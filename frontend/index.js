@@ -1,0 +1,595 @@
+// ST3 PLASTIC SURGERY INTERVIEW TRAINER - V4
+// Architecture: Web Speech API + GPT-4o-mini + Google Cloud TTS
+
+let session = null;
+let currentScenario = { category: '', title: '', promptFile: 'template.txt', imageFile: null };
+
+// ============================================================================
+// SPEECH RECOGNITION MANAGER (Web Speech API)
+// ============================================================================
+
+class SpeechRecognitionManager {
+  constructor() {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      throw new Error('Speech Recognition not supported. Please use Chrome or Edge.');
+    }
+    this.recognition = new SpeechRecognition();
+    this.isListening = false;
+    this.shouldBeListening = false;
+    this.onTranscript = null;
+    this.onStart = null;
+    this.onEnd = null;
+  }
+
+  initialize() {
+    this.recognition.continuous = true;
+    this.recognition.interimResults = true; // Enable interim results for faster response
+    this.recognition.lang = 'en-GB';
+    this.recognition.maxAlternatives = 1;
+
+    // Medical terminology hints for better accuracy
+    const medicalTerms = [
+      'necrotising fasciitis', 'debridement', 'erythema', 'fascia',
+      'anaesthetist', 'resuscitation', 'intravenous', 'antibiotics',
+      'microbiology', 'histology', 'ABCDE', 'ITU', 'ICU',
+      'diabetes', 'sepsis', 'hypotension', 'tachycardia',
+      'compartment syndrome', 'amputation', 'flap', 'graft',
+      'haemorrhage', 'oedema', 'necrosis', 'ischaemia'
+    ];
+
+    // Note: Web Speech API has limited support for custom grammars
+    // This helps improve recognition but isn't guaranteed
+
+    this.recognition.onresult = (event) => {
+      const last = event.results.length - 1;
+      const result = event.results[last];
+
+      // Only process final results to avoid duplicate sends
+      if (result.isFinal) {
+        const transcript = result[0].transcript.trim();
+        if (this.onTranscript && transcript) {
+          this.onTranscript(transcript);
+        }
+      }
+    };
+
+    this.recognition.onstart = () => {
+      this.isListening = true;
+      if (this.onStart) this.onStart();
+    };
+
+    this.recognition.onend = () => {
+      this.isListening = false;
+      if (this.onEnd) this.onEnd();
+      if (this.shouldBeListening) {
+        // Immediate restart - no delay at all
+        try {
+          this.recognition.start();
+        } catch (e) {
+          // If immediate restart fails, try once more after brief delay
+          setTimeout(() => {
+            try { this.recognition.start(); }
+            catch (err) { console.error('Restart failed:', err); }
+          }, 50);
+        }
+      }
+    };
+
+    this.recognition.onerror = (event) => {
+      if (event.error !== 'no-speech' && event.error !== 'aborted') {
+        log('Speech recognition error: ' + event.error, 'warning');
+      }
+    };
+  }
+
+  start() {
+    this.shouldBeListening = true;
+    if (!this.isListening) {
+      try {
+        this.recognition.start();
+        log('Speech recognition started', 'success');
+      } catch (e) {
+        if (e.name !== 'InvalidStateError') console.error('Start failed:', e);
+      }
+    }
+  }
+
+  stop() {
+    this.shouldBeListening = false;
+    if (this.isListening) {
+      this.recognition.stop();
+    }
+  }
+}
+
+// ============================================================================
+// AUDIO PLAYER
+// ============================================================================
+
+class AudioPlayer {
+  constructor() {
+    this.audio = new Audio();
+    this.isPlaying = false;
+    this.onStart = null;
+    this.onEnd = null;
+  }
+
+  playBase64Audio(base64Audio) {
+    const binaryString = atob(base64Audio);
+    const bytes = Uint8Array.from(binaryString, char => char.charCodeAt(0));
+    const blob = new Blob([bytes], { type: 'audio/mp3' });
+    const url = URL.createObjectURL(blob);
+
+    this.audio.src = url;
+    this.audio.play();
+    this.isPlaying = true;
+    if (this.onStart) this.onStart();
+
+    this.audio.onended = () => {
+      this.isPlaying = false;
+      URL.revokeObjectURL(url);
+      // Call onEnd immediately to restart mic ASAP
+      if (this.onEnd) this.onEnd();
+    };
+
+    this.audio.onerror = (e) => {
+      console.error('Audio playback error:', e);
+      this.isPlaying = false;
+      URL.revokeObjectURL(url);
+      log('Audio playback error', 'error');
+    };
+  }
+
+  interrupt() {
+    if (this.isPlaying) {
+      this.audio.pause();
+      this.audio.currentTime = 0;
+      this.isPlaying = false;
+    }
+  }
+}
+
+// ============================================================================
+// V4 SESSION MANAGER
+// ============================================================================
+
+class V4Session {
+  constructor(backendUrl, promptFile, difficulty) {
+    this.ws = null;
+    this.sessionId = null;
+    this.speechRecognition = new SpeechRecognitionManager();
+    this.audioPlayer = new AudioPlayer();
+    this.backendUrl = backendUrl;
+    this.promptFile = promptFile;
+    this.difficulty = difficulty || null;
+    this.isConnected = false;
+    this.inFeedbackMode = false; // Track if we're in feedback mode
+  }
+
+  async connect() {
+    return new Promise((resolve, reject) => {
+      let wsUrl = this.backendUrl + '?scenario=' + this.promptFile;
+      if (this.difficulty) {
+        wsUrl += '&difficulty=' + this.difficulty;
+      }
+      log('Connecting to ' + wsUrl + '...', 'info');
+      this.ws = new WebSocket(wsUrl);
+
+      this.ws.onopen = () => {
+        this.isConnected = true;
+        updateStatus('connectionStatus', 'Connected', 'connected');
+        log('Connected to backend', 'success');
+        resolve();
+      };
+
+      this.ws.onmessage = (event) => {
+        const msg = JSON.parse(event.data);
+        this.handleMessage(msg);
+      };
+
+      this.ws.onerror = (error) => {
+        log('WebSocket error', 'error');
+        this.isConnected = false;
+        reject(error);
+      };
+
+      this.ws.onclose = () => {
+        this.isConnected = false;
+        updateStatus('connectionStatus', 'Disconnected', 'disconnected');
+        log('WebSocket closed', 'warning');
+      };
+    });
+  }
+
+  handleMessage(msg) {
+    switch (msg.type) {
+      case 'scenario_loaded':
+        this.sessionId = msg.sessionId;
+        updateStatus('sessionStatus', 'Ready', 'connected');
+        setOrbState('idle');
+        log('Scenario loaded: ' + msg.scenario, 'success');
+        break;
+
+      case 'ai_response':
+        log('AI: ' + msg.text, 'info');
+        this.audioPlayer.playBase64Audio(msg.audio);
+        // Show interrupt button and set speaking state
+        document.getElementById('interruptBtn').style.display = 'block';
+        document.getElementById('interruptBtn').disabled = false;
+        updateStatus('aiStatus', 'Speaking', 'speaking'); // Hide bubble when speaking
+        setOrbState('speaking');
+        break;
+
+      case 'feedback_processing':
+        // Show random processing message during feedback transitions
+        this.inFeedbackMode = true; // Set feedback mode flag
+        updateStatus('micStatus', 'Paused', 'active');
+        updateStatus('aiStatus', getRandomProcessingMessage(), 'processing');
+        setOrbState('thinking');
+        break;
+
+      case 'interrupt':
+        this.audioPlayer.interrupt();
+        document.getElementById('interruptBtn').style.display = 'none';
+        setOrbState('listening');
+        break;
+
+      case 'error':
+        log('Error: ' + msg.message, 'error');
+        setOrbState('idle');
+        break;
+    }
+  }
+
+  startListening() {
+    this.speechRecognition.initialize();
+
+    this.speechRecognition.onTranscript = (text) => {
+      log('You: ' + text, 'info');
+
+      if (this.isConnected && this.sessionId) {
+        this.ws.send(JSON.stringify({
+          type: 'user_transcript',
+          sessionId: this.sessionId,
+          text: text
+        }));
+        updateStatus('micStatus', 'Paused', 'active');
+        updateStatus('aiStatus', getRandomProcessingMessage(), 'processing');
+        setOrbState('thinking'); // Show thinking animation while AI processes
+      }
+    };
+
+    this.speechRecognition.onStart = () => {
+      updateStatus('micStatus', 'Listening', 'connected');
+      updateStatus('aiStatus', 'Listening', 'connected'); // Hide bubble when listening
+      setOrbState('listening'); // Show listening animation when mic starts
+    };
+
+    this.speechRecognition.onEnd = () => {
+      if (this.speechRecognition.shouldBeListening) {
+        updateStatus('micStatus', 'Restarting', 'processing');
+      }
+    };
+
+    this.audioPlayer.onStart = () => {
+      // Stop mic to prevent AI from hearing itself
+      this.speechRecognition.stop();
+      updateStatus('micStatus', 'Paused', 'active');
+      updateStatus('aiStatus', 'Speaking', 'speaking'); // Hide bubble when speaking
+      // Orb state already set to 'speaking' in handleMessage
+    };
+
+    this.audioPlayer.onEnd = () => {
+      // Hide interrupt button
+      document.getElementById('interruptBtn').style.display = 'none';
+      // Send WebSocket message to notify backend
+      if (this.isConnected && this.sessionId) {
+        this.ws.send(JSON.stringify({
+          type: 'ai_finished',
+          sessionId: this.sessionId
+        }));
+      }
+      // Wait longer to see if we're in feedback mode
+      setTimeout(() => {
+        // Only restart mic if NOT in feedback mode
+        if (!this.inFeedbackMode && !this.audioPlayer.isPlaying) {
+          this.speechRecognition.start();
+        } else {
+          // Reset feedback mode flag after processing
+          this.inFeedbackMode = false;
+        }
+      }, 350); // Increased from 100ms to 350ms to wait for feedback_processing message
+    };
+
+    this.speechRecognition.start();
+  }
+
+  disconnect() {
+    this.speechRecognition.stop();
+    this.audioPlayer.interrupt();
+    if (this.ws) {
+      this.ws.close();
+      this.ws = null;
+    }
+    this.isConnected = false;
+    this.sessionId = null;
+    setOrbState('idle'); // Reset orb to idle when disconnected
+  }
+}
+
+// ============================================================================
+// UI HELPER FUNCTIONS
+// ============================================================================
+
+// Random processing messages for more natural feel
+const processingMessages = [
+  'Thinking...',
+  'Hold on a sec...',
+  'Let me think...',
+  'Processing...',
+  'AI is cooking...',
+  'Just a moment...',
+  'Analyzing...',
+  'Working on it...'
+];
+
+function getRandomProcessingMessage() {
+  return processingMessages[Math.floor(Math.random() * processingMessages.length)];
+}
+
+function log(message, type) {
+  // Keep old logging for debugging (not displayed)
+  console.log('[' + type + '] ' + message);
+}
+
+// Transcript function removed - no longer needed without transcript panel
+
+function updateStatus(elementId, text, status) {
+  const element = document.getElementById(elementId);
+  if (!element) return; // Element doesn't exist, skip silently
+
+  element.textContent = text;
+
+  // Handle AI status bubble specially
+  if (elementId === 'aiStatus') {
+    const bubble = document.getElementById('aiStatusBubble');
+    if (bubble) {
+      // Only show bubble when processing/thinking
+      if (status === 'processing') {
+        bubble.classList.add('visible', 'processing');
+      } else {
+        // Hide bubble when not processing (speaking, idle, etc.)
+        bubble.classList.remove('visible', 'processing');
+      }
+    }
+    return;
+  }
+
+  // Handle regular status elements
+  element.className = 'status-value';
+  if (status === 'disconnected') {
+    element.classList.add('status-disconnected');
+  } else if (status === 'connected') {
+    element.classList.add('status-connected');
+  } else if (status === 'active') {
+    element.classList.add('status-active');
+  } else if (status === 'processing') {
+    element.classList.add('status-processing');
+  } else if (status === 'speaking') {
+    element.classList.add('status-speaking');
+  }
+}
+
+// ============================================================================
+// VOICE ORB STATE MANAGER
+// ============================================================================
+// Controls the visual state of the voice orb based on interaction flow
+// States: idle → listening → thinking → speaking → (loop back)
+
+function setOrbState(state) {
+  const orb = document.getElementById('voiceOrb');
+  if (!orb) return;
+
+  // Remove all state classes
+  orb.classList.remove('idle', 'listening', 'thinking', 'speaking');
+
+  // Add new state class
+  orb.classList.add(state);
+
+  // Optional: Log state changes for debugging
+  console.log('[Orb] State changed to:', state);
+}
+
+// ============================================================================
+// NAVIGATION FUNCTIONS (from V3)
+// ============================================================================
+
+function toggleMenu(menuId) {
+  const content = document.getElementById('content-' + menuId);
+  const arrow = document.getElementById('arrow-' + menuId);
+  const header = arrow.parentElement;
+  if (content.classList.contains('open')) {
+    content.classList.remove('open');
+    arrow.classList.remove('open');
+    header.classList.remove('active');
+  } else {
+    content.classList.add('open');
+    arrow.classList.add('open');
+    header.classList.add('active');
+  }
+}
+
+function startScenario(category, title, promptFile, imageFile) {
+  promptFile = promptFile || 'template.txt';
+  currentScenario = { category: category, title: title, promptFile: promptFile, imageFile: imageFile };
+  document.getElementById('scenarioSelection').style.display = 'none';
+  document.getElementById('simulationRoom').classList.add('active');
+  document.getElementById('currentScenarioTitle').textContent = title;
+  document.getElementById('currentScenarioCategory').textContent = category;
+
+  const imageSection = document.getElementById('imageSection');
+  const clinicalImage = document.getElementById('clinicalImage');
+  const noImagePlaceholder = document.getElementById('noImagePlaceholder');
+
+  // Pre-load image but keep section hidden until session starts
+  if (imageFile) {
+    const imagePath = 'images/' + imageFile;
+    clinicalImage.src = imagePath;
+    clinicalImage.onload = () => {
+      clinicalImage.style.display = 'block';
+      noImagePlaceholder.style.display = 'none';
+      log('Clinical image loaded: ' + imageFile, 'success');
+    };
+    clinicalImage.onerror = () => {
+      clinicalImage.style.display = 'none';
+      noImagePlaceholder.style.display = 'block';
+      noImagePlaceholder.textContent = 'Image not found: ' + imageFile;
+      log('Clinical image not found: ' + imageFile, 'warning');
+    };
+  }
+  // Image section is always visible in the layout, but hidden with opacity
+  // It will fade in when user clicks "Start Session"
+
+  log('Selected scenario: ' + title, 'info');
+}
+
+function exitSimulation() {
+  if (session) {
+    session.disconnect();
+    session = null;
+  }
+  document.getElementById('simulationRoom').classList.remove('active');
+  // Go back to difficulty selection instead of scenario selection
+  document.getElementById('difficultySelection').style.display = 'block';
+  document.getElementById('connectBtn').disabled = false;
+  document.getElementById('disconnectBtn').disabled = true;
+  updateStatus('connectionStatus', 'Disconnected', 'disconnected');
+  updateStatus('sessionStatus', 'No Session', 'disconnected');
+  updateStatus('micStatus', 'Inactive', 'disconnected');
+  updateStatus('aiStatus', 'Idle', 'disconnected');
+  setOrbState('idle'); // Reset orb state when exiting
+
+  // Reset image section (it will fade out via CSS)
+  const imageSection = document.getElementById('imageSection');
+  if (imageSection) {
+    imageSection.classList.remove('visible');
+  }
+}
+
+// ============================================================================
+// NEW MULTI-PAGE NAVIGATION
+// ============================================================================
+
+let selectedSpecialty = null;
+let selectedDifficulty = null;
+
+function selectSpecialty(specialty) {
+  selectedSpecialty = specialty;
+  document.getElementById('specialtySelection').style.display = 'none';
+  document.getElementById('difficultySelection').style.display = 'block';
+  log('Selected specialty: ' + specialty, 'info');
+}
+
+function selectDifficulty(difficulty) {
+  selectedDifficulty = difficulty;
+  document.getElementById('difficultySelection').style.display = 'none';
+  document.getElementById('scenarioSelection').style.display = 'block';
+  log('Selected difficulty: ' + difficulty, 'info');
+}
+
+function backToSpecialties() {
+  document.getElementById('difficultySelection').style.display = 'none';
+  document.getElementById('specialtySelection').style.display = 'block';
+  selectedSpecialty = null;
+}
+
+function backToDifficulty() {
+  document.getElementById('scenarioSelection').style.display = 'none';
+  document.getElementById('difficultySelection').style.display = 'block';
+  selectedDifficulty = null;
+}
+
+function openImageModal() {
+  const modal = document.getElementById('imageModal');
+  const modalImage = document.getElementById('modalImage');
+  const clinicalImage = document.getElementById('clinicalImage');
+  if (clinicalImage.src) {
+    modalImage.src = clinicalImage.src;
+    modal.style.display = 'block';
+  }
+}
+
+function closeImageModal() {
+  const modal = document.getElementById('imageModal');
+  modal.style.display = 'none';
+}
+
+// ============================================================================
+// BUTTON EVENT HANDLERS
+// ============================================================================
+
+document.getElementById('connectBtn').addEventListener('click', async () => {
+  try {
+    log('Initializing session...', 'info');
+    session = new V4Session(CONFIG.BACKEND_URL, currentScenario.promptFile, selectedDifficulty);
+    await session.connect();
+    session.startListening();
+    document.getElementById('connectBtn').disabled = true;
+    document.getElementById('disconnectBtn').disabled = false;
+    log('Session ready! Start speaking to begin the interview.', 'success');
+
+    // Show the clinical image with transition when session starts
+    const imageSection = document.getElementById('imageSection');
+    if (imageSection) {
+      imageSection.classList.add('visible');
+    }
+  } catch (error) {
+    log('Connection failed: ' + error.message, 'error');
+  }
+});
+
+document.getElementById('disconnectBtn').addEventListener('click', () => {
+  if (session) {
+    session.disconnect();
+    session = null;
+    log('Session ended by user', 'info');
+  }
+  document.getElementById('connectBtn').disabled = false;
+  document.getElementById('disconnectBtn').disabled = true;
+  document.getElementById('interruptBtn').style.display = 'none';
+  updateStatus('sessionStatus', 'No Session', 'disconnected');
+  updateStatus('micStatus', 'Inactive', 'disconnected');
+  setOrbState('idle'); // Reset orb when disconnecting
+
+  // Hide image with transition
+  const imageSection = document.getElementById('imageSection');
+  if (imageSection) {
+    imageSection.classList.remove('visible');
+  }
+});
+
+// Interrupt button - stops AI and activates microphone
+document.getElementById('interruptBtn').addEventListener('click', () => {
+  if (session && session.audioPlayer.isPlaying) {
+    session.audioPlayer.interrupt();
+    session.speechRecognition.start();
+    updateStatus('micStatus', '🎤 Listening', 'connected');
+    document.getElementById('interruptBtn').style.display = 'none';
+    log('AI interrupted by user', 'info');
+  }
+});
+
+// ============================================================================
+// BROWSER COMPATIBILITY CHECK
+// ============================================================================
+
+window.addEventListener('DOMContentLoaded', () => {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    alert('Speech Recognition is not supported in your browser. Please use Google Chrome or Microsoft Edge.');
+    log('ERROR: Speech Recognition not supported', 'error');
+  } else {
+    log('Speech Recognition available', 'success');
+  }
+});

@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "st3-coach-v4",
+  "private_key_id": "4f77f9411b55837f0dfef0f7881fd5aeaaea8dc3",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDE749RavHglTYD\niTeZXDefMl94tWofX7ycNEiGsUsqzESdy+HSDdcC9gBWZiepFuAw1KLi/rq4vVbK\n2IQZhsqOZwcTnKlldihlvi5N3zNsowUUIQdJRSABf09A3KkWJ3tPunN7BaAQw7vr\n+luiLzk61kBva10aKfmTMnvjAJ15VZyU4NlAYS22LeU0OlENHfvRK7o91PEgml1S\nlcfxtVL7pkHOBpEK3bUBTUedwDPAVQo2+N102767A0MSuzLNX8qu46SmmkKcu/GC\nYvAFmjg+2xYDjUFMkZcZOh4Fvr8mKcdcWE64xQnBSUb/3OFL9QllYJk41KUgKTpJ\nGhgBRqK7AgMBAAECggEABrZ4IKYJq5/6anSj0zofYHGAa2Y0dInrYGzjaGMkgeEN\n/7Qo6BbC4V3be7AMu9WrSHU4pI5a2zXQMdoSgQ1x2+Veint/ExXL4VGLu4Mw4HJo\nF5xBzTlD34X+GhX+oq78cMAuwOuoRDOfzratQLuyWQAsZX/eRkHv0pjyCLYgwZ3e\nZ0OvdOtuGZAytUsuj/AZyp6psvoJjaZwjqKeRSW/E4td2lJb4g0LrmfSn7jLIhzj\nGA5qQL7wHrgzmYSCugR3f539JJvRGwjznkeSd2keLjs23e26o9rGx7I6J2YrZ5Mq\nyX8xRK31fVe3XK+CYwxVOa1uELZ+5c9FdjTNh6NICQKBgQDwKnFovzT2oUIj03fW\n87JbmbgUL1jhSIRvhjMYwO0z9r08+jIRjGFPRb1Y+qPLk7cIVr/knOo2J/V5VRfn\noKek5bUph0bi9bxZK+NHDp/iHDn1xElaVsz8pg9ilBDuOhaxUgtIzPWPNJGng4JR\n998PgCbuPZSrb0fhS6D/DVjTUwKBgQDR63lFAK/rkAK5W2i6oIYj8cUjERfghzEf\nQvxNU/YbRdv9ScuyRW+U6B4Nj941WXT98593nbencMOD2GsOMajESbRV8ncahWFd\nIhI/jFivkr2yBaVcF6E2KDI7jMdWK9/XomirCW5Npmu/TEKlfx1zcrZ7n+5wFNAm\nVylMhGat+QKBgB9NiOacNW0H67T7tR0BOngR+xo2aaFDcG+Q0EwjqUcim9u8yJXc\n9Dn+3wUf9gVsxWiC1hQYF7bjUm10F9+K4w7tGcXF6gle+iOtQrxaPaCdCTjtUppB\nwgoUIuE4Z1SFobuO9AWTIVZ/BZUN4QiKBDri+zAGOsB1iqrkzqEvviodAoGACx/Q\naGC18eTK0CnQ7frtwN/iE46nVkWzy7VQC4UEiMN1+gE8IzFczWZTmWJjYy5fbcnI\nTJ12CxCFu+nvGmx1RhmlzdwwhZ5F35qbnvSACqXbGaEE91FlQKp2pwM52Q4wKYw4\nwb+ZMdI86YFQEtcep2yP0RNTnmrr8OwzixOFIXkCgYAp96SnlR/ctL/9J/H1/fV5\nAiM1SuxB4N4TOeC37oUdwieBxGa6coENGkn73T5ss7botcKo/wvpqfyFz1w2bEsG\nLwsJkPa58oUUPHzlFkRtpal26RxP8mjuvfvNOfotKo1IJav2EsE2FK9RO2hdeW71\naCXYxeOnFPHxqTIGPpqqWQ==\n-----END PRIVATE KEY-----\n",
+  "client_email": "st3-tts-service-663@st3-coach-v4.iam.gserviceaccount.com",
+  "client_id": "106526957340413233027",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/st3-tts-service-663%40st3-coach-v4.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
