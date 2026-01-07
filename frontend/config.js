@@ -12,7 +12,7 @@ const CONFIG = {
 
     // Production - use secure WebSocket (wss://)
     // Update this with your Railway/Render backend URL after deployment
-    const productionBackendUrl = 'YOUR_BACKEND_URL_HERE'; // e.g., 'your-app.up.railway.app'
+    const productionBackendUrl = 'ai-st3-coach-backend.onrender.com'; // Render backend URL
 
     if (productionBackendUrl === 'YOUR_BACKEND_URL_HERE') {
       console.warn('⚠️ Production backend URL not configured. Update config.js with your deployment URL.');
