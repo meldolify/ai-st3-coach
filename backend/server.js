@@ -102,13 +102,17 @@ async function callGPT4oMini(history) {
 async function googleTTS(text, voiceName) {
   voiceName = voiceName || TTS_VOICE;
   console.log('[TTS] Using voice: ' + voiceName);
+
+  // Determine gender based on voice name (F = Female, others = Male)
+  const gender = voiceName.includes('-F') ? 'FEMALE' : 'MALE';
+
   try {
     const request = {
       input: { ssml: text },
       voice: {
         languageCode: 'en-GB',
         name: voiceName,
-        ssmlGender: 'MALE'
+        ssmlGender: gender
       },
       audioConfig: {
         audioEncoding: 'MP3',

@@ -166,11 +166,11 @@ class V4Session {
     this.isConnected = false;
     this.inFeedbackMode = false; // Track if we're in feedback mode
 
-    // Voice mapping for each difficulty level
+    // Voice mapping for each difficulty level (swap John and Perry)
     this.voiceMap = {
-      'easy': 'en-GB-Neural2-D',      // John: Male British voice (current default)
+      'easy': 'en-GB-Neural2-B',      // John: Professional male British voice
       'medium': 'en-GB-Neural2-F',    // Elliot: Female British voice
-      'strict': 'en-GB-Neural2-B'     // Perry: Professional male British voice
+      'strict': 'en-GB-Neural2-D'     // Perry: Male British voice (original default)
     };
     this.voice = this.voiceMap[difficulty] || 'en-GB-Neural2-D';
   }
