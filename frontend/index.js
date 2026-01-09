@@ -705,11 +705,32 @@ function selectScenario(topicFolder, title, imageFile) {
   // Format: prompts/{topicFolder}/{difficulty}_{topicFolder}_1.txt
   const promptFile = `prompts/${topicFolder}/${selectedDifficulty}_${topicFolder}_1.txt`;
 
-  // Use the same transition pattern as other page transitions
-  transitionToPage('scenarioSelection', 'simulationRoom', () => {
-    // Load scenario content after page transition starts
-    startScenario(title, title, promptFile, imageFile);
+  // Show "Entering Simulation Room" overlay
+  const overlay = document.getElementById('simulationTransition');
+  overlay.style.display = 'flex';
+
+  // Trigger fade-in
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      overlay.classList.add('active');
+    });
   });
+
+  // Wait 1.5 seconds then fade out overlay
+  setTimeout(() => {
+    overlay.classList.remove('active');
+
+    // After overlay fades out, hide it and start page transition
+    setTimeout(() => {
+      overlay.style.display = 'none';
+
+      // Use the same transition pattern as other page transitions
+      transitionToPage('scenarioSelection', 'simulationRoom', () => {
+        // Load scenario content after page transition starts
+        startScenario(title, title, promptFile, imageFile);
+      });
+    }, 800); // Wait for overlay fade-out
+  }, 1500); // Display overlay for 1.5 seconds
 }
 
 function startScenario(category, title, promptFile, imageFile) {
