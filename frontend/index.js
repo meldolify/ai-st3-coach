@@ -433,30 +433,45 @@ function toggleMenu(menuId) {
 
 // Cascading Hover Panel System
 
+// Timers for delaying panel opening
+let subheadingsTimer = null;
+let topicsTimer = null;
+
 // Show subheadings panel when hovering over a heading
 function showSubheadings(headingId) {
-  const subheadingsPanel = document.getElementById('subheadings-panel');
-  const topicsPanel = document.getElementById('topics-panel');
+  // Clear any pending timer
+  clearTimeout(subheadingsTimer);
 
-  // Hide all subheading groups
-  document.querySelectorAll('.subheading-group').forEach(group => {
-    group.style.display = 'none';
-  });
+  // Delay before opening panel
+  subheadingsTimer = setTimeout(() => {
+    const subheadingsPanel = document.getElementById('subheadings-panel');
+    const topicsPanel = document.getElementById('topics-panel');
 
-  // Show the appropriate subheading group
-  const subheadingGroup = document.getElementById('subheadings-' + headingId);
-  if (subheadingGroup) {
-    subheadingGroup.style.display = 'block';
-    subheadingsPanel.classList.add('visible');
-  }
+    // Hide all subheading groups
+    document.querySelectorAll('.subheading-group').forEach(group => {
+      group.style.display = 'none';
+    });
 
-  // Hide topics panel when switching headings
-  topicsPanel.classList.remove('visible');
+    // Show the appropriate subheading group
+    const subheadingGroup = document.getElementById('subheadings-' + headingId);
+    if (subheadingGroup) {
+      subheadingGroup.style.display = 'block';
+      subheadingsPanel.classList.add('visible');
+    }
+
+    // Hide topics panel when switching headings
+    topicsPanel.classList.remove('visible');
+  }, 300); // 300ms delay before opening
 }
 
 // Show topics panel when hovering over a subheading
 function showTopics(subheadingId) {
-  const topicsPanel = document.getElementById('topics-panel');
+  // Clear any pending timer
+  clearTimeout(topicsTimer);
+
+  // Delay before opening panel
+  topicsTimer = setTimeout(() => {
+    const topicsPanel = document.getElementById('topics-panel');
 
   // Define all topics for each subheading
   const topicsData = {
@@ -588,19 +603,20 @@ function showTopics(subheadingId) {
     }
   };
 
-  const data = topicsData[subheadingId];
-  if (!data) return;
+    const data = topicsData[subheadingId];
+    if (!data) return;
 
-  // Build topics HTML
-  let html = `<div class="topics-panel-title">${data.title}</div>`;
-  data.topics.forEach(topic => {
-    const [folder, title, image] = topic;
-    const imageArg = image ? `, '${image}'` : '';
-    html += `<div class="topic-item" onclick="selectScenario('${folder}', '${title.replace(/'/g, "\\'")}'${imageArg})">📋 ${title}</div>`;
-  });
+    // Build topics HTML
+    let html = `<div class="topics-panel-title">${data.title}</div>`;
+    data.topics.forEach(topic => {
+      const [folder, title, image] = topic;
+      const imageArg = image ? `, '${image}'` : '';
+      html += `<div class="topic-item" onclick="selectScenario('${folder}', '${title.replace(/'/g, "\\'")}'${imageArg})">📋 ${title}</div>`;
+    });
 
-  topicsPanel.innerHTML = html;
-  topicsPanel.classList.add('visible');
+    topicsPanel.innerHTML = html;
+    topicsPanel.classList.add('visible');
+  }, 300); // 300ms delay before opening
 }
 
 // Handle mouse leave events for panels
