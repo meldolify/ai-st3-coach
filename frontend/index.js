@@ -420,50 +420,21 @@ function toggleMenu(menuId) {
   }
 }
 
-// Temporary storage for selected scenario before difficulty is chosen
-let pendingScenario = null;
-
-// Called when user clicks a scenario - shows difficulty modal
+// Called when user clicks a scenario - directly starts with pre-selected difficulty
 function selectScenario(topicFolder, title, imageFile) {
-  pendingScenario = {
-    topicFolder: topicFolder,
-    title: title,
-    imageFile: imageFile
-  };
+  // Ensure we have a difficulty selected
+  if (!selectedDifficulty) {
+    log('Error: No difficulty selected', 'error');
+    alert('Please select a difficulty level first');
+    return;
+  }
 
-  // Update modal text
-  document.getElementById('difficultyModalScenario').textContent = title;
+  // Construct the prompt file path using the pre-selected difficulty
+  // Format: prompts/{topicFolder}/{difficulty}_{topicFolder}_1.txt
+  const promptFile = `prompts/${topicFolder}/${selectedDifficulty}_${topicFolder}_1.txt`;
 
-  // Show difficulty modal
-  document.getElementById('difficultyModal').classList.add('active');
-}
-
-// Called when user selects a difficulty level
-function startScenarioWithDifficulty(difficulty) {
-  if (!pendingScenario) return;
-
-  // Construct the prompt file path: prompts/{topicFolder}/{difficulty}_{topicFolder}_1.txt
-  const promptFile = `prompts/${pendingScenario.topicFolder}/${difficulty}_${pendingScenario.topicFolder}_1.txt`;
-
-  // Close difficulty modal
-  closeDifficultyModal();
-
-  // Start the scenario with the constructed path
-  startScenario(
-    pendingScenario.title,
-    pendingScenario.title,
-    promptFile,
-    pendingScenario.imageFile
-  );
-
-  // Clear pending scenario
-  pendingScenario = null;
-}
-
-// Close difficulty modal
-function closeDifficultyModal() {
-  document.getElementById('difficultyModal').classList.remove('active');
-  pendingScenario = null;
+  // Start the scenario immediately
+  startScenario(title, title, promptFile, imageFile);
 }
 
 function startScenario(category, title, promptFile, imageFile) {
@@ -539,6 +510,18 @@ function selectSpecialty(specialty) {
 
 function selectDifficulty(difficulty) {
   selectedDifficulty = difficulty;
+
+  // Update the difficulty indicator on the scenario page
+  const indicator = document.getElementById('selectedDifficultyIndicator');
+  const difficultyEmoji = {
+    'easy': '🟢',
+    'medium': '🟡',
+    'strict': '🔴'
+  };
+  const difficultyName = difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
+  indicator.textContent = `${difficultyEmoji[difficulty]} Selected Difficulty: ${difficultyName}`;
+  indicator.style.color = difficulty === 'easy' ? '#059669' : difficulty === 'medium' ? '#d97706' : '#dc2626';
+
   document.getElementById('difficultySelection').style.display = 'none';
   document.getElementById('scenarioSelection').style.display = 'block';
   log('Selected difficulty: ' + difficulty, 'info');
