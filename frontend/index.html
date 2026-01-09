@@ -1305,7 +1305,7 @@
         </div>
 
         <!-- Panel 2: Subheadings (12.5%) -->
-        <div id="subheadings-panel" class="subheadings-panel" onmouseleave="handlePanelMouseLeave('subheadings')">
+        <div id="subheadings-panel" class="subheadings-panel" onmouseenter="cancelSubheadingsTimer()" onmouseleave="handlePanelMouseLeave('subheadings')">
           <!-- Clinical subheadings -->
           <div id="subheadings-clinical" class="subheading-group" style="display: none;">
             <div class="subheading-item" onmouseenter="showTopics('emergencies')">1. Emergencies</div>
