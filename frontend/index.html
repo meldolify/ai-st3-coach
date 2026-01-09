@@ -771,132 +771,6 @@
       color: #ccc;
     }
 
-    /* Difficulty Selection Modal */
-    .difficulty-modal {
-      display: none;
-      position: fixed;
-      z-index: 2000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.8);
-    }
-
-    .difficulty-modal.active {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .difficulty-content {
-      background: white;
-      border-radius: 20px;
-      padding: 40px;
-      max-width: 500px;
-      width: 90%;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-    }
-
-    .difficulty-content h2 {
-      color: #111827;
-      margin-bottom: 10px;
-      text-align: center;
-    }
-
-    .difficulty-content p {
-      text-align: center;
-      color: #6b7280;
-      margin-bottom: 30px;
-    }
-
-    .difficulty-buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-
-    .difficulty-btn {
-      padding: 20px;
-      border: 3px solid transparent;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      text-align: left;
-      background: #f9fafb;
-    }
-
-    .difficulty-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-    }
-
-    .difficulty-btn.easy {
-      border-color: #10b981;
-    }
-
-    .difficulty-btn.easy:hover {
-      background: #d1fae5;
-      border-color: #059669;
-    }
-
-    .difficulty-btn.medium {
-      border-color: #f59e0b;
-    }
-
-    .difficulty-btn.medium:hover {
-      background: #fef3c7;
-      border-color: #d97706;
-    }
-
-    .difficulty-btn.strict {
-      border-color: #ef4444;
-    }
-
-    .difficulty-btn.strict:hover {
-      background: #fee2e2;
-      border-color: #dc2626;
-    }
-
-    .difficulty-btn-title {
-      font-size: 18px;
-      font-weight: 700;
-      margin-bottom: 5px;
-    }
-
-    .difficulty-btn.easy .difficulty-btn-title {
-      color: #059669;
-    }
-
-    .difficulty-btn.medium .difficulty-btn-title {
-      color: #d97706;
-    }
-
-    .difficulty-btn.strict .difficulty-btn-title {
-      color: #dc2626;
-    }
-
-    .difficulty-btn-desc {
-      font-size: 14px;
-      color: #6b7280;
-    }
-
-    .difficulty-cancel {
-      margin-top: 20px;
-      padding: 12px;
-      background: #e5e7eb;
-      border: none;
-      border-radius: 8px;
-      width: 100%;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 600;
-      transition: all 0.2s ease;
-    }
-
-    .difficulty-cancel:hover {
-      background: #d1d5db;
-    }
 
     /* Specialty Selection Page */
     .specialty-grid {
@@ -1145,9 +1019,9 @@
           </ul>
         </div>
 
-        <div class="difficulty-card difficulty-moderate" onclick="selectDifficulty('moderate')">
+        <div class="difficulty-card difficulty-moderate" onclick="selectDifficulty('medium')">
           <div class="difficulty-icon">😐</div>
-          <h2>Moderate</h2>
+          <h2>Medium</h2>
           <p>Standard ST3 interview experience with balanced questioning</p>
           <ul>
             <li>Realistic timing</li>
@@ -1176,6 +1050,7 @@
       <div class="header">
         <h1>🎯 ST3 Plastic Surgery Interview Trainer</h1>
         <p class="subtitle">Select a scenario to begin your practice session</p>
+        <p id="selectedDifficultyIndicator" class="subtitle" style="margin-top: 10px; font-weight: 600;"></p>
       </div>
 
       <div class="menu-container">
@@ -1457,32 +1332,6 @@
     <img id="modalImage" src="" alt="Full screen clinical image">
   </div>
 
-  <!-- Difficulty Selection Modal -->
-  <div id="difficultyModal" class="difficulty-modal">
-    <div class="difficulty-content">
-      <h2 id="difficultyModalTitle">Select Difficulty</h2>
-      <p id="difficultyModalScenario">Scenario Name</p>
-
-      <div class="difficulty-buttons">
-        <div class="difficulty-btn easy" onclick="startScenarioWithDifficulty('easy')">
-          <div class="difficulty-btn-title">🟢 Easy</div>
-          <div class="difficulty-btn-desc">Supportive examiner. Gentle prompts. Great for first attempts.</div>
-        </div>
-
-        <div class="difficulty-btn medium" onclick="startScenarioWithDifficulty('medium')">
-          <div class="difficulty-btn-title">🟡 Medium</div>
-          <div class="difficulty-btn-desc">Professional examiner. Expects thorough answers. Standard interview level.</div>
-        </div>
-
-        <div class="difficulty-btn strict" onclick="startScenarioWithDifficulty('strict')">
-          <div class="difficulty-btn-title">🔴 Strict</div>
-          <div class="difficulty-btn-desc">Demanding examiner. Challenges vague responses. Consultant-level expectations.</div>
-        </div>
-      </div>
-
-      <button class="difficulty-cancel" onclick="closeDifficultyModal()">Cancel</button>
-    </div>
-  </div>
 
   <script src="config.js"></script>
   <script src="index.js"></script>
