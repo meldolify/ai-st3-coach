@@ -248,12 +248,14 @@
       bottom: 0;
       opacity: 0;
       visibility: hidden;
-      transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out;
+      transform: translateX(-20px);
+      transition: opacity 1s ease-in-out, visibility 1s ease-in-out, transform 1s ease-in-out;
     }
 
     .subheadings-panel.visible {
       opacity: 1;
       visibility: visible;
+      transform: translateX(0);
     }
 
     .subheading-item {
@@ -284,12 +286,14 @@
       bottom: 0;
       opacity: 0;
       visibility: hidden;
-      transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out;
+      transform: translateX(-20px);
+      transition: opacity 1s ease-in-out, visibility 1s ease-in-out, transform 1s ease-in-out;
     }
 
     .topics-panel.visible {
       opacity: 1;
       visibility: visible;
+      transform: translateX(0);
     }
 
     .topics-panel-title {
@@ -1176,9 +1180,9 @@
 
     <!-- Page 3: Scenario Selection View -->
     <div id="scenarioSelection" style="display: none;">
-      <div class="scenario-selection-layout">
+      <div class="scenario-selection-layout" id="panelContainer">
         <!-- Panel 1: Headings (12.5%) -->
-        <div class="headings-panel">
+        <div class="headings-panel" id="headings-panel">
           <div class="panel-header">
             <button class="top-back-button" onclick="backToDifficulty()">← Back</button>
             <p id="selectedDifficultyIndicator" style="margin-top: 15px; font-size: 13px; color: #6366f1; font-weight: 600;"></p>
@@ -1196,7 +1200,7 @@
         </div>
 
         <!-- Panel 2: Subheadings (12.5%) -->
-        <div id="subheadings-panel" class="subheadings-panel">
+        <div id="subheadings-panel" class="subheadings-panel" onmouseleave="handlePanelMouseLeave('subheadings')">
           <!-- Clinical subheadings -->
           <div id="subheadings-clinical" class="subheading-group" style="display: none;">
             <div class="subheading-item" onmouseenter="showTopics('emergencies')">1. Emergencies</div>
@@ -1221,12 +1225,12 @@
         </div>
 
         <!-- Panel 3: Topics (25%) -->
-        <div id="topics-panel" class="topics-panel">
+        <div id="topics-panel" class="topics-panel" onmouseleave="handlePanelMouseLeave('topics')">
           <!-- Topics will be populated dynamically -->
         </div>
 
         <!-- Right Content Area (50%) - Empty for now -->
-        <div class="content-area">
+        <div class="content-area" onmouseenter="hideAllPanels()">
           <!-- Empty for future content -->
         </div>
       </div>
