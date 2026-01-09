@@ -707,14 +707,19 @@ function selectScenario(topicFolder, title, imageFile) {
 
   // Show transition overlay
   const transitionOverlay = document.getElementById('simulationTransition');
+  console.log('[TRANSITION] Overlay element:', transitionOverlay);
+  console.log('[TRANSITION] Adding active class');
   transitionOverlay.classList.add('active');
+  console.log('[TRANSITION] Active class added, classes:', transitionOverlay.className);
 
   // Wait 1.5 seconds then start scenario with fade-in
   setTimeout(() => {
+    console.log('[TRANSITION] Starting fade out');
     // Fade out transition
     transitionOverlay.style.opacity = '0';
 
     setTimeout(() => {
+      console.log('[TRANSITION] Removing overlay, starting scenario');
       // Remove active class and reset opacity
       transitionOverlay.classList.remove('active');
       transitionOverlay.style.opacity = '1';
