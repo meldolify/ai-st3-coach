@@ -702,8 +702,10 @@ function selectScenario(topicFolder, title, imageFile) {
   }
 
   // Construct the prompt file path using the pre-selected difficulty
-  // Format: prompts/{topicFolder}/{difficulty}_{topicFolder}_1.txt
-  const promptFile = `prompts/${topicFolder}/${selectedDifficulty}_${topicFolder}_1.txt`;
+  // Extract just the folder name (last part after final slash) for the filename
+  const folderName = topicFolder.split('/').pop();
+  // Format: prompts/{topicFolder}/{difficulty}_{folderName}_1.txt
+  const promptFile = `prompts/${topicFolder}/${selectedDifficulty}_${folderName}_1.txt`;
 
   // Show "Entering Simulation Room" overlay
   const overlay = document.getElementById('simulationTransition');
