@@ -166,13 +166,13 @@ class V4Session {
     this.isConnected = false;
     this.inFeedbackMode = false; // Track if we're in feedback mode
 
-    // Voice mapping for each difficulty level (swap John and Perry)
+    // Voice mapping for each difficulty level using Chirp 3 HD voices
     this.voiceMap = {
-      'easy': 'en-GB-Neural2-B',      // John: Professional male British voice
-      'medium': 'en-GB-Neural2-F',    // Elliot: Female British voice
-      'strict': 'en-GB-Neural2-D'     // Perry: Male British voice (original default)
+      'easy': 'en-GB-Chirp3-HD-A',      // John: Warm, encouraging male voice
+      'medium': 'en-GB-Chirp3-HD-B',    // Elliot: Balanced female voice
+      'strict': 'en-GB-Chirp3-HD-C'     // Perry: Direct, authoritative male voice
     };
-    this.voice = this.voiceMap[difficulty] || 'en-GB-Neural2-D';
+    this.voice = this.voiceMap[difficulty] || 'en-GB-Chirp3-HD-A';
   }
 
   async connect() {
