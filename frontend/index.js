@@ -716,7 +716,7 @@ function selectScenario(topicFolder, title, imageFile) {
     });
   });
 
-  // Wait 1.5 seconds then fade out overlay
+  // Wait 1 second then fade out overlay
   setTimeout(() => {
     overlay.classList.remove('active');
 
@@ -730,7 +730,7 @@ function selectScenario(topicFolder, title, imageFile) {
         startScenario(title, title, promptFile, imageFile);
       });
     }, 800); // Wait for overlay fade-out
-  }, 1500); // Display overlay for 1.5 seconds
+  }, 1000); // Display overlay for 1 second
 }
 
 function startScenario(category, title, promptFile, imageFile) {
