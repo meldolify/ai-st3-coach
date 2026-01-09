@@ -168,11 +168,11 @@ class V4Session {
 
     // Voice mapping for each difficulty level using Chirp 3 HD voices
     this.voiceMap = {
-      'easy': 'en-GB-Chirp3-HD-A',      // John: Warm, encouraging male voice
-      'medium': 'en-GB-Chirp3-HD-B',    // Elliot: Balanced female voice
-      'strict': 'en-GB-Chirp3-HD-C'     // Perry: Direct, authoritative male voice
+      'easy': 'en-GB-Chirp3-HD-Charon',      // John: Warm, encouraging voice
+      'medium': 'en-GB-Chirp3-HD-Leda',      // Elliot: Balanced voice
+      'strict': 'en-GB-Chirp3-HD-Fenrir'     // Perry: Direct, authoritative voice
     };
-    this.voice = this.voiceMap[difficulty] || 'en-GB-Chirp3-HD-A';
+    this.voice = this.voiceMap[difficulty] || 'en-GB-Chirp3-HD-Charon';
   }
 
   async connect() {
