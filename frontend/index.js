@@ -605,12 +605,22 @@ function handlePanelMouseLeave(panelType) {
     const isOverSubheadings = subheadingsPanel.matches(':hover');
     const isOverTopics = topicsPanel.matches(':hover');
 
-    if (panelType === 'subheadings') {
-      // If mouse left subheadings panel, hide both subheadings and topics
-      // unless hovering over headings, subheadings, or topics
-      if (!isOverHeadings && !isOverSubheadings && !isOverTopics) {
+    if (panelType === 'headings') {
+      // If mouse left headings panel, hide subheadings and topics
+      // unless hovering over subheadings or topics
+      if (!isOverSubheadings && !isOverTopics) {
         subheadingsPanel.classList.remove('visible');
         topicsPanel.classList.remove('visible');
+      }
+    } else if (panelType === 'subheadings') {
+      // If mouse left subheadings panel, hide topics
+      // unless hovering over topics
+      if (!isOverTopics) {
+        topicsPanel.classList.remove('visible');
+      }
+      // Also hide subheadings if not hovering over headings or subheadings
+      if (!isOverHeadings && !isOverSubheadings) {
+        subheadingsPanel.classList.remove('visible');
       }
     } else if (panelType === 'topics') {
       // If mouse left topics panel, hide topics only
@@ -619,7 +629,7 @@ function handlePanelMouseLeave(panelType) {
         topicsPanel.classList.remove('visible');
       }
     }
-  }, 150); // Small delay to allow smooth transitions between panels
+  }, 50); // Reduced delay for more responsive hiding
 }
 
 // Hide all panels when hovering over content area
