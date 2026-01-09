@@ -167,18 +167,98 @@
 
     .instructions {
       background: #eff6ff;
-      padding: 18px 24px;
-      margin-top: 20px;
-      font-size: 14px;
+      padding: 32px 40px;
+      font-size: 16px;
       color: #1e40af;
-      border-left: 3px solid #3b82f6;
-      border-radius: 8px;
+      border-left: 4px solid #3b82f6;
+      border-radius: 12px;
+      line-height: 1.8;
     }
 
     .instructions strong {
       display: block;
-      margin-bottom: 8px;
+      margin-bottom: 16px;
       color: #1e3a8a;
+      font-size: 20px;
+    }
+
+    .instructions ol {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    .instructions li {
+      margin-bottom: 12px;
+    }
+
+    /* Side Panel Layout for Scenario Selection */
+    .scenario-selection-layout {
+      display: grid;
+      grid-template-columns: 350px 1fr;
+      gap: 40px;
+      margin-top: 20px;
+      min-height: 70vh;
+    }
+
+    .side-panel {
+      background: #f9fafb;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      height: fit-content;
+      position: sticky;
+      top: 20px;
+    }
+
+    .side-panel-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+    }
+
+    .station-nav-item {
+      padding: 16px 20px;
+      margin-bottom: 8px;
+      background: white;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+      font-size: 15px;
+      font-weight: 600;
+      color: #374151;
+    }
+
+    .station-nav-item:hover {
+      background: #eef2ff;
+      border-color: #6366f1;
+      color: #6366f1;
+      transform: translateX(4px);
+    }
+
+    .station-nav-item.active {
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      color: white;
+      border-color: transparent;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    }
+
+    .content-area {
+      background: white;
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .station-content {
+      display: none;
+    }
+
+    .station-content.active {
+      display: block;
     }
 
     /* Simulation Room - Side by Side Layout */
@@ -476,28 +556,28 @@
       transform: translateX(-4px) scale(0.98);
     }
 
-    /* Top back button for page navigation */
+    /* Enhanced back button for page navigation */
     .top-back-button {
-      background: #f3f4f6;
-      color: #374151;
-      padding: 12px 24px;
-      border: 2px solid #e5e7eb;
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      color: white;
+      padding: 16px 32px;
+      border: none;
       cursor: pointer;
-      font-size: 15px;
-      font-weight: 600;
+      font-size: 18px;
+      font-weight: 700;
       transition: all 0.3s ease;
-      border-radius: 10px;
+      border-radius: 12px;
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      margin-bottom: 20px;
+      gap: 12px;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
     }
 
     .top-back-button:hover {
-      background: #e5e7eb;
-      color: #111827;
-      border-color: #d1d5db;
-      transform: translateX(-4px);
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      transform: translateX(-4px) translateY(-2px);
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
     }
 
     .top-back-button:active {
@@ -1045,30 +1125,33 @@
 
     <!-- Page 3: Scenario Selection View -->
     <div id="scenarioSelection" style="display: none;">
-      <button class="top-back-button" onclick="backToDifficulty()">← Back to Difficulty</button>
+      <button class="top-back-button" onclick="backToDifficulty()">⬅ Back to Difficulty Selection</button>
 
       <div class="header">
-        <h1>🎯 ST3 Plastic Surgery Interview Trainer</h1>
-        <p class="subtitle">Select a scenario to begin your practice session</p>
+        <h1>🎯 Select Your Scenario</h1>
         <p id="selectedDifficultyIndicator" class="subtitle" style="margin-top: 10px; font-weight: 600;"></p>
       </div>
 
-      <div class="menu-container">
-        <!-- Level 1: Main Category -->
-        <div class="menu-item">
-          <div class="menu-header level-1" onclick="toggleMenu('plastic-surgery-st3')">
-            <span>Plastic Surgery ST3 Interview</span>
-            <span class="arrow" id="arrow-plastic-surgery-st3">▶</span>
+      <div class="scenario-selection-layout">
+        <!-- Left Side Panel -->
+        <div class="side-panel">
+          <div class="side-panel-title">Station Types</div>
+          <div class="station-nav-item active" onclick="switchStation('clinical', event)">
+            <div>📋 Clinical Stations</div>
           </div>
-          <div class="menu-content" id="content-plastic-surgery-st3">
+          <div class="station-nav-item" onclick="switchStation('communication', event)">
+            <div>💬 Communication Stations</div>
+          </div>
+          <div class="station-nav-item" onclick="switchStation('structured', event)">
+            <div>📝 Structured Interview</div>
+          </div>
+        </div>
 
-            <!-- ====== CLINICAL STATIONS ====== -->
-            <div class="menu-item">
-              <div class="menu-header level-2" onclick="toggleMenu('clinical')">
-                <span>Clinical Stations</span>
-                <span class="arrow" id="arrow-clinical">▶</span>
-              </div>
-              <div class="menu-content" id="content-clinical">
+        <!-- Right Content Area -->
+        <div class="content-area">
+          <!-- Clinical Stations Content -->
+          <div id="station-clinical" class="station-content active">
+            <div class="menu-container">
 
                 <!-- 1. Emergencies -->
                 <div class="menu-item">
@@ -1196,14 +1279,12 @@
 
               </div>
             </div>
+            </div>
+          </div>
 
-            <!-- ====== COMMUNICATION STATIONS ====== -->
-            <div class="menu-item">
-              <div class="menu-header level-2" onclick="toggleMenu('communication')">
-                <span>Communication Stations</span>
-                <span class="arrow" id="arrow-communication">▶</span>
-              </div>
-              <div class="menu-content" id="content-communication">
+          <!-- Communication Stations Content -->
+          <div id="station-communication" class="station-content">
+            <div class="menu-container">
 
                 <!-- Call-The-Boss -->
                 <div class="menu-item">
@@ -1243,14 +1324,13 @@
 
               </div>
             </div>
+            </div>
+          </div>
 
-            <!-- ====== STRUCTURED INTERVIEW ====== -->
-            <div class="menu-item">
-              <div class="menu-header level-2" onclick="toggleMenu('structured')">
-                <span>Structured Interview</span>
-                <span class="arrow" id="arrow-structured">▶</span>
-              </div>
-              <div class="menu-content" id="content-structured">
+          <!-- Structured Interview Content -->
+          <div id="station-structured" class="station-content">
+            <div class="menu-container">
+              <div class="menu-item">
                 <div class="scenario-item" onclick="selectScenario('structured_research', 'Research')">📋 Research</div>
                 <div class="scenario-item" onclick="selectScenario('structured_audit', 'Audit')">📋 Audit</div>
                 <div class="scenario-item" onclick="selectScenario('structured_teaching', 'Teaching')">📋 Teaching</div>
@@ -1259,17 +1339,20 @@
                 <div class="scenario-item" onclick="selectScenario('structured_consent', 'Consent')">📋 Consent</div>
               </div>
             </div>
+          </div>
 
+          <!-- Instructions Box (Right Side) -->
+          <div class="instructions">
+            <strong>How to Use This Trainer</strong>
+            <ol>
+              <li>Select a station type from the left panel (Clinical, Communication, or Structured Interview)</li>
+              <li>Browse through the categories and choose your specific scenario</li>
+              <li>Click on a scenario to enter the simulation room</li>
+              <li>Have a real-time voice conversation with the AI examiner</li>
+              <li>Practice as many times as you need to build confidence and improve your performance</li>
+            </ol>
           </div>
         </div>
-      </div>
-
-      <div class="instructions">
-        <strong>Instructions:</strong>
-        1. Navigate through the menu to select your practice scenario<br>
-        2. Click on a specific scenario to enter the simulation room<br>
-        3. You'll be able to have a real-time voice conversation with an AI examiner<br>
-        4. Practice as many times as you need to build your confidence
       </div>
     </div>
 
