@@ -464,6 +464,15 @@ function showSubheadings(headingId) {
   }, 300); // 300ms delay before opening
 }
 
+// Cancel topics timer when mouse enters topics panel
+function cancelTopicsTimer() {
+  if (topicsTimer) {
+    console.log('[CANCEL] Mouse entered topics panel, canceling pending timer');
+    clearTimeout(topicsTimer);
+    topicsTimer = null;
+  }
+}
+
 // Show topics panel when hovering over a subheading
 function showTopics(subheadingId) {
   console.log('[HOVER] showTopics called for:', subheadingId);
