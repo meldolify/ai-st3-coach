@@ -705,90 +705,18 @@ function selectScenario(topicFolder, title, imageFile) {
   // Format: prompts/{topicFolder}/{difficulty}_{topicFolder}_1.txt
   const promptFile = `prompts/${topicFolder}/${selectedDifficulty}_${topicFolder}_1.txt`;
 
-  // Show transition overlay
-  const transitionOverlay = document.getElementById('simulationTransition');
-  console.log('[TRANSITION] Overlay element:', transitionOverlay);
-  console.log('[TRANSITION] Adding active class');
-
-  // First set display to flex, then trigger opacity transition
-  transitionOverlay.style.display = 'flex';
-
-  // Use requestAnimationFrame to ensure display change is applied before opacity change
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      transitionOverlay.classList.add('active');
-      console.log('[TRANSITION] Active class added, classes:', transitionOverlay.className);
-    });
+  // Use the same transition pattern as other page transitions
+  transitionToPage('scenarioSelection', 'simulationRoom', () => {
+    // Load scenario content after page transition starts
+    startScenario(title, title, promptFile, imageFile);
   });
-
-  // Start loading the simulation room immediately in the background (but don't fade in yet)
-  console.log('[TRANSITION] Starting scenario load in background');
-  const simulationRoom = startScenario(title, title, promptFile, imageFile, true); // Pass true to skip immediate fade-in
-
-  // Wait 1 second then start fade out of overlay AND fade in of simulation room
-  setTimeout(() => {
-    console.log('[TRANSITION] Starting fade out and simulation fade in');
-    // Fade out transition by removing active class
-    transitionOverlay.classList.remove('active');
-
-    // Start simulation room fade-in at the same time
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        simulationRoom.classList.add('fade-in');
-        console.log('[TRANSITION] Added fade-in to simulation room');
-      });
-    });
-
-    // Wait for fade-out transition to complete (800ms) then hide overlay
-    setTimeout(() => {
-      console.log('[TRANSITION] Removing overlay display');
-      transitionOverlay.style.display = 'none';
-    }, 800); // Wait for fade-out transition
-  }, 1000); // Display for 1 second
 }
 
-function startScenario(category, title, promptFile, imageFile, skipFadeIn) {
+function startScenario(category, title, promptFile, imageFile) {
   promptFile = promptFile || 'template.txt';
   currentScenario = { category: category, title: title, promptFile: promptFile, imageFile: imageFile };
 
-  const scenarioSelection = document.getElementById('scenarioSelection');
-  const simulationRoom = document.getElementById('simulationRoom');
-
-  // Hide scenario selection
-  scenarioSelection.style.display = 'none';
-
-  console.log('[SIMULATION] Starting simulation room transition, skipFadeIn:', skipFadeIn);
-  console.log('[SIMULATION] Initial state - display:', window.getComputedStyle(simulationRoom).display, 'opacity:', window.getComputedStyle(simulationRoom).opacity);
-
-  // Reset simulation room state (remove fade-in from previous scenario)
-  simulationRoom.classList.remove('fade-in', 'active');
-  console.log('[SIMULATION] Reset classes, now:', simulationRoom.className);
-
-  // Show simulation room
-  simulationRoom.style.display = 'grid';
-  console.log('[SIMULATION] Set display to grid');
-
-  simulationRoom.classList.add('active');
-  console.log('[SIMULATION] Added active class, classes:', simulationRoom.className);
-  console.log('[SIMULATION] After active - display:', window.getComputedStyle(simulationRoom).display, 'opacity:', window.getComputedStyle(simulationRoom).opacity);
-
-  // Only trigger fade-in immediately if NOT skipping (for direct scenario starts without overlay)
-  if (!skipFadeIn) {
-    requestAnimationFrame(() => {
-      console.log('[SIMULATION] First RAF - opacity:', window.getComputedStyle(simulationRoom).opacity);
-      requestAnimationFrame(() => {
-        console.log('[SIMULATION] Second RAF, adding fade-in class');
-        simulationRoom.classList.add('fade-in');
-        console.log('[SIMULATION] Added fade-in class, classes:', simulationRoom.className);
-        console.log('[SIMULATION] After fade-in - opacity:', window.getComputedStyle(simulationRoom).opacity);
-
-        setTimeout(() => {
-          console.log('[SIMULATION] After 500ms - opacity:', window.getComputedStyle(simulationRoom).opacity);
-        }, 500);
-      });
-    });
-  }
-
+  // Set scenario information
   document.getElementById('currentScenarioTitle').textContent = title;
   document.getElementById('currentScenarioCategory').textContent = category;
 
@@ -816,9 +744,6 @@ function startScenario(category, title, promptFile, imageFile, skipFadeIn) {
   // It will fade in when user clicks "Start Session"
 
   log('Selected scenario: ' + title, 'info');
-
-  // Return the simulation room element so the caller can control fade-in timing
-  return simulationRoom;
 }
 
 function exitSimulation() {
