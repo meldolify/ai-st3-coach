@@ -716,6 +716,10 @@ function startScenario(category, title, promptFile, imageFile) {
   promptFile = promptFile || 'template.txt';
   currentScenario = { category: category, title: title, promptFile: promptFile, imageFile: imageFile };
 
+  // Apply active class to simulation room to trigger grid layout
+  const simulationRoom = document.getElementById('simulationRoom');
+  simulationRoom.classList.add('active');
+
   // Set scenario information
   document.getElementById('currentScenarioTitle').textContent = title;
   document.getElementById('currentScenarioCategory').textContent = category;
