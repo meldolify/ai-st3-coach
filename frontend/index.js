@@ -760,6 +760,10 @@ function startScenario(category, title, promptFile, imageFile, skipFadeIn) {
   console.log('[SIMULATION] Starting simulation room transition, skipFadeIn:', skipFadeIn);
   console.log('[SIMULATION] Initial state - display:', window.getComputedStyle(simulationRoom).display, 'opacity:', window.getComputedStyle(simulationRoom).opacity);
 
+  // Reset simulation room state (remove fade-in from previous scenario)
+  simulationRoom.classList.remove('fade-in', 'active');
+  console.log('[SIMULATION] Reset classes, now:', simulationRoom.className);
+
   // Show simulation room
   simulationRoom.style.display = 'grid';
   console.log('[SIMULATION] Set display to grid');
