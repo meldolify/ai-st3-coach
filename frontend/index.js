@@ -464,6 +464,14 @@ function showSubheadings(headingId) {
   }, 300); // 300ms delay before opening
 }
 
+// Cancel subheadings timer when mouse enters subheadings panel
+function cancelSubheadingsTimer() {
+  if (subheadingsTimer) {
+    clearTimeout(subheadingsTimer);
+    subheadingsTimer = null;
+  }
+}
+
 // Cancel topics timer when mouse enters topics panel
 function cancelTopicsTimer() {
   if (topicsTimer) {
