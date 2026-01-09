@@ -420,6 +420,41 @@ function toggleMenu(menuId) {
   }
 }
 
+// Switch between station types (Clinical, Communication, Structured)
+function switchStation(stationId, event) {
+  // Hide all station contents
+  document.querySelectorAll('.station-content').forEach(station => {
+    station.classList.remove('active');
+  });
+
+  // Remove active class from all nav items
+  document.querySelectorAll('.station-nav-item').forEach(navItem => {
+    navItem.classList.remove('active');
+  });
+
+  // Show the selected station content
+  const selectedStation = document.getElementById('station-' + stationId);
+  if (selectedStation) {
+    selectedStation.classList.add('active');
+  }
+
+  // Add active class to the clicked nav item
+  if (event && event.target) {
+    event.target.closest('.station-nav-item').classList.add('active');
+  }
+
+  // Close all open menus when switching stations
+  document.querySelectorAll('.menu-content.open').forEach(menu => {
+    menu.classList.remove('open');
+  });
+  document.querySelectorAll('.arrow.open').forEach(arrow => {
+    arrow.classList.remove('open');
+  });
+  document.querySelectorAll('.menu-header.active').forEach(header => {
+    header.classList.remove('active');
+  });
+}
+
 // Called when user clicks a scenario - directly starts with pre-selected difficulty
 function selectScenario(topicFolder, title, imageFile) {
   // Ensure we have a difficulty selected
