@@ -103,22 +103,22 @@ async function googleTTS(text, voiceName) {
   voiceName = voiceName || TTS_VOICE;
   console.log('[TTS] Using voice: ' + voiceName);
 
-  // Determine gender based on voice name (B = Female for Chirp3-HD-B, others = Male)
-  const gender = (voiceName.includes('-F') || voiceName.includes('-B')) ? 'FEMALE' : 'MALE';
+  // Determine gender based on voice name (Leda = Female, others = Male for these voices)
+  const gender = (voiceName.includes('-F') || voiceName.includes('Leda')) ? 'FEMALE' : 'MALE';
 
   // Personality-based audio settings
   let speakingRate = 1.0;
   let pitch = 0.0;
 
-  if (voiceName.includes('Chirp3-HD-A')) {
+  if (voiceName.includes('Charon')) {
     // John (Easy): Slightly slower, warmer tone
     speakingRate = 0.95;
     pitch = 0.5;
-  } else if (voiceName.includes('Chirp3-HD-B')) {
+  } else if (voiceName.includes('Leda')) {
     // Elliot (Medium): Balanced, professional
     speakingRate = 1.0;
     pitch = 0.0;
-  } else if (voiceName.includes('Chirp3-HD-C')) {
+  } else if (voiceName.includes('Fenrir')) {
     // Perry (Strict): Slightly faster, more direct
     speakingRate = 1.05;
     pitch = -0.5;
