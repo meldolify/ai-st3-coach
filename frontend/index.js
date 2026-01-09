@@ -742,8 +742,29 @@ function selectScenario(topicFolder, title, imageFile) {
 function startScenario(category, title, promptFile, imageFile) {
   promptFile = promptFile || 'template.txt';
   currentScenario = { category: category, title: title, promptFile: promptFile, imageFile: imageFile };
-  document.getElementById('scenarioSelection').style.display = 'none';
-  document.getElementById('simulationRoom').classList.add('active');
+
+  const scenarioSelection = document.getElementById('scenarioSelection');
+  const simulationRoom = document.getElementById('simulationRoom');
+
+  // Hide scenario selection
+  scenarioSelection.style.display = 'none';
+
+  // Show simulation room with fade-in effect
+  simulationRoom.style.display = 'grid';
+  simulationRoom.classList.add('active');
+
+  // Trigger fade-in animation
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      simulationRoom.classList.add('fade-in');
+    });
+  });
+
+  // Remove fade-in class after animation completes
+  setTimeout(() => {
+    simulationRoom.classList.remove('fade-in');
+  }, 500);
+
   document.getElementById('currentScenarioTitle').textContent = title;
   document.getElementById('currentScenarioCategory').textContent = category;
 
