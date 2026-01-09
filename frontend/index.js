@@ -757,13 +757,9 @@ function startScenario(category, title, promptFile, imageFile) {
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
       simulationRoom.classList.add('fade-in');
+      console.log('[SIMULATION] Added fade-in class, classes:', simulationRoom.className);
     });
   });
-
-  // Remove fade-in class after animation completes
-  setTimeout(() => {
-    simulationRoom.classList.remove('fade-in');
-  }, 500);
 
   document.getElementById('currentScenarioTitle').textContent = title;
   document.getElementById('currentScenarioCategory').textContent = category;
