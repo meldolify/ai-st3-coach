@@ -466,18 +466,26 @@ function showSubheadings(headingId) {
 
 // Show topics panel when hovering over a subheading
 function showTopics(subheadingId) {
+  console.log('[HOVER] showTopics called for:', subheadingId);
+
   // Clear any pending timer
-  clearTimeout(topicsTimer);
+  if (topicsTimer) {
+    console.log('[HOVER] Clearing previous timer');
+    clearTimeout(topicsTimer);
+  }
 
   // Always use delay, even if panel is already visible
   // This prevents accidental switching while moving mouse through subheadings
+  console.log('[HOVER] Starting 300ms timer for:', subheadingId);
   topicsTimer = setTimeout(() => {
+    console.log('[HOVER] Timer elapsed, updating topics to:', subheadingId);
     updateTopicsContent(subheadingId);
   }, 300); // 300ms delay before switching topics
 }
 
 // Helper function to update topics panel content
 function updateTopicsContent(subheadingId) {
+  console.log('[UPDATE] Updating topics panel content for:', subheadingId);
   const topicsPanel = document.getElementById('topics-panel');
 
   // Define all topics for each subheading
