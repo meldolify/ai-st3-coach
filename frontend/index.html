@@ -771,6 +771,133 @@
       color: #ccc;
     }
 
+    /* Difficulty Selection Modal */
+    .difficulty-modal {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+    }
+
+    .difficulty-modal.active {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .difficulty-content {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 500px;
+      width: 90%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+
+    .difficulty-content h2 {
+      color: #111827;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .difficulty-content p {
+      text-align: center;
+      color: #6b7280;
+      margin-bottom: 30px;
+    }
+
+    .difficulty-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .difficulty-btn {
+      padding: 20px;
+      border: 3px solid transparent;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: left;
+      background: #f9fafb;
+    }
+
+    .difficulty-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+
+    .difficulty-btn.easy {
+      border-color: #10b981;
+    }
+
+    .difficulty-btn.easy:hover {
+      background: #d1fae5;
+      border-color: #059669;
+    }
+
+    .difficulty-btn.medium {
+      border-color: #f59e0b;
+    }
+
+    .difficulty-btn.medium:hover {
+      background: #fef3c7;
+      border-color: #d97706;
+    }
+
+    .difficulty-btn.strict {
+      border-color: #ef4444;
+    }
+
+    .difficulty-btn.strict:hover {
+      background: #fee2e2;
+      border-color: #dc2626;
+    }
+
+    .difficulty-btn-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .difficulty-btn.easy .difficulty-btn-title {
+      color: #059669;
+    }
+
+    .difficulty-btn.medium .difficulty-btn-title {
+      color: #d97706;
+    }
+
+    .difficulty-btn.strict .difficulty-btn-title {
+      color: #dc2626;
+    }
+
+    .difficulty-btn-desc {
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    .difficulty-cancel {
+      margin-top: 20px;
+      padding: 12px;
+      background: #e5e7eb;
+      border: none;
+      border-radius: 8px;
+      width: 100%;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .difficulty-cancel:hover {
+      background: #d1d5db;
+    }
+
     /* Specialty Selection Page */
     .specialty-grid {
       display: grid;
@@ -1060,103 +1187,201 @@
           </div>
           <div class="menu-content" id="content-plastic-surgery-st3">
 
-            <!-- Level 2: Clinical -->
+            <!-- ====== CLINICAL STATIONS ====== -->
             <div class="menu-item">
               <div class="menu-header level-2" onclick="toggleMenu('clinical')">
-                <span>1.1 Clinical Stations</span>
+                <span>Clinical Stations</span>
                 <span class="arrow" id="arrow-clinical">▶</span>
               </div>
               <div class="menu-content" id="content-clinical">
 
-                <!-- Level 3: Hand -->
-                <div class="menu-item">
-                  <div class="menu-header level-3" onclick="toggleMenu('hand')">
-                    <span>1.1.1 Hand</span>
-                    <span class="arrow" id="arrow-hand">▶</span>
-                  </div>
-                  <div class="menu-content" id="content-hand">
-                    <div class="scenario-item" onclick="startScenario('hand', 'Flexor Tendon Injury')">
-                      📋 Flexor Tendon Injury
-                    </div>
-                    <div class="scenario-item" onclick="startScenario('hand', 'Carpal Tunnel Syndrome')">
-                      📋 Carpal Tunnel Syndrome
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Level 3: Burns -->
-                <div class="menu-item">
-                  <div class="menu-header level-3" onclick="toggleMenu('burns')">
-                    <span>1.1.2 Burns</span>
-                    <span class="arrow" id="arrow-burns">▶</span>
-                  </div>
-                  <div class="menu-content" id="content-burns">
-                    <div class="scenario-item" onclick="startScenario('burns', 'Acute Burn Management')">
-                      📋 Acute Burn Management
-                    </div>
-                    <div class="scenario-item" onclick="startScenario('burns', 'Chemical Burn')">
-                      📋 Chemical Burn
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Level 3: Emergencies -->
+                <!-- 1. Emergencies -->
                 <div class="menu-item">
                   <div class="menu-header level-3" onclick="toggleMenu('emergencies')">
-                    <span>1.1.3 Emergencies</span>
+                    <span>1. Emergencies</span>
                     <span class="arrow" id="arrow-emergencies">▶</span>
                   </div>
                   <div class="menu-content" id="content-emergencies">
-                    <div class="scenario-item" onclick="startScenario('emergencies', 'Necrotising Fasciitis', 'nec_fasc.txt', 'nec_fasc_1.jpg')">
-                      📋 Necrotising Fasciitis
-                    </div>
-                    <div class="scenario-item" onclick="startScenario('emergencies', 'Digital Amputation', 'template.txt')">
-                      📋 Digital Amputation
-                    </div>
-                    <div class="scenario-item" onclick="startScenario('emergencies', 'Open Fracture', 'template.txt')">
-                      📋 Open Fracture
-                    </div>
+                    <div class="scenario-item" onclick="selectScenario('digital_amputation', 'Digital Amputation')">📋 Digital Amputation</div>
+                    <div class="scenario-item" onclick="selectScenario('macro_amputation', 'Macro Amputation')">📋 Macro Amputation</div>
+                    <div class="scenario-item" onclick="selectScenario('degloving_devascularisation', 'Degloving / Devascularisation')">📋 Degloving / Devascularisation</div>
+                    <div class="scenario-item" onclick="selectScenario('mangled_hand', 'Mangled Hand')">📋 Mangled Hand</div>
+                    <div class="scenario-item" onclick="selectScenario('high_pressure_injection', 'High Pressure Injection Injury')">📋 High Pressure Injection Injury</div>
+                    <div class="scenario-item" onclick="selectScenario('flexor_sheath_infection', 'Flexor Sheath Infection')">📋 Flexor Sheath Infection</div>
+                    <div class="scenario-item" onclick="selectScenario('extravasation_injury', 'Extravasation Injury')">📋 Extravasation Injury</div>
+                    <div class="scenario-item" onclick="selectScenario('necrotising_fasciitis', 'Necrotising Fasciitis', 'nec_fasc_1.jpg')">📋 Necrotising Fasciitis</div>
+                    <div class="scenario-item" onclick="selectScenario('open_fracture', 'Open Fracture')">📋 Open Fracture</div>
+                    <div class="scenario-item" onclick="selectScenario('compartment_syndrome', 'Compartment Syndrome')">📋 Compartment Syndrome</div>
+                    <div class="scenario-item" onclick="selectScenario('flap_at_risk', 'Flap at Risk')">📋 Flap at Risk</div>
+                  </div>
+                </div>
+
+                <!-- 2. Hand Trauma -->
+                <div class="menu-item">
+                  <div class="menu-header level-3" onclick="toggleMenu('hand-trauma')">
+                    <span>2. Hand Trauma</span>
+                    <span class="arrow" id="arrow-hand-trauma">▶</span>
+                  </div>
+                  <div class="menu-content" id="content-hand-trauma">
+                    <div class="scenario-item" onclick="selectScenario('fingertip_injury', 'Fingertip Injury')">📋 Fingertip Injury</div>
+                    <div class="scenario-item" onclick="selectScenario('closed_hand_fracture', 'Closed Hand Fracture')">📋 Closed Hand Fracture</div>
+                    <div class="scenario-item" onclick="selectScenario('tendon_injury', 'Tendon Injury')">📋 Tendon Injury</div>
+                    <div class="scenario-item" onclick="selectScenario('fightbite_injury', 'Fightbite Injury')">📋 Fightbite Injury</div>
+                    <div class="scenario-item" onclick="selectScenario('finger_deformities_ligamental', 'Finger Deformities and Ligamental Injuries')">📋 Finger Deformities and Ligamental Injuries</div>
+                  </div>
+                </div>
+
+                <!-- 3. Elective Hand -->
+                <div class="menu-item">
+                  <div class="menu-header level-3" onclick="toggleMenu('elective-hand')">
+                    <span>3. Elective Hand</span>
+                    <span class="arrow" id="arrow-elective-hand">▶</span>
+                  </div>
+                  <div class="menu-content" id="content-elective-hand">
+                    <div class="scenario-item" onclick="selectScenario('dupuytrens_disease', 'Dupuytren\'s Disease')">📋 Dupuytren's Disease</div>
+                    <div class="scenario-item" onclick="selectScenario('compression_neuropathies', 'Compression Neuropathies')">📋 Compression Neuropathies</div>
+                    <div class="scenario-item" onclick="selectScenario('hand_deformities', 'Hand Deformities')">📋 Hand Deformities</div>
+                  </div>
+                </div>
+
+                <!-- 4. Skin Cancer -->
+                <div class="menu-item">
+                  <div class="menu-header level-3" onclick="toggleMenu('skin-cancer')">
+                    <span>4. Skin Cancer</span>
+                    <span class="arrow" id="arrow-skin-cancer">▶</span>
+                  </div>
+                  <div class="menu-content" id="content-skin-cancer">
+                    <div class="scenario-item" onclick="selectScenario('bcc_basic', 'BCC Basic')">📋 BCC Basic</div>
+                    <div class="scenario-item" onclick="selectScenario('scc_basic', 'SCC Basic')">📋 SCC Basic</div>
+                    <div class="scenario-item" onclick="selectScenario('mm_basic', 'MM Basic')">📋 MM Basic</div>
+                    <div class="scenario-item" onclick="selectScenario('scalp', 'Skin Cancer - Scalp')">📋 Scalp</div>
+                    <div class="scenario-item" onclick="selectScenario('forehead_temple', 'Skin Cancer - Forehead / Temple')">📋 Forehead / Temple</div>
+                    <div class="scenario-item" onclick="selectScenario('eyelid', 'Skin Cancer - Eyelid')">📋 Eyelid</div>
+                    <div class="scenario-item" onclick="selectScenario('nose', 'Skin Cancer - Nose')">📋 Nose</div>
+                    <div class="scenario-item" onclick="selectScenario('lip', 'Skin Cancer - Lip')">📋 Lip</div>
+                    <div class="scenario-item" onclick="selectScenario('ear', 'Skin Cancer - Ear')">📋 Ear</div>
+                    <div class="scenario-item" onclick="selectScenario('subungual', 'Subungual Melanoma')">📋 Subungual</div>
+                    <div class="scenario-item" onclick="selectScenario('mucosal', 'Mucosal Melanoma')">📋 Mucosal</div>
+                    <div class="scenario-item" onclick="selectScenario('fungating_massive', 'Fungating / Massive Tumour')">📋 Fungating / Massive</div>
+                    <div class="scenario-item" onclick="selectScenario('lymph_node_management', 'Lymph Node Management')">📋 Lymph Node Management</div>
+                  </div>
+                </div>
+
+                <!-- 5. Miscellaneous Topics -->
+                <div class="menu-item">
+                  <div class="menu-header level-3" onclick="toggleMenu('miscellaneous')">
+                    <span>5. Miscellaneous Topics</span>
+                    <span class="arrow" id="arrow-miscellaneous">▶</span>
+                  </div>
+                  <div class="menu-content" id="content-miscellaneous">
+                    <div class="scenario-item" onclick="selectScenario('sternal_wound_dehiscence', 'Sternal Wound Dehiscence')">📋 Sternal Wound Dehiscence</div>
+                    <div class="scenario-item" onclick="selectScenario('pressure_ulcer', 'Pressure Ulcer')">📋 Pressure Ulcer</div>
+                    <div class="scenario-item" onclick="selectScenario('pretibial_laceration', 'Pretibial Laceration')">📋 Pretibial Laceration</div>
+                    <div class="scenario-item" onclick="selectScenario('haemangioma_vascular', 'Haemangioma / Vascular Malformation')">📋 Haemangioma / Vascular Malformation</div>
+                    <div class="scenario-item" onclick="selectScenario('chronic_lower_limb_infections', 'Chronic Lower Limb Infections')">📋 Chronic Lower Limb Infections</div>
+                    <div class="scenario-item" onclick="selectScenario('cleft_lip_palate', 'Cleft Lip and Palate')">📋 Cleft Lip and Palate</div>
+                    <div class="scenario-item" onclick="selectScenario('hypospadias', 'Hypospadias')">📋 Hypospadias</div>
+                  </div>
+                </div>
+
+                <!-- 6. Breast and Aesthetic Surgery -->
+                <div class="menu-item">
+                  <div class="menu-header level-3" onclick="toggleMenu('breast-aesthetic')">
+                    <span>6. Breast and Aesthetic Surgery</span>
+                    <span class="arrow" id="arrow-breast-aesthetic">▶</span>
+                  </div>
+                  <div class="menu-content" id="content-breast-aesthetic">
+                    <div class="scenario-item" onclick="selectScenario('breast_cancer_reconstruction', 'Breast Cancer and Reconstruction')">📋 Breast Cancer and Reconstruction</div>
+                    <div class="scenario-item" onclick="selectScenario('breast_reduction', 'Breast Reduction')">📋 Breast Reduction</div>
+                    <div class="scenario-item" onclick="selectScenario('mastopexy', 'Mastopexy')">📋 Mastopexy</div>
+                    <div class="scenario-item" onclick="selectScenario('breast_augmentation_implants', 'Breast Augmentation / Implants')">📋 Breast Augmentation / Implants</div>
+                    <div class="scenario-item" onclick="selectScenario('gynaecomastia', 'Gynaecomastia')">📋 Gynaecomastia</div>
+                    <div class="scenario-item" onclick="selectScenario('abdominoplasty', 'Abdominoplasty')">📋 Abdominoplasty</div>
+                    <div class="scenario-item" onclick="selectScenario('rhinoplasty', 'Rhinoplasty')">📋 Rhinoplasty</div>
+                    <div class="scenario-item" onclick="selectScenario('pinnaplasty', 'Pinnaplasty')">📋 Pinnaplasty</div>
+                  </div>
+                </div>
+
+                <!-- 7. Burns -->
+                <div class="menu-item">
+                  <div class="menu-header level-3" onclick="toggleMenu('burns')">
+                    <span>7. Burns</span>
+                    <span class="arrow" id="arrow-burns">▶</span>
+                  </div>
+                  <div class="menu-content" id="content-burns">
+                    <div class="scenario-item" onclick="selectScenario('resus_burn', 'Resuscitation Burn')">📋 Resus Burn</div>
+                    <div class="scenario-item" onclick="selectScenario('electric_burn', 'Electric Burn')">📋 Electric Burn</div>
+                    <div class="scenario-item" onclick="selectScenario('chemical_burn', 'Chemical Burn')">📋 Chemical Burn</div>
+                    <div class="scenario-item" onclick="selectScenario('major_paediatric_burn', 'Major Paediatric Burn')">📋 Major Paediatric Burn</div>
+                    <div class="scenario-item" onclick="selectScenario('minor_paediatric_burn', 'Minor Paediatric Burn / TSS')">📋 Minor Paediatric Burn / TSS</div>
+                    <div class="scenario-item" onclick="selectScenario('burn_scars', 'Burn Scars')">📋 Burn Scars</div>
+                    <div class="scenario-item" onclick="selectScenario('burn_dressings_skin_substitutes', 'Burn Dressings and Skin Substitutes')">📋 Burn Dressings and Skin Substitutes</div>
                   </div>
                 </div>
 
               </div>
             </div>
 
-            <!-- Level 2: Communication -->
+            <!-- ====== COMMUNICATION STATIONS ====== -->
             <div class="menu-item">
               <div class="menu-header level-2" onclick="toggleMenu('communication')">
-                <span>1.2 Communication Stations</span>
+                <span>Communication Stations</span>
                 <span class="arrow" id="arrow-communication">▶</span>
               </div>
               <div class="menu-content" id="content-communication">
-                <div class="scenario-item" onclick="startScenario('communication', 'Call The Boss - Emergency')">
-                  📋 Call The Boss - Emergency
+
+                <!-- Call-The-Boss -->
+                <div class="menu-item">
+                  <div class="menu-header level-3" onclick="toggleMenu('call-the-boss')">
+                    <span>Call-The-Boss</span>
+                    <span class="arrow" id="arrow-call-the-boss">▶</span>
+                  </div>
+                  <div class="menu-content" id="content-call-the-boss">
+                    <div class="scenario-item" onclick="selectScenario('call_boss_resus_burn', 'Call Boss - Resus Burn')">📋 Resus Burn</div>
+                    <div class="scenario-item" onclick="selectScenario('call_boss_electric_burn', 'Call Boss - Electric Burn')">📋 Electric Burn</div>
+                    <div class="scenario-item" onclick="selectScenario('call_boss_chemical_hf', 'Call Boss - Chemical / HF Burn')">📋 Chemical / HF Burn</div>
+                    <div class="scenario-item" onclick="selectScenario('call_boss_toxic_shock', 'Call Boss - Toxic Shock Syndrome')">📋 Toxic Shock Syndrome</div>
+                    <div class="scenario-item" onclick="selectScenario('call_boss_open_fracture', 'Call Boss - Open Fracture')">📋 Open Fracture</div>
+                    <div class="scenario-item" onclick="selectScenario('call_boss_compartment_syndrome', 'Call Boss - Compartment Syndrome')">📋 Compartment Syndrome</div>
+                    <div class="scenario-item" onclick="selectScenario('call_boss_compromised_flap', 'Call Boss - Compromised Flap')">📋 Compromised Flap</div>
+                    <div class="scenario-item" onclick="selectScenario('call_boss_nec_fasc', 'Call Boss - Necrotising Fasciitis')">📋 Necrotising Fasciitis</div>
+                    <div class="scenario-item" onclick="selectScenario('call_boss_finger_replant', 'Call Boss - Finger Replant / Revascularisation')">📋 Finger Replant / Revascularisation</div>
+                    <div class="scenario-item" onclick="selectScenario('call_boss_macro_replant', 'Call Boss - Macro Replant')">📋 Macro Replant</div>
+                  </div>
                 </div>
-                <div class="scenario-item" onclick="startScenario('communication', 'Consent - Procedure')">
-                  📋 Consent for Procedure
+
+                <!-- Consent -->
+                <div class="menu-item">
+                  <div class="menu-header level-3" onclick="toggleMenu('consent')">
+                    <span>Consent</span>
+                    <span class="arrow" id="arrow-consent">▶</span>
+                  </div>
+                  <div class="menu-content" id="content-consent">
+                    <div class="scenario-item" onclick="selectScenario('consent_breast_reduction', 'Consent - Breast Reduction')">📋 Breast Reduction</div>
+                    <div class="scenario-item" onclick="selectScenario('consent_diep', 'Consent - DIEP')">📋 DIEP</div>
+                    <div class="scenario-item" onclick="selectScenario('consent_skin_lesion', 'Consent - Skin Lesion Excision +/- Reconstruction')">📋 Skin Lesion Excision +/- Reconstruction</div>
+                    <div class="scenario-item" onclick="selectScenario('consent_pinnaplasty', 'Consent - Pinnaplasty')">📋 Pinnaplasty</div>
+                    <div class="scenario-item" onclick="selectScenario('consent_pretibial', 'Consent - Pretibial Laceration')">📋 Pretibial Laceration</div>
+                    <div class="scenario-item" onclick="selectScenario('consent_tendon_nerve', 'Consent - Tendon / Digital Nerve Repair')">📋 Tendon / Digital Nerve Repair</div>
+                  </div>
                 </div>
+
               </div>
             </div>
 
-            <!-- Level 2: Structured Interview -->
+            <!-- ====== STRUCTURED INTERVIEW ====== -->
             <div class="menu-item">
               <div class="menu-header level-2" onclick="toggleMenu('structured')">
-                <span>1.3 Structured Interview</span>
+                <span>Structured Interview</span>
                 <span class="arrow" id="arrow-structured">▶</span>
               </div>
               <div class="menu-content" id="content-structured">
-                <div class="scenario-item" onclick="startScenario('structured', 'Research & Audit')">
-                  📋 Research & Audit
-                </div>
-                <div class="scenario-item" onclick="startScenario('structured', 'Teaching & Training')">
-                  📋 Teaching & Training
-                </div>
-                <div class="scenario-item" onclick="startScenario('structured', 'Risk Management')">
-                  📋 Risk Management
-                </div>
-                <div class="scenario-item" onclick="startScenario('structured', 'Ethics & Consent')">
-                  📋 Ethics & Consent
-                </div>
+                <div class="scenario-item" onclick="selectScenario('structured_research', 'Research')">📋 Research</div>
+                <div class="scenario-item" onclick="selectScenario('structured_audit', 'Audit')">📋 Audit</div>
+                <div class="scenario-item" onclick="selectScenario('structured_teaching', 'Teaching')">📋 Teaching</div>
+                <div class="scenario-item" onclick="selectScenario('structured_ethics', 'Ethics')">📋 Ethics</div>
+                <div class="scenario-item" onclick="selectScenario('structured_risk_management', 'Risk Management')">📋 Risk Management</div>
+                <div class="scenario-item" onclick="selectScenario('structured_consent', 'Consent')">📋 Consent</div>
               </div>
             </div>
 
@@ -1230,6 +1455,33 @@
   <div id="imageModal" class="image-modal" onclick="closeImageModal()">
     <span class="close-modal" onclick="closeImageModal()">&times;</span>
     <img id="modalImage" src="" alt="Full screen clinical image">
+  </div>
+
+  <!-- Difficulty Selection Modal -->
+  <div id="difficultyModal" class="difficulty-modal">
+    <div class="difficulty-content">
+      <h2 id="difficultyModalTitle">Select Difficulty</h2>
+      <p id="difficultyModalScenario">Scenario Name</p>
+
+      <div class="difficulty-buttons">
+        <div class="difficulty-btn easy" onclick="startScenarioWithDifficulty('easy')">
+          <div class="difficulty-btn-title">🟢 Easy</div>
+          <div class="difficulty-btn-desc">Supportive examiner. Gentle prompts. Great for first attempts.</div>
+        </div>
+
+        <div class="difficulty-btn medium" onclick="startScenarioWithDifficulty('medium')">
+          <div class="difficulty-btn-title">🟡 Medium</div>
+          <div class="difficulty-btn-desc">Professional examiner. Expects thorough answers. Standard interview level.</div>
+        </div>
+
+        <div class="difficulty-btn strict" onclick="startScenarioWithDifficulty('strict')">
+          <div class="difficulty-btn-title">🔴 Strict</div>
+          <div class="difficulty-btn-desc">Demanding examiner. Challenges vague responses. Consultant-level expectations.</div>
+        </div>
+      </div>
+
+      <button class="difficulty-cancel" onclick="closeDifficultyModal()">Cancel</button>
+    </div>
   </div>
 
   <script src="config.js"></script>
