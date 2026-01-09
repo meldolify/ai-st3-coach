@@ -330,22 +330,24 @@
     .simulation-room {
       display: none;
       min-height: 100vh;
-      padding: 40px 20px;
     }
 
     .simulation-room.active {
       display: grid;
-      grid-template-columns: 1fr 600px;
-      gap: 60px;
-      max-width: 1600px;
-      margin: 0 auto;
-      align-items: center;
+      grid-template-columns: 25% 50% 25%;
+      min-height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
     }
 
     @media (max-width: 1200px) {
       .simulation-room.active {
         grid-template-columns: 1fr;
-        gap: 40px;
+        position: relative;
+        padding: 20px;
       }
     }
 
@@ -586,11 +588,15 @@
       }
     }
 
-    /* Controls Section */
+    /* Left Panel - Controls Section */
     .controls-container {
+      background: #f9fafb;
+      padding: 30px;
       display: flex;
       flex-direction: column;
-      gap: 32px;
+      gap: 24px;
+      overflow-y: auto;
+      border-right: 1px solid #e5e7eb;
     }
 
     .back-button {
@@ -824,15 +830,82 @@
     }
 
     /* Clinical Image Display - Side Panel */
+    /* Center Panel - Clinical Image */
+    .center-panel {
+      background: #ffffff;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      overflow-y: auto;
+      align-items: center;
+      justify-content: center;
+    }
+
     .image-section {
       opacity: 0;
-      transform: translateX(30px);
+      transform: translateY(20px);
       transition: all 0.6s ease;
+      width: 100%;
+      max-width: 600px;
     }
 
     .image-section.visible {
       opacity: 1;
-      transform: translateX(0);
+      transform: translateY(0);
+    }
+
+    .model-answer-section {
+      width: 100%;
+      max-width: 600px;
+      padding: 24px;
+      background: #f9fafb;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+    }
+
+    .model-answer-section h3 {
+      margin: 0 0 16px 0;
+      color: #374151;
+      font-size: 16px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .model-answer-content {
+      color: #6b7280;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* Right Panel - Examiner Background with Orb */
+    .right-panel {
+      background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+      background-image: url('https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=800&fit=crop');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-left: 1px solid #e5e7eb;
+    }
+
+    .right-panel::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(30, 41, 59, 0.7);
+      z-index: 1;
+    }
+
+    .right-panel .voice-orb-container {
+      position: relative;
+      z-index: 2;
     }
 
     .image-section h3 {
@@ -1240,22 +1313,13 @@
 
     <!-- Simulation Room View (Hidden by default) -->
     <div id="simulationRoom" class="simulation-room">
-      <!-- Left: Controls and Voice Orb -->
+      <!-- Left Panel (25%): Controls and Navigation -->
       <div class="controls-container">
         <button class="back-button" onclick="exitSimulation()">← Back to Scenarios</button>
 
         <div class="scenario-title">
           <h2 id="currentScenarioTitle">Scenario Title</h2>
           <p id="currentScenarioCategory">Category</p>
-        </div>
-
-        <!-- Voice Orb -->
-        <div class="voice-orb-container">
-          <!-- AI Status Bubble -->
-          <div id="aiStatusBubble" class="ai-status-bubble">
-            <span id="aiStatus">Ready</span>
-          </div>
-          <div id="voiceOrb" class="voice-orb"></div>
         </div>
 
         <!-- Status Section -->
@@ -1278,14 +1342,36 @@
         </div>
       </div>
 
-      <!-- Right: Clinical Image -->
-      <div id="imageSection" class="image-section">
-        <h3>Clinical Image</h3>
-        <div class="clinical-image-container">
-          <img id="clinicalImage" class="clinical-image" src="" alt="Clinical image" onclick="openImageModal()" style="display: none;">
-          <div id="noImagePlaceholder" class="no-image-placeholder">
-            No clinical image available for this scenario
+      <!-- Center Panel (50%): Clinical Image and Model Answer -->
+      <div class="center-panel">
+        <div id="imageSection" class="image-section">
+          <h3>Clinical Image</h3>
+          <div class="clinical-image-container">
+            <img id="clinicalImage" class="clinical-image" src="" alt="Clinical image" onclick="openImageModal()" style="display: none;">
+            <div id="noImagePlaceholder" class="no-image-placeholder">
+              No clinical image available for this scenario
+            </div>
           </div>
+        </div>
+
+        <!-- Model Answer Section (will appear after feedback) -->
+        <div id="modelAnswerSection" class="model-answer-section" style="display: none;">
+          <h3>Model Answer</h3>
+          <div id="modelAnswerContent" class="model-answer-content">
+            Model answer will appear here after the scenario is completed.
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Panel (25%): Voice Orb with Examiner Background -->
+      <div class="right-panel">
+        <!-- Voice Orb Container -->
+        <div class="voice-orb-container">
+          <!-- AI Status Bubble -->
+          <div id="aiStatusBubble" class="ai-status-bubble">
+            <span id="aiStatus">Ready</span>
+          </div>
+          <div id="voiceOrb" class="voice-orb"></div>
         </div>
       </div>
     </div>
