@@ -721,15 +721,23 @@ function selectScenario(topicFolder, title, imageFile) {
     });
   });
 
-  // Start loading the simulation room immediately in the background
+  // Start loading the simulation room immediately in the background (but don't fade in yet)
   console.log('[TRANSITION] Starting scenario load in background');
-  startScenario(title, title, promptFile, imageFile);
+  const simulationRoom = startScenario(title, title, promptFile, imageFile, true); // Pass true to skip immediate fade-in
 
-  // Wait 1 second then start fade out
+  // Wait 1 second then start fade out of overlay AND fade in of simulation room
   setTimeout(() => {
-    console.log('[TRANSITION] Starting fade out');
+    console.log('[TRANSITION] Starting fade out and simulation fade in');
     // Fade out transition by removing active class
     transitionOverlay.classList.remove('active');
+
+    // Start simulation room fade-in at the same time
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        simulationRoom.classList.add('fade-in');
+        console.log('[TRANSITION] Added fade-in to simulation room');
+      });
+    });
 
     // Wait for fade-out transition to complete (800ms) then hide overlay
     setTimeout(() => {
@@ -739,7 +747,7 @@ function selectScenario(topicFolder, title, imageFile) {
   }, 1000); // Display for 1 second
 }
 
-function startScenario(category, title, promptFile, imageFile) {
+function startScenario(category, title, promptFile, imageFile, skipFadeIn) {
   promptFile = promptFile || 'template.txt';
   currentScenario = { category: category, title: title, promptFile: promptFile, imageFile: imageFile };
 
@@ -749,10 +757,10 @@ function startScenario(category, title, promptFile, imageFile) {
   // Hide scenario selection
   scenarioSelection.style.display = 'none';
 
-  console.log('[SIMULATION] Starting simulation room transition');
+  console.log('[SIMULATION] Starting simulation room transition, skipFadeIn:', skipFadeIn);
   console.log('[SIMULATION] Initial state - display:', window.getComputedStyle(simulationRoom).display, 'opacity:', window.getComputedStyle(simulationRoom).opacity);
 
-  // Show simulation room with fade-in effect
+  // Show simulation room
   simulationRoom.style.display = 'grid';
   console.log('[SIMULATION] Set display to grid');
 
@@ -760,20 +768,22 @@ function startScenario(category, title, promptFile, imageFile) {
   console.log('[SIMULATION] Added active class, classes:', simulationRoom.className);
   console.log('[SIMULATION] After active - display:', window.getComputedStyle(simulationRoom).display, 'opacity:', window.getComputedStyle(simulationRoom).opacity);
 
-  // Trigger fade-in animation
-  requestAnimationFrame(() => {
-    console.log('[SIMULATION] First RAF - opacity:', window.getComputedStyle(simulationRoom).opacity);
+  // Only trigger fade-in immediately if NOT skipping (for direct scenario starts without overlay)
+  if (!skipFadeIn) {
     requestAnimationFrame(() => {
-      console.log('[SIMULATION] Second RAF, adding fade-in class');
-      simulationRoom.classList.add('fade-in');
-      console.log('[SIMULATION] Added fade-in class, classes:', simulationRoom.className);
-      console.log('[SIMULATION] After fade-in - opacity:', window.getComputedStyle(simulationRoom).opacity);
+      console.log('[SIMULATION] First RAF - opacity:', window.getComputedStyle(simulationRoom).opacity);
+      requestAnimationFrame(() => {
+        console.log('[SIMULATION] Second RAF, adding fade-in class');
+        simulationRoom.classList.add('fade-in');
+        console.log('[SIMULATION] Added fade-in class, classes:', simulationRoom.className);
+        console.log('[SIMULATION] After fade-in - opacity:', window.getComputedStyle(simulationRoom).opacity);
 
-      setTimeout(() => {
-        console.log('[SIMULATION] After 500ms - opacity:', window.getComputedStyle(simulationRoom).opacity);
-      }, 500);
+        setTimeout(() => {
+          console.log('[SIMULATION] After 500ms - opacity:', window.getComputedStyle(simulationRoom).opacity);
+        }, 500);
+      });
     });
-  });
+  }
 
   document.getElementById('currentScenarioTitle').textContent = title;
   document.getElementById('currentScenarioCategory').textContent = category;
@@ -802,6 +812,9 @@ function startScenario(category, title, promptFile, imageFile) {
   // It will fade in when user clicks "Start Session"
 
   log('Selected scenario: ' + title, 'info');
+
+  // Return the simulation room element so the caller can control fade-in timing
+  return simulationRoom;
 }
 
 function exitSimulation() {
