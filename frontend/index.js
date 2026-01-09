@@ -420,6 +420,52 @@ function toggleMenu(menuId) {
   }
 }
 
+// Temporary storage for selected scenario before difficulty is chosen
+let pendingScenario = null;
+
+// Called when user clicks a scenario - shows difficulty modal
+function selectScenario(topicFolder, title, imageFile) {
+  pendingScenario = {
+    topicFolder: topicFolder,
+    title: title,
+    imageFile: imageFile
+  };
+
+  // Update modal text
+  document.getElementById('difficultyModalScenario').textContent = title;
+
+  // Show difficulty modal
+  document.getElementById('difficultyModal').classList.add('active');
+}
+
+// Called when user selects a difficulty level
+function startScenarioWithDifficulty(difficulty) {
+  if (!pendingScenario) return;
+
+  // Construct the prompt file path: prompts/{topicFolder}/{difficulty}_{topicFolder}_1.txt
+  const promptFile = `prompts/${pendingScenario.topicFolder}/${difficulty}_${pendingScenario.topicFolder}_1.txt`;
+
+  // Close difficulty modal
+  closeDifficultyModal();
+
+  // Start the scenario with the constructed path
+  startScenario(
+    pendingScenario.title,
+    pendingScenario.title,
+    promptFile,
+    pendingScenario.imageFile
+  );
+
+  // Clear pending scenario
+  pendingScenario = null;
+}
+
+// Close difficulty modal
+function closeDifficultyModal() {
+  document.getElementById('difficultyModal').classList.remove('active');
+  pendingScenario = null;
+}
+
 function startScenario(category, title, promptFile, imageFile) {
   promptFile = promptFile || 'template.txt';
   currentScenario = { category: category, title: title, promptFile: promptFile, imageFile: imageFile };
@@ -460,8 +506,8 @@ function exitSimulation() {
     session = null;
   }
   document.getElementById('simulationRoom').classList.remove('active');
-  // Go back to difficulty selection instead of scenario selection
-  document.getElementById('difficultySelection').style.display = 'block';
+  // Go back to scenario selection
+  document.getElementById('scenarioSelection').style.display = 'block';
   document.getElementById('connectBtn').disabled = false;
   document.getElementById('disconnectBtn').disabled = true;
   updateStatus('connectionStatus', 'Disconnected', 'disconnected');

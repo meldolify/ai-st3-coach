@@ -17,7 +17,7 @@ if (process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON) {
 
 const PORT = process.env.PORT || 8080;
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-const SCENARIOS_DIR = path.join(__dirname, 'scenarios');
+const PROMPTS_DIR = path.join(__dirname, 'prompts');
 
 // TTS Voice Configuration - Change this single line to switch voices
 const TTS_VOICE = 'en-GB-Neural2-D';  // Options: Neural2-D (fast), Wavenet-D (natural), Studio-D (premium)
@@ -38,33 +38,36 @@ function generateSessionId() {
   return 'session_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
 }
 
-function loadScenarioPrompt(scenarioFile, difficulty) {
+function loadScenarioPrompt(scenarioFile) {
   try {
-    // If difficulty is provided, look in the difficulty subfolder
-    let filePath;
-    if (difficulty && ['easy', 'moderate', 'strict'].includes(difficulty)) {
-      filePath = path.join(SCENARIOS_DIR, difficulty, scenarioFile);
-      console.log('[SCENARIO] Looking for difficulty-specific file: ' + difficulty + '/' + scenarioFile);
-    } else {
-      filePath = path.join(SCENARIOS_DIR, scenarioFile);
-    }
+    // The scenarioFile now includes the full path from prompts/ directory
+    // e.g., "prompts/digital_amputation/easy_digital_amputation_1.txt"
+    const filePath = path.join(__dirname, scenarioFile);
 
+    // Security check: ensure the file is within the backend directory
     const normalizedPath = path.normalize(filePath);
-    if (!normalizedPath.startsWith(SCENARIOS_DIR)) {
+    if (!normalizedPath.startsWith(__dirname)) {
       throw new Error('Invalid scenario file path');
     }
 
     if (!fs.existsSync(filePath)) {
-      console.warn('[SCENARIO] File not found: ' + filePath + ', using template.txt');
-      return fs.readFileSync(path.join(SCENARIOS_DIR, 'template.txt'), 'utf8');
+      console.warn('[SCENARIO] File not found: ' + scenarioFile);
+      // Try fallback to a default scenario in the old structure
+      const fallbackPath = path.join(__dirname, 'scenarios', 'template.txt');
+      if (fs.existsSync(fallbackPath)) {
+        console.warn('[SCENARIO] Using fallback template.txt');
+        return fs.readFileSync(fallbackPath, 'utf8');
+      }
+      throw new Error('Scenario file not found and no fallback available');
     }
 
     const prompt = fs.readFileSync(filePath, 'utf8');
-    console.log('[SCENARIO] Loaded prompt from: ' + (difficulty ? difficulty + '/' : '') + scenarioFile);
+    console.log('[SCENARIO] Loaded prompt from: ' + scenarioFile);
     return prompt;
   } catch (error) {
     console.error('[SCENARIO] Error loading prompt: ' + error.message);
-    return fs.readFileSync(path.join(SCENARIOS_DIR, 'template.txt'), 'utf8');
+    // Return a basic template as last resort
+    return `You are a Plastic Surgery ST3 interview examiner. Conduct a professional interview.`;
   }
 }
 
