@@ -709,25 +709,34 @@ function selectScenario(topicFolder, title, imageFile) {
   const transitionOverlay = document.getElementById('simulationTransition');
   console.log('[TRANSITION] Overlay element:', transitionOverlay);
   console.log('[TRANSITION] Adding active class');
-  transitionOverlay.classList.add('active');
-  console.log('[TRANSITION] Active class added, classes:', transitionOverlay.className);
 
-  // Wait 1.5 seconds then start scenario with fade-in
+  // First set display to flex, then trigger opacity transition
+  transitionOverlay.style.display = 'flex';
+
+  // Use requestAnimationFrame to ensure display change is applied before opacity change
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      transitionOverlay.classList.add('active');
+      console.log('[TRANSITION] Active class added, classes:', transitionOverlay.className);
+    });
+  });
+
+  // Wait 2 seconds then start fade out
   setTimeout(() => {
     console.log('[TRANSITION] Starting fade out');
-    // Fade out transition
-    transitionOverlay.style.opacity = '0';
+    // Fade out transition by removing active class
+    transitionOverlay.classList.remove('active');
 
+    // Wait for fade-out transition to complete (800ms)
     setTimeout(() => {
       console.log('[TRANSITION] Removing overlay, starting scenario');
-      // Remove active class and reset opacity
-      transitionOverlay.classList.remove('active');
-      transitionOverlay.style.opacity = '1';
+      // Hide overlay and start scenario
+      transitionOverlay.style.display = 'none';
 
       // Start the scenario
       startScenario(title, title, promptFile, imageFile);
-    }, 300); // Wait for fade-out
-  }, 1500); // Display for 1.5 seconds
+    }, 800); // Wait for fade-out transition
+  }, 2000); // Display for 2 seconds
 }
 
 function startScenario(category, title, promptFile, imageFile) {
