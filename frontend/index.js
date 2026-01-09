@@ -170,7 +170,7 @@ class V4Session {
     this.voiceMap = {
       'easy': 'en-GB-Chirp3-HD-Charon',      // John: Male voice
       'medium': 'en-GB-Chirp3-HD-Kore',      // Elliot: Female voice
-      'strict': 'en-GB-Chirp3-HD-Puck'       // Perry: Male voice
+      'strict': 'en-GB-Chirp3-HD-Fenrir'     // Perry: Male voice
     };
     this.voice = this.voiceMap[difficulty] || 'en-GB-Chirp3-HD-Charon';
   }
