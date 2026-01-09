@@ -754,7 +754,7 @@ function exitSimulation() {
 
     setTimeout(() => {
       scenarioSelection.classList.remove('fade-in');
-    }, 300);
+    }, 500);
 
     document.getElementById('connectBtn').disabled = false;
     document.getElementById('disconnectBtn').disabled = true;
@@ -769,7 +769,7 @@ function exitSimulation() {
     if (imageSection) {
       imageSection.classList.remove('visible');
     }
-  }, 300);
+  }, 500);
 }
 
 // ============================================================================
@@ -802,8 +802,8 @@ function transitionToPage(fromPageId, toPageId, callback) {
     // Remove fade-in class after animation
     setTimeout(() => {
       toPage.classList.remove('fade-in');
-    }, 300);
-  }, 300); // Match CSS transition duration
+    }, 500);
+  }, 500); // Match CSS transition duration
 }
 
 function selectSpecialty(specialty) {
