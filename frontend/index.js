@@ -721,22 +721,22 @@ function selectScenario(topicFolder, title, imageFile) {
     });
   });
 
-  // Wait 2 seconds then start fade out
+  // Start loading the simulation room immediately in the background
+  console.log('[TRANSITION] Starting scenario load in background');
+  startScenario(title, title, promptFile, imageFile);
+
+  // Wait 1 second then start fade out
   setTimeout(() => {
     console.log('[TRANSITION] Starting fade out');
     // Fade out transition by removing active class
     transitionOverlay.classList.remove('active');
 
-    // Wait for fade-out transition to complete (800ms)
+    // Wait for fade-out transition to complete (800ms) then hide overlay
     setTimeout(() => {
-      console.log('[TRANSITION] Removing overlay, starting scenario');
-      // Hide overlay and start scenario
+      console.log('[TRANSITION] Removing overlay display');
       transitionOverlay.style.display = 'none';
-
-      // Start the scenario
-      startScenario(title, title, promptFile, imageFile);
     }, 800); // Wait for fade-out transition
-  }, 2000); // Display for 2 seconds
+  }, 1000); // Display for 1 second
 }
 
 function startScenario(category, title, promptFile, imageFile) {
