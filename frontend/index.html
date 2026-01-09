@@ -20,6 +20,29 @@
       overflow-x: hidden;
     }
 
+    /* Page Transition Classes */
+    .page {
+      opacity: 1;
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    .page.fade-out {
+      opacity: 0;
+    }
+
+    .page.fade-in {
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
     .container {
       background: transparent;
       max-width: 1200px;
@@ -1187,7 +1210,7 @@
 <body>
   <div class="container">
     <!-- Page 1: Specialty Selection (Landing Page) -->
-    <div id="specialtySelection">
+    <div id="specialtySelection" class="page">
       <div class="header">
         <h1>🎯 ST3 Interview Trainer</h1>
         <p class="subtitle">Select your specialty to begin</p>
@@ -1216,7 +1239,7 @@
     </div>
 
     <!-- Page 2: Difficulty Selection -->
-    <div id="difficultySelection" style="display: none;">
+    <div id="difficultySelection" class="page" style="display: none;">
       <button class="top-back-button" onclick="backToSpecialties()">← Back</button>
 
       <div class="header">
@@ -1261,7 +1284,7 @@
     </div>
 
     <!-- Page 3: Scenario Selection View -->
-    <div id="scenarioSelection" style="display: none;">
+    <div id="scenarioSelection" class="page" style="display: none;">
       <div class="scenario-selection-layout" id="panelContainer">
         <!-- Panel 1: Headings (12.5%) -->
         <div class="headings-panel" id="headings-panel" onmouseleave="handlePanelMouseLeave('headings')">
@@ -1319,7 +1342,7 @@
     </div>
 
     <!-- Simulation Room View (Hidden by default) -->
-    <div id="simulationRoom" class="simulation-room">
+    <div id="simulationRoom" class="simulation-room page">
       <!-- Left Panel (25%): Controls and Navigation -->
       <div class="controls-container">
         <button class="back-button" onclick="exitSimulation()">← Back to Scenarios</button>
