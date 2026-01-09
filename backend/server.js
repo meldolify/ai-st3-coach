@@ -138,7 +138,8 @@ wss.on('connection', (ws, req) => {
   const queryParams = url.parse(req.url, true).query;
   const scenarioFile = queryParams.scenario || 'template.txt';
   const difficulty = queryParams.difficulty || null;
-  console.log('[CLIENT] Requested scenario: ' + scenarioFile + (difficulty ? ' (difficulty: ' + difficulty + ')' : ''));
+  const voice = queryParams.voice || TTS_VOICE;
+  console.log('[CLIENT] Requested scenario: ' + scenarioFile + (difficulty ? ' (difficulty: ' + difficulty + ')' : '') + (voice ? ' (voice: ' + voice + ')' : ''));
 
   const scenarioPrompt = loadScenarioPrompt(scenarioFile, difficulty);
   const sessionId = generateSessionId();
@@ -147,6 +148,7 @@ wss.on('connection', (ws, req) => {
     history: [{ role: 'system', content: scenarioPrompt }],
     ws: ws,
     scenario: scenarioFile,
+    voice: voice,
     isAISpeaking: false,
     inFeedbackMode: false,
     feedbackCount: 0
@@ -190,7 +192,7 @@ wss.on('connection', (ws, req) => {
 
           const ssmlText = buildNaturalSSML(responseText);
           const t3 = Date.now();
-          const audioBuffer = await googleTTS(ssmlText);
+          const audioBuffer = await googleTTS(ssmlText, session.voice);
           const t4 = Date.now();
           console.log(`[TIMING] TTS: ${t4-t3}ms, Total: ${t4-t1}ms`);
 
@@ -236,7 +238,7 @@ wss.on('connection', (ws, req) => {
 
                 const ssmlText = buildNaturalSSML(responseText);
                 const t3 = Date.now();
-                const audioBuffer = await googleTTS(ssmlText);
+                const audioBuffer = await googleTTS(ssmlText, session.voice);
                 const t4 = Date.now();
                 console.log(`[TIMING] TTS: ${t4-t3}ms, Total: ${t4-t1}ms`);
 

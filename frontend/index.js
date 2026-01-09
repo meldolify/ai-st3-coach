@@ -165,6 +165,14 @@ class V4Session {
     this.difficulty = difficulty || null;
     this.isConnected = false;
     this.inFeedbackMode = false; // Track if we're in feedback mode
+
+    // Voice mapping for each difficulty level
+    this.voiceMap = {
+      'easy': 'en-GB-Neural2-D',      // John: Male British voice (current default)
+      'medium': 'en-GB-Neural2-F',    // Elliot: Female British voice
+      'strict': 'en-GB-Neural2-B'     // Perry: Professional male British voice
+    };
+    this.voice = this.voiceMap[difficulty] || 'en-GB-Neural2-D';
   }
 
   async connect() {
@@ -172,6 +180,9 @@ class V4Session {
       let wsUrl = this.backendUrl + '?scenario=' + this.promptFile;
       if (this.difficulty) {
         wsUrl += '&difficulty=' + this.difficulty;
+      }
+      if (this.voice) {
+        wsUrl += '&voice=' + this.voice;
       }
       log('Connecting to ' + wsUrl + '...', 'info');
       this.ws = new WebSocket(wsUrl);
