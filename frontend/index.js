@@ -618,8 +618,8 @@ function handlePanelMouseLeave(panelType) {
       if (!isOverTopics) {
         topicsPanel.classList.remove('visible');
       }
-      // Also hide subheadings if not hovering over headings or subheadings
-      if (!isOverHeadings && !isOverSubheadings) {
+      // Hide subheadings only if not hovering over headings, subheadings, OR topics
+      if (!isOverHeadings && !isOverSubheadings && !isOverTopics) {
         subheadingsPanel.classList.remove('visible');
       }
     } else if (panelType === 'topics') {
