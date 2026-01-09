@@ -705,8 +705,24 @@ function selectScenario(topicFolder, title, imageFile) {
   // Format: prompts/{topicFolder}/{difficulty}_{topicFolder}_1.txt
   const promptFile = `prompts/${topicFolder}/${selectedDifficulty}_${topicFolder}_1.txt`;
 
-  // Start the scenario immediately
-  startScenario(title, title, promptFile, imageFile);
+  // Show transition overlay
+  const transitionOverlay = document.getElementById('simulationTransition');
+  transitionOverlay.classList.add('active');
+
+  // Wait 1.5 seconds then start scenario with fade-in
+  setTimeout(() => {
+    // Fade out transition
+    transitionOverlay.style.opacity = '0';
+
+    setTimeout(() => {
+      // Remove active class and reset opacity
+      transitionOverlay.classList.remove('active');
+      transitionOverlay.style.opacity = '1';
+
+      // Start the scenario
+      startScenario(title, title, promptFile, imageFile);
+    }, 300); // Wait for fade-out
+  }, 1500); // Display for 1.5 seconds
 }
 
 function startScenario(category, title, promptFile, imageFile) {
