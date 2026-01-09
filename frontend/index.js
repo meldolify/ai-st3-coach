@@ -592,6 +592,40 @@ function showTopics(subheadingId) {
   topicsPanel.classList.add('visible');
 }
 
+// Handle mouse leave events for panels
+function handlePanelMouseLeave(panelType) {
+  // Use setTimeout to allow mouse movement to next panel without closing
+  setTimeout(() => {
+    const headingsPanel = document.getElementById('headings-panel');
+    const subheadingsPanel = document.getElementById('subheadings-panel');
+    const topicsPanel = document.getElementById('topics-panel');
+
+    // Check if mouse is still over any of the panels
+    const isOverHeadings = headingsPanel.matches(':hover');
+    const isOverSubheadings = subheadingsPanel.matches(':hover');
+    const isOverTopics = topicsPanel.matches(':hover');
+
+    if (!isOverHeadings && !isOverSubheadings && !isOverTopics) {
+      // Mouse has left all panels, hide them
+      if (panelType === 'subheadings') {
+        subheadingsPanel.classList.remove('visible');
+        topicsPanel.classList.remove('visible');
+      } else if (panelType === 'topics') {
+        topicsPanel.classList.remove('visible');
+      }
+    }
+  }, 50); // Small delay to allow smooth transitions between panels
+}
+
+// Hide all panels when hovering over content area
+function hideAllPanels() {
+  const subheadingsPanel = document.getElementById('subheadings-panel');
+  const topicsPanel = document.getElementById('topics-panel');
+
+  subheadingsPanel.classList.remove('visible');
+  topicsPanel.classList.remove('visible');
+}
+
 // Called when user clicks a scenario - directly starts with pre-selected difficulty
 function selectScenario(topicFolder, title, imageFile) {
   // Ensure we have a difficulty selected
