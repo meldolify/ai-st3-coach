@@ -749,15 +749,29 @@ function startScenario(category, title, promptFile, imageFile) {
   // Hide scenario selection
   scenarioSelection.style.display = 'none';
 
+  console.log('[SIMULATION] Starting simulation room transition');
+  console.log('[SIMULATION] Initial state - display:', window.getComputedStyle(simulationRoom).display, 'opacity:', window.getComputedStyle(simulationRoom).opacity);
+
   // Show simulation room with fade-in effect
   simulationRoom.style.display = 'grid';
+  console.log('[SIMULATION] Set display to grid');
+
   simulationRoom.classList.add('active');
+  console.log('[SIMULATION] Added active class, classes:', simulationRoom.className);
+  console.log('[SIMULATION] After active - display:', window.getComputedStyle(simulationRoom).display, 'opacity:', window.getComputedStyle(simulationRoom).opacity);
 
   // Trigger fade-in animation
   requestAnimationFrame(() => {
+    console.log('[SIMULATION] First RAF - opacity:', window.getComputedStyle(simulationRoom).opacity);
     requestAnimationFrame(() => {
+      console.log('[SIMULATION] Second RAF, adding fade-in class');
       simulationRoom.classList.add('fade-in');
       console.log('[SIMULATION] Added fade-in class, classes:', simulationRoom.className);
+      console.log('[SIMULATION] After fade-in - opacity:', window.getComputedStyle(simulationRoom).opacity);
+
+      setTimeout(() => {
+        console.log('[SIMULATION] After 500ms - opacity:', window.getComputedStyle(simulationRoom).opacity);
+      }, 500);
     });
   });
 
