@@ -106,22 +106,18 @@ async function googleTTS(text, voiceName) {
   // Determine gender based on voice name (Leda = Female, others = Male for these voices)
   const gender = (voiceName.includes('-F') || voiceName.includes('Leda')) ? 'FEMALE' : 'MALE';
 
-  // Personality-based audio settings
+  // Personality-based audio settings (Chirp 3 HD doesn't support pitch)
   let speakingRate = 1.0;
-  let pitch = 0.0;
 
   if (voiceName.includes('Charon')) {
-    // John (Easy): Slightly slower, warmer tone
-    speakingRate = 0.95;
-    pitch = 0.5;
+    // John (Easy): Slightly slower, more encouraging
+    speakingRate = 0.92;
   } else if (voiceName.includes('Leda')) {
     // Elliot (Medium): Balanced, professional
     speakingRate = 1.0;
-    pitch = 0.0;
   } else if (voiceName.includes('Fenrir')) {
     // Perry (Strict): Slightly faster, more direct
-    speakingRate = 1.05;
-    pitch = -0.5;
+    speakingRate = 1.08;
   }
 
   try {
@@ -135,7 +131,6 @@ async function googleTTS(text, voiceName) {
       audioConfig: {
         audioEncoding: 'MP3',
         speakingRate: speakingRate,
-        pitch: pitch,
         volumeGainDb: 0.0
       }
     };
