@@ -422,37 +422,60 @@ function toggleMenu(menuId) {
 
 // Switch between station types (Clinical, Communication, Structured)
 function switchStation(stationId, event) {
-  // Hide all station contents
-  document.querySelectorAll('.station-content').forEach(station => {
-    station.classList.remove('active');
-  });
+  if (event) {
+    event.stopPropagation();
+  }
 
   // Remove active class from all nav items
   document.querySelectorAll('.station-nav-item').forEach(navItem => {
     navItem.classList.remove('active');
   });
 
-  // Show the selected station content
-  const selectedStation = document.getElementById('station-' + stationId);
-  if (selectedStation) {
-    selectedStation.classList.add('active');
-  }
-
   // Add active class to the clicked nav item
-  if (event && event.target) {
-    event.target.closest('.station-nav-item').classList.add('active');
+  if (event && event.currentTarget) {
+    event.currentTarget.classList.add('active');
   }
 
-  // Close all open menus when switching stations
-  document.querySelectorAll('.menu-content.open').forEach(menu => {
-    menu.classList.remove('open');
+  // Hide all category sections
+  document.querySelectorAll('.category-section').forEach(section => {
+    section.style.display = 'none';
   });
-  document.querySelectorAll('.arrow.open').forEach(arrow => {
-    arrow.classList.remove('open');
+
+  // For structured interview, show it directly
+  if (stationId === 'structured') {
+    const structuredSection = document.getElementById('category-structured');
+    if (structuredSection) {
+      structuredSection.style.display = 'block';
+    }
+  }
+}
+
+// Show specific category when subcategory is clicked
+function showCategory(categoryId, event) {
+  if (event) {
+    event.stopPropagation();
+  }
+
+  // Hide all category sections
+  document.querySelectorAll('.category-section').forEach(section => {
+    section.style.display = 'none';
   });
-  document.querySelectorAll('.menu-header.active').forEach(header => {
-    header.classList.remove('active');
+
+  // Remove active from all subcategory items
+  document.querySelectorAll('.subcategory-item').forEach(item => {
+    item.classList.remove('active');
   });
+
+  // Show the selected category
+  const selectedCategory = document.getElementById('category-' + categoryId);
+  if (selectedCategory) {
+    selectedCategory.style.display = 'block';
+  }
+
+  // Add active to clicked subcategory
+  if (event && event.currentTarget) {
+    event.currentTarget.classList.add('active');
+  }
 }
 
 // Called when user clicks a scenario - directly starts with pre-selected difficulty

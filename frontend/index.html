@@ -191,66 +191,101 @@
       margin-bottom: 12px;
     }
 
-    /* Side Panel Layout for Scenario Selection */
+    /* Side Panel Layout - Full Height Left Panel */
+    #scenarioSelection {
+      position: relative;
+    }
+
     .scenario-selection-layout {
-      display: grid;
-      grid-template-columns: 350px 1fr;
-      gap: 40px;
-      margin-top: 20px;
-      min-height: 70vh;
+      display: flex;
+      position: fixed;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 100;
     }
 
     .side-panel {
-      background: #f9fafb;
-      border-radius: 16px;
-      padding: 24px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-      height: fit-content;
-      position: sticky;
-      top: 20px;
+      width: 25%;
+      background: #1f2937;
+      color: white;
+      overflow-y: auto;
+      padding: 20px 0;
     }
 
-    .side-panel-title {
-      font-size: 14px;
+    .side-panel-header {
+      padding: 0 20px 20px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 20px;
+    }
+
+    .side-panel-header h3 {
+      margin: 0;
+      font-size: 16px;
       font-weight: 600;
-      color: #6b7280;
+      color: #9ca3af;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 16px;
+      letter-spacing: 1px;
     }
 
     .station-nav-item {
       padding: 16px 20px;
-      margin-bottom: 8px;
-      background: white;
-      border-radius: 10px;
       cursor: pointer;
-      transition: all 0.3s ease;
-      border: 2px solid transparent;
+      transition: all 0.2s ease;
       font-size: 15px;
       font-weight: 600;
-      color: #374151;
+      color: #d1d5db;
+      border-left: 3px solid transparent;
+      position: relative;
     }
 
     .station-nav-item:hover {
-      background: #eef2ff;
-      border-color: #6366f1;
-      color: #6366f1;
-      transform: translateX(4px);
+      background: rgba(99, 102, 241, 0.1);
+      border-left-color: #6366f1;
+      color: white;
     }
 
     .station-nav-item.active {
-      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      background: rgba(99, 102, 241, 0.2);
+      border-left-color: #6366f1;
       color: white;
-      border-color: transparent;
-      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
     }
 
+    /* Subcategories shown on hover/click */
+    .station-subcategories {
+      display: none;
+      padding-left: 20px;
+    }
+
+    .station-nav-item.active .station-subcategories {
+      display: block;
+    }
+
+    .subcategory-item {
+      padding: 10px 20px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #9ca3af;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .subcategory-item:hover {
+      color: white;
+      background: rgba(99, 102, 241, 0.1);
+    }
+
+    .subcategory-item.active {
+      color: #6366f1;
+    }
+
+    /* Main content area */
     .content-area {
+      flex: 1;
       background: white;
-      border-radius: 16px;
-      padding: 32px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      overflow-y: auto;
+      padding: 40px;
     }
 
     .station-content {
@@ -259,6 +294,20 @@
 
     .station-content.active {
       display: block;
+    }
+
+    /* Scenario items in list format */
+    .scenario-list {
+      margin-top: 20px;
+    }
+
+    .scenario-list-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #111827;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #e5e7eb;
     }
 
     /* Simulation Room - Side by Side Layout */
@@ -556,32 +605,28 @@
       transform: translateX(-4px) scale(0.98);
     }
 
-    /* Enhanced back button for page navigation */
+    /* Back button for page navigation */
     .top-back-button {
-      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      background: #6366f1;
       color: white;
-      padding: 16px 32px;
+      padding: 10px 20px;
       border: none;
       cursor: pointer;
-      font-size: 18px;
-      font-weight: 700;
-      transition: all 0.3s ease;
-      border-radius: 12px;
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 30px;
-      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      border-radius: 8px;
+      display: inline-block;
+      margin-bottom: 20px;
     }
 
     .top-back-button:hover {
-      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-      transform: translateX(-4px) translateY(-2px);
-      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+      background: #4f46e5;
+      transform: translateY(-1px);
     }
 
     .top-back-button:active {
-      transform: translateX(-4px) scale(0.98);
+      transform: translateY(0);
     }
 
     .scenario-title {
@@ -1071,16 +1116,11 @@
           <p>More specialties in development</p>
         </div>
       </div>
-
-      <div class="instructions">
-        <strong>Welcome to the ST3 Interview Trainer</strong>
-        This platform helps you practice for your ST3 interview with AI-powered examiners. Select a specialty above to begin your practice session.
-      </div>
     </div>
 
     <!-- Page 2: Difficulty Selection -->
     <div id="difficultySelection" style="display: none;">
-      <button class="top-back-button" onclick="backToSpecialties()">← Back to Specialties</button>
+      <button class="top-back-button" onclick="backToSpecialties()">← Back</button>
 
       <div class="header">
         <h1>🎯 Plastic Surgery ST3</h1>
@@ -1125,41 +1165,51 @@
 
     <!-- Page 3: Scenario Selection View -->
     <div id="scenarioSelection" style="display: none;">
-      <button class="top-back-button" onclick="backToDifficulty()">⬅ Back to Difficulty Selection</button>
-
-      <div class="header">
-        <h1>🎯 Select Your Scenario</h1>
-        <p id="selectedDifficultyIndicator" class="subtitle" style="margin-top: 10px; font-weight: 600;"></p>
-      </div>
-
       <div class="scenario-selection-layout">
-        <!-- Left Side Panel -->
+        <!-- Left Side Panel - Full Height -->
         <div class="side-panel">
-          <div class="side-panel-title">Station Types</div>
+          <div class="side-panel-header">
+            <button class="top-back-button" onclick="backToDifficulty()">← Back</button>
+            <p id="selectedDifficultyIndicator" style="margin-top: 15px; font-size: 14px; color: #6366f1; font-weight: 600;"></p>
+          </div>
+
+          <!-- Clinical Stations with Subcategories -->
           <div class="station-nav-item active" onclick="switchStation('clinical', event)">
-            <div>📋 Clinical Stations</div>
+            📋 Clinical Stations
+            <div class="station-subcategories">
+              <div class="subcategory-item" onclick="showCategory('emergencies', event)">1. Emergencies</div>
+              <div class="subcategory-item" onclick="showCategory('hand-trauma', event)">2. Hand Trauma</div>
+              <div class="subcategory-item" onclick="showCategory('elective-hand', event)">3. Elective Hand</div>
+              <div class="subcategory-item" onclick="showCategory('skin-cancer', event)">4. Skin Cancer</div>
+              <div class="subcategory-item" onclick="showCategory('miscellaneous', event)">5. Miscellaneous</div>
+              <div class="subcategory-item" onclick="showCategory('breast-aesthetic', event)">6. Breast & Aesthetic</div>
+              <div class="subcategory-item" onclick="showCategory('burns', event)">7. Burns</div>
+            </div>
           </div>
+
+          <!-- Communication Stations with Subcategories -->
           <div class="station-nav-item" onclick="switchStation('communication', event)">
-            <div>💬 Communication Stations</div>
+            💬 Communication Stations
+            <div class="station-subcategories">
+              <div class="subcategory-item" onclick="showCategory('call-the-boss', event)">Call-The-Boss</div>
+              <div class="subcategory-item" onclick="showCategory('consent', event)">Consent</div>
+            </div>
           </div>
+
+          <!-- Structured Interview (no subcategories, just direct list) -->
           <div class="station-nav-item" onclick="switchStation('structured', event)">
-            <div>📝 Structured Interview</div>
+            📝 Structured Interview
           </div>
         </div>
 
         <!-- Right Content Area -->
         <div class="content-area">
-          <!-- Clinical Stations Content -->
-          <div id="station-clinical" class="station-content active">
-            <div class="menu-container">
+          <h2 style="margin-top: 0;">Select a Scenario</h2>
 
-                <!-- 1. Emergencies -->
-                <div class="menu-item">
-                  <div class="menu-header level-3" onclick="toggleMenu('emergencies')">
-                    <span>1. Emergencies</span>
-                    <span class="arrow" id="arrow-emergencies">▶</span>
-                  </div>
-                  <div class="menu-content" id="content-emergencies">
+          <!-- Category: Emergencies -->
+          <div id="category-emergencies" class="category-section" style="display: none;">
+            <h3 class="scenario-list-title">1. Emergencies</h3>
+            <div class="scenario-list">
                     <div class="scenario-item" onclick="selectScenario('digital_amputation', 'Digital Amputation')">📋 Digital Amputation</div>
                     <div class="scenario-item" onclick="selectScenario('macro_amputation', 'Macro Amputation')">📋 Macro Amputation</div>
                     <div class="scenario-item" onclick="selectScenario('degloving_devascularisation', 'Degloving / Devascularisation')">📋 Degloving / Devascularisation</div>
@@ -1171,16 +1221,13 @@
                     <div class="scenario-item" onclick="selectScenario('open_fracture', 'Open Fracture')">📋 Open Fracture</div>
                     <div class="scenario-item" onclick="selectScenario('compartment_syndrome', 'Compartment Syndrome')">📋 Compartment Syndrome</div>
                     <div class="scenario-item" onclick="selectScenario('flap_at_risk', 'Flap at Risk')">📋 Flap at Risk</div>
-                  </div>
-                </div>
+            </div>
+          </div>
 
-                <!-- 2. Hand Trauma -->
-                <div class="menu-item">
-                  <div class="menu-header level-3" onclick="toggleMenu('hand-trauma')">
-                    <span>2. Hand Trauma</span>
-                    <span class="arrow" id="arrow-hand-trauma">▶</span>
-                  </div>
-                  <div class="menu-content" id="content-hand-trauma">
+          <!-- Category: Hand Trauma -->
+          <div id="category-hand-trauma" class="category-section" style="display: none;">
+            <h3 class="scenario-list-title">2. Hand Trauma</h3>
+            <div class="scenario-list">
                     <div class="scenario-item" onclick="selectScenario('fingertip_injury', 'Fingertip Injury')">📋 Fingertip Injury</div>
                     <div class="scenario-item" onclick="selectScenario('closed_hand_fracture', 'Closed Hand Fracture')">📋 Closed Hand Fracture</div>
                     <div class="scenario-item" onclick="selectScenario('tendon_injury', 'Tendon Injury')">📋 Tendon Injury</div>
