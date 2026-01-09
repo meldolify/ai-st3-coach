@@ -43,6 +43,60 @@
       }
     }
 
+    /* Simulation Room Transition Overlay */
+    .simulation-transition {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.95);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    .simulation-transition.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    .transition-content {
+      text-align: center;
+      color: white;
+    }
+
+    .transition-content h2 {
+      font-size: 32px;
+      margin-bottom: 30px;
+      font-weight: 600;
+      color: white;
+    }
+
+    .door-animation {
+      font-size: 80px;
+      margin-bottom: 20px;
+      animation: doorOpen 1.5s ease-in-out infinite;
+    }
+
+    @keyframes doorOpen {
+      0% {
+        transform: scale(1) rotateY(0deg);
+        opacity: 0.7;
+      }
+      50% {
+        transform: scale(1.1) rotateY(10deg);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1) rotateY(0deg);
+        opacity: 0.7;
+      }
+    }
+
     .container {
       background: transparent;
       max-width: 1200px;
@@ -1413,6 +1467,13 @@
     <img id="modalImage" src="" alt="Full screen clinical image">
   </div>
 
+  <!-- Simulation Room Transition Overlay -->
+  <div id="simulationTransition" class="simulation-transition">
+    <div class="transition-content">
+      <div class="door-animation">🚪</div>
+      <h2>Entering the Simulation Room</h2>
+    </div>
+  </div>
 
   <script src="config.js"></script>
   <script src="index.js"></script>
