@@ -740,35 +740,75 @@ function exitSimulation() {
     session.disconnect();
     session = null;
   }
-  document.getElementById('simulationRoom').classList.remove('active');
-  // Go back to scenario selection
-  document.getElementById('scenarioSelection').style.display = 'block';
-  document.getElementById('connectBtn').disabled = false;
-  document.getElementById('disconnectBtn').disabled = true;
-  updateStatus('connectionStatus', 'Disconnected', 'disconnected');
-  updateStatus('sessionStatus', 'No Session', 'disconnected');
-  updateStatus('micStatus', 'Inactive', 'disconnected');
-  updateStatus('aiStatus', 'Idle', 'disconnected');
-  setOrbState('idle'); // Reset orb state when exiting
 
-  // Reset image section (it will fade out via CSS)
-  const imageSection = document.getElementById('imageSection');
-  if (imageSection) {
-    imageSection.classList.remove('visible');
-  }
+  const simulationRoom = document.getElementById('simulationRoom');
+  simulationRoom.classList.add('fade-out');
+
+  setTimeout(() => {
+    simulationRoom.classList.remove('active', 'fade-out');
+
+    // Show scenario selection with fade in
+    const scenarioSelection = document.getElementById('scenarioSelection');
+    scenarioSelection.style.display = 'block';
+    scenarioSelection.classList.add('fade-in');
+
+    setTimeout(() => {
+      scenarioSelection.classList.remove('fade-in');
+    }, 300);
+
+    document.getElementById('connectBtn').disabled = false;
+    document.getElementById('disconnectBtn').disabled = true;
+    updateStatus('connectionStatus', 'Disconnected', 'disconnected');
+    updateStatus('sessionStatus', 'No Session', 'disconnected');
+    updateStatus('micStatus', 'Inactive', 'disconnected');
+    updateStatus('aiStatus', 'Idle', 'disconnected');
+    setOrbState('idle'); // Reset orb state when exiting
+
+    // Reset image section (it will fade out via CSS)
+    const imageSection = document.getElementById('imageSection');
+    if (imageSection) {
+      imageSection.classList.remove('visible');
+    }
+  }, 300);
 }
 
 // ============================================================================
-// NEW MULTI-PAGE NAVIGATION
+// NEW MULTI-PAGE NAVIGATION WITH FADE TRANSITIONS
 // ============================================================================
 
 let selectedSpecialty = null;
 let selectedDifficulty = null;
 
+// Helper function to transition between pages with fade effect
+function transitionToPage(fromPageId, toPageId, callback) {
+  const fromPage = document.getElementById(fromPageId);
+  const toPage = document.getElementById(toPageId);
+
+  // Fade out current page
+  fromPage.classList.add('fade-out');
+
+  setTimeout(() => {
+    // Hide current page
+    fromPage.style.display = 'none';
+    fromPage.classList.remove('fade-out');
+
+    // Show new page
+    toPage.style.display = 'block';
+    toPage.classList.add('fade-in');
+
+    // Execute callback if provided
+    if (callback) callback();
+
+    // Remove fade-in class after animation
+    setTimeout(() => {
+      toPage.classList.remove('fade-in');
+    }, 300);
+  }, 300); // Match CSS transition duration
+}
+
 function selectSpecialty(specialty) {
   selectedSpecialty = specialty;
-  document.getElementById('specialtySelection').style.display = 'none';
-  document.getElementById('difficultySelection').style.display = 'block';
+  transitionToPage('specialtySelection', 'difficultySelection');
   log('Selected specialty: ' + specialty, 'info');
 }
 
@@ -786,21 +826,18 @@ function selectDifficulty(difficulty) {
   indicator.textContent = `${difficultyEmoji[difficulty]} Selected Difficulty: ${difficultyName}`;
   indicator.style.color = difficulty === 'easy' ? '#059669' : difficulty === 'medium' ? '#d97706' : '#dc2626';
 
-  document.getElementById('difficultySelection').style.display = 'none';
-  document.getElementById('scenarioSelection').style.display = 'block';
+  transitionToPage('difficultySelection', 'scenarioSelection');
   log('Selected difficulty: ' + difficulty, 'info');
 }
 
 function backToSpecialties() {
-  document.getElementById('difficultySelection').style.display = 'none';
-  document.getElementById('specialtySelection').style.display = 'block';
   selectedSpecialty = null;
+  transitionToPage('difficultySelection', 'specialtySelection');
 }
 
 function backToDifficulty() {
-  document.getElementById('scenarioSelection').style.display = 'none';
-  document.getElementById('difficultySelection').style.display = 'block';
   selectedDifficulty = null;
+  transitionToPage('scenarioSelection', 'difficultySelection');
 }
 
 function openImageModal() {
