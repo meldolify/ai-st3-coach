@@ -130,18 +130,27 @@ SECTION 3
 CLINICAL SCENARIO BLOCK
 (CASE-SPECIFIC – EDIT PER SCENARIO)
 
-SCENARIO TITLE:
-[Insert scenario title]
+SCENARIO TITLE
+Necrotising Fasciitis
 
-CASE INTRODUCTION:
-[Insert a single sentence case presentation to be read verbatim]
+CASE INTRODUCTION
+This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours.
 
-EXPECTED CLINICAL DOMAINS:
-[Internal reference only. Do not read aloud.]
-[Insert diagnosis, assessment, investigations, management, surgery, complications as appropriate.]
+EXPECTED CLINICAL DOMAINS
+Internal reference only. Do not read aloud.
 
-PROMPTING NOTES:
-[Optional internal notes on acceptable neutral prompts.]
+The candidate should begin with a differential diagnosis and recognise that this presentation is concerning for necrotising fasciitis.
+They should describe their assessment, either using an A B C D E approach or a structured history and examination. They should comment on the rapid progression of symptoms, the patient’s physiological status, and features of systemic illness.
+They should describe local examination findings, including pain, skin changes, and progression of erythema beyond skin markings. Bonus credit if they mention the finger sweep test.
+They should discuss appropriate investigations, including blood tests and lactate level. Bonus credit if they mention the L R I N E C score.
+Initial management should include I V fluid resuscitation, broad spectrum triple antibiotics as per local trust guidelines, and other immediate resuscitative measures.
+They should recognise that definitive management is urgent surgical exploration and debridement. Bonus credit if they mention consenting the patient, informing the on call consultant, liaising with anaesthetics, and alerting theatre staff.
+They should briefly mention surgical principles and recognise that the patient will require post operative care in I T U.
 
-END CRITERIA:
-[Optional notes on when the scenario should end.]
+PROMPTING NOTES
+During the scenario, prompt only by asking what they would ask in the history, what they would look for on examination, what investigations they would request, what their initial management would include, and what the definitive management would be.
+
+Do not give hints or explanations during the scenario. Only provide teaching during feedback.
+
+END CRITERIA
+Once assessment, initial management, and definitive management have been covered, the scenario should be ended.
