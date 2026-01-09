@@ -420,62 +420,176 @@ function toggleMenu(menuId) {
   }
 }
 
-// Switch between station types (Clinical, Communication, Structured)
-function switchStation(stationId, event) {
-  if (event) {
-    event.stopPropagation();
-  }
+// Cascading Hover Panel System
 
-  // Remove active class from all nav items
-  document.querySelectorAll('.station-nav-item').forEach(navItem => {
-    navItem.classList.remove('active');
+// Show subheadings panel when hovering over a heading
+function showSubheadings(headingId) {
+  const subheadingsPanel = document.getElementById('subheadings-panel');
+  const topicsPanel = document.getElementById('topics-panel');
+
+  // Hide all subheading groups
+  document.querySelectorAll('.subheading-group').forEach(group => {
+    group.style.display = 'none';
   });
 
-  // Add active class to the clicked nav item
-  if (event && event.currentTarget) {
-    event.currentTarget.classList.add('active');
+  // Show the appropriate subheading group
+  const subheadingGroup = document.getElementById('subheadings-' + headingId);
+  if (subheadingGroup) {
+    subheadingGroup.style.display = 'block';
+    subheadingsPanel.classList.add('visible');
   }
 
-  // Hide all category sections
-  document.querySelectorAll('.category-section').forEach(section => {
-    section.style.display = 'none';
-  });
-
-  // For structured interview, show it directly
-  if (stationId === 'structured') {
-    const structuredSection = document.getElementById('category-structured');
-    if (structuredSection) {
-      structuredSection.style.display = 'block';
-    }
-  }
+  // Hide topics panel when switching headings
+  topicsPanel.classList.remove('visible');
 }
 
-// Show specific category when subcategory is clicked
-function showCategory(categoryId, event) {
-  if (event) {
-    event.stopPropagation();
-  }
+// Show topics panel when hovering over a subheading
+function showTopics(subheadingId) {
+  const topicsPanel = document.getElementById('topics-panel');
 
-  // Hide all category sections
-  document.querySelectorAll('.category-section').forEach(section => {
-    section.style.display = 'none';
+  // Define all topics for each subheading
+  const topicsData = {
+    'emergencies': {
+      title: '1. Emergencies',
+      topics: [
+        ['digital_amputation', 'Digital Amputation'],
+        ['macro_amputation', 'Macro Amputation'],
+        ['degloving_devascularisation', 'Degloving / Devascularisation'],
+        ['mangled_hand', 'Mangled Hand'],
+        ['high_pressure_injection', 'High Pressure Injection Injury'],
+        ['flexor_sheath_infection', 'Flexor Sheath Infection'],
+        ['extravasation_injury', 'Extravasation Injury'],
+        ['necrotising_fasciitis', 'Necrotising Fasciitis', 'nec_fasc_1.jpg'],
+        ['open_fracture', 'Open Fracture'],
+        ['compartment_syndrome', 'Compartment Syndrome'],
+        ['flap_at_risk', 'Flap at Risk']
+      ]
+    },
+    'hand-trauma': {
+      title: '2. Hand Trauma',
+      topics: [
+        ['fingertip_injury', 'Fingertip Injury'],
+        ['closed_hand_fracture', 'Closed Hand Fracture'],
+        ['tendon_injury', 'Tendon Injury'],
+        ['fightbite_injury', 'Fightbite Injury'],
+        ['finger_deformities_ligamental', 'Finger Deformities and Ligamental Injuries']
+      ]
+    },
+    'elective-hand': {
+      title: '3. Elective Hand',
+      topics: [
+        ['dupuytrens_disease', "Dupuytren's Disease"],
+        ['compression_neuropathies', 'Compression Neuropathies'],
+        ['hand_deformities', 'Hand Deformities']
+      ]
+    },
+    'skin-cancer': {
+      title: '4. Skin Cancer',
+      topics: [
+        ['bcc_basic', 'BCC Basic'],
+        ['scc_basic', 'SCC Basic'],
+        ['mm_basic', 'MM Basic'],
+        ['scalp', 'Scalp'],
+        ['forehead_temple', 'Forehead / Temple'],
+        ['eyelid', 'Eyelid'],
+        ['nose', 'Nose'],
+        ['lip', 'Lip'],
+        ['ear', 'Ear'],
+        ['subungual', 'Subungual'],
+        ['mucosal', 'Mucosal'],
+        ['fungating_massive', 'Fungating / Massive'],
+        ['lymph_node_management', 'Lymph Node Management']
+      ]
+    },
+    'miscellaneous': {
+      title: '5. Miscellaneous',
+      topics: [
+        ['sternal_wound_dehiscence', 'Sternal Wound Dehiscence'],
+        ['pressure_ulcer', 'Pressure Ulcer'],
+        ['pretibial_laceration', 'Pretibial Laceration'],
+        ['haemangioma_vascular', 'Haemangioma / Vascular Malformation'],
+        ['chronic_lower_limb_infections', 'Chronic Lower Limb Infections'],
+        ['cleft_lip_palate', 'Cleft Lip and Palate'],
+        ['hypospadias', 'Hypospadias']
+      ]
+    },
+    'breast-aesthetic': {
+      title: '6. Breast & Aesthetic',
+      topics: [
+        ['breast_cancer_reconstruction', 'Breast Cancer and Reconstruction'],
+        ['breast_reduction', 'Breast Reduction'],
+        ['mastopexy', 'Mastopexy'],
+        ['breast_augmentation_implants', 'Breast Augmentation / Implants'],
+        ['gynaecomastia', 'Gynaecomastia'],
+        ['abdominoplasty', 'Abdominoplasty'],
+        ['rhinoplasty', 'Rhinoplasty'],
+        ['pinnaplasty', 'Pinnaplasty']
+      ]
+    },
+    'burns': {
+      title: '7. Burns',
+      topics: [
+        ['resus_burn', 'Resuscitation Burn'],
+        ['electric_burn', 'Electric Burn'],
+        ['chemical_burn', 'Chemical Burn'],
+        ['major_paediatric_burn', 'Major Paediatric Burn'],
+        ['minor_paediatric_burn', 'Minor Paediatric Burn / TSS'],
+        ['burn_scars', 'Burn Scars'],
+        ['burn_dressings_skin_substitutes', 'Burn Dressings and Skin Substitutes']
+      ]
+    },
+    'call-the-boss': {
+      title: 'Call-The-Boss',
+      topics: [
+        ['call_boss_resus_burn', 'Resus Burn'],
+        ['call_boss_electric_burn', 'Electric Burn'],
+        ['call_boss_chemical_hf', 'Chemical / HF Burn'],
+        ['call_boss_toxic_shock', 'Toxic Shock Syndrome'],
+        ['call_boss_open_fracture', 'Open Fracture'],
+        ['call_boss_compartment_syndrome', 'Compartment Syndrome'],
+        ['call_boss_compromised_flap', 'Compromised Flap'],
+        ['call_boss_nec_fasc', 'Necrotising Fasciitis'],
+        ['call_boss_finger_replant', 'Finger Replant / Revascularisation'],
+        ['call_boss_macro_replant', 'Macro Replant']
+      ]
+    },
+    'consent': {
+      title: 'Consent',
+      topics: [
+        ['consent_breast_reduction', 'Breast Reduction'],
+        ['consent_diep', 'DIEP'],
+        ['consent_skin_lesion', 'Skin Lesion Excision +/- Reconstruction'],
+        ['consent_pinnaplasty', 'Pinnaplasty'],
+        ['consent_pretibial', 'Pretibial Laceration'],
+        ['consent_tendon_nerve', 'Tendon / Digital Nerve Repair']
+      ]
+    },
+    'structured-topics': {
+      title: 'Structured Interview',
+      topics: [
+        ['structured_research', 'Research'],
+        ['structured_audit', 'Audit'],
+        ['structured_teaching', 'Teaching'],
+        ['structured_ethics', 'Ethics'],
+        ['structured_risk_management', 'Risk Management'],
+        ['structured_consent', 'Consent']
+      ]
+    }
+  };
+
+  const data = topicsData[subheadingId];
+  if (!data) return;
+
+  // Build topics HTML
+  let html = `<div class="topics-panel-title">${data.title}</div>`;
+  data.topics.forEach(topic => {
+    const [folder, title, image] = topic;
+    const imageArg = image ? `, '${image}'` : '';
+    html += `<div class="topic-item" onclick="selectScenario('${folder}', '${title.replace(/'/g, "\\'")}'${imageArg})">📋 ${title}</div>`;
   });
 
-  // Remove active from all subcategory items
-  document.querySelectorAll('.subcategory-item').forEach(item => {
-    item.classList.remove('active');
-  });
-
-  // Show the selected category
-  const selectedCategory = document.getElementById('category-' + categoryId);
-  if (selectedCategory) {
-    selectedCategory.style.display = 'block';
-  }
-
-  // Add active to clicked subcategory
-  if (event && event.currentTarget) {
-    event.currentTarget.classList.add('active');
-  }
+  topicsPanel.innerHTML = html;
+  topicsPanel.classList.add('visible');
 }
 
 // Called when user clicks a scenario - directly starts with pre-selected difficulty
