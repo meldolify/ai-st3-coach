@@ -466,12 +466,29 @@ function showSubheadings(headingId) {
 
 // Show topics panel when hovering over a subheading
 function showTopics(subheadingId) {
+  const topicsPanel = document.getElementById('topics-panel');
+
+  // If topics panel is already visible, don't start a new timer - update immediately
+  if (topicsPanel.classList.contains('visible')) {
+    // Clear any pending timer first
+    clearTimeout(topicsTimer);
+    // Update immediately without delay
+    updateTopicsContent(subheadingId);
+    return;
+  }
+
   // Clear any pending timer
   clearTimeout(topicsTimer);
 
-  // Delay before opening panel
+  // Delay before opening panel (only for initial opening)
   topicsTimer = setTimeout(() => {
-    const topicsPanel = document.getElementById('topics-panel');
+    updateTopicsContent(subheadingId);
+  }, 300); // 300ms delay before opening
+}
+
+// Helper function to update topics panel content
+function updateTopicsContent(subheadingId) {
+  const topicsPanel = document.getElementById('topics-panel');
 
   // Define all topics for each subheading
   const topicsData = {
@@ -614,9 +631,8 @@ function showTopics(subheadingId) {
       html += `<div class="topic-item" onclick="selectScenario('${folder}', '${title.replace(/'/g, "\\'")}'${imageArg})">📋 ${title}</div>`;
     });
 
-    topicsPanel.innerHTML = html;
-    topicsPanel.classList.add('visible');
-  }, 300); // 300ms delay before opening
+  topicsPanel.innerHTML = html;
+  topicsPanel.classList.add('visible');
 }
 
 // Handle mouse leave events for panels
