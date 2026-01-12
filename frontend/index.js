@@ -373,9 +373,8 @@ class V4Session {
     }
   }
 
-  startListening() {
-    this.speechRecognition.initialize();
-
+  async startListening() {
+    // Set up callbacks before initialization
     this.speechRecognition.onTranscript = (text) => {
       log('You: ' + text, 'info');
 
@@ -433,6 +432,10 @@ class V4Session {
       }, 350); // Increased from 100ms to 350ms to wait for feedback_processing message
     };
 
+    // Initialize (async for Whisper, sync for Web Speech API)
+    await this.speechRecognition.initialize();
+
+    // Start listening after initialization completes
     this.speechRecognition.start();
   }
 
