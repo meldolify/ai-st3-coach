@@ -414,8 +414,7 @@
     }
 
     .simulation-room.active {
-      display: grid;
-      grid-template-columns: 25% 50% 25%;
+      display: block;
       min-height: 100vh;
       position: fixed;
       top: 0;
@@ -424,12 +423,16 @@
       bottom: 0;
     }
 
-    @media (max-width: 1200px) {
-      .simulation-room.active {
-        grid-template-columns: 1fr;
-        position: relative;
-        padding: 20px;
-      }
+    /* Desktop: show desktop layout */
+    .desktop-simulation-layout {
+      display: grid;
+      grid-template-columns: 25% 50% 25%;
+      min-height: 100vh;
+      width: 100%;
+    }
+
+    .mobile-simulation-layout {
+      display: none;
     }
 
     /* Voice Orb Container */
@@ -1405,26 +1408,28 @@
       }
 
       .mobile-control-button {
-        padding: 12px 24px;
-        font-size: 16px;
+        padding: 10px 18px;
+        font-size: 14px;
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
         border: none;
-        border-radius: 12px;
+        border-radius: 10px;
         cursor: pointer;
         font-weight: 600;
         box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
         transition: all 0.3s ease;
+        min-height: 44px;
       }
 
-      .mobile-control-button:active {
+      .mobile-control-button:active:not(:disabled) {
         transform: translateY(2px);
         box-shadow: 0 2px 6px rgba(102, 126, 234, 0.3);
       }
 
       .mobile-control-button:disabled {
-        opacity: 0.5;
+        opacity: 0.4;
         cursor: not-allowed;
+        background: #9ca3af;
       }
 
       /* MOBILE STATUS BAR - Bottom fixed */
