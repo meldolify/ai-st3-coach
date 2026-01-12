@@ -134,19 +134,33 @@ class WhisperRecognitionManager {
       };
 
       this.mediaRecorder.onstop = async () => {
+        const stopTime = Date.now();
+        const recordDuration = stopTime - this.recordStartTime;
+        console.log(`[WHISPER TIMING] Recording stopped. Duration: ${recordDuration}ms`);
+
         if (this.audioChunks.length > 0) {
+          const t1 = Date.now();
           const audioBlob = new Blob(this.audioChunks, { type: 'audio/webm' });
           this.audioChunks = [];
+          const t2 = Date.now();
+          console.log(`[WHISPER TIMING] Blob creation: ${t2 - t1}ms`);
 
           // Convert blob to base64 and send to backend
           const reader = new FileReader();
           reader.onloadend = () => {
+            const t3 = Date.now();
+            console.log(`[WHISPER TIMING] Base64 conversion: ${t3 - t2}ms`);
+
             const base64Audio = reader.result.split(',')[1];
             this.websocket.send(JSON.stringify({
               type: 'whisper_audio',
               sessionId: session.sessionId,
               audio: base64Audio
             }));
+
+            const t4 = Date.now();
+            console.log(`[WHISPER TIMING] WebSocket send: ${t4 - t3}ms`);
+            console.log(`[WHISPER TIMING] Total frontend processing: ${t4 - t1}ms`);
           };
           reader.readAsDataURL(audioBlob);
         }
@@ -170,6 +184,7 @@ class WhisperRecognitionManager {
   start() {
     this.shouldBeListening = true;
     if (!this.isListening && this.mediaRecorder) {
+      this.recordStartTime = Date.now();
       this.mediaRecorder.start();
       this.isListening = true;
 
@@ -182,7 +197,7 @@ class WhisperRecognitionManager {
       }, 10000);
 
       if (this.onStart) this.onStart();
-      log('Whisper recording started', 'success');
+      console.log(`[WHISPER TIMING] Recording started at ${this.recordStartTime}`);
     }
   }
 
@@ -347,6 +362,7 @@ class V4Session {
 
       case 'whisper_transcript':
         // Handle Whisper API transcript (same as Web Speech API onTranscript)
+        console.log('[WHISPER TIMING] Transcript received from backend');
         if (this.speechRecognition.onTranscript && msg.text) {
           this.speechRecognition.onTranscript(msg.text);
         }
