@@ -104,6 +104,101 @@ class SpeechRecognitionManager {
 }
 
 // ============================================================================
+// WHISPER RECOGNITION MANAGER (for browsers without Web Speech API)
+// ============================================================================
+
+class WhisperRecognitionManager {
+  constructor(websocket) {
+    this.websocket = websocket;
+    this.isListening = false;
+    this.shouldBeListening = false;
+    this.onTranscript = null;
+    this.onStart = null;
+    this.onEnd = null;
+    this.mediaRecorder = null;
+    this.audioChunks = [];
+    this.silenceTimer = null;
+  }
+
+  async initialize() {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      this.mediaRecorder = new MediaRecorder(stream, {
+        mimeType: 'audio/webm;codecs=opus'
+      });
+
+      this.mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          this.audioChunks.push(event.data);
+        }
+      };
+
+      this.mediaRecorder.onstop = async () => {
+        if (this.audioChunks.length > 0) {
+          const audioBlob = new Blob(this.audioChunks, { type: 'audio/webm' });
+          this.audioChunks = [];
+
+          // Convert blob to base64 and send to backend
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            const base64Audio = reader.result.split(',')[1];
+            this.websocket.send(JSON.stringify({
+              type: 'whisper_audio',
+              sessionId: session.id,
+              audio: base64Audio
+            }));
+          };
+          reader.readAsDataURL(audioBlob);
+        }
+
+        this.isListening = false;
+        if (this.onEnd) this.onEnd();
+
+        // Auto-restart if should be listening
+        if (this.shouldBeListening) {
+          setTimeout(() => this.start(), 100);
+        }
+      };
+
+      log('Whisper recognition initialized', 'success');
+    } catch (error) {
+      log('Microphone access denied: ' + error.message, 'error');
+      throw error;
+    }
+  }
+
+  start() {
+    this.shouldBeListening = true;
+    if (!this.isListening && this.mediaRecorder) {
+      this.mediaRecorder.start();
+      this.isListening = true;
+
+      // Auto-stop after 10 seconds to send audio for transcription
+      // This creates natural conversation chunks
+      this.silenceTimer = setTimeout(() => {
+        if (this.isListening) {
+          this.mediaRecorder.stop();
+        }
+      }, 10000);
+
+      if (this.onStart) this.onStart();
+      log('Whisper recording started', 'success');
+    }
+  }
+
+  stop() {
+    this.shouldBeListening = false;
+    if (this.silenceTimer) {
+      clearTimeout(this.silenceTimer);
+      this.silenceTimer = null;
+    }
+    if (this.isListening && this.mediaRecorder) {
+      this.mediaRecorder.stop();
+    }
+  }
+}
+
+// ============================================================================
 // AUDIO PLAYER
 // ============================================================================
 
@@ -158,7 +253,19 @@ class V4Session {
   constructor(backendUrl, promptFile, difficulty) {
     this.ws = null;
     this.sessionId = null;
-    this.speechRecognition = new SpeechRecognitionManager();
+
+    // Hybrid STT: Detect browser capability and choose appropriate manager
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      this.speechRecognition = new SpeechRecognitionManager();
+      this.usingWhisper = false;
+      log('Using Web Speech API for STT', 'success');
+    } else {
+      this.speechRecognition = new WhisperRecognitionManager(null); // WebSocket will be set after connection
+      this.usingWhisper = true;
+      log('Using Whisper API for STT', 'success');
+    }
+
     this.audioPlayer = new AudioPlayer();
     this.backendUrl = backendUrl;
     this.promptFile = promptFile;
@@ -189,6 +296,12 @@ class V4Session {
 
       this.ws.onopen = () => {
         this.isConnected = true;
+
+        // If using Whisper, set the WebSocket reference
+        if (this.usingWhisper) {
+          this.speechRecognition.websocket = this.ws;
+        }
+
         updateStatus('connectionStatus', 'Connected', 'connected');
         log('Connected to backend', 'success');
         resolve();
@@ -230,6 +343,13 @@ class V4Session {
         document.getElementById('interruptBtn').disabled = false;
         updateStatus('aiStatus', 'Speaking', 'speaking'); // Hide bubble when speaking
         setOrbState('speaking');
+        break;
+
+      case 'whisper_transcript':
+        // Handle Whisper API transcript (same as Web Speech API onTranscript)
+        if (this.speechRecognition.onTranscript && msg.text) {
+          this.speechRecognition.onTranscript(msg.text);
+        }
         break;
 
       case 'feedback_processing':
@@ -957,9 +1077,10 @@ document.getElementById('interruptBtn').addEventListener('click', () => {
 window.addEventListener('DOMContentLoaded', () => {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SpeechRecognition) {
-    alert('Speech Recognition is not supported in your browser. Please use Google Chrome or Microsoft Edge.');
-    log('ERROR: Speech Recognition not supported', 'error');
+    // Whisper API fallback available - all browsers supported
+    log('Using Whisper API for speech recognition (browser fallback)', 'info');
   } else {
-    log('Speech Recognition available', 'success');
+    // Web Speech API available - optimal performance
+    log('Using Web Speech API for speech recognition (native browser support)', 'success');
   }
 });
