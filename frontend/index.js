@@ -563,13 +563,20 @@ function updateStatus(elementId, text, status) {
   // Handle AI status bubble specially
   if (elementId === 'aiStatus') {
     const bubble = document.getElementById('aiStatusBubble');
+    const mobileBubble = document.getElementById('mobileAiStatusBubble');
+    const mobileElement = document.getElementById('mobileAiStatus');
+
+    if (mobileElement) mobileElement.textContent = text;
+
     if (bubble) {
       // Only show bubble when processing/thinking
       if (status === 'processing') {
         bubble.classList.add('visible', 'processing');
+        if (mobileBubble) mobileBubble.classList.add('visible', 'processing');
       } else {
         // Hide bubble when not processing (speaking, idle, etc.)
         bubble.classList.remove('visible', 'processing');
+        if (mobileBubble) mobileBubble.classList.remove('visible', 'processing');
       }
     }
     return;
@@ -588,6 +595,14 @@ function updateStatus(elementId, text, status) {
   } else if (status === 'speaking') {
     element.classList.add('status-speaking');
   }
+
+  // Sync with mobile element
+  const mobileId = 'mobile' + elementId.charAt(0).toUpperCase() + elementId.slice(1);
+  const mobileElement = document.getElementById(mobileId);
+  if (mobileElement) {
+    mobileElement.textContent = text;
+    mobileElement.className = element.className;
+  }
 }
 
 // ============================================================================
@@ -598,13 +613,20 @@ function updateStatus(elementId, text, status) {
 
 function setOrbState(state) {
   const orb = document.getElementById('voiceOrb');
-  if (!orb) return;
+  const mobileOrb = document.getElementById('mobileVoiceOrb');
 
-  // Remove all state classes
-  orb.classList.remove('idle', 'listening', 'thinking', 'speaking');
+  if (orb) {
+    // Remove all state classes
+    orb.classList.remove('idle', 'listening', 'thinking', 'speaking');
+    // Add new state class
+    orb.classList.add(state);
+  }
 
-  // Add new state class
-  orb.classList.add(state);
+  if (mobileOrb) {
+    // Sync mobile orb
+    mobileOrb.classList.remove('idle', 'listening', 'thinking', 'speaking');
+    mobileOrb.classList.add(state);
+  }
 
   // Optional: Log state changes for debugging
   console.log('[Orb] State changed to:', state);
@@ -1212,7 +1234,93 @@ function startScenario(category, title, promptFile, imageFile) {
   // Image section is always visible in the layout, but hidden with opacity
   // It will fade in when user clicks "Start Session"
 
+  // Sync mobile elements with desktop elements
+  syncMobileSimulationElements();
+
   log('Selected scenario: ' + title, 'info');
+}
+
+// Sync mobile simulation elements with desktop elements
+function syncMobileSimulationElements() {
+  const isMobile = window.matchMedia('(max-width: 1023px)').matches;
+
+  if (isMobile) {
+    // Sync clinical image
+    const desktopImage = document.getElementById('clinicalImage');
+    const mobileImage = document.getElementById('mobileClinicalImage');
+    const desktopPlaceholder = document.getElementById('noImagePlaceholder');
+    const mobilePlaceholder = document.getElementById('mobileNoImagePlaceholder');
+
+    if (desktopImage && mobileImage) {
+      mobileImage.src = desktopImage.src;
+      mobileImage.style.display = desktopImage.style.display;
+      if (mobilePlaceholder && desktopPlaceholder) {
+        mobilePlaceholder.style.display = desktopPlaceholder.style.display;
+        mobilePlaceholder.textContent = desktopPlaceholder.textContent;
+      }
+    }
+
+    // Sync status values
+    const sessionStatus = document.getElementById('sessionStatus');
+    const mobileSessionStatus = document.getElementById('mobileSessionStatus');
+    if (sessionStatus && mobileSessionStatus) {
+      mobileSessionStatus.textContent = sessionStatus.textContent;
+      mobileSessionStatus.className = sessionStatus.className;
+    }
+
+    const micStatus = document.getElementById('micStatus');
+    const mobileMicStatus = document.getElementById('mobileMicStatus');
+    if (micStatus && mobileMicStatus) {
+      mobileMicStatus.textContent = micStatus.textContent;
+      mobileMicStatus.className = micStatus.className;
+    }
+
+    // Sync AI status bubble
+    const aiStatus = document.getElementById('aiStatus');
+    const mobileAiStatus = document.getElementById('mobileAiStatus');
+    if (aiStatus && mobileAiStatus) {
+      mobileAiStatus.textContent = aiStatus.textContent;
+    }
+
+    // Sync voice orb
+    const voiceOrb = document.getElementById('voiceOrb');
+    const mobileVoiceOrb = document.getElementById('mobileVoiceOrb');
+    if (voiceOrb && mobileVoiceOrb) {
+      mobileVoiceOrb.className = voiceOrb.className;
+    }
+
+    // Sync button states
+    const connectBtn = document.getElementById('connectBtn');
+    const mobileConnectBtn = document.getElementById('mobileConnectBtn');
+    if (connectBtn && mobileConnectBtn) {
+      mobileConnectBtn.disabled = connectBtn.disabled;
+      mobileConnectBtn.style.display = connectBtn.style.display;
+    }
+
+    const interruptBtn = document.getElementById('interruptBtn');
+    const mobileInterruptBtn = document.getElementById('mobileInterruptBtn');
+    if (interruptBtn && mobileInterruptBtn) {
+      mobileInterruptBtn.disabled = interruptBtn.disabled;
+      mobileInterruptBtn.style.display = interruptBtn.style.display;
+    }
+
+    const disconnectBtn = document.getElementById('disconnectBtn');
+    const mobileDisconnectBtn = document.getElementById('mobileDisconnectBtn');
+    if (disconnectBtn && mobileDisconnectBtn) {
+      mobileDisconnectBtn.disabled = disconnectBtn.disabled;
+    }
+
+    // Add event listeners to mobile buttons to trigger desktop buttons
+    if (mobileConnectBtn) {
+      mobileConnectBtn.onclick = () => connectBtn.click();
+    }
+    if (mobileInterruptBtn) {
+      mobileInterruptBtn.onclick = () => interruptBtn.click();
+    }
+    if (mobileDisconnectBtn) {
+      mobileDisconnectBtn.onclick = () => disconnectBtn.click();
+    }
+  }
 }
 
 function exitSimulation() {

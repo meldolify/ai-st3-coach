@@ -1297,139 +1297,169 @@
         margin-bottom: 16px !important;
       }
 
-      /* SIMULATION ROOM: Complete mobile redesign - individual element positioning */
-      .simulation-room.active {
-        position: fixed !important;
+      /* SIMULATION ROOM: Separate desktop and mobile layouts */
+
+      /* Hide desktop layout, show mobile layout */
+      .desktop-simulation-layout {
+        display: none !important;
+      }
+
+      .mobile-simulation-layout {
+        display: block !important;
+        position: fixed;
         top: 0;
         left: 0;
         right: 0;
         bottom: 0;
         background: #ffffff;
+        overflow-y: auto;
       }
 
-      /* Hide all desktop panels */
-      .simulation-room.active .controls-container,
-      .simulation-room.active .center-panel,
-      .simulation-room.active .right-panel {
-        display: none !important;
+      /* MOBILE BACK BUTTON - Top left */
+      .mobile-back-button {
+        position: fixed;
+        top: 8px;
+        left: 8px;
+        z-index: 1000;
+        padding: 8px 16px;
+        font-size: 13px;
+        background: rgba(255, 255, 255, 0.95);
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       }
 
-      /* BACK BUTTON - Top left corner */
-      .simulation-room.active .back-button {
-        position: fixed !important;
-        top: 8px !important;
-        left: 8px !important;
-        z-index: 1000 !important;
-        padding: 8px 16px !important;
-        font-size: 13px !important;
-        min-height: 32px !important;
-        background: rgba(255, 255, 255, 0.95) !important;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
-        display: block !important;
+      .mobile-back-button:active {
+        transform: translateY(1px);
       }
 
-      /* VOICE ORB - Top center */
-      .simulation-room.active .voice-orb-container {
-        position: fixed !important;
-        top: 50px !important;
-        left: 50% !important;
-        transform: translateX(-50%) !important;
-        z-index: 100 !important;
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        gap: 4px !important;
+      /* MOBILE VOICE ORB SECTION - Top center */
+      .mobile-voice-section {
+        position: fixed;
+        top: 50px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 100;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
       }
 
-      .simulation-room.active .voice-orb {
-        width: 60px !important;
-        height: 60px !important;
-        font-size: 24px !important;
+      .mobile-voice-section .voice-orb {
+        width: 80px;
+        height: 80px;
       }
 
-      .simulation-room.active .ai-status-bubble {
-        padding: 4px 10px !important;
-        font-size: 11px !important;
-        min-width: 80px !important;
+      .mobile-voice-section .ai-status-bubble {
+        font-size: 12px;
+        padding: 6px 12px;
+        min-width: 120px;
       }
 
-      /* CLINICAL IMAGE - Middle section */
-      .simulation-room.active .clinical-image-container {
-        position: fixed !important;
-        top: 140px !important;
-        left: 8px !important;
-        right: 8px !important;
-        bottom: 180px !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        z-index: 10 !important;
+      /* MOBILE IMAGE SECTION - Middle */
+      .mobile-image-section {
+        position: fixed;
+        top: 160px;
+        left: 8px;
+        right: 8px;
+        bottom: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
       }
 
-      .simulation-room.active .clinical-image {
-        max-width: 100% !important;
-        max-height: 100% !important;
-        object-fit: contain !important;
-        display: block !important;
+      .mobile-clinical-image-container {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
 
-      .simulation-room.active .image-section h3,
-      .simulation-room.active .no-image-placeholder {
-        display: none !important;
+      .mobile-clinical-image-container .clinical-image {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        border-radius: 8px;
       }
 
-      /* ACTION BUTTONS - Bottom center */
-      .simulation-room.active .button-group {
-        position: fixed !important;
-        bottom: 100px !important;
-        left: 50% !important;
-        transform: translateX(-50%) !important;
-        z-index: 100 !important;
-        display: flex !important;
-        gap: 16px !important;
+      .mobile-clinical-image-container .no-image-placeholder {
+        font-size: 14px;
+        color: #9ca3af;
+        text-align: center;
+        padding: 20px;
       }
 
-      .simulation-room.active .button-group button {
-        width: 52px !important;
-        height: 52px !important;
-        font-size: 18px !important;
+      /* MOBILE ACTION BUTTONS - Bottom center */
+      .mobile-button-group {
+        position: fixed;
+        bottom: 90px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 100;
+        display: flex;
+        gap: 12px;
       }
 
-      /* STATUS INFO - Bottom compact bar */
-      .simulation-room.active .status-section {
-        position: fixed !important;
-        bottom: 0 !important;
-        left: 0 !important;
-        right: 0 !important;
-        background: #f9fafb !important;
-        border-top: 1px solid #e5e7eb !important;
-        padding: 8px 12px !important;
-        z-index: 100 !important;
-        display: flex !important;
-        justify-content: space-between !important;
-        gap: 8px !important;
+      .mobile-control-button {
+        padding: 12px 24px;
+        font-size: 16px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        font-weight: 600;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        transition: all 0.3s ease;
       }
 
-      .simulation-room.active .status-row {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 2px !important;
-        font-size: 10px !important;
+      .mobile-control-button:active {
+        transform: translateY(2px);
+        box-shadow: 0 2px 6px rgba(102, 126, 234, 0.3);
       }
 
-      .simulation-room.active .status-label {
-        font-weight: 600 !important;
-        font-size: 9px !important;
-        opacity: 0.6 !important;
+      .mobile-control-button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
       }
 
-      .simulation-room.active .status-value {
-        font-size: 11px !important;
+      /* MOBILE STATUS BAR - Bottom fixed */
+      .mobile-status-bar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: #f9fafb;
+        border-top: 1px solid #e5e7eb;
+        padding: 12px 16px;
+        z-index: 100;
+        display: flex;
+        justify-content: space-around;
+        gap: 16px;
       }
 
-      /* HIDE scenario title on mobile */
-      .simulation-room.active .scenario-title {
-        display: none !important;
+      .mobile-status-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .mobile-status-label {
+        font-size: 11px;
+        font-weight: 600;
+        color: #6b7280;
+        text-transform: uppercase;
+      }
+
+      .mobile-status-item .status-value {
+        font-size: 12px;
+        padding: 4px 8px;
+        border-radius: 6px;
       }
 
       /* AI status bubble compact */
@@ -1829,65 +1859,111 @@
 
     <!-- Simulation Room View (Hidden by default) -->
     <div id="simulationRoom" class="simulation-room page">
-      <!-- Left Panel (25%): Controls and Navigation -->
-      <div class="controls-container">
-        <button class="back-button" onclick="exitSimulation()">← Back to Scenarios</button>
+      <!-- Desktop Layout: Three panels -->
+      <div class="desktop-simulation-layout">
+        <!-- Left Panel (25%): Controls and Navigation -->
+        <div class="controls-container">
+          <button class="back-button" onclick="exitSimulation()">← Back to Scenarios</button>
 
-        <div class="scenario-title">
-          <h2 id="currentScenarioTitle">Scenario Title</h2>
-          <p id="currentScenarioCategory">Category</p>
-        </div>
-
-        <!-- Status Section -->
-        <div class="status-section">
-          <div class="status-row">
-            <span class="status-label">Session</span>
-            <span id="sessionStatus" class="status-value status-disconnected">No Session</span>
+          <div class="scenario-title">
+            <h2 id="currentScenarioTitle">Scenario Title</h2>
+            <p id="currentScenarioCategory">Category</p>
           </div>
-          <div class="status-row">
-            <span class="status-label">Microphone</span>
-            <span id="micStatus" class="status-value status-disconnected">🔴 Inactive</span>
+
+          <!-- Status Section -->
+          <div class="status-section">
+            <div class="status-row">
+              <span class="status-label">Session</span>
+              <span id="sessionStatus" class="status-value status-disconnected">No Session</span>
+            </div>
+            <div class="status-row">
+              <span class="status-label">Microphone</span>
+              <span id="micStatus" class="status-value status-disconnected">🔴 Inactive</span>
+            </div>
+          </div>
+
+          <!-- Round Icon Buttons -->
+          <div class="button-group">
+            <button id="connectBtn" title="Start Session">▶</button>
+            <button id="interruptBtn" disabled style="display: none;" title="Pause">⏸</button>
+            <button id="disconnectBtn" disabled title="Stop">■</button>
           </div>
         </div>
 
-        <!-- Round Icon Buttons -->
-        <div class="button-group">
-          <button id="connectBtn" title="Start Session">▶</button>
-          <button id="interruptBtn" disabled style="display: none;" title="Pause">⏸</button>
-          <button id="disconnectBtn" disabled title="Stop">■</button>
-        </div>
-      </div>
+        <!-- Center Panel (50%): Clinical Image and Model Answer -->
+        <div class="center-panel">
+          <div id="imageSection" class="image-section">
+            <h3>Clinical Image</h3>
+            <div class="clinical-image-container">
+              <img id="clinicalImage" class="clinical-image" src="" alt="Clinical image" onclick="openImageModal()" style="display: none;">
+              <div id="noImagePlaceholder" class="no-image-placeholder">
+                No clinical image available for this scenario
+              </div>
+            </div>
+          </div>
 
-      <!-- Center Panel (50%): Clinical Image and Model Answer -->
-      <div class="center-panel">
-        <div id="imageSection" class="image-section">
-          <h3>Clinical Image</h3>
-          <div class="clinical-image-container">
-            <img id="clinicalImage" class="clinical-image" src="" alt="Clinical image" onclick="openImageModal()" style="display: none;">
-            <div id="noImagePlaceholder" class="no-image-placeholder">
-              No clinical image available for this scenario
+          <!-- Model Answer Section (will appear after feedback) -->
+          <div id="modelAnswerSection" class="model-answer-section" style="display: none;">
+            <h3>Model Answer</h3>
+            <div id="modelAnswerContent" class="model-answer-content">
+              Model answer will appear here after the scenario is completed.
             </div>
           </div>
         </div>
 
-        <!-- Model Answer Section (will appear after feedback) -->
-        <div id="modelAnswerSection" class="model-answer-section" style="display: none;">
-          <h3>Model Answer</h3>
-          <div id="modelAnswerContent" class="model-answer-content">
-            Model answer will appear here after the scenario is completed.
+        <!-- Right Panel (25%): Voice Orb with Examiner Background -->
+        <div class="right-panel">
+          <!-- Voice Orb Container -->
+          <div class="voice-orb-container">
+            <!-- AI Status Bubble -->
+            <div id="aiStatusBubble" class="ai-status-bubble">
+              <span id="aiStatus">Ready</span>
+            </div>
+            <div id="voiceOrb" class="voice-orb"></div>
           </div>
         </div>
       </div>
 
-      <!-- Right Panel (25%): Voice Orb with Examiner Background -->
-      <div class="right-panel">
-        <!-- Voice Orb Container -->
-        <div class="voice-orb-container">
-          <!-- AI Status Bubble -->
-          <div id="aiStatusBubble" class="ai-status-bubble">
-            <span id="aiStatus">Ready</span>
+      <!-- Mobile Layout: Vertical stacking -->
+      <div class="mobile-simulation-layout">
+        <!-- Back button - top left -->
+        <button class="mobile-back-button" onclick="exitSimulation()">← Back</button>
+
+        <!-- Voice Orb - top center -->
+        <div class="mobile-voice-section">
+          <div id="mobileAiStatusBubble" class="ai-status-bubble">
+            <span id="mobileAiStatus">Ready</span>
           </div>
-          <div id="voiceOrb" class="voice-orb"></div>
+          <div id="mobileVoiceOrb" class="voice-orb"></div>
+        </div>
+
+        <!-- Clinical Image - middle -->
+        <div class="mobile-image-section">
+          <div class="mobile-clinical-image-container">
+            <img id="mobileClinicalImage" class="clinical-image" src="" alt="Clinical image" onclick="openImageModal()" style="display: none;">
+            <div id="mobileNoImagePlaceholder" class="no-image-placeholder">
+              No clinical image available
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons - bottom center -->
+        <div class="mobile-button-group">
+          <button id="mobileConnectBtn" class="mobile-control-button" title="Start Session">▶ Start</button>
+          <button id="mobileInterruptBtn" class="mobile-control-button" disabled style="display: none;" title="Pause">⏸ Pause</button>
+          <button id="mobileDisconnectBtn" class="mobile-control-button" disabled title="Stop">■ Stop</button>
+        </div>
+
+        <!-- Status Bar - bottom fixed -->
+        <div class="mobile-status-bar">
+          <div class="mobile-status-item">
+            <span class="mobile-status-label">Session:</span>
+            <span id="mobileSessionStatus" class="status-value status-disconnected">No Session</span>
+          </div>
+          <div class="mobile-status-item">
+            <span class="mobile-status-label">Mic:</span>
+            <span id="mobileMicStatus" class="status-value status-disconnected">🔴</span>
+          </div>
         </div>
       </div>
     </div>
