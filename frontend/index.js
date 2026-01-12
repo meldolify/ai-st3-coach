@@ -495,7 +495,7 @@ class V4Session {
           sessionId: this.sessionId
         }));
       }
-      // Wait longer to see if we're in feedback mode
+      // Wait longer to see if we're in feedback mode AND for audio to fully stop
       setTimeout(() => {
         // Only restart mic if NOT in feedback mode
         if (!this.inFeedbackMode && !this.audioPlayer.isPlaying) {
@@ -504,7 +504,7 @@ class V4Session {
           // Reset feedback mode flag after processing
           this.inFeedbackMode = false;
         }
-      }, 350); // Increased from 100ms to 350ms to wait for feedback_processing message
+      }, 800); // Increased from 350ms to 800ms to ensure audio fully stops before mic restarts
     };
 
     // Initialize (async for Whisper, sync for Web Speech API)
