@@ -1297,73 +1297,139 @@
         margin-bottom: 16px !important;
       }
 
-      /* Simulation room: Orb top, image middle, controls bottom - all visible */
+      /* SIMULATION ROOM: Complete mobile redesign - individual element positioning */
       .simulation-room.active {
-        display: flex !important;
-        flex-direction: column !important;
         position: fixed !important;
         top: 0;
         left: 0;
         right: 0;
         bottom: 0;
-        padding: 0 !important;
-        overflow: hidden !important;
-        grid-template-columns: unset !important;
+        background: #ffffff;
       }
 
-      /* Back button fixed at top left */
-      .back-button {
+      /* Hide all desktop panels */
+      .simulation-room.active .controls-container,
+      .simulation-room.active .center-panel,
+      .simulation-room.active .right-panel {
+        display: none !important;
+      }
+
+      /* BACK BUTTON - Top left corner */
+      .simulation-room.active .back-button {
         position: fixed !important;
-        top: 8px;
-        left: 8px;
-        z-index: 100;
+        top: 8px !important;
+        left: 8px !important;
+        z-index: 1000 !important;
         padding: 8px 16px !important;
-        font-size: 14px !important;
-        min-height: 36px !important;
+        font-size: 13px !important;
+        min-height: 32px !important;
+        background: rgba(255, 255, 255, 0.95) !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+        display: block !important;
       }
 
-      /* Center panel with orb at TOP - compact */
-      .center-panel {
-        width: 100% !important;
-        padding: 48px 8px 8px 8px !important; /* Top padding for back button */
-        order: 1;
-        flex: 0 0 auto;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 4px;
+      /* VOICE ORB - Top center */
+      .simulation-room.active .voice-orb-container {
+        position: fixed !important;
+        top: 50px !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        z-index: 100 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 4px !important;
       }
 
-      /* Right panel (clinical image) middle */
-      .right-panel {
-        width: 100% !important;
-        padding: 8px !important;
-        order: 2;
-        flex: 1 1 auto;
-        min-height: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
+      .simulation-room.active .voice-orb {
+        width: 60px !important;
+        height: 60px !important;
+        font-size: 24px !important;
       }
 
-      /* Controls at BOTTOM - very compact */
-      .controls-container {
-        width: 100% !important;
-        padding: 8px !important;
-        order: 3;
-        flex: 0 0 auto;
-        border-right: none !important;
-        border-top: 1px solid #e5e7eb;
-        max-height: 25vh;
-        overflow-y: auto;
+      .simulation-room.active .ai-status-bubble {
+        padding: 4px 10px !important;
+        font-size: 11px !important;
+        min-width: 80px !important;
       }
 
-      /* Voice orb much smaller on mobile */
-      .voice-orb {
-        width: 70px !important;
-        height: 70px !important;
-        font-size: 28px !important;
+      /* CLINICAL IMAGE - Middle section */
+      .simulation-room.active .clinical-image-container {
+        position: fixed !important;
+        top: 140px !important;
+        left: 8px !important;
+        right: 8px !important;
+        bottom: 180px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        z-index: 10 !important;
+      }
+
+      .simulation-room.active .clinical-image {
+        max-width: 100% !important;
+        max-height: 100% !important;
+        object-fit: contain !important;
+        display: block !important;
+      }
+
+      .simulation-room.active .image-section h3,
+      .simulation-room.active .no-image-placeholder {
+        display: none !important;
+      }
+
+      /* ACTION BUTTONS - Bottom center */
+      .simulation-room.active .button-group {
+        position: fixed !important;
+        bottom: 100px !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        z-index: 100 !important;
+        display: flex !important;
+        gap: 16px !important;
+      }
+
+      .simulation-room.active .button-group button {
+        width: 52px !important;
+        height: 52px !important;
+        font-size: 18px !important;
+      }
+
+      /* STATUS INFO - Bottom compact bar */
+      .simulation-room.active .status-section {
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        background: #f9fafb !important;
+        border-top: 1px solid #e5e7eb !important;
+        padding: 8px 12px !important;
+        z-index: 100 !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        gap: 8px !important;
+      }
+
+      .simulation-room.active .status-row {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 2px !important;
+        font-size: 10px !important;
+      }
+
+      .simulation-room.active .status-label {
+        font-weight: 600 !important;
+        font-size: 9px !important;
+        opacity: 0.6 !important;
+      }
+
+      .simulation-room.active .status-value {
+        font-size: 11px !important;
+      }
+
+      /* HIDE scenario title on mobile */
+      .simulation-room.active .scenario-title {
+        display: none !important;
       }
 
       /* AI status bubble compact */
