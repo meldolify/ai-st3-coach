@@ -1321,20 +1321,27 @@
       /* MOBILE BACK BUTTON - Top left */
       .mobile-back-button {
         position: fixed;
-        top: 8px;
-        left: 8px;
+        top: 12px;
+        left: 12px;
         z-index: 1000;
-        padding: 8px 16px;
-        font-size: 13px;
-        background: rgba(255, 255, 255, 0.95);
-        border: 1px solid #e5e7eb;
-        border-radius: 8px;
+        padding: 10px 16px;
+        font-size: 14px;
+        font-weight: 500;
+        background: #ffffff;
+        color: #374151;
+        border: none;
+        border-radius: 12px;
         cursor: pointer;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 6px;
       }
 
       .mobile-back-button:active {
-        transform: translateY(1px);
+        transform: scale(0.96);
+        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12);
       }
 
       /* MOBILE VOICE ORB SECTION - Top center */
@@ -1404,32 +1411,64 @@
         transform: translateX(-50%);
         z-index: 100;
         display: flex;
-        gap: 12px;
+        gap: 10px;
+        padding: 0 16px;
       }
 
       .mobile-control-button {
-        padding: 10px 18px;
-        font-size: 14px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 12px 20px;
+        font-size: 13px;
+        font-weight: 500;
         color: white;
         border: none;
-        border-radius: 10px;
+        border-radius: 14px;
         cursor: pointer;
-        font-weight: 600;
-        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-        transition: all 0.3s ease;
-        min-height: 44px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+        transition: all 0.2s ease;
+        min-height: 48px;
+        min-width: 90px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
       }
 
-      .mobile-control-button:active:not(:disabled) {
-        transform: translateY(2px);
-        box-shadow: 0 2px 6px rgba(102, 126, 234, 0.3);
+      /* Start button - Green */
+      #mobileConnectBtn {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
       }
 
+      #mobileConnectBtn:active:not(:disabled) {
+        transform: scale(0.96);
+        box-shadow: 0 2px 6px rgba(16, 185, 129, 0.4);
+      }
+
+      /* Pause button - Orange */
+      #mobileInterruptBtn {
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      }
+
+      #mobileInterruptBtn:active:not(:disabled) {
+        transform: scale(0.96);
+        box-shadow: 0 2px 6px rgba(245, 158, 11, 0.4);
+      }
+
+      /* Stop button - Red */
+      #mobileDisconnectBtn {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      }
+
+      #mobileDisconnectBtn:active:not(:disabled) {
+        transform: scale(0.96);
+        box-shadow: 0 2px 6px rgba(239, 68, 68, 0.4);
+      }
+
+      /* Disabled state for all mobile control buttons */
       .mobile-control-button:disabled {
-        opacity: 0.4;
+        opacity: 0.3;
         cursor: not-allowed;
-        background: #9ca3af;
+        background: #d1d5db !important;
+        box-shadow: none;
       }
 
       /* MOBILE STATUS BAR - Bottom fixed */
