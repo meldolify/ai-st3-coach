@@ -890,106 +890,6 @@ function hideAllPanels() {
   topicsPanel.classList.remove('visible');
 }
 
-// Mobile-friendly scenario grid (replaces cascading panels on mobile)
-function initMobilePanelNavigation() {
-  const isMobile = window.matchMedia('(max-width: 1023px)').matches;
-
-  if (isMobile) {
-    console.log('[MOBILE] Populating mobile scenario grid');
-
-    // Copy difficulty indicator to mobile version
-    const desktopIndicator = document.getElementById('selectedDifficultyIndicator');
-    const mobileIndicator = document.getElementById('selectedDifficultyIndicatorMobile');
-    if (desktopIndicator && mobileIndicator) {
-      mobileIndicator.textContent = desktopIndicator.textContent;
-      mobileIndicator.style.color = desktopIndicator.style.color;
-    }
-
-    // Define all scenarios grouped by category
-    const scenarioCategories = [
-      {
-        name: '🚨 Emergencies',
-        scenarios: [
-          ['clinical_stations/hand_trauma/digital_amputation', 'Digital Amputation'],
-          ['clinical_stations/hand_trauma/macro_amputation', 'Macro Amputation'],
-          ['clinical_stations/hand_trauma/degloving_devascularisation', 'Degloving / Devascularisation'],
-          ['clinical_stations/hand_trauma/mangled_hand', 'Mangled Hand'],
-          ['clinical_stations/emergencies/high_pressure_injection', 'High Pressure Injection'],
-          ['clinical_stations/emergencies/flexor_sheath_infection', 'Flexor Sheath Infection'],
-          ['clinical_stations/miscellaneous/extravasation_injury', 'Extravasation Injury'],
-          ['clinical_stations/emergencies/necrotising_fasciitis', 'Necrotising Fasciitis', 'nec_fasc_1.jpg'],
-          ['clinical_stations/hand_trauma/open_fracture', 'Open Fracture'],
-          ['clinical_stations/emergencies/compartment_syndrome', 'Compartment Syndrome'],
-          ['clinical_stations/miscellaneous/flap_at_risk', 'Flap at Risk']
-        ]
-      },
-      {
-        name: '✋ Hand Trauma',
-        scenarios: [
-          ['clinical_stations/hand_trauma/fingertip_injury', 'Fingertip Injury'],
-          ['clinical_stations/hand_trauma/closed_hand_fracture', 'Closed Hand Fracture'],
-          ['clinical_stations/hand_trauma/tendon_injury', 'Tendon Injury'],
-          ['clinical_stations/emergencies/fightbite_injury', 'Fightbite Injury'],
-          ['clinical_stations/elective_hand/finger_deformities_ligamental', 'Finger Deformities']
-        ]
-      },
-      {
-        name: '🤚 Elective Hand',
-        scenarios: [
-          ['clinical_stations/elective_hand/dupuytrens_disease', "Dupuytren's Disease"],
-          ['clinical_stations/elective_hand/compression_neuropathies', 'Compression Neuropathies'],
-          ['clinical_stations/elective_hand/hand_deformities', 'Hand Deformities']
-        ]
-      },
-      {
-        name: '🔬 Skin Cancer',
-        scenarios: [
-          ['clinical_stations/skin_cancer/bcc_basic', 'BCC Basic'],
-          ['clinical_stations/skin_cancer/scc_basic', 'SCC Basic'],
-          ['clinical_stations/skin_cancer/mm_basic', 'MM Basic'],
-          ['clinical_stations/miscellaneous/scalp', 'Scalp'],
-          ['clinical_stations/miscellaneous/forehead_temple', 'Forehead / Temple'],
-          ['clinical_stations/miscellaneous/eyelid', 'Eyelid'],
-          ['clinical_stations/miscellaneous/nose', 'Nose'],
-          ['clinical_stations/miscellaneous/lip', 'Lip'],
-          ['clinical_stations/miscellaneous/ear', 'Ear'],
-          ['clinical_stations/skin_cancer/subungual', 'Subungual'],
-          ['clinical_stations/skin_cancer/mucosal', 'Mucosal'],
-          ['clinical_stations/miscellaneous/fungating_massive', 'Fungating / Massive'],
-          ['clinical_stations/skin_cancer/lymph_node_management', 'Lymph Node Management']
-        ]
-      }
-    ];
-
-    // Populate the grid
-    const gridContent = document.getElementById('mobileScenarioGridContent');
-    gridContent.innerHTML = '';
-
-    scenarioCategories.forEach(category => {
-      // Add category header
-      const header = document.createElement('div');
-      header.className = 'mobile-category-header';
-      header.textContent = category.name;
-      gridContent.appendChild(header);
-
-      // Add scenario cards
-      category.scenarios.forEach(scenario => {
-        const [folder, title, image] = scenario;
-        const card = document.createElement('div');
-        card.className = 'mobile-scenario-card';
-        card.onclick = () => selectScenario(folder, title, image);
-
-        card.innerHTML = `
-          <h3>${title}</h3>
-          <p>${category.name.replace(/[🚨✋🤚🔬]/g, '').trim()}</p>
-        `;
-
-        gridContent.appendChild(card);
-      });
-    });
-  }
-}
-
 // Called when user clicks a scenario - directly starts with pre-selected difficulty
 function selectScenario(topicFolder, title, imageFile) {
   // Ensure we have a difficulty selected
@@ -1164,10 +1064,7 @@ function selectDifficulty(difficulty) {
   indicator.textContent = `${difficultyEmoji[difficulty]} Selected Difficulty: ${difficultyName}`;
   indicator.style.color = difficulty === 'easy' ? '#059669' : difficulty === 'medium' ? '#d97706' : '#dc2626';
 
-  transitionToPage('difficultySelection', 'scenarioSelection', () => {
-    // Initialize mobile-friendly panel navigation after page loads
-    initMobilePanelNavigation();
-  });
+  transitionToPage('difficultySelection', 'scenarioSelection');
   log('Selected difficulty: ' + difficulty, 'info');
 }
 
