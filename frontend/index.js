@@ -136,6 +136,11 @@ class WhisperRecognitionManager {
       this.analyser.fftSize = 2048;
       source.connect(this.analyser);
 
+      // Resume audio context if suspended (browser autoplay policy)
+      if (this.audioContext.state === 'suspended') {
+        await this.audioContext.resume();
+      }
+
       this.mediaRecorder = new MediaRecorder(stream, {
         mimeType: 'audio/webm;codecs=opus'
       });
@@ -211,6 +216,7 @@ class WhisperRecognitionManager {
     if (rms > this.silenceThreshold) {
       // Voice detected - start or continue recording
       if (!this.isRecording) {
+        console.log(`[WHISPER VAD] Voice detected (RMS: ${rms.toFixed(4)})`);
         this.startRecording();
       }
       // Reset silence timer
