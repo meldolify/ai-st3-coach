@@ -1244,82 +1244,105 @@ function startScenario(category, title, promptFile, imageFile) {
 function syncMobileSimulationElements() {
   const isMobile = window.matchMedia('(max-width: 1023px)').matches;
 
-  if (isMobile) {
-    // Sync clinical image
-    const desktopImage = document.getElementById('clinicalImage');
-    const mobileImage = document.getElementById('mobileClinicalImage');
-    const desktopPlaceholder = document.getElementById('noImagePlaceholder');
-    const mobilePlaceholder = document.getElementById('mobileNoImagePlaceholder');
+  if (!isMobile) return; // Only sync on mobile
 
-    if (desktopImage && mobileImage) {
+  // Sync clinical image - use onload to ensure image is ready
+  const desktopImage = document.getElementById('clinicalImage');
+  const mobileImage = document.getElementById('mobileClinicalImage');
+  const desktopPlaceholder = document.getElementById('noImagePlaceholder');
+  const mobilePlaceholder = document.getElementById('mobileNoImagePlaceholder');
+
+  if (desktopImage && mobileImage) {
+    // Copy src first
+    if (desktopImage.src) {
       mobileImage.src = desktopImage.src;
-      mobileImage.style.display = desktopImage.style.display;
-      if (mobilePlaceholder && desktopPlaceholder) {
-        mobilePlaceholder.style.display = desktopPlaceholder.style.display;
-        mobilePlaceholder.textContent = desktopPlaceholder.textContent;
+      mobileImage.onload = () => {
+        mobileImage.style.display = 'block';
+        if (mobilePlaceholder) mobilePlaceholder.style.display = 'none';
+      };
+      mobileImage.onerror = () => {
+        mobileImage.style.display = 'none';
+        if (mobilePlaceholder) {
+          mobilePlaceholder.style.display = 'block';
+          mobilePlaceholder.textContent = 'Image not found';
+        }
+      };
+    } else {
+      mobileImage.style.display = 'none';
+      if (mobilePlaceholder) {
+        mobilePlaceholder.style.display = 'block';
+        mobilePlaceholder.textContent = desktopPlaceholder ? desktopPlaceholder.textContent : 'No clinical image available';
       }
     }
+  }
 
-    // Sync status values
-    const sessionStatus = document.getElementById('sessionStatus');
-    const mobileSessionStatus = document.getElementById('mobileSessionStatus');
-    if (sessionStatus && mobileSessionStatus) {
-      mobileSessionStatus.textContent = sessionStatus.textContent;
-      mobileSessionStatus.className = sessionStatus.className;
-    }
+  // Sync status values
+  const sessionStatus = document.getElementById('sessionStatus');
+  const mobileSessionStatus = document.getElementById('mobileSessionStatus');
+  if (sessionStatus && mobileSessionStatus) {
+    mobileSessionStatus.textContent = sessionStatus.textContent;
+    mobileSessionStatus.className = sessionStatus.className;
+  }
 
-    const micStatus = document.getElementById('micStatus');
-    const mobileMicStatus = document.getElementById('mobileMicStatus');
-    if (micStatus && mobileMicStatus) {
-      mobileMicStatus.textContent = micStatus.textContent;
-      mobileMicStatus.className = micStatus.className;
-    }
+  const micStatus = document.getElementById('micStatus');
+  const mobileMicStatus = document.getElementById('mobileMicStatus');
+  if (micStatus && mobileMicStatus) {
+    mobileMicStatus.textContent = micStatus.textContent;
+    mobileMicStatus.className = micStatus.className;
+  }
 
-    // Sync AI status bubble
-    const aiStatus = document.getElementById('aiStatus');
-    const mobileAiStatus = document.getElementById('mobileAiStatus');
-    if (aiStatus && mobileAiStatus) {
-      mobileAiStatus.textContent = aiStatus.textContent;
-    }
+  // Sync AI status bubble
+  const aiStatus = document.getElementById('aiStatus');
+  const mobileAiStatus = document.getElementById('mobileAiStatus');
+  if (aiStatus && mobileAiStatus) {
+    mobileAiStatus.textContent = aiStatus.textContent;
+  }
 
-    // Sync voice orb
-    const voiceOrb = document.getElementById('voiceOrb');
-    const mobileVoiceOrb = document.getElementById('mobileVoiceOrb');
-    if (voiceOrb && mobileVoiceOrb) {
-      mobileVoiceOrb.className = voiceOrb.className;
-    }
+  // Sync voice orb
+  const voiceOrb = document.getElementById('voiceOrb');
+  const mobileVoiceOrb = document.getElementById('mobileVoiceOrb');
+  if (voiceOrb && mobileVoiceOrb) {
+    mobileVoiceOrb.className = voiceOrb.className;
+  }
 
-    // Sync button states
-    const connectBtn = document.getElementById('connectBtn');
-    const mobileConnectBtn = document.getElementById('mobileConnectBtn');
-    if (connectBtn && mobileConnectBtn) {
-      mobileConnectBtn.disabled = connectBtn.disabled;
-      mobileConnectBtn.style.display = connectBtn.style.display;
-    }
+  // Sync button states
+  const connectBtn = document.getElementById('connectBtn');
+  const mobileConnectBtn = document.getElementById('mobileConnectBtn');
+  if (connectBtn && mobileConnectBtn) {
+    mobileConnectBtn.disabled = connectBtn.disabled;
+  }
 
-    const interruptBtn = document.getElementById('interruptBtn');
-    const mobileInterruptBtn = document.getElementById('mobileInterruptBtn');
-    if (interruptBtn && mobileInterruptBtn) {
-      mobileInterruptBtn.disabled = interruptBtn.disabled;
-      mobileInterruptBtn.style.display = interruptBtn.style.display;
-    }
+  const interruptBtn = document.getElementById('interruptBtn');
+  const mobileInterruptBtn = document.getElementById('mobileInterruptBtn');
+  if (interruptBtn && mobileInterruptBtn) {
+    mobileInterruptBtn.disabled = interruptBtn.disabled;
+    mobileInterruptBtn.style.display = interruptBtn.style.display;
+  }
 
-    const disconnectBtn = document.getElementById('disconnectBtn');
-    const mobileDisconnectBtn = document.getElementById('mobileDisconnectBtn');
-    if (disconnectBtn && mobileDisconnectBtn) {
-      mobileDisconnectBtn.disabled = disconnectBtn.disabled;
-    }
+  const disconnectBtn = document.getElementById('disconnectBtn');
+  const mobileDisconnectBtn = document.getElementById('mobileDisconnectBtn');
+  if (disconnectBtn && mobileDisconnectBtn) {
+    mobileDisconnectBtn.disabled = disconnectBtn.disabled;
+  }
 
-    // Add event listeners to mobile buttons to trigger desktop buttons
-    if (mobileConnectBtn) {
-      mobileConnectBtn.onclick = () => connectBtn.click();
-    }
-    if (mobileInterruptBtn) {
-      mobileInterruptBtn.onclick = () => interruptBtn.click();
-    }
-    if (mobileDisconnectBtn) {
-      mobileDisconnectBtn.onclick = () => disconnectBtn.click();
-    }
+  // Add event listeners to mobile buttons to trigger desktop buttons
+  if (mobileConnectBtn && connectBtn) {
+    mobileConnectBtn.onclick = () => {
+      console.log('[Mobile] Connect button clicked');
+      connectBtn.click();
+    };
+  }
+  if (mobileInterruptBtn && interruptBtn) {
+    mobileInterruptBtn.onclick = () => {
+      console.log('[Mobile] Interrupt button clicked');
+      interruptBtn.click();
+    };
+  }
+  if (mobileDisconnectBtn && disconnectBtn) {
+    mobileDisconnectBtn.onclick = () => {
+      console.log('[Mobile] Disconnect button clicked');
+      disconnectBtn.click();
+    };
   }
 }
 
