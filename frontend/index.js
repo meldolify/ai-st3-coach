@@ -112,17 +112,30 @@ class WhisperRecognitionManager {
     this.websocket = websocket;
     this.isListening = false;
     this.shouldBeListening = false;
+    this.isRecording = false;
     this.onTranscript = null;
     this.onStart = null;
     this.onEnd = null;
     this.mediaRecorder = null;
     this.audioChunks = [];
     this.silenceTimer = null;
+    this.audioContext = null;
+    this.analyser = null;
+    this.silenceThreshold = 0.01; // Adjust based on testing
+    this.silenceDuration = 1500; // Stop recording after 1.5s of silence
   }
 
   async initialize() {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+      // Set up audio analysis for voice activity detection
+      this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const source = this.audioContext.createMediaStreamSource(stream);
+      this.analyser = this.audioContext.createAnalyser();
+      this.analyser.fftSize = 2048;
+      source.connect(this.analyser);
+
       this.mediaRecorder = new MediaRecorder(stream, {
         mimeType: 'audio/webm;codecs=opus'
       });
@@ -138,7 +151,7 @@ class WhisperRecognitionManager {
         const recordDuration = stopTime - this.recordStartTime;
         console.log(`[WHISPER TIMING] Recording stopped. Duration: ${recordDuration}ms`);
 
-        if (this.audioChunks.length > 0) {
+        if (this.audioChunks.length > 0 && recordDuration > 300) {
           const t1 = Date.now();
           const audioBlob = new Blob(this.audioChunks, { type: 'audio/webm' });
           this.audioChunks = [];
@@ -163,15 +176,14 @@ class WhisperRecognitionManager {
             console.log(`[WHISPER TIMING] Total frontend processing: ${t4 - t1}ms`);
           };
           reader.readAsDataURL(audioBlob);
+        } else {
+          // Discard recording if too short (likely just noise)
+          console.log('[WHISPER] Discarded short/silent recording');
+          this.audioChunks = [];
         }
 
-        this.isListening = false;
+        this.isRecording = false;
         if (this.onEnd) this.onEnd();
-
-        // Auto-restart if should be listening
-        if (this.shouldBeListening) {
-          setTimeout(() => this.start(), 100);
-        }
       };
 
       log('Whisper recognition initialized', 'success');
@@ -181,34 +193,75 @@ class WhisperRecognitionManager {
     }
   }
 
-  start() {
-    this.shouldBeListening = true;
-    if (!this.isListening && this.mediaRecorder) {
+  checkAudioLevel() {
+    if (!this.analyser || !this.shouldBeListening) return;
+
+    const bufferLength = this.analyser.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLength);
+    this.analyser.getByteTimeDomainData(dataArray);
+
+    // Calculate RMS (root mean square) to detect voice
+    let sum = 0;
+    for (let i = 0; i < bufferLength; i++) {
+      const normalized = (dataArray[i] - 128) / 128;
+      sum += normalized * normalized;
+    }
+    const rms = Math.sqrt(sum / bufferLength);
+
+    if (rms > this.silenceThreshold) {
+      // Voice detected - start or continue recording
+      if (!this.isRecording) {
+        this.startRecording();
+      }
+      // Reset silence timer
+      if (this.silenceTimer) {
+        clearTimeout(this.silenceTimer);
+      }
+      this.silenceTimer = setTimeout(() => {
+        if (this.isRecording) {
+          this.stopRecording();
+        }
+      }, this.silenceDuration);
+    }
+
+    // Continue monitoring
+    if (this.shouldBeListening) {
+      requestAnimationFrame(() => this.checkAudioLevel());
+    }
+  }
+
+  startRecording() {
+    if (!this.isRecording && this.mediaRecorder && this.mediaRecorder.state === 'inactive') {
       this.recordStartTime = Date.now();
       this.mediaRecorder.start();
-      this.isListening = true;
-
-      // Auto-stop after 10 seconds to send audio for transcription
-      // This creates natural conversation chunks
-      this.silenceTimer = setTimeout(() => {
-        if (this.isListening) {
-          this.mediaRecorder.stop();
-        }
-      }, 10000);
-
-      if (this.onStart) this.onStart();
+      this.isRecording = true;
       console.log(`[WHISPER TIMING] Recording started at ${this.recordStartTime}`);
     }
   }
 
+  stopRecording() {
+    if (this.isRecording && this.mediaRecorder && this.mediaRecorder.state === 'recording') {
+      this.mediaRecorder.stop();
+    }
+  }
+
+  start() {
+    this.shouldBeListening = true;
+    this.isListening = true;
+    if (this.onStart) this.onStart();
+    // Start monitoring audio levels
+    this.checkAudioLevel();
+  }
+
   stop() {
     this.shouldBeListening = false;
+    this.isListening = false;
     if (this.silenceTimer) {
       clearTimeout(this.silenceTimer);
       this.silenceTimer = null;
     }
-    if (this.isListening && this.mediaRecorder) {
-      this.mediaRecorder.stop();
+    if (this.isRecording) {
+      this.stopRecording();
     }
   }
 }
