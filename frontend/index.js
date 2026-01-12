@@ -890,12 +890,16 @@ function hideAllPanels() {
   topicsPanel.classList.remove('visible');
 }
 
-// Mobile-friendly scenario grid (replaces cascading panels on mobile)
+// Mobile progressive hierarchy navigation
+let mobileCurrentLevel = 'headings'; // Track current navigation level
+let mobileCurrentHeading = null;
+let mobileCurrentSubheading = null;
+
 function initMobilePanelNavigation() {
   const isMobile = window.matchMedia('(max-width: 1023px)').matches;
 
   if (isMobile) {
-    console.log('[MOBILE] Populating mobile scenario grid');
+    console.log('[MOBILE] Initializing progressive hierarchy navigation');
 
     // Copy difficulty indicator to mobile version
     const desktopIndicator = document.getElementById('selectedDifficultyIndicator');
@@ -905,89 +909,173 @@ function initMobilePanelNavigation() {
       mobileIndicator.style.color = desktopIndicator.style.color;
     }
 
-    // Define all scenarios grouped by category
-    const scenarioCategories = [
-      {
-        name: '🚨 Emergencies',
-        scenarios: [
-          ['clinical_stations/hand_trauma/digital_amputation', 'Digital Amputation'],
-          ['clinical_stations/hand_trauma/macro_amputation', 'Macro Amputation'],
-          ['clinical_stations/hand_trauma/degloving_devascularisation', 'Degloving / Devascularisation'],
-          ['clinical_stations/hand_trauma/mangled_hand', 'Mangled Hand'],
-          ['clinical_stations/emergencies/high_pressure_injection', 'High Pressure Injection'],
-          ['clinical_stations/emergencies/flexor_sheath_infection', 'Flexor Sheath Infection'],
-          ['clinical_stations/miscellaneous/extravasation_injury', 'Extravasation Injury'],
-          ['clinical_stations/emergencies/necrotising_fasciitis', 'Necrotising Fasciitis', 'nec_fasc_1.jpg'],
-          ['clinical_stations/hand_trauma/open_fracture', 'Open Fracture'],
-          ['clinical_stations/emergencies/compartment_syndrome', 'Compartment Syndrome'],
-          ['clinical_stations/miscellaneous/flap_at_risk', 'Flap at Risk']
-        ]
-      },
-      {
-        name: '✋ Hand Trauma',
-        scenarios: [
-          ['clinical_stations/hand_trauma/fingertip_injury', 'Fingertip Injury'],
-          ['clinical_stations/hand_trauma/closed_hand_fracture', 'Closed Hand Fracture'],
-          ['clinical_stations/hand_trauma/tendon_injury', 'Tendon Injury'],
-          ['clinical_stations/emergencies/fightbite_injury', 'Fightbite Injury'],
-          ['clinical_stations/elective_hand/finger_deformities_ligamental', 'Finger Deformities']
-        ]
-      },
-      {
-        name: '🤚 Elective Hand',
-        scenarios: [
-          ['clinical_stations/elective_hand/dupuytrens_disease', "Dupuytren's Disease"],
-          ['clinical_stations/elective_hand/compression_neuropathies', 'Compression Neuropathies'],
-          ['clinical_stations/elective_hand/hand_deformities', 'Hand Deformities']
-        ]
-      },
-      {
-        name: '🔬 Skin Cancer',
-        scenarios: [
-          ['clinical_stations/skin_cancer/bcc_basic', 'BCC Basic'],
-          ['clinical_stations/skin_cancer/scc_basic', 'SCC Basic'],
-          ['clinical_stations/skin_cancer/mm_basic', 'MM Basic'],
-          ['clinical_stations/miscellaneous/scalp', 'Scalp'],
-          ['clinical_stations/miscellaneous/forehead_temple', 'Forehead / Temple'],
-          ['clinical_stations/miscellaneous/eyelid', 'Eyelid'],
-          ['clinical_stations/miscellaneous/nose', 'Nose'],
-          ['clinical_stations/miscellaneous/lip', 'Lip'],
-          ['clinical_stations/miscellaneous/ear', 'Ear'],
-          ['clinical_stations/skin_cancer/subungual', 'Subungual'],
-          ['clinical_stations/skin_cancer/mucosal', 'Mucosal'],
-          ['clinical_stations/miscellaneous/fungating_massive', 'Fungating / Massive'],
-          ['clinical_stations/skin_cancer/lymph_node_management', 'Lymph Node Management']
-        ]
-      }
-    ];
-
-    // Populate the grid
-    const gridContent = document.getElementById('mobileScenarioGridContent');
-    gridContent.innerHTML = '';
-
-    scenarioCategories.forEach(category => {
-      // Add category header
-      const header = document.createElement('div');
-      header.className = 'mobile-category-header';
-      header.textContent = category.name;
-      gridContent.appendChild(header);
-
-      // Add scenario cards
-      category.scenarios.forEach(scenario => {
-        const [folder, title, image] = scenario;
-        const card = document.createElement('div');
-        card.className = 'mobile-scenario-card';
-        card.onclick = () => selectScenario(folder, title, image);
-
-        card.innerHTML = `
-          <h3>${title}</h3>
-          <p>${category.name.replace(/[🚨✋🤚🔬]/g, '').trim()}</p>
-        `;
-
-        gridContent.appendChild(card);
-      });
-    });
+    // Reset to headings level
+    mobileShowHeadings();
   }
+}
+
+function mobileShowHeadings() {
+  const headingsGrid = document.getElementById('mobileHeadingsGrid');
+  const subheadingsGrid = document.getElementById('mobileSubheadingsGrid');
+  const topicsGrid = document.getElementById('mobileTopicsGrid');
+  const backButton = document.getElementById('mobileBackButton');
+
+  // Show headings, hide others
+  headingsGrid.style.display = 'grid';
+  subheadingsGrid.style.display = 'none';
+  topicsGrid.style.display = 'none';
+
+  // Update back button
+  backButton.textContent = '← Back to Difficulty';
+  backButton.onclick = backToDifficulty;
+
+  mobileCurrentLevel = 'headings';
+  mobileCurrentHeading = null;
+
+  // Populate headings
+  headingsGrid.innerHTML = '';
+  const headings = [
+    { id: 'clinical', icon: '📋', name: 'Clinical Stations' },
+    { id: 'communication', icon: '💬', name: 'Communication' },
+    { id: 'structured', icon: '📝', name: 'Structured Interview' }
+  ];
+
+  headings.forEach(heading => {
+    const card = document.createElement('div');
+    card.className = 'mobile-scenario-card';
+    card.onclick = () => mobileShowSubheadings(heading.id, heading.name);
+    card.innerHTML = `
+      <h3>${heading.icon} ${heading.name}</h3>
+    `;
+    headingsGrid.appendChild(card);
+  });
+}
+
+function mobileShowSubheadings(headingId, headingName) {
+  const headingsGrid = document.getElementById('mobileHeadingsGrid');
+  const subheadingsGrid = document.getElementById('mobileSubheadingsGrid');
+  const topicsGrid = document.getElementById('mobileTopicsGrid');
+  const backButton = document.getElementById('mobileBackButton');
+
+  // Show subheadings, hide others
+  headingsGrid.style.display = 'none';
+  subheadingsGrid.style.display = 'grid';
+  topicsGrid.style.display = 'none';
+
+  // Update back button
+  backButton.textContent = '← Back to Categories';
+  backButton.onclick = mobileShowHeadings;
+
+  mobileCurrentLevel = 'subheadings';
+  mobileCurrentHeading = headingId;
+
+  // Populate subheadings based on heading
+  subheadingsGrid.innerHTML = '';
+
+  const subheadingsData = {
+    clinical: [
+      { id: 'emergencies', name: '🚨 Emergencies' },
+      { id: 'hand-trauma', name: '✋ Hand Trauma' },
+      { id: 'elective-hand', name: '🤚 Elective Hand' },
+      { id: 'skin-cancer', name: '🔬 Skin Cancer' },
+      { id: 'miscellaneous', name: '📦 Miscellaneous' },
+      { id: 'breast-aesthetic', name: '💄 Breast & Aesthetic' },
+      { id: 'burns', name: '🔥 Burns' }
+    ],
+    communication: [
+      { id: 'call-the-boss', name: '📞 Call-The-Boss' },
+      { id: 'consent', name: '✍️ Consent' }
+    ],
+    structured: [
+      { id: 'structured-topics', name: '📝 Interview Topics' }
+    ]
+  };
+
+  const subheadings = subheadingsData[headingId] || [];
+
+  subheadings.forEach(subheading => {
+    const card = document.createElement('div');
+    card.className = 'mobile-scenario-card';
+    card.onclick = () => mobileShowTopics(subheading.id, subheading.name);
+    card.innerHTML = `<h3>${subheading.name}</h3>`;
+    subheadingsGrid.appendChild(card);
+  });
+}
+
+function mobileShowTopics(subheadingId, subheadingName) {
+  const headingsGrid = document.getElementById('mobileHeadingsGrid');
+  const subheadingsGrid = document.getElementById('mobileSubheadingsGrid');
+  const topicsGrid = document.getElementById('mobileTopicsGrid');
+  const backButton = document.getElementById('mobileBackButton');
+
+  // Show topics, hide others
+  headingsGrid.style.display = 'none';
+  subheadingsGrid.style.display = 'none';
+  topicsGrid.style.display = 'grid';
+
+  // Update back button
+  backButton.textContent = '← Back';
+  backButton.onclick = () => mobileShowSubheadings(mobileCurrentHeading, '');
+
+  mobileCurrentLevel = 'topics';
+  mobileCurrentSubheading = subheadingId;
+
+  // Populate topics - using the same data from topicsData
+  topicsGrid.innerHTML = '';
+
+  const topicsData = {
+    'emergencies': [
+      ['clinical_stations/hand_trauma/digital_amputation', 'Digital Amputation'],
+      ['clinical_stations/hand_trauma/macro_amputation', 'Macro Amputation'],
+      ['clinical_stations/hand_trauma/degloving_devascularisation', 'Degloving / Devascularisation'],
+      ['clinical_stations/hand_trauma/mangled_hand', 'Mangled Hand'],
+      ['clinical_stations/emergencies/high_pressure_injection', 'High Pressure Injection'],
+      ['clinical_stations/emergencies/flexor_sheath_infection', 'Flexor Sheath Infection'],
+      ['clinical_stations/miscellaneous/extravasation_injury', 'Extravasation Injury'],
+      ['clinical_stations/emergencies/necrotising_fasciitis', 'Necrotising Fasciitis', 'nec_fasc_1.jpg'],
+      ['clinical_stations/hand_trauma/open_fracture', 'Open Fracture'],
+      ['clinical_stations/emergencies/compartment_syndrome', 'Compartment Syndrome'],
+      ['clinical_stations/miscellaneous/flap_at_risk', 'Flap at Risk']
+    ],
+    'hand-trauma': [
+      ['clinical_stations/hand_trauma/fingertip_injury', 'Fingertip Injury'],
+      ['clinical_stations/hand_trauma/closed_hand_fracture', 'Closed Hand Fracture'],
+      ['clinical_stations/hand_trauma/tendon_injury', 'Tendon Injury'],
+      ['clinical_stations/emergencies/fightbite_injury', 'Fightbite Injury'],
+      ['clinical_stations/elective_hand/finger_deformities_ligamental', 'Finger Deformities']
+    ],
+    'elective-hand': [
+      ['clinical_stations/elective_hand/dupuytrens_disease', "Dupuytren's Disease"],
+      ['clinical_stations/elective_hand/compression_neuropathies', 'Compression Neuropathies'],
+      ['clinical_stations/elective_hand/hand_deformities', 'Hand Deformities']
+    ],
+    'skin-cancer': [
+      ['clinical_stations/skin_cancer/bcc_basic', 'BCC Basic'],
+      ['clinical_stations/skin_cancer/scc_basic', 'SCC Basic'],
+      ['clinical_stations/skin_cancer/mm_basic', 'MM Basic'],
+      ['clinical_stations/miscellaneous/scalp', 'Scalp'],
+      ['clinical_stations/miscellaneous/forehead_temple', 'Forehead / Temple'],
+      ['clinical_stations/miscellaneous/eyelid', 'Eyelid'],
+      ['clinical_stations/miscellaneous/nose', 'Nose'],
+      ['clinical_stations/miscellaneous/lip', 'Lip'],
+      ['clinical_stations/miscellaneous/ear', 'Ear'],
+      ['clinical_stations/skin_cancer/subungual', 'Subungual'],
+      ['clinical_stations/skin_cancer/mucosal', 'Mucosal'],
+      ['clinical_stations/miscellaneous/fungating_massive', 'Fungating / Massive'],
+      ['clinical_stations/skin_cancer/lymph_node_management', 'Lymph Node Management']
+    ]
+  };
+
+  const topics = topicsData[subheadingId] || [];
+
+  topics.forEach(topic => {
+    const [folder, title, image] = topic;
+    const card = document.createElement('div');
+    card.className = 'mobile-scenario-card';
+    card.onclick = () => selectScenario(folder, title, image);
+    card.innerHTML = `<h3>${title}</h3>`;
+    topicsGrid.appendChild(card);
+  });
 }
 
 // Called when user clicks a scenario - directly starts with pre-selected difficulty
