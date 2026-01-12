@@ -144,7 +144,7 @@ class WhisperRecognitionManager {
             const base64Audio = reader.result.split(',')[1];
             this.websocket.send(JSON.stringify({
               type: 'whisper_audio',
-              sessionId: session.id,
+              sessionId: session.sessionId,
               audio: base64Audio
             }));
           };
