@@ -1306,27 +1306,38 @@
         left: 0;
         right: 0;
         bottom: 0;
-        padding: 8px !important;
+        padding: 0 !important;
         overflow: hidden !important;
         grid-template-columns: unset !important;
       }
 
-      /* Center panel with orb at TOP */
+      /* Back button fixed at top left */
+      .back-button {
+        position: fixed !important;
+        top: 8px;
+        left: 8px;
+        z-index: 100;
+        padding: 8px 16px !important;
+        font-size: 14px !important;
+        min-height: 36px !important;
+      }
+
+      /* Center panel with orb at TOP - compact */
       .center-panel {
         width: 100% !important;
-        padding: 8px !important;
+        padding: 48px 8px 8px 8px !important; /* Top padding for back button */
         order: 1;
         flex: 0 0 auto;
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 8px;
+        gap: 4px;
       }
 
-      /* Right panel (background photo) behind orb */
+      /* Right panel (clinical image) middle */
       .right-panel {
         width: 100% !important;
-        padding: 0 !important;
+        padding: 8px !important;
         order: 2;
         flex: 1 1 auto;
         min-height: 0;
@@ -1336,7 +1347,7 @@
         overflow: hidden;
       }
 
-      /* Controls at BOTTOM - compact */
+      /* Controls at BOTTOM - very compact */
       .controls-container {
         width: 100% !important;
         padding: 8px !important;
@@ -1344,15 +1355,15 @@
         flex: 0 0 auto;
         border-right: none !important;
         border-top: 1px solid #e5e7eb;
-        max-height: 30vh;
+        max-height: 25vh;
         overflow-y: auto;
       }
 
-      /* Voice orb smaller on mobile */
+      /* Voice orb much smaller on mobile */
       .voice-orb {
-        width: 100px !important;
-        height: 100px !important;
-        font-size: 36px !important;
+        width: 70px !important;
+        height: 70px !important;
+        font-size: 28px !important;
       }
 
       /* AI status bubble compact */
@@ -1728,11 +1739,24 @@
 
       <!-- Mobile Scenario Grid (Hidden on desktop, shown on mobile) -->
       <div id="mobileScenarioGrid" style="display: none;">
-        <button class="top-back-button" onclick="backToDifficulty()">← Back</button>
-        <p id="selectedDifficultyIndicatorMobile" style="margin: 15px 0; font-size: 14px; color: #6366f1; font-weight: 600;"></p>
+        <div style="padding: 16px;">
+          <button class="top-back-button" id="mobileBackButton" onclick="backToDifficulty()">← Back to Difficulty</button>
+          <p id="selectedDifficultyIndicatorMobile" style="margin: 15px 0; font-size: 14px; color: #6366f1; font-weight: 600;"></p>
 
-        <div id="mobileScenarioGridContent" class="mobile-scenario-grid">
-          <!-- Populated dynamically by JavaScript -->
+          <!-- Level 1: Headings -->
+          <div id="mobileHeadingsGrid" class="mobile-scenario-grid">
+            <!-- Populated by JS -->
+          </div>
+
+          <!-- Level 2: Subheadings -->
+          <div id="mobileSubheadingsGrid" class="mobile-scenario-grid" style="display: none;">
+            <!-- Populated by JS -->
+          </div>
+
+          <!-- Level 3: Topics -->
+          <div id="mobileTopicsGrid" class="mobile-scenario-grid" style="display: none;">
+            <!-- Populated by JS -->
+          </div>
         </div>
       </div>
     </div>
