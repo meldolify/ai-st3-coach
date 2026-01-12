@@ -890,6 +890,58 @@ function hideAllPanels() {
   topicsPanel.classList.remove('visible');
 }
 
+// Mobile-friendly panel navigation (click/tap instead of hover)
+function initMobilePanelNavigation() {
+  const isMobile = window.matchMedia('(max-width: 1023px)').matches;
+
+  if (isMobile) {
+    console.log('[MOBILE] Enabling mobile panel navigation');
+
+    // On mobile, panels should expand/collapse on click
+    const headingsPanel = document.getElementById('headings-panel');
+    const subheadingsPanel = document.getElementById('subheadings-panel');
+    const topicsPanel = document.getElementById('topics-panel');
+
+    // Click handlers for heading items (Level 1)
+    document.querySelectorAll('.menu-header-level1').forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.stopPropagation();
+        // Toggle subheadings panel
+        const isVisible = subheadingsPanel.classList.contains('visible');
+        if (!isVisible) {
+          // Show subheadings for this heading
+          const heading = e.currentTarget.dataset.heading;
+          showSubheadings(heading);
+          subheadingsPanel.classList.add('visible');
+          topicsPanel.classList.remove('visible');
+        } else {
+          // Hide if clicking the same heading again
+          subheadingsPanel.classList.remove('visible');
+          topicsPanel.classList.remove('visible');
+        }
+      });
+    });
+
+    // Click handlers for subheading items (Level 2)
+    // Note: These are dynamically created, so we'll use event delegation
+    subheadingsPanel.addEventListener('click', (e) => {
+      const menuItem = e.target.closest('.menu-header-level2');
+      if (menuItem) {
+        e.stopPropagation();
+        const heading = menuItem.dataset.heading;
+        const subheading = menuItem.dataset.subheading;
+        showTopics(heading, subheading);
+        topicsPanel.classList.add('visible');
+      }
+    });
+
+    // Click on content area hides all panels
+    document.querySelector('.content-area')?.addEventListener('click', () => {
+      hideAllPanels();
+    });
+  }
+}
+
 // Called when user clicks a scenario - directly starts with pre-selected difficulty
 function selectScenario(topicFolder, title, imageFile) {
   // Ensure we have a difficulty selected
@@ -1064,7 +1116,10 @@ function selectDifficulty(difficulty) {
   indicator.textContent = `${difficultyEmoji[difficulty]} Selected Difficulty: ${difficultyName}`;
   indicator.style.color = difficulty === 'easy' ? '#059669' : difficulty === 'medium' ? '#d97706' : '#dc2626';
 
-  transitionToPage('difficultySelection', 'scenarioSelection');
+  transitionToPage('difficultySelection', 'scenarioSelection', () => {
+    // Initialize mobile-friendly panel navigation after page loads
+    initMobilePanelNavigation();
+  });
   log('Selected difficulty: ' + difficulty, 'info');
 }
 
