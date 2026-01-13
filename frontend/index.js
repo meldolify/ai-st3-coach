@@ -26,6 +26,12 @@ function initSupabase() {
     return false;
   }
 
+  // Check if Supabase SDK loaded
+  if (typeof window.supabase === 'undefined') {
+    console.error('[AUTH] Supabase SDK not loaded. Running in demo mode.');
+    return false;
+  }
+
   try {
     supabase = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
     console.log('[AUTH] Supabase initialized');
@@ -60,6 +66,7 @@ async function checkAuthState() {
     }
   } catch (error) {
     console.error('[AUTH] Error checking auth state:', error);
+    // Show landing page on error so user can try to login
     showLandingPage();
   }
 }
@@ -2271,9 +2278,24 @@ document.getElementById('interruptBtn').addEventListener('click', () => {
 // ============================================================================
 
 window.addEventListener('DOMContentLoaded', async () => {
-  // Initialize Supabase and check auth state
-  initSupabase();
-  await checkAuthState();
+  console.log('[INIT] DOMContentLoaded fired');
+
+  // Safety fallback - if nothing shows after 3 seconds, show landing page
+  const safetyTimeout = setTimeout(() => {
+    console.log('[INIT] Safety timeout triggered - forcing landing page');
+    showLandingPage();
+  }, 3000);
+
+  try {
+    // Initialize Supabase and check auth state
+    initSupabase();
+    await checkAuthState();
+    clearTimeout(safetyTimeout);
+  } catch (error) {
+    console.error('[INIT] Critical error during initialization:', error);
+    clearTimeout(safetyTimeout);
+    showLandingPage();
+  }
 
   // Listen for auth state changes (for social login redirects)
   if (supabase) {
