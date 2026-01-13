@@ -415,6 +415,7 @@ class V4Session {
         // Show interrupt button and set speaking state
         document.getElementById('interruptBtn').style.display = 'block';
         document.getElementById('interruptBtn').disabled = false;
+        syncMobileButtonStates(); // Sync mobile buttons
         updateStatus('aiStatus', 'Speaking', 'speaking'); // Hide bubble when speaking
         setOrbState('speaking');
         break;
@@ -438,6 +439,7 @@ class V4Session {
       case 'interrupt':
         this.audioPlayer.interrupt();
         document.getElementById('interruptBtn').style.display = 'none';
+        syncMobileButtonStates(); // Sync mobile buttons
         setOrbState('listening');
         break;
 
@@ -488,6 +490,7 @@ class V4Session {
     this.audioPlayer.onEnd = () => {
       // Hide interrupt button
       document.getElementById('interruptBtn').style.display = 'none';
+      syncMobileButtonStates(); // Sync mobile buttons
       // Send WebSocket message to notify backend
       if (this.isConnected && this.sessionId) {
         this.ws.send(JSON.stringify({
@@ -1325,6 +1328,14 @@ function syncMobileSimulationElements() {
   }
 
   // Sync button states
+  syncMobileButtonStates();
+
+  // Add event listeners to mobile buttons to trigger desktop buttons (only once)
+  setupMobileButtonListeners();
+}
+
+// Separate function to sync mobile button states - call this whenever desktop button states change
+function syncMobileButtonStates() {
   const connectBtn = document.getElementById('connectBtn');
   const mobileConnectBtn = document.getElementById('mobileConnectBtn');
   if (connectBtn && mobileConnectBtn) {
@@ -1343,8 +1354,21 @@ function syncMobileSimulationElements() {
   if (disconnectBtn && mobileDisconnectBtn) {
     mobileDisconnectBtn.disabled = disconnectBtn.disabled;
   }
+}
 
-  // Add event listeners to mobile buttons to trigger desktop buttons
+// Setup mobile button click handlers (call once)
+let mobileButtonListenersSetup = false;
+function setupMobileButtonListeners() {
+  if (mobileButtonListenersSetup) return;
+  mobileButtonListenersSetup = true;
+
+  const connectBtn = document.getElementById('connectBtn');
+  const mobileConnectBtn = document.getElementById('mobileConnectBtn');
+  const interruptBtn = document.getElementById('interruptBtn');
+  const mobileInterruptBtn = document.getElementById('mobileInterruptBtn');
+  const disconnectBtn = document.getElementById('disconnectBtn');
+  const mobileDisconnectBtn = document.getElementById('mobileDisconnectBtn');
+
   if (mobileConnectBtn && connectBtn) {
     mobileConnectBtn.onclick = () => {
       console.log('[Mobile] Connect button clicked');
@@ -1388,6 +1412,8 @@ function exitSimulation() {
 
     document.getElementById('connectBtn').disabled = false;
     document.getElementById('disconnectBtn').disabled = true;
+    document.getElementById('interruptBtn').style.display = 'none';
+    syncMobileButtonStates(); // Sync mobile buttons
     updateStatus('connectionStatus', 'Disconnected', 'disconnected');
     updateStatus('sessionStatus', 'No Session', 'disconnected');
     updateStatus('micStatus', 'Inactive', 'disconnected');
@@ -1396,8 +1422,12 @@ function exitSimulation() {
 
     // Reset image section (it will fade out via CSS)
     const imageSection = document.getElementById('imageSection');
+    const mobileImageSection = document.getElementById('mobileImageSection');
     if (imageSection) {
       imageSection.classList.remove('visible');
+    }
+    if (mobileImageSection) {
+      mobileImageSection.classList.remove('visible');
     }
   }, 500);
 }
@@ -1502,12 +1532,17 @@ document.getElementById('connectBtn').addEventListener('click', async () => {
     session.startListening();
     document.getElementById('connectBtn').disabled = true;
     document.getElementById('disconnectBtn').disabled = false;
+    syncMobileButtonStates(); // Sync mobile buttons
     log('Session ready! Start speaking to begin the interview.', 'success');
 
     // Show the clinical image with transition when session starts
     const imageSection = document.getElementById('imageSection');
+    const mobileImageSection = document.getElementById('mobileImageSection');
     if (imageSection) {
       imageSection.classList.add('visible');
+    }
+    if (mobileImageSection) {
+      mobileImageSection.classList.add('visible');
     }
   } catch (error) {
     log('Connection failed: ' + error.message, 'error');
@@ -1523,14 +1558,19 @@ document.getElementById('disconnectBtn').addEventListener('click', () => {
   document.getElementById('connectBtn').disabled = false;
   document.getElementById('disconnectBtn').disabled = true;
   document.getElementById('interruptBtn').style.display = 'none';
+  syncMobileButtonStates(); // Sync mobile buttons
   updateStatus('sessionStatus', 'No Session', 'disconnected');
   updateStatus('micStatus', 'Inactive', 'disconnected');
   setOrbState('idle'); // Reset orb when disconnecting
 
   // Hide image with transition
   const imageSection = document.getElementById('imageSection');
+  const mobileImageSection = document.getElementById('mobileImageSection');
   if (imageSection) {
     imageSection.classList.remove('visible');
+  }
+  if (mobileImageSection) {
+    mobileImageSection.classList.remove('visible');
   }
 });
 
@@ -1541,6 +1581,7 @@ document.getElementById('interruptBtn').addEventListener('click', () => {
     session.speechRecognition.start();
     updateStatus('micStatus', '🎤 Listening', 'connected');
     document.getElementById('interruptBtn').style.display = 'none';
+    syncMobileButtonStates(); // Sync mobile buttons
     log('AI interrupted by user', 'info');
   }
 });
