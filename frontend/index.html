@@ -1048,6 +1048,8 @@
     #interruptBtn {
       color: #fbbf24;
       border-color: rgba(251, 191, 36, 0.3);
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      letter-spacing: 2px;
     }
 
     #interruptBtn:hover:not(:disabled) {
@@ -1059,6 +1061,7 @@
     #disconnectBtn {
       color: #f87171;
       border-color: rgba(248, 113, 113, 0.3);
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
     }
 
     #disconnectBtn:hover:not(:disabled) {
@@ -1702,6 +1705,7 @@
       #mobileInterruptBtn {
         color: #fbbf24;
         border-color: rgba(251, 191, 36, 0.3);
+        letter-spacing: 2px;
       }
 
       #mobileInterruptBtn:active:not(:disabled) {
@@ -2207,9 +2211,9 @@
 
           <!-- Round Icon Buttons -->
           <div class="button-group">
-            <button id="connectBtn" title="Start Session">▶</button>
-            <button id="interruptBtn" disabled style="display: none;" title="Pause">⏸</button>
-            <button id="disconnectBtn" disabled title="Stop">■</button>
+            <button id="connectBtn" title="Start Session">&#9654;</button>
+            <button id="interruptBtn" disabled style="display: none;" title="Pause">&#10074;&#10074;</button>
+            <button id="disconnectBtn" disabled title="Stop">&#9632;</button>
           </div>
         </div>
 
@@ -2308,9 +2312,9 @@
 
         <!-- Action Buttons - bottom center (icons only) -->
         <div class="mobile-button-group">
-          <button id="mobileConnectBtn" class="mobile-control-button" title="Start Session">▶</button>
-          <button id="mobileInterruptBtn" class="mobile-control-button" disabled style="display: none;" title="Pause">⏸</button>
-          <button id="mobileDisconnectBtn" class="mobile-control-button" disabled title="Stop">■</button>
+          <button id="mobileConnectBtn" class="mobile-control-button" title="Start Session">&#9654;</button>
+          <button id="mobileInterruptBtn" class="mobile-control-button" disabled style="display: none;" title="Pause">&#10074;&#10074;</button>
+          <button id="mobileDisconnectBtn" class="mobile-control-button" disabled title="Stop">&#9632;</button>
         </div>
 
         <!-- Status Bar - bottom fixed -->
