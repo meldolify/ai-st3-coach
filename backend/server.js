@@ -1,10 +1,30 @@
 require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
 const WebSocket = require('ws');
 const fs = require('fs');
 const path = require('path');
 const url = require('url');
 const OpenAI = require('openai');
 const textToSpeech = require('@google-cloud/text-to-speech');
+
+// Stripe for payments (optional - only if configured)
+let stripe = null;
+if (process.env.STRIPE_SECRET_KEY) {
+  stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+  console.log('[STRIPE] Payment processing enabled');
+}
+
+// Supabase for database operations (optional - only if configured)
+let supabaseAdmin = null;
+if (process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_KEY) {
+  const { createClient } = require('@supabase/supabase-js');
+  supabaseAdmin = createClient(
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_KEY
+  );
+  console.log('[SUPABASE] Database connection enabled');
+}
 
 // Handle Google Cloud credentials for production deployment
 // In production, credentials are passed as a JSON string via environment variable
@@ -364,5 +384,179 @@ wss.on('connection', (ws, req) => {
     sessions.delete(sessionId);
   });
 });
+
+// ============================================================================
+// EXPRESS HTTP SERVER (for Stripe webhooks and REST endpoints)
+// ============================================================================
+
+const HTTP_PORT = process.env.HTTP_PORT || 3000;
+const app = express();
+
+// Enable CORS for frontend
+app.use(cors({
+  origin: process.env.FRONTEND_URL || '*',
+  methods: ['POST', 'GET', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'stripe-signature']
+}));
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+// Stripe webhook endpoint (must use raw body)
+app.post('/stripe-webhook',
+  express.raw({ type: 'application/json' }),
+  async (req, res) => {
+    if (!stripe || !supabaseAdmin) {
+      return res.status(503).json({ error: 'Payment processing not configured' });
+    }
+
+    const sig = req.headers['stripe-signature'];
+    let event;
+
+    try {
+      event = stripe.webhooks.constructEvent(
+        req.body,
+        sig,
+        process.env.STRIPE_WEBHOOK_SECRET
+      );
+    } catch (err) {
+      console.error('[STRIPE WEBHOOK] Signature verification failed:', err.message);
+      return res.status(400).send(`Webhook Error: ${err.message}`);
+    }
+
+    console.log('[STRIPE WEBHOOK] Event received:', event.type);
+
+    try {
+      switch (event.type) {
+        case 'checkout.session.completed': {
+          const session = event.data.object;
+          const userId = session.metadata?.userId;
+          const customerId = session.customer;
+          const subscriptionId = session.subscription;
+
+          if (userId) {
+            await supabaseAdmin
+              .from('subscriptions')
+              .update({
+                stripe_customer_id: customerId,
+                stripe_subscription_id: subscriptionId,
+                status: 'active'
+              })
+              .eq('user_id', userId);
+
+            console.log('[STRIPE] Subscription activated for user:', userId);
+          }
+          break;
+        }
+
+        case 'customer.subscription.updated': {
+          const subscription = event.data.object;
+          const status = subscription.status === 'active' ? 'active' : 'past_due';
+
+          await supabaseAdmin
+            .from('subscriptions')
+            .update({
+              status,
+              current_period_end: new Date(subscription.current_period_end * 1000).toISOString()
+            })
+            .eq('stripe_subscription_id', subscription.id);
+
+          console.log('[STRIPE] Subscription updated:', subscription.id, status);
+          break;
+        }
+
+        case 'customer.subscription.deleted': {
+          const subscription = event.data.object;
+
+          await supabaseAdmin
+            .from('subscriptions')
+            .update({ status: 'cancelled' })
+            .eq('stripe_subscription_id', subscription.id);
+
+          console.log('[STRIPE] Subscription cancelled:', subscription.id);
+          break;
+        }
+      }
+    } catch (error) {
+      console.error('[STRIPE WEBHOOK] Error processing event:', error);
+    }
+
+    res.json({ received: true });
+  }
+);
+
+// Create Stripe checkout session
+app.post('/create-checkout-session',
+  express.json(),
+  async (req, res) => {
+    if (!stripe) {
+      return res.status(503).json({ error: 'Payment processing not configured' });
+    }
+
+    try {
+      const { userId, email } = req.body;
+
+      if (!userId || !email) {
+        return res.status(400).json({ error: 'Missing userId or email' });
+      }
+
+      const session = await stripe.checkout.sessions.create({
+        customer_email: email,
+        line_items: [{
+          price: process.env.STRIPE_PRICE_ID,
+          quantity: 1
+        }],
+        mode: 'subscription',
+        success_url: `${process.env.FRONTEND_URL || 'http://localhost:5500'}?payment=success`,
+        cancel_url: `${process.env.FRONTEND_URL || 'http://localhost:5500'}?payment=cancelled`,
+        metadata: { userId }
+      });
+
+      console.log('[STRIPE] Checkout session created for:', email);
+      res.json({ url: session.url });
+    } catch (error) {
+      console.error('[STRIPE] Error creating checkout session:', error);
+      res.status(500).json({ error: 'Failed to create checkout session' });
+    }
+  }
+);
+
+// Create Stripe customer portal session
+app.post('/create-portal-session',
+  express.json(),
+  async (req, res) => {
+    if (!stripe) {
+      return res.status(503).json({ error: 'Payment processing not configured' });
+    }
+
+    try {
+      const { customerId } = req.body;
+
+      if (!customerId) {
+        return res.status(400).json({ error: 'Missing customerId' });
+      }
+
+      const session = await stripe.billingPortal.sessions.create({
+        customer: customerId,
+        return_url: `${process.env.FRONTEND_URL || 'http://localhost:5500'}?page=profile`
+      });
+
+      console.log('[STRIPE] Portal session created for customer:', customerId);
+      res.json({ url: session.url });
+    } catch (error) {
+      console.error('[STRIPE] Error creating portal session:', error);
+      res.status(500).json({ error: 'Failed to create portal session' });
+    }
+  }
+);
+
+// Start HTTP server (only if we're not in a serverless environment)
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(HTTP_PORT, '0.0.0.0', () => {
+    console.log(`HTTP server running on port ${HTTP_PORT}`);
+  });
+}
 
 console.log('\nServer ready\n');
