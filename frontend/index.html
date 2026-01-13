@@ -8,7 +8,40 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>ST3 Plastic Surgery Interview Trainer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
+    :root {
+      /* Dark VUI Color Palette */
+      --bg-primary: #0a0a12;
+      --bg-secondary: #12121c;
+      --bg-card: rgba(255, 255, 255, 0.03);
+      --bg-glass: rgba(255, 255, 255, 0.05);
+      --bg-glass-hover: rgba(255, 255, 255, 0.08);
+
+      /* Accent Colors */
+      --accent-primary: #00d4aa;
+      --accent-secondary: #00b4d8;
+      --accent-glow: rgba(0, 212, 170, 0.4);
+      --accent-gradient: linear-gradient(135deg, #00d4aa 0%, #00b4d8 100%);
+
+      /* Text Colors */
+      --text-primary: #ffffff;
+      --text-secondary: rgba(255, 255, 255, 0.7);
+      --text-muted: rgba(255, 255, 255, 0.4);
+
+      /* Borders & Effects */
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-accent: rgba(0, 212, 170, 0.3);
+      --shadow-glow: 0 0 30px rgba(0, 212, 170, 0.15);
+      --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.3);
+
+      /* Glassmorphism */
+      --glass-blur: blur(20px);
+      --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
     * {
       margin: 0;
       padding: 0;
@@ -16,10 +49,10 @@
     }
 
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #ffffff;
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-primary);
       min-height: 100vh;
-      color: #1f2937;
+      color: var(--text-primary);
       padding: 20px;
       overflow-x: hidden;
     }
@@ -1314,34 +1347,36 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background: #ffffff;
+        background: var(--bg-primary);
         overflow-y: auto;
       }
 
-      /* MOBILE BACK BUTTON - Top left */
+      /* MOBILE BACK BUTTON - Top left - VUI Style */
       .mobile-back-button {
         position: fixed;
-        top: 12px;
-        left: 12px;
+        top: 16px;
+        left: 16px;
         z-index: 1000;
-        padding: 10px 16px;
-        font-size: 14px;
-        font-weight: 500;
-        background: #ffffff;
-        color: #374151;
-        border: none;
-        border-radius: 12px;
+        width: 44px;
+        height: 44px;
+        font-size: 18px;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        color: var(--text-secondary);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
         cursor: pointer;
-        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-        transition: all 0.2s ease;
+        transition: all 0.25s ease;
         display: flex;
         align-items: center;
-        gap: 6px;
+        justify-content: center;
       }
 
       .mobile-back-button:active {
-        transform: scale(0.96);
-        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12);
+        transform: scale(0.9);
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 0 20px rgba(0, 212, 170, 0.2);
       }
 
       /* MOBILE VOICE ORB SECTION - Top center */
@@ -1403,83 +1438,106 @@
         padding: 20px;
       }
 
-      /* MOBILE ACTION BUTTONS - Bottom center */
+      /* MOBILE ACTION BUTTONS - Bottom center - VUI Style */
       .mobile-button-group {
         position: fixed;
-        bottom: 90px;
+        bottom: 100px;
         left: 50%;
         transform: translateX(-50%);
         z-index: 100;
         display: flex;
-        gap: 10px;
-        padding: 0 16px;
+        align-items: center;
+        gap: 20px;
+        padding: 12px 20px;
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: 50px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
       }
 
       .mobile-control-button {
-        padding: 12px 20px;
-        font-size: 13px;
-        font-weight: 500;
-        color: white;
-        border: none;
-        border-radius: 14px;
+        width: 52px;
+        height: 52px;
+        font-size: 18px;
+        color: var(--text-secondary);
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
         cursor: pointer;
-        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
-        transition: all 0.2s ease;
-        min-height: 48px;
-        min-width: 90px;
+        transition: all 0.25s ease;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 6px;
+        position: relative;
       }
 
-      /* Start button - Green */
+      .mobile-control-button::before {
+        content: '';
+        position: absolute;
+        inset: -2px;
+        border-radius: 50%;
+        background: transparent;
+        transition: all 0.25s ease;
+        z-index: -1;
+      }
+
+      /* Start/Play button - Teal glow */
       #mobileConnectBtn {
-        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: var(--accent-primary);
+        border-color: rgba(0, 212, 170, 0.3);
+        font-size: 20px;
       }
 
       #mobileConnectBtn:active:not(:disabled) {
-        transform: scale(0.96);
-        box-shadow: 0 2px 6px rgba(16, 185, 129, 0.4);
+        transform: scale(0.92);
+        background: rgba(0, 212, 170, 0.15);
+        box-shadow: 0 0 25px rgba(0, 212, 170, 0.4);
       }
 
-      /* Pause button - Orange */
+      /* Pause button - Amber */
       #mobileInterruptBtn {
-        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        color: #fbbf24;
+        border-color: rgba(251, 191, 36, 0.3);
       }
 
       #mobileInterruptBtn:active:not(:disabled) {
-        transform: scale(0.96);
-        box-shadow: 0 2px 6px rgba(245, 158, 11, 0.4);
+        transform: scale(0.92);
+        background: rgba(251, 191, 36, 0.15);
+        box-shadow: 0 0 25px rgba(251, 191, 36, 0.4);
       }
 
-      /* Stop button - Red */
+      /* Stop button - Coral/Red */
       #mobileDisconnectBtn {
-        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        color: #f87171;
+        border-color: rgba(248, 113, 113, 0.3);
       }
 
       #mobileDisconnectBtn:active:not(:disabled) {
-        transform: scale(0.96);
-        box-shadow: 0 2px 6px rgba(239, 68, 68, 0.4);
+        transform: scale(0.92);
+        background: rgba(248, 113, 113, 0.15);
+        box-shadow: 0 0 25px rgba(248, 113, 113, 0.4);
       }
 
-      /* Disabled state for all mobile control buttons */
+      /* Disabled state */
       .mobile-control-button:disabled {
-        opacity: 0.3;
+        opacity: 0.25;
         cursor: not-allowed;
-        background: #d1d5db !important;
-        box-shadow: none;
+        color: var(--text-muted) !important;
+        border-color: rgba(255, 255, 255, 0.05) !important;
       }
 
-      /* MOBILE STATUS BAR - Bottom fixed */
+      /* MOBILE STATUS BAR - Bottom fixed - VUI Style */
       .mobile-status-bar {
         position: fixed;
         bottom: 0;
         left: 0;
         right: 0;
-        background: #f9fafb;
-        border-top: 1px solid #e5e7eb;
-        padding: 12px 16px;
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        padding: 14px 24px;
         z-index: 100;
         display: flex;
         justify-content: space-around;
@@ -1494,16 +1552,29 @@
       }
 
       .mobile-status-label {
-        font-size: 11px;
-        font-weight: 600;
-        color: #6b7280;
+        font-size: 10px;
+        font-weight: 500;
+        color: var(--text-muted);
         text-transform: uppercase;
+        letter-spacing: 0.5px;
       }
 
       .mobile-status-item .status-value {
         font-size: 12px;
-        padding: 4px 8px;
-        border-radius: 6px;
+        padding: 4px 10px;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--text-secondary);
+      }
+
+      .mobile-status-item .status-connected {
+        color: var(--accent-primary);
+        background: rgba(0, 212, 170, 0.1);
+      }
+
+      .mobile-status-item .status-active {
+        color: var(--accent-primary);
+        background: rgba(0, 212, 170, 0.15);
       }
 
       /* AI status bubble compact */
@@ -1968,10 +2039,10 @@
         </div>
       </div>
 
-      <!-- Mobile Layout: Vertical stacking -->
+      <!-- Mobile Layout: Vertical stacking - VUI Dark Theme -->
       <div class="mobile-simulation-layout">
-        <!-- Back button - top left -->
-        <button class="mobile-back-button" onclick="exitSimulation()">← Back</button>
+        <!-- Back button - top left (icon only) -->
+        <button class="mobile-back-button" onclick="exitSimulation()">←</button>
 
         <!-- Voice Orb - top center -->
         <div class="mobile-voice-section">
@@ -1991,22 +2062,22 @@
           </div>
         </div>
 
-        <!-- Action Buttons - bottom center -->
+        <!-- Action Buttons - bottom center (icons only) -->
         <div class="mobile-button-group">
-          <button id="mobileConnectBtn" class="mobile-control-button" title="Start Session">▶ Start</button>
-          <button id="mobileInterruptBtn" class="mobile-control-button" disabled style="display: none;" title="Pause">⏸ Pause</button>
-          <button id="mobileDisconnectBtn" class="mobile-control-button" disabled title="Stop">■ Stop</button>
+          <button id="mobileConnectBtn" class="mobile-control-button" title="Start Session">▶</button>
+          <button id="mobileInterruptBtn" class="mobile-control-button" disabled style="display: none;" title="Pause">⏸</button>
+          <button id="mobileDisconnectBtn" class="mobile-control-button" disabled title="Stop">■</button>
         </div>
 
         <!-- Status Bar - bottom fixed -->
         <div class="mobile-status-bar">
           <div class="mobile-status-item">
-            <span class="mobile-status-label">Session:</span>
-            <span id="mobileSessionStatus" class="status-value status-disconnected">No Session</span>
+            <span class="mobile-status-label">Session</span>
+            <span id="mobileSessionStatus" class="status-value status-disconnected">Disconnected</span>
           </div>
           <div class="mobile-status-item">
-            <span class="mobile-status-label">Mic:</span>
-            <span id="mobileMicStatus" class="status-value status-disconnected">🔴</span>
+            <span class="mobile-status-label">Mic</span>
+            <span id="mobileMicStatus" class="status-value status-disconnected">Off</span>
           </div>
         </div>
       </div>
