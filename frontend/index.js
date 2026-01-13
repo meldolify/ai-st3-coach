@@ -121,8 +121,32 @@ class WhisperRecognitionManager {
     this.silenceTimer = null;
     this.audioContext = null;
     this.analyser = null;
-    this.silenceThreshold = 0.01; // Adjust based on testing
+
+    // VAD Configuration - tuned to reduce false positives
+    this.silenceThreshold = 0.025; // Raised from 0.01 to reduce noise triggers
     this.silenceDuration = 1500; // Stop recording after 1.5s of silence
+    this.minRecordingDuration = 500; // Minimum recording length in ms
+    this.minAverageRMS = 0.02; // Minimum average energy to consider valid speech
+
+    // Continuous listening - track AI state but keep mic open
+    this.aiIsSpeaking = false;
+    this.recordingContaminated = false; // True if AI spoke during recording
+
+    // Energy tracking for audio validation
+    this.rmsReadings = [];
+  }
+
+  // Called externally to update AI speaking state (for continuous listening)
+  setAISpeaking(isSpeaking) {
+    const wasAISpeaking = this.aiIsSpeaking;
+    this.aiIsSpeaking = isSpeaking;
+    console.log(`[WHISPER] AI speaking state changed: ${isSpeaking}`);
+
+    // If AI just started speaking while we're recording, mark as contaminated
+    if (isSpeaking && this.isRecording && !wasAISpeaking) {
+      this.recordingContaminated = true;
+      console.log('[WHISPER] Recording marked contaminated - AI started speaking');
+    }
   }
 
   async initialize() {
@@ -156,7 +180,41 @@ class WhisperRecognitionManager {
         const recordDuration = stopTime - this.recordStartTime;
         console.log(`[WHISPER TIMING] Recording stopped. Duration: ${recordDuration}ms`);
 
-        if (this.audioChunks.length > 0 && recordDuration > 300) {
+        // Calculate average RMS from readings during this recording
+        const avgRMS = this.rmsReadings.length > 0
+          ? this.rmsReadings.reduce((a, b) => a + b, 0) / this.rmsReadings.length
+          : 0;
+        const maxRMS = this.rmsReadings.length > 0 ? Math.max(...this.rmsReadings) : 0;
+        console.log(`[WHISPER VAD] Recording stats - Avg RMS: ${avgRMS.toFixed(4)}, Max RMS: ${maxRMS.toFixed(4)}, Samples: ${this.rmsReadings.length}`);
+
+        // Reset RMS readings for next recording
+        const wasContaminated = this.recordingContaminated;
+        this.rmsReadings = [];
+        this.recordingContaminated = false;
+
+        // Validation checks before sending to Whisper
+        let shouldDiscard = false;
+        let discardReason = '';
+
+        if (this.audioChunks.length === 0) {
+          shouldDiscard = true;
+          discardReason = 'No audio chunks';
+        } else if (recordDuration < this.minRecordingDuration) {
+          shouldDiscard = true;
+          discardReason = `Too short (${recordDuration}ms < ${this.minRecordingDuration}ms)`;
+        } else if (wasContaminated) {
+          shouldDiscard = true;
+          discardReason = 'Contaminated by AI speech';
+        } else if (avgRMS < this.minAverageRMS) {
+          shouldDiscard = true;
+          discardReason = `Low energy (avg RMS ${avgRMS.toFixed(4)} < ${this.minAverageRMS})`;
+        }
+
+        if (shouldDiscard) {
+          console.log(`[WHISPER] Discarded recording: ${discardReason}`);
+          this.audioChunks = [];
+        } else {
+          // Valid recording - send to Whisper
           const t1 = Date.now();
           const audioBlob = new Blob(this.audioChunks, { type: 'audio/webm' });
           this.audioChunks = [];
@@ -181,10 +239,6 @@ class WhisperRecognitionManager {
             console.log(`[WHISPER TIMING] Total frontend processing: ${t4 - t1}ms`);
           };
           reader.readAsDataURL(audioBlob);
-        } else {
-          // Discard recording if too short (likely just noise)
-          console.log('[WHISPER] Discarded short/silent recording');
-          this.audioChunks = [];
         }
 
         this.isRecording = false;
@@ -213,21 +267,35 @@ class WhisperRecognitionManager {
     }
     const rms = Math.sqrt(sum / bufferLength);
 
+    // Track RMS readings while recording for energy validation
+    if (this.isRecording) {
+      this.rmsReadings.push(rms);
+    }
+
+    // Only start new recordings when AI is NOT speaking (continuous listening protection)
+    const canStartRecording = !this.aiIsSpeaking;
+
     if (rms > this.silenceThreshold) {
-      // Voice detected - start or continue recording
-      if (!this.isRecording) {
-        console.log(`[WHISPER VAD] Voice detected (RMS: ${rms.toFixed(4)})`);
+      // Voice/sound detected
+      if (!this.isRecording && canStartRecording) {
+        console.log(`[WHISPER VAD] Voice detected (RMS: ${rms.toFixed(4)}), AI speaking: ${this.aiIsSpeaking}`);
         this.startRecording();
+      } else if (!this.isRecording && !canStartRecording) {
+        // Sound detected but AI is speaking - ignore to prevent feedback
+        // (Don't log every frame to avoid spam)
       }
-      // Reset silence timer
-      if (this.silenceTimer) {
-        clearTimeout(this.silenceTimer);
-      }
-      this.silenceTimer = setTimeout(() => {
-        if (this.isRecording) {
-          this.stopRecording();
+
+      // Reset silence timer if we're recording
+      if (this.isRecording) {
+        if (this.silenceTimer) {
+          clearTimeout(this.silenceTimer);
         }
-      }, this.silenceDuration);
+        this.silenceTimer = setTimeout(() => {
+          if (this.isRecording) {
+            this.stopRecording();
+          }
+        }, this.silenceDuration);
+      }
     }
 
     // Continue monitoring
@@ -239,6 +307,8 @@ class WhisperRecognitionManager {
   startRecording() {
     if (!this.isRecording && this.mediaRecorder && this.mediaRecorder.state === 'inactive') {
       this.recordStartTime = Date.now();
+      this.rmsReadings = []; // Reset RMS readings for new recording
+      this.recordingContaminated = false; // Reset contamination flag
       this.mediaRecorder.start();
       this.isRecording = true;
       console.log(`[WHISPER TIMING] Recording started at ${this.recordStartTime}`);
@@ -480,9 +550,16 @@ class V4Session {
     };
 
     this.audioPlayer.onStart = () => {
-      // Stop mic to prevent AI from hearing itself
-      this.speechRecognition.stop();
-      updateStatus('micStatus', 'Paused', 'active');
+      // For Whisper: use continuous listening - just set AI speaking flag
+      // For Web Speech API: must stop mic to prevent browser issues
+      if (this.usingWhisper && this.speechRecognition.setAISpeaking) {
+        this.speechRecognition.setAISpeaking(true);
+        updateStatus('micStatus', 'Listening (AI speaking)', 'active');
+      } else {
+        // Web Speech API - stop mic to prevent feedback
+        this.speechRecognition.stop();
+        updateStatus('micStatus', 'Paused', 'active');
+      }
       updateStatus('aiStatus', 'Speaking', 'speaking'); // Hide bubble when speaking
       // Orb state already set to 'speaking' in handleMessage
     };
@@ -491,6 +568,12 @@ class V4Session {
       // Hide interrupt button
       document.getElementById('interruptBtn').style.display = 'none';
       syncMobileButtonStates(); // Sync mobile buttons
+
+      // For Whisper: clear AI speaking flag
+      if (this.usingWhisper && this.speechRecognition.setAISpeaking) {
+        this.speechRecognition.setAISpeaking(false);
+      }
+
       // Send WebSocket message to notify backend
       if (this.isConnected && this.sessionId) {
         this.ws.send(JSON.stringify({
@@ -498,16 +581,21 @@ class V4Session {
           sessionId: this.sessionId
         }));
       }
-      // Wait longer to see if we're in feedback mode AND for audio to fully stop
+
+      // Wait to see if we're in feedback mode
       setTimeout(() => {
-        // Only restart mic if NOT in feedback mode
+        // Only restart mic if NOT in feedback mode (for Web Speech API)
+        // Whisper is already running continuously
         if (!this.inFeedbackMode && !this.audioPlayer.isPlaying) {
-          this.speechRecognition.start();
+          if (!this.usingWhisper) {
+            this.speechRecognition.start();
+          }
+          updateStatus('micStatus', '🎤 Listening', 'connected');
         } else {
           // Reset feedback mode flag after processing
           this.inFeedbackMode = false;
         }
-      }, 800); // Increased from 350ms to 800ms to ensure audio fully stops before mic restarts
+      }, 500); // Reduced delay since Whisper handles continuous listening
     };
 
     // Initialize (async for Whisper, sync for Web Speech API)
