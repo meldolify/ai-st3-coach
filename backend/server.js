@@ -71,6 +71,54 @@ function loadScenarioPrompt(scenarioFile) {
   }
 }
 
+// Noise filter for Whisper transcriptions
+// Returns true if the transcript appears to be noise rather than speech
+function isNoiseTranscript(text) {
+  if (!text || typeof text !== 'string') return true;
+
+  const trimmed = text.trim();
+
+  // Empty or very short
+  if (trimmed.length < 2) return true;
+
+  // Common noise patterns from Whisper
+  const noisePatterns = [
+    /^s+$/i,                          // Just "sss" or "ssssss"
+    /^h+$/i,                          // Just "hhh" or "hhhh"
+    /^m+$/i,                          // Just "mmm" or "mmmm"
+    /^u+h*$/i,                        // Just "uhh" or "uuuuh"
+    /^a+h*$/i,                        // Just "ahh" or "aaah"
+    /^\.+$/,                          // Just dots
+    /^\*+$/,                          // Just asterisks
+    /^[\s\.,!?]+$/,                   // Just punctuation
+    /^(um|uh|er|ah|oh|hm)+$/i,        // Just filler sounds
+    /^(okay|ok)\.?$/i,                // Just "okay" by itself (often false positive)
+    /^(yes|yeah|no|nope)\.?$/i,       // Single word responses (often noise)
+    /^thank you\.?$/i,                // Common noise pickup
+    /^that's fine\.?$/i,              // Common echo from AI
+    /^you$/i,                         // Just "you"
+  ];
+
+  for (const pattern of noisePatterns) {
+    if (pattern.test(trimmed)) {
+      console.log(`[NOISE FILTER] Rejected: "${trimmed}" (matched pattern)`);
+      return true;
+    }
+  }
+
+  // Check for repeated characters (like "ssssssss" with spaces)
+  const withoutSpaces = trimmed.replace(/\s/g, '');
+  if (withoutSpaces.length > 2) {
+    const uniqueChars = new Set(withoutSpaces.toLowerCase()).size;
+    if (uniqueChars <= 2) {
+      console.log(`[NOISE FILTER] Rejected: "${trimmed}" (repeated characters)`);
+      return true;
+    }
+  }
+
+  return false;
+}
+
 function buildNaturalSSML(text) {
   // Minimal SSML - only natural pauses, no artificial emphasis
   let ssml = text;
@@ -201,6 +249,12 @@ wss.on('connection', (ws, req) => {
             const t2 = Date.now();
             console.log('[WHISPER STT] ' + transcription.text);
             console.log(`[TIMING] Whisper: ${t2-t1}ms`);
+
+            // Filter out noise transcripts before sending
+            if (isNoiseTranscript(transcription.text)) {
+              console.log('[WHISPER] Filtered noise transcript, not sending to frontend');
+              return; // Don't send noise to frontend
+            }
 
             // Send transcript back to frontend
             ws.send(JSON.stringify({
