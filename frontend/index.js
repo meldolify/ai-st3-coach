@@ -614,6 +614,8 @@ function updateStatus(elementId, text, status) {
 function setOrbState(state) {
   const orb = document.getElementById('voiceOrb');
   const mobileOrb = document.getElementById('mobileVoiceOrb');
+  const waveform = document.getElementById('audioWaveform');
+  const mobileWaveform = document.getElementById('mobileAudioWaveform');
 
   if (orb) {
     // Remove all state classes
@@ -626,6 +628,23 @@ function setOrbState(state) {
     // Sync mobile orb
     mobileOrb.classList.remove('idle', 'listening', 'thinking', 'speaking');
     mobileOrb.classList.add(state);
+  }
+
+  // Control waveform visualizer - active when AI is speaking
+  if (waveform) {
+    if (state === 'speaking') {
+      waveform.classList.add('active');
+    } else {
+      waveform.classList.remove('active');
+    }
+  }
+
+  if (mobileWaveform) {
+    if (state === 'speaking') {
+      mobileWaveform.classList.add('active');
+    } else {
+      mobileWaveform.classList.remove('active');
+    }
   }
 
   // Optional: Log state changes for debugging
