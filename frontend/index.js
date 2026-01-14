@@ -2256,10 +2256,9 @@ function transitionToPage(fromPageId, toPageId, callback) {
     fromPage.style.display = 'none';
     fromPage.classList.remove('fade-out');
 
-    // Show new page - for simulation room, don't set display (let CSS class handle it)
-    if (toPageId !== 'simulationRoom') {
-      toPage.style.display = 'block';
-    }
+    // Show new page - must set inline style to override hideAllPages()
+    // (inline styles have higher specificity than CSS classes)
+    toPage.style.display = 'block';
     toPage.classList.add('fade-in');
 
     // Execute callback if provided
