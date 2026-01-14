@@ -157,12 +157,20 @@ function showLandingPage() {
 }
 
 function showAuthPage(mode = 'login') {
+  console.log('[DEBUG] showAuthPage called with mode:', mode);
   authMode = mode;
   hideAllPages();
   const authPage = document.getElementById('authPage');
+  console.log('[DEBUG] authPage element:', authPage);
+  if (!authPage) {
+    console.error('[ERROR] authPage element not found!');
+    return;
+  }
   authPage.classList.remove('hidden');
   authPage.classList.add('active');
   authPage.style.display = 'block';
+  console.log('[DEBUG] authPage display set to:', authPage.style.display);
+  console.log('[DEBUG] authPage classes:', authPage.className);
   document.getElementById('appHeader').style.display = 'none';
   document.body.classList.remove('has-header');
   updateAuthUI();
