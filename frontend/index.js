@@ -207,6 +207,8 @@ function showAuthPage(mode = 'login') {
   authPage.classList.remove('hidden');
   authPage.classList.add('active');
   authPage.style.display = 'flex';
+  // Reset scroll position (fixes mobile issue where modal opens scrolled down)
+  authPage.scrollTop = 0;
   console.log('[DEBUG] authPage display set to:', authPage.style.display);
   console.log('[DEBUG] authPage classes:', authPage.className);
   updateAuthUI();
@@ -2204,6 +2206,8 @@ function exitSimulation() {
 
   setTimeout(() => {
     simulationRoom.classList.remove('active', 'fade-out');
+    // Must set inline style to hide - CSS classes can't override inline display:block
+    simulationRoom.style.display = 'none';
 
     // Show scenario selection with fade in
     const scenarioSelection = document.getElementById('scenarioSelection');
