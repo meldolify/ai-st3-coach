@@ -101,6 +101,21 @@
       box-sizing: border-box;
     }
 
+    /* Reset button defaults - removes browser styling */
+    button {
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      background: transparent;
+      border: none;
+      font-family: inherit;
+      font-size: inherit;
+      color: inherit;
+      cursor: pointer;
+      padding: 0;
+      margin: 0;
+    }
+
     body {
       font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       background: var(--bg-light);
@@ -948,56 +963,71 @@
       border-right: 1px solid var(--border-subtle);
     }
 
-    .back-button {
-      background: rgba(255, 255, 255, 0.05);
-      color: var(--text-secondary);
-      padding: 12px 20px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+    /* Back button for simulation room (dark theme) */
+    .back-button,
+    button.back-button {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.1) !important;
+      color: #FFFFFF !important;
+      font-family: 'Plus Jakarta Sans', sans-serif !important;
+      padding: 12px 20px !important;
+      border: 1px solid rgba(255, 255, 255, 0.25) !important;
       cursor: pointer;
-      font-size: 14px;
-      font-weight: 500;
+      font-size: 14px !important;
+      font-weight: 500 !important;
       transition: all 0.25s ease;
       align-self: flex-start;
-      border-radius: 12px;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
+      border-radius: 12px !important;
       margin-bottom: 24px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     }
 
-    .back-button:hover {
-      background: rgba(255, 255, 255, 0.08);
-      color: var(--text-primary);
-      border-color: rgba(255, 255, 255, 0.15);
+    .back-button:hover,
+    button.back-button:hover {
+      background: rgba(255, 255, 255, 0.15) !important;
+      border-color: var(--brand-primary) !important;
       transform: translateX(-4px);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
     }
 
-    .back-button:active {
+    .back-button:active,
+    button.back-button:active {
       transform: translateX(-4px) scale(0.98);
     }
 
-    /* Back button for page navigation - VUI style */
-    .top-back-button {
-      background: rgba(0, 212, 170, 0.15);
-      color: var(--accent-primary);
-      padding: 12px 24px;
-      border: 1px solid rgba(0, 212, 170, 0.3);
+    /* Back button for page navigation (dark theme sections) */
+    .top-back-button,
+    button.top-back-button {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      background: rgba(255, 255, 255, 0.1) !important;
+      color: #FFFFFF !important;
+      font-family: 'Plus Jakarta Sans', sans-serif !important;
+      padding: 12px 24px !important;
+      border: 1px solid rgba(255, 255, 255, 0.25) !important;
       cursor: pointer;
-      font-size: 14px;
-      font-weight: 500;
+      font-size: 14px !important;
+      font-weight: 500 !important;
       transition: all 0.25s ease;
-      border-radius: 12px;
-      display: inline-block;
+      border-radius: 12px !important;
       width: auto;
       height: auto;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     }
 
-    .top-back-button:hover {
-      background: rgba(0, 212, 170, 0.25);
-      box-shadow: 0 0 20px rgba(0, 212, 170, 0.2);
+    .top-back-button:hover,
+    button.top-back-button:hover {
+      background: rgba(255, 255, 255, 0.15) !important;
+      border-color: var(--brand-primary) !important;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 20px rgba(15, 118, 110, 0.2);
     }
 
-    .top-back-button:active {
+    .top-back-button:active,
+    button.top-back-button:active {
       transform: scale(0.98);
     }
 
@@ -1085,7 +1115,7 @@
       background: rgba(0, 212, 170, 0.15);
     }
 
-    /* Round Icon Buttons - VUI Dark Theme */
+    /* Round Icon Buttons - VUI Dark Theme (Simulation Room Only) */
     .button-group {
       display: flex;
       gap: 16px;
@@ -1098,24 +1128,25 @@
       border: 1px solid var(--border-subtle);
     }
 
-    button:not(.back-button):not(.top-back-button):not(.mobile-back-button):not(.mobile-control-button) {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      background: transparent;
+    /* Round control buttons ONLY in simulation room button-group */
+    .button-group button {
+      width: 60px !important;
+      height: 60px !important;
+      border-radius: 50% !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      background: transparent !important;
       cursor: pointer;
       transition: all 0.25s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      font-size: 20px !important;
       line-height: 1;
-      padding: 0;
-      box-shadow: none;
+      padding: 0 !important;
+      box-shadow: none !important;
     }
 
-    button:disabled {
+    .button-group button:disabled {
       opacity: 0.25;
       cursor: not-allowed;
     }
@@ -2392,28 +2423,32 @@
     }
 
     /* Nav Buttons - Card-like style with visible border */
-    .nav-link {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      background: #FFFFFF;
-      border: 1px solid #D1D5DB;
-      color: #1F2937;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 14px;
-      font-weight: 500;
-      padding: 10px 18px;
-      border-radius: 10px;
+    .nav-link,
+    button.nav-link,
+    a.nav-link {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      background: #FFFFFF !important;
+      border: 1px solid #D1D5DB !important;
+      color: #1F2937 !important;
+      font-family: 'Plus Jakarta Sans', sans-serif !important;
+      font-size: 14px !important;
+      font-weight: 500 !important;
+      padding: 10px 18px !important;
+      border-radius: 10px !important;
       cursor: pointer;
       transition: all 0.3s ease;
-      text-decoration: none;
+      text-decoration: none !important;
       box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
     }
 
-    .nav-link:hover {
+    .nav-link:hover,
+    button.nav-link:hover,
+    a.nav-link:hover {
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      border-color: #0F766E;
+      border-color: #0F766E !important;
     }
 
     /* Landing Content */
@@ -2487,64 +2522,70 @@
        ============================================ */
 
     /* Primary Button - Main CTA */
-    .btn-primary {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
+    .btn-primary,
+    button.btn-primary {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
       gap: 8px;
-      background: #FFFFFF;
-      color: #1F2937;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 16px;
-      font-weight: 600;
-      padding: 16px 32px;
-      border: 1px solid #D1D5DB;
-      border-radius: 12px;
+      background: #FFFFFF !important;
+      color: #1F2937 !important;
+      font-family: 'Plus Jakarta Sans', sans-serif !important;
+      font-size: 16px !important;
+      font-weight: 600 !important;
+      padding: 16px 32px !important;
+      border: 1px solid #D1D5DB !important;
+      border-radius: 12px !important;
       cursor: pointer;
       transition: all 0.3s ease;
-      text-decoration: none;
+      text-decoration: none !important;
       white-space: nowrap;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
     }
 
-    .btn-primary:hover {
+    .btn-primary:hover,
+    button.btn-primary:hover {
       transform: translateY(-3px);
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-      border-color: #0F766E;
+      border-color: #0F766E !important;
     }
 
-    .btn-primary:active {
+    .btn-primary:active,
+    button.btn-primary:active {
       transform: translateY(0);
     }
 
     /* Secondary Button - Same card-like style */
-    .btn-secondary {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
+    .btn-secondary,
+    button.btn-secondary {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
       gap: 8px;
-      background: #FFFFFF;
-      color: #1F2937;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 16px;
-      font-weight: 600;
-      padding: 16px 32px;
-      border: 1px solid #D1D5DB;
-      border-radius: 12px;
+      background: #FFFFFF !important;
+      color: #1F2937 !important;
+      font-family: 'Plus Jakarta Sans', sans-serif !important;
+      font-size: 16px !important;
+      font-weight: 600 !important;
+      padding: 16px 32px !important;
+      border: 1px solid #D1D5DB !important;
+      border-radius: 12px !important;
       cursor: pointer;
       transition: all 0.3s ease;
-      text-decoration: none;
+      text-decoration: none !important;
       white-space: nowrap;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
     }
 
-    .btn-secondary:hover {
+    .btn-secondary:hover,
+    button.btn-secondary:hover {
       transform: translateY(-3px);
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-      border-color: #0F766E;
+      border-color: #0F766E !important;
     }
 
-    .btn-secondary:active {
+    .btn-secondary:active,
+    button.btn-secondary:active {
       transform: translateY(0);
     }
 
@@ -2974,26 +3015,28 @@
     }
 
     /* Auth Form Submit Button - Full width, card-like style */
-    .auth-form .btn-primary {
-      width: 100%;
+    .auth-form .btn-primary,
+    .auth-form button.btn-primary {
+      width: 100% !important;
       margin-top: 8px;
-      background: #FFFFFF;
-      color: #1F2937;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 16px;
-      font-weight: 600;
-      padding: 16px 24px;
-      border: 1px solid #D1D5DB;
-      border-radius: 12px;
+      background: #FFFFFF !important;
+      color: #1F2937 !important;
+      font-family: 'Plus Jakarta Sans', sans-serif !important;
+      font-size: 16px !important;
+      font-weight: 600 !important;
+      padding: 16px 24px !important;
+      border: 1px solid #D1D5DB !important;
+      border-radius: 12px !important;
       cursor: pointer;
       transition: all 0.3s ease;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
     }
 
-    .auth-form .btn-primary:hover {
+    .auth-form .btn-primary:hover,
+    .auth-form button.btn-primary:hover {
       transform: translateY(-3px);
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-      border-color: #0F766E;
+      border-color: #0F766E !important;
     }
 
     .auth-divider {
@@ -3022,26 +3065,30 @@
       gap: 12px;
     }
 
-    .btn-social {
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .btn-social,
+    button.btn-social {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
       gap: 12px;
-      background: var(--bg-light-tertiary);
-      border: 1px solid var(--border-light);
-      border-radius: 12px;
-      padding: 14px;
-      font-size: 15px;
-      font-weight: 500;
-      color: var(--text-light-primary);
+      background: #FFFFFF !important;
+      border: 1px solid #D1D5DB !important;
+      border-radius: 12px !important;
+      padding: 14px !important;
+      font-family: 'Plus Jakarta Sans', sans-serif !important;
+      font-size: 15px !important;
+      font-weight: 500 !important;
+      color: #1F2937 !important;
       cursor: pointer;
       transition: all 0.2s ease;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
     }
 
-    .btn-social:hover {
-      background: var(--bg-light-secondary);
-      border-color: var(--border-light-hover);
-      box-shadow: var(--shadow-light-md);
+    .btn-social:hover,
+    button.btn-social:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border-color: #0F766E !important;
     }
 
     .btn-social img {
@@ -3307,60 +3354,66 @@
     }
 
     /* Profile Save Button - Card-like style */
-    .btn-save {
+    .btn-save,
+    button.btn-save {
       flex: 1;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      background: #FFFFFF;
-      color: #1F2937;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      border: 1px solid #D1D5DB;
-      padding: 16px 24px;
-      font-size: 16px;
-      font-weight: 600;
-      border-radius: 12px;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      background: #FFFFFF !important;
+      color: #1F2937 !important;
+      font-family: 'Plus Jakarta Sans', sans-serif !important;
+      border: 1px solid #D1D5DB !important;
+      padding: 16px 24px !important;
+      font-size: 16px !important;
+      font-weight: 600 !important;
+      border-radius: 12px !important;
       cursor: pointer;
       transition: all 0.3s ease;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
     }
 
-    .btn-save:hover {
+    .btn-save:hover,
+    button.btn-save:hover {
       transform: translateY(-3px);
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-      border-color: #0F766E;
+      border-color: #0F766E !important;
     }
 
-    .btn-save:active {
+    .btn-save:active,
+    button.btn-save:active {
       transform: translateY(0);
     }
 
     /* Profile Back Button - Card-like style */
-    .btn-back {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
+    .btn-back,
+    button.btn-back {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
       gap: 8px;
-      background: #FFFFFF;
-      color: #1F2937;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      border: 1px solid #D1D5DB;
-      padding: 16px 24px;
-      font-size: 16px;
-      font-weight: 500;
-      border-radius: 12px;
+      background: #FFFFFF !important;
+      color: #1F2937 !important;
+      font-family: 'Plus Jakarta Sans', sans-serif !important;
+      border: 1px solid #D1D5DB !important;
+      padding: 16px 24px !important;
+      font-size: 16px !important;
+      font-weight: 500 !important;
+      border-radius: 12px !important;
       cursor: pointer;
       transition: all 0.3s ease;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
     }
 
-    .btn-back:hover {
+    .btn-back:hover,
+    button.btn-back:hover {
       transform: translateY(-3px);
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-      border-color: #0F766E;
+      border-color: #0F766E !important;
     }
 
-    .btn-back:active {
+    .btn-back:active,
+    button.btn-back:active {
       transform: translateY(0);
     }
 
@@ -3447,34 +3500,54 @@
       gap: 12px;
     }
 
-    .btn-upgrade {
-      background: var(--accent-gradient);
-      color: #000;
-      border: none;
-      padding: 16px;
-      font-size: 16px;
-      font-weight: 600;
-      border-radius: 12px;
+    .btn-upgrade,
+    button.btn-upgrade {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      background: #FFFFFF !important;
+      color: #1F2937 !important;
+      font-family: 'Plus Jakarta Sans', sans-serif !important;
+      border: 1px solid #D1D5DB !important;
+      padding: 16px !important;
+      font-size: 16px !important;
+      font-weight: 600 !important;
+      border-radius: 12px !important;
       cursor: pointer;
       transition: all 0.3s ease;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
     }
 
-    .btn-upgrade:hover {
+    .btn-upgrade:hover,
+    button.btn-upgrade:hover {
       transform: translateY(-2px);
-      box-shadow: var(--shadow-glow);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+      border-color: #0F766E !important;
     }
 
-    .btn-cancel {
-      background: transparent;
-      color: var(--text-muted);
-      border: none;
-      padding: 12px;
-      font-size: 14px;
+    .btn-cancel,
+    button.btn-cancel {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      background: #FFFFFF !important;
+      color: #1F2937 !important;
+      font-family: 'Plus Jakarta Sans', sans-serif !important;
+      border: 1px solid #D1D5DB !important;
+      padding: 12px !important;
+      font-size: 14px !important;
+      font-weight: 500 !important;
+      border-radius: 12px !important;
       cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
     }
 
-    .btn-cancel:hover {
-      color: var(--text-primary);
+    .btn-cancel:hover,
+    button.btn-cancel:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border-color: #0F766E !important;
     }
 
     /* Lock icon for premium scenarios */

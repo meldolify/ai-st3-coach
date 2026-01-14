@@ -1,0 +1,4 @@
+Database password: LightningInmyhands13@37
+Project URL: https://vsdiovgjnbziwwukpvqo.supabase.co
+Publishable API: sb_publishable_iKcKZicUkZ_bfZZU8pJlqQ_hfGRyGNa
+Anon public key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZzZGlvdmdqbmJ6aXd3dWtwdnFvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzMjkxOTUsImV4cCI6MjA4MzkwNTE5NX0.iTanR6urX6H7-818YEWAN6jn0rXQBny8VANRJ-6qdBk

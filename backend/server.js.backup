@@ -178,6 +178,41 @@ wss.on('connection', (ws, req) => {
       }
 
       switch (msg.type) {
+        case 'whisper_audio':
+          // Handle Whisper API transcription for browsers without Web Speech API
+          try {
+            const audioBuffer = Buffer.from(msg.audio, 'base64');
+            const t1 = Date.now();
+
+            // Write audio to temporary file for Whisper API
+            const tempFilePath = path.join(__dirname, `temp_audio_${sessionId}.webm`);
+            fs.writeFileSync(tempFilePath, audioBuffer);
+
+            // Transcribe using Whisper API
+            const transcription = await openai.audio.transcriptions.create({
+              file: fs.createReadStream(tempFilePath),
+              model: 'whisper-1',
+              language: 'en'
+            });
+
+            // Clean up temp file
+            fs.unlinkSync(tempFilePath);
+
+            const t2 = Date.now();
+            console.log('[WHISPER STT] ' + transcription.text);
+            console.log(`[TIMING] Whisper: ${t2-t1}ms`);
+
+            // Send transcript back to frontend
+            ws.send(JSON.stringify({
+              type: 'whisper_transcript',
+              text: transcription.text
+            }));
+          } catch (error) {
+            console.error('[WHISPER ERROR]', error.message);
+            ws.send(JSON.stringify({ type: 'error', message: 'Transcription failed' }));
+          }
+          break;
+
         case 'user_transcript':
           console.log('[USER] ' + msg.text);
           session.history.push({ role: 'user', content: msg.text });
