@@ -148,8 +148,10 @@ async function loadUserStats() {
 
 function showLandingPage() {
   hideAllPages();
-  document.getElementById('landingPage').classList.add('active');
-  document.getElementById('landingPage').style.display = 'block';
+  const landingPage = document.getElementById('landingPage');
+  landingPage.classList.remove('hidden');
+  landingPage.classList.add('active');
+  landingPage.style.display = 'block';
   document.getElementById('appHeader').style.display = 'none';
   document.body.classList.remove('has-header');
 }
@@ -157,8 +159,10 @@ function showLandingPage() {
 function showAuthPage(mode = 'login') {
   authMode = mode;
   hideAllPages();
-  document.getElementById('authPage').classList.add('active');
-  document.getElementById('authPage').style.display = 'block';
+  const authPage = document.getElementById('authPage');
+  authPage.classList.remove('hidden');
+  authPage.classList.add('active');
+  authPage.style.display = 'block';
   document.getElementById('appHeader').style.display = 'none';
   document.body.classList.remove('has-header');
   updateAuthUI();
@@ -166,7 +170,9 @@ function showAuthPage(mode = 'login') {
 
 function showProtectedContent() {
   hideAllPages();
-  document.getElementById('specialtySelection').style.display = 'block';
+  const specialtySelection = document.getElementById('specialtySelection');
+  specialtySelection.classList.remove('hidden');
+  specialtySelection.style.display = 'block';
   document.getElementById('appHeader').style.display = 'flex';
   document.body.classList.add('has-header');
 }
@@ -182,8 +188,10 @@ function showProfilePage() {
   }
 
   hideAllPages();
-  document.getElementById('profilePage').classList.add('active');
-  document.getElementById('profilePage').style.display = 'block';
+  const profilePage = document.getElementById('profilePage');
+  profilePage.classList.remove('hidden');
+  profilePage.classList.add('active');
+  profilePage.style.display = 'block';
 
   // Close user dropdown
   document.getElementById('userDropdown').classList.remove('active');
@@ -193,11 +201,15 @@ function showProfilePage() {
 }
 
 function hideProfilePage() {
-  document.getElementById('profilePage').style.display = 'none';
-  document.getElementById('profilePage').classList.remove('active');
+  const profilePage = document.getElementById('profilePage');
+  profilePage.style.display = 'none';
+  profilePage.classList.add('hidden');
+  profilePage.classList.remove('active');
 
   // Return to previous page
-  document.getElementById(previousPage).style.display = 'block';
+  const prevPage = document.getElementById(previousPage);
+  prevPage.classList.remove('hidden');
+  prevPage.style.display = 'block';
 }
 
 async function populateProfilePage() {
