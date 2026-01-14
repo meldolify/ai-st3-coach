@@ -192,6 +192,32 @@ function showLandingPage() {
   landingPage.style.display = 'block';
   document.getElementById('appHeader').style.display = 'none';
   document.body.classList.remove('has-header');
+
+  // Update landing page nav based on login status
+  updateLandingNavForAuthState();
+}
+
+// Navigate back to landing page (from app header)
+function navigateToLanding() {
+  showLandingPage();
+}
+
+// Update landing page navigation based on authentication state
+function updateLandingNavForAuthState() {
+  const navGuest = document.getElementById('navLinksGuest');
+  const navUser = document.getElementById('navLinksUser');
+
+  if (!navGuest || !navUser) return;
+
+  if (currentUser) {
+    // User is logged in - show profile/logout options
+    navGuest.style.display = 'none';
+    navUser.style.display = 'flex';
+  } else {
+    // User is not logged in - show login/signup options
+    navGuest.style.display = 'flex';
+    navUser.style.display = 'none';
+  }
 }
 
 function showAuthPage(mode = 'login') {
