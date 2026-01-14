@@ -8,7 +8,7 @@ let currentScenario = { category: '', title: '', promptFile: 'template.txt', ima
 // AUTHENTICATION STATE
 // ============================================================================
 
-let supabase = null;
+let supabaseClient = null;
 let currentUser = null;
 let userProfile = null;
 let userSubscription = null;
@@ -27,13 +27,13 @@ function initSupabase() {
   }
 
   // Check if Supabase SDK loaded
-  if (typeof window.supabase === 'undefined') {
+  if (typeof window.supabaseClient === 'undefined') {
     console.error('[AUTH] Supabase SDK not loaded. Running in demo mode.');
     return false;
   }
 
   try {
-    supabase = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
+    supabaseClient = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
     console.log('[AUTH] Supabase initialized');
     return true;
   } catch (error) {
@@ -47,14 +47,14 @@ function initSupabase() {
 // ============================================================================
 
 async function checkAuthState() {
-  if (!supabase) {
+  if (!supabaseClient) {
     // Demo mode - skip auth, show specialty selection
     showProtectedContent();
     return;
   }
 
   try {
-    const { data: { session } } = await supabase.auth.getSession();
+    const { data: { session } } = await supabaseClient.auth.getSession();
 
     if (session) {
       currentUser = session.user;
@@ -72,10 +72,10 @@ async function checkAuthState() {
 }
 
 async function loadUserProfile() {
-  if (!supabase || !currentUser) return;
+  if (!supabaseClient || !currentUser) return;
 
   try {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
       .from('profiles')
       .select('*')
       .eq('id', currentUser.id)
@@ -90,10 +90,10 @@ async function loadUserProfile() {
 }
 
 async function loadSubscription() {
-  if (!supabase || !currentUser) return;
+  if (!supabaseClient || !currentUser) return;
 
   try {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
       .from('subscriptions')
       .select('*')
       .eq('user_id', currentUser.id)
@@ -110,20 +110,20 @@ async function loadSubscription() {
 }
 
 async function loadUserStats() {
-  if (!supabase || !currentUser) {
+  if (!supabaseClient || !currentUser) {
     return { totalSessions: 0, lastSessionDate: null };
   }
 
   try {
     // Count completed sessions
-    const { count } = await supabase
+    const { count } = await supabaseClient
       .from('session_history')
       .select('*', { count: 'exact', head: true })
       .eq('user_id', currentUser.id)
       .not('ended_at', 'is', null);
 
     // Get last session date
-    const { data: lastSession } = await supabase
+    const { data: lastSession } = await supabaseClient
       .from('session_history')
       .select('ended_at')
       .eq('user_id', currentUser.id)
@@ -327,7 +327,7 @@ function setAuthLoading(loading) {
 async function handleAuthSubmit(event) {
   event.preventDefault();
 
-  if (!supabase) {
+  if (!supabaseClient) {
     showAuthError('Authentication not configured. Please contact support.');
     return;
   }
@@ -350,7 +350,7 @@ async function handleAuthSubmit(event) {
     let result;
 
     if (authMode === 'signup') {
-      result = await supabase.auth.signUp({
+      result = await supabaseClient.auth.signUp({
         email,
         password,
         options: {
@@ -358,7 +358,7 @@ async function handleAuthSubmit(event) {
         }
       });
     } else {
-      result = await supabase.auth.signInWithPassword({
+      result = await supabaseClient.auth.signInWithPassword({
         email,
         password
       });
@@ -386,13 +386,13 @@ async function handleAuthSubmit(event) {
 }
 
 async function handleSocialLogin(provider) {
-  if (!supabase) {
+  if (!supabaseClient) {
     showAuthError('Authentication not configured. Please contact support.');
     return;
   }
 
   try {
-    const { error } = await supabase.auth.signInWithOAuth({
+    const { error } = await supabaseClient.auth.signInWithOAuth({
       provider,
       options: {
         redirectTo: window.location.origin
@@ -407,7 +407,7 @@ async function handleSocialLogin(provider) {
 }
 
 async function handleForgotPassword() {
-  if (!supabase) {
+  if (!supabaseClient) {
     showAuthError('Authentication not configured. Please contact support.');
     return;
   }
@@ -419,7 +419,7 @@ async function handleForgotPassword() {
   }
 
   try {
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
       redirectTo: window.location.origin
     });
 
@@ -432,13 +432,13 @@ async function handleForgotPassword() {
 }
 
 async function handleLogout() {
-  if (!supabase) {
+  if (!supabaseClient) {
     showLandingPage();
     return;
   }
 
   try {
-    await supabase.auth.signOut();
+    await supabaseClient.auth.signOut();
     currentUser = null;
     userProfile = null;
     userSubscription = null;
@@ -454,7 +454,7 @@ async function handleLogout() {
 // ============================================================================
 
 async function saveProfile() {
-  if (!supabase || !currentUser) {
+  if (!supabaseClient || !currentUser) {
     alert('Unable to save. Please try again.');
     return;
   }
@@ -464,7 +464,7 @@ async function saveProfile() {
   const trainingLevel = document.getElementById('profileTrainingLevel').value;
 
   try {
-    const { error } = await supabase
+    const { error } = await supabaseClient
       .from('profiles')
       .update({
         full_name: fullName,
@@ -505,7 +505,7 @@ document.addEventListener('click', (event) => {
 
 function canAccessScenario(scenarioPath) {
   // If no auth configured, allow all
-  if (!supabase) return true;
+  if (!supabaseClient) return true;
 
   // Premium users get everything
   if (userSubscription?.status === 'active') return true;
@@ -578,10 +578,10 @@ async function openCustomerPortal() {
 // ============================================================================
 
 async function logSessionStart() {
-  if (!supabase || !currentUser) return;
+  if (!supabaseClient || !currentUser) return;
 
   try {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
       .from('session_history')
       .insert({
         user_id: currentUser.id,
@@ -600,10 +600,10 @@ async function logSessionStart() {
 }
 
 async function logSessionEnd() {
-  if (!supabase || !currentSessionHistoryId) return;
+  if (!supabaseClient || !currentSessionHistoryId) return;
 
   try {
-    await supabase
+    await supabaseClient
       .from('session_history')
       .update({
         ended_at: new Date().toISOString()
@@ -2319,8 +2319,8 @@ window.addEventListener('DOMContentLoaded', async () => {
   }
 
   // Listen for auth state changes (for social login redirects)
-  if (supabase) {
-    supabase.auth.onAuthStateChange(async (event, session) => {
+  if (supabaseClient) {
+    supabaseClient.auth.onAuthStateChange(async (event, session) => {
       console.log('[AUTH] State changed:', event);
       if (event === 'SIGNED_IN' && session) {
         currentUser = session.user;
