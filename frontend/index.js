@@ -17,6 +17,43 @@ let authMode = 'login'; // 'login' or 'signup'
 let previousPage = 'specialtySelection'; // Track page before profile
 
 // ============================================================================
+// TIER TESTING MODE (Development Only)
+// ============================================================================
+// Use browser console to test different user tiers:
+//   setTestTier('unlogged')  - Tier 1: No access to any scenarios
+//   setTestTier('free')      - Tier 2: Access to free tier scenarios only
+//   setTestTier('premium')   - Tier 3: Full access to all scenarios
+//   setTestTier('off')       - Disable test mode, use real auth state
+
+let testTierOverride = null; // null = use real auth, 'unlogged' | 'free' | 'premium'
+
+window.setTestTier = function(tier) {
+  const validTiers = ['unlogged', 'free', 'premium', 'off'];
+  if (!validTiers.includes(tier)) {
+    console.error(`[TEST] Invalid tier. Use: ${validTiers.join(', ')}`);
+    return;
+  }
+
+  if (tier === 'off') {
+    testTierOverride = null;
+    console.log('[TEST] Test mode disabled. Using real authentication state.');
+  } else {
+    testTierOverride = tier;
+    console.log(`[TEST] Test tier set to: ${tier}`);
+    console.log('[TEST] Refresh scenario list to see changes.');
+  }
+
+  // Refresh the current page to apply changes
+  if (document.getElementById('scenarioSelection').style.display !== 'none') {
+    // Re-render scenarios with new tier
+    const currentHeading = document.querySelector('.scenario-selection-layout h2')?.textContent;
+    if (currentHeading) {
+      console.log('[TEST] Refreshing scenario view...');
+    }
+  }
+}
+
+// ============================================================================
 // SUPABASE INITIALIZATION
 // ============================================================================
 
@@ -191,6 +228,15 @@ function showProtectedContent() {
   specialtySelection.style.display = 'block';
   document.getElementById('appHeader').style.display = 'flex';
   document.body.classList.add('has-header');
+}
+
+// Allow users to browse without logging in (all scenarios will be locked)
+function browseAsGuest() {
+  console.log('[AUTH] Browsing as guest - all scenarios will be locked');
+  currentUser = null;
+  userProfile = null;
+  userSubscription = null;
+  showProtectedContent();
 }
 
 function showProfilePage() {
@@ -400,10 +446,14 @@ async function handleSocialLogin(provider) {
   }
 
   try {
+    // Use current origin for redirect (works for both localhost and production)
+    const redirectUrl = window.location.origin;
+    console.log('[AUTH] OAuth redirect URL:', redirectUrl);
+
     const { error } = await supabaseClient.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: window.location.origin
+        redirectTo: redirectUrl
       }
     });
 
@@ -512,6 +562,18 @@ document.addEventListener('click', (event) => {
 // ============================================================================
 
 function canAccessScenario(scenarioPath) {
+  // Test mode override (for development testing)
+  if (testTierOverride) {
+    switch (testTierOverride) {
+      case 'unlogged':
+        return false;
+      case 'free':
+        return CONFIG.FREE_TIER_SCENARIOS.includes(scenarioPath);
+      case 'premium':
+        return true;
+    }
+  }
+
   // Tier 1: Unlogged users - all scenarios locked
   if (!currentUser) {
     return false;

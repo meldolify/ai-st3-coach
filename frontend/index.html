@@ -2325,6 +2325,26 @@
       background: rgba(27, 77, 137, 0.04);
     }
 
+    .btn-editorial-tertiary {
+      background: transparent;
+      color: var(--text-secondary);
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 10px 20px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .btn-editorial-tertiary:hover {
+      color: var(--text-primary);
+      text-decoration-color: var(--accent-primary);
+    }
+
     /* Decorative Background Elements */
     .bg-letterform {
       position: absolute;
@@ -3087,6 +3107,9 @@
         </button>
         <button class="btn-editorial-secondary" onclick="showAuthPage('login')">
           Sign In
+        </button>
+        <button class="btn-editorial-tertiary" onclick="browseAsGuest()">
+          Explore Without Login
         </button>
       </div>
 
