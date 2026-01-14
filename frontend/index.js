@@ -246,6 +246,7 @@ function hideAllPages() {
     const el = document.getElementById(id);
     if (el) {
       el.style.display = 'none';
+      el.classList.add('hidden');
       el.classList.remove('active');
     }
   });
