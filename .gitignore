@@ -51,3 +51,6 @@ coverage/
 
 # Claude Code cache
 .claude/
+
+# Claude temporary working directories
+tmpclaude-*-cwd
