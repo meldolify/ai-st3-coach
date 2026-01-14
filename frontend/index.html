@@ -1917,8 +1917,8 @@
         font-size: 16px !important;
       }
 
-      /* Pages scrollable on mobile */
-      .page {
+      /* Pages scrollable on mobile (except auth modal which must stay fixed) */
+      .page:not(#authPage) {
         position: relative !important;
         overflow-y: auto;
         min-height: 100vh;
