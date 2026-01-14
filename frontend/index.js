@@ -27,7 +27,7 @@ function initSupabase() {
   }
 
   // Check if Supabase SDK loaded
-  if (typeof window.supabaseClient === 'undefined') {
+  if (typeof window.supabase === 'undefined') {
     console.error('[AUTH] Supabase SDK not loaded. Running in demo mode.');
     return false;
   }
@@ -160,7 +160,7 @@ function showLandingPage() {
 function showAuthPage(mode = 'login') {
   console.log('[DEBUG] showAuthPage called with mode:', mode);
   authMode = mode;
-  hideAllPages();
+  // Don't hide other pages - modal overlays on top
   const authPage = document.getElementById('authPage');
   console.log('[DEBUG] authPage element:', authPage);
   if (!authPage) {
@@ -169,12 +169,19 @@ function showAuthPage(mode = 'login') {
   }
   authPage.classList.remove('hidden');
   authPage.classList.add('active');
-  authPage.style.display = 'block';
+  authPage.style.display = 'flex';
   console.log('[DEBUG] authPage display set to:', authPage.style.display);
   console.log('[DEBUG] authPage classes:', authPage.className);
-  document.getElementById('appHeader').style.display = 'none';
-  document.body.classList.remove('has-header');
   updateAuthUI();
+}
+
+function closeAuthModal() {
+  const authPage = document.getElementById('authPage');
+  authPage.classList.add('hidden');
+  authPage.classList.remove('active');
+  authPage.style.display = 'none';
+  // Clear any errors
+  document.getElementById('authError').classList.remove('visible');
 }
 
 function showProtectedContent() {
@@ -505,13 +512,17 @@ document.addEventListener('click', (event) => {
 // ============================================================================
 
 function canAccessScenario(scenarioPath) {
-  // If no auth configured, allow all
-  if (!supabaseClient) return true;
+  // Tier 1: Unlogged users - all scenarios locked
+  if (!currentUser) {
+    return false;
+  }
 
-  // Premium users get everything
-  if (userSubscription?.status === 'active') return true;
+  // Tier 3: Paid users (logged in + active subscription) - full access
+  if (userSubscription?.status === 'active') {
+    return true;
+  }
 
-  // Free users get limited scenarios
+  // Tier 2: Free users (logged in, no subscription) - limited scenarios
   return CONFIG.FREE_TIER_SCENARIOS.includes(scenarioPath);
 }
 
@@ -1584,7 +1595,7 @@ function updateTopicsContent(subheadingId) {
       // Check if scenario is locked (for all difficulty levels)
       const folderName = folder.split('/').pop();
       const easyPromptFile = `prompts/${folder}/easy_${folderName}_1.txt`;
-      const isLocked = !hasAccessToScenario(easyPromptFile);
+      const isLocked = !canAccessScenario(easyPromptFile);
 
       if (isLocked) {
         html += `<div class="topic-item locked" onclick="alert('🔒 This scenario requires a Premium subscription.\\n\\nUpgrade to access all scenarios.')">🔒 ${title}</div>`;
@@ -1886,7 +1897,7 @@ function mobileShowTopics(subheadingId, subheadingName) {
     // Check if scenario is locked
     const folderName = folder.split('/').pop();
     const easyPromptFile = `prompts/${folder}/easy_${folderName}_1.txt`;
-    const isLocked = !hasAccessToScenario(easyPromptFile);
+    const isLocked = !canAccessScenario(easyPromptFile);
 
     const card = document.createElement('div');
     card.className = isLocked ? 'mobile-scenario-card locked' : 'mobile-scenario-card';
@@ -1919,7 +1930,7 @@ function selectScenario(topicFolder, title, imageFile) {
   const promptFile = `prompts/${topicFolder}/${selectedDifficulty}_${folderName}_1.txt`;
 
   // Check if user has access to this scenario
-  if (!hasAccessToScenario(promptFile)) {
+  if (!canAccessScenario(promptFile)) {
     alert('🔒 This scenario requires a Premium subscription.\n\nUpgrade to access all scenarios and features.');
     return;
   }
