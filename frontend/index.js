@@ -48,8 +48,9 @@ function initSupabase() {
 
 async function checkAuthState() {
   if (!supabaseClient) {
-    // Demo mode - skip auth, show specialty selection
-    showProtectedContent();
+    // No Supabase configured - show landing page so users can sign up
+    console.log('[AUTH] No Supabase configured - showing landing page');
+    showLandingPage();
     return;
   }
 
@@ -1579,7 +1580,17 @@ function updateTopicsContent(subheadingId) {
     data.topics.forEach(topic => {
       const [folder, title, image] = topic;
       const imageArg = image ? `, '${image}'` : '';
-      html += `<div class="topic-item" onclick="selectScenario('${folder}', '${title.replace(/'/g, "\\'")}'${imageArg})">📋 ${title}</div>`;
+
+      // Check if scenario is locked (for all difficulty levels)
+      const folderName = folder.split('/').pop();
+      const easyPromptFile = `prompts/${folder}/easy_${folderName}_1.txt`;
+      const isLocked = !hasAccessToScenario(easyPromptFile);
+
+      if (isLocked) {
+        html += `<div class="topic-item locked" onclick="alert('🔒 This scenario requires a Premium subscription.\\n\\nUpgrade to access all scenarios.')">🔒 ${title}</div>`;
+      } else {
+        html += `<div class="topic-item" onclick="selectScenario('${folder}', '${title.replace(/'/g, "\\'")}'${imageArg})">📋 ${title}</div>`;
+      }
     });
 
   topicsPanel.innerHTML = html;
@@ -1871,10 +1882,23 @@ function mobileShowTopics(subheadingId, subheadingName) {
 
   topics.forEach(topic => {
     const [folder, title, image] = topic;
+
+    // Check if scenario is locked
+    const folderName = folder.split('/').pop();
+    const easyPromptFile = `prompts/${folder}/easy_${folderName}_1.txt`;
+    const isLocked = !hasAccessToScenario(easyPromptFile);
+
     const card = document.createElement('div');
-    card.className = 'mobile-scenario-card';
-    card.onclick = () => selectScenario(folder, title, image);
-    card.innerHTML = `<h3>${title}</h3>`;
+    card.className = isLocked ? 'mobile-scenario-card locked' : 'mobile-scenario-card';
+
+    if (isLocked) {
+      card.onclick = () => alert('🔒 This scenario requires a Premium subscription.\n\nUpgrade to access all scenarios.');
+      card.innerHTML = `<h3>🔒 ${title}</h3>`;
+    } else {
+      card.onclick = () => selectScenario(folder, title, image);
+      card.innerHTML = `<h3>${title}</h3>`;
+    }
+
     topicsGrid.appendChild(card);
   });
 }
@@ -1893,6 +1917,12 @@ function selectScenario(topicFolder, title, imageFile) {
   const folderName = topicFolder.split('/').pop();
   // Format: prompts/{topicFolder}/{difficulty}_{folderName}_1.txt
   const promptFile = `prompts/${topicFolder}/${selectedDifficulty}_${folderName}_1.txt`;
+
+  // Check if user has access to this scenario
+  if (!hasAccessToScenario(promptFile)) {
+    alert('🔒 This scenario requires a Premium subscription.\n\nUpgrade to access all scenarios and features.');
+    return;
+  }
 
   // Show "Entering Simulation Room" overlay
   const overlay = document.getElementById('simulationTransition');
