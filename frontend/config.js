@@ -38,10 +38,22 @@ const CONFIG = {
   SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZzZGlvdmdqbmJ6aXd3dWtwdnFvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzMjkxOTUsImV4cCI6MjA4MzkwNTE5NX0.iTanR6urX6H7-818YEWAN6jn0rXQBny8VANRJ-6qdBk',
 
   // Free tier scenarios (paths that free users can access)
+  // Format must match: prompts/{topicFolder}/{difficulty}_{folderName}_1.txt
   FREE_TIER_SCENARIOS: [
-    'prompts/clinical_stations/necrotising_fasciitis/easy_nec_fasc_1.txt',
-    'prompts/clinical_stations/cauda_equina/easy_cauda_equina_1.txt',
-    'prompts/clinical_stations/ectopic_pregnancy/easy_ectopic_1.txt'
+    // Clinical > Emergencies > Necrotising Fasciitis
+    'prompts/clinical_stations/emergencies/necrotising_fasciitis/easy_necrotising_fasciitis_1.txt',
+    'prompts/clinical_stations/emergencies/necrotising_fasciitis/medium_necrotising_fasciitis_1.txt',
+    'prompts/clinical_stations/emergencies/necrotising_fasciitis/hard_necrotising_fasciitis_1.txt',
+
+    // Communication > Call-The-Boss > Resus Burn
+    'prompts/communication/call_boss/call_boss_resus_burn/easy_call_boss_resus_burn_1.txt',
+    'prompts/communication/call_boss/call_boss_resus_burn/medium_call_boss_resus_burn_1.txt',
+    'prompts/communication/call_boss/call_boss_resus_burn/hard_call_boss_resus_burn_1.txt',
+
+    // Structured Interview > Research
+    'prompts/structured_interview/structured_research/easy_structured_research_1.txt',
+    'prompts/structured_interview/structured_research/medium_structured_research_1.txt',
+    'prompts/structured_interview/structured_research/hard_structured_research_1.txt'
   ]
 };
 
