@@ -16,7 +16,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Sans:wght@400;500;600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      /* Dark VUI Color Palette */
+      /* Dark VUI Color Palette (Simulation Room) */
       --bg-primary: #0a0a12;
       --bg-secondary: #12121c;
       --bg-card: rgba(255, 255, 255, 0.03);
@@ -24,25 +24,55 @@
       --bg-glass-hover: rgba(255, 255, 255, 0.08);
 
       /* Accent Colors */
-      --accent-primary: #00d4aa;
-      --accent-secondary: #00b4d8;
-      --accent-glow: rgba(0, 212, 170, 0.4);
-      --accent-gradient: linear-gradient(135deg, #00d4aa 0%, #00b4d8 100%);
+      --accent-primary: #1B4D89;
+      --accent-surgical: #1B4D89; /* Alias for surgical blue */
+      --accent-secondary: #2563EB;
+      --accent-glow: rgba(27, 77, 137, 0.4);
+      --accent-gradient: linear-gradient(135deg, #1B4D89 0%, #0A1628 100%);
 
-      /* Text Colors */
+      /* Text Colors (Dark theme) */
       --text-primary: #ffffff;
       --text-secondary: rgba(255, 255, 255, 0.7);
       --text-muted: rgba(255, 255, 255, 0.4);
 
-      /* Borders & Effects */
+      /* Borders & Effects (Dark theme) */
       --border-subtle: rgba(255, 255, 255, 0.08);
-      --border-accent: rgba(0, 212, 170, 0.3);
-      --shadow-glow: 0 0 30px rgba(0, 212, 170, 0.15);
+      --border-accent: rgba(27, 77, 137, 0.3);
+      --shadow-glow: 0 0 30px rgba(27, 77, 137, 0.15);
       --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.3);
 
       /* Glassmorphism */
       --glass-blur: blur(20px);
       --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+
+      /* ============================================
+         LIGHT THEME (Selection Pages & Profile)
+         ============================================ */
+      --bg-light: #F8FAFC;
+      --bg-light-secondary: #FFFFFF;
+      --bg-light-card: rgba(255, 255, 255, 0.85);
+      --bg-light-glass: rgba(255, 255, 255, 0.7);
+      --bg-light-glass-hover: rgba(255, 255, 255, 0.9);
+
+      /* Text Colors (Light theme) */
+      --text-light-primary: #1A1D23;
+      --text-light-secondary: #5A6270;
+      --text-light-muted: #94A3B8;
+
+      /* Borders & Effects (Light theme) */
+      --border-light: rgba(27, 77, 137, 0.12);
+      --border-light-hover: rgba(27, 77, 137, 0.25);
+      --shadow-light: 0 8px 32px rgba(0, 0, 0, 0.08);
+      --shadow-light-hover: 0 20px 60px rgba(0, 0, 0, 0.12);
+      --shadow-light-glow: 0 0 40px rgba(27, 77, 137, 0.1);
+
+      /* Difficulty Colors */
+      --color-easy: #059669;
+      --color-easy-light: rgba(5, 150, 105, 0.1);
+      --color-moderate: #D97706;
+      --color-moderate-light: rgba(217, 119, 6, 0.1);
+      --color-strict: #DC2626;
+      --color-strict-light: rgba(220, 38, 38, 0.1);
     }
 
     * {
@@ -322,8 +352,12 @@
     }
 
     /* Cascading Panel Navigation System */
+    /* ============================================
+       Scenario Selection Page - LIGHT THEME
+       ============================================ */
     #scenarioSelection {
       position: relative;
+      background: var(--bg-light);
     }
 
     .scenario-selection-layout {
@@ -334,6 +368,7 @@
       right: 0;
       bottom: 0;
       z-index: 100;
+      background: var(--bg-light);
     }
 
     /* Adjust scenario selection layout when header is visible */
@@ -344,17 +379,17 @@
     /* Panel 1: Headings (12.5%) */
     .headings-panel {
       width: 12.5%;
-      background: var(--bg-primary);
-      color: var(--text-primary);
+      background: var(--bg-light-secondary);
+      color: var(--text-light-primary);
       overflow-y: auto;
       position: relative;
-      border-right: 1px solid var(--border-subtle);
+      border-right: 1px solid var(--border-light);
     }
 
     .panel-header {
       padding: 20px;
-      border-bottom: 1px solid var(--border-subtle);
-      background: rgba(0, 212, 170, 0.03);
+      border-bottom: 1px solid var(--border-light);
+      background: rgba(27, 77, 137, 0.04);
     }
 
     .heading-item {
@@ -363,27 +398,29 @@
       transition: all 0.2s ease;
       font-size: 15px;
       font-weight: 600;
-      color: var(--text-secondary);
+      color: var(--text-light-secondary);
       border-left: 3px solid transparent;
     }
 
     .heading-item:hover {
-      background: rgba(0, 212, 170, 0.1);
-      border-left-color: var(--accent-primary);
-      color: var(--text-primary);
+      background: rgba(27, 77, 137, 0.08);
+      border-left-color: var(--accent-surgical);
+      color: var(--text-light-primary);
     }
 
     .heading-item.active {
-      background: rgba(0, 212, 170, 0.15);
-      border-left-color: var(--accent-primary);
-      color: var(--accent-primary);
+      background: rgba(27, 77, 137, 0.12);
+      border-left-color: var(--accent-surgical);
+      color: var(--accent-surgical);
     }
 
     /* Panel 2: Subheadings (12.5%) - shown on hover */
     .subheadings-panel {
       width: 12.5%;
-      background: var(--bg-secondary);
-      color: var(--text-primary);
+      background: var(--bg-light-glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      color: var(--text-light-primary);
       overflow-y: auto;
       position: absolute;
       left: 12.5%;
@@ -393,7 +430,7 @@
       visibility: hidden;
       transform: translateX(-20px);
       transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out, transform 0.5s ease-in-out;
-      border-right: 1px solid var(--border-subtle);
+      border-right: 1px solid var(--border-light);
     }
 
     .subheadings-panel.visible {
@@ -408,28 +445,29 @@
       transition: all 0.2s ease;
       font-size: 14px;
       font-weight: 500;
-      color: var(--text-secondary);
+      color: var(--text-light-secondary);
       border-left: 3px solid transparent;
     }
 
     .subheading-item:hover {
-      background: rgba(0, 212, 170, 0.1);
-      border-left-color: var(--accent-primary);
-      color: var(--text-primary);
+      background: rgba(27, 77, 137, 0.08);
+      border-left-color: var(--accent-surgical);
+      color: var(--text-light-primary);
     }
 
     .subheading-item.active {
-      background: rgba(0, 212, 170, 0.15);
-      border-left-color: var(--accent-primary);
-      color: var(--accent-primary);
+      background: rgba(27, 77, 137, 0.12);
+      border-left-color: var(--accent-surgical);
+      color: var(--accent-surgical);
     }
 
     /* Panel 3: Topics (25%) - shown on hover */
     .topics-panel {
       width: 25%;
-      background: rgba(18, 18, 28, 0.95);
+      background: var(--bg-light-glass-hover);
       backdrop-filter: blur(20px);
-      color: var(--text-primary);
+      -webkit-backdrop-filter: blur(20px);
+      color: var(--text-light-primary);
       overflow-y: auto;
       position: absolute;
       left: 25%;
@@ -439,7 +477,8 @@
       visibility: hidden;
       transform: translateX(-20px);
       transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out, transform 0.5s ease-in-out;
-      border-right: 1px solid var(--border-subtle);
+      border-right: 1px solid var(--border-light);
+      box-shadow: 4px 0 20px rgba(0, 0, 0, 0.05);
     }
 
     .topics-panel.visible {
@@ -452,9 +491,9 @@
       padding: 20px;
       font-size: 16px;
       font-weight: 600;
-      color: var(--text-primary);
-      border-bottom: 1px solid var(--border-subtle);
-      background: rgba(0, 212, 170, 0.03);
+      color: var(--text-light-primary);
+      border-bottom: 1px solid var(--border-light);
+      background: rgba(27, 77, 137, 0.04);
     }
 
     .topic-item {
@@ -462,38 +501,38 @@
       cursor: pointer;
       transition: all 0.2s ease;
       font-size: 14px;
-      color: var(--text-secondary);
+      color: var(--text-light-secondary);
       border-left: 3px solid transparent;
     }
 
     .topic-item:hover {
-      background: rgba(0, 212, 170, 0.1);
-      border-left-color: var(--accent-primary);
-      color: var(--text-primary);
+      background: rgba(27, 77, 137, 0.08);
+      border-left-color: var(--accent-surgical);
+      color: var(--text-light-primary);
     }
 
     .topic-item.locked {
       opacity: 0.5;
       cursor: not-allowed;
-      color: var(--text-tertiary);
+      color: var(--text-light-muted);
     }
 
     .topic-item.locked:hover {
-      background: rgba(128, 128, 128, 0.05);
+      background: rgba(128, 128, 128, 0.03);
       border-left-color: transparent;
-      color: var(--text-tertiary);
+      color: var(--text-light-muted);
     }
 
     .topic-item.active {
-      background: rgba(0, 212, 170, 0.15);
-      border-left-color: var(--accent-primary);
-      color: var(--accent-primary);
+      background: rgba(27, 77, 137, 0.12);
+      border-left-color: var(--accent-surgical);
+      color: var(--accent-surgical);
     }
 
     /* Right content area (50%) - empty for now */
     .content-area {
       flex: 1;
-      background: var(--bg-primary);
+      background: var(--bg-light);
       overflow-y: auto;
       display: flex;
       flex-direction: column;
@@ -1301,24 +1340,33 @@
     }
 
 
-    /* Specialty Selection Page - VUI Dark Theme */
+    /* Specialty Selection Page - Light Theme */
+    #specialtySelection {
+      background: var(--bg-light);
+      min-height: 100vh;
+    }
+
+    #specialtySelection h1 {
+      color: var(--text-light-primary);
+    }
+
     .specialty-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
+      gap: 24px;
       margin-top: 40px;
     }
 
     .specialty-card {
-      background: rgba(255, 255, 255, 0.03);
+      background: var(--bg-light-glass);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      color: var(--text-primary);
+      color: var(--text-light-primary);
       padding: 60px 40px;
       cursor: pointer;
-      transition: all 0.4s ease;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       text-align: center;
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-light);
       position: relative;
       overflow: hidden;
       min-height: 50vh;
@@ -1327,6 +1375,7 @@
       align-items: center;
       justify-content: center;
       border-radius: 20px;
+      box-shadow: var(--shadow-light);
     }
 
     .specialty-card::before {
@@ -1336,7 +1385,7 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: radial-gradient(circle at 50% 0%, rgba(0, 212, 170, 0.15) 0%, transparent 60%);
+      background: radial-gradient(circle at 50% 0%, rgba(27, 77, 137, 0.08) 0%, transparent 60%);
       opacity: 0;
       transition: opacity 0.4s ease;
     }
@@ -1347,8 +1396,9 @@
 
     .specialty-card:hover {
       transform: translateY(-8px);
-      border-color: rgba(0, 212, 170, 0.3);
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 40px rgba(0, 212, 170, 0.1);
+      background: var(--bg-light-glass-hover);
+      border-color: var(--border-light-hover);
+      box-shadow: var(--shadow-light-hover), var(--shadow-light-glow);
     }
 
     .specialty-card:active {
@@ -1356,39 +1406,67 @@
     }
 
     .specialty-card.coming-soon {
-      background: rgba(255, 255, 255, 0.02);
+      background: rgba(248, 250, 252, 0.5);
       cursor: not-allowed;
-      opacity: 0.4;
-      border-color: rgba(255, 255, 255, 0.05);
+      opacity: 0.5;
+      border-color: var(--border-light);
     }
 
     .specialty-card.coming-soon:hover {
       transform: none;
-      box-shadow: none;
-      border-color: rgba(255, 255, 255, 0.05);
+      box-shadow: var(--shadow-light);
+      border-color: var(--border-light);
+      background: rgba(248, 250, 252, 0.5);
     }
 
     .specialty-icon {
       font-size: 80px;
       margin-bottom: 20px;
-      filter: drop-shadow(0 0 20px rgba(0, 212, 170, 0.3));
+      filter: drop-shadow(0 0 20px rgba(27, 77, 137, 0.2));
     }
 
     .specialty-card h2 {
       font-size: 32px;
       font-weight: 600;
       margin-bottom: 12px;
-      color: var(--text-primary);
+      color: var(--text-light-primary);
     }
 
     .specialty-card p {
       font-size: 16px;
-      color: var(--text-secondary);
+      color: var(--text-light-secondary);
       max-width: 500px;
       line-height: 1.6;
     }
 
-    /* Difficulty Selection Page - VUI Dark Theme */
+    /* ============================================
+       Difficulty Selection Page - LIGHT THEME
+       ============================================ */
+    #difficultySelection {
+      background: var(--bg-light);
+      min-height: 100vh;
+    }
+
+    #difficultySelection .header h1 {
+      color: var(--text-light-primary);
+    }
+
+    #difficultySelection .header .subtitle {
+      color: var(--text-light-secondary);
+    }
+
+    #difficultySelection .top-back-button {
+      background: var(--bg-light-glass);
+      color: var(--text-light-secondary);
+      border: 1px solid var(--border-light);
+    }
+
+    #difficultySelection .top-back-button:hover {
+      background: var(--bg-light-glass-hover);
+      color: var(--text-light-primary);
+      border-color: var(--border-light-hover);
+    }
+
     .difficulty-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -1409,10 +1487,13 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      color: var(--text-primary);
+      color: var(--text-light-primary);
       border-radius: 20px;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: var(--bg-light-glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border-light);
+      box-shadow: var(--shadow-light);
     }
 
     .difficulty-card::before {
@@ -1424,6 +1505,7 @@
       bottom: 0;
       opacity: 0;
       transition: opacity 0.4s ease;
+      pointer-events: none;
     }
 
     .difficulty-card:hover::before {
@@ -1432,66 +1514,70 @@
 
     .difficulty-card:hover {
       transform: translateY(-8px);
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+      background: var(--bg-light-glass-hover);
+      box-shadow: var(--shadow-light-hover);
     }
 
     .difficulty-card:active {
       transform: scale(0.98);
     }
 
-    /* Difficulty colors as accents */
+    /* Difficulty colors as accents - Light Theme */
     .difficulty-easy {
-      border-color: rgba(16, 185, 129, 0.3);
+      border-color: rgba(5, 150, 105, 0.25);
     }
     .difficulty-easy::before {
-      background: radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.2) 0%, transparent 60%);
+      background: radial-gradient(circle at 50% 0%, rgba(5, 150, 105, 0.12) 0%, transparent 60%);
     }
     .difficulty-easy:hover {
-      border-color: rgba(16, 185, 129, 0.5);
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 40px rgba(16, 185, 129, 0.15);
+      border-color: rgba(5, 150, 105, 0.45);
+      box-shadow: var(--shadow-light-hover), 0 0 40px rgba(5, 150, 105, 0.12);
     }
-    .difficulty-easy .difficulty-icon { color: #10b981; }
+    .difficulty-easy .difficulty-icon { color: var(--color-easy); }
+    .difficulty-easy ul li::before { color: var(--color-easy); }
 
     .difficulty-moderate {
-      border-color: rgba(245, 158, 11, 0.3);
+      border-color: rgba(217, 119, 6, 0.25);
     }
     .difficulty-moderate::before {
-      background: radial-gradient(circle at 50% 0%, rgba(245, 158, 11, 0.2) 0%, transparent 60%);
+      background: radial-gradient(circle at 50% 0%, rgba(217, 119, 6, 0.12) 0%, transparent 60%);
     }
     .difficulty-moderate:hover {
-      border-color: rgba(245, 158, 11, 0.5);
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 40px rgba(245, 158, 11, 0.15);
+      border-color: rgba(217, 119, 6, 0.45);
+      box-shadow: var(--shadow-light-hover), 0 0 40px rgba(217, 119, 6, 0.12);
     }
-    .difficulty-moderate .difficulty-icon { color: #f59e0b; }
+    .difficulty-moderate .difficulty-icon { color: var(--color-moderate); }
+    .difficulty-moderate ul li::before { color: var(--color-moderate); }
 
     .difficulty-strict {
-      border-color: rgba(239, 68, 68, 0.3);
+      border-color: rgba(220, 38, 38, 0.25);
     }
     .difficulty-strict::before {
-      background: radial-gradient(circle at 50% 0%, rgba(239, 68, 68, 0.2) 0%, transparent 60%);
+      background: radial-gradient(circle at 50% 0%, rgba(220, 38, 38, 0.12) 0%, transparent 60%);
     }
     .difficulty-strict:hover {
-      border-color: rgba(239, 68, 68, 0.5);
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 40px rgba(239, 68, 68, 0.15);
+      border-color: rgba(220, 38, 38, 0.45);
+      box-shadow: var(--shadow-light-hover), 0 0 40px rgba(220, 38, 38, 0.12);
     }
-    .difficulty-strict .difficulty-icon { color: #ef4444; }
+    .difficulty-strict .difficulty-icon { color: var(--color-strict); }
+    .difficulty-strict ul li::before { color: var(--color-strict); }
 
     .difficulty-icon {
       font-size: 80px;
       margin-bottom: 20px;
-      filter: drop-shadow(0 0 20px currentColor);
+      filter: drop-shadow(0 0 15px currentColor);
     }
 
     .difficulty-card h2 {
       font-size: 32px;
       font-weight: 600;
       margin-bottom: 16px;
-      color: var(--text-primary);
+      color: var(--text-light-primary);
     }
 
     .difficulty-card p {
       font-size: 16px;
-      color: var(--text-secondary);
+      color: var(--text-light-secondary);
       margin-bottom: 24px;
       max-width: 600px;
       line-height: 1.6;
@@ -1508,7 +1594,7 @@
     .difficulty-card ul li {
       padding: 8px 0;
       font-size: 14px;
-      color: var(--text-secondary);
+      color: var(--text-light-secondary);
       position: relative;
       padding-left: 28px;
     }
@@ -2273,76 +2359,195 @@
     /* Call to Action */
     .cta-section {
       display: flex;
-      gap: 16px;
-      justify-content: flex-end;
-      animation: fadeIn 0.8s ease-out 0.9s backwards;
+      gap: 20px;
+      justify-content: flex-start;
+      align-items: center;
+      flex-wrap: wrap;
     }
 
-    .btn-editorial-primary {
-      background: #1B4D89;
+    /* Primary CTA Button - Pill shaped with gradient */
+    .btn-cta-primary {
+      background: linear-gradient(135deg, #1B4D89 0%, #0A1628 100%);
       color: white;
       font-family: 'IBM Plex Sans', sans-serif;
       font-size: 16px;
       font-weight: 600;
-      padding: 18px 36px;
+      padding: 18px 32px;
       border: none;
+      border-radius: 50px;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 12px;
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 15px rgba(27, 77, 137, 0.2);
     }
 
-    .btn-editorial-primary:hover {
-      background: #0A1628;
-      transform: scale(1.02);
-      box-shadow: 0 8px 24px rgba(27, 77, 137, 0.3);
+    .btn-cta-primary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, #2563EB 0%, #1B4D89 100%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
     }
 
-    .btn-arrow {
-      font-size: 20px;
-      transition: transform 0.2s;
+    .btn-cta-primary:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 8px 30px rgba(27, 77, 137, 0.35),
+                  0 0 40px rgba(27, 77, 137, 0.15);
     }
 
-    .btn-editorial-primary:hover .btn-arrow {
-      transform: translateX(4px);
+    .btn-cta-primary:hover::before {
+      opacity: 1;
     }
 
-    .btn-editorial-secondary {
+    .btn-cta-primary .btn-text,
+    .btn-cta-primary .btn-icon {
+      position: relative;
+      z-index: 1;
+    }
+
+    .btn-cta-primary .btn-icon {
+      display: flex;
+      align-items: center;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .btn-cta-primary:hover .btn-icon {
+      transform: translateX(5px);
+    }
+
+    /* Secondary CTA Button - Ghost style with fill animation */
+    .btn-cta-secondary {
       background: transparent;
       color: #1B4D89;
       font-family: 'IBM Plex Sans', sans-serif;
       font-size: 16px;
       font-weight: 600;
-      padding: 18px 36px;
-      border: 1px solid rgba(27, 77, 137, 0.12);
+      padding: 18px 32px;
+      border: 2px solid #1B4D89;
+      border-radius: 50px;
       cursor: pointer;
-      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    .btn-editorial-secondary:hover {
+    .btn-cta-secondary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #1B4D89;
+      transform: translateX(-100%);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 0;
+    }
+
+    .btn-cta-secondary .btn-text {
+      position: relative;
+      z-index: 1;
+      transition: color 0.4s ease;
+    }
+
+    .btn-cta-secondary:hover {
       border-color: #1B4D89;
-      background: rgba(27, 77, 137, 0.04);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(27, 77, 137, 0.2);
     }
 
-    .btn-editorial-tertiary {
+    .btn-cta-secondary:hover::before {
+      transform: translateX(0);
+    }
+
+    .btn-cta-secondary:hover .btn-text {
+      color: white;
+    }
+
+    /* Tertiary CTA Button - Text link with animated underline */
+    .btn-cta-tertiary {
       background: transparent;
-      color: #64748B;  /* Slate gray - visible on light landing page background */
+      color: #64748B;
       font-family: 'IBM Plex Sans', sans-serif;
-      font-size: 14px;
+      font-size: 15px;
       font-weight: 500;
-      padding: 10px 20px;
-      border-radius: 8px;
+      padding: 12px 8px;
       border: none;
       cursor: pointer;
-      transition: all 0.2s;
-      text-decoration: underline;
-      text-underline-offset: 3px;
+      position: relative;
+      transition: color 0.3s ease;
     }
 
-    .btn-editorial-tertiary:hover {
-      color: #1B4D89;  /* Match primary button color on hover */
-      text-decoration-color: #1B4D89;
+    .btn-cta-tertiary .btn-text {
+      position: relative;
+      z-index: 1;
+    }
+
+    .btn-cta-tertiary .btn-underline {
+      position: absolute;
+      bottom: 8px;
+      left: 8px;
+      right: 8px;
+      height: 2px;
+      background: linear-gradient(90deg, #1B4D89, #2563EB);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .btn-cta-tertiary:hover {
+      color: #1B4D89;
+    }
+
+    .btn-cta-tertiary:hover .btn-underline {
+      transform: scaleX(1);
+    }
+
+    /* Squarespace-style Animations */
+    .animate-on-load {
+      opacity: 0;
+      transform: translateY(30px);
+      animation: slideUpFadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    .animate-on-load.stagger-1 { animation-delay: 0.15s; }
+    .animate-on-load.stagger-2 { animation-delay: 0.3s; }
+    .animate-on-load.stagger-3 { animation-delay: 0.45s; }
+
+    .animate-on-scroll {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+                  transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .animate-on-scroll.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Staggered delays for scroll animations */
+    .features-editorial .animate-on-scroll:nth-child(1) { transition-delay: 0s; }
+    .features-editorial .animate-on-scroll:nth-child(2) { transition-delay: 0.15s; }
+    .features-editorial .animate-on-scroll:nth-child(3) { transition-delay: 0.3s; }
+
+    @keyframes slideUpFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     /* Decorative Background Elements */
@@ -2653,10 +2858,14 @@
     }
 
     /* Profile Page */
+    /* ============================================
+       Profile Page - LIGHT THEME, SPLIT PANEL
+       ============================================ */
     #profilePage {
       display: none;
       min-height: 100vh;
-      padding: 80px 20px 40px;
+      padding: 60px 40px 40px;
+      background: var(--bg-light);
     }
 
     #profilePage.hidden {
@@ -2667,36 +2876,76 @@
       display: block;
     }
 
+    /* Split Panel Layout */
     .profile-container {
-      max-width: 600px;
+      max-width: 1200px;
       margin: 0 auto;
     }
 
     .profile-header {
-      margin-bottom: 32px;
+      margin-bottom: 40px;
+      text-align: center;
     }
 
     .profile-header h1 {
-      font-size: 32px;
+      font-size: 36px;
       font-weight: 600;
       margin-bottom: 8px;
+      color: var(--text-light-primary);
+    }
+
+    .profile-header .profile-subtitle {
+      font-size: 16px;
+      color: var(--text-light-secondary);
+    }
+
+    /* Two-column grid layout */
+    .profile-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+    }
+
+    /* Left Panel - Profile Info */
+    .profile-info-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* Right Panel - Progress Tracking */
+    .profile-progress-panel {
+      background: var(--bg-light-glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border-light);
+      border-radius: 24px;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 500px;
+      box-shadow: var(--shadow-light);
     }
 
     .profile-section {
-      background: var(--bg-glass);
-      border: 1px solid var(--border-subtle);
-      border-radius: 16px;
-      padding: 24px;
-      margin-bottom: 24px;
+      background: var(--bg-light-glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border-light);
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: var(--shadow-light);
     }
 
     .profile-section h3 {
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 600;
-      color: var(--text-secondary);
+      color: var(--text-light-secondary);
       margin-bottom: 20px;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 1px;
     }
 
     .profile-field {
@@ -2713,41 +2962,45 @@
     .profile-field label {
       font-size: 14px;
       font-weight: 500;
-      color: var(--text-muted);
+      color: var(--text-light-muted);
     }
 
     .profile-field input,
     .profile-field select {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-subtle);
-      border-radius: 10px;
+      background: var(--bg-light-secondary);
+      border: 1px solid var(--border-light);
+      border-radius: 12px;
       padding: 14px 16px;
       font-size: 16px;
-      color: var(--text-primary);
+      color: var(--text-light-primary);
       transition: all 0.2s ease;
     }
 
     .profile-field input:focus,
     .profile-field select:focus {
       outline: none;
-      border-color: var(--accent-primary);
+      border-color: var(--accent-surgical);
+      box-shadow: 0 0 0 3px rgba(27, 77, 137, 0.1);
     }
 
     .profile-field input:disabled {
       opacity: 0.6;
       cursor: not-allowed;
+      background: var(--bg-light);
     }
 
     .profile-field select {
       cursor: pointer;
     }
 
+    /* Subscription Card - Light Theme */
     .subscription-card {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: var(--bg-secondary);
-      border-radius: 12px;
+      background: var(--bg-light-secondary);
+      border: 1px solid var(--border-light);
+      border-radius: 14px;
       padding: 20px;
     }
 
@@ -2755,11 +3008,12 @@
       font-size: 18px;
       font-weight: 600;
       margin-bottom: 4px;
+      color: var(--text-light-primary);
     }
 
     .subscription-info p {
       font-size: 14px;
-      color: var(--text-muted);
+      color: var(--text-light-muted);
     }
 
     .subscription-badge {
@@ -2770,68 +3024,87 @@
     }
 
     .subscription-badge.free {
-      background: rgba(255, 255, 255, 0.1);
-      color: var(--text-secondary);
+      background: rgba(27, 77, 137, 0.1);
+      color: var(--accent-surgical);
     }
 
     .subscription-badge.premium {
       background: var(--accent-gradient);
-      color: #000;
+      color: white;
     }
 
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 16px;
-    }
-
-    .stat-card {
-      background: var(--bg-secondary);
-      border-radius: 12px;
-      padding: 20px;
+    /* Progress Placeholder */
+    .coming-soon-placeholder {
       text-align: center;
+      padding: 20px;
     }
 
-    .stat-value {
-      font-size: 32px;
-      font-weight: 700;
-      color: var(--accent-primary);
-      margin-bottom: 4px;
+    .progress-illustration {
+      width: 180px;
+      height: 140px;
+      margin-bottom: 28px;
+      opacity: 0.6;
     }
 
-    .stat-label {
-      font-size: 14px;
-      color: var(--text-muted);
+    .progress-illustration svg {
+      width: 100%;
+      height: 100%;
     }
 
+    .coming-soon-placeholder h3 {
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--text-light-primary);
+      margin-bottom: 12px;
+    }
+
+    .coming-soon-placeholder p {
+      font-size: 15px;
+      color: var(--text-light-muted);
+      max-width: 280px;
+      line-height: 1.6;
+    }
+
+    /* Subtle pulse animation for coming soon */
+    @keyframes gentlePulse {
+      0%, 100% { opacity: 0.6; }
+      50% { opacity: 0.4; }
+    }
+
+    .progress-illustration {
+      animation: gentlePulse 3s ease-in-out infinite;
+    }
+
+    /* Profile Actions - Redesigned */
     .profile-actions {
       display: flex;
       gap: 16px;
-      margin-top: 24px;
+      margin-top: 8px;
     }
 
     .btn-save {
       flex: 1;
-      background: var(--accent-gradient);
-      color: #000;
+      background: linear-gradient(135deg, #1B4D89 0%, #0A1628 100%);
+      color: white;
       border: none;
-      padding: 16px;
+      padding: 16px 24px;
       font-size: 16px;
       font-weight: 600;
       border-radius: 12px;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 15px rgba(27, 77, 137, 0.2);
     }
 
     .btn-save:hover {
       transform: translateY(-2px);
-      box-shadow: var(--shadow-glow);
+      box-shadow: 0 8px 25px rgba(27, 77, 137, 0.3);
     }
 
     .btn-back {
       background: transparent;
-      color: var(--text-secondary);
-      border: 1px solid var(--border-subtle);
+      color: var(--text-light-secondary);
+      border: 1px solid var(--border-light);
       padding: 16px 24px;
       font-size: 16px;
       font-weight: 500;
@@ -2841,8 +3114,24 @@
     }
 
     .btn-back:hover {
-      background: var(--bg-glass);
-      color: var(--text-primary);
+      background: var(--bg-light-glass);
+      color: var(--text-light-primary);
+      border-color: var(--border-light-hover);
+    }
+
+    /* Mobile: Stack panels vertically */
+    @media (max-width: 900px) {
+      .profile-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .profile-progress-panel {
+        min-height: 350px;
+      }
+
+      #profilePage {
+        padding: 40px 20px;
+      }
     }
 
     /* Upgrade Modal */
@@ -3052,21 +3341,21 @@
   <div id="landingPage" class="page">
     <div class="landing-container">
       <!-- Logo Lockup -->
-      <div class="logo-lockup">
+      <div class="logo-lockup animate-on-load">
         <div class="logo-mark">ST3</div>
         <div class="logo-subtitle">Interview Trainer</div>
       </div>
 
       <!-- Hero Editorial Grid -->
       <div class="hero-grid">
-        <div class="hero-col-1">
+        <div class="hero-col-1 animate-on-load stagger-1">
           <h1 class="display-headline">
             Master Your<br>
             Surgical<br>
             Interview
           </h1>
         </div>
-        <div class="hero-col-2">
+        <div class="hero-col-2 animate-on-load stagger-2">
           <p class="hero-tagline">
             AI-powered voice simulation designed for plastic surgery ST3 candidates.
             Practice clinical scenarios with real-time feedback that mirrors actual
@@ -3077,39 +3366,44 @@
 
       <!-- Feature Cards -->
       <div class="features-editorial">
-        <div class="feature-card feature-primary">
+        <div class="feature-card feature-primary animate-on-scroll">
           <span class="feature-number">01</span>
-          <h3>Clinical Scenarios</h3>
-          <p>Practice with realistic ST3 interview cases covering emergencies,
-             procedures, and communication stations.</p>
+          <h3>Practice Anytime</h3>
+          <p>AI-powered ST3 interview simulation that lets you practice at your own pace,
+             whenever and wherever you want. No scheduling, no waiting.</p>
         </div>
 
-        <div class="feature-card feature-primary">
+        <div class="feature-card feature-primary animate-on-scroll">
           <span class="feature-number">02</span>
-          <h3>Voice Interaction</h3>
-          <p>Speak naturally to an AI examiner that responds in real-time,
-             simulating actual interview pressure.</p>
+          <h3>Expert-Designed</h3>
+          <p>Meticulously crafted by current high-ranking trainees. Topics and scenarios
+             designed to mirror the real ST3 interview as closely as possible.</p>
         </div>
 
-        <div class="feature-card feature-wide">
+        <div class="feature-card feature-wide animate-on-scroll">
           <span class="feature-number">03</span>
-          <h3>Precision Tracking</h3>
-          <p>Monitor your performance across sessions with detailed analytics
-             that identify improvement areas.</p>
+          <h3>Try Before You Subscribe</h3>
+          <p>Explore the platform and test selected scenarios completely free.
+             Experience the quality before committing.</p>
         </div>
       </div>
 
       <!-- Call to Action -->
-      <div class="cta-section">
-        <button class="btn-editorial-primary" onclick="showAuthPage('signup')">
-          Begin Training
-          <span class="btn-arrow">→</span>
+      <div class="cta-section animate-on-scroll">
+        <button class="btn-cta-primary" onclick="showAuthPage('signup')">
+          <span class="btn-text">Begin Training</span>
+          <span class="btn-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </span>
         </button>
-        <button class="btn-editorial-secondary" onclick="showAuthPage('login')">
-          Sign In
+        <button class="btn-cta-secondary" onclick="showAuthPage('login')">
+          <span class="btn-text">Sign In</span>
         </button>
-        <button class="btn-editorial-tertiary" onclick="browseAsGuest()">
-          Explore Without Login
+        <button class="btn-cta-tertiary" onclick="browseAsGuest()">
+          <span class="btn-text">Explore Without Login</span>
+          <span class="btn-underline"></span>
         </button>
       </div>
 
@@ -3180,80 +3474,112 @@
     <div class="profile-container">
       <div class="profile-header">
         <h1>Your Profile</h1>
+        <p class="profile-subtitle">Manage your account and track your progress</p>
       </div>
 
-      <div class="profile-section">
-        <h3>Account Information</h3>
-        <div class="profile-field">
-          <label>Email</label>
-          <input type="email" id="profileEmail" disabled>
-        </div>
-        <div class="profile-field">
-          <label>Full Name</label>
-          <input type="text" id="profileName" placeholder="Enter your name">
-        </div>
-        <div class="profile-field">
-          <label>Specialty</label>
-          <select id="profileSpecialty">
-            <option value="">Select specialty</option>
-            <option value="plastic-surgery">Plastic Surgery</option>
-            <option value="general-surgery">General Surgery</option>
-            <option value="orthopaedics">Orthopaedics</option>
-            <option value="ent">ENT</option>
-            <option value="other">Other</option>
-          </select>
-        </div>
-        <div class="profile-field">
-          <label>Training Level</label>
-          <select id="profileTrainingLevel">
-            <option value="">Select level</option>
-            <option value="ct1">CT1</option>
-            <option value="ct2">CT2</option>
-            <option value="st3">ST3</option>
-            <option value="st4">ST4</option>
-            <option value="st5">ST5</option>
-            <option value="st6">ST6</option>
-            <option value="st7">ST7</option>
-            <option value="st8">ST8</option>
-            <option value="consultant">Consultant</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="profile-section">
-        <h3>Subscription</h3>
-        <div class="subscription-card">
-          <div class="subscription-info">
-            <h4 id="subscriptionPlanName">Free Plan</h4>
-            <p id="subscriptionDetails">Access to sample scenarios</p>
+      <div class="profile-layout">
+        <!-- Left Panel - Profile Info -->
+        <div class="profile-info-panel">
+          <div class="profile-section">
+            <h3>Account Information</h3>
+            <div class="profile-field">
+              <label>Email</label>
+              <input type="email" id="profileEmail" disabled>
+            </div>
+            <div class="profile-field">
+              <label>Full Name</label>
+              <input type="text" id="profileName" placeholder="Enter your name">
+            </div>
+            <div class="profile-field">
+              <label>Specialty</label>
+              <select id="profileSpecialty">
+                <option value="">Select specialty</option>
+                <option value="plastic-surgery">Plastic Surgery</option>
+                <option value="general-surgery">General Surgery</option>
+                <option value="orthopaedics">Orthopaedics</option>
+                <option value="ent">ENT</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="profile-field">
+              <label>Training Level</label>
+              <select id="profileTrainingLevel">
+                <option value="">Select level</option>
+                <option value="ct1">CT1</option>
+                <option value="ct2">CT2</option>
+                <option value="st3">ST3</option>
+                <option value="st4">ST4</option>
+                <option value="st5">ST5</option>
+                <option value="st6">ST6</option>
+                <option value="st7">ST7</option>
+                <option value="st8">ST8</option>
+                <option value="consultant">Consultant</option>
+              </select>
+            </div>
           </div>
-          <span id="subscriptionBadge" class="subscription-badge free">Free</span>
-        </div>
-        <button id="upgradeBtn" class="btn-primary" style="width: 100%; margin-top: 16px;" onclick="showUpgradeModal()">
-          Upgrade to Premium
-        </button>
-        <button id="manageSubscriptionBtn" class="btn-secondary" style="width: 100%; margin-top: 16px; display: none;" onclick="openCustomerPortal()">
-          Manage Subscription
-        </button>
-      </div>
 
-      <div class="profile-section">
-        <h3>Your Stats</h3>
-        <div class="stats-grid">
-          <div class="stat-card">
-            <div id="statTotalSessions" class="stat-value">0</div>
-            <div class="stat-label">Sessions Completed</div>
+          <div class="profile-section">
+            <h3>Subscription</h3>
+            <div class="subscription-card">
+              <div class="subscription-info">
+                <h4 id="subscriptionPlanName">Free Plan</h4>
+                <p id="subscriptionDetails">Access to sample scenarios</p>
+              </div>
+              <span id="subscriptionBadge" class="subscription-badge free">Free</span>
+            </div>
+            <button id="upgradeBtn" class="btn-save" style="width: 100%; margin-top: 16px;" onclick="showUpgradeModal()">
+              Upgrade to Premium
+            </button>
+            <button id="manageSubscriptionBtn" class="btn-back" style="width: 100%; margin-top: 12px; display: none;" onclick="openCustomerPortal()">
+              Manage Subscription
+            </button>
           </div>
-          <div class="stat-card">
-            <div id="statLastSession" class="stat-value">-</div>
-            <div class="stat-label">Last Session</div>
+
+          <div class="profile-actions">
+            <button class="btn-back" onclick="hideProfilePage()">← Back</button>
+            <button class="btn-save" onclick="saveProfile()">Save Changes</button>
           </div>
         </div>
-      </div>
 
-      <div class="profile-actions">
-        <button class="btn-back" onclick="hideProfilePage()">Back</button>
-        <button class="btn-save" onclick="saveProfile()">Save Changes</button>
+        <!-- Right Panel - Progress Tracking (Coming Soon) -->
+        <div class="profile-progress-panel">
+          <div class="coming-soon-placeholder">
+            <div class="progress-illustration">
+              <!-- Abstract chart/graph SVG illustration -->
+              <svg viewBox="0 0 180 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Background grid lines -->
+                <line x1="20" y1="120" x2="160" y2="120" stroke="#1B4D89" stroke-width="1" opacity="0.2"/>
+                <line x1="20" y1="90" x2="160" y2="90" stroke="#1B4D89" stroke-width="1" opacity="0.1"/>
+                <line x1="20" y1="60" x2="160" y2="60" stroke="#1B4D89" stroke-width="1" opacity="0.1"/>
+                <line x1="20" y1="30" x2="160" y2="30" stroke="#1B4D89" stroke-width="1" opacity="0.1"/>
+
+                <!-- Area chart fill -->
+                <path d="M20 120 L40 95 L60 100 L80 70 L100 75 L120 45 L140 50 L160 25 L160 120 Z"
+                      fill="url(#chartGradient)" opacity="0.3"/>
+
+                <!-- Line chart -->
+                <path d="M20 120 L40 95 L60 100 L80 70 L100 75 L120 45 L140 50 L160 25"
+                      stroke="#1B4D89" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+                <!-- Data points -->
+                <circle cx="40" cy="95" r="4" fill="#1B4D89"/>
+                <circle cx="80" cy="70" r="4" fill="#1B4D89"/>
+                <circle cx="120" cy="45" r="4" fill="#1B4D89"/>
+                <circle cx="160" cy="25" r="5" fill="#1B4D89"/>
+
+                <!-- Gradient definition -->
+                <defs>
+                  <linearGradient id="chartGradient" x1="90" y1="25" x2="90" y2="120" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#1B4D89" stop-opacity="0.4"/>
+                    <stop offset="100%" stop-color="#1B4D89" stop-opacity="0"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+            <h3>Progress Tracking</h3>
+            <p>Detailed analytics and performance insights coming soon...</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
