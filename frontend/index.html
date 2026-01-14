@@ -998,17 +998,17 @@
       transform: translateX(-4px) scale(0.98);
     }
 
-    /* Back button for page navigation (dark theme sections) */
+    /* Back button for page navigation (light theme - matches other buttons) */
     .top-back-button,
     button.top-back-button {
       display: inline-flex !important;
       align-items: center !important;
       justify-content: center !important;
-      background: rgba(255, 255, 255, 0.1) !important;
-      color: #FFFFFF !important;
+      background: #FFFFFF !important;
+      color: #1F2937 !important;
       font-family: 'Plus Jakarta Sans', sans-serif !important;
       padding: 12px 24px !important;
-      border: 1px solid rgba(255, 255, 255, 0.25) !important;
+      border: 1px solid #D1D5DB !important;
       cursor: pointer;
       font-size: 14px !important;
       font-weight: 500 !important;
@@ -1016,14 +1016,15 @@
       border-radius: 12px !important;
       width: auto;
       height: auto;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
     }
 
     .top-back-button:hover,
     button.top-back-button:hover {
-      background: rgba(255, 255, 255, 0.15) !important;
-      border-color: var(--brand-primary) !important;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 20px rgba(15, 118, 110, 0.2);
+      transform: translateY(-2px);
+      background: #FFFFFF !important;
+      border-color: #0F766E !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
 
     .top-back-button:active,
@@ -1526,16 +1527,16 @@
     }
 
     #difficultySelection .top-back-button {
-      background: var(--bg-light-tertiary);
-      color: var(--text-light-secondary);
-      border: 1px solid var(--border-light);
+      background: #FFFFFF !important;
+      color: #1F2937 !important;
+      border: 1px solid #D1D5DB !important;
     }
 
     #difficultySelection .top-back-button:hover {
-      background: var(--bg-light-secondary);
-      color: var(--text-light-primary);
-      border-color: var(--border-light-hover);
-      box-shadow: var(--shadow-light-md);
+      background: #FFFFFF !important;
+      color: #1F2937 !important;
+      border-color: #0F766E !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
 
     .difficulty-grid {
