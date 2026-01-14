@@ -2401,11 +2401,44 @@ document.getElementById('interruptBtn').addEventListener('click', () => {
 });
 
 // ============================================================================
+// SCROLL ANIMATIONS (Squarespace-style)
+// ============================================================================
+
+function initScrollAnimations() {
+  // Create Intersection Observer for scroll-triggered animations
+  const observerOptions = {
+    root: null,
+    rootMargin: '0px 0px -80px 0px', // Trigger slightly before element is fully visible
+    threshold: 0.15
+  };
+
+  const animationObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        // Once animated, stop observing (one-time animation)
+        animationObserver.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+
+  // Observe all elements with scroll animation class
+  document.querySelectorAll('.animate-on-scroll').forEach((el) => {
+    animationObserver.observe(el);
+  });
+
+  console.log('[ANIM] Scroll animations initialized');
+}
+
+// ============================================================================
 // BROWSER COMPATIBILITY CHECK
 // ============================================================================
 
 window.addEventListener('DOMContentLoaded', async () => {
   console.log('[INIT] DOMContentLoaded fired');
+
+  // Initialize scroll animations (Squarespace-style)
+  initScrollAnimations();
 
   // Safety fallback - if nothing shows after 3 seconds, show landing page
   const safetyTimeout = setTimeout(() => {
