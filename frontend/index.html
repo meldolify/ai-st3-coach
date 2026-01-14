@@ -2210,11 +2210,69 @@
       z-index: 1000;
     }
 
-    .header-logo {
-      font-size: 18px;
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .header-logo-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .header-logo-link:hover {
+      opacity: 0.8;
+    }
+
+    .header-logo-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--brand-primary);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFFFFF;
+      font-weight: 700;
+      font-size: 12px;
+    }
+
+    .header-logo-text {
+      font-size: 17px;
       font-weight: 700;
       color: var(--brand-primary);
       letter-spacing: -0.3px;
+    }
+
+    .header-home-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--bg-light-tertiary);
+      color: var(--text-light-secondary);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 8px 14px;
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .header-home-btn:hover {
+      background: #FFFFFF;
+      color: var(--brand-primary);
+      border-color: var(--brand-primary);
+      box-shadow: var(--shadow-light);
+    }
+
+    .header-home-btn svg {
+      flex-shrink: 0;
     }
 
     .header-right {
@@ -2363,13 +2421,18 @@
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
 
+    /* Nav Text Links (Pricing, etc.) */
     .nav-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       background: transparent;
       border: none;
       color: var(--text-light-secondary);
+      font-family: 'Plus Jakarta Sans', sans-serif;
       font-size: 15px;
       font-weight: 500;
       padding: 10px 16px;
@@ -2380,27 +2443,59 @@
     }
 
     .nav-link:hover {
-      color: var(--text-light-primary);
-      background: var(--bg-light-tertiary);
+      color: var(--brand-primary);
+      background: rgba(15, 118, 110, 0.08);
     }
 
-    .nav-btn-primary {
-      background: var(--brand-primary);
-      color: white;
+    /* Nav Secondary Button (Log In - outlined) */
+    .nav-btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      color: var(--brand-primary);
+      font-family: 'Plus Jakarta Sans', sans-serif;
       font-size: 14px;
       font-weight: 600;
       padding: 10px 20px;
-      border: none;
+      border: 2px solid var(--brand-primary);
       border-radius: 8px;
       cursor: pointer;
       transition: all 0.2s ease;
-      margin-left: 8px;
+      text-decoration: none;
+    }
+
+    .nav-btn-secondary:hover {
+      background: var(--brand-primary);
+      color: #FFFFFF;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(15, 118, 110, 0.25);
+    }
+
+    /* Nav Primary Button (Sign Up - filled) */
+    .nav-btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--brand-primary);
+      color: #FFFFFF;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 20px;
+      border: 2px solid var(--brand-primary);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-left: 4px;
+      box-shadow: 0 2px 8px rgba(15, 118, 110, 0.2);
     }
 
     .nav-btn-primary:hover {
       background: var(--brand-dark);
+      border-color: var(--brand-dark);
       transform: translateY(-1px);
-      box-shadow: var(--shadow-light-md);
+      box-shadow: 0 4px 14px rgba(15, 118, 110, 0.35);
     }
 
     /* Landing Content */
@@ -2468,10 +2563,20 @@
       animation: fadeInUp 0.6s ease-out 0.3s backwards;
     }
 
-    /* Unified Button System */
+    /* ============================================
+       UNIFIED BUTTON SYSTEM
+       All buttons use consistent styling
+       ============================================ */
+
+    /* Primary Button - Main CTA */
     .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
       background: var(--brand-primary);
-      color: white;
+      color: #FFFFFF;
+      font-family: 'Plus Jakarta Sans', sans-serif;
       font-size: 16px;
       font-weight: 600;
       padding: 16px 32px;
@@ -2479,32 +2584,53 @@
       border-radius: 12px;
       cursor: pointer;
       transition: all 0.25s ease;
-      box-shadow: 0 4px 14px rgba(15, 118, 110, 0.25);
+      box-shadow: 0 4px 14px rgba(15, 118, 110, 0.3);
+      text-decoration: none;
+      white-space: nowrap;
     }
 
     .btn-primary:hover {
       background: var(--brand-dark);
       transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(15, 118, 110, 0.35);
+      box-shadow: 0 8px 25px rgba(15, 118, 110, 0.4);
     }
 
+    .btn-primary:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 8px rgba(15, 118, 110, 0.3);
+    }
+
+    /* Secondary Button - Outlined style */
     .btn-secondary {
-      background: var(--bg-light-secondary);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: #FFFFFF;
       color: var(--text-light-primary);
+      font-family: 'Plus Jakarta Sans', sans-serif;
       font-size: 16px;
       font-weight: 600;
       padding: 16px 32px;
-      border: 1px solid var(--border-light);
+      border: 2px solid var(--border-light);
       border-radius: 12px;
       cursor: pointer;
       transition: all 0.25s ease;
+      text-decoration: none;
+      white-space: nowrap;
+      box-shadow: var(--shadow-light);
     }
 
     .btn-secondary:hover {
       background: var(--bg-light-tertiary);
-      border-color: var(--border-light-hover);
+      border-color: var(--brand-primary);
+      color: var(--brand-primary);
       transform: translateY(-2px);
       box-shadow: var(--shadow-light-md);
+    }
+
+    .btn-secondary:active {
+      transform: translateY(0);
     }
 
     /* Features Section */
@@ -2932,6 +3058,29 @@
       display: block;
     }
 
+    /* Auth Form Submit Button - Full width, explicit styling */
+    .auth-form .btn-primary {
+      width: 100%;
+      margin-top: 8px;
+      background: var(--brand-primary);
+      color: #FFFFFF;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      padding: 16px 24px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 14px rgba(15, 118, 110, 0.3);
+    }
+
+    .auth-form .btn-primary:hover {
+      background: var(--brand-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(15, 118, 110, 0.4);
+    }
+
     .auth-divider {
       display: flex;
       align-items: center;
@@ -3242,10 +3391,15 @@
       margin-top: 8px;
     }
 
+    /* Profile Save Button - Primary action */
     .btn-save {
       flex: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       background: var(--brand-primary);
-      color: white;
+      color: #FFFFFF;
+      font-family: 'Plus Jakarta Sans', sans-serif;
       border: none;
       padding: 16px 24px;
       font-size: 16px;
@@ -3253,32 +3407,47 @@
       border-radius: 12px;
       cursor: pointer;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 4px 14px rgba(15, 118, 110, 0.25);
+      box-shadow: 0 4px 14px rgba(15, 118, 110, 0.3);
     }
 
     .btn-save:hover {
       background: var(--brand-dark);
       transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(15, 118, 110, 0.35);
+      box-shadow: 0 8px 25px rgba(15, 118, 110, 0.4);
     }
 
+    .btn-save:active {
+      transform: translateY(0);
+    }
+
+    /* Profile Back Button - Secondary action */
     .btn-back {
-      background: var(--bg-light-tertiary);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: #FFFFFF;
       color: var(--text-light-secondary);
-      border: 1px solid var(--border-light);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      border: 2px solid var(--border-light);
       padding: 16px 24px;
       font-size: 16px;
       font-weight: 500;
       border-radius: 12px;
       cursor: pointer;
       transition: all 0.2s ease;
+      box-shadow: var(--shadow-light);
     }
 
     .btn-back:hover {
-      background: var(--bg-light-secondary);
+      background: var(--bg-light-tertiary);
       color: var(--text-light-primary);
-      border-color: var(--border-light-hover);
+      border-color: var(--brand-primary);
       box-shadow: var(--shadow-light-md);
+    }
+
+    .btn-back:active {
+      transform: translateY(0);
     }
 
     /* Mobile: Stack panels vertically */
@@ -3487,7 +3656,19 @@
 
   <!-- App Header (shown on protected pages) -->
   <header id="appHeader" class="app-header" style="display: none;">
-    <div class="header-logo">ST3 Trainer</div>
+    <div class="header-left">
+      <a href="#" class="header-logo-link" onclick="navigateToLanding(); return false;">
+        <div class="header-logo-icon">ST3</div>
+        <span class="header-logo-text">Interview Trainer</span>
+      </a>
+      <button class="header-home-btn" onclick="navigateToLanding()" title="Back to Home">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+        Home
+      </button>
+    </div>
     <div class="header-right">
       <button class="user-menu-btn" onclick="toggleUserMenu()">
         <span>👤</span>
@@ -3510,11 +3691,17 @@
         <div class="nav-logo-icon">ST3</div>
         <span class="nav-logo-text">Interview Trainer</span>
       </a>
-      <div class="nav-links">
+      <div class="nav-links" id="navLinksGuest">
         <a href="#pricing" class="nav-link">Pricing</a>
         <button class="nav-link" onclick="browseAsGuest()">Explore</button>
-        <button class="nav-link" onclick="showAuthPage('login')">Log In</button>
+        <button class="nav-btn-secondary" onclick="showAuthPage('login')">Log In</button>
         <button class="nav-btn-primary" onclick="showAuthPage('signup')">Sign Up</button>
+      </div>
+      <div class="nav-links" id="navLinksUser" style="display: none;">
+        <a href="#pricing" class="nav-link">Pricing</a>
+        <button class="nav-link" onclick="browseAsGuest()">Explore</button>
+        <button class="nav-btn-secondary" onclick="showProfilePage()">Profile</button>
+        <button class="nav-btn-primary" onclick="handleLogout()">Log Out</button>
       </div>
     </nav>
 
