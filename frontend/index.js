@@ -1113,16 +1113,33 @@ class V4Session {
     this.ws = null;
     this.sessionId = null;
 
-    // Hybrid STT: Detect browser capability and choose appropriate manager
+    // Hybrid STT: Whisper PRIMARY, Web Speech API FALLBACK
+    // Whisper provides better accuracy for medical terminology
+    const whisperPrimary = CONFIG.SPEECH_RECOGNITION?.WHISPER_PRIMARY ?? true;
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (SpeechRecognition) {
-      this.speechRecognition = new SpeechRecognitionManager();
-      this.usingWhisper = false;
-      log('Using Web Speech API for STT', 'success');
-    } else {
-      this.speechRecognition = new WhisperRecognitionManager(null); // WebSocket will be set after connection
+
+    if (whisperPrimary) {
+      // Use Whisper as primary (all browsers)
+      this.speechRecognition = new WhisperRecognitionManager(null); // WebSocket set after connection
       this.usingWhisper = true;
-      log('Using Whisper API for STT', 'success');
+      this.fallbackAvailable = !!SpeechRecognition;
+      log('Using Whisper API for STT (primary)', 'success');
+      if (this.fallbackAvailable) {
+        log('Web Speech API available as fallback', 'info');
+      }
+    } else {
+      // Legacy mode: Web Speech API primary, Whisper fallback
+      if (SpeechRecognition) {
+        this.speechRecognition = new SpeechRecognitionManager();
+        this.usingWhisper = false;
+        this.fallbackAvailable = true; // Whisper always available as fallback
+        log('Using Web Speech API for STT (legacy mode)', 'success');
+      } else {
+        this.speechRecognition = new WhisperRecognitionManager(null);
+        this.usingWhisper = true;
+        this.fallbackAvailable = false;
+        log('Using Whisper API for STT (no Web Speech support)', 'success');
+      }
     }
 
     this.audioPlayer = new AudioPlayer();
@@ -1314,10 +1331,79 @@ class V4Session {
     };
 
     // Initialize (async for Whisper, sync for Web Speech API)
-    await this.speechRecognition.initialize();
+    // With auto-fallback if primary fails
+    try {
+      await this.speechRecognition.initialize();
+      this.speechRecognition.start();
+    } catch (error) {
+      log('Speech recognition initialization failed: ' + error.message, 'error');
 
-    // Start listening after initialization completes
-    this.speechRecognition.start();
+      // Attempt fallback if Whisper failed and fallback is available
+      if (this.usingWhisper && this.fallbackAvailable) {
+        log('Attempting Web Speech API fallback...', 'warning');
+        const fallbackSuccess = await this.switchToFallback();
+        if (!fallbackSuccess) {
+          throw new Error('Both Whisper and Web Speech API failed to initialize');
+        }
+      } else {
+        throw error;
+      }
+    }
+  }
+
+  // Fallback to Web Speech API if Whisper fails
+  async switchToFallback() {
+    if (!this.fallbackAvailable || !this.usingWhisper) {
+      log('No fallback available', 'warning');
+      return false;
+    }
+
+    try {
+      log('Switching to Web Speech API fallback...', 'warning');
+
+      // Stop current Whisper recognition
+      this.speechRecognition.stop();
+
+      // Create Web Speech API manager
+      this.speechRecognition = new SpeechRecognitionManager();
+      this.usingWhisper = false;
+
+      // Re-attach callbacks
+      this.speechRecognition.onTranscript = (text) => {
+        log('You: ' + text, 'info');
+        if (this.isConnected && this.sessionId) {
+          this.ws.send(JSON.stringify({
+            type: 'user_transcript',
+            sessionId: this.sessionId,
+            text: text
+          }));
+          updateStatus('micStatus', 'Paused', 'active');
+          updateStatus('aiStatus', getRandomProcessingMessage(), 'processing');
+          setOrbState('thinking');
+        }
+      };
+
+      this.speechRecognition.onStart = () => {
+        updateStatus('micStatus', '🎤 Listening (Fallback)', 'connected');
+        setOrbState('listening');
+      };
+
+      this.speechRecognition.onEnd = () => {
+        if (this.speechRecognition.shouldBeListening) {
+          updateStatus('micStatus', 'Restarting', 'processing');
+        }
+      };
+
+      // Initialize and start
+      this.speechRecognition.initialize();
+      this.speechRecognition.start();
+
+      log('Switched to Web Speech API fallback', 'success');
+      return true;
+    } catch (error) {
+      log('Fallback failed: ' + error.message, 'error');
+      return false;
+    }
   }
 
   disconnect() {
