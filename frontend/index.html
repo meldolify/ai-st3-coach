@@ -2103,7 +2103,7 @@
         display: block !important;
       }
 
-      /* Mobile scenario grid */
+      /* Mobile scenario grid - Light Theme */
       .mobile-scenario-grid {
         display: grid;
         grid-template-columns: 1fr;
@@ -2112,22 +2112,22 @@
       }
 
       .mobile-scenario-card {
-        background: rgba(255, 255, 255, 0.03);
+        background: #FFFFFF;
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
-        color: var(--text-primary);
+        color: #1F2937;
         padding: 20px;
         border-radius: 16px;
         cursor: pointer;
         transition: all 0.3s ease;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        border: 1px solid #D1D5DB;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
       }
 
       .mobile-scenario-card:active {
         transform: scale(0.98);
-        background: rgba(0, 212, 170, 0.08);
-        border-color: rgba(0, 212, 170, 0.3);
+        background: rgba(15, 118, 110, 0.08);
+        border-color: #0F766E;
       }
 
       .mobile-scenario-card.locked {
@@ -2137,29 +2137,29 @@
 
       .mobile-scenario-card.locked:active {
         transform: none;
-        background: rgba(255, 255, 255, 0.03);
-        border-color: rgba(255, 255, 255, 0.08);
+        background: #FFFFFF;
+        border-color: #D1D5DB;
       }
 
       .mobile-scenario-card h3 {
         font-size: 18px;
         margin-bottom: 6px;
         font-weight: 600;
-        color: var(--text-primary);
+        color: #1F2937;
       }
 
       .mobile-scenario-card p {
         font-size: 13px;
-        color: var(--text-secondary);
+        color: #475569;
       }
 
       .mobile-category-header {
         font-size: 20px;
         font-weight: 700;
-        color: var(--accent-primary);
+        color: #0F766E;
         margin: 24px 0 12px 0;
         padding-bottom: 8px;
-        border-bottom: 1px solid var(--border-subtle);
+        border-bottom: 1px solid #E5E7EB;
       }
 
       .mobile-category-header:first-child {
@@ -3433,14 +3433,14 @@
       }
     }
 
-    /* Upgrade Modal */
+    /* Upgrade Modal - Light Theme */
     .upgrade-modal {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(0, 0, 0, 0.8);
+      background: rgba(0, 0, 0, 0.5);
       display: none;
       align-items: center;
       justify-content: center;
@@ -3452,22 +3452,24 @@
     }
 
     .upgrade-content {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-subtle);
+      background: #FFFFFF;
+      border: 1px solid #D1D5DB;
       border-radius: 20px;
       padding: 40px;
       max-width: 450px;
       text-align: center;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
     }
 
     .upgrade-content h2 {
       font-size: 28px;
       font-weight: 600;
       margin-bottom: 16px;
+      color: #0F766E;
     }
 
     .upgrade-content p {
-      color: var(--text-secondary);
+      color: #475569;
       margin-bottom: 24px;
       line-height: 1.6;
     }
@@ -3482,8 +3484,8 @@
       align-items: center;
       gap: 12px;
       padding: 12px 0;
-      color: var(--text-secondary);
-      border-bottom: 1px solid var(--border-subtle);
+      color: #1F2937;
+      border-bottom: 1px solid #E5E7EB;
     }
 
     .upgrade-benefits li:last-child {
@@ -3491,7 +3493,7 @@
     }
 
     .upgrade-benefits .check {
-      color: var(--accent-primary);
+      color: #0F766E;
       font-size: 18px;
     }
 
