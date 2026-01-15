@@ -846,6 +846,10 @@ class WhisperRecognitionManager {
     // Continuous listening - track AI state but keep mic open
     this.aiIsSpeaking = false;
     this.recordingContaminated = false; // True if AI spoke during recording
+    this.userInitiatedInterrupt = false; // True if user interrupted AI by speaking
+
+    // Callback for requesting AI interrupt (set by V4Session)
+    this.onInterruptRequest = null;
 
     // Energy tracking for audio validation
     this.rmsReadings = [];
@@ -857,8 +861,14 @@ class WhisperRecognitionManager {
     this.aiIsSpeaking = isSpeaking;
     console.log(`[WHISPER] AI speaking state changed: ${isSpeaking}`);
 
+    // If AI stopped speaking, reset the interrupt flag
+    if (!isSpeaking && wasAISpeaking) {
+      this.userInitiatedInterrupt = false;
+    }
+
     // If AI just started speaking while we're recording, mark as contaminated
-    if (isSpeaking && this.isRecording && !wasAISpeaking) {
+    // BUT NOT if the user initiated the interrupt (they're intentionally speaking over AI)
+    if (isSpeaking && this.isRecording && !wasAISpeaking && !this.userInitiatedInterrupt) {
       this.recordingContaminated = true;
       console.log('[WHISPER] Recording marked contaminated - AI started speaking');
     }
@@ -987,17 +997,21 @@ class WhisperRecognitionManager {
       this.rmsReadings.push(rms);
     }
 
-    // Only start new recordings when AI is NOT speaking (continuous listening protection)
-    const canStartRecording = !this.aiIsSpeaking;
-
+    // Voice activity detection with automatic interrupt
     if (rms > this.silenceThreshold) {
       // Voice/sound detected
-      if (!this.isRecording && canStartRecording) {
+      if (!this.isRecording) {
         console.log(`[WHISPER VAD] Voice detected (RMS: ${rms.toFixed(4)}), AI speaking: ${this.aiIsSpeaking}`);
+
+        // If AI is speaking, interrupt it first (user wants to speak)
+        if (this.aiIsSpeaking && this.onInterruptRequest) {
+          console.log('[WHISPER VAD] User speaking during AI playback - requesting interrupt');
+          this.userInitiatedInterrupt = true;
+          this.onInterruptRequest(); // This will stop AI audio
+        }
+
+        // Start recording regardless of AI state
         this.startRecording();
-      } else if (!this.isRecording && !canStartRecording) {
-        // Sound detected but AI is speaking - ignore to prevent feedback
-        // (Don't log every frame to avoid spam)
       }
 
       // Reset silence timer if we're recording
@@ -1280,6 +1294,25 @@ class V4Session {
         updateStatus('micStatus', 'Restarting', 'processing');
       }
     };
+
+    // Set up voice-triggered interrupt callback (Whisper only)
+    if (this.usingWhisper && this.speechRecognition.onInterruptRequest !== undefined) {
+      this.speechRecognition.onInterruptRequest = () => {
+        log('Voice-triggered interrupt', 'info');
+        this.audioPlayer.interrupt();
+        // Notify backend of interrupt
+        if (this.isConnected && this.sessionId) {
+          this.ws.send(JSON.stringify({
+            type: 'user_speaking',
+            sessionId: this.sessionId
+          }));
+        }
+        // Hide interrupt button since we've already interrupted
+        document.getElementById('interruptBtn').style.display = 'none';
+        syncMobileButtonStates();
+        setOrbState('listening');
+      };
+    }
 
     this.audioPlayer.onStart = () => {
       // For Whisper: use continuous listening - just set AI speaking flag
