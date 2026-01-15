@@ -2135,12 +2135,18 @@
 
       /* Mobile scenario grid - Light Theme */
       .mobile-scenario-grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 12px;
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
         margin-top: 0 !important;
-        position: relative;
-        z-index: 1;
+        position: relative !important;
+        z-index: 1 !important;
+        top: auto !important;
+        left: auto !important;
+        right: auto !important;
+        bottom: auto !important;
+        width: auto !important;
+        height: auto !important;
       }
 
       .mobile-scenario-card {
