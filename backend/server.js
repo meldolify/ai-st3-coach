@@ -1,6 +1,9 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+const { body, validationResult } = require('express-validator');
 const WebSocket = require('ws');
 const fs = require('fs');
 const path = require('path');
@@ -399,6 +402,59 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'stripe-signature']
 }));
 
+// Security headers (helmet)
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "https://cdn.jsdelivr.net", "https://js.stripe.com"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+      fontSrc: ["'self'", "https://fonts.gstatic.com"],
+      connectSrc: ["'self'", "https://*.supabase.co", "wss://*.onrender.com", "https://api.stripe.com"],
+      frameSrc: ["https://js.stripe.com", "https://hooks.stripe.com"],
+      imgSrc: ["'self'", "data:", "https:"]
+    }
+  },
+  hsts: {
+    maxAge: 31536000,
+    includeSubDomains: true,
+    preload: true
+  },
+  frameguard: { action: 'deny' },
+  noSniff: true,
+  referrerPolicy: { policy: 'strict-origin-when-cross-origin' }
+}));
+
+// HTTPS enforcement in production
+app.set('trust proxy', 1);
+app.use((req, res, next) => {
+  if (process.env.NODE_ENV === 'production' && !req.secure && req.get('x-forwarded-proto') !== 'https') {
+    return res.redirect(301, `https://${req.get('host')}${req.url}`);
+  }
+  next();
+});
+
+// Rate limiting for payment endpoints
+const paymentLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10, // 10 requests per window per IP
+  message: { error: 'Too many payment requests. Please try again later.' },
+  standardHeaders: true,
+  legacyHeaders: false
+});
+
+// General API rate limiter
+const apiLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 60, // 60 requests per minute
+  message: { error: 'Too many requests. Please slow down.' }
+});
+
+// Apply rate limiters
+app.use('/create-checkout-session', paymentLimiter);
+app.use('/create-portal-session', paymentLimiter);
+app.use('/stripe-webhook', apiLimiter);
+
 // Health check endpoint
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
@@ -487,19 +543,32 @@ app.post('/stripe-webhook',
   }
 );
 
-// Create Stripe checkout session
+// Create Stripe checkout session with input validation
 app.post('/create-checkout-session',
   express.json(),
+  [
+    body('userId').isString().isLength({ min: 1, max: 100 }).trim().escape(),
+    body('email').isEmail().normalizeEmail()
+  ],
   async (req, res) => {
     if (!stripe) {
       return res.status(503).json({ error: 'Payment processing not configured' });
     }
 
+    // Check validation results
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      console.error('[STRIPE] Validation errors:', errors.array());
+      return res.status(400).json({ error: 'Invalid input', details: errors.array() });
+    }
+
     try {
       const { userId, email } = req.body;
 
-      if (!userId || !email) {
-        return res.status(400).json({ error: 'Missing userId or email' });
+      // Verify STRIPE_PRICE_ID is configured
+      if (!process.env.STRIPE_PRICE_ID) {
+        console.error('[STRIPE] STRIPE_PRICE_ID not configured');
+        return res.status(500).json({ error: 'Payment configuration error' });
       }
 
       const session = await stripe.checkout.sessions.create({
@@ -523,20 +592,26 @@ app.post('/create-checkout-session',
   }
 );
 
-// Create Stripe customer portal session
+// Create Stripe customer portal session with input validation
 app.post('/create-portal-session',
   express.json(),
+  [
+    body('customerId').isString().isLength({ min: 1, max: 100 }).trim().escape()
+  ],
   async (req, res) => {
     if (!stripe) {
       return res.status(503).json({ error: 'Payment processing not configured' });
     }
 
+    // Check validation results
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      console.error('[STRIPE] Portal validation errors:', errors.array());
+      return res.status(400).json({ error: 'Invalid input', details: errors.array() });
+    }
+
     try {
       const { customerId } = req.body;
-
-      if (!customerId) {
-        return res.status(400).json({ error: 'Missing customerId' });
-      }
 
       const session = await stripe.billingPortal.sessions.create({
         customer: customerId,

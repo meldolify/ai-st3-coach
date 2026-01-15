@@ -54,7 +54,18 @@ const CONFIG = {
     'prompts/structured_interview/structured_research/easy_structured_research_1.txt',
     'prompts/structured_interview/structured_research/medium_structured_research_1.txt',
     'prompts/structured_interview/structured_research/hard_structured_research_1.txt'
-  ]
+  ],
+
+  // Speech Recognition Configuration
+  // Whisper is more accurate for medical terminology but requires backend call
+  // Web Speech API is free and instant but less accurate
+  SPEECH_RECOGNITION: {
+    WHISPER_PRIMARY: true,  // true = Whisper primary, Web Speech fallback
+                            // false = Web Speech primary, Whisper fallback (legacy)
+    SILENCE_THRESHOLD: 0.025,      // RMS threshold for voice activity detection
+    SILENCE_DURATION_MS: 1500,     // Stop recording after this much silence
+    MIN_RECORDING_MS: 500          // Minimum recording duration to send
+  }
 };
 
 // Log current configuration
