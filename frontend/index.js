@@ -837,11 +837,21 @@ class WhisperRecognitionManager {
     this.audioContext = null;
     this.analyser = null;
 
-    // VAD Configuration - tuned to reduce false positives
-    this.silenceThreshold = 0.025; // Raised from 0.01 to reduce noise triggers
-    this.silenceDuration = 1500; // Stop recording after 1.5s of silence
-    this.minRecordingDuration = 500; // Minimum recording length in ms
-    this.minAverageRMS = 0.02; // Minimum average energy to consider valid speech
+    // VAD Configuration - based on OpenAI Realtime API parameters
+    // Reference: https://platform.openai.com/docs/guides/realtime-vad
+    this.silenceThreshold = CONFIG.SPEECH_RECOGNITION?.SILENCE_THRESHOLD ?? 0.025;
+    this.interruptThreshold = CONFIG.SPEECH_RECOGNITION?.INTERRUPT_THRESHOLD ?? 0.08; // Higher threshold during AI speech
+    this.silenceDuration = CONFIG.SPEECH_RECOGNITION?.SILENCE_DURATION_MS ?? 700; // Faster turn detection
+    this.minRecordingDuration = CONFIG.SPEECH_RECOGNITION?.MIN_RECORDING_MS ?? 500;
+    this.minAverageRMS = 0.015; // Lowered to allow quieter speech
+
+    // Confirmation frame requirement - prevents false triggers from spikes
+    this.consecutiveVoiceFrames = 0;
+    this.requiredVoiceFrames = CONFIG.SPEECH_RECOGNITION?.REQUIRED_VOICE_FRAMES ?? 4; // ~67ms at 60fps
+
+    // Interrupt cooldown - prevents rapid re-interrupts
+    this.lastInterruptTime = 0;
+    this.interruptCooldownMs = 1500; // 1.5 second cooldown after interrupt
 
     // Continuous listening - track AI state but keep mic open
     this.aiIsSpeaking = false;
@@ -876,7 +886,15 @@ class WhisperRecognitionManager {
 
   async initialize() {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      // Enable browser's built-in echo cancellation and noise suppression
+      // Critical for preventing AI audio from triggering VAD
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          echoCancellation: true,    // Removes speaker audio from mic input
+          noiseSuppression: true,    // Reduces background noise
+          autoGainControl: true      // Normalizes mic levels
+        }
+      });
 
       // Set up audio analysis for voice activity detection
       this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -997,20 +1015,34 @@ class WhisperRecognitionManager {
       this.rmsReadings.push(rms);
     }
 
-    // Voice activity detection with automatic interrupt
-    if (rms > this.silenceThreshold) {
-      // Voice/sound detected
-      if (!this.isRecording) {
-        console.log(`[WHISPER VAD] Voice detected (RMS: ${rms.toFixed(4)}), AI speaking: ${this.aiIsSpeaking}`);
+    // Dynamic threshold: higher when AI is speaking to filter out speaker bleed
+    const activeThreshold = this.aiIsSpeaking
+      ? this.interruptThreshold  // 0.08 - higher threshold during AI speech
+      : this.silenceThreshold;   // 0.025 - normal listening threshold
 
-        // If AI is speaking, interrupt it first (user wants to speak)
+    // Voice activity detection with confirmation frames
+    if (rms > activeThreshold) {
+      // Sound above threshold - increment consecutive frame counter
+      this.consecutiveVoiceFrames++;
+
+      // Only trigger after required consecutive frames (prevents false positives from spikes)
+      if (this.consecutiveVoiceFrames >= this.requiredVoiceFrames && !this.isRecording) {
+        console.log(`[WHISPER VAD] Voice confirmed (RMS: ${rms.toFixed(4)}, frames: ${this.consecutiveVoiceFrames}), AI speaking: ${this.aiIsSpeaking}`);
+
+        // If AI is speaking, check cooldown before interrupting
         if (this.aiIsSpeaking && this.onInterruptRequest) {
-          console.log('[WHISPER VAD] User speaking during AI playback - requesting interrupt');
-          this.userInitiatedInterrupt = true;
-          this.onInterruptRequest(); // This will stop AI audio
+          const now = Date.now();
+          if (now - this.lastInterruptTime >= this.interruptCooldownMs) {
+            console.log('[WHISPER VAD] User speaking during AI playback - requesting interrupt');
+            this.userInitiatedInterrupt = true;
+            this.lastInterruptTime = now;
+            this.onInterruptRequest(); // This will stop AI audio
+          } else {
+            console.log(`[WHISPER VAD] Interrupt cooldown active (${this.interruptCooldownMs - (now - this.lastInterruptTime)}ms remaining)`);
+          }
         }
 
-        // Start recording regardless of AI state
+        // Start recording
         this.startRecording();
       }
 
@@ -1025,6 +1057,9 @@ class WhisperRecognitionManager {
           }
         }, this.silenceDuration);
       }
+    } else {
+      // Sound below threshold - reset consecutive frame counter
+      this.consecutiveVoiceFrames = 0;
     }
 
     // Continue monitoring
