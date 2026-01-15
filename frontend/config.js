@@ -62,10 +62,11 @@ const CONFIG = {
   SPEECH_RECOGNITION: {
     WHISPER_PRIMARY: true,         // true = Whisper primary, Web Speech fallback
     SILENCE_THRESHOLD: 0.025,      // RMS threshold for normal voice detection
-    INTERRUPT_THRESHOLD: 0.08,     // Higher threshold during AI speech (filters speaker bleed)
+    INTERRUPT_THRESHOLD: 0.15,     // Higher threshold during AI speech (filters speaker bleed at ~0.10 RMS)
     SILENCE_DURATION_MS: 700,      // Stop recording after silence (faster turn detection)
     MIN_RECORDING_MS: 500,         // Minimum recording duration to send
-    REQUIRED_VOICE_FRAMES: 4       // Consecutive frames above threshold before triggering (~67ms)
+    REQUIRED_VOICE_FRAMES: 4,      // Consecutive frames for normal listening (~67ms)
+    INTERRUPT_VOICE_FRAMES: 8      // More frames required during AI speech (~133ms) - stricter confirmation
   }
 };
 

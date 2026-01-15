@@ -848,6 +848,7 @@ class WhisperRecognitionManager {
     // Confirmation frame requirement - prevents false triggers from spikes
     this.consecutiveVoiceFrames = 0;
     this.requiredVoiceFrames = CONFIG.SPEECH_RECOGNITION?.REQUIRED_VOICE_FRAMES ?? 4; // ~67ms at 60fps
+    this.interruptVoiceFrames = CONFIG.SPEECH_RECOGNITION?.INTERRUPT_VOICE_FRAMES ?? 8; // ~133ms - stricter during AI speech
 
     // Interrupt cooldown - prevents rapid re-interrupts
     this.lastInterruptTime = 0;
@@ -1017,8 +1018,13 @@ class WhisperRecognitionManager {
 
     // Dynamic threshold: higher when AI is speaking to filter out speaker bleed
     const activeThreshold = this.aiIsSpeaking
-      ? this.interruptThreshold  // 0.08 - higher threshold during AI speech
+      ? this.interruptThreshold  // 0.15 - higher threshold during AI speech
       : this.silenceThreshold;   // 0.025 - normal listening threshold
+
+    // Dynamic frame requirement: more frames needed during AI speech (stricter confirmation)
+    const activeFrameRequirement = this.aiIsSpeaking
+      ? this.interruptVoiceFrames  // 8 frames (~133ms) during AI speech
+      : this.requiredVoiceFrames;  // 4 frames (~67ms) normally
 
     // Voice activity detection with confirmation frames
     if (rms > activeThreshold) {
@@ -1026,7 +1032,7 @@ class WhisperRecognitionManager {
       this.consecutiveVoiceFrames++;
 
       // Only trigger after required consecutive frames (prevents false positives from spikes)
-      if (this.consecutiveVoiceFrames >= this.requiredVoiceFrames && !this.isRecording) {
+      if (this.consecutiveVoiceFrames >= activeFrameRequirement && !this.isRecording) {
         console.log(`[WHISPER VAD] Voice confirmed (RMS: ${rms.toFixed(4)}, frames: ${this.consecutiveVoiceFrames}), AI speaking: ${this.aiIsSpeaking}`);
 
         // If AI is speaking, check cooldown before interrupting
