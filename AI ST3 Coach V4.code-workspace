@@ -1,0 +1,65 @@
+{
+  "folders": [
+    {
+      "path": "backend",
+      "name": "Backend (Node.js)"
+    },
+    {
+      "path": "frontend",
+      "name": "Frontend (Vanilla JS)"
+    },
+    {
+      "path": ".",
+      "name": "Root"
+    }
+  ],
+  "settings": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    },
+    "javascript.validate.enable": true,
+    "javascript.suggest.paths": true,
+    "files.exclude": {
+      "**/node_modules": true,
+      "**/.git": true,
+      "**/coverage": true
+    },
+    "search.exclude": {
+      "**/node_modules": true,
+      "**/coverage": true
+    },
+    "files.watcherExclude": {
+      "**/node_modules/**": true,
+      "**/coverage/**": true
+    },
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "files.eol": "\n",
+    "files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true,
+    "[javascript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[json]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[markdown]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "files.trimTrailingWhitespace": false
+    }
+  },
+  "extensions": {
+    "recommendations": [
+      "esbenp.prettier-vscode",
+      "dbaeumer.vscode-eslint",
+      "orta.vscode-jest",
+      "msjsdiag.debugger-for-chrome",
+      "ms-vscode.vscode-node-azure-pack",
+      "christian-kohler.path-intellisense",
+      "eamodio.gitlens",
+      "gruntfuggly.todo-tree"
+    ]
+  }
+}
