@@ -324,12 +324,280 @@ const audioBuffer = await googleTTS(responseText, 'en-GB-Neural2-D');
 
 ---
 
+---
+
+## Development Setup
+
+### Prerequisites for Development
+- Node.js v18+
+- VS Code (recommended IDE)
+- Git
+
+### Initial Setup
+
+1. **Clone and open workspace:**
+```bash
+# Open the workspace file in VS Code
+code "AI ST3 Coach V4.code-workspace"
+```
+
+2. **Install dependencies:**
+```bash
+cd backend
+npm install
+```
+
+3. **Install recommended VS Code extensions:**
+- Prettier - Code formatter
+- ESLint - Linting
+- Jest - Test runner
+- Debugger for Chrome - Frontend debugging
+- GitLens - Git integration
+
+### Development Workflow
+
+#### Running Development Server
+```bash
+# Terminal 1: Backend with auto-restart
+cd backend
+npm run dev
+
+# Terminal 2: Frontend dev server
+cd frontend
+npx serve -s . -l 5500
+
+# Terminal 3 (optional): Watch tests
+cd backend
+npm run test:watch
+```
+
+#### Debugging in VS Code
+
+**Backend Debugging:**
+1. Press `F5` or go to Run & Debug
+2. Select "Backend: Debug WebSocket Server"
+3. Set breakpoints in `server.js`
+4. Connect from frontend to hit breakpoints
+
+**Frontend Debugging:**
+1. Start backend first
+2. Press `F5` and select "Frontend: Launch Chrome with Debugger"
+3. Chrome opens with debugging enabled
+4. Set breakpoints in browser DevTools or VS Code
+
+**Full Stack Debugging:**
+- Select "Full Stack: Backend + Frontend" compound configuration
+- Debugs both simultaneously
+
+#### Running Tests
+
+```bash
+cd backend
+
+# Run all tests with coverage
+npm test
+
+# Watch mode (auto-run on file changes)
+npm run test:watch
+
+# Run specific test file
+npx jest __tests__/scenario-loader.test.js
+
+# Debug tests in VS Code
+# Press F5 → Select "Backend: Debug Jest Tests"
+```
+
+**Test Coverage:**
+- 51 unit tests covering:
+  - Scenario loading (6 tests)
+  - WebSocket server (5 tests)
+  - VAD logic (13 tests)
+  - GPT integration (12 tests)
+  - TTS integration (15 tests)
+
+**Coverage Thresholds:**
+- Branches: 70%
+- Functions: 70%
+- Lines: 70%
+- Statements: 70%
+
+#### Code Quality
+
+```bash
+cd backend
+
+# Check linting errors
+npm run lint
+
+# Auto-fix linting issues
+npm run lint:fix
+
+# Format code with Prettier
+npm run format
+```
+
+#### Git Workflow
+
+```bash
+# Check current changes
+git status
+
+# Run tests before committing
+npm test
+
+# Stage and commit
+git add .
+git commit -m "Description of changes"
+
+# View development log
+cat DEVELOPMENT_LOG.md
+```
+
+### Project Structure
+
+```
+AI ST3 Coach V4/
+├── .vscode/                       # VS Code configuration
+│   ├── launch.json               # Debugging configurations
+│   ├── tasks.json                # Build/dev tasks
+│   ├── settings.json             # Workspace settings
+│   └── extensions.json           # Recommended extensions
+├── backend/
+│   ├── server.js                 # Main server (637 lines)
+│   ├── package.json              # Dependencies + scripts
+│   ├── jest.config.js            # Jest configuration
+│   ├── .eslintrc.json            # ESLint rules
+│   ├── .prettierrc.json          # Prettier config
+│   ├── __tests__/                # Unit tests (51 tests)
+│   │   ├── scenario-loader.test.js
+│   │   ├── server.test.js
+│   │   ├── vad-logic.test.js
+│   │   ├── gpt-integration.test.js
+│   │   └── tts-integration.test.js
+│   └── prompts/                  # 231 scenario files
+├── frontend/
+│   ├── index.html                # UI (4,354 lines)
+│   ├── index.js                  # Client logic (2,684 lines)
+│   ├── config.js                 # Environment config
+│   └── images/                   # Clinical images
+├── AI ST3 Coach V4.code-workspace # Multi-root workspace
+├── DEVELOPMENT_LOG.md            # Change tracking
+└── README.md                     # This file
+```
+
+### NPM Scripts Reference
+
+| Script | Description |
+|--------|-------------|
+| `npm start` | Start production server |
+| `npm run dev` | Start with nodemon (auto-restart) |
+| `npm test` | Run tests with coverage |
+| `npm run test:watch` | Run tests in watch mode |
+| `npm run test:ci` | Run tests for CI environment |
+| `npm run lint` | Check code for linting errors |
+| `npm run lint:fix` | Auto-fix linting errors |
+| `npm run format` | Format code with Prettier |
+
+### Environment Variables
+
+**Development (`.env`):**
+```bash
+OPENAI_API_KEY=sk-your-dev-key
+GOOGLE_APPLICATION_CREDENTIALS=./google-tts-key.json
+PORT=8080
+HTTP_PORT=3000
+NODE_ENV=development
+```
+
+**Testing:**
+- Tests use mocked API responses
+- No real API calls during testing
+- Test environment variables set in `jest.config.js`
+
+### Troubleshooting Development Issues
+
+**"Cannot find module 'jest'":**
+```bash
+cd backend
+npm install
+```
+
+**ESLint not working:**
+1. Install ESLint extension in VS Code
+2. Reload VS Code window
+3. Check `.eslintrc.json` exists
+
+**Debugger not attaching:**
+1. Kill existing Node processes
+2. Restart VS Code
+3. Try "Backend: Debug with Nodemon" configuration
+
+**Tests failing:**
+1. Check all dependencies installed
+2. Run `npm test` to see specific errors
+3. Check `DEVELOPMENT_LOG.md` for known issues
+
+### Development Best Practices
+
+1. **Always run tests before committing:**
+   ```bash
+   npm test
+   ```
+
+2. **Use the development log:**
+   - Update `DEVELOPMENT_LOG.md` after significant changes
+   - Include: what changed, why, and any gotchas
+
+3. **Debug instead of console.log:**
+   - Set breakpoints in VS Code
+   - Inspect variables in debugger
+   - Step through code line-by-line
+
+4. **Write tests for new features:**
+   - Add test file in `__tests__/`
+   - Maintain 70% coverage threshold
+   - Run `npm run test:watch` while developing
+
+5. **Use consistent code style:**
+   - Prettier formats on save
+   - ESLint auto-fixes on save
+   - Follow existing patterns
+
+### Git Tags and Rollback
+
+**Backup point before dev environment setup:**
+```bash
+# View backup tag
+git tag -l
+
+# Rollback if needed
+git checkout pre-dev-environment-setup
+
+# Return to main
+git checkout main
+```
+
+### Development Time Estimates
+
+| Task | Time |
+|------|------|
+| Fix linting error | 5-10 min |
+| Add unit test | 15-30 min |
+| Debug WebSocket issue | 30-60 min |
+| Add new scenario | 20-40 min |
+| Update prompt file | 10-20 min |
+
+---
+
 ## Support
 
+- Development Log: See `DEVELOPMENT_LOG.md`
 - V3 comparison: See `../AI ST3 coach v3/PROJECT_SUMMARY.md`
 - Google TTS docs: https://cloud.google.com/text-to-speech
 - OpenAI API: https://platform.openai.com/docs
 - Web Speech API: https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API
+- Jest docs: https://jestjs.io/
+- ESLint rules: https://eslint.org/docs/rules/
 
 ---
 

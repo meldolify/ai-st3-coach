@@ -1,0 +1,7 @@
+node_modules
+coverage
+.env
+.env.*
+*.log
+prompts/**/*.txt
+google-tts-key.json
