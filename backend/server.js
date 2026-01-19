@@ -90,19 +90,23 @@ function loadScenarioPrompt(scenarioFile) {
   } catch (error) {
     console.error('[SCENARIO] Error loading prompt: ' + error.message);
     // Return a basic template as last resort
-    return `You are a Plastic Surgery ST3 interview examiner. Conduct a professional interview.`;
+    return 'You are a Plastic Surgery ST3 interview examiner. Conduct a professional interview.';
   }
 }
 
 // Noise filter for Whisper transcriptions
 // Returns true if the transcript appears to be noise rather than speech
 function isNoiseTranscript(text) {
-  if (!text || typeof text !== 'string') return true;
+  if (!text || typeof text !== 'string') {
+    return true;
+  }
 
   const trimmed = text.trim();
 
   // Empty or very short
-  if (trimmed.length < 2) return true;
+  if (trimmed.length < 2) {
+    return true;
+  }
 
   // Common noise patterns from Whisper
   const noisePatterns = [
@@ -119,7 +123,7 @@ function isNoiseTranscript(text) {
     /^(yes|yeah|no|nope)\.?$/i,       // Single word responses (often noise)
     /^thank you\.?$/i,                // Common noise pickup
     /^that's fine\.?$/i,              // Common echo from AI
-    /^you$/i,                         // Just "you"
+    /^you$/i                         // Just "you"
   ];
 
   for (const pattern of noisePatterns) {
@@ -179,7 +183,7 @@ async function googleTTS(text, voiceName) {
   const gender = femaleVoices.some(v => voiceName.includes(v)) ? 'FEMALE' : 'MALE';
 
   // Use default speaking rate for all voices
-  let speakingRate = 1.0;
+  const speakingRate = 1.0;
 
   try {
     const request = {
@@ -407,12 +411,12 @@ app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "https://cdn.jsdelivr.net", "https://js.stripe.com"],
-      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
-      fontSrc: ["'self'", "https://fonts.gstatic.com"],
-      connectSrc: ["'self'", "https://*.supabase.co", "wss://*.onrender.com", "https://api.stripe.com"],
-      frameSrc: ["https://js.stripe.com", "https://hooks.stripe.com"],
-      imgSrc: ["'self'", "data:", "https:"]
+      scriptSrc: ["'self'", 'https://cdn.jsdelivr.net', 'https://js.stripe.com'],
+      styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
+      fontSrc: ["'self'", 'https://fonts.gstatic.com'],
+      connectSrc: ["'self'", 'https://*.supabase.co', 'wss://*.onrender.com', 'https://api.stripe.com'],
+      frameSrc: ['https://js.stripe.com', 'https://hooks.stripe.com'],
+      imgSrc: ["'self'", 'data:', 'https:']
     }
   },
   hsts: {
