@@ -1,0 +1,23 @@
+{
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "jest.autoRun": "off",
+  "jest.showCoverageOnLoad": false,
+  "eslint.workingDirectories": [
+    {"directory": "backend", "changeProcessCWD": true}
+  ],
+  "eslint.validate": [
+    "javascript"
+  ],
+  "files.associations": {
+    "*.txt": "plaintext"
+  },
+  "search.useIgnoreFiles": true,
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/coverage": true,
+    "**/.git": true
+  }
+}

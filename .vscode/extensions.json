@@ -1,0 +1,13 @@
+{
+  "recommendations": [
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "orta.vscode-jest",
+    "msjsdiag.debugger-for-chrome",
+    "christian-kohler.path-intellisense",
+    "eamodio.gitlens",
+    "gruntfuggly.todo-tree",
+    "ms-vscode.vscode-node-azure-pack"
+  ],
+  "unwantedRecommendations": []
+}

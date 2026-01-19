@@ -25,12 +25,12 @@ service-account*.json
 Thumbs.db
 desktop.ini
 
-# IDE files
-.vscode/
+# IDE files (keep .vscode/ for shared team configs)
 .idea/
 *.swp
 *.swo
 *~
+.vscode/chrome-debug-profile/
 
 # Logs
 logs/
@@ -48,6 +48,10 @@ build/
 # Testing
 coverage/
 .nyc_output/
+*.test.js.snap
+backend/__tests__/temp_*
+e2e-tests/screenshots/
+e2e-tests/videos/
 
 # Claude Code cache
 .claude/
