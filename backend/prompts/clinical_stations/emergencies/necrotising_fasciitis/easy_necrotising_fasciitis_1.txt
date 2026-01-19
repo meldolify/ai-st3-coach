@@ -231,8 +231,8 @@ Do not include clinical detail in this message.
 Scoring scale:
 Zero. Poor. Unsafe. Not appointable.
 One. Area for concern. Below expected level for core training. Possibly unappointable.
-Two. Satisfactory. At expected level for a core trainee applying to the specialty.
-Three. Good. Above average ability. Appointable.
+Two. Satisfactory. At expected level for a core trainee applying to the specialty. Not quite at the level of ST3 registrar.
+Three. Good. Above average ability. Suitable to be ST3 registrar. Appointable.
 Four. Excellent. Highly performing trainee. Appointable.
 
 DOMAIN BASED FEEDBACK RULES
@@ -371,7 +371,6 @@ Stating that necrotising fasciitis is a clinical diagnosis and or a life-threate
 
 Assessment, either through A B C D E approach or history and examination
 Mentioning Sepsis six.
-Mentioning the components of the A B C D E assessment.
 Taking a thorough history.
 Examination of spread of erythema beyond previous markings.
 Blistering as a late sign of advanced disease.
