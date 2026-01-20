@@ -60,14 +60,8 @@ async function checkAuthState() {
       currentUser = session.user;
       await loadUserProfile();
       await loadSubscription();
-
-      // Check user's start page preference
-      const startPage = localStorage.getItem('startPagePreference') || 'dashboard';
-      if (startPage === 'landing') {
-        showLandingPage();
-      } else {
-        showProtectedContent();
-      }
+      // Always show landing page for logged-in users
+      showLandingPage();
     } else {
       showLandingPage();
     }
@@ -273,11 +267,24 @@ function closeAuthModal() {
 
 function showProtectedContent() {
   hideAllPages();
-  const specialtySelection = document.getElementById('specialtySelection');
-  specialtySelection.classList.remove('hidden');
-  specialtySelection.style.display = 'block';
   document.getElementById('appHeader').style.display = 'flex';
   document.body.classList.add('has-header');
+
+  // Check if user has a default specialty set
+  const defaultSpecialty = localStorage.getItem('defaultSpecialty');
+  if (defaultSpecialty) {
+    // Skip specialty selection - go directly to difficulty selection
+    selectedSpecialty = defaultSpecialty;
+    const difficultySelection = document.getElementById('difficultySelection');
+    difficultySelection.classList.remove('hidden');
+    difficultySelection.style.display = 'block';
+    console.log('[AUTH] Default specialty set, skipping to difficulty selection:', defaultSpecialty);
+  } else {
+    // Show specialty selection as normal
+    const specialtySelection = document.getElementById('specialtySelection');
+    specialtySelection.classList.remove('hidden');
+    specialtySelection.style.display = 'block';
+  }
 }
 
 // Allow users to browse without logging in (all scenarios will be locked)
@@ -333,10 +340,10 @@ async function populateProfilePage() {
   document.getElementById('profileSpecialty').value = userProfile?.specialty || '';
   document.getElementById('profileTrainingLevel').value = userProfile?.training_level || '';
 
-  // Start page preference (from localStorage)
-  const startPageSelect = document.getElementById('profileStartPage');
-  if (startPageSelect) {
-    startPageSelect.value = localStorage.getItem('startPagePreference') || 'dashboard';
+  // Default specialty preference (from localStorage)
+  const defaultSpecialtySelect = document.getElementById('profileDefaultSpecialty');
+  if (defaultSpecialtySelect) {
+    defaultSpecialtySelect.value = localStorage.getItem('defaultSpecialty') || '';
   }
 
   // Subscription
@@ -570,14 +577,14 @@ async function handleLogout() {
 // ============================================================================
 
 async function saveProfile() {
-  // Save start page preference to localStorage (works even without Supabase)
-  const startPageSelect = document.getElementById('profileStartPage');
-  if (startPageSelect) {
-    localStorage.setItem('startPagePreference', startPageSelect.value);
+  // Save default specialty preference to localStorage (works even without Supabase)
+  const defaultSpecialtySelect = document.getElementById('profileDefaultSpecialty');
+  if (defaultSpecialtySelect) {
+    localStorage.setItem('defaultSpecialty', defaultSpecialtySelect.value);
   }
 
   if (!supabaseClient || !currentUser) {
-    // Even without Supabase, we saved the start page preference
+    // Even without Supabase, we saved the default specialty preference
     alert('Preferences saved!');
     return;
   }
