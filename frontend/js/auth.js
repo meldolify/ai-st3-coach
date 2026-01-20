@@ -163,17 +163,10 @@ function showLandingPage() {
   updateLandingPageForAuthState();
 }
 
-// Navigate back to landing/dashboard (from app header)
-// If user is logged in, go to dashboard (specialtySelection)
-// If user is guest/logged out, go to landing page
+// Navigate back to landing page (from app header logo)
+// Always goes to landing page regardless of auth state
 function navigateToLanding() {
-  if (currentUser) {
-    // Logged in user - go to dashboard
-    showProtectedContent();
-  } else {
-    // Guest or logged out - go to landing page
-    showLandingPage();
-  }
+  showLandingPage();
 }
 
 // Update landing page content based on authentication and subscription state
