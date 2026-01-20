@@ -66,7 +66,13 @@ const CONFIG = {
     SILENCE_DURATION_MS: 700,      // Stop recording after silence (faster turn detection)
     MIN_RECORDING_MS: 500,         // Minimum recording duration to send
     REQUIRED_VOICE_FRAMES: 4,      // Consecutive frames for normal listening (~67ms)
-    INTERRUPT_VOICE_FRAMES: 8      // More frames required during AI speech (~133ms) - stricter confirmation
+    INTERRUPT_VOICE_FRAMES: 8,     // More frames required during AI speech (~133ms) - stricter confirmation
+
+    // Enhanced VAD settings (V4.1)
+    USE_SPECTRAL_ANALYSIS: true,   // Enable frequency-based voice detection
+    NOISE_FLOOR_MULTIPLIER: 2.5,   // Threshold = noiseFloor * multiplier (adaptive)
+    MIN_VOICE_CENTROID: 200,       // Minimum spectral centroid for voice (Hz)
+    MAX_VOICE_CENTROID: 2000       // Maximum spectral centroid for voice (Hz)
   }
 };
 
