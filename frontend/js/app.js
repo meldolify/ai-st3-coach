@@ -203,21 +203,16 @@ window.addEventListener('DOMContentLoaded', async () => {
   // Initialize scroll animations (Squarespace-style)
   initScrollAnimations();
 
-  // Safety fallback - if nothing shows after 3 seconds, show landing page
-  const safetyTimeout = setTimeout(() => {
-    console.log('[INIT] Safety timeout triggered - forcing landing page');
-    showLandingPage();
-  }, 3000);
-
   try {
     // Initialize Supabase and check auth state
+    // Loading overlay is shown by default - will be hidden after auth resolves
     initSupabase();
     await checkAuthState();
-    clearTimeout(safetyTimeout);
+    // Note: hideLoadingOverlay() is called inside checkAuthState() after determining destination
   } catch (error) {
     console.error('[INIT] Critical error during initialization:', error);
-    clearTimeout(safetyTimeout);
     showLandingPage();
+    hideLoadingOverlay();
   }
 
   // Listen for auth state changes (for social login redirects)

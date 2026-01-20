@@ -32,11 +32,24 @@ function initSupabase() {
 // AUTH FUNCTIONS
 // ============================================================================
 
+// Hide the loading overlay with fade transition
+function hideLoadingOverlay() {
+  const overlay = document.getElementById('loadingOverlay');
+  if (overlay) {
+    overlay.classList.add('hidden');
+    // Remove from DOM after transition completes
+    setTimeout(() => {
+      overlay.style.display = 'none';
+    }, 300);
+  }
+}
+
 async function checkAuthState() {
   if (!supabaseClient) {
     // No Supabase configured - show landing page so users can sign up
     console.log('[AUTH] No Supabase configured - showing landing page');
     showLandingPage();
+    hideLoadingOverlay();
     return;
   }
 
@@ -47,7 +60,14 @@ async function checkAuthState() {
       currentUser = session.user;
       await loadUserProfile();
       await loadSubscription();
-      showProtectedContent();
+
+      // Check user's start page preference
+      const startPage = localStorage.getItem('startPagePreference') || 'dashboard';
+      if (startPage === 'landing') {
+        showLandingPage();
+      } else {
+        showProtectedContent();
+      }
     } else {
       showLandingPage();
     }
@@ -56,6 +76,9 @@ async function checkAuthState() {
     // Show landing page on error so user can try to login
     showLandingPage();
   }
+
+  // Always hide loading overlay after auth check completes
+  hideLoadingOverlay();
 }
 
 async function loadUserProfile() {
@@ -142,30 +165,80 @@ function showLandingPage() {
   document.getElementById('appHeader').style.display = 'none';
   document.body.classList.remove('has-header');
 
-  // Update landing page nav based on login status
-  updateLandingNavForAuthState();
+  // Update landing page content based on auth state
+  updateLandingPageForAuthState();
 }
 
-// Navigate back to landing page (from app header)
+// Navigate back to landing/dashboard (from app header)
+// If user is logged in, go to dashboard (specialtySelection)
+// If user is guest/logged out, go to landing page
 function navigateToLanding() {
-  showLandingPage();
+  if (currentUser) {
+    // Logged in user - go to dashboard
+    showProtectedContent();
+  } else {
+    // Guest or logged out - go to landing page
+    showLandingPage();
+  }
 }
 
-// Update landing page navigation based on authentication state
-function updateLandingNavForAuthState() {
+// Update landing page content based on authentication and subscription state
+// Three states: Guest (not logged in), Free (logged in, no subscription), Subscribed (active subscription)
+function updateLandingPageForAuthState() {
+  const isLoggedIn = !!currentUser;
+  const isSubscribed = userSubscription?.status === 'active';
+
+  // === NAVIGATION ===
   const navGuest = document.getElementById('navLinksGuest');
   const navUser = document.getElementById('navLinksUser');
+  const navPricingUser = document.getElementById('navPricingUser');
 
-  if (!navGuest || !navUser) return;
+  if (navGuest && navUser) {
+    navGuest.style.display = isLoggedIn ? 'none' : 'flex';
+    navUser.style.display = isLoggedIn ? 'flex' : 'none';
+  }
 
-  if (currentUser) {
-    // User is logged in - show profile/logout options
-    navGuest.style.display = 'none';
-    navUser.style.display = 'flex';
-  } else {
-    // User is not logged in - show login/signup options
-    navGuest.style.display = 'flex';
-    navUser.style.display = 'none';
+  // Hide pricing link in nav for subscribed users
+  if (navPricingUser) {
+    navPricingUser.style.display = isSubscribed ? 'none' : 'inline';
+  }
+
+  // === HERO CTA BUTTONS ===
+  const primaryBtn = document.getElementById('heroPrimaryBtn');
+  const secondaryBtn = document.getElementById('heroSecondaryBtn');
+
+  if (primaryBtn && secondaryBtn) {
+    if (!isLoggedIn) {
+      // Guest: Show signup and explore options
+      primaryBtn.textContent = 'Login to Practise Free Sample Scenarios';
+      primaryBtn.onclick = () => showAuthPage('signup');
+      secondaryBtn.textContent = 'Explore the website without login';
+      secondaryBtn.onclick = browseAsGuest;
+      secondaryBtn.style.display = 'inline-flex';
+    } else if (isSubscribed) {
+      // Subscribed: Single dashboard button, no pricing CTA
+      primaryBtn.textContent = 'Continue to Dashboard';
+      primaryBtn.onclick = showProtectedContent;
+      secondaryBtn.style.display = 'none';
+    } else {
+      // Free tier: Dashboard button + pricing link
+      primaryBtn.textContent = 'Continue to Dashboard';
+      primaryBtn.onclick = showProtectedContent;
+      secondaryBtn.textContent = 'View Pricing';
+      secondaryBtn.onclick = () => {
+        const pricingSection = document.getElementById('pricingSection');
+        if (pricingSection) {
+          pricingSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      };
+      secondaryBtn.style.display = 'inline-flex';
+    }
+  }
+
+  // === PRICING SECTION ===
+  const pricingSection = document.getElementById('pricingSection');
+  if (pricingSection) {
+    pricingSection.style.display = isSubscribed ? 'none' : 'block';
   }
 }
 
@@ -259,6 +332,12 @@ async function populateProfilePage() {
   document.getElementById('profileName').value = userProfile?.full_name || '';
   document.getElementById('profileSpecialty').value = userProfile?.specialty || '';
   document.getElementById('profileTrainingLevel').value = userProfile?.training_level || '';
+
+  // Start page preference (from localStorage)
+  const startPageSelect = document.getElementById('profileStartPage');
+  if (startPageSelect) {
+    startPageSelect.value = localStorage.getItem('startPagePreference') || 'dashboard';
+  }
 
   // Subscription
   const isPremium = userSubscription?.status === 'active';
@@ -491,8 +570,15 @@ async function handleLogout() {
 // ============================================================================
 
 async function saveProfile() {
+  // Save start page preference to localStorage (works even without Supabase)
+  const startPageSelect = document.getElementById('profileStartPage');
+  if (startPageSelect) {
+    localStorage.setItem('startPagePreference', startPageSelect.value);
+  }
+
   if (!supabaseClient || !currentUser) {
-    alert('Unable to save. Please try again.');
+    // Even without Supabase, we saved the start page preference
+    alert('Preferences saved!');
     return;
   }
 
