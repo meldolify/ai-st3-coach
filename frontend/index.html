@@ -29,6 +29,11 @@
     </div>
   </noscript>
 
+  <!-- Loading Overlay (shown by default, hidden after auth check) -->
+  <div id="loadingOverlay" class="loading-overlay">
+    <div class="loading-spinner"></div>
+  </div>
+
   <!-- App Header (shown on protected pages) -->
   <header id="appHeader" class="app-header" style="display: none;">
     <a href="#" class="header-logo-link" onclick="navigateToLanding(); return false;">
@@ -58,13 +63,13 @@
         <span class="nav-logo-text">Interview Trainer</span>
       </a>
       <div class="nav-links" id="navLinksGuest">
-        <a href="#pricing" class="nav-link">Pricing</a>
-        <button class="nav-link" onclick="browseAsGuest()">Explore</button>
+        <a href="#pricingSection" class="nav-link">Pricing</a>
+        <button class="nav-link" onclick="browseAsGuest()">Explore without login</button>
         <button class="nav-link" onclick="showAuthPage('login')">Log In</button>
         <button class="nav-link" onclick="showAuthPage('signup')">Sign Up</button>
       </div>
       <div class="nav-links" id="navLinksUser" style="display: none;">
-        <a href="#pricing" class="nav-link">Pricing</a>
+        <a href="#pricingSection" class="nav-link" id="navPricingUser">Pricing</a>
         <button class="nav-link" onclick="browseAsGuest()">Explore</button>
         <button class="nav-link" onclick="showProfilePage()">Profile</button>
         <button class="nav-link" onclick="handleLogout()">Log Out</button>
@@ -88,10 +93,6 @@
           Practice anytime with AI-powered voice simulation designed by current trainees.
           Get real-time feedback that mirrors actual interview conditions.
         </p>
-        <div class="hero-buttons">
-          <button class="btn-primary" onclick="showAuthPage('signup')">Start Practicing Free</button>
-          <button class="btn-secondary" onclick="browseAsGuest()">Explore Scenarios</button>
-        </div>
       </section>
 
       <!-- Features Section -->
@@ -117,8 +118,16 @@
         </div>
       </section>
 
+      <!-- Call to Action Buttons (moved below Features) -->
+      <section class="landing-cta">
+        <div class="hero-buttons">
+          <button class="btn-primary" id="heroPrimaryBtn" onclick="showAuthPage('signup')">Login to Practise Free Sample Scenarios</button>
+          <button class="btn-secondary" id="heroSecondaryBtn" onclick="browseAsGuest()">Explore the website without login</button>
+        </div>
+      </section>
+
       <!-- Pricing Section -->
-      <section class="landing-pricing" id="pricing">
+      <section class="landing-pricing" id="pricingSection">
         <p class="section-label">Simple Pricing</p>
         <h2 class="section-title">Choose your plan</h2>
         <div class="pricing-grid">
@@ -151,7 +160,7 @@
           <div class="footer-column">
             <h4>Product</h4>
             <a href="#" onclick="browseAsGuest(); return false;">Scenarios</a>
-            <a href="#pricing">Pricing</a>
+            <a href="#pricingSection">Pricing</a>
             <a href="#" onclick="showAuthPage('signup'); return false;">Sign Up</a>
           </div>
           <div class="footer-column">
@@ -286,6 +295,13 @@
                 <option value="st7">ST7</option>
                 <option value="st8">ST8</option>
                 <option value="consultant">Consultant</option>
+              </select>
+            </div>
+            <div class="profile-field">
+              <label for="profileStartPage">Start Page</label>
+              <select id="profileStartPage" title="Choose your start page preference">
+                <option value="dashboard">Dashboard (Specialty Selection)</option>
+                <option value="landing">Landing Page</option>
               </select>
             </div>
           </div>
