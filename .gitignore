@@ -31,6 +31,7 @@ desktop.ini
 *.swo
 *~
 .vscode/chrome-debug-profile/
+.vscode/edge-debug-profile/
 
 # Logs
 logs/

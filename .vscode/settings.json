@@ -1,4 +1,5 @@
 {
+  "vscode-edge-devtools.headless": false,
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
@@ -6,7 +7,10 @@
   "jest.autoRun": "off",
   "jest.showCoverageOnLoad": false,
   "eslint.workingDirectories": [
-    {"directory": "backend", "changeProcessCWD": true}
+    {
+      "directory": "backend",
+      "changeProcessCWD": true
+    }
   ],
   "eslint.validate": [
     "javascript"

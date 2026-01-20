@@ -9,9 +9,14 @@
       "cwd": "${workspaceFolder}/backend",
       "envFile": "${workspaceFolder}/backend/.env",
       "console": "integratedTerminal",
-      "skipFiles": ["<node_internals>/**", "**/node_modules/**"],
+      "skipFiles": [
+        "<node_internals>/**",
+        "**/node_modules/**"
+      ],
       "restart": true,
-      "runtimeArgs": ["--inspect"],
+      "runtimeArgs": [
+        "--inspect"
+      ],
       "outputCapture": "std",
       "internalConsoleOptions": "neverOpen"
     },
@@ -26,13 +31,15 @@
       "restart": true,
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
-      "skipFiles": ["<node_internals>/**"]
+      "skipFiles": [
+        "<node_internals>/**"
+      ]
     },
     {
       "name": "Frontend: Launch Chrome with Debugger",
       "type": "chrome",
       "request": "launch",
-      "url": "http://localhost:5500",
+      "url": "http://localhost:3000",
       "webRoot": "${workspaceFolder}/frontend",
       "sourceMaps": true,
       "userDataDir": "${workspaceFolder}/.vscode/chrome-debug-profile",
@@ -46,11 +53,14 @@
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/backend/node_modules/.bin/jest",
-      "args": ["--runInBand", "--no-cache", "--watchAll=false"],
+      "args": [
+        "--runInBand",
+        "--no-cache",
+        "--watchAll=false"
+      ],
       "cwd": "${workspaceFolder}/backend",
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
-      "disableOptimisticBPs": true,
       "windows": {
         "program": "${workspaceFolder}/backend/node_modules/jest/bin/jest"
       }
@@ -60,20 +70,56 @@
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/backend/node_modules/.bin/jest",
-      "args": ["--runInBand", "--no-cache", "--watchAll=false"],
+      "args": [
+        "--runInBand",
+        "--no-cache",
+        "--watchAll=false"
+      ],
       "cwd": "${workspaceFolder}/backend",
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
-      "disableOptimisticBPs": true,
       "windows": {
         "program": "${workspaceFolder}/backend/node_modules/jest/bin/jest"
       }
     }
+    {
+      "name": "Frontend: Launch Embedded Edge (Testing)",
+      "type": "pwa-msedge",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      "presentation": {
+        "hidden": false,
+        "group": "remote",
+        "order": 1
+      },
+      "webRoot": "${workspaceFolder}/frontend",
+      "sourceMaps": true,
+      "userDataDir": "${workspaceFolder}/.vscode/edge-debug-profile",
+      "runtimeArgs": [
+        "--remote-debugging-port=9222"
+      ]
+    }
   ],
   "compounds": [
     {
+      "name": "Full Stack: Backend + Embedded Edge",
+      "configurations": [
+        "Backend: Debug WebSocket Server",
+        "Frontend: Launch Embedded Edge (Testing)"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "fullstack",
+        "order": 1
+      },
+      "stopAll": true
+    },
+    {
       "name": "Full Stack: Backend + Frontend",
-      "configurations": ["Backend: Debug WebSocket Server", "Frontend: Launch Chrome with Debugger"],
+      "configurations": [
+        "Backend: Debug WebSocket Server",
+        "Frontend: Launch Chrome with Debugger"
+      ],
       "presentation": {
         "hidden": false,
         "group": "fullstack",

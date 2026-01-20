@@ -7,7 +7,9 @@
     "christian-kohler.path-intellisense",
     "eamodio.gitlens",
     "gruntfuggly.todo-tree",
-    "ms-vscode.vscode-node-azure-pack"
+    "ms-vscode.vscode-node-azure-pack",
+    "ms-edgedevtools.vscode-edge-devtools",
+    "ms-vscode.live-server"
   ],
   "unwantedRecommendations": []
 }
