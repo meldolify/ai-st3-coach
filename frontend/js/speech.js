@@ -170,7 +170,10 @@ class WhisperRecognitionManager {
     this.maxVoiceCentroid = 2000;        // Max centroid for voice (Hz)
 
     // Combined detection confidence
-    this.useSpectralAnalysis = CONFIG.SPEECH_RECOGNITION?.USE_SPECTRAL_ANALYSIS ?? true;
+    // DISABLED by default: Spectral analysis was blocking valid speech because
+    // real microphones produce centroids outside the 200-2000Hz range when speaking loudly.
+    // RMS-based detection alone is reliable. Enable via config if environment-specific tuning is done.
+    this.useSpectralAnalysis = CONFIG.SPEECH_RECOGNITION?.USE_SPECTRAL_ANALYSIS ?? false;
   }
 
   // Called externally to update AI speaking state (for continuous listening)
