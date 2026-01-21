@@ -462,7 +462,7 @@ class WhisperRecognitionManager {
 
       // Use averaged centroid for stability
       const avgCentroid = this.spectralCentroidHistory.reduce((a, b) => a + b, 0) /
-                          this.spectralCentroidHistory.length;
+        this.spectralCentroidHistory.length;
 
       isVoiceLikeSpectrum = this.isLikelyVoice(avgCentroid, voiceBandRatio);
     }
@@ -487,13 +487,22 @@ class WhisperRecognitionManager {
     const isAboveThreshold = rms > activeThreshold;
     const passesSpectralCheck = !this.useSpectralAnalysis || isVoiceLikeSpectrum;
 
+    // DIAGNOSTIC LOGGING: Log every 30 frames (~500ms at 60fps) to diagnose VAD issues
+    this._diagFrameCount = (this._diagFrameCount || 0) + 1;
+    if (this._diagFrameCount % 30 === 0) {
+      console.log(`[VAD DIAG] RMS: ${rms.toFixed(4)} | Thresh: ${activeThreshold.toFixed(4)} | ` +
+        `Above: ${isAboveThreshold} | Spectral: ${this.useSpectralAnalysis} | ` +
+        `Centroid: ${spectralCentroid.toFixed(0)}Hz | VoiceBand: ${(voiceBandRatio * 100).toFixed(0)}% | ` +
+        `PassesSpectral: ${passesSpectralCheck} | ConsecFrames: ${this.consecutiveVoiceFrames}/${activeFrameRequirement}`);
+    }
+
     if (isAboveThreshold && passesSpectralCheck) {
       // Sound above threshold with voice-like spectrum - increment consecutive frame counter
       this.consecutiveVoiceFrames++;
 
       // Only trigger after required consecutive frames (prevents false positives from spikes)
       if (this.consecutiveVoiceFrames >= activeFrameRequirement && !this.isRecording) {
-        console.log(`[VAD] Voice confirmed (RMS: ${rms.toFixed(4)}, threshold: ${activeThreshold.toFixed(4)}, centroid: ${spectralCentroid.toFixed(0)}Hz, voiceBand: ${(voiceBandRatio*100).toFixed(0)}%)`);
+        console.log(`[VAD] Voice confirmed (RMS: ${rms.toFixed(4)}, threshold: ${activeThreshold.toFixed(4)}, centroid: ${spectralCentroid.toFixed(0)}Hz, voiceBand: ${(voiceBandRatio * 100).toFixed(0)}%)`);
 
         // If AI is speaking, check cooldown before interrupting
         if (this.aiIsSpeaking && this.onInterruptRequest) {
