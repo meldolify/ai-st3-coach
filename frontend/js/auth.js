@@ -291,12 +291,16 @@ function browseAsGuest() {
 
 function showProfilePage() {
   // Track current page before showing profile
-  if (document.getElementById('specialtySelection').style.display !== 'none') {
+  if (document.getElementById('landingPage').style.display !== 'none') {
+    previousPage = 'landingPage';
+  } else if (document.getElementById('specialtySelection').style.display !== 'none') {
     previousPage = 'specialtySelection';
   } else if (document.getElementById('difficultySelection').style.display !== 'none') {
     previousPage = 'difficultySelection';
   } else if (document.getElementById('scenarioSelection').style.display !== 'none') {
     previousPage = 'scenarioSelection';
+  } else if (document.getElementById('simulationRoom').style.display !== 'none') {
+    previousPage = 'simulationRoom';
   }
 
   hideAllPages();
@@ -305,8 +309,15 @@ function showProfilePage() {
   profilePage.classList.add('active');
   profilePage.style.display = 'block';
 
+  // Keep app header visible for profile page (unless coming from landing)
+  if (previousPage !== 'landingPage') {
+    document.getElementById('appHeader').style.display = 'flex';
+    document.body.classList.add('has-header');
+  }
+
   // Close user dropdown
-  document.getElementById('userDropdown').classList.remove('active');
+  const dropdown = document.getElementById('userDropdown');
+  if (dropdown) dropdown.classList.remove('active');
 
   // Populate profile fields
   populateProfilePage();
@@ -319,9 +330,17 @@ function hideProfilePage() {
   profilePage.classList.remove('active');
 
   // Return to previous page
-  const prevPage = document.getElementById(previousPage);
-  prevPage.classList.remove('hidden');
-  prevPage.style.display = 'block';
+  if (previousPage === 'landingPage') {
+    // Going back to landing page - hide header and show landing
+    showLandingPage();
+  } else {
+    // Going back to a protected page - show header and the page
+    const prevPage = document.getElementById(previousPage);
+    prevPage.classList.remove('hidden');
+    prevPage.style.display = 'block';
+    document.getElementById('appHeader').style.display = 'flex';
+    document.body.classList.add('has-header');
+  }
 }
 
 async function populateProfilePage() {
