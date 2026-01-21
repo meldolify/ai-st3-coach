@@ -32,6 +32,16 @@ function canAccessScenario(scenarioPath) {
   return CONFIG.FREE_TIER_SCENARIOS.includes(scenarioPath);
 }
 
+function isPremiumUser() {
+  // Test mode override
+  if (testTierOverride) {
+    return testTierOverride === 'premium';
+  }
+
+  // Check active subscription
+  return userSubscription?.status === 'active';
+}
+
 function showUpgradeModal() {
   document.getElementById('upgradeModal').classList.add('active');
 }
