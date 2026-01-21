@@ -171,10 +171,11 @@ wss.on('connection', (ws, req) => {
           // Handle Whisper API transcription for browsers without Web Speech API
           try {
             const audioBuffer = Buffer.from(msg.audio, 'base64');
+            const audioFormat = msg.format || 'webm'; // Support WAV from Silero VAD
             const t1 = Date.now();
 
             // Transcribe using OpenAI service
-            const transcriptionText = await openaiService.transcribeAudio(audioBuffer, msg.sessionId);
+            const transcriptionText = await openaiService.transcribeAudio(audioBuffer, msg.sessionId, audioFormat);
 
             const t2 = Date.now();
             console.log('[WHISPER STT] ' + transcriptionText);
