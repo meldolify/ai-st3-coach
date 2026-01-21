@@ -158,6 +158,8 @@ class V4Session {
     switch (msg.type) {
       case 'scenario_loaded':
         this.sessionId = msg.sessionId;
+        // Store session ID globally for SileroVADManager
+        window.currentSessionId = msg.sessionId;
         updateStatus('sessionStatus', 'Ready', 'connected');
         setOrbState('idle');
         log('Scenario loaded: ' + msg.scenario, 'success');
@@ -386,6 +388,7 @@ class V4Session {
     }
     this.isConnected = false;
     this.sessionId = null;
+    window.currentSessionId = null; // Clear global session ID
     setOrbState('idle'); // Reset orb to idle when disconnected
   }
 }
