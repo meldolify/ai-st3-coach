@@ -62,22 +62,21 @@ const CONFIG = {
   ],
 
   // Speech Recognition Configuration
-  // Based on OpenAI Realtime API VAD parameters
-  // Reference: https://platform.openai.com/docs/guides/realtime-vad
+  // V4.2: Silero VAD (deep learning) as primary for reliable voice detection
   SPEECH_RECOGNITION: {
-    WHISPER_PRIMARY: true,         // true = Whisper primary, Web Speech fallback
-    SILENCE_THRESHOLD: 0.025,      // RMS threshold for normal voice detection
-    INTERRUPT_THRESHOLD: 0.15,     // Higher threshold during AI speech (filters speaker bleed at ~0.10 RMS)
-    SILENCE_DURATION_MS: 700,      // Stop recording after silence (faster turn detection)
-    MIN_RECORDING_MS: 500,         // Minimum recording duration to send
-    REQUIRED_VOICE_FRAMES: 4,      // Consecutive frames for normal listening (~67ms)
-    INTERRUPT_VOICE_FRAMES: 8,     // More frames required during AI speech (~133ms) - stricter confirmation
+    USE_SILERO_VAD: true,          // true = Silero VAD primary (recommended)
+    WHISPER_PRIMARY: true,         // true = Whisper transcription primary, Web Speech fallback
 
-    // Enhanced VAD settings (V4.1)
-    USE_SPECTRAL_ANALYSIS: true,   // Enable frequency-based voice detection
-    NOISE_FLOOR_MULTIPLIER: 2.5,   // Threshold = noiseFloor * multiplier (adaptive)
-    MIN_VOICE_CENTROID: 200,       // Minimum spectral centroid for voice (Hz)
-    MAX_VOICE_CENTROID: 2000       // Maximum spectral centroid for voice (Hz)
+    // Legacy VAD settings (only used if Silero VAD fails to load)
+    SILENCE_THRESHOLD: 0.015,      // RMS threshold (lowered for better sensitivity)
+    INTERRUPT_THRESHOLD: 0.10,     // Threshold during AI speech
+    SILENCE_DURATION_MS: 800,      // Stop recording after silence
+    MIN_RECORDING_MS: 300,         // Minimum recording duration to send
+    REQUIRED_VOICE_FRAMES: 2,      // Consecutive frames for listening
+    INTERRUPT_VOICE_FRAMES: 6,     // Frames required during AI speech
+
+    // Spectral analysis disabled by default (Silero VAD handles this better)
+    USE_SPECTRAL_ANALYSIS: false
   }
 };
 

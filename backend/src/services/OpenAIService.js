@@ -54,15 +54,23 @@ class OpenAIService {
    * Transcribe audio using Whisper API
    * @param {Buffer} audioBuffer - Audio data as Buffer
    * @param {string} sessionId - Session ID for temp file naming
+   * @param {string} format - Audio format: 'wav' or 'webm' (default: 'webm')
    * @returns {Promise<string>} - The transcribed text
    */
-  async transcribeAudio(audioBuffer, sessionId) {
+  async transcribeAudio(audioBuffer, sessionId, format = 'webm') {
     const client = this._ensureClient();
-    const tempFilePath = path.join(__dirname, '../../', `temp_audio_${sessionId}.webm`);
+
+    // Detect format from buffer header if not specified
+    const isWav = audioBuffer.length >= 4 &&
+      audioBuffer.slice(0, 4).toString() === 'RIFF';
+    const extension = isWav || format === 'wav' ? 'wav' : 'webm';
+
+    const tempFilePath = path.join(__dirname, '../../', `temp_audio_${sessionId}.${extension}`);
 
     try {
       // Write audio to temporary file for Whisper API
       fs.writeFileSync(tempFilePath, audioBuffer);
+      console.log(`[WHISPER] Processing ${extension} audio, size: ${audioBuffer.length} bytes`);
 
       const transcription = await client.audio.transcriptions.create({
         file: fs.createReadStream(tempFilePath),
