@@ -29,6 +29,23 @@ let mobileCurrentHeading = null;
 let mobileCurrentSubheading = null;
 let mobileButtonListenersSetup = false;
 
+// Mock Exam Mode State
+let selectedMode = null;              // 'practice' | 'mock-exam'
+let mockExamType = null;              // 'by-station' | 'full-mock'
+let selectedStationType = null;       // 'clinical' | 'call-the-boss' | 'consent' | 'structured'
+
+// Mock Exam Session State
+let isMockExamActive = false;
+let mockExamStations = [];            // Array of station configs for full mock
+let currentStationIndex = 0;
+let mockExamResults = [];             // Track results for profile
+
+// Timer State
+let scenarioTimerInterval = null;
+let scenarioStartTime = null;
+let scenarioTimeLimit = 300;          // 5 minutes default (mock by station)
+let timerWarningShown = false;
+
 // ============================================================================
 // TIER TESTING MODE (Development Only)
 // ============================================================================

@@ -467,7 +467,118 @@
       </div>
     </div>
 
-    <!-- Page 3: Scenario Selection View -->
+    <!-- Page: Mode Selection (Practice vs Mock Exam) -->
+    <div id="modeSelection" class="page" style="display: none;">
+      <button class="top-back-button" onclick="backToDifficulty()">← Back</button>
+
+      <div class="header">
+        <h1>Choose Your Mode</h1>
+        <p class="subtitle">Select how you want to practice today</p>
+        <p id="modeSelectedDifficultyIndicator" class="difficulty-indicator"></p>
+      </div>
+
+      <div class="mode-grid">
+        <div class="mode-card mode-practice" onclick="selectMode('practice')">
+          <div class="mode-icon">📚</div>
+          <h2>Practice Mode</h2>
+          <p>Choose specific scenarios to practice at your own pace</p>
+          <ul>
+            <li>Browse all available scenarios</li>
+            <li>No time pressure</li>
+            <li>Immediate feedback after each scenario</li>
+            <li>Focus on specific topics</li>
+          </ul>
+        </div>
+
+        <div class="mode-card mode-mock-exam" onclick="selectMode('mock-exam')">
+          <div class="mode-icon">🎯</div>
+          <h2>Mock Exam Mode</h2>
+          <p>Simulate real interview conditions with timed scenarios</p>
+          <ul>
+            <li>Timed stations</li>
+            <li>Hidden scenario topics</li>
+            <li>Test your exam readiness</li>
+            <li>Detailed performance review</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Page: Mock Type Selection -->
+    <div id="mockTypeSelection" class="page" style="display: none;">
+      <button class="top-back-button" onclick="backToModeSelection()">← Back</button>
+
+      <div class="header">
+        <h1>Mock Exam Options</h1>
+        <p class="subtitle">Choose your mock exam format</p>
+        <p id="mockTypeSelectedDifficultyIndicator" class="difficulty-indicator"></p>
+      </div>
+
+      <div class="mock-type-grid">
+        <div class="mock-type-card mock-by-station" onclick="selectMockType('by-station')">
+          <div class="mock-type-icon">🎲</div>
+          <h2>Mock by Station</h2>
+          <p>Practice a single random station from a specific category</p>
+          <ul>
+            <li>Choose station type (Clinical, Call-Boss, etc.)</li>
+            <li>Random scenario selection</li>
+            <li>Topic hidden until you start</li>
+            <li>5-minute timer with feedback at end</li>
+          </ul>
+        </div>
+
+        <div class="mock-type-card full-mock-exam" onclick="selectMockType('full-mock')">
+          <div class="mock-type-icon">📋</div>
+          <h2>Full Mock Exam</h2>
+          <p>Complete 3-station mock interview experience</p>
+          <ul>
+            <li>Clinical (2 topics) + Communication (2 topics) + Structured (3 topics)</li>
+            <li>10 minutes per station</li>
+            <li>All feedback at the end</li>
+            <li>Comprehensive performance report</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Page: Station Type Selection (for Mock by Station) -->
+    <div id="stationTypeSelection" class="page" style="display: none;">
+      <button class="top-back-button" onclick="backToMockTypeSelection()">← Back</button>
+
+      <div class="header">
+        <h1>Select Station Type</h1>
+        <p class="subtitle">A random scenario will be selected from your chosen category</p>
+        <p id="stationTypeSelectedDifficultyIndicator" class="difficulty-indicator"></p>
+      </div>
+
+      <div class="station-type-grid">
+        <div class="station-type-card station-clinical" onclick="selectStationType('clinical')">
+          <div class="station-type-icon">📋</div>
+          <h2>Clinical Station</h2>
+          <p>Random clinical scenario from any subspecialty</p>
+        </div>
+
+        <div class="station-type-card station-call-the-boss" onclick="selectStationType('call-the-boss')">
+          <div class="station-type-icon">📞</div>
+          <h2>Call-The-Boss</h2>
+          <p>Random emergency escalation scenario</p>
+        </div>
+
+        <div class="station-type-card station-consent" onclick="selectStationType('consent')">
+          <div class="station-type-icon">✍️</div>
+          <h2>Consent Station</h2>
+          <p>Random consent discussion scenario</p>
+        </div>
+
+        <div class="station-type-card station-structured" onclick="selectStationType('structured')">
+          <div class="station-type-icon">📝</div>
+          <h2>Structured Interview</h2>
+          <p>Random audit, ethics, or governance scenario</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Page: Scenario Selection View -->
     <div id="scenarioSelection" class="page" style="display: none;">
       <div class="scenario-selection-layout" id="panelContainer">
         <!-- Panel 1: Headings (12.5%) -->
@@ -571,6 +682,22 @@
 
     <!-- Simulation Room View (Hidden by default) -->
     <div id="simulationRoom" class="simulation-room page">
+      <!-- Mock Exam Timer (positioned top-right) -->
+      <div id="mockExamTimer" class="mock-exam-timer" style="display: none;">
+        <div class="timer-display">
+          <span id="timerMinutes">05</span>:<span id="timerSeconds">00</span>
+        </div>
+        <div id="timerWarning" class="timer-warning" style="display: none;">Under 1 minute</div>
+      </div>
+
+      <!-- Mock Exam Progress Bar (Full Mock only) -->
+      <div id="mockExamProgress" class="mock-exam-progress" style="display: none;">
+        <span id="mockProgressText">Station 1 of 3</span>
+        <div class="progress-bar">
+          <div id="mockProgressFill" class="progress-fill"></div>
+        </div>
+      </div>
+
       <!-- Desktop Layout: Three panels -->
       <div class="desktop-simulation-layout">
         <!-- Left Panel (25%): Controls and Navigation -->
@@ -731,6 +858,15 @@
     </div>
   </div>
 
+  <!-- Mock Exam Transition Overlay -->
+  <div id="mockTransitionOverlay" class="mock-transition-overlay">
+    <div class="mock-transition-content">
+      <div class="mock-transition-icon">📝</div>
+      <h2 id="mockTransitionTitle">Mock Exam</h2>
+      <p id="mockTransitionSubtitle">Preparing your scenario...</p>
+    </div>
+  </div>
+
   <!-- JavaScript Files (load order matters!) -->
   <script src="config.js"></script>
   <script src="js/state.js"></script>
@@ -741,6 +877,7 @@
   <script src="js/speech.js"></script>
   <script src="js/session.js"></script>
   <script src="js/scenarios.js"></script>
+  <script src="js/mock-exam.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

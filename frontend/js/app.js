@@ -47,22 +47,99 @@ function selectSpecialty(specialty) {
 function selectDifficulty(difficulty) {
   selectedDifficulty = difficulty;
 
-  // Update the difficulty indicator on the scenario page
-  const indicator = document.getElementById('selectedDifficultyIndicator');
+  // Update difficulty indicators on all pages that show it
+  updateAllDifficultyIndicators(difficulty);
+
+  // Go to Mode Selection instead of directly to Scenario Selection
+  transitionToPage('difficultySelection', 'modeSelection');
+  log('Selected difficulty: ' + difficulty, 'info');
+}
+
+// Helper to update difficulty indicator on multiple pages
+function updateAllDifficultyIndicators(difficulty) {
   const difficultyEmoji = {
     'easy': '🟢',
     'medium': '🟡',
     'strict': '🔴'
   };
   const difficultyName = difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
-  indicator.textContent = `${difficultyEmoji[difficulty]} Selected Difficulty: ${difficultyName}`;
-  indicator.style.color = difficulty === 'easy' ? '#059669' : difficulty === 'medium' ? '#d97706' : '#dc2626';
+  const indicatorText = `${difficultyEmoji[difficulty]} ${difficultyName} Mode`;
+  const indicatorColor = difficulty === 'easy' ? '#059669' : difficulty === 'medium' ? '#d97706' : '#dc2626';
 
-  transitionToPage('difficultySelection', 'scenarioSelection', () => {
-    // Initialize mobile-friendly panel navigation after page loads
-    initMobilePanelNavigation();
+  // Update all difficulty indicators (matching actual HTML IDs)
+  const indicatorIds = [
+    'selectedDifficultyIndicator',
+    'selectedDifficultyIndicatorMobile',
+    'modeSelectedDifficultyIndicator',
+    'mockTypeSelectedDifficultyIndicator',
+    'stationTypeSelectedDifficultyIndicator'
+  ];
+
+  indicatorIds.forEach(id => {
+    const indicator = document.getElementById(id);
+    if (indicator) {
+      indicator.textContent = indicatorText;
+      indicator.style.color = indicatorColor;
+    }
   });
-  log('Selected difficulty: ' + difficulty, 'info');
+}
+
+// ============================================================================
+// MODE SELECTION NAVIGATION
+// ============================================================================
+
+function selectMode(mode) {
+  selectedMode = mode;
+
+  if (mode === 'practice') {
+    // Practice mode goes to existing scenario selection
+    transitionToPage('modeSelection', 'scenarioSelection', () => {
+      initMobilePanelNavigation();
+    });
+    log('Selected mode: Practice', 'info');
+  } else if (mode === 'mock-exam') {
+    // Mock exam mode goes to mock type selection
+    transitionToPage('modeSelection', 'mockTypeSelection');
+    log('Selected mode: Mock Exam', 'info');
+  }
+}
+
+function selectMockType(type) {
+  mockExamType = type;
+
+  if (type === 'by-station') {
+    // Mock by Station goes to station type selection
+    transitionToPage('mockTypeSelection', 'stationTypeSelection');
+    log('Selected mock type: By Station', 'info');
+  } else if (type === 'full-mock') {
+    // Full Mock Exam starts immediately with generated scenarios
+    startFullMockExam();
+    log('Selected mock type: Full Mock Exam', 'info');
+  }
+}
+
+function selectStationType(stationType) {
+  selectedStationType = stationType;
+  // Start mock by station with random scenario from this type
+  startMockByStation(stationType);
+  log('Selected station type: ' + stationType, 'info');
+}
+
+// Back navigation for mock exam pages
+function backToModeSelection() {
+  selectedMode = null;
+  transitionToPage('mockTypeSelection', 'modeSelection');
+}
+
+function backToMockTypeSelection() {
+  mockExamType = null;
+  transitionToPage('stationTypeSelection', 'mockTypeSelection');
+}
+
+function backToDifficultyFromMode() {
+  selectedMode = null;
+  selectedDifficulty = null;
+  transitionToPage('modeSelection', 'difficultySelection');
 }
 
 function backToSpecialties() {
@@ -71,8 +148,9 @@ function backToSpecialties() {
 }
 
 function backToDifficulty() {
-  selectedDifficulty = null;
-  transitionToPage('scenarioSelection', 'difficultySelection');
+  // Now goes back to mode selection (the page before scenario selection)
+  selectedMode = null;
+  transitionToPage('scenarioSelection', 'modeSelection');
 }
 
 function openImageModal() {
