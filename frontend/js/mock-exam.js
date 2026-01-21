@@ -367,6 +367,13 @@ function startMockByStation(stationType) {
 function startFullMockExam() {
   console.log('[MOCK] Starting Full Mock Exam');
 
+  // Strict Premium Check
+  if (!isPremiumUser()) {
+    alert('Full Mock Exam is a Premium feature.\n\nUpgrade to access timed exam simulations with 3 rotating stations.');
+    showUpgradeModal();
+    return;
+  }
+
   // Generate scenarios for all 3 stations
   mockExamStations = [
     {
