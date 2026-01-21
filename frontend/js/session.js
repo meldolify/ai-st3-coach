@@ -58,40 +58,25 @@ class V4Session {
     this.ws = null;
     this.sessionId = null;
 
-    // Hybrid STT: Silero VAD PRIMARY, WhisperRecognitionManager/Web Speech API FALLBACK
-    // Silero VAD uses deep learning for reliable voice detection
+    // STT: Silero VAD PRIMARY, Web Speech API FALLBACK
+    // Silero VAD uses deep learning for reliable voice detection, sends to Whisper for transcription
     const useSileroVAD = CONFIG.SPEECH_RECOGNITION?.USE_SILERO_VAD ?? true;
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
     if (useSileroVAD && typeof vad !== 'undefined' && vad.MicVAD) {
       // Use Silero VAD as primary (recommended)
       this.speechRecognition = new SileroVADManager(null); // WebSocket set after connection
-      this.usingWhisper = true; // Still sends to Whisper for transcription
+      this.usingWhisper = true; // Sends to Whisper for transcription
       this.usingSileroVAD = true;
-      this.fallbackAvailable = true;
       log('Using Silero VAD for STT (primary)', 'success');
-    } else if (CONFIG.SPEECH_RECOGNITION?.WHISPER_PRIMARY ?? true) {
-      // Fallback to WhisperRecognitionManager if Silero not available
-      this.speechRecognition = new WhisperRecognitionManager(null);
-      this.usingWhisper = true;
+    } else if (SpeechRecognition) {
+      // Fallback to Web Speech API if Silero not available
+      this.speechRecognition = new SpeechRecognitionManager();
+      this.usingWhisper = false;
       this.usingSileroVAD = false;
-      this.fallbackAvailable = !!SpeechRecognition;
-      log('Using Whisper VAD for STT (Silero not available)', 'warning');
+      log('Silero VAD not available, using Web Speech API', 'warning');
     } else {
-      // Legacy mode: Web Speech API primary
-      if (SpeechRecognition) {
-        this.speechRecognition = new SpeechRecognitionManager();
-        this.usingWhisper = false;
-        this.usingSileroVAD = false;
-        this.fallbackAvailable = true;
-        log('Using Web Speech API for STT (legacy mode)', 'success');
-      } else {
-        this.speechRecognition = new WhisperRecognitionManager(null);
-        this.usingWhisper = true;
-        this.usingSileroVAD = false;
-        this.fallbackAvailable = false;
-        log('Using Whisper API for STT (no Web Speech support)', 'success');
-      }
+      throw new Error('No speech recognition available. Please use a modern browser.');
     }
 
     this.audioPlayer = new AudioPlayer();
