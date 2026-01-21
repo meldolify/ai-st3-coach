@@ -108,6 +108,7 @@ class SileroVADManager {
     this.isSpeaking = false;
     this.shouldBeListening = false;
     this.speechStartTime = null;
+    this.speechContaminated = false; // True if speech started while AI was playing
 
     // Callbacks (set by V4Session)
     this.onTranscript = null;
@@ -131,32 +132,42 @@ class SileroVADManager {
       this.vad = await vad.MicVAD.new({
         // Speech detection callbacks
         onSpeechStart: () => {
-          console.log('[SILERO VAD] Speech started');
+          console.log('[SILERO VAD] Speech started, AI speaking:', this.aiIsSpeaking);
           this.isSpeaking = true;
           this.speechStartTime = Date.now();
 
-          // Don't auto-interrupt during AI speech - causes echo false positives
-          // The user can manually interrupt if needed
-          // Only trigger UI callback
-          if (this.onStart && !this.aiIsSpeaking) {
+          // Mark this speech as contaminated if AI is currently playing
+          // This prevents sending AI audio to Whisper even if AI stops before speech ends
+          this.speechContaminated = this.aiIsSpeaking;
+
+          if (this.speechContaminated) {
+            console.log('[SILERO VAD] Speech marked as contaminated (AI audio)');
+          }
+
+          // Only trigger UI callback if not contaminated
+          if (this.onStart && !this.speechContaminated) {
             this.onStart();
           }
         },
 
         onSpeechEnd: async (audio) => {
           const speechDuration = this.speechStartTime ? Date.now() - this.speechStartTime : 0;
-          console.log(`[SILERO VAD] Speech ended, duration: ${speechDuration}ms, samples: ${audio.length}`);
+          console.log(`[SILERO VAD] Speech ended, duration: ${speechDuration}ms, contaminated: ${this.speechContaminated}`);
           this.isSpeaking = false;
           this.speechStartTime = null;
 
-          // Only trigger UI callback if not during AI speech
-          if (this.onEnd && !this.aiIsSpeaking) {
+          // Check if this speech was contaminated (started during AI playback)
+          const wasContaminated = this.speechContaminated;
+          this.speechContaminated = false; // Reset for next speech
+
+          // Only trigger UI callback if not contaminated
+          if (this.onEnd && !wasContaminated) {
             this.onEnd();
           }
 
-          // Don't send audio captured during AI speech (contaminated with AI voice)
-          if (this.aiIsSpeaking) {
-            console.log('[SILERO VAD] Ignoring - captured during AI speech');
+          // Don't send audio that started during AI speech (contaminated with AI voice)
+          if (wasContaminated) {
+            console.log('[SILERO VAD] Discarding - speech started during AI playback');
             return;
           }
 
