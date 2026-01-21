@@ -478,10 +478,13 @@
           </div>
 
           <div class="heading-item" onmouseenter="showSubheadings('clinical')" data-heading="clinical">
-            📋 Clinical Stations
+            📋 Clinical
           </div>
-          <div class="heading-item" onmouseenter="showSubheadings('communication')" data-heading="communication">
-            💬 Communication
+          <div class="heading-item" onmouseenter="showSubheadings('call-the-boss')" data-heading="call-the-boss">
+            📞 Call-The-Boss
+          </div>
+          <div class="heading-item" onmouseenter="showSubheadings('consent')" data-heading="consent">
+            ✍️ Consent
           </div>
           <div class="heading-item" onmouseenter="showSubheadings('structured')" data-heading="structured">
             📝 Structured Interview
@@ -492,24 +495,42 @@
         <div id="subheadings-panel" class="subheadings-panel" onmouseenter="cancelSubheadingsTimer()" onmouseleave="handlePanelMouseLeave('subheadings')">
           <!-- Clinical subheadings -->
           <div id="subheadings-clinical" class="subheading-group" style="display: none;">
-            <div class="subheading-item" onmouseenter="showTopics('emergencies')">1. Emergencies</div>
-            <div class="subheading-item" onmouseenter="showTopics('hand-trauma')">2. Hand Trauma</div>
-            <div class="subheading-item" onmouseenter="showTopics('elective-hand')">3. Elective Hand</div>
-            <div class="subheading-item" onmouseenter="showTopics('skin-cancer')">4. Skin Cancer</div>
-            <div class="subheading-item" onmouseenter="showTopics('miscellaneous')">5. Miscellaneous</div>
-            <div class="subheading-item" onmouseenter="showTopics('breast-aesthetic')">6. Breast & Aesthetic</div>
-            <div class="subheading-item" onmouseenter="showTopics('burns')">7. Burns</div>
+            <div class="subheading-item" onmouseenter="showTopics('breast-and-aesthetic')">Breast & Aesthetic</div>
+            <div class="subheading-item" onmouseenter="showTopics('burns')">Burns</div>
+            <div class="subheading-item" onmouseenter="showTopics('elective-hand')">Elective Hand</div>
+            <div class="subheading-item" onmouseenter="showTopics('emergencies')">Emergencies</div>
+            <div class="subheading-item" onmouseenter="showTopics('hand-trauma')">Hand Trauma</div>
+            <div class="subheading-item" onmouseenter="showTopics('lower-limb')">Lower Limb</div>
+            <div class="subheading-item" onmouseenter="showTopics('skin-cancer')">Skin Cancer</div>
+            <div class="subheading-item" onmouseenter="showTopics('head-and-neck')">Head & Neck</div>
+            <div class="subheading-item" onmouseenter="showTopics('congenital')">Congenital</div>
+            <div class="subheading-item" onmouseenter="showTopics('microsurgery')">Microsurgery</div>
           </div>
 
-          <!-- Communication subheadings -->
-          <div id="subheadings-communication" class="subheading-group" style="display: none;">
-            <div class="subheading-item" onmouseenter="showTopics('call-the-boss')">Call-The-Boss</div>
-            <div class="subheading-item" onmouseenter="showTopics('consent')">Consent</div>
+          <!-- Call-The-Boss subheadings -->
+          <div id="subheadings-call-the-boss" class="subheading-group" style="display: none;">
+            <div class="subheading-item" onmouseenter="showTopics('call-the-boss-scenarios')">Scenarios</div>
           </div>
 
-          <!-- Structured has no subheadings, show topics directly -->
+          <!-- Consent subheadings -->
+          <div id="subheadings-consent" class="subheading-group" style="display: none;">
+            <div class="subheading-item" onmouseenter="showTopics('consent-breast-and-aesthetic')">Breast & Aesthetic</div>
+            <div class="subheading-item" onmouseenter="showTopics('consent-hand-surgery')">Hand Surgery</div>
+            <div class="subheading-item" onmouseenter="showTopics('consent-skin-surgery')">Skin Surgery</div>
+            <div class="subheading-item" onmouseenter="showTopics('consent-emergency-procedures')">Emergency Procedures</div>
+            <div class="subheading-item" onmouseenter="showTopics('consent-reconstructive')">Reconstructive</div>
+          </div>
+
+          <!-- Structured Interview subheadings -->
           <div id="subheadings-structured" class="subheading-group" style="display: none;">
-            <div class="subheading-item" onmouseenter="showTopics('structured-topics')">Interview Topics</div>
+            <div class="subheading-item" onmouseenter="showTopics('structured-audit')">Audit</div>
+            <div class="subheading-item" onmouseenter="showTopics('structured-clinical-governance')">Clinical Governance</div>
+            <div class="subheading-item" onmouseenter="showTopics('structured-complaints')">Complaints</div>
+            <div class="subheading-item" onmouseenter="showTopics('structured-consent-ethics')">Consent & Ethics</div>
+            <div class="subheading-item" onmouseenter="showTopics('structured-ethics')">Ethics</div>
+            <div class="subheading-item" onmouseenter="showTopics('structured-research')">Research</div>
+            <div class="subheading-item" onmouseenter="showTopics('structured-risk-management')">Risk Management</div>
+            <div class="subheading-item" onmouseenter="showTopics('structured-teaching')">Teaching</div>
           </div>
         </div>
 
