@@ -1532,25 +1532,40 @@ button.top-back-button:active {
   padding-top: 80px;
 }
 
-#difficultySelection .header {
+#difficultySelection .header,
+#modeSelection .header,
+#mockTypeSelection .header,
+#stationTypeSelection .header {
   padding-top: 20px;
 }
 
-#difficultySelection .header h1 {
+#difficultySelection .header h1,
+#modeSelection .header h1,
+#mockTypeSelection .header h1,
+#stationTypeSelection .header h1 {
   color: var(--text-light-primary);
 }
 
-#difficultySelection .header .subtitle {
+#difficultySelection .header .subtitle,
+#modeSelection .header .subtitle,
+#mockTypeSelection .header .subtitle,
+#stationTypeSelection .header .subtitle {
   color: var(--text-light-secondary);
 }
 
-#difficultySelection .top-back-button {
+#difficultySelection .top-back-button,
+#modeSelection .top-back-button,
+#mockTypeSelection .top-back-button,
+#stationTypeSelection .top-back-button {
   background: #FFFFFF !important;
   color: #1F2937 !important;
   border: 1px solid #D1D5DB !important;
 }
 
-#difficultySelection .top-back-button:hover {
+#difficultySelection .top-back-button:hover,
+#modeSelection .top-back-button:hover,
+#mockTypeSelection .top-back-button:hover,
+#stationTypeSelection .top-back-button:hover {
   background: #FFFFFF !important;
   color: #1F2937 !important;
   border-color: #0F766E !important;
