@@ -26,6 +26,290 @@
 
   <!-- Styles (extracted from inline) -->
   <link rel="stylesheet" href="styles/main.css">
+  <style>
+    /* ==================================== */
+    /* POST-REMODEL ADJUSTMENTS (ROUND 2)   */
+    /* ==================================== */
+
+    /* 1. Refined Voice Orb */
+    .voice-orb {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6, #10b981, #fbbf24, #ef4444, #f97316, #a855f7, #6366f1);
+      background-size: 800% 800%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      box-shadow: 0 0 60px rgba(99, 102, 241, 0.4);
+      overflow: hidden;
+      animation: color-cycle 30s ease-in-out infinite;
+      border: none !important;
+      outline: none !important;
+    }
+
+    .voice-orb::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: inherit;
+      opacity: 0;
+      animation: none;
+    }
+
+    .voice-orb::after {
+      content: '';
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      background: conic-gradient(from 0deg, transparent 0%, rgba(255, 255, 255, 0.08) 15%, rgba(255, 255, 255, 0.2) 25%, rgba(255, 255, 255, 0.08) 35%, transparent 50%, rgba(255, 255, 255, 0.08) 65%, rgba(255, 255, 255, 0.2) 75%, rgba(255, 255, 255, 0.08) 85%, transparent 100%);
+      border-radius: 50%;
+      opacity: 0;
+      animation: none;
+      filter: blur(8px);
+    }
+
+    .voice-orb.idle {
+      animation: color-cycle 30s ease-in-out infinite, breathe 3s ease-in-out infinite;
+    }
+
+    .voice-orb.listening {
+      animation: color-cycle 30s ease-in-out infinite;
+      box-shadow: 0 0 80px rgba(99, 102, 241, 0.7);
+    }
+
+    .voice-orb.listening::before {
+      animation: listening-pulse 1.5s ease-out infinite;
+    }
+
+    .voice-orb.thinking {
+      animation: color-cycle 30s ease-in-out infinite, thinking-bounce 2.0s ease-in-out infinite;
+      box-shadow: 0 0 70px rgba(139, 92, 246, 0.6);
+    }
+
+    .voice-orb.thinking::after {
+      opacity: 1;
+      animation: thinking-spin 3s ease-in-out infinite;
+    }
+
+    .voice-orb.speaking {
+      animation: color-cycle 30s ease-in-out infinite, speaking-scale 1.5s ease-in-out infinite;
+      box-shadow: 0 0 90px rgba(99, 102, 241, 0.8);
+    }
+
+    .voice-orb.speaking::before {
+      animation: speaking-pulse 1.8s ease-out infinite;
+    }
+
+    @keyframes color-cycle {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    @keyframes breathe {
+
+      0%,
+      100% {
+        transform: scale(1);
+        box-shadow: 0 0 60px rgba(99, 102, 241, 0.4);
+      }
+
+      50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 80px rgba(99, 102, 241, 0.6);
+      }
+    }
+
+    @keyframes listening-pulse {
+      0% {
+        transform: scale(1);
+        opacity: 0.5;
+      }
+
+      100% {
+        transform: scale(1.6);
+        opacity: 0;
+      }
+    }
+
+    @keyframes thinking-spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes thinking-bounce {
+
+      0%,
+      100% {
+        transform: translateY(0) scale(1);
+      }
+
+      50% {
+        transform: translateY(-15px) scale(1.08);
+      }
+    }
+
+    @keyframes speaking-scale {
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.1);
+      }
+    }
+
+    @keyframes speaking-pulse {
+      0% {
+        transform: scale(1);
+        opacity: 0.6;
+      }
+
+      100% {
+        transform: scale(1.8);
+        opacity: 0;
+      }
+    }
+
+    /* 2. Glassmorphism Buttons (Smaller & Cleaner) */
+    .persona-controls-overlay {
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      pointer-events: none;
+    }
+
+    .control-pill {
+      background: transparent !important;
+      -webkit-backdrop-filter: none !important;
+      backdrop-filter: none !important;
+      box-shadow: none !important;
+      gap: 24px !important;
+      padding: 0 !important;
+      pointer-events: auto;
+      display: flex !important;
+    }
+
+    .control-btn {
+      width: 64px !important;
+      height: 64px !important;
+      font-size: 24px !important;
+      border-radius: 50% !important;
+      background: rgba(255, 255, 255, 0.2) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
+      backdrop-filter: blur(12px) !important;
+      border: 1px solid rgba(255, 255, 255, 0.3) !important;
+      color: white !important;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      transition: all 0.2s ease !important;
+    }
+
+    .control-btn:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.35) !important;
+      transform: translateY(-3px) !important;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+    }
+
+    .control-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Red hangup button */
+    #disconnectBtn {
+      background: rgba(239, 68, 68, 0.8) !important;
+      /* Soft red default */
+      border-color: rgba(239, 68, 68, 0.5) !important;
+    }
+
+    #disconnectBtn:hover:not(:disabled) {
+      background: #EF4444 !important;
+      /* Solid red hover */
+    }
+
+    /* Specific overrides */
+    #connectBtn {
+      background: rgba(16, 185, 129, 0.8) !important;
+      border-color: rgba(16, 185, 129, 0.5) !important;
+    }
+
+    /* Teal */
+    #connectBtn:hover:not(:disabled) {
+      background: #10B981 !important;
+    }
+
+    #recordBtn.recording {
+      background: #EF4444 !important;
+      animation: recording-pulse 1.5s ease-in-out infinite !important;
+    }
+
+    /* 3. AI Status Bubble - Restored & Positioned */
+    .ai-status-bubble {
+      position: absolute !important;
+      top: 20px !important;
+      right: 20px !important;
+      transform: none !important;
+      /* Reset conflicting transforms */
+      background: rgba(255, 255, 255, 0.95) !important;
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
+      padding: 8px 16px !important;
+      border-radius: 20px !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+      display: flex !important;
+      z-index: 20 !important;
+      opacity: 1 !important;
+      /* Force visible */
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .ai-status-bubble span {
+      color: #333 !important;
+      font-weight: 600 !important;
+      font-size: 13px !important;
+    }
+
+    /* 4. Fix Back Button */
+    .back-button {
+      color: #1F2937 !important;
+      background: white;
+      border: 1px solid #E5E7EB;
+    }
+
+    .back-button span {
+      color: #1F2937 !important;
+    }
+
+    .back-button:hover {
+      background: #F3F4F6;
+    }
+  </style>
 </head>
 
 <body>
@@ -746,7 +1030,8 @@
         <!-- Left Panel (60%): Persona with overlaid controls -->
         <div id="personaPanel" class="persona-panel breathing">
           <!-- Persona Image -->
-          <img id="personaImage" class="persona-image" src="images/happy-mature-business-woman-middle-260nw-2454482105.webp" alt="Examiner">
+          <img id="personaImage" class="persona-image"
+            src="images/happy-mature-business-woman-middle-260nw-2454482105.webp" alt="Examiner">
 
           <!-- Persona Info Overlay (top) -->
           <div class="persona-info-overlay">
@@ -766,10 +1051,14 @@
           <!-- Control Pill (bottom center) -->
           <div class="persona-controls-overlay">
             <div class="control-pill">
-              <button type="button" id="connectBtn" class="control-btn" title="Start Session" aria-label="Start Session">▶</button>
-              <button type="button" id="recordBtn" class="control-btn control-btn-record initially-hidden" disabled title="Push to Talk" aria-label="Push to Talk">🎤</button>
-              <button type="button" id="interruptBtn" class="control-btn initially-hidden" disabled title="Pause AI" aria-label="Pause AI">⏸</button>
-              <button type="button" id="disconnectBtn" class="control-btn control-btn-danger" disabled title="End Session" aria-label="End Session">⏹</button>
+              <button type="button" id="connectBtn" class="control-btn" title="Start Session"
+                aria-label="Start Session">▶</button>
+              <button type="button" id="recordBtn" class="control-btn control-btn-record initially-hidden" disabled
+                title="Push to Talk" aria-label="Push to Talk">🎤</button>
+              <button type="button" id="interruptBtn" class="control-btn initially-hidden" disabled title="Pause AI"
+                aria-label="Pause AI">⏸</button>
+              <button type="button" id="disconnectBtn" class="control-btn control-btn-danger" disabled
+                title="End Session" aria-label="End Session">⏹</button>
             </div>
           </div>
 
@@ -802,10 +1091,12 @@
           <div id="imageSection" class="clinical-section">
             <div class="section-header">
               <span class="case-badge">Clinical Image</span>
-              <button type="button" class="expand-btn" onclick="openImageModal()" title="Fullscreen" aria-label="View fullscreen">⤢</button>
+              <button type="button" class="expand-btn" onclick="openImageModal()" title="Fullscreen"
+                aria-label="View fullscreen">⤢</button>
             </div>
             <div class="clinical-image-container">
-              <img id="clinicalImage" class="clinical-image initially-hidden" src="" alt="Clinical image" onclick="openImageModal()">
+              <img id="clinicalImage" class="clinical-image initially-hidden" src="" alt="Clinical image"
+                onclick="openImageModal()">
               <div class="image-overlay initially-hidden">
                 <span>Click to examine</span>
               </div>
@@ -909,7 +1200,8 @@
   <div id="modelAnswerDrawer" class="drawer">
     <div class="drawer-header">
       <h3>Model Answer</h3>
-      <button type="button" class="drawer-close" onclick="closeModelAnswerDrawer()" aria-label="Close drawer">&times;</button>
+      <button type="button" class="drawer-close" onclick="closeModelAnswerDrawer()"
+        aria-label="Close drawer">&times;</button>
     </div>
     <div class="drawer-content">
       <div id="modelAnswerContent">
