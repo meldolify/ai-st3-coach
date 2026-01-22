@@ -907,6 +907,16 @@ function startScenario(category, title, promptFile, imageFile) {
   document.getElementById('currentScenarioTitle').textContent = title;
   document.getElementById('currentScenarioCategory').textContent = category;
 
+  // Set persona based on selected difficulty
+  if (typeof setPersona === 'function' && selectedDifficulty) {
+    setPersona(selectedDifficulty);
+  }
+
+  // Clear transcript for new session
+  if (window.transcript) {
+    window.transcript.clear();
+  }
+
   const imageSection = document.getElementById('imageSection');
   const clinicalImage = document.getElementById('clinicalImage');
   const noImagePlaceholder = document.getElementById('noImagePlaceholder');
@@ -1088,6 +1098,16 @@ function exitSimulation() {
   if (session) {
     session.disconnect();
     session = null;
+  }
+
+  // Clear transcript on exit
+  if (window.transcript) {
+    window.transcript.clear();
+  }
+
+  // Close model answer drawer if open
+  if (typeof closeModelAnswerDrawer === 'function') {
+    closeModelAnswerDrawer();
   }
 
   const simulationRoom = document.getElementById('simulationRoom');

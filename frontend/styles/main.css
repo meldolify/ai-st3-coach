@@ -1,13 +1,25 @@
+/* ============================================
+   GOOGLE FONTS - Clinical Elegance Typography
+   ============================================ */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Serif+Display&display=swap');
+
 :root {
+  /* ============================================
+     TYPOGRAPHY - Distinctive & Universal
+     ============================================ */
+  --font-display: 'DM Serif Display', Georgia, 'Times New Roman', serif;
+  --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
+
   /* ============================================
      PRIMARY BRAND COLORS
      ============================================ */
-  --brand-primary: #0F766E;
-  /* Deep teal - main brand color */
+  --brand-primary: #0D9488;
+  /* Teal 600 - professional medical */
   --brand-secondary: #14B8A6;
-  /* Lighter teal - accents */
-  --brand-dark: #0D3D38;
-  /* Dark teal - for gradients */
+  /* Teal 500 - vibrant accent */
+  --brand-dark: #0F766E;
+  /* Teal 700 - for gradients */
 
   /* ============================================
      LIGHT THEME (Main App Theme)
@@ -34,7 +46,42 @@
   --shadow-light-xl: 0 20px 40px rgba(0, 0, 0, 0.1);
 
   /* ============================================
-     DARK THEME (Simulation Room Only)
+     SIMULATION ROOM THEME (Light - Clinical Elegance)
+     ============================================ */
+  /* Warm, clinical palette */
+  --sim-bg-primary: #FAF9F7;
+  /* Warm off-white */
+  --sim-bg-secondary: #FFFFFF;
+  --sim-bg-accent: #F5F3EF;
+  /* Subtle warmth */
+  --sim-bg-panel: #FFFFFF;
+
+  /* Medical teal spectrum */
+  --sim-accent-primary: #0D9488;
+  /* Teal 600 - professional */
+  --sim-accent-secondary: #14B8A6;
+  /* Teal 500 - vibrant */
+  --sim-accent-muted: #99F6E4;
+  /* Teal 200 - subtle */
+
+  /* Text hierarchy for simulation */
+  --sim-text-primary: #1C1917;
+  /* Stone 900 */
+  --sim-text-secondary: #57534E;
+  /* Stone 600 */
+  --sim-text-muted: #A8A29E;
+  /* Stone 400 */
+
+  /* Simulation borders & shadows */
+  --sim-border: rgba(28, 25, 23, 0.08);
+  --sim-border-accent: rgba(13, 148, 136, 0.3);
+  --sim-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --sim-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
+  --sim-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.08);
+  --sim-shadow-panel: 0 4px 20px rgba(0, 0, 0, 0.06);
+
+  /* ============================================
+     LEGACY DARK THEME (kept for compatibility)
      ============================================ */
   --bg-primary: #0a0a12;
   --bg-secondary: #12121c;
@@ -42,42 +89,48 @@
   --bg-glass: rgba(255, 255, 255, 0.05);
   --bg-glass-hover: rgba(255, 255, 255, 0.08);
 
-  /* Text Colors (Dark theme) */
-  --text-primary: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.7);
-  --text-muted: rgba(255, 255, 255, 0.4);
+  /* Text Colors (Dark theme - legacy) */
+  --text-primary: #1C1917;
+  --text-secondary: #57534E;
+  --text-muted: #A8A29E;
 
-  /* Borders & Effects (Dark theme) */
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-accent: rgba(15, 118, 110, 0.3);
-  --shadow-glow: 0 0 30px rgba(15, 118, 110, 0.2);
-  --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.3);
+  /* Borders & Effects (Dark theme - legacy) */
+  --border-subtle: rgba(28, 25, 23, 0.08);
+  --border-accent: rgba(13, 148, 136, 0.3);
+  --shadow-glow: 0 0 30px rgba(13, 148, 136, 0.2);
+  --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.1);
   --glass-blur: blur(20px);
-  --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+  --glass-border: 1px solid rgba(13, 148, 136, 0.1);
 
   /* ============================================
      SEMANTIC COLORS
      ============================================ */
-  --color-success: #059669;
-  --color-success-light: rgba(5, 150, 105, 0.1);
-  --color-warning: #D97706;
-  --color-warning-light: rgba(217, 119, 6, 0.1);
-  --color-danger: #DC2626;
-  --color-danger-light: rgba(220, 38, 38, 0.1);
+  --color-success: #10B981;
+  /* Emerald 500 */
+  --color-success-light: rgba(16, 185, 129, 0.1);
+  --color-warning: #F59E0B;
+  /* Amber 500 */
+  --color-warning-light: rgba(245, 158, 11, 0.1);
+  --color-danger: #EF4444;
+  /* Red 500 */
+  --color-danger-light: rgba(239, 68, 68, 0.1);
 
-  /* Difficulty Colors (aliased for clarity) */
-  --color-easy: var(--color-success);
-  --color-easy-light: var(--color-success-light);
-  --color-moderate: var(--color-warning);
-  --color-moderate-light: var(--color-warning-light);
-  --color-strict: var(--color-danger);
-  --color-strict-light: var(--color-danger-light);
+  /* Difficulty Colors */
+  --color-easy: #10B981;
+  /* Emerald - approachable */
+  --color-easy-light: rgba(16, 185, 129, 0.1);
+  --color-moderate: #F59E0B;
+  /* Amber - challenging */
+  --color-moderate-light: rgba(245, 158, 11, 0.1);
+  --color-strict: #EF4444;
+  /* Red - intense */
+  --color-strict-light: rgba(239, 68, 68, 0.1);
 
   /* Legacy aliases for backwards compatibility */
   --accent-primary: var(--brand-primary);
   --accent-surgical: var(--brand-primary);
   --accent-secondary: var(--brand-secondary);
-  --accent-glow: rgba(15, 118, 110, 0.4);
+  --accent-glow: rgba(13, 148, 136, 0.4);
   --accent-gradient: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-dark) 100%);
 }
 
@@ -102,12 +155,27 @@ button {
   margin: 0;
 }
 
+/* Visually hidden but accessible to screen readers */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 body {
-  font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: var(--font-body);
   background: var(--bg-light);
   min-height: 100vh;
   color: var(--text-light-primary);
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* ============================================
@@ -605,19 +673,30 @@ body.has-header .scenario-selection-layout {
 }
 
 /* Simulation Room - Side by Side Layout */
+/* ============================================
+   SIMULATION ROOM - Clinical Elegance Theme
+   ============================================ */
 .simulation-room {
   display: none;
   min-height: 100vh;
+  background: var(--sim-bg-primary);
 }
 
 .simulation-room.active {
-  display: block;
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
+  animation: room-fade-in 0.4s ease-out;
+}
+
+@keyframes room-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 /* Adjust simulation room when header is visible */
@@ -625,16 +704,607 @@ body.has-header .simulation-room.active {
   top: 60px;
 }
 
-/* Desktop: show desktop layout */
+/* Simulation Header Bar */
+.simulation-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  background: var(--sim-bg-secondary);
+  border-bottom: 1px solid var(--sim-border);
+  flex-shrink: 0;
+}
+
+.simulation-header .back-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: var(--sim-bg-accent);
+  border-radius: 8px;
+  color: var(--sim-text-secondary);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+  cursor: pointer;
+  border: none;
+}
+
+.simulation-header .back-button:hover {
+  background: var(--sim-accent-muted);
+  color: var(--sim-accent-primary);
+}
+
+.simulation-header-title {
+  text-align: center;
+  flex: 1;
+}
+
+.simulation-header-title h2 {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--sim-text-primary);
+  margin: 0 0 2px 0;
+}
+
+.simulation-header-title p {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--sim-text-muted);
+  margin: 0;
+}
+
+/* Desktop: 60/40 split layout */
 .desktop-simulation-layout {
-  display: grid;
-  grid-template-columns: 25% 50% 25%;
-  min-height: 100vh;
-  width: 100%;
+  display: flex;
+  flex: 1;
+  gap: 16px;
+  padding: 16px;
+  min-height: 0;
 }
 
 .mobile-simulation-layout {
   display: none;
+}
+
+/* ============================================
+   PERSONA PANEL (Left - 60%)
+   ============================================ */
+.persona-panel {
+  flex: 0 0 60%;
+  background: var(--sim-bg-secondary);
+  border-radius: 24px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--sim-shadow-panel);
+  animation: panel-slide-in 0.5s ease-out 0.1s both;
+}
+
+@keyframes panel-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Subtle breathing animation when idle */
+.persona-panel.breathing {
+  animation: panel-slide-in 0.5s ease-out 0.1s both, persona-breathe 4s ease-in-out infinite 0.6s;
+}
+
+@keyframes persona-breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.003); }
+}
+
+/* Persona responds to AI state */
+.persona-panel.ai-speaking {
+  box-shadow: var(--sim-shadow-panel), 0 0 60px rgba(13, 148, 136, 0.12);
+}
+
+.persona-panel.ai-thinking {
+  filter: saturate(0.95);
+}
+
+/* Persona Image */
+.persona-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+
+/* Persona Info Overlay (top) */
+.persona-info-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 20px 24px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0) 100%);
+  z-index: 5;
+}
+
+.persona-name {
+  font-family: var(--font-display);
+  font-size: 18px;
+  color: var(--sim-text-primary);
+  margin: 0 0 2px 0;
+}
+
+.persona-title {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--sim-text-muted);
+  margin: 0;
+}
+
+/* Voice Orb Overlay (centered-lower) */
+.persona-orb-overlay {
+  position: absolute;
+  bottom: 35%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  z-index: 10;
+}
+
+/* Control Pill (bottom center) */
+.persona-controls-overlay {
+  position: absolute;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  animation: controls-rise 0.4s ease-out 0.4s both;
+}
+
+@keyframes controls-rise {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.control-pill {
+  display: flex;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 40px;
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.08),
+    0 1px 2px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+}
+
+.control-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  background: var(--sim-bg-accent);
+  color: var(--sim-text-secondary);
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.control-btn:hover:not(:disabled) {
+  background: var(--sim-accent-muted);
+  color: var(--sim-accent-primary);
+  transform: translateY(-1px);
+}
+
+.control-btn:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.control-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Record button - special treatment */
+.control-btn-record {
+  background: var(--sim-accent-primary);
+  color: white;
+}
+
+.control-btn-record:hover:not(:disabled) {
+  background: var(--brand-dark);
+  color: white;
+}
+
+.control-btn-record.recording {
+  background: #EF4444;
+  animation: record-pulse 1s ease-in-out infinite;
+}
+
+@keyframes record-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+}
+
+/* Danger button (disconnect) */
+.control-btn-danger {
+  background: rgba(239, 68, 68, 0.1);
+  color: #EF4444;
+}
+
+.control-btn-danger:hover:not(:disabled) {
+  background: #EF4444;
+  color: white;
+}
+
+/* Waveform Overlay (bottom) */
+.persona-waveform-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px 24px 24px;
+  background: linear-gradient(transparent, rgba(255,255,255,0.9));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  z-index: 5;
+}
+
+.waveform-status {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--sim-text-muted);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.waveform-status.visible {
+  opacity: 1;
+}
+
+/* ============================================
+   SIDEBAR PANEL (Right - 40%)
+   ============================================ */
+.sidebar-panel {
+  flex: 0 0 calc(40% - 16px);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: panel-slide-in 0.5s ease-out 0.2s both;
+}
+
+/* Clinical Image Section */
+.clinical-section {
+  background: var(--sim-bg-secondary);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: var(--sim-shadow-panel);
+  flex: 0 0 auto;
+  max-height: 45%;
+  display: flex;
+  flex-direction: column;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--sim-border);
+}
+
+.section-header-title {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--sim-text-primary);
+}
+
+.case-badge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--sim-text-muted);
+  background: var(--sim-bg-accent);
+  padding: 4px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.expand-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: none;
+  background: var(--sim-bg-accent);
+  color: var(--sim-text-muted);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.expand-btn:hover {
+  background: var(--sim-accent-muted);
+  color: var(--sim-accent-primary);
+}
+
+.clinical-image-container {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid var(--sim-bg-accent);
+  flex: 1;
+  min-height: 0;
+}
+
+.clinical-image-container:hover .image-overlay {
+  opacity: 1;
+}
+
+.clinical-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  cursor: pointer;
+}
+
+.image-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  cursor: pointer;
+}
+
+.image-overlay span {
+  color: white;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.no-image-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 120px;
+  color: var(--sim-text-muted);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-style: italic;
+  background: var(--sim-bg-accent);
+  border-radius: 8px;
+}
+
+/* Clinical image visibility transition */
+.clinical-section .clinical-image {
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.clinical-section.visible .clinical-image {
+  opacity: 1;
+}
+
+.clinical-section.visible .clinical-image.initially-hidden {
+  display: block;
+}
+
+.clinical-section.visible .image-overlay {
+  display: flex;
+}
+
+.clinical-section.visible .no-image-placeholder {
+  display: none;
+}
+
+/* Transcript Section */
+.transcript-section {
+  background: var(--sim-bg-secondary);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: var(--sim-shadow-panel);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.transcript-container {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.transcript-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 4px;
+}
+
+.transcript-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 100px;
+  color: var(--sim-text-muted);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-style: italic;
+}
+
+.transcript-message {
+  padding: 12px 16px;
+  border-radius: 16px;
+  max-width: 85%;
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.message-user {
+  background: var(--sim-accent-muted);
+  color: var(--sim-text-primary);
+  margin-left: auto;
+  border-bottom-right-radius: 4px;
+}
+
+.message-ai {
+  background: var(--sim-bg-accent);
+  color: var(--sim-text-primary);
+  margin-right: auto;
+  border-bottom-left-radius: 4px;
+}
+
+.message-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+  font-size: 12px;
+}
+
+.message-role {
+  font-weight: 600;
+  color: var(--sim-text-secondary);
+}
+
+.message-ai .message-role {
+  color: var(--sim-accent-primary);
+}
+
+.message-time {
+  color: var(--sim-text-muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.message-text {
+  margin: 0;
+}
+
+/* ============================================
+   MODEL ANSWER DRAWER
+   ============================================ */
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 420px;
+  max-width: 90vw;
+  height: 100vh;
+  background: var(--sim-bg-secondary);
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.1);
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+}
+
+.drawer.open {
+  transform: translateX(0);
+}
+
+.drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--sim-border);
+  flex-shrink: 0;
+}
+
+.drawer-header h3 {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--sim-text-primary);
+  margin: 0;
+}
+
+.drawer-close {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: none;
+  background: var(--sim-bg-accent);
+  color: var(--sim-text-secondary);
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.drawer-close:hover {
+  background: var(--color-danger-light);
+  color: var(--color-danger);
+}
+
+.drawer-content {
+  padding: 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.drawer-content p {
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--sim-text-primary);
+  margin: 0 0 16px 0;
+}
+
+/* Drawer backdrop */
+.drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  z-index: 99;
+}
+
+.drawer-backdrop.visible {
+  opacity: 1;
+  visibility: visible;
 }
 
 /* Voice Orb Container */
@@ -883,46 +1553,37 @@ body.has-header .simulation-room.active {
 /* Voice Orb - VUI Dark Theme with Teal/Cyan Glow */
 .voice-orb {
   position: relative;
-  width: 200px;
-  height: 200px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #00d4aa, #00b4d8, #0891b2, #06b6d4, #14b8a6, #00d4aa);
-  background-size: 600% 600%;
+  /* Glass morphism with teal tint for light theme */
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(255, 255, 255, 0.9),
+    rgba(13, 148, 136, 0.15)
+  );
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(13, 148, 136, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
   box-shadow:
-    0 0 60px rgba(0, 212, 170, 0.4),
-    0 0 120px rgba(0, 180, 216, 0.2),
-    inset 0 0 30px rgba(255, 255, 255, 0.1);
+    inset 0 0 30px rgba(13, 148, 136, 0.1),
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(255, 255, 255, 0.5) inset;
   overflow: hidden;
-  animation: color-cycle 20s ease-in-out infinite;
 }
 
-/* Smooth continuous color cycling animation */
-@keyframes color-cycle {
-  0% {
-    background-position: 0% 50%;
-  }
-
-  50% {
-    background-position: 100% 50%;
-  }
-
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-/* Outer glow ring for all states */
+/* Outer glow ring for pulse states */
 .voice-orb::before {
   content: '';
   position: absolute;
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: inherit;
+  background: radial-gradient(circle, rgba(13, 148, 136, 0.3) 0%, transparent 70%);
   opacity: 0;
   animation: none;
 }
@@ -931,56 +1592,53 @@ body.has-header .simulation-room.active {
 .voice-orb::after {
   content: '';
   position: absolute;
-  width: 200%;
-  height: 200%;
+  width: 150%;
+  height: 150%;
   background: conic-gradient(from 0deg,
       transparent 0%,
-      rgba(255, 255, 255, 0.1) 15%,
-      rgba(255, 255, 255, 0.25) 25%,
-      rgba(255, 255, 255, 0.1) 35%,
+      rgba(13, 148, 136, 0.1) 15%,
+      rgba(13, 148, 136, 0.2) 25%,
+      rgba(13, 148, 136, 0.1) 35%,
       transparent 50%,
-      rgba(255, 255, 255, 0.1) 65%,
-      rgba(255, 255, 255, 0.25) 75%,
-      rgba(255, 255, 255, 0.1) 85%,
+      rgba(13, 148, 136, 0.1) 65%,
+      rgba(13, 148, 136, 0.2) 75%,
+      rgba(13, 148, 136, 0.1) 85%,
       transparent 100%);
   border-radius: 50%;
   opacity: 0;
   animation: none;
-  filter: blur(10px);
+  filter: blur(8px);
 }
 
 /* STATE: Idle - Soft breathing pulse */
 .voice-orb.idle {
-  animation: color-cycle 20s ease-in-out infinite, breathe 4s ease-in-out infinite;
+  animation: orb-breathe 4s ease-in-out infinite;
 }
 
-@keyframes breathe {
-
-  0%,
-  100% {
+@keyframes orb-breathe {
+  0%, 100% {
     transform: scale(1);
     box-shadow:
-      0 0 60px rgba(0, 212, 170, 0.4),
-      0 0 120px rgba(0, 180, 216, 0.2),
-      inset 0 0 30px rgba(255, 255, 255, 0.1);
+      inset 0 0 30px rgba(13, 148, 136, 0.1),
+      0 8px 32px rgba(0, 0, 0, 0.1),
+      0 0 0 1px rgba(255, 255, 255, 0.5) inset;
   }
-
   50% {
     transform: scale(1.03);
     box-shadow:
-      0 0 80px rgba(0, 212, 170, 0.5),
-      0 0 150px rgba(0, 180, 216, 0.3),
-      inset 0 0 40px rgba(255, 255, 255, 0.15);
+      inset 0 0 40px rgba(13, 148, 136, 0.15),
+      0 12px 40px rgba(0, 0, 0, 0.12),
+      0 0 0 1px rgba(255, 255, 255, 0.6) inset;
   }
 }
 
 /* STATE: Listening - Active expanding pulse */
 .voice-orb.listening {
-  animation: color-cycle 20s ease-in-out infinite;
+  border-color: rgba(13, 148, 136, 0.4);
   box-shadow:
-    0 0 80px rgba(0, 212, 170, 0.6),
-    0 0 150px rgba(0, 180, 216, 0.4),
-    inset 0 0 40px rgba(255, 255, 255, 0.15);
+    inset 0 0 40px rgba(13, 148, 136, 0.15),
+    0 8px 32px rgba(13, 148, 136, 0.2),
+    0 0 0 1px rgba(255, 255, 255, 0.5) inset;
 }
 
 .voice-orb.listening::before {
@@ -990,9 +1648,8 @@ body.has-header .simulation-room.active {
 @keyframes listening-pulse {
   0% {
     transform: scale(1);
-    opacity: 0.6;
+    opacity: 0.5;
   }
-
   100% {
     transform: scale(1.8);
     opacity: 0;
@@ -1006,42 +1663,36 @@ body.has-header .simulation-room.active {
 }
 
 .voice-orb.thinking {
-  animation: color-cycle 20s ease-in-out infinite, thinking-bounce 2.0s ease-in-out infinite;
+  animation: thinking-bounce 2.0s ease-in-out infinite;
+  border-color: rgba(13, 148, 136, 0.3);
   box-shadow:
-    0 0 70px rgba(0, 212, 170, 0.5),
-    0 0 140px rgba(0, 180, 216, 0.3),
-    inset 0 0 35px rgba(255, 255, 255, 0.12);
+    inset 0 0 35px rgba(13, 148, 136, 0.12),
+    0 8px 32px rgba(13, 148, 136, 0.15),
+    0 0 0 1px rgba(255, 255, 255, 0.5) inset;
 }
 
 @keyframes thinking-spin {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 @keyframes thinking-bounce {
-
-  0%,
-  100% {
+  0%, 100% {
     transform: translateY(0) scale(1);
   }
-
   50% {
-    transform: translateY(-12px) scale(1.05);
+    transform: translateY(-8px) scale(1.03);
   }
 }
 
 /* STATE: Speaking - Rhythmic wave pulses */
 .voice-orb.speaking {
-  animation: color-cycle 20s ease-in-out infinite, speaking-scale 0.8s ease-in-out infinite;
+  animation: speaking-scale 0.8s ease-in-out infinite;
+  border-color: rgba(13, 148, 136, 0.5);
   box-shadow:
-    0 0 100px rgba(0, 212, 170, 0.7),
-    0 0 180px rgba(0, 180, 216, 0.5),
-    inset 0 0 50px rgba(255, 255, 255, 0.2);
+    inset 0 0 50px rgba(13, 148, 136, 0.2),
+    0 8px 40px rgba(13, 148, 136, 0.25),
+    0 0 0 1px rgba(255, 255, 255, 0.5) inset;
 }
 
 .voice-orb.speaking::before {
@@ -1049,23 +1700,15 @@ body.has-header .simulation-room.active {
 }
 
 @keyframes speaking-scale {
-
-  0%,
-  100% {
-    transform: scale(1);
-  }
-
-  50% {
-    transform: scale(1.08);
-  }
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
 }
 
 @keyframes speaking-pulse {
   0% {
     transform: scale(1);
-    opacity: 0.7;
+    opacity: 0.6;
   }
-
   100% {
     transform: scale(2);
     opacity: 0;

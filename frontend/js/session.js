@@ -181,6 +181,10 @@ class V4Session {
           this.speechRecognition.setAISpeaking(true);
         }
         log('AI: ' + msg.text, 'info');
+        // Add AI message to transcript
+        if (window.transcript) {
+          window.transcript.addAIMessage(msg.text);
+        }
         this.audioPlayer.playBase64Audio(msg.audio);
         // Show interrupt button and set speaking state
         const interruptBtn = document.getElementById('interruptBtn');
@@ -232,6 +236,10 @@ class V4Session {
     // Set up callbacks before initialization
     this.speechRecognition.onTranscript = (text) => {
       log('You: ' + text, 'info');
+      // Add user message to transcript
+      if (window.transcript) {
+        window.transcript.addUserMessage(text);
+      }
 
       if (this.isConnected && this.sessionId) {
         this.ws.send(JSON.stringify({
