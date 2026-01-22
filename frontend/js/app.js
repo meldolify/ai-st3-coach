@@ -183,7 +183,7 @@ document.getElementById('connectBtn').addEventListener('click', async () => {
 
     // Show and enable the Record button
     const recordBtn = document.getElementById('recordBtn');
-    recordBtn.style.display = 'inline-block';
+    recordBtn.style.display = 'flex'; // Use flex to maintain centering
     recordBtn.disabled = false;
 
     syncMobileButtonStates(); // Sync mobile buttons
