@@ -51,17 +51,40 @@
       background: linear-gradient(145deg, #f0f4f8 0%, #d9e2ec 100%);
     }
 
-    /* Ensure the simulation layout has proper bottom spacing */
-    .desktop-simulation-layout {
-      padding-bottom: 32px !important;
-      max-height: calc(100vh - 32px) !important;
+    /* Simulation room layout with bottom banner */
+    #simulationRoom {
+      max-height: 100vh;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
     }
 
-    /* Add bottom boundary to the simulation room page */
-    #simulationRoom {
-      padding-bottom: 24px !important;
-      max-height: 100vh;
-      overflow: hidden;
+    /* Desktop layout takes remaining space */
+    #simulationRoom .desktop-simulation-layout {
+      flex: 1;
+      min-height: 0;
+      padding-bottom: 16px !important;
+    }
+
+    /* Bottom banner for simulation room */
+    .simulation-footer {
+      height: 36px;
+      min-height: 36px;
+      background: linear-gradient(180deg, #f0f2f5 0%, #e4e8ec 100%);
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.03);
+    }
+
+    .simulation-footer span {
+      font-size: 11px;
+      color: #9ca3af;
+      letter-spacing: 0.3px;
+      font-weight: 500;
     }
 
     .persona-panel img,
@@ -1433,6 +1456,11 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- Bottom Banner -->
+    <div class="simulation-footer">
+      <span>ST3 Interview Trainer</span>
     </div>
   </div>
 
