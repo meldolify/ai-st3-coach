@@ -181,15 +181,8 @@ wss.on('connection', (ws, req) => {
             console.log('[WHISPER STT] ' + transcriptionText);
             console.log(`[TIMING] Whisper: ${t2 - t1}ms`);
 
-            // Filter out noise transcripts before sending
-            if (isNoiseTranscript(transcriptionText)) {
-              console.log('[WHISPER] Filtered noise transcript, signaling frontend');
-              ws.send(JSON.stringify({
-                type: 'error',
-                message: 'No speech detected (noise filtered)'
-              }));
-              return;
-            }
+            // PASSTHROUGH (PTT Mode): Send whatever we get.
+            // if (isNoiseTranscript(transcriptionText)) { ... } removed per user request.
 
             // Send transcript back to frontend
             ws.send(JSON.stringify({
