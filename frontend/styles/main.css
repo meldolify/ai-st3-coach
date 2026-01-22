@@ -756,13 +756,14 @@ body.has-header .simulation-room.active {
   margin: 0;
 }
 
-/* Desktop: 60/40 split layout */
+/* Desktop: 40/60 split layout */
 .desktop-simulation-layout {
   display: flex;
   flex: 1;
   gap: 16px;
   padding: 16px;
   min-height: 0;
+  height: calc(100vh - 100px);
 }
 
 .mobile-simulation-layout {
@@ -770,10 +771,11 @@ body.has-header .simulation-room.active {
 }
 
 /* ============================================
-   PERSONA PANEL (Left - 60%)
+   PERSONA PANEL (Left - 40%)
    ============================================ */
 .persona-panel {
-  flex: 0 0 60%;
+  flex: 1 1 40%;
+  min-width: 300px;
   background: var(--sim-bg-secondary);
   border-radius: 24px;
   position: relative;
@@ -987,14 +989,15 @@ body.has-header .simulation-room.active {
 }
 
 /* ============================================
-   SIDEBAR PANEL (Right - 40%)
+   SIDEBAR PANEL (Right - 60%)
    ============================================ */
 .sidebar-panel {
-  flex: 0 0 calc(40% - 16px);
+  flex: 1.5 1 60%;
   display: flex;
   flex-direction: column;
   gap: 16px;
   animation: panel-slide-in 0.5s ease-out 0.2s both;
+  min-height: 0;
 }
 
 /* Clinical Image Section */

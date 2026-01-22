@@ -36,7 +36,8 @@
       position: relative;
       overflow: hidden;
       border-radius: 12px;
-      min-height: 500px;
+      height: 100%;
+      background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);
     }
 
     /* FORCE IMAGE TO BACKGROUND */
@@ -48,30 +49,30 @@
       left: 0;
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
+      object-position: center center;
       display: block;
       z-index: 0 !important;
+      background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
     }
 
     /* 1. Refined Voice Orb & Overlays */
     .persona-orb-overlay {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      bottom: 120px;
+      left: 50%;
+      transform: translateX(-50%);
       pointer-events: none;
       display: flex;
       align-items: center;
       justify-content: center;
       z-index: 20 !important;
-      /* High priority */
     }
 
     .voice-orb {
       position: relative;
-      width: 200px;
-      height: 200px;
+      width: 140px;
+      height: 140px;
       border-radius: 50%;
       background: linear-gradient(135deg, #6366f1, #8b5cf6, #10b981, #fbbf24, #ef4444, #f97316, #a855f7, #6366f1);
       background-size: 800% 800%;
@@ -79,7 +80,7 @@
       align-items: center;
       justify-content: center;
       transition: transform 0.4s ease, box-shadow 0.4s ease;
-      box-shadow: 0 0 60px rgba(99, 102, 241, 0.4);
+      box-shadow: 0 0 40px rgba(99, 102, 241, 0.4);
       overflow: hidden;
       animation: color-cycle 30s ease-in-out infinite;
       border: none !important;
@@ -106,29 +107,29 @@
     /* Individual Spectrum Bars */
     .spectrum-bar {
       position: absolute;
-      width: 4px;
-      height: 30px;
+      width: 3px;
+      height: 20px;
       background: linear-gradient(to top, rgba(99, 102, 241, 0.9), rgba(139, 92, 246, 0.9), rgba(16, 185, 129, 0.9));
       border-radius: 2px;
-      transform-origin: center 70px;
-      transform: rotate(calc(var(--i) * 15deg)) translateY(-50px) scaleY(0.5);
+      transform-origin: center 50px;
+      transform: rotate(calc(var(--i) * 15deg)) translateY(-35px) scaleY(0.5);
       opacity: 0;
       transition: opacity 0.3s ease;
     }
 
     .voice-orb.speaking .spectrum-bar {
       opacity: 1;
-      animation: spectrum-pulse 0.6s ease-in-out infinite;
-      animation-delay: calc(var(--i) * 0.04s);
+      animation: spectrum-pulse 1.2s ease-in-out infinite;
+      animation-delay: calc(var(--i) * 0.08s);
     }
 
     @keyframes spectrum-pulse {
       0%, 100% {
-        transform: rotate(calc(var(--i) * 15deg)) translateY(-50px) scaleY(0.4);
-        opacity: 0.6;
+        transform: rotate(calc(var(--i) * 15deg)) translateY(-35px) scaleY(0.3);
+        opacity: 0.5;
       }
       50% {
-        transform: rotate(calc(var(--i) * 15deg)) translateY(-50px) scaleY(1.5);
+        transform: rotate(calc(var(--i) * 15deg)) translateY(-35px) scaleY(1.2);
         opacity: 1;
       }
     }
@@ -312,67 +313,69 @@
     }
 
     .control-pill {
-      background: transparent !important;
-      padding: 0 !important;
-      gap: 20px !important;
+      background: rgba(40, 40, 50, 0.85) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
+      backdrop-filter: blur(12px) !important;
+      padding: 8px 12px !important;
+      gap: 8px !important;
       pointer-events: auto;
       display: flex !important;
-      box-shadow: none !important;
+      border-radius: 30px !important;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
     }
 
     .control-btn {
-      width: 64px !important;
-      height: 64px !important;
-      font-size: 24px !important;
+      width: 40px !important;
+      height: 40px !important;
+      font-size: 16px !important;
       border-radius: 50% !important;
-      background: rgba(255, 255, 255, 0.2) !important;
-      -webkit-backdrop-filter: blur(12px) !important;
-      backdrop-filter: blur(12px) !important;
-      border: 1px solid rgba(255, 255, 255, 0.3) !important;
-      color: white !important;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
+      background: rgba(60, 60, 70, 0.9) !important;
+      border: none !important;
+      color: rgba(255, 255, 255, 0.9) !important;
+      box-shadow: none !important;
       display: flex !important;
       align-items: center !important;
       justify-content: center !important;
-      transition: all 0.2s ease !important;
+      transition: all 0.15s ease !important;
     }
 
     .control-btn:hover:not(:disabled) {
-      background: rgba(255, 255, 255, 0.35) !important;
-      transform: translateY(-3px) !important;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2) !important;
+      background: rgba(80, 80, 90, 1) !important;
+      transform: scale(1.05) !important;
     }
 
     .control-btn:disabled {
-      opacity: 0.5;
+      opacity: 0.4;
       cursor: not-allowed;
     }
 
-    /* Red hangup button */
+    /* Red disconnect/end button */
     #disconnectBtn {
-      background: rgba(239, 68, 68, 0.8) !important;
-      /* Soft red default */
-      border-color: rgba(239, 68, 68, 0.5) !important;
+      background: #E53935 !important;
+      color: white !important;
     }
 
     #disconnectBtn:hover:not(:disabled) {
-      background: #EF4444 !important;
-      /* Solid red hover */
+      background: #C62828 !important;
     }
 
-    /* Specific overrides */
+    /* Green connect/start button */
     #connectBtn {
-      background: rgba(16, 185, 129, 0.8) !important;
-      border-color: rgba(16, 185, 129, 0.5) !important;
+      background: #43A047 !important;
+      color: white !important;
     }
 
-    /* Teal */
     #connectBtn:hover:not(:disabled) {
-      background: #10B981 !important;
+      background: #388E3C !important;
+    }
+
+    /* Record button - pink/coral when active */
+    #recordBtn {
+      background: rgba(60, 60, 70, 0.9) !important;
     }
 
     #recordBtn.recording {
-      background: #EF4444 !important;
+      background: #E91E63 !important;
       animation: recording-pulse 1.5s ease-in-out infinite !important;
     }
 
