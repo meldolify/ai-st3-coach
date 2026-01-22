@@ -266,27 +266,28 @@
     }
 
     .control-pill {
-      background: transparent !important;
-      -webkit-backdrop-filter: none !important;
-      backdrop-filter: none !important;
-      box-shadow: none !important;
-      gap: 24px !important;
-      padding: 0 !important;
+      background: rgba(0, 0, 0, 0.25) !important;
+      -webkit-backdrop-filter: blur(16px) !important;
+      backdrop-filter: blur(16px) !important;
+      border-radius: 28px !important;
+      padding: 8px 16px !important;
+      gap: 12px !important;
       pointer-events: auto;
       display: flex !important;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
     }
 
     .control-btn {
-      width: 64px !important;
-      height: 64px !important;
-      font-size: 24px !important;
+      width: 44px !important;
+      height: 44px !important;
+      font-size: 18px !important;
       border-radius: 50% !important;
-      background: rgba(255, 255, 255, 0.2) !important;
+      background: rgba(255, 255, 255, 0.15) !important;
       -webkit-backdrop-filter: blur(12px) !important;
       backdrop-filter: blur(12px) !important;
-      border: 1px solid rgba(255, 255, 255, 0.3) !important;
+      border: 1px solid rgba(255, 255, 255, 0.2) !important;
       color: white !important;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
       display: flex !important;
       align-items: center !important;
       justify-content: center !important;
@@ -294,9 +295,9 @@
     }
 
     .control-btn:hover:not(:disabled) {
-      background: rgba(255, 255, 255, 0.35) !important;
-      transform: translateY(-3px) !important;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+      background: rgba(255, 255, 255, 0.25) !important;
+      transform: translateY(-2px) !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12) !important;
     }
 
     .control-btn:disabled {
@@ -332,13 +333,11 @@
       animation: recording-pulse 1.5s ease-in-out infinite !important;
     }
 
-    /* 3. AI Status Bubble - Restored & Positioned */
+    /* 3. AI Status Bubble - Hidden by default, shown when processing */
     .ai-status-bubble {
       position: absolute !important;
       top: 24px !important;
       right: 24px !important;
-      transform: none !important;
-      /* Reset conflicting transforms */
       background: rgba(255, 255, 255, 0.95) !important;
       -webkit-backdrop-filter: blur(8px);
       backdrop-filter: blur(8px);
@@ -349,9 +348,29 @@
       gap: 8px;
       align-items: center;
       z-index: 20 !important;
-      opacity: 1 !important;
-      /* Force visible */
       border: 1px solid rgba(0, 0, 0, 0.05);
+      /* Hidden by default */
+      opacity: 0 !important;
+      transform: translateY(-10px) !important;
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.3s ease !important;
+    }
+
+    /* Visible state when processing */
+    .ai-status-bubble.visible {
+      opacity: 1 !important;
+      transform: translateY(0) !important;
+      pointer-events: auto;
+    }
+
+    /* Bounce animation for processing */
+    .ai-status-bubble.processing {
+      animation: bubble-bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes bubble-bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
     }
 
     .ai-status-bubble span {
@@ -1099,7 +1118,7 @@
 
           <!-- Persona Info Overlay (top) -->
           <div class="persona-info-overlay">
-            <h3 id="personaName" class="persona-name">Dr. Sarah Chen</h3>
+            <h3 id="personaName" class="persona-name">Miss Elliot</h3>
             <p id="personaTitle" class="persona-title">Senior Examiner</p>
           </div>
 
