@@ -10,6 +10,11 @@
  * @returns {boolean} - True if the text is likely noise
  */
 function isNoiseTranscript(text) {
+  // PER USER REQUEST: Noise filtering disabled for Push-to-Talk
+  // PTT implies intent, so we accept whatever Whisper returns.
+  return false;
+
+  /* NOISE FILTER DISABLED
   if (!text || typeof text !== 'string') {
     return true;
   }
@@ -103,20 +108,20 @@ function isNoiseTranscript(text) {
  * @param {string} text - Plain text to convert to SSML
  * @returns {string} - SSML-formatted text
  */
-function buildNaturalSSML(text) {
-  // Minimal SSML - only natural pauses, no artificial emphasis
-  let ssml = text;
+  function buildNaturalSSML(text) {
+    // Minimal SSML - only natural pauses, no artificial emphasis
+    let ssml = text;
 
-  // Add natural pauses using strength levels
-  ssml = ssml.replace(/\.\s+/g, '.<break strength="medium"/> ');
-  ssml = ssml.replace(/\?\s+/g, '?<break strength="medium"/> ');
-  ssml = ssml.replace(/,\s+/g, ',<break strength="weak"/> ');
+    // Add natural pauses using strength levels
+    ssml = ssml.replace(/\.\s+/g, '.<break strength="medium"/> ');
+    ssml = ssml.replace(/\?\s+/g, '?<break strength="medium"/> ');
+    ssml = ssml.replace(/,\s+/g, ',<break strength="weak"/> ');
 
-  // Wrap in speak tags
-  return `<speak>${ssml}</speak>`;
-}
+    // Wrap in speak tags
+    return `<speak>${ssml}</speak>`;
+  }
 
-module.exports = {
-  isNoiseTranscript,
-  buildNaturalSSML
-};
+  module.exports = {
+    isNoiseTranscript,
+    buildNaturalSSML
+  };
