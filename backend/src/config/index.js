@@ -40,8 +40,8 @@ const config = {
   STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
   STRIPE_PRICE_ID: process.env.STRIPE_PRICE_ID,
 
-  // Frontend URL for redirects
-  FRONTEND_URL: process.env.FRONTEND_URL || 'http://localhost:3000',
+  // Frontend URL for redirects (default 5500 matches frontend serve config)
+  FRONTEND_URL: process.env.FRONTEND_URL || 'http://localhost:5500',
 
   // Environment
   NODE_ENV: process.env.NODE_ENV || 'development',

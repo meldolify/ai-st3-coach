@@ -105,10 +105,14 @@ class SileroVADManager {
 
     // State tracking
     this.aiIsSpeaking = false;
+    this.aiStoppedTime = null; // Timestamp when AI audio stopped (for overlap calculation)
     this.isSpeaking = false;
     this.shouldBeListening = false;
     this.speechStartTime = null;
-    this.speechContaminated = false; // True if speech started while AI was playing
+    this.speechStartedDuringAI = false; // True if speech started while AI was playing
+    this.speechIsInterrupt = false; // True if this speech is an intentional interrupt
+    this.interruptCandidate = false; // True if speech might be an interrupt (pending confirmation)
+    this.healthCheckInterval = null; // Interval for VAD health monitoring
 
     // Callbacks (set by V4Session)
     this.onTranscript = null;
@@ -136,50 +140,109 @@ class SileroVADManager {
           this.isSpeaking = true;
           this.speechStartTime = Date.now();
 
-          // Mark this speech as contaminated if AI is currently playing
-          // This prevents sending AI audio to Whisper even if AI stops before speech ends
-          this.speechContaminated = this.aiIsSpeaking;
+          // Track if speech started during AI playback (for overlap analysis)
+          this.speechStartedDuringAI = this.aiIsSpeaking;
+          this.speechIsInterrupt = false;
+          this.interruptCandidate = false;
 
-          if (this.speechContaminated) {
-            console.log('[SILERO VAD] Speech marked as contaminated (AI audio)');
+          if (this.speechStartedDuringAI) {
+            console.log('[SILERO VAD] Speech started during AI playback - will analyze overlap');
+            this.interruptCandidate = true;
+
+            // Wait 300ms - if still speaking during AI, it's intentional interrupt
+            setTimeout(() => {
+              if (this.isSpeaking && this.aiIsSpeaking && this.interruptCandidate) {
+                console.log('[SILERO VAD] Sustained speech during AI - triggering interrupt');
+                this.speechIsInterrupt = true;
+                if (this.onInterruptRequest) {
+                  this.onInterruptRequest(); // Triggers audio stop
+                }
+              }
+            }, 300);
           }
 
-          // Only trigger UI callback if not contaminated
-          if (this.onStart && !this.speechContaminated) {
+          // Always trigger UI callback (we'll handle contamination at end)
+          if (this.onStart) {
             this.onStart();
           }
         },
 
         onSpeechEnd: async (audio) => {
-          const speechDuration = this.speechStartTime ? Date.now() - this.speechStartTime : 0;
-          console.log(`[SILERO VAD] Speech ended, duration: ${speechDuration}ms, contaminated: ${this.speechContaminated}`);
+          const speechEndTime = Date.now();
+          const speechDuration = this.speechStartTime ? speechEndTime - this.speechStartTime : 0;
+          console.log(`[SILERO VAD] Speech ended, duration: ${speechDuration}ms, startedDuringAI: ${this.speechStartedDuringAI}`);
+
           this.isSpeaking = false;
+          const wasStartedDuringAI = this.speechStartedDuringAI;
+          const wasInterrupt = this.speechIsInterrupt;
+
+          // Reset state for next speech
+          this.speechStartedDuringAI = false;
+          this.speechIsInterrupt = false;
+          this.interruptCandidate = false;
+          const speechStartTime = this.speechStartTime;
           this.speechStartTime = null;
 
-          // Check if this speech was contaminated (started during AI playback)
-          const wasContaminated = this.speechContaminated;
-          this.speechContaminated = false; // Reset for next speech
-
-          // Only trigger UI callback if not contaminated
-          if (this.onEnd && !wasContaminated) {
+          // Trigger UI callback
+          if (this.onEnd) {
             this.onEnd();
           }
 
-          // Don't send audio that started during AI speech (contaminated with AI voice)
-          if (wasContaminated) {
-            console.log('[SILERO VAD] Discarding - speech started during AI playback');
-            return;
-          }
-
-          // Minimum speech duration check (filter out very short noises)
+          // Minimum speech duration check
           const minDuration = 200; // 200ms minimum
           if (speechDuration < minDuration) {
             console.log(`[SILERO VAD] Ignoring - too short (${speechDuration}ms < ${minDuration}ms)`);
             return;
           }
 
-          // Convert Float32Array (16kHz) to WAV and send to Whisper
-          await this.sendAudioToWhisper(audio);
+          // If speech didn't start during AI playback, send normally
+          if (!wasStartedDuringAI) {
+            await this.sendAudioToWhisper(audio);
+            return;
+          }
+
+          // GRADUATED CONTAMINATION LOGIC
+          // Calculate overlap between user speech and AI playback
+          const aiStopTime = this.aiStoppedTime || speechEndTime;
+          const overlapDuration = Math.max(0, aiStopTime - speechStartTime);
+          const overlapPercent = speechDuration > 0 ? (overlapDuration / speechDuration) * 100 : 100;
+          const cleanDuration = speechDuration - overlapDuration;
+
+          console.log(`[SILERO VAD] Overlap analysis: ${overlapPercent.toFixed(1)}% overlap, ${cleanDuration}ms clean`);
+
+          // Log for debugging/analytics
+          console.log(JSON.stringify({
+            event: 'speech_segment',
+            duration: speechDuration,
+            overlapPercent: Math.round(overlapPercent),
+            cleanDuration,
+            isInterrupt: wasInterrupt
+          }));
+
+          // For interrupts, use more lenient thresholds
+          const highOverlapThreshold = wasInterrupt ? 90 : 70;
+          const minCleanDuration = wasInterrupt ? 300 : 500;
+
+          // Decision matrix
+          if (overlapPercent > highOverlapThreshold || cleanDuration < minCleanDuration) {
+            console.log('[SILERO VAD] High overlap - discarding');
+            return;
+          }
+
+          if (overlapPercent > 20) {
+            // Trim the contaminated portion from the start
+            const trimmedAudio = this.trimAudioStart(audio, overlapDuration + 100);
+            if (trimmedAudio) {
+              console.log(`[SILERO VAD] Trimmed ${overlapDuration + 100}ms - sending clean portion`);
+              await this.sendAudioToWhisper(trimmedAudio);
+            } else {
+              console.log('[SILERO VAD] Trim failed - discarding');
+            }
+          } else {
+            // Low overlap - send full audio
+            console.log('[SILERO VAD] Low overlap - sending full audio');
+            await this.sendAudioToWhisper(audio);
+          }
         },
 
         // CDN paths for ONNX model files
@@ -284,13 +347,34 @@ class SileroVADManager {
     });
   }
 
+  // Trim the start of audio to remove contaminated portion
+  // Used when speech started during AI playback but continued after AI stopped
+  trimAudioStart(audioFloat32, trimMs) {
+    // 16kHz sample rate = 16 samples per millisecond
+    const samplesToTrim = Math.floor(trimMs * 16);
+
+    if (samplesToTrim >= audioFloat32.length) {
+      console.warn('[SILERO VAD] Trim would remove entire audio');
+      return null;
+    }
+
+    if (samplesToTrim <= 0) {
+      return audioFloat32;
+    }
+
+    const trimmedAudio = audioFloat32.slice(samplesToTrim);
+    console.log(`[SILERO VAD] Trimmed ${trimMs}ms (${samplesToTrim} samples), remaining: ${trimmedAudio.length} samples`);
+    return trimmedAudio;
+  }
+
   setAISpeaking(isSpeaking) {
     const wasAISpeaking = this.aiIsSpeaking;
     this.aiIsSpeaking = isSpeaking;
     console.log('[SILERO VAD] AI speaking:', isSpeaking);
 
-    // When AI finishes speaking, any speech detected can now be processed
+    // Track when AI actually stopped for overlap calculation
     if (wasAISpeaking && !isSpeaking) {
+      this.aiStoppedTime = Date.now();
       console.log('[SILERO VAD] AI finished - ready to process user speech');
     }
   }
@@ -300,18 +384,52 @@ class SileroVADManager {
     if (this.vad && this.isInitialized) {
       this.vad.start();
       console.log('[SILERO VAD] Started listening');
+
+      // Start health check interval
+      if (!this.healthCheckInterval) {
+        this.healthCheckInterval = setInterval(() => this.checkVADHealth(), 5000);
+      }
     }
   }
 
   stop() {
     this.shouldBeListening = false;
+
+    // Clear health check interval
+    if (this.healthCheckInterval) {
+      clearInterval(this.healthCheckInterval);
+      this.healthCheckInterval = null;
+    }
+
     if (this.vad) {
       this.vad.pause();
       console.log('[SILERO VAD] Stopped listening');
     }
   }
 
+  // Health check to detect and recover from stuck states
+  checkVADHealth() {
+    // If speaking for > 30 seconds, something is wrong - reset
+    if (this.isSpeaking && this.speechStartTime) {
+      const duration = Date.now() - this.speechStartTime;
+      if (duration > 30000) {
+        console.warn('[SILERO VAD] Stuck in speaking state for 30s - resetting');
+        this.isSpeaking = false;
+        this.speechStartTime = null;
+        this.speechStartedDuringAI = false;
+        this.speechIsInterrupt = false;
+        this.interruptCandidate = false;
+      }
+    }
+  }
+
   destroy() {
+    // Clear health check interval
+    if (this.healthCheckInterval) {
+      clearInterval(this.healthCheckInterval);
+      this.healthCheckInterval = null;
+    }
+
     if (this.vad) {
       this.vad.destroy();
       this.vad = null;

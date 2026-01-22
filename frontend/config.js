@@ -62,10 +62,18 @@ const CONFIG = {
   ],
 
   // Speech Recognition Configuration
-  // V4.2: Silero VAD (deep learning) as primary for reliable voice detection
+  // V4.3: Silero VAD with graduated contamination logic
   SPEECH_RECOGNITION: {
     USE_SILERO_VAD: true,          // true = Silero VAD primary (recommended)
     WHISPER_PRIMARY: true,         // true = Whisper transcription primary, Web Speech fallback
+
+    // Overlap handling thresholds (used by graduated contamination logic)
+    HIGH_OVERLAP_DISCARD_PERCENT: 70,   // >70% overlap with AI = discard audio
+    LOW_OVERLAP_KEEP_PERCENT: 20,       // <20% overlap = keep full audio
+    MIN_CLEAN_AUDIO_MS: 500,            // Minimum clean audio duration to keep
+
+    // Interrupt detection
+    INTERRUPT_SUSTAIN_MS: 300,          // Time to confirm interrupt intent
 
     // Legacy VAD settings (only used if Silero VAD fails to load)
     SILENCE_THRESHOLD: 0.015,      // RMS threshold (lowered for better sensitivity)

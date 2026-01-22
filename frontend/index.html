@@ -43,7 +43,7 @@
   </div>
 
   <!-- App Header (shown on protected pages) -->
-  <header id="appHeader" class="app-header" style="display: none;">
+  <header id="appHeader" class="app-header initially-hidden">
     <a href="#" class="header-logo-link" onclick="navigateToLanding(); return false;">
       <div class="header-logo-icon">ST3</div>
       <span class="header-logo-text">Interview Trainer</span>
@@ -76,7 +76,7 @@
         <button class="nav-link" onclick="showAuthPage('login')">Log In</button>
         <button class="nav-link" onclick="showAuthPage('signup')">Sign Up</button>
       </div>
-      <div class="nav-links" id="navLinksUser" style="display: none;">
+      <div class="nav-links initially-hidden" id="navLinksUser">
         <a href="#pricingSection" class="nav-link" id="navPricingUser">Pricing</a>
         <button class="nav-link" onclick="browseAsGuest()">Explore</button>
         <button class="nav-link" onclick="showProfilePage()">Profile</button>
@@ -234,7 +234,7 @@
           <input type="password" id="authPassword" placeholder="••••••••" required minlength="6">
         </div>
 
-        <div id="confirmPasswordGroup" class="form-group" style="display: none;">
+        <div id="confirmPasswordGroup" class="form-group initially-hidden">
           <label for="authConfirmPassword">Confirm Password</label>
           <input type="password" id="authConfirmPassword" placeholder="••••••••" minlength="6">
         </div>
@@ -287,16 +287,16 @@
           <div class="profile-section">
             <h3>Account Information</h3>
             <div class="profile-field">
-              <label>Email</label>
-              <input type="email" id="profileEmail" disabled>
+              <label for="profileEmail">Email</label>
+              <input type="email" id="profileEmail" disabled aria-label="Email address">
             </div>
             <div class="profile-field">
-              <label>Full Name</label>
-              <input type="text" id="profileName" placeholder="Enter your name">
+              <label for="profileName">Full Name</label>
+              <input type="text" id="profileName" placeholder="Enter your name" aria-label="Full name">
             </div>
             <div class="profile-field">
-              <label>Specialty</label>
-              <select id="profileSpecialty">
+              <label for="profileSpecialty">Specialty</label>
+              <select id="profileSpecialty" aria-label="Select your specialty">
                 <option value="">Select specialty</option>
                 <option value="plastic-surgery">Plastic Surgery</option>
                 <option value="general-surgery">General Surgery</option>
@@ -306,8 +306,8 @@
               </select>
             </div>
             <div class="profile-field">
-              <label>Training Level</label>
-              <select id="profileTrainingLevel">
+              <label for="profileTrainingLevel">Training Level</label>
+              <select id="profileTrainingLevel" aria-label="Select your training level">
                 <option value="">Select level</option>
                 <option value="ct1">CT1</option>
                 <option value="ct2">CT2</option>
@@ -338,11 +338,10 @@
               </div>
               <span id="subscriptionBadge" class="subscription-badge free">Free</span>
             </div>
-            <button id="upgradeBtn" class="btn-save" style="width: 100%; margin-top: 16px;"
-              onclick="showUpgradeModal()">
+            <button id="upgradeBtn" class="btn-save btn-upgrade-spacing" onclick="showUpgradeModal()">
               Upgrade to Premium
             </button>
-            <button id="manageSubscriptionBtn" class="btn-back" style="width: 100%; margin-top: 12px; display: none;"
+            <button id="manageSubscriptionBtn" class="btn-back btn-manage-subscription initially-hidden"
               onclick="openCustomerPortal()">
               Manage Subscription
             </button>
@@ -419,7 +418,7 @@
 
   <div class="container">
     <!-- Page 1: Specialty Selection -->
-    <div id="specialtySelection" class="page" style="display: none;">
+    <div id="specialtySelection" class="page initially-hidden">
       <div class="header">
         <h1>🎯 ST3 Interview Trainer</h1>
         <p class="subtitle">Select your specialty to begin</p>
@@ -448,7 +447,7 @@
     </div>
 
     <!-- Page 2: Difficulty Selection -->
-    <div id="difficultySelection" class="page" style="display: none;">
+    <div id="difficultySelection" class="page initially-hidden">
       <button class="top-back-button" onclick="backToSpecialties()">← Back</button>
 
       <div class="header">
@@ -493,7 +492,7 @@
     </div>
 
     <!-- Page: Mode Selection (Practice vs Mock Exam) -->
-    <div id="modeSelection" class="page" style="display: none;">
+    <div id="modeSelection" class="page initially-hidden">
       <button class="top-back-button" onclick="backToDifficultyFromMode()">← Back</button>
 
       <div class="header">
@@ -530,7 +529,7 @@
     </div>
 
     <!-- Page: Mock Type Selection -->
-    <div id="mockTypeSelection" class="page" style="display: none;">
+    <div id="mockTypeSelection" class="page initially-hidden">
       <button class="top-back-button" onclick="backToModeSelection()">← Back</button>
 
       <div class="header">
@@ -567,7 +566,7 @@
     </div>
 
     <!-- Page: Station Type Selection (for Mock by Station) -->
-    <div id="stationTypeSelection" class="page" style="display: none;">
+    <div id="stationTypeSelection" class="page initially-hidden">
       <button class="top-back-button" onclick="backToMockTypeSelection()">← Back</button>
 
       <div class="header">
@@ -604,14 +603,13 @@
     </div>
 
     <!-- Page: Scenario Selection View -->
-    <div id="scenarioSelection" class="page" style="display: none;">
+    <div id="scenarioSelection" class="page initially-hidden">
       <div class="scenario-selection-layout" id="panelContainer">
         <!-- Panel 1: Headings (12.5%) -->
         <div class="headings-panel" id="headings-panel" onmouseleave="handlePanelMouseLeave('headings')">
           <div class="panel-header">
             <button class="top-back-button" onclick="backToDifficulty()">← Back</button>
-            <p id="selectedDifficultyIndicator"
-              style="margin-top: 15px; font-size: 13px; color: #00d4aa; font-weight: 600;"></p>
+            <p id="selectedDifficultyIndicator" class="difficulty-indicator"></p>
           </div>
 
           <div class="heading-item" onmouseenter="showSubheadings('clinical')" data-heading="clinical">
@@ -632,7 +630,7 @@
         <div id="subheadings-panel" class="subheadings-panel" onmouseenter="cancelSubheadingsTimer()"
           onmouseleave="handlePanelMouseLeave('subheadings')">
           <!-- Clinical subheadings -->
-          <div id="subheadings-clinical" class="subheading-group" style="display: none;">
+          <div id="subheadings-clinical" class="subheading-group initially-hidden">
             <div class="subheading-item" onmouseenter="showTopics('breast-and-aesthetic')">Breast & Aesthetic</div>
             <div class="subheading-item" onmouseenter="showTopics('burns')">Burns</div>
             <div class="subheading-item" onmouseenter="showTopics('elective-hand')">Elective Hand</div>
@@ -646,12 +644,12 @@
           </div>
 
           <!-- Call-The-Boss subheadings -->
-          <div id="subheadings-call-the-boss" class="subheading-group" style="display: none;">
+          <div id="subheadings-call-the-boss" class="subheading-group initially-hidden">
             <div class="subheading-item" onmouseenter="showTopics('call-the-boss-scenarios')">Scenarios</div>
           </div>
 
           <!-- Consent subheadings -->
-          <div id="subheadings-consent" class="subheading-group" style="display: none;">
+          <div id="subheadings-consent" class="subheading-group initially-hidden">
             <div class="subheading-item" onmouseenter="showTopics('consent-breast-and-aesthetic')">Breast & Aesthetic
             </div>
             <div class="subheading-item" onmouseenter="showTopics('consent-hand-surgery')">Hand Surgery</div>
@@ -662,7 +660,7 @@
           </div>
 
           <!-- Structured Interview subheadings -->
-          <div id="subheadings-structured" class="subheading-group" style="display: none;">
+          <div id="subheadings-structured" class="subheading-group initially-hidden">
             <div class="subheading-item" onmouseenter="showTopics('structured-audit')">Audit</div>
             <div class="subheading-item" onmouseenter="showTopics('structured-clinical-governance')">Clinical Governance
             </div>
@@ -688,12 +686,11 @@
       </div>
 
       <!-- Mobile Scenario Grid (Hidden on desktop, shown on mobile) -->
-      <div id="mobileScenarioGrid" style="display: none;">
-        <div style="padding: 16px; padding-top: 80px;">
+      <div id="mobileScenarioGrid" class="initially-hidden">
+        <div class="mobile-scenario-content">
           <button class="top-back-button" id="mobileBackButton" onclick="backToDifficulty()">← Back to
             Difficulty</button>
-          <p id="selectedDifficultyIndicatorMobile"
-            style="margin: 15px 0; font-size: 14px; color: #00d4aa; font-weight: 600;"></p>
+          <p id="selectedDifficultyIndicatorMobile" class="difficulty-indicator-mobile"></p>
 
           <!-- Level 1: Headings -->
           <div id="mobileHeadingsGrid" class="mobile-scenario-grid">
@@ -701,12 +698,12 @@
           </div>
 
           <!-- Level 2: Subheadings -->
-          <div id="mobileSubheadingsGrid" class="mobile-scenario-grid" style="display: none;">
+          <div id="mobileSubheadingsGrid" class="mobile-scenario-grid initially-hidden">
             <!-- Populated by JS -->
           </div>
 
           <!-- Level 3: Topics -->
-          <div id="mobileTopicsGrid" class="mobile-scenario-grid" style="display: none;">
+          <div id="mobileTopicsGrid" class="mobile-scenario-grid initially-hidden">
             <!-- Populated by JS -->
           </div>
         </div>
@@ -716,15 +713,15 @@
     <!-- Simulation Room View (Hidden by default) -->
     <div id="simulationRoom" class="simulation-room page">
       <!-- Mock Exam Timer (positioned top-right) -->
-      <div id="mockExamTimer" class="mock-exam-timer" style="display: none;">
+      <div id="mockExamTimer" class="mock-exam-timer initially-hidden">
         <div class="timer-display">
           <span id="timerMinutes">05</span>:<span id="timerSeconds">00</span>
         </div>
-        <div id="timerWarning" class="timer-warning" style="display: none;">Under 1 minute</div>
+        <div id="timerWarning" class="timer-warning initially-hidden">Under 1 minute</div>
       </div>
 
       <!-- Mock Exam Progress Bar (Full Mock only) -->
-      <div id="mockExamProgress" class="mock-exam-progress" style="display: none;">
+      <div id="mockExamProgress" class="mock-exam-progress initially-hidden">
         <span id="mockProgressText">Station 1 of 3</span>
         <div class="progress-bar">
           <div id="mockProgressFill" class="progress-fill"></div>
@@ -757,7 +754,7 @@
           <!-- Round Icon Buttons -->
           <div class="button-group">
             <button id="connectBtn" title="Start Session">&#9654;</button>
-            <button id="interruptBtn" disabled style="display: none;" title="Pause">&#10074;&#10074;</button>
+            <button id="interruptBtn" class="initially-hidden" disabled title="Pause">&#10074;&#10074;</button>
             <button id="disconnectBtn" disabled title="Stop">&#9632;</button>
           </div>
         </div>
@@ -767,8 +764,8 @@
           <div id="imageSection" class="image-section">
             <h3>Clinical Image</h3>
             <div class="clinical-image-container">
-              <img id="clinicalImage" class="clinical-image" src="" alt="Clinical image" onclick="openImageModal()"
-                style="display: none;">
+              <img id="clinicalImage" class="clinical-image initially-hidden" src="" alt="Clinical image"
+                onclick="openImageModal()">
               <div id="noImagePlaceholder" class="no-image-placeholder">
                 No clinical image available for this scenario
               </div>
@@ -776,7 +773,7 @@
           </div>
 
           <!-- Model Answer Section (will appear after feedback) -->
-          <div id="modelAnswerSection" class="model-answer-section" style="display: none;">
+          <div id="modelAnswerSection" class="model-answer-section initially-hidden">
             <h3>Model Answer</h3>
             <div id="modelAnswerContent" class="model-answer-content">
               Model answer will appear here after the scenario is completed.
@@ -849,8 +846,8 @@
         <!-- Clinical Image - middle -->
         <div id="mobileImageSection" class="mobile-image-section">
           <div class="mobile-clinical-image-container">
-            <img id="mobileClinicalImage" class="clinical-image" src="" alt="Clinical image" onclick="openImageModal()"
-              style="display: none;">
+            <img id="mobileClinicalImage" class="clinical-image initially-hidden" src="" alt="Clinical image"
+              onclick="openImageModal()">
             <div id="mobileNoImagePlaceholder" class="no-image-placeholder">
               No clinical image available
             </div>
@@ -860,7 +857,7 @@
         <!-- Action Buttons - bottom center (icons only) -->
         <div class="mobile-button-group">
           <button id="mobileConnectBtn" class="mobile-control-button" title="Start Session">&#9654;</button>
-          <button id="mobileInterruptBtn" class="mobile-control-button" disabled style="display: none;"
+          <button id="mobileInterruptBtn" class="mobile-control-button initially-hidden" disabled
             title="Pause">&#10074;&#10074;</button>
           <button id="mobileDisconnectBtn" class="mobile-control-button" disabled title="Stop">&#9632;</button>
         </div>
