@@ -37,12 +37,9 @@
       --neu-dark: rgba(163, 177, 198, 0.5);
       --neu-radius: 20px;
       --neu-radius-lg: 28px;
-      /* Accent colors for icons only */
-      --icon-play: #2E7D32;
-      --icon-stop: #C62828;
-      --icon-pause: #546E7A;
-      --icon-record: #D81B60;
-      --icon-muted: #78909C;
+      /* Icon colors - all grey except record */
+      --icon-grey: #5a6a7a;
+      --icon-record: #C62828;
     }
 
     /* ===== PANEL LAYOUT ===== */
@@ -52,6 +49,11 @@
       border-radius: 16px;
       height: 100%;
       background: linear-gradient(145deg, #f0f4f8 0%, #d9e2ec 100%);
+    }
+
+    /* Ensure the simulation layout has proper bottom spacing */
+    .desktop-simulation-layout {
+      padding-bottom: 48px !important;
     }
 
     .persona-panel img,
@@ -352,7 +354,7 @@
     /* Invisible container for alignment */
     .persona-controls-overlay {
       position: absolute;
-      bottom: 32px;
+      bottom: 48px;
       left: 50%;
       transform: translateX(-50%);
       z-index: 15;
@@ -421,45 +423,35 @@
         3px 3px 8px var(--neu-dark) !important;
     }
 
-    /* Standard size buttons (play/pause/stop) */
+    /* Standard size buttons (play/pause/stop) - all grey icons */
     .control-btn.standard {
       width: 64px !important;
       height: 64px !important;
       font-size: 22px !important;
-      color: var(--icon-muted) !important;
+      color: var(--icon-grey) !important;
     }
 
-    /* Record button - larger, prominent */
+    /* Record button - larger, prominent, red icon */
     .control-btn.record-main {
       width: 80px !important;
       height: 80px !important;
-      font-size: 28px !important;
+      font-size: 36px !important;
       border-radius: var(--neu-radius-lg) !important;
       color: var(--icon-record) !important;
       margin-bottom: 4px;
     }
 
-    /* ===== BUTTON-SPECIFIC ICON COLORS ===== */
+    /* ===== BUTTON-SPECIFIC STYLES ===== */
 
-    /* Connect/Play button - green icon */
-    #connectBtn {
-      color: var(--icon-play) !important;
-      background: var(--neu-bg) !important;
-    }
-
-    /* Pause button - neutral grey icon */
-    #interruptBtn {
-      color: var(--icon-pause) !important;
-      background: var(--neu-bg) !important;
-    }
-
-    /* Disconnect/Stop button - red icon */
+    /* All control buttons get grey icons */
+    #connectBtn,
+    #interruptBtn,
     #disconnectBtn {
-      color: var(--icon-stop) !important;
+      color: var(--icon-grey) !important;
       background: var(--neu-bg) !important;
     }
 
-    /* Record button - pink/magenta icon */
+    /* Record button - red circle icon */
     #recordBtn {
       color: var(--icon-record) !important;
       background: var(--neu-bg) !important;
@@ -1302,7 +1294,7 @@
           <div class="persona-controls-overlay">
             <!-- Record Button (Top, Large) -->
             <button type="button" id="recordBtn" class="control-btn record-main initially-hidden" disabled
-              title="Push to Talk" aria-label="Push to Talk">🎤</button>
+              title="Push to Talk" aria-label="Push to Talk">●</button>
 
             <!-- Other Controls (Bottom Row) -->
             <div class="controls-row">
