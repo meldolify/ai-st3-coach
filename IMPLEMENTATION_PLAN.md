@@ -1,58 +1,62 @@
-# Step 1: Environment Optimization & Foundation (COMPLETED)
-*Status: Done. VS Code debugging, Jest testing, and Linting are configured.*
+# Visual Polish & Layout Fixes
 
----
+## Problem Statement
+The current UI execution lacks professional polish, resembling a "MS Paint" mockup.
+1.  **Buttons**: The control buttons are inconsistent in style (dark semi-transparent squircle vs. solid colored circles) and lack a cohesive design language.
+2.  **Layout**: The bottom margin is missing or inconsistent, causing elements to feel crowded or cut off.
+3.  **Orb Position**: The "Voice Orb" feels like a sticker on top of the persona image rather than an integrated UI element.
 
-# Step 2: Backend Scalability & Refactoring (COMPLETED)
-*Status: Done. Modular structure (`backend/src/`) implemented. `server.js` retained as entry point but refactored to use `src/services`, `src/config`, and `src/utils`.*
+## Proposed Design Specs (for "Claude Code" Execution)
 
----
+### 1. Unified Control Bar
+Instead of floating individual buttons, implement a **Unified Control Bar** pinned to the bottom of the container.
 
-# Step 3: Frontend Modernization (COMPLETED)
-*Status: Done. Monolithic `index.html` and `index.js` refactored into modular JS files (`frontend/js/*.js`) and CSS (`frontend/styles/main.css`). No bundler used; scripts loaded via HTML tags.*
+*   **Container**:
+    *   `width`: `90%` (centered with auto margins).
+    *   `background`: `rgba(255, 255, 255, 0.9)` (Glassmorphism) or Solid White.
+    *   `border-radius`: `100px` (Capsule shape).
+    *   `padding`: `16px 32px`.
+    *   `box-shadow`: `0 10px 40px rgba(0,0,0,0.1)` (Premium elevation).
+    *   `bottom`: `24px` (Rigid margin from bottom of panel).
+    *   `display`: `flex`, `justify-content`: `space-between`, `align-items`: `center`.
 
----
+*   **Buttons (Inside Control Bar)**:
+    *   **Record (Center)**: Largest element.
+        *   size: `64px`.
+        *   style: Solid primary color (e.g., `#E91E63` or `#6366F1`) with white icon.
+        *   pulse animation when active.
+    *   **Playback Controls (Left/Right)**:
+        *   size: `48px`.
+        *   style: Ghost/Subtle (grey background) or text-labeled.
+        *   Play/Pause on one side, Stop/Disconnect on the other.
 
-# Step 4: Security Hardening (COMPLETED)
-*Status: Done. WebSocket middleware implemented for Rate Limiting, Session Security, and Message Validation.*
+### 2. Panel Constraints & Margins
+The panel currently has an "unlimited lower end".
+*   **Fix**: Enforce `position: relative` and `overflow: hidden` on the parent `.persona-panel`.
+*   **Flex-box Layout**:
+    *   The internal container (`.persona-layout-container`) must use `height: 100%` with `box-sizing: border-box`.
+    *   Use `padding-bottom: 32px` (or more) to create a visual "floor" that the Control Bar sits above.
 
----
+### 3. Voice Orb Integration
+The orb shouldn't obscure the persona's face.
+*   **Position**: Move the orb to a dedicated "Status Area" or ensure the persona image is scaled/cropped such that the face is in the top 50% and the orb occupies the bottom 50% (empty chest area).
+*   **Alternative**: Make the orb much smaller (`48px`) and integrate it into the **Control Bar** as a dynamic visualizer next to the record button.
 
-# Step 5: VAD Optimization (COMPLETED)
-*Status: Done. Adaptive Noise Floor and Spectral Analysis implemented in `speech.js`.*
+## CSS Strategy
+1.  **Clear Styles**: Delete all existing `.control-btn`, `.voice-orb`, and `.ai-status-bubble` styles to start fresh.
+2.  **Theme Variables**: Use CSS variables for spacing and colors to ensure consistency btwn buttons.
+3.  **Z-Index**: Ensure the `Control Bar` is `z-index: 20` and Image is `z-index: 0`.
 
----
-
-# Step 6: Testing Environment Setup (COMPLETED)
-*Status: Done. Configured `launch.json` for "Full Stack + Embedded Edge" debugging. Solved "Headless Mode" issues by forcing `vscode-edge-devtools.headless: false` in `settings.json` and cleaning up stale processes. Created `TESTING_SETUP.md`.*
-
----
-
-# Step 7: UI/UX Refinement (ACTIVE)
-
-## Goal
-Improve the clarity of the Unauthenticated experience and fix navigation bugs. **(To be implemented by Claude Code)**.
-
-## Proposed Changes
-
-### 1. Navigation Header Improvements
-#### [MODIFY] `frontend/index.html`
-*   **Guest Navigation:** Find `<div id="navLinksGuest">`. Change the "Explore" button text to **"Explore without login"**.
-*   **Header Bug Fix:** Inspect the `navigateToLanding()` function key in `frontend/js/ui-helpers.js` (or inline if not separated).
-    *   *Issue:* Clicking the logo from Profile page hides `appHeader` but might not correctly reset the state if the user IS logged in.
-    *   *Fix:* Ensure `navigateToLanding()` checks `isAuthenticated` state. If logged in, it should probably go to `Dashboard` or keep `appHeader` visible if staying on a protected route. Or, if it goes to Landing, it should ensure the correct Nav (Guest vs User) is shown.
-
-### 2. Landing Page Reorganization
-#### [MODIFY] `frontend/index.html`
-*   **Reorder Sections:**
-    *   Move the entire `.hero-buttons` container (currently inside `.landing-hero`) to be **BELOW** the `.landing-features` section.
-    *   *Alternative Layout:* If moving buttons out of Hero breaks the flow, consider moving `.landing-features` UP to sit between the Hero Description and the Hero Buttons.
-    *   *Requirement:* VISUAL ORDER: Hero Title -> Features (Why Choose Us) -> Big Action Buttons.
-*   **Rename Buttons (`.hero-buttons`):**
-    *   Button 1 (Primary): Change "Start Practicing Free" to **"Login to Practise Free Sample Scenarios"**.
-    *   Button 2 (Secondary): Change "Explore Scenarios" to **"Explore the website without login"**.
-*   **Styling:** Update `frontend/styles/main.css` to accommodate the longer button text (allow wrapping or increase container width).
-
-## Verification Plan
-1.  **Visual Check:** Verify "Features" appear before "Buttons".
-2.  **Navigation Check:** Go to Profile -> Click Logo -> Ensure Header/Nav bar state is correct.
+## Example Structure
+```html
+<div class="persona-panel-footer">
+  <!-- Unified Bar -->
+  <div class="control-bar">
+    <button class="btn-secondary">End Session</button>
+    <div class="record-container">
+       <button class="btn-record">🎤</button> <!-- Orb effect around this? -->
+    </div>
+    <button class="btn-secondary">Pause</button>
+  </div>
+</div>
+```

@@ -26,19 +26,34 @@
   <link rel="stylesheet" href="styles/main.css">
   <style>
     /* ==================================== */
-    /* POST-REMODEL ADJUSTMENTS (ROUND 4)   */
+    /* SIMULATION ROOM - REFINED DESIGN     */
+    /* Neumorphic Controls + Glass Orb      */
     /* ==================================== */
 
-    /* 0. ESSENTIAL LAYOUT & LAYERING */
+    /* ===== NEUMORPHISM VARIABLES ===== */
+    :root {
+      --neu-bg: #e4e8ec;
+      --neu-light: rgba(255, 255, 255, 0.95);
+      --neu-dark: rgba(163, 177, 198, 0.5);
+      --neu-radius: 20px;
+      --neu-radius-lg: 28px;
+      /* Accent colors for icons only */
+      --icon-play: #2E7D32;
+      --icon-stop: #C62828;
+      --icon-pause: #546E7A;
+      --icon-record: #D81B60;
+      --icon-muted: #78909C;
+    }
+
+    /* ===== PANEL LAYOUT ===== */
     .persona-panel {
       position: relative;
       overflow: hidden;
-      border-radius: 12px;
+      border-radius: 16px;
       height: 100%;
-      background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);
+      background: linear-gradient(145deg, #f0f4f8 0%, #d9e2ec 100%);
     }
 
-    /* FORCE IMAGE TO BACKGROUND */
     .persona-panel img,
     .persona-image,
     #personaImage {
@@ -51,395 +66,471 @@
       object-position: center center;
       display: block;
       z-index: 0 !important;
-      background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+      background: linear-gradient(145deg, #f0f4f8 0%, #e2e8f0 100%);
     }
 
-    /* 1. Refined Voice Orb & Overlays */
+    /* Hide persona info overlay */
+    .persona-info-overlay {
+      display: none !important;
+    }
+
+    /* ===== VOICE ORB - GLASSMORPHIC CIRCLE ===== */
     .persona-orb-overlay {
       position: absolute;
-      top: 55%;
-      /* Moved down further to prevent overlap */
+      top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       pointer-events: none;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      z-index: 10 !important;
-      /* Lower z-index than bubbles */
+      gap: 16px;
+      z-index: 10;
     }
 
     .voice-orb {
-      position: relative;
-      width: 140px;
-      height: 140px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #6366f1, #8b5cf6, #10b981, #fbbf24, #ef4444, #f97316, #a855f7, #6366f1);
-      background-size: 800% 800%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.4s ease, box-shadow 0.4s ease;
-      box-shadow: 0 0 40px rgba(99, 102, 241, 0.4);
-      overflow: hidden;
-      animation: color-cycle 30s ease-in-out infinite;
+      /* FORCE perfect circle */
+      width: 120px !important;
+      height: 120px !important;
+      min-width: 120px !important;
+      min-height: 120px !important;
+      aspect-ratio: 1 / 1 !important;
+      border-radius: 50% !important;
+
+      /* Glassmorphic frosted appearance */
+      background: radial-gradient(
+        ellipse at 30% 20%,
+        rgba(255, 255, 255, 0.9) 0%,
+        rgba(255, 255, 255, 0.6) 40%,
+        rgba(200, 220, 240, 0.4) 100%
+      ) !important;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+
+      /* Soft inner glow and outer shadow */
+      box-shadow:
+        inset 0 0 30px rgba(255, 255, 255, 0.8),
+        inset 0 0 60px rgba(100, 150, 200, 0.1),
+        0 8px 32px rgba(31, 38, 135, 0.15),
+        0 0 0 1px rgba(255, 255, 255, 0.4);
+
       border: none !important;
       outline: none !important;
-      z-index: 21 !important;
-    }
-
-    /* Circular Audio Spectrum Container */
-    .spectrum-container {
-      position: absolute;
-      width: 100%;
-      height: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
-      opacity: 0;
-      transition: opacity 0.3s ease;
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                  box-shadow 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: visible;
     }
 
-    .voice-orb.speaking .spectrum-container {
-      opacity: 1;
+    /* Spectrum container - hidden by default */
+    .spectrum-container {
+      display: none !important;
     }
 
-    /* Individual Spectrum Bars */
-    .spectrum-bar {
-      position: absolute;
-      width: 3px;
-      height: 20px;
-      background: linear-gradient(to top, rgba(99, 102, 241, 0.9), rgba(139, 92, 246, 0.9), rgba(16, 185, 129, 0.9));
-      border-radius: 2px;
-      transform-origin: center 70px;
-      transform: rotate(calc(var(--i) * 15deg)) translateY(-50px) scaleY(0.5);
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .voice-orb.speaking .spectrum-bar {
-      opacity: 1;
-      animation: spectrum-pulse 2.4s ease-in-out infinite;
-      animation-delay: calc(var(--i) * 0.16s);
-    }
-
-    @keyframes spectrum-pulse {
-
-      0%,
-      100% {
-        transform: rotate(calc(var(--i) * 15deg)) translateY(-50px) scaleY(0.3);
-        opacity: 0.5;
-      }
-
-      50% {
-        transform: rotate(calc(var(--i) * 15deg)) translateY(-50px) scaleY(1.2);
-        opacity: 1;
-      }
-    }
-
+    /* Outer ring pulse effect */
     .voice-orb::before {
       content: '';
       position: absolute;
       width: 100%;
       height: 100%;
       border-radius: 50%;
-      background: inherit;
+      background: transparent;
+      border: 2px solid rgba(100, 150, 200, 0.3);
       opacity: 0;
-      animation: none;
+      transform: scale(1);
+      transition: all 0.4s ease;
     }
 
+    /* Inner highlight shimmer */
     .voice-orb::after {
       content: '';
       position: absolute;
-      width: 200%;
-      height: 200%;
-      background: conic-gradient(from 0deg, transparent 0%, rgba(255, 255, 255, 0.08) 15%, rgba(255, 255, 255, 0.2) 25%, rgba(255, 255, 255, 0.08) 35%, transparent 50%, rgba(255, 255, 255, 0.08) 65%, rgba(255, 255, 255, 0.2) 75%, rgba(255, 255, 255, 0.08) 85%, transparent 100%);
+      top: 10%;
+      left: 15%;
+      width: 35%;
+      height: 20%;
+      background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.8) 0%,
+        rgba(255, 255, 255, 0) 100%
+      );
       border-radius: 50%;
-      opacity: 0;
-      animation: none;
-      filter: blur(8px);
+      opacity: 0.7;
     }
 
+    /* ===== ORB STATES ===== */
+
+    /* IDLE: Gentle breathing */
     .voice-orb.idle {
-      animation: color-cycle 30s ease-in-out infinite, breathe 3s ease-in-out infinite;
+      animation: orb-idle-breathe 4s ease-in-out infinite;
     }
 
+    @keyframes orb-idle-breathe {
+      0%, 100% {
+        transform: scale(1);
+        box-shadow:
+          inset 0 0 30px rgba(255, 255, 255, 0.8),
+          inset 0 0 60px rgba(100, 150, 200, 0.1),
+          0 8px 32px rgba(31, 38, 135, 0.15),
+          0 0 0 1px rgba(255, 255, 255, 0.4);
+      }
+      50% {
+        transform: scale(1.03);
+        box-shadow:
+          inset 0 0 40px rgba(255, 255, 255, 0.9),
+          inset 0 0 70px rgba(100, 150, 200, 0.15),
+          0 12px 40px rgba(31, 38, 135, 0.2),
+          0 0 0 1px rgba(255, 255, 255, 0.5);
+      }
+    }
+
+    /* LISTENING: Attentive glow with ring pulse */
     .voice-orb.listening {
-      animation: color-cycle 30s ease-in-out infinite;
-      box-shadow: 0 0 80px rgba(99, 102, 241, 0.7);
+      animation: orb-listening 2s ease-in-out infinite;
+      background: radial-gradient(
+        ellipse at 30% 20%,
+        rgba(255, 255, 255, 0.95) 0%,
+        rgba(230, 245, 255, 0.7) 40%,
+        rgba(180, 210, 240, 0.5) 100%
+      ) !important;
     }
 
     .voice-orb.listening::before {
-      animation: listening-pulse 1.5s ease-out infinite;
+      animation: listening-ring-pulse 1.8s ease-out infinite;
     }
 
-    .voice-orb.thinking {
-      animation: color-cycle 30s ease-in-out infinite, thinking-bounce 2.0s ease-in-out infinite;
-      box-shadow: 0 0 70px rgba(139, 92, 246, 0.6);
-    }
-
-    .voice-orb.thinking::after {
-      opacity: 1;
-      animation: thinking-spin 3s ease-in-out infinite;
-    }
-
-    .voice-orb.speaking {
-      animation: color-cycle 30s ease-in-out infinite;
-      box-shadow: 0 0 100px rgba(99, 102, 241, 0.9);
-      background: radial-gradient(circle at center, rgba(30, 30, 50, 0.9) 0%, rgba(20, 20, 40, 0.95) 100%);
-    }
-
-    .voice-orb.speaking::before {
-      animation: none;
-    }
-
-    @keyframes color-cycle {
-      0% {
-        background-position: 0% 50%;
-      }
-
-      50% {
-        background-position: 100% 50%;
-      }
-
-      100% {
-        background-position: 0% 50%;
-      }
-    }
-
-    @keyframes breathe {
-
-      0%,
-      100% {
+    @keyframes orb-listening {
+      0%, 100% {
         transform: scale(1);
-        box-shadow: 0 0 60px rgba(99, 102, 241, 0.4);
+        box-shadow:
+          inset 0 0 35px rgba(255, 255, 255, 0.9),
+          inset 0 0 60px rgba(66, 165, 245, 0.15),
+          0 8px 32px rgba(66, 165, 245, 0.25),
+          0 0 0 1px rgba(255, 255, 255, 0.5);
       }
-
       50% {
-        transform: scale(1.05);
-        box-shadow: 0 0 80px rgba(99, 102, 241, 0.6);
+        transform: scale(1.02);
+        box-shadow:
+          inset 0 0 40px rgba(255, 255, 255, 0.95),
+          inset 0 0 70px rgba(66, 165, 245, 0.2),
+          0 12px 40px rgba(66, 165, 245, 0.3),
+          0 0 0 1px rgba(255, 255, 255, 0.6);
       }
     }
 
-    @keyframes listening-pulse {
-      0% {
-        transform: scale(1);
-        opacity: 0.5;
-      }
-
-      100% {
-        transform: scale(1.6);
-        opacity: 0;
-      }
-    }
-
-    @keyframes thinking-spin {
-      0% {
-        transform: rotate(0deg);
-      }
-
-      100% {
-        transform: rotate(360deg);
-      }
-    }
-
-    @keyframes thinking-bounce {
-
-      0%,
-      100% {
-        transform: translateY(0) scale(1);
-      }
-
-      50% {
-        transform: translateY(-15px) scale(1.08);
-      }
-    }
-
-    @keyframes speaking-scale {
-
-      0%,
-      100% {
-        transform: scale(1);
-      }
-
-      50% {
-        transform: scale(1.1);
-      }
-    }
-
-    @keyframes speaking-pulse {
+    @keyframes listening-ring-pulse {
       0% {
         transform: scale(1);
         opacity: 0.6;
+        border-color: rgba(66, 165, 245, 0.5);
       }
-
       100% {
-        transform: scale(1.8);
+        transform: scale(1.5);
         opacity: 0;
+        border-color: rgba(66, 165, 245, 0);
       }
     }
 
-    /* 2. Glassmorphism Buttons (Smaller & Cleaner) */
-    /* 2. Soft UI Controls (Redesigned) */
-    /* 2. Soft UI Controls (Redesigned) */
-    /* .persona-controls-overlay removed in favor of Flexbox layout */
-
-    /* Info overlay - HIDDEN */
-    .persona-info-overlay {
-      display: none !important;
+    /* THINKING: Subtle bounce with rotating inner glow */
+    .voice-orb.thinking {
+      animation: orb-thinking-bounce 2.5s ease-in-out infinite;
+      background: radial-gradient(
+        ellipse at 30% 20%,
+        rgba(255, 255, 255, 0.9) 0%,
+        rgba(240, 230, 255, 0.6) 40%,
+        rgba(200, 180, 230, 0.4) 100%
+      ) !important;
     }
 
-    /* Container for grouped controls (Play/Pause/Stop) */
+    @keyframes orb-thinking-bounce {
+      0%, 100% {
+        transform: translateY(0) scale(1);
+        box-shadow:
+          inset 0 0 30px rgba(255, 255, 255, 0.8),
+          inset 0 0 60px rgba(149, 117, 205, 0.15),
+          0 8px 32px rgba(149, 117, 205, 0.2),
+          0 0 0 1px rgba(255, 255, 255, 0.4);
+      }
+      50% {
+        transform: translateY(-10px) scale(1.04);
+        box-shadow:
+          inset 0 0 40px rgba(255, 255, 255, 0.9),
+          inset 0 0 70px rgba(149, 117, 205, 0.2),
+          0 16px 48px rgba(149, 117, 205, 0.25),
+          0 0 0 1px rgba(255, 255, 255, 0.5);
+      }
+    }
+
+    /* SPEAKING: Rhythmic pulse with warm glow */
+    .voice-orb.speaking {
+      animation: orb-speaking-pulse 1.2s ease-in-out infinite;
+      background: radial-gradient(
+        ellipse at 30% 20%,
+        rgba(255, 255, 255, 0.95) 0%,
+        rgba(255, 245, 230, 0.7) 40%,
+        rgba(255, 200, 150, 0.4) 100%
+      ) !important;
+    }
+
+    .voice-orb.speaking::before {
+      animation: speaking-ring-pulse 1.2s ease-out infinite;
+    }
+
+    @keyframes orb-speaking-pulse {
+      0%, 100% {
+        transform: scale(1);
+        box-shadow:
+          inset 0 0 35px rgba(255, 255, 255, 0.9),
+          inset 0 0 60px rgba(255, 167, 38, 0.15),
+          0 8px 32px rgba(255, 167, 38, 0.2),
+          0 0 0 1px rgba(255, 255, 255, 0.5);
+      }
+      50% {
+        transform: scale(1.06);
+        box-shadow:
+          inset 0 0 45px rgba(255, 255, 255, 0.95),
+          inset 0 0 80px rgba(255, 167, 38, 0.2),
+          0 12px 44px rgba(255, 167, 38, 0.3),
+          0 0 0 1px rgba(255, 255, 255, 0.6);
+      }
+    }
+
+    @keyframes speaking-ring-pulse {
+      0% {
+        transform: scale(1);
+        opacity: 0.5;
+        border-color: rgba(255, 167, 38, 0.4);
+      }
+      100% {
+        transform: scale(1.6);
+        opacity: 0;
+        border-color: rgba(255, 167, 38, 0);
+      }
+    }
+
+    /* ===== AI STATUS BUBBLE ===== */
+    .ai-status-bubble {
+      background: rgba(255, 255, 255, 0.85) !important;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 8px 20px !important;
+      border-radius: 24px !important;
+      border: 1px solid rgba(255, 255, 255, 0.6) !important;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      min-width: auto !important;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: all 0.3s ease;
+    }
+
+    .ai-status-bubble.visible {
+      opacity: 1 !important;
+      transform: translateY(0) !important;
+    }
+
+    .ai-status-bubble.processing {
+      animation: status-float 2.5s ease-in-out infinite;
+    }
+
+    @keyframes status-float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    .ai-status-bubble span {
+      color: #37474F !important;
+      font-weight: 500 !important;
+      font-size: 13px !important;
+      letter-spacing: 0.3px;
+    }
+
+    /* ===== CONTROL BUTTONS - NEUMORPHIC ===== */
+
+    /* Invisible container for alignment */
+    .persona-controls-overlay {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 15;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      /* Invisible container */
+      background: transparent !important;
+      padding: 0;
+      pointer-events: none;
+    }
+
     .controls-row {
       display: flex;
-      gap: 16px;
+      gap: 20px;
       pointer-events: auto;
+      align-items: center;
     }
 
-    /* Base Soft UI Button Style */
+    /* Base neumorphic button */
     .control-btn {
       border: none !important;
       outline: none !important;
-      color: #555 !important;
-      background: #f0f2f5 !important;
-      /* Soft grey/white */
-      box-shadow:
-        -6px -6px 14px rgba(255, 255, 255, 0.9),
-        6px 6px 10px rgba(174, 174, 192, 0.4) !important;
-      border-radius: 24px !important;
-      /* Squircle */
       cursor: pointer;
       display: flex !important;
       align-items: center !important;
       justify-content: center !important;
-      transition: all 0.2s ease !important;
       pointer-events: auto !important;
+
+      /* Neumorphic surface */
+      background: var(--neu-bg) !important;
+      border-radius: var(--neu-radius) !important;
+
+      /* The signature raised shadow */
+      box-shadow:
+        -6px -6px 14px var(--neu-light),
+        6px 6px 14px var(--neu-dark),
+        inset 0 0 0 transparent !important;
+
+      transition: all 0.15s ease !important;
     }
 
-    /* Pressed/Active State */
+    /* Hover - subtle lift */
+    .control-btn:hover:not(:disabled) {
+      box-shadow:
+        -8px -8px 18px var(--neu-light),
+        8px 8px 18px var(--neu-dark) !important;
+      transform: translateY(-1px);
+    }
+
+    /* Active/Pressed - inset shadow */
     .control-btn:active:not(:disabled) {
-      box-shadow: inset 2px 2px 5px rgba(174, 174, 192, 0.4), inset -3px -3px 7px rgba(255, 255, 255, 0.9) !important;
-      transform: scale(0.98);
+      box-shadow:
+        inset 4px 4px 8px var(--neu-dark),
+        inset -4px -4px 8px var(--neu-light) !important;
+      transform: scale(0.98) translateY(0);
     }
 
+    /* Disabled state */
     .control-btn:disabled {
-      opacity: 0.5;
+      opacity: 0.4;
       cursor: not-allowed;
-      box-shadow: none !important;
+      box-shadow:
+        -3px -3px 8px var(--neu-light),
+        3px 3px 8px var(--neu-dark) !important;
     }
 
-    /* Standard Control Buttons (Play/Pause/Stop) */
+    /* Standard size buttons (play/pause/stop) */
     .control-btn.standard {
       width: 64px !important;
       height: 64px !important;
-      font-size: 24px !important;
+      font-size: 22px !important;
+      color: var(--icon-muted) !important;
     }
 
-    /* Giant Record Button */
+    /* Record button - larger, prominent */
     .control-btn.record-main {
-      width: 96px !important;
-      height: 96px !important;
-      font-size: 32px !important;
-      border-radius: 32px !important;
-      color: #E91E63 !important;
-      /* Pink icon */
-      margin-bottom: 8px;
+      width: 80px !important;
+      height: 80px !important;
+      font-size: 28px !important;
+      border-radius: var(--neu-radius-lg) !important;
+      color: var(--icon-record) !important;
+      margin-bottom: 4px;
     }
 
+    /* ===== BUTTON-SPECIFIC ICON COLORS ===== */
+
+    /* Connect/Play button - green icon */
+    #connectBtn {
+      color: var(--icon-play) !important;
+      background: var(--neu-bg) !important;
+    }
+
+    /* Pause button - neutral grey icon */
+    #interruptBtn {
+      color: var(--icon-pause) !important;
+      background: var(--neu-bg) !important;
+    }
+
+    /* Disconnect/Stop button - red icon */
+    #disconnectBtn {
+      color: var(--icon-stop) !important;
+      background: var(--neu-bg) !important;
+    }
+
+    /* Record button - pink/magenta icon */
+    #recordBtn {
+      color: var(--icon-record) !important;
+      background: var(--neu-bg) !important;
+    }
+
+    /* Recording state - filled background */
+    #recordBtn.recording,
     .control-btn.record-main.recording {
+      background: var(--icon-record) !important;
       color: white !important;
-      background: #E91E63 !important;
-      box-shadow: 0 0 20px rgba(233, 30, 99, 0.6) !important;
-      animation: recording-pulse 1.5s ease-in-out infinite !important;
+      box-shadow:
+        0 0 0 4px rgba(216, 27, 96, 0.2),
+        -4px -4px 10px var(--neu-light),
+        4px 4px 10px var(--neu-dark) !important;
+      animation: recording-glow 1.5s ease-in-out infinite !important;
     }
 
+    @keyframes recording-glow {
+      0%, 100% {
+        box-shadow:
+          0 0 0 4px rgba(216, 27, 96, 0.2),
+          0 0 20px rgba(216, 27, 96, 0.3),
+          -4px -4px 10px var(--neu-light),
+          4px 4px 10px var(--neu-dark);
+      }
+      50% {
+        box-shadow:
+          0 0 0 8px rgba(216, 27, 96, 0.15),
+          0 0 30px rgba(216, 27, 96, 0.4),
+          -4px -4px 10px var(--neu-light),
+          4px 4px 10px var(--neu-dark);
+      }
+    }
+
+    /* Legacy class cleanup */
     .control-pill {
-      /* Legacy class removal/override just in case */
       display: contents !important;
       background: transparent !important;
       box-shadow: none !important;
       padding: 0 !important;
     }
 
-    /* LEGACY STYLES REMOVED - DUPLICATES */
-    /* .control-btn styles are now defined above with Soft UI properties */
-
-    /* Red disconnect/end button */
-    #disconnectBtn {
-      background: #E53935 !important;
-      color: white !important;
-    }
-
-    #disconnectBtn:hover:not(:disabled) {
-      background: #C62828 !important;
-    }
-
-    /* Green connect/start button */
-    #connectBtn {
-      background: #43A047 !important;
-      color: white !important;
-    }
-
-    #connectBtn:hover:not(:disabled) {
-      background: #388E3C !important;
-    }
-
-    /* Record button - pink/coral when active */
-    #recordBtn {
-      background: rgba(60, 60, 70, 0.9) !important;
-    }
-
-    #recordBtn.recording {
-      background: #E91E63 !important;
-      animation: recording-pulse 1.5s ease-in-out infinite !important;
-    }
-
-    /* 3. AI Status Bubble - Top Left (Styled above) */
-    /* .ai-status-bubble definition moved to main flex layout block */
-
-    /* Visible state when processing */
-    .ai-status-bubble.visible {
-      opacity: 1 !important;
-      transform: translateY(0) !important;
-      pointer-events: auto;
-    }
-
-    /* Bounce animation for processing */
-    .ai-status-bubble.processing {
-      animation: bubble-bounce 2s ease-in-out infinite;
-    }
-
-    @keyframes bubble-bounce {
-
-      0%,
-      100% {
-        transform: translateY(0);
-      }
-
-      50% {
-        transform: translateY(-8px);
-      }
-    }
-
-    .ai-status-bubble span {
-      color: #333 !important;
-      font-weight: 600 !important;
-      font-size: 13px !important;
-    }
-
-    /* 4. Fix Back Button */
+    /* ===== BACK BUTTON ===== */
     .back-button {
-      color: #1F2937 !important;
-      background: white;
-      border: 1px solid #E5E7EB;
+      color: #37474F !important;
+      background: var(--neu-bg);
+      border: none;
+      box-shadow:
+        -4px -4px 10px var(--neu-light),
+        4px 4px 10px var(--neu-dark);
     }
 
     .back-button span {
-      color: #1F2937 !important;
+      color: #37474F !important;
     }
 
     .back-button:hover {
-      background: #F3F4F6;
+      box-shadow:
+        -6px -6px 14px var(--neu-light),
+        6px 6px 14px var(--neu-dark);
+    }
+
+    /* ===== REDUCED MOTION ===== */
+    @media (prefers-reduced-motion: reduce) {
+      .voice-orb,
+      .voice-orb::before,
+      .control-btn,
+      .ai-status-bubble {
+        animation: none !important;
+        transition: none !important;
+      }
     }
   </style>
 </head>
