@@ -1029,6 +1029,13 @@ function syncMobileButtonStates() {
     }
   }
 
+  const interruptBtn = document.getElementById('interruptBtn');
+  const mobileInterruptBtn = document.getElementById('mobileInterruptBtn');
+  if (interruptBtn && mobileInterruptBtn) {
+    mobileInterruptBtn.disabled = interruptBtn.disabled;
+    mobileInterruptBtn.style.display = interruptBtn.style.display;
+  }
+
   const disconnectBtn = document.getElementById('disconnectBtn');
   const mobileDisconnectBtn = document.getElementById('mobileDisconnectBtn');
   if (disconnectBtn && mobileDisconnectBtn) {
@@ -1059,6 +1066,14 @@ function setupMobileButtonListeners() {
     mobileRecordBtn.onclick = () => {
       console.log('[Mobile] Record button clicked');
       recordBtn.click();
+    };
+  }
+  const interruptBtn = document.getElementById('interruptBtn');
+  const mobileInterruptBtn = document.getElementById('mobileInterruptBtn');
+  if (mobileInterruptBtn && interruptBtn) {
+    mobileInterruptBtn.onclick = () => {
+      console.log('[Mobile] Interrupt button clicked');
+      interruptBtn.click();
     };
   }
   if (mobileDisconnectBtn && disconnectBtn) {

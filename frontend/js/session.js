@@ -183,6 +183,11 @@ class V4Session {
         log('AI: ' + msg.text, 'info');
         this.audioPlayer.playBase64Audio(msg.audio);
         // Show interrupt button and set speaking state
+        const interruptBtn = document.getElementById('interruptBtn');
+        if (interruptBtn) {
+          interruptBtn.style.display = 'inline-block';
+          interruptBtn.disabled = false;
+        }
         syncMobileButtonStates(); // Sync mobile buttons
         updateStatus('aiStatus', 'Speaking', 'speaking'); // Hide bubble when speaking
         setOrbState('speaking');
@@ -206,6 +211,12 @@ class V4Session {
 
       case 'interrupt':
         this.audioPlayer.interrupt();
+        // Hide interrupt button
+        const interruptBtnOnInterrupt = document.getElementById('interruptBtn');
+        if (interruptBtnOnInterrupt) {
+          interruptBtnOnInterrupt.style.display = 'none';
+          interruptBtnOnInterrupt.disabled = true;
+        }
         syncMobileButtonStates(); // Sync mobile buttons
         setOrbState('listening');
         break;
@@ -246,6 +257,23 @@ class V4Session {
       }
     };
 
+    // Set up PTT recording callbacks (centralized UI state management)
+    this.speechRecognition.onRecordingStart = () => {
+      updateStatus('micStatus', 'Recording', 'connected');
+      setOrbState('listening');
+    };
+
+    this.speechRecognition.onRecordingEnd = () => {
+      updateStatus('micStatus', 'Processing...', 'processing');
+      setOrbState('processing');
+    };
+
+    // Set up error callback for PTT failures
+    this.speechRecognition.onError = (message) => {
+      log(message, 'error');
+      setOrbState('idle');
+    };
+
     // Set up voice-triggered interrupt callback (Whisper only)
     if (this.usingWhisper && this.speechRecognition.onInterruptRequest !== undefined) {
       this.speechRecognition.onInterruptRequest = () => {
@@ -281,6 +309,11 @@ class V4Session {
 
     this.audioPlayer.onEnd = () => {
       // Hide interrupt button
+      const interruptBtnOnEnd = document.getElementById('interruptBtn');
+      if (interruptBtnOnEnd) {
+        interruptBtnOnEnd.style.display = 'none';
+        interruptBtnOnEnd.disabled = true;
+      }
       syncMobileButtonStates(); // Sync mobile buttons
 
       // For Whisper: clear AI speaking flag

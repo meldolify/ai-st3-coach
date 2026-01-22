@@ -258,6 +258,13 @@ document.getElementById('disconnectBtn').addEventListener('click', async () => {
   recordBtn.classList.remove('recording');
   recordBtn.disabled = true;
 
+  // Hide and reset interrupt button
+  const interruptBtn = document.getElementById('interruptBtn');
+  if (interruptBtn) {
+    interruptBtn.style.display = 'none';
+    interruptBtn.disabled = true;
+  }
+
   syncMobileButtonStates(); // Sync mobile buttons
   updateStatus('sessionStatus', 'No Session', 'disconnected');
   updateStatus('micStatus', 'Inactive', 'disconnected');
@@ -275,7 +282,28 @@ document.getElementById('disconnectBtn').addEventListener('click', async () => {
 });
 
 // Interrupt button - stops AI and activates microphone
+document.getElementById('interruptBtn').addEventListener('click', () => {
+  if (session && session.audioPlayer.isPlaying) {
+    session.audioPlayer.interrupt();
 
+    // Notify backend
+    if (session.isConnected && session.sessionId) {
+      session.ws.send(JSON.stringify({
+        type: 'user_speaking',
+        sessionId: session.sessionId
+      }));
+    }
+
+    // Hide interrupt button
+    const interruptBtn = document.getElementById('interruptBtn');
+    interruptBtn.style.display = 'none';
+    interruptBtn.disabled = true;
+
+    syncMobileButtonStates();
+    setOrbState('idle');
+    log('AI interrupted by user', 'info');
+  }
+});
 
 // ============================================================================
 // SCROLL ANIMATIONS (Squarespace-style)
