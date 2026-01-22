@@ -4601,3 +4601,42 @@ body.has-header {
   padding: 16px;
   padding-top: 80px;
 }
+
+/* ============================================
+   PUSH-TO-TALK BUTTON STYLES
+   ============================================ */
+
+/* Record button - default state */
+#recordBtn,
+#mobileRecordBtn {
+  transition: all 0.3s ease;
+}
+
+/* Record button - recording state */
+#recordBtn.recording,
+#mobileRecordBtn.recording {
+  background: linear-gradient(135deg, #DC2626, #EF4444) !important;
+  box-shadow: 0 0 20px rgba(220, 38, 38, 0.5), 0 0 40px rgba(220, 38, 38, 0.3);
+  animation: recording-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes recording-pulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 20px rgba(220, 38, 38, 0.5), 0 0 40px rgba(220, 38, 38, 0.3);
+  }
+
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(220, 38, 38, 0.7), 0 0 60px rgba(220, 38, 38, 0.4);
+  }
+}
+
+/* Record button - hover when not recording */
+#recordBtn:not(.recording):not(:disabled):hover,
+#mobileRecordBtn:not(.recording):not(:disabled):hover {
+  background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
+  box-shadow: 0 0 15px rgba(15, 118, 110, 0.4);
+}

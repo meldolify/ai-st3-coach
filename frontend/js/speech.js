@@ -1,8 +1,8 @@
 // ============================================================================
-// SPEECH.JS - Speech Recognition (Silero VAD + Web Speech API Fallback)
+// SPEECH.JS - Speech Recognition (Push-to-Talk + Web Speech API Fallback)
 // ============================================================================
-// Dependencies: config.js, @ricky0123/vad-web (CDN)
-// Classes: SpeechRecognitionManager (Web Speech API), SileroVADManager (primary)
+// Dependencies: config.js
+// Classes: SpeechRecognitionManager (Web Speech API fallback), PushToTalkManager (primary)
 // ============================================================================
 
 // ============================================================================
@@ -93,192 +93,179 @@ class SpeechRecognitionManager {
 }
 
 // ============================================================================
-// SILERO VAD MANAGER - Professional Voice Activity Detection
-// Uses @ricky0123/vad-web with Silero VAD deep learning model
+// PUSH-TO-TALK MANAGER - Simple Click-to-Record Audio Capture
+// User clicks to start recording, clicks again to stop and send to Whisper
 // ============================================================================
 
-class SileroVADManager {
+class PushToTalkManager {
   constructor(websocket) {
     this.websocket = websocket;
-    this.vad = null;
     this.isInitialized = false;
+    this.isRecording = false;
 
-    // State tracking
-    this.aiIsSpeaking = false;
-    this.aiStoppedTime = null; // Timestamp when AI audio stopped (for overlap calculation)
-    this.isSpeaking = false;
-    this.shouldBeListening = false;
-    this.speechStartTime = null;
-    this.speechStartedDuringAI = false; // True if speech started while AI was playing
-    this.speechIsInterrupt = false; // True if this speech is an intentional interrupt
-    this.interruptCandidate = false; // True if speech might be an interrupt (pending confirmation)
-    this.healthCheckInterval = null; // Interval for VAD health monitoring
+    // MediaRecorder for capturing audio
+    this.mediaRecorder = null;
+    this.audioChunks = [];
+    this.stream = null;
+
+    // Audio context for processing
+    this.audioContext = null;
 
     // Callbacks (set by V4Session)
     this.onTranscript = null;
-    this.onStart = null;
-    this.onEnd = null;
-    this.onInterruptRequest = null;
+    this.onRecordingStart = null;
+    this.onRecordingEnd = null;
   }
 
   async initialize() {
     if (this.isInitialized) return true;
 
-    // Check if vad library is loaded
-    if (typeof vad === 'undefined' || !vad.MicVAD) {
-      console.error('[SILERO VAD] vad-web library not loaded');
-      return false;
-    }
-
     try {
-      console.log('[SILERO VAD] Initializing...');
+      console.log('[PTT] Initializing Push-to-Talk...');
 
-      this.vad = await vad.MicVAD.new({
-        // Speech detection callbacks
-        onSpeechStart: () => {
-          console.log('[SILERO VAD] Speech started, AI speaking:', this.aiIsSpeaking);
-          this.isSpeaking = true;
-          this.speechStartTime = Date.now();
+      // Request microphone permission
+      this.stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          sampleRate: 16000
+        }
+      });
 
-          // Track if speech started during AI playback (for overlap analysis)
-          this.speechStartedDuringAI = this.aiIsSpeaking;
-          this.speechIsInterrupt = false;
-          this.interruptCandidate = false;
-
-          if (this.speechStartedDuringAI) {
-            console.log('[SILERO VAD] Speech started during AI playback - will analyze overlap');
-            this.interruptCandidate = true;
-
-            // Wait 300ms - if still speaking during AI, it's intentional interrupt
-            setTimeout(() => {
-              if (this.isSpeaking && this.aiIsSpeaking && this.interruptCandidate) {
-                console.log('[SILERO VAD] Sustained speech during AI - triggering interrupt');
-                this.speechIsInterrupt = true;
-                if (this.onInterruptRequest) {
-                  this.onInterruptRequest(); // Triggers audio stop
-                }
-              }
-            }, 300);
-          }
-
-          // Always trigger UI callback (we'll handle contamination at end)
-          if (this.onStart) {
-            this.onStart();
-          }
-        },
-
-        onSpeechEnd: async (audio) => {
-          const speechEndTime = Date.now();
-          const speechDuration = this.speechStartTime ? speechEndTime - this.speechStartTime : 0;
-          console.log(`[SILERO VAD] Speech ended, duration: ${speechDuration}ms, startedDuringAI: ${this.speechStartedDuringAI}`);
-
-          this.isSpeaking = false;
-          const wasStartedDuringAI = this.speechStartedDuringAI;
-          const wasInterrupt = this.speechIsInterrupt;
-
-          // Reset state for next speech
-          this.speechStartedDuringAI = false;
-          this.speechIsInterrupt = false;
-          this.interruptCandidate = false;
-          const speechStartTime = this.speechStartTime;
-          this.speechStartTime = null;
-
-          // Trigger UI callback
-          if (this.onEnd) {
-            this.onEnd();
-          }
-
-          // Minimum speech duration check
-          const minDuration = 200; // 200ms minimum
-          if (speechDuration < minDuration) {
-            console.log(`[SILERO VAD] Ignoring - too short (${speechDuration}ms < ${minDuration}ms)`);
-            return;
-          }
-
-          // If speech didn't start during AI playback, send normally
-          if (!wasStartedDuringAI) {
-            await this.sendAudioToWhisper(audio);
-            return;
-          }
-
-          // GRADUATED CONTAMINATION LOGIC
-          // Calculate overlap between user speech and AI playback
-          const aiStopTime = this.aiStoppedTime || speechEndTime;
-          const overlapDuration = Math.max(0, aiStopTime - speechStartTime);
-          const overlapPercent = speechDuration > 0 ? (overlapDuration / speechDuration) * 100 : 100;
-          const cleanDuration = speechDuration - overlapDuration;
-
-          console.log(`[SILERO VAD] Overlap analysis: ${overlapPercent.toFixed(1)}% overlap, ${cleanDuration}ms clean`);
-
-          // Log for debugging/analytics
-          console.log(JSON.stringify({
-            event: 'speech_segment',
-            duration: speechDuration,
-            overlapPercent: Math.round(overlapPercent),
-            cleanDuration,
-            isInterrupt: wasInterrupt
-          }));
-
-          // For interrupts, use more lenient thresholds
-          const highOverlapThreshold = wasInterrupt ? 90 : 70;
-          const minCleanDuration = wasInterrupt ? 300 : 500;
-
-          // Decision matrix
-          if (overlapPercent > highOverlapThreshold || cleanDuration < minCleanDuration) {
-            console.log('[SILERO VAD] High overlap - discarding');
-            return;
-          }
-
-          if (overlapPercent > 20) {
-            // Trim the contaminated portion from the start
-            const trimmedAudio = this.trimAudioStart(audio, overlapDuration + 100);
-            if (trimmedAudio) {
-              console.log(`[SILERO VAD] Trimmed ${overlapDuration + 100}ms - sending clean portion`);
-              await this.sendAudioToWhisper(trimmedAudio);
-            } else {
-              console.log('[SILERO VAD] Trim failed - discarding');
-            }
-          } else {
-            // Low overlap - send full audio
-            console.log('[SILERO VAD] Low overlap - sending full audio');
-            await this.sendAudioToWhisper(audio);
-          }
-        },
-
-        // CDN paths for ONNX model files
-        onnxWASMBasePath: "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.22.0/dist/",
-        baseAssetPath: "https://cdn.jsdelivr.net/npm/@ricky0123/vad-web@0.0.29/dist/",
-
-        // VAD parameters - tuned for voice agents with echo cancellation
-        positiveSpeechThreshold: 0.6,   // Higher threshold to reduce false positives from speakers
-        negativeSpeechThreshold: 0.4,   // Threshold to end speech
-        redemptionFrames: 10,           // More frames to wait before ending (reduces premature cutoff)
-        minSpeechFrames: 5,             // Minimum frames for valid speech (filters short noises)
-        preSpeechPadFrames: 2           // Frames to include before speech
+      // Create audio context for later WAV conversion
+      this.audioContext = new (window.AudioContext || window.webkitAudioContext)({
+        sampleRate: 16000
       });
 
       this.isInitialized = true;
-      console.log('[SILERO VAD] Initialized successfully');
+      console.log('[PTT] Initialized successfully');
       return true;
 
     } catch (error) {
-      console.error('[SILERO VAD] Initialization failed:', error);
+      console.error('[PTT] Initialization failed:', error);
+      if (error.name === 'NotAllowedError') {
+        log('Microphone access denied. Please allow microphone access.', 'error');
+      } else if (error.name === 'NotFoundError') {
+        log('No microphone found. Please connect a microphone.', 'error');
+      }
       return false;
     }
   }
 
-  async sendAudioToWhisper(audioFloat32) {
+  toggleRecording() {
+    if (this.isRecording) {
+      this.stopRecording();
+    } else {
+      this.startRecording();
+    }
+    return this.isRecording;
+  }
+
+  startRecording() {
+    if (!this.isInitialized || !this.stream) {
+      console.error('[PTT] Not initialized');
+      return false;
+    }
+
+    if (this.isRecording) {
+      console.warn('[PTT] Already recording');
+      return false;
+    }
+
+    try {
+      console.log('[PTT] Starting recording...');
+
+      this.audioChunks = [];
+
+      // Use webm for MediaRecorder (widely supported)
+      const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
+        ? 'audio/webm;codecs=opus'
+        : 'audio/webm';
+
+      this.mediaRecorder = new MediaRecorder(this.stream, {
+        mimeType: mimeType
+      });
+
+      this.mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          this.audioChunks.push(event.data);
+        }
+      };
+
+      this.mediaRecorder.onstop = async () => {
+        console.log('[PTT] Recording stopped, processing audio...');
+        await this.processAndSendAudio();
+      };
+
+      this.mediaRecorder.onerror = (error) => {
+        console.error('[PTT] MediaRecorder error:', error);
+        this.isRecording = false;
+        if (this.onRecordingEnd) this.onRecordingEnd();
+      };
+
+      this.mediaRecorder.start();
+      this.isRecording = true;
+
+      console.log('[PTT] Recording started');
+      if (this.onRecordingStart) this.onRecordingStart();
+
+      return true;
+
+    } catch (error) {
+      console.error('[PTT] Failed to start recording:', error);
+      return false;
+    }
+  }
+
+  stopRecording() {
+    if (!this.isRecording || !this.mediaRecorder) {
+      console.warn('[PTT] Not recording');
+      return false;
+    }
+
+    try {
+      console.log('[PTT] Stopping recording...');
+      this.mediaRecorder.stop();
+      this.isRecording = false;
+
+      if (this.onRecordingEnd) this.onRecordingEnd();
+
+      return true;
+
+    } catch (error) {
+      console.error('[PTT] Failed to stop recording:', error);
+      this.isRecording = false;
+      return false;
+    }
+  }
+
+  async processAndSendAudio() {
+    if (this.audioChunks.length === 0) {
+      console.warn('[PTT] No audio data to send');
+      return;
+    }
+
     if (!this.websocket || this.websocket.readyState !== WebSocket.OPEN) {
-      console.warn('[SILERO VAD] WebSocket not ready');
+      console.warn('[PTT] WebSocket not ready');
       return;
     }
 
     try {
       const startTime = Date.now();
 
-      // Convert Float32Array (16kHz mono) to WAV blob
-      const wavBlob = this.float32ToWav(audioFloat32, 16000);
-      console.log(`[SILERO VAD] WAV: ${wavBlob.size} bytes`);
+      // Create blob from chunks
+      const audioBlob = new Blob(this.audioChunks, { type: 'audio/webm' });
+      console.log(`[PTT] Audio blob: ${audioBlob.size} bytes`);
+
+      // Skip if too short (likely a misclick)
+      if (audioBlob.size < 1000) {
+        console.log('[PTT] Audio too short, skipping');
+        return;
+      }
+
+      // Convert WebM to WAV for Whisper (requires decoding)
+      const wavBlob = await this.convertToWav(audioBlob);
+      console.log(`[PTT] WAV: ${wavBlob.size} bytes`);
 
       // Convert to base64
       const base64Audio = await this.blobToBase64(wavBlob);
@@ -292,11 +279,24 @@ class SileroVADManager {
         format: 'wav'
       }));
 
-      console.log(`[SILERO VAD] Audio sent to Whisper (${Date.now() - startTime}ms)`);
+      console.log(`[PTT] Audio sent to Whisper (${Date.now() - startTime}ms)`);
 
     } catch (error) {
-      console.error('[SILERO VAD] Error sending audio:', error);
+      console.error('[PTT] Error processing audio:', error);
     }
+  }
+
+  async convertToWav(webmBlob) {
+    // Decode the WebM audio using AudioContext
+    const arrayBuffer = await webmBlob.arrayBuffer();
+    const audioBuffer = await this.audioContext.decodeAudioData(arrayBuffer);
+
+    // Get audio data (mono, first channel)
+    const channelData = audioBuffer.getChannelData(0);
+    const sampleRate = audioBuffer.sampleRate;
+
+    // Create WAV file
+    return this.float32ToWav(channelData, sampleRate);
   }
 
   float32ToWav(float32Array, sampleRate) {
@@ -347,94 +347,43 @@ class SileroVADManager {
     });
   }
 
-  // Trim the start of audio to remove contaminated portion
-  // Used when speech started during AI playback but continued after AI stopped
-  trimAudioStart(audioFloat32, trimMs) {
-    // 16kHz sample rate = 16 samples per millisecond
-    const samplesToTrim = Math.floor(trimMs * 16);
-
-    if (samplesToTrim >= audioFloat32.length) {
-      console.warn('[SILERO VAD] Trim would remove entire audio');
-      return null;
-    }
-
-    if (samplesToTrim <= 0) {
-      return audioFloat32;
-    }
-
-    const trimmedAudio = audioFloat32.slice(samplesToTrim);
-    console.log(`[SILERO VAD] Trimmed ${trimMs}ms (${samplesToTrim} samples), remaining: ${trimmedAudio.length} samples`);
-    return trimmedAudio;
-  }
-
-  setAISpeaking(isSpeaking) {
-    const wasAISpeaking = this.aiIsSpeaking;
-    this.aiIsSpeaking = isSpeaking;
-    console.log('[SILERO VAD] AI speaking:', isSpeaking);
-
-    // Track when AI actually stopped for overlap calculation
-    if (wasAISpeaking && !isSpeaking) {
-      this.aiStoppedTime = Date.now();
-      console.log('[SILERO VAD] AI finished - ready to process user speech');
-    }
-  }
-
+  // Compatibility methods (for interface consistency with old VAD)
   start() {
-    this.shouldBeListening = true;
-    if (this.vad && this.isInitialized) {
-      this.vad.start();
-      console.log('[SILERO VAD] Started listening');
-
-      // Start health check interval
-      if (!this.healthCheckInterval) {
-        this.healthCheckInterval = setInterval(() => this.checkVADHealth(), 5000);
-      }
-    }
+    // PTT doesn't auto-start listening - it waits for button press
+    console.log('[PTT] Ready - click Record button to speak');
   }
 
   stop() {
-    this.shouldBeListening = false;
-
-    // Clear health check interval
-    if (this.healthCheckInterval) {
-      clearInterval(this.healthCheckInterval);
-      this.healthCheckInterval = null;
-    }
-
-    if (this.vad) {
-      this.vad.pause();
-      console.log('[SILERO VAD] Stopped listening');
+    // Stop any ongoing recording
+    if (this.isRecording) {
+      this.stopRecording();
     }
   }
 
-  // Health check to detect and recover from stuck states
-  checkVADHealth() {
-    // If speaking for > 30 seconds, something is wrong - reset
-    if (this.isSpeaking && this.speechStartTime) {
-      const duration = Date.now() - this.speechStartTime;
-      if (duration > 30000) {
-        console.warn('[SILERO VAD] Stuck in speaking state for 30s - resetting');
-        this.isSpeaking = false;
-        this.speechStartTime = null;
-        this.speechStartedDuringAI = false;
-        this.speechIsInterrupt = false;
-        this.interruptCandidate = false;
-      }
-    }
+  setAISpeaking(isSpeaking) {
+    // PTT doesn't need to track AI speaking state
+    // (user controls when to record)
   }
 
   destroy() {
-    // Clear health check interval
-    if (this.healthCheckInterval) {
-      clearInterval(this.healthCheckInterval);
-      this.healthCheckInterval = null;
+    // Stop recording if active
+    if (this.isRecording && this.mediaRecorder) {
+      this.mediaRecorder.stop();
     }
 
-    if (this.vad) {
-      this.vad.destroy();
-      this.vad = null;
-      this.isInitialized = false;
-      console.log('[SILERO VAD] Destroyed');
+    // Release microphone
+    if (this.stream) {
+      this.stream.getTracks().forEach(track => track.stop());
+      this.stream = null;
     }
+
+    // Close audio context
+    if (this.audioContext && this.audioContext.state !== 'closed') {
+      this.audioContext.close();
+    }
+
+    this.isInitialized = false;
+    console.log('[PTT] Destroyed');
   }
 }
+

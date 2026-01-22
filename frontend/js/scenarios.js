@@ -376,28 +376,28 @@ function updateTopicsContent(subheadingId) {
     }
   };
 
-    const data = topicsData[subheadingId];
-    if (!data) return;
+  const data = topicsData[subheadingId];
+  if (!data) return;
 
-    // Build topics HTML
-    let html = `<div class="topics-panel-title">${data.title}</div>`;
-    data.topics.forEach(topic => {
-      const [folder, title, image] = topic;
-      const imageArg = image ? `, '${image}'` : '';
+  // Build topics HTML
+  let html = `<div class="topics-panel-title">${data.title}</div>`;
+  data.topics.forEach(topic => {
+    const [folder, title, image] = topic;
+    const imageArg = image ? `, '${image}'` : '';
 
-      // Check if scenario is locked (for all difficulty levels)
-      const folderName = folder.split('/').pop();
-      // Get heading from folder path (first segment)
-      const heading = folder.split('/')[0];
-      const easyPromptFile = `prompts/${folder}/easy_${heading}_${folderName}_1.txt`;
-      const isLocked = !canAccessScenario(easyPromptFile);
+    // Check if scenario is locked (for all difficulty levels)
+    const folderName = folder.split('/').pop();
+    // Get heading from folder path (first segment)
+    const heading = folder.split('/')[0];
+    const easyPromptFile = `prompts/${folder}/easy_${heading}_${folderName}_1.txt`;
+    const isLocked = !canAccessScenario(easyPromptFile);
 
-      if (isLocked) {
-        html += `<div class="topic-item locked" onclick="alert('This scenario requires a Premium subscription.\\n\\nUpgrade to access all scenarios.')">🔒 ${title}</div>`;
-      } else {
-        html += `<div class="topic-item" onclick="selectScenario('${folder}', '${title.replace(/'/g, "\\'")}'${imageArg})">📋 ${title}</div>`;
-      }
-    });
+    if (isLocked) {
+      html += `<div class="topic-item locked" onclick="alert('This scenario requires a Premium subscription.\\n\\nUpgrade to access all scenarios.')">🔒 ${title}</div>`;
+    } else {
+      html += `<div class="topic-item" onclick="selectScenario('${folder}', '${title.replace(/'/g, "\\'")}'${imageArg})">📋 ${title}</div>`;
+    }
+  });
 
   topicsPanel.innerHTML = html;
   topicsPanel.classList.add('visible');
@@ -1016,11 +1016,17 @@ function syncMobileButtonStates() {
     mobileConnectBtn.disabled = connectBtn.disabled;
   }
 
-  const interruptBtn = document.getElementById('interruptBtn');
-  const mobileInterruptBtn = document.getElementById('mobileInterruptBtn');
-  if (interruptBtn && mobileInterruptBtn) {
-    mobileInterruptBtn.disabled = interruptBtn.disabled;
-    mobileInterruptBtn.style.display = interruptBtn.style.display;
+  const recordBtn = document.getElementById('recordBtn');
+  const mobileRecordBtn = document.getElementById('mobileRecordBtn');
+  if (recordBtn && mobileRecordBtn) {
+    mobileRecordBtn.disabled = recordBtn.disabled;
+    mobileRecordBtn.style.display = recordBtn.style.display;
+    // Sync recording state class
+    if (recordBtn.classList.contains('recording')) {
+      mobileRecordBtn.classList.add('recording');
+    } else {
+      mobileRecordBtn.classList.remove('recording');
+    }
   }
 
   const disconnectBtn = document.getElementById('disconnectBtn');
@@ -1038,8 +1044,8 @@ function setupMobileButtonListeners() {
 
   const connectBtn = document.getElementById('connectBtn');
   const mobileConnectBtn = document.getElementById('mobileConnectBtn');
-  const interruptBtn = document.getElementById('interruptBtn');
-  const mobileInterruptBtn = document.getElementById('mobileInterruptBtn');
+  const recordBtn = document.getElementById('recordBtn');
+  const mobileRecordBtn = document.getElementById('mobileRecordBtn');
   const disconnectBtn = document.getElementById('disconnectBtn');
   const mobileDisconnectBtn = document.getElementById('mobileDisconnectBtn');
 
@@ -1049,10 +1055,10 @@ function setupMobileButtonListeners() {
       connectBtn.click();
     };
   }
-  if (mobileInterruptBtn && interruptBtn) {
-    mobileInterruptBtn.onclick = () => {
-      console.log('[Mobile] Interrupt button clicked');
-      interruptBtn.click();
+  if (mobileRecordBtn && recordBtn) {
+    mobileRecordBtn.onclick = () => {
+      console.log('[Mobile] Record button clicked');
+      recordBtn.click();
     };
   }
   if (mobileDisconnectBtn && disconnectBtn) {
@@ -1088,7 +1094,7 @@ function exitSimulation() {
 
     document.getElementById('connectBtn').disabled = false;
     document.getElementById('disconnectBtn').disabled = true;
-    document.getElementById('interruptBtn').style.display = 'none';
+    document.getElementById('recordBtn').style.display = 'none';
     syncMobileButtonStates(); // Sync mobile buttons
     updateStatus('connectionStatus', 'Disconnected', 'disconnected');
     updateStatus('sessionStatus', 'No Session', 'disconnected');
