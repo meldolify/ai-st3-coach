@@ -59,9 +59,9 @@
     /* 1. Refined Voice Orb & Overlays */
     .persona-orb-overlay {
       position: absolute;
-      bottom: 120px;
+      top: 50%;
       left: 50%;
-      transform: translateX(-50%);
+      transform: translate(-50%, -50%);
       pointer-events: none;
       display: flex;
       align-items: center;
@@ -111,25 +111,25 @@
       height: 20px;
       background: linear-gradient(to top, rgba(99, 102, 241, 0.9), rgba(139, 92, 246, 0.9), rgba(16, 185, 129, 0.9));
       border-radius: 2px;
-      transform-origin: center 50px;
-      transform: rotate(calc(var(--i) * 15deg)) translateY(-35px) scaleY(0.5);
+      transform-origin: center 70px;
+      transform: rotate(calc(var(--i) * 15deg)) translateY(-50px) scaleY(0.5);
       opacity: 0;
       transition: opacity 0.3s ease;
     }
 
     .voice-orb.speaking .spectrum-bar {
       opacity: 1;
-      animation: spectrum-pulse 1.2s ease-in-out infinite;
-      animation-delay: calc(var(--i) * 0.08s);
+      animation: spectrum-pulse 2.4s ease-in-out infinite;
+      animation-delay: calc(var(--i) * 0.16s);
     }
 
     @keyframes spectrum-pulse {
       0%, 100% {
-        transform: rotate(calc(var(--i) * 15deg)) translateY(-35px) scaleY(0.3);
+        transform: rotate(calc(var(--i) * 15deg)) translateY(-50px) scaleY(0.3);
         opacity: 0.5;
       }
       50% {
-        transform: rotate(calc(var(--i) * 15deg)) translateY(-35px) scaleY(1.2);
+        transform: rotate(calc(var(--i) * 15deg)) translateY(-50px) scaleY(1.2);
         opacity: 1;
       }
     }
