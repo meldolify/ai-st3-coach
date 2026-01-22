@@ -183,8 +183,12 @@ wss.on('connection', (ws, req) => {
 
             // Filter out noise transcripts before sending
             if (isNoiseTranscript(transcriptionText)) {
-              console.log('[WHISPER] Filtered noise transcript, not sending to frontend');
-              return; // Don't send noise to frontend
+              console.log('[WHISPER] Filtered noise transcript, signaling frontend');
+              ws.send(JSON.stringify({
+                type: 'error',
+                message: 'No speech detected (noise filtered)'
+              }));
+              return;
             }
 
             // Send transcript back to frontend
