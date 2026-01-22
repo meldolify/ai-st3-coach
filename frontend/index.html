@@ -57,7 +57,8 @@
     /* 1. Refined Voice Orb & Overlays */
     .persona-orb-overlay {
       position: absolute;
-      top: 50%;
+      top: 45%;
+      /* Moved up slightly to make room for controls */
       left: 50%;
       transform: translate(-50%, -50%);
       pointer-events: none;
@@ -122,10 +123,13 @@
     }
 
     @keyframes spectrum-pulse {
-      0%, 100% {
+
+      0%,
+      100% {
         transform: rotate(calc(var(--i) * 15deg)) translateY(-50px) scaleY(0.3);
         opacity: 0.5;
       }
+
       50% {
         transform: rotate(calc(var(--i) * 15deg)) translateY(-50px) scaleY(1.2);
         opacity: 1;
@@ -275,16 +279,20 @@
     }
 
     /* 2. Glassmorphism Buttons (Smaller & Cleaner) */
+    /* 2. Soft UI Controls (Redesigned) */
     .persona-controls-overlay {
       position: absolute;
-      bottom: 80px;
+      bottom: 40px;
       left: 50%;
       transform: translateX(-50%);
-      width: 100%;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      /* Space between Record and Controls */
       pointer-events: none;
       z-index: 20 !important;
+      width: auto;
     }
 
     /* Info overlay - HIDDEN */
@@ -292,29 +300,76 @@
       display: none !important;
     }
 
-    .persona-name {
-      color: white;
-      margin: 0;
-      font-size: 24px;
-      font-weight: 700;
+    /* Container for grouped controls (Play/Pause/Stop) */
+    .controls-row {
+      display: flex;
+      gap: 16px;
+      pointer-events: auto;
     }
 
-    .persona-title {
-      color: rgba(255, 255, 255, 0.8);
-      margin: 4px 0 0 0;
-      font-size: 14px;
+    /* Base Soft UI Button Style */
+    .control-btn {
+      border: none !important;
+      outline: none !important;
+      color: #555 !important;
+      background: #f0f2f5 !important;
+      /* Soft grey/white */
+      box-shadow:
+        -6px -6px 14px rgba(255, 255, 255, 0.9),
+        6px 6px 10px rgba(174, 174, 192, 0.4) !important;
+      border-radius: 24px !important;
+      /* Squircle */
+      cursor: pointer;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      transition: all 0.2s ease !important;
+      pointer-events: auto !important;
+    }
+
+    /* Pressed/Active State */
+    .control-btn:active:not(:disabled) {
+      box-shadow: inset 2px 2px 5px rgba(174, 174, 192, 0.4), inset -3px -3px 7px rgba(255, 255, 255, 0.9) !important;
+      transform: scale(0.98);
+    }
+
+    .control-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      box-shadow: none !important;
+    }
+
+    /* Standard Control Buttons (Play/Pause/Stop) */
+    .control-btn.standard {
+      width: 64px !important;
+      height: 64px !important;
+      font-size: 24px !important;
+    }
+
+    /* Giant Record Button */
+    .control-btn.record-main {
+      width: 96px !important;
+      height: 96px !important;
+      font-size: 32px !important;
+      border-radius: 32px !important;
+      color: #E91E63 !important;
+      /* Pink icon */
+      margin-bottom: 8px;
+    }
+
+    .control-btn.record-main.recording {
+      color: white !important;
+      background: #E91E63 !important;
+      box-shadow: 0 0 20px rgba(233, 30, 99, 0.6) !important;
+      animation: recording-pulse 1.5s ease-in-out infinite !important;
     }
 
     .control-pill {
-      background: rgba(40, 40, 50, 0.85) !important;
-      -webkit-backdrop-filter: blur(12px) !important;
-      backdrop-filter: blur(12px) !important;
-      padding: 8px 12px !important;
-      gap: 8px !important;
-      pointer-events: auto;
-      display: flex !important;
-      border-radius: 30px !important;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+      /* Legacy class removal/override just in case */
+      display: contents !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      padding: 0 !important;
     }
 
     .control-btn {
@@ -372,11 +427,11 @@
       animation: recording-pulse 1.5s ease-in-out infinite !important;
     }
 
-    /* 3. AI Status Bubble - Hidden by default, shown when processing */
+    /* 3. AI Status Bubble - Top Right but with more margin */
     .ai-status-bubble {
       position: absolute !important;
-      top: 24px !important;
-      right: 24px !important;
+      top: 32px !important;
+      right: 32px !important;
       background: rgba(255, 255, 255, 0.95) !important;
       -webkit-backdrop-filter: blur(8px);
       backdrop-filter: blur(8px);
@@ -408,8 +463,15 @@
     }
 
     @keyframes bubble-bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-8px);
+      }
     }
 
     .ai-status-bubble span {
@@ -1200,15 +1262,20 @@
 
           <!-- Control Pill (bottom center) -->
           <div class="persona-controls-overlay">
-            <div class="control-pill">
-              <button type="button" id="connectBtn" class="control-btn" title="Start Session"
+            <!-- Record Button (Top, Large) -->
+            <button type="button" id="recordBtn" class="control-btn record-main initially-hidden" disabled
+              title="Push to Talk" aria-label="Push to Talk">🎤</button>
+
+            <!-- Other Controls (Bottom Row) -->
+            <div class="controls-row">
+              <button type="button" id="connectBtn" class="control-btn standard" title="Start Session"
                 aria-label="Start Session">▶</button>
-              <button type="button" id="recordBtn" class="control-btn control-btn-record initially-hidden" disabled
-                title="Push to Talk" aria-label="Push to Talk">🎤</button>
-              <button type="button" id="interruptBtn" class="control-btn initially-hidden" disabled title="Pause AI"
-                aria-label="Pause AI">⏸</button>
-              <button type="button" id="disconnectBtn" class="control-btn control-btn-danger" disabled
-                title="End Session" aria-label="End Session">⏹</button>
+
+              <button type="button" id="interruptBtn" class="control-btn standard initially-hidden" disabled
+                title="Pause AI" aria-label="Pause AI">⏸</button>
+
+              <button type="button" id="disconnectBtn" class="control-btn standard" disabled title="End Session"
+                aria-label="End Session">⏹</button>
             </div>
           </div>
 
