@@ -35,6 +35,10 @@ function isNoiseTranscript(text) {
     /^(um|uh|er|ah|oh|hm)+$/i,        // Just filler sounds
     /^(mmhmm|mhm|uh-huh)$/i,          // Agreement sounds
 
+    // Single letters and very short words
+    /^[a-z]$/i,                       // Single letters
+    /^[a-z]{1,2}\.?$/i,               // One or two letters
+
     // Single word false positives
     /^(okay|ok)\.?$/i,                // Just "okay" by itself
     /^(yes|yeah|no|nope)\.?$/i,       // Single word responses
@@ -43,6 +47,7 @@ function isNoiseTranscript(text) {
     /^(please|thanks)\.?$/i,          // Polite words alone
     /^(go on|continue)\.?$/i,         // Prompts that might echo
     /^you$/i,                         // Just "you"
+    /^(the|a|an|to|in|is|it|of)\.?$/i,  // Common short words alone
 
     // Common AI echo pickups in medical context
     /^thank you\.?$/i,                // Common noise pickup
@@ -50,6 +55,12 @@ function isNoiseTranscript(text) {
     /^tell me more\.?$/i,             // Examiner prompt echo
     /^what else\.?$/i,                // Examiner prompt echo
     /^anything else\.?$/i,            // Examiner prompt echo
+    /^(let me|I would|perhaps|indeed)$/i,  // Examiner phrases
+    /^(certainly|absolutely|exactly)$/i,   // Agreement echoes
+
+    // Breathing and mouth sounds
+    /^(breath|sigh|cough)s?$/i,       // Breathing sounds
+    /^(tsk|tch|pff|pfft)$/i,          // Mouth sounds
 
     // Whisper hallucinations and artifacts
     /^\.\.\.+$/,                      // Just ellipsis
@@ -77,6 +88,14 @@ function isNoiseTranscript(text) {
       console.log(`[NOISE FILTER] Rejected: "${trimmed}" (repeated characters)`);
       return true;
     }
+  }
+
+  // Minimum word count for non-noise
+  // Very short transcripts with few words are likely noise
+  const words = trimmed.split(/\s+/).filter(w => w.length > 1);
+  if (words.length < 2 && trimmed.length < 10) {
+    console.log(`[NOISE FILTER] Rejected: "${trimmed}" (too few words: ${words.length})`);
+    return true;
   }
 
   return false;

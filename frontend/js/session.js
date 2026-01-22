@@ -12,6 +12,7 @@ class AudioPlayer {
     this.isPlaying = false;
     this.onStart = null;
     this.onEnd = null;
+    this.playbackTimeout = null; // Safety timeout for stuck playback
   }
 
   playBase64Audio(base64Audio) {
@@ -20,12 +21,35 @@ class AudioPlayer {
     const blob = new Blob([bytes], { type: 'audio/mp3' });
     const url = URL.createObjectURL(blob);
 
+    // Clear any existing timeout
+    if (this.playbackTimeout) {
+      clearTimeout(this.playbackTimeout);
+      this.playbackTimeout = null;
+    }
+
     this.audio.src = url;
     this.audio.play();
     this.isPlaying = true;
     if (this.onStart) this.onStart();
 
+    // Safety timeout: estimate duration from byte size (rough MP3 estimate ~4KB/sec)
+    // Add generous buffer (10 seconds) to avoid premature cutoff
+    const estimatedDurationMs = (bytes.length / 4000) * 1000;
+    this.playbackTimeout = setTimeout(() => {
+      if (this.isPlaying) {
+        console.warn('[AUDIO] Playback timeout - forcing end state');
+        this.isPlaying = false;
+        URL.revokeObjectURL(url);
+        if (this.onEnd) this.onEnd();
+      }
+    }, estimatedDurationMs + 10000);
+
     this.audio.onended = () => {
+      // Clear safety timeout
+      if (this.playbackTimeout) {
+        clearTimeout(this.playbackTimeout);
+        this.playbackTimeout = null;
+      }
       this.isPlaying = false;
       URL.revokeObjectURL(url);
       // Call onEnd immediately to restart mic ASAP
@@ -33,15 +57,26 @@ class AudioPlayer {
     };
 
     this.audio.onerror = (e) => {
+      // Clear safety timeout
+      if (this.playbackTimeout) {
+        clearTimeout(this.playbackTimeout);
+        this.playbackTimeout = null;
+      }
       console.error('Audio playback error:', e);
       this.isPlaying = false;
       URL.revokeObjectURL(url);
       log('Audio playback error', 'error');
+      if (this.onEnd) this.onEnd();
     };
   }
 
   interrupt() {
     if (this.isPlaying) {
+      // Clear safety timeout
+      if (this.playbackTimeout) {
+        clearTimeout(this.playbackTimeout);
+        this.playbackTimeout = null;
+      }
       this.audio.pause();
       this.audio.currentTime = 0;
       this.isPlaying = false;
@@ -151,6 +186,11 @@ class V4Session {
         break;
 
       case 'ai_response':
+        // Set AI speaking state IMMEDIATELY when response arrives (before audio decode)
+        // This eliminates the 100-200ms timing gap that caused incorrect contamination
+        if (this.usingWhisper && this.speechRecognition.setAISpeaking) {
+          this.speechRecognition.setAISpeaking(true);
+        }
         log('AI: ' + msg.text, 'info');
         this.audioPlayer.playBase64Audio(msg.audio);
         // Show interrupt button and set speaking state
