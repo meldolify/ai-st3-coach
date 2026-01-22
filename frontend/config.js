@@ -62,29 +62,10 @@ const CONFIG = {
   ],
 
   // Speech Recognition Configuration
-  // V4.3: Silero VAD with graduated contamination logic
+  // V4.4: Push-to-Talk (PTT) - user clicks to record, no VAD needed
   SPEECH_RECOGNITION: {
-    USE_SILERO_VAD: true,          // true = Silero VAD primary (recommended)
-    WHISPER_PRIMARY: true,         // true = Whisper transcription primary, Web Speech fallback
-
-    // Overlap handling thresholds (used by graduated contamination logic)
-    HIGH_OVERLAP_DISCARD_PERCENT: 70,   // >70% overlap with AI = discard audio
-    LOW_OVERLAP_KEEP_PERCENT: 20,       // <20% overlap = keep full audio
-    MIN_CLEAN_AUDIO_MS: 500,            // Minimum clean audio duration to keep
-
-    // Interrupt detection
-    INTERRUPT_SUSTAIN_MS: 300,          // Time to confirm interrupt intent
-
-    // Legacy VAD settings (only used if Silero VAD fails to load)
-    SILENCE_THRESHOLD: 0.015,      // RMS threshold (lowered for better sensitivity)
-    INTERRUPT_THRESHOLD: 0.10,     // Threshold during AI speech
-    SILENCE_DURATION_MS: 800,      // Stop recording after silence
-    MIN_RECORDING_MS: 300,         // Minimum recording duration to send
-    REQUIRED_VOICE_FRAMES: 2,      // Consecutive frames for listening
-    INTERRUPT_VOICE_FRAMES: 6,     // Frames required during AI speech
-
-    // Spectral analysis disabled by default (Silero VAD handles this better)
-    USE_SPECTRAL_ANALYSIS: false
+    USE_PUSH_TO_TALK: true,        // true = PTT mode (click to record)
+    WHISPER_PRIMARY: true          // true = Whisper transcription
   }
 };
 

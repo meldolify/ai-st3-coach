@@ -93,26 +93,15 @@ class V4Session {
     this.ws = null;
     this.sessionId = null;
 
-    // STT: Silero VAD PRIMARY, Web Speech API FALLBACK
-    // Silero VAD uses deep learning for reliable voice detection, sends to Whisper for transcription
-    const useSileroVAD = CONFIG.SPEECH_RECOGNITION?.USE_SILERO_VAD ?? true;
+    // STT: Push-to-Talk PRIMARY, Web Speech API FALLBACK
+    // PTT uses MediaRecorder to capture audio when user clicks Record button
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
-    if (useSileroVAD && typeof vad !== 'undefined' && vad.MicVAD) {
-      // Use Silero VAD as primary (recommended)
-      this.speechRecognition = new SileroVADManager(null); // WebSocket set after connection
-      this.usingWhisper = true; // Sends to Whisper for transcription
-      this.usingSileroVAD = true;
-      log('Using Silero VAD for STT (primary)', 'success');
-    } else if (SpeechRecognition) {
-      // Fallback to Web Speech API if Silero not available
-      this.speechRecognition = new SpeechRecognitionManager();
-      this.usingWhisper = false;
-      this.usingSileroVAD = false;
-      log('Silero VAD not available, using Web Speech API', 'warning');
-    } else {
-      throw new Error('No speech recognition available. Please use a modern browser.');
-    }
+    // Always use Push-to-Talk as primary (no VAD needed)
+    this.speechRecognition = new PushToTalkManager(null); // WebSocket set after connection
+    this.usingWhisper = true; // Sends to Whisper for transcription
+    this.usingPTT = true;
+    log('Using Push-to-Talk for STT', 'success');
 
     this.audioPlayer = new AudioPlayer();
     this.backendUrl = backendUrl;

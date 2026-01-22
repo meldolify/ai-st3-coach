@@ -180,8 +180,14 @@ document.getElementById('connectBtn').addEventListener('click', async () => {
     session.startListening();
     document.getElementById('connectBtn').disabled = true;
     document.getElementById('disconnectBtn').disabled = false;
+
+    // Show and enable the Record button
+    const recordBtn = document.getElementById('recordBtn');
+    recordBtn.style.display = 'inline-block';
+    recordBtn.disabled = false;
+
     syncMobileButtonStates(); // Sync mobile buttons
-    log('Session ready! Start speaking to begin the interview.', 'success');
+    log('Session ready! Click the Record button to speak.', 'success');
 
     // Log session start for analytics
     await logSessionStart();
@@ -200,6 +206,39 @@ document.getElementById('connectBtn').addEventListener('click', async () => {
   }
 });
 
+// Record button - toggle recording on/off
+document.getElementById('recordBtn').addEventListener('click', () => {
+  if (!session || !session.speechRecognition) {
+    log('No active session', 'warning');
+    return;
+  }
+
+  const recordBtn = document.getElementById('recordBtn');
+  const mobileRecordBtn = document.getElementById('mobileRecordBtn');
+  const pttManager = session.speechRecognition;
+
+  if (pttManager.isRecording) {
+    // Stop recording
+    pttManager.stopRecording();
+    recordBtn.classList.remove('recording');
+    if (mobileRecordBtn) mobileRecordBtn.classList.remove('recording');
+    recordBtn.title = 'Click to Record';
+    log('Recording stopped - processing...', 'info');
+    setOrbState('processing');
+  } else {
+    // Start recording
+    pttManager.startRecording();
+    recordBtn.classList.add('recording');
+    if (mobileRecordBtn) mobileRecordBtn.classList.add('recording');
+    recordBtn.title = 'Click to Stop Recording';
+    log('Recording... Click again to stop', 'info');
+    setOrbState('listening');
+    updateStatus('micStatus', '🟢 Recording', 'connected');
+  }
+
+  syncMobileButtonStates();
+});
+
 document.getElementById('disconnectBtn').addEventListener('click', async () => {
   if (session) {
     session.disconnect();
@@ -212,7 +251,13 @@ document.getElementById('disconnectBtn').addEventListener('click', async () => {
 
   document.getElementById('connectBtn').disabled = false;
   document.getElementById('disconnectBtn').disabled = true;
-  document.getElementById('interruptBtn').style.display = 'none';
+
+  // Hide and reset record button
+  const recordBtn = document.getElementById('recordBtn');
+  recordBtn.style.display = 'none';
+  recordBtn.classList.remove('recording');
+  recordBtn.disabled = true;
+
   syncMobileButtonStates(); // Sync mobile buttons
   updateStatus('sessionStatus', 'No Session', 'disconnected');
   updateStatus('micStatus', 'Inactive', 'disconnected');
