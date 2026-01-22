@@ -11,11 +11,11 @@
 // ============================================================================
 // Note: Persona images should be placed in frontend/images/ folder
 // For now, all difficulties use the same placeholder image
-const PERSONA_DEFAULT_IMAGE = 'images/happy-mature-business-woman-middle-260nw-2454482105.webp';
+const PERSONA_DEFAULT_IMAGE = 'images/interviewer_persona_elliot.png'; // Use a valid persona as default
 
 const PERSONA_CONFIG = {
   easy: {
-    name: 'Dr. John Mitchell',
+    name: 'Mr John',
     title: 'Consultant Plastic Surgeon',
     image: 'images/interviewer_persona_john.png',
     fallbackImage: PERSONA_DEFAULT_IMAGE,
@@ -23,7 +23,7 @@ const PERSONA_CONFIG = {
     accentColor: '#10B981' // Emerald
   },
   medium: {
-    name: 'Dr. Sarah Chen',
+    name: 'Miss Elliot',
     title: 'Senior Examiner',
     image: 'images/interviewer_persona_elliot.png',
     fallbackImage: PERSONA_DEFAULT_IMAGE,
@@ -31,7 +31,7 @@ const PERSONA_CONFIG = {
     accentColor: '#F59E0B' // Amber
   },
   strict: {
-    name: 'Prof. James Thornton',
+    name: 'Mr Perry',
     title: 'Chief Examiner',
     image: 'images/interviewer_persona_perry.png',
     fallbackImage: PERSONA_DEFAULT_IMAGE,
