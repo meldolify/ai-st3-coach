@@ -275,16 +275,7 @@ document.getElementById('disconnectBtn').addEventListener('click', async () => {
 });
 
 // Interrupt button - stops AI and activates microphone
-document.getElementById('interruptBtn').addEventListener('click', () => {
-  if (session && session.audioPlayer.isPlaying) {
-    session.audioPlayer.interrupt();
-    session.speechRecognition.start();
-    updateStatus('micStatus', '🎤 Listening', 'connected');
-    document.getElementById('interruptBtn').style.display = 'none';
-    syncMobileButtonStates(); // Sync mobile buttons
-    log('AI interrupted by user', 'info');
-  }
-});
+
 
 // ============================================================================
 // SCROLL ANIMATIONS (Squarespace-style)

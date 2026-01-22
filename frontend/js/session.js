@@ -183,8 +183,6 @@ class V4Session {
         log('AI: ' + msg.text, 'info');
         this.audioPlayer.playBase64Audio(msg.audio);
         // Show interrupt button and set speaking state
-        document.getElementById('interruptBtn').style.display = 'block';
-        document.getElementById('interruptBtn').disabled = false;
         syncMobileButtonStates(); // Sync mobile buttons
         updateStatus('aiStatus', 'Speaking', 'speaking'); // Hide bubble when speaking
         setOrbState('speaking');
@@ -208,7 +206,6 @@ class V4Session {
 
       case 'interrupt':
         this.audioPlayer.interrupt();
-        document.getElementById('interruptBtn').style.display = 'none';
         syncMobileButtonStates(); // Sync mobile buttons
         setOrbState('listening');
         break;
@@ -262,7 +259,6 @@ class V4Session {
           }));
         }
         // Hide interrupt button since we've already interrupted
-        document.getElementById('interruptBtn').style.display = 'none';
         syncMobileButtonStates();
         setOrbState('listening');
       };
@@ -285,7 +281,6 @@ class V4Session {
 
     this.audioPlayer.onEnd = () => {
       // Hide interrupt button
-      document.getElementById('interruptBtn').style.display = 'none';
       syncMobileButtonStates(); // Sync mobile buttons
 
       // For Whisper: clear AI speaking flag
