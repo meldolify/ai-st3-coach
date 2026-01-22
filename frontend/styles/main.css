@@ -760,10 +760,13 @@ body.has-header .simulation-room.active {
 .desktop-simulation-layout {
   display: flex;
   flex: 1;
-  gap: 16px;
-  padding: 16px;
+  gap: 24px;
+  padding: 24px;
+  max-width: 1600px;
+  margin: 0 auto;
   min-height: 0;
-  height: calc(100vh - 100px);
+  height: calc(100vh - 80px); /* Account for header */
+  box-sizing: border-box;
 }
 
 .mobile-simulation-layout {

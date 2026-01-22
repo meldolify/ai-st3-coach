@@ -57,15 +57,16 @@
     /* 1. Refined Voice Orb & Overlays */
     .persona-orb-overlay {
       position: absolute;
-      top: 45%;
-      /* Moved up slightly to make room for controls */
+      top: 55%;
+      /* Moved down further to prevent overlap */
       left: 50%;
       transform: translate(-50%, -50%);
       pointer-events: none;
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 20 !important;
+      z-index: 10 !important;
+      /* Lower z-index than bubbles */
     }
 
     .voice-orb {
@@ -280,20 +281,8 @@
 
     /* 2. Glassmorphism Buttons (Smaller & Cleaner) */
     /* 2. Soft UI Controls (Redesigned) */
-    .persona-controls-overlay {
-      position: absolute;
-      bottom: 40px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 24px;
-      /* Space between Record and Controls */
-      pointer-events: none;
-      z-index: 20 !important;
-      width: auto;
-    }
+    /* 2. Soft UI Controls (Redesigned) */
+    /* .persona-controls-overlay removed in favor of Flexbox layout */
 
     /* Info overlay - HIDDEN */
     .persona-info-overlay {
@@ -372,30 +361,8 @@
       padding: 0 !important;
     }
 
-    .control-btn {
-      width: 40px !important;
-      height: 40px !important;
-      font-size: 16px !important;
-      border-radius: 50% !important;
-      background: rgba(60, 60, 70, 0.9) !important;
-      border: none !important;
-      color: rgba(255, 255, 255, 0.9) !important;
-      box-shadow: none !important;
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      transition: all 0.15s ease !important;
-    }
-
-    .control-btn:hover:not(:disabled) {
-      background: rgba(80, 80, 90, 1) !important;
-      transform: scale(1.05) !important;
-    }
-
-    .control-btn:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-    }
+    /* LEGACY STYLES REMOVED - DUPLICATES */
+    /* .control-btn styles are now defined above with Soft UI properties */
 
     /* Red disconnect/end button */
     #disconnectBtn {
@@ -427,28 +394,8 @@
       animation: recording-pulse 1.5s ease-in-out infinite !important;
     }
 
-    /* 3. AI Status Bubble - Top Right but with more margin */
-    .ai-status-bubble {
-      position: absolute !important;
-      top: 32px !important;
-      right: 32px !important;
-      background: rgba(255, 255, 255, 0.95) !important;
-      -webkit-backdrop-filter: blur(8px);
-      backdrop-filter: blur(8px);
-      padding: 8px 16px !important;
-      border-radius: 20px !important;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
-      display: flex !important;
-      gap: 8px;
-      align-items: center;
-      z-index: 20 !important;
-      border: 1px solid rgba(0, 0, 0, 0.05);
-      /* Hidden by default */
-      opacity: 0 !important;
-      transform: translateY(-10px) !important;
-      pointer-events: none;
-      transition: opacity 0.3s ease, transform 0.3s ease !important;
-    }
+    /* 3. AI Status Bubble - Top Left (Styled above) */
+    /* .ai-status-bubble definition moved to main flex layout block */
 
     /* Visible state when processing */
     .ai-status-bubble.visible {
