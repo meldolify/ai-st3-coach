@@ -40,14 +40,10 @@ function isNoiseTranscript(text) {
     /^[a-z]{1,2}\.?$/i,               // One or two letters
 
     // Single word false positives
-    /^(okay|ok)\.?$/i,                // Just "okay" by itself
-    /^(yes|yeah|no|nope)\.?$/i,       // Single word responses
-    /^(right|good|excellent|correct)\.?$/i,  // Examiner acknowledgments (AI echo)
+    // Single word false positives - RELAXED for PTT
+    // We allow these now because PTT implies intent to speak
     /^(so|and|well|now|then)\.?$/i,   // Transition words alone
-    /^(please|thanks)\.?$/i,          // Polite words alone
-    /^(go on|continue)\.?$/i,         // Prompts that might echo
-    /^you$/i,                         // Just "you"
-    /^(the|a|an|to|in|is|it|of)\.?$/i,  // Common short words alone
+    /^(the|a|an|to|in|of)\.?$/i,      // Common short words alone (kept "is/it" as likely noise)
 
     // Common AI echo pickups in medical context
     /^thank you\.?$/i,                // Common noise pickup
