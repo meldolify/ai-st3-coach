@@ -111,10 +111,14 @@ class PushToTalkManager {
     // Audio context for processing
     this.audioContext = null;
 
+    // Recording timing for duration validation
+    this.recordingStartTime = null;
+
     // Callbacks (set by V4Session)
     this.onTranscript = null;
     this.onRecordingStart = null;
     this.onRecordingEnd = null;
+    this.onError = null; // Error callback for failed operations
   }
 
   async initialize() {
@@ -132,10 +136,16 @@ class PushToTalkManager {
         }
       });
 
-      // Create audio context for later WAV conversion
-      this.audioContext = new (window.AudioContext || window.webkitAudioContext)({
-        sampleRate: 16000
-      });
+      // Reuse existing AudioContext if still valid, or create new one
+      if (this.audioContext && this.audioContext.state !== 'closed') {
+        if (this.audioContext.state === 'suspended') {
+          await this.audioContext.resume();
+        }
+      } else {
+        this.audioContext = new (window.AudioContext || window.webkitAudioContext)({
+          sampleRate: 16000
+        });
+      }
 
       this.isInitialized = true;
       console.log('[PTT] Initialized successfully');
@@ -176,11 +186,19 @@ class PushToTalkManager {
       console.log('[PTT] Starting recording...');
 
       this.audioChunks = [];
+      this.recordingStartTime = Date.now(); // Track recording start time
 
       // Use webm for MediaRecorder (widely supported)
       const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
         ? 'audio/webm;codecs=opus'
         : 'audio/webm';
+
+      // Clean up previous MediaRecorder handlers to prevent memory leaks
+      if (this.mediaRecorder) {
+        this.mediaRecorder.ondataavailable = null;
+        this.mediaRecorder.onstop = null;
+        this.mediaRecorder.onerror = null;
+      }
 
       this.mediaRecorder = new MediaRecorder(this.stream, {
         mimeType: mimeType
@@ -194,13 +212,23 @@ class PushToTalkManager {
 
       this.mediaRecorder.onstop = async () => {
         console.log('[PTT] Recording stopped, processing audio...');
-        await this.processAndSendAudio();
+        try {
+          await this.processAndSendAudio();
+        } catch (error) {
+          console.error('[PTT] Processing error:', error);
+          if (this.onError) {
+            this.onError('Failed to process audio. Please try again.');
+          }
+        }
       };
 
       this.mediaRecorder.onerror = (error) => {
         console.error('[PTT] MediaRecorder error:', error);
         this.isRecording = false;
         if (this.onRecordingEnd) this.onRecordingEnd();
+        if (this.onError) {
+          this.onError('Recording error occurred. Please try again.');
+        }
       };
 
       this.mediaRecorder.start();
@@ -245,8 +273,18 @@ class PushToTalkManager {
       return;
     }
 
+    // Check recording duration (more reliable than file size)
+    const recordingDuration = Date.now() - this.recordingStartTime;
+    if (recordingDuration < 300) {
+      console.log(`[PTT] Recording too short (${recordingDuration}ms), skipping`);
+      return;
+    }
+
     if (!this.websocket || this.websocket.readyState !== WebSocket.OPEN) {
       console.warn('[PTT] WebSocket not ready');
+      if (this.onError) {
+        this.onError('Connection lost. Please reconnect and try again.');
+      }
       return;
     }
 
@@ -255,13 +293,7 @@ class PushToTalkManager {
 
       // Create blob from chunks
       const audioBlob = new Blob(this.audioChunks, { type: 'audio/webm' });
-      console.log(`[PTT] Audio blob: ${audioBlob.size} bytes`);
-
-      // Skip if too short (likely a misclick)
-      if (audioBlob.size < 1000) {
-        console.log('[PTT] Audio too short, skipping');
-        return;
-      }
+      console.log(`[PTT] Audio blob: ${audioBlob.size} bytes (${recordingDuration}ms)`);
 
       // Convert WebM to WAV for Whisper (requires decoding)
       const wavBlob = await this.convertToWav(audioBlob);

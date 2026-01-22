@@ -4640,3 +4640,21 @@ body.has-header {
   background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
   box-shadow: 0 0 15px rgba(15, 118, 110, 0.4);
 }
+
+/* ============================================
+   INTERRUPT BUTTON STYLES
+   ============================================ */
+
+/* Interrupt button - default state (red) */
+#interruptBtn,
+#mobileInterruptBtn {
+  background: linear-gradient(135deg, #DC2626, #B91C1C);
+  transition: all 0.3s ease;
+}
+
+/* Interrupt button - hover state */
+#interruptBtn:not(:disabled):hover,
+#mobileInterruptBtn:not(:disabled):hover {
+  background: linear-gradient(135deg, #EF4444, #DC2626);
+  box-shadow: 0 0 15px rgba(220, 38, 38, 0.5);
+}
