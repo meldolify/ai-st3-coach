@@ -34,10 +34,9 @@
     /* 0. ESSENTIAL LAYOUT & LAYERING */
     .persona-panel {
       position: relative;
-      width: 100%;
-      height: 100%;
       overflow: hidden;
       border-radius: 12px;
+      min-height: 500px;
     }
 
     /* FORCE IMAGE TO BACKGROUND */
@@ -88,6 +87,52 @@
       z-index: 21 !important;
     }
 
+    /* Circular Audio Spectrum Container */
+    .spectrum-container {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .voice-orb.speaking .spectrum-container {
+      opacity: 1;
+    }
+
+    /* Individual Spectrum Bars */
+    .spectrum-bar {
+      position: absolute;
+      width: 4px;
+      height: 30px;
+      background: linear-gradient(to top, rgba(99, 102, 241, 0.9), rgba(139, 92, 246, 0.9), rgba(16, 185, 129, 0.9));
+      border-radius: 2px;
+      transform-origin: center 70px;
+      transform: rotate(calc(var(--i) * 15deg)) translateY(-50px) scaleY(0.5);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .voice-orb.speaking .spectrum-bar {
+      opacity: 1;
+      animation: spectrum-pulse 0.6s ease-in-out infinite;
+      animation-delay: calc(var(--i) * 0.04s);
+    }
+
+    @keyframes spectrum-pulse {
+      0%, 100% {
+        transform: rotate(calc(var(--i) * 15deg)) translateY(-50px) scaleY(0.4);
+        opacity: 0.6;
+      }
+      50% {
+        transform: rotate(calc(var(--i) * 15deg)) translateY(-50px) scaleY(1.5);
+        opacity: 1;
+      }
+    }
+
     .voice-orb::before {
       content: '';
       position: absolute;
@@ -135,12 +180,13 @@
     }
 
     .voice-orb.speaking {
-      animation: color-cycle 30s ease-in-out infinite, speaking-scale 1.5s ease-in-out infinite;
-      box-shadow: 0 0 90px rgba(99, 102, 241, 0.8);
+      animation: color-cycle 30s ease-in-out infinite;
+      box-shadow: 0 0 100px rgba(99, 102, 241, 0.9);
+      background: radial-gradient(circle at center, rgba(30, 30, 50, 0.9) 0%, rgba(20, 20, 40, 0.95) 100%);
     }
 
     .voice-orb.speaking::before {
-      animation: speaking-pulse 1.8s ease-out infinite;
+      animation: none;
     }
 
     @keyframes color-cycle {
@@ -266,28 +312,25 @@
     }
 
     .control-pill {
-      background: rgba(0, 0, 0, 0.25) !important;
-      -webkit-backdrop-filter: blur(16px) !important;
-      backdrop-filter: blur(16px) !important;
-      border-radius: 28px !important;
-      padding: 8px 16px !important;
-      gap: 12px !important;
+      background: transparent !important;
+      padding: 0 !important;
+      gap: 20px !important;
       pointer-events: auto;
       display: flex !important;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
+      box-shadow: none !important;
     }
 
     .control-btn {
-      width: 44px !important;
-      height: 44px !important;
-      font-size: 18px !important;
+      width: 64px !important;
+      height: 64px !important;
+      font-size: 24px !important;
       border-radius: 50% !important;
-      background: rgba(255, 255, 255, 0.15) !important;
+      background: rgba(255, 255, 255, 0.2) !important;
       -webkit-backdrop-filter: blur(12px) !important;
       backdrop-filter: blur(12px) !important;
-      border: 1px solid rgba(255, 255, 255, 0.2) !important;
+      border: 1px solid rgba(255, 255, 255, 0.3) !important;
       color: white !important;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
       display: flex !important;
       align-items: center !important;
       justify-content: center !important;
@@ -295,9 +338,9 @@
     }
 
     .control-btn:hover:not(:disabled) {
-      background: rgba(255, 255, 255, 0.25) !important;
-      transform: translateY(-2px) !important;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12) !important;
+      background: rgba(255, 255, 255, 0.35) !important;
+      transform: translateY(-3px) !important;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2) !important;
     }
 
     .control-btn:disabled {
@@ -1128,7 +1171,35 @@
             <div id="aiStatusBubble" class="ai-status-bubble">
               <span id="aiStatus">Ready</span>
             </div>
-            <div id="voiceOrb" class="voice-orb idle"></div>
+            <div id="voiceOrb" class="voice-orb idle">
+              <!-- Circular Audio Spectrum Bars -->
+              <div class="spectrum-container">
+                <div class="spectrum-bar" style="--i:0"></div>
+                <div class="spectrum-bar" style="--i:1"></div>
+                <div class="spectrum-bar" style="--i:2"></div>
+                <div class="spectrum-bar" style="--i:3"></div>
+                <div class="spectrum-bar" style="--i:4"></div>
+                <div class="spectrum-bar" style="--i:5"></div>
+                <div class="spectrum-bar" style="--i:6"></div>
+                <div class="spectrum-bar" style="--i:7"></div>
+                <div class="spectrum-bar" style="--i:8"></div>
+                <div class="spectrum-bar" style="--i:9"></div>
+                <div class="spectrum-bar" style="--i:10"></div>
+                <div class="spectrum-bar" style="--i:11"></div>
+                <div class="spectrum-bar" style="--i:12"></div>
+                <div class="spectrum-bar" style="--i:13"></div>
+                <div class="spectrum-bar" style="--i:14"></div>
+                <div class="spectrum-bar" style="--i:15"></div>
+                <div class="spectrum-bar" style="--i:16"></div>
+                <div class="spectrum-bar" style="--i:17"></div>
+                <div class="spectrum-bar" style="--i:18"></div>
+                <div class="spectrum-bar" style="--i:19"></div>
+                <div class="spectrum-bar" style="--i:20"></div>
+                <div class="spectrum-bar" style="--i:21"></div>
+                <div class="spectrum-bar" style="--i:22"></div>
+                <div class="spectrum-bar" style="--i:23"></div>
+              </div>
+            </div>
           </div>
 
           <!-- Control Pill (bottom center) -->
@@ -1145,23 +1216,9 @@
             </div>
           </div>
 
-          <!-- Waveform Overlay (bottom) -->
-          <div class="persona-waveform-overlay">
+          <!-- Waveform Overlay (hidden) -->
+          <div class="persona-waveform-overlay" style="display: none !important;">
             <div id="audioWaveform" class="audio-waveform">
-              <div class="waveform-bar"></div>
-              <div class="waveform-bar"></div>
-              <div class="waveform-bar"></div>
-              <div class="waveform-bar"></div>
-              <div class="waveform-bar"></div>
-              <div class="waveform-bar"></div>
-              <div class="waveform-bar"></div>
-              <div class="waveform-bar"></div>
-              <div class="waveform-bar"></div>
-              <div class="waveform-bar"></div>
-              <div class="waveform-bar"></div>
-              <div class="waveform-bar"></div>
-              <div class="waveform-bar"></div>
-              <div class="waveform-bar"></div>
               <div class="waveform-bar"></div>
             </div>
             <span id="waveformStatus" class="waveform-status">AI is speaking...</span>
