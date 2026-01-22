@@ -728,70 +728,53 @@
         </div>
       </div>
 
-      <!-- Desktop Layout: Three panels -->
+      <!-- Simulation Header Bar -->
+      <div class="simulation-header">
+        <button type="button" class="back-button" onclick="exitSimulation()">
+          <span>←</span>
+          <span class="back-button-text">Back</span>
+        </button>
+        <div class="simulation-header-title">
+          <h2 id="currentScenarioTitle">Scenario Title</h2>
+          <p id="currentScenarioCategory">Category</p>
+        </div>
+        <div class="simulation-header-spacer"></div>
+      </div>
+
+      <!-- Desktop Layout: 60/40 split -->
       <div class="desktop-simulation-layout">
-        <!-- Left Panel (25%): Controls and Navigation -->
-        <div class="controls-container">
-          <button class="back-button" onclick="exitSimulation()">← Back to Scenarios</button>
+        <!-- Left Panel (60%): Persona with overlaid controls -->
+        <div id="personaPanel" class="persona-panel breathing">
+          <!-- Persona Image -->
+          <img id="personaImage" class="persona-image" src="images/happy-mature-business-woman-middle-260nw-2454482105.webp" alt="Examiner">
 
-          <div class="scenario-title">
-            <h2 id="currentScenarioTitle">Scenario Title</h2>
-            <p id="currentScenarioCategory">Category</p>
+          <!-- Persona Info Overlay (top) -->
+          <div class="persona-info-overlay">
+            <h3 id="personaName" class="persona-name">Dr. Sarah Chen</h3>
+            <p id="personaTitle" class="persona-title">Senior Examiner</p>
           </div>
 
-          <!-- Status Section -->
-          <div class="status-section">
-            <div class="status-row">
-              <span class="status-label">Session</span>
-              <span id="sessionStatus" class="status-value status-disconnected">No Session</span>
-            </div>
-            <div class="status-row">
-              <span class="status-label">Microphone</span>
-              <span id="micStatus" class="status-value status-disconnected">🔴 Inactive</span>
-            </div>
-          </div>
-
-          <!-- Round Icon Buttons -->
-          <div class="button-group">
-            <button id="connectBtn" title="Start Session">&#9654;</button>
-            <button id="recordBtn" class="initially-hidden" disabled title="Click to Record">🎤</button>
-            <button id="interruptBtn" class="initially-hidden" disabled title="Interrupt AI">&#10074;&#10074;</button>
-            <button id="disconnectBtn" disabled title="Stop">&#9632;</button>
-          </div>
-        </div>
-
-        <!-- Center Panel (50%): Clinical Image and Model Answer -->
-        <div class="center-panel">
-          <div id="imageSection" class="image-section">
-            <h3>Clinical Image</h3>
-            <div class="clinical-image-container">
-              <img id="clinicalImage" class="clinical-image initially-hidden" src="" alt="Clinical image"
-                onclick="openImageModal()">
-              <div id="noImagePlaceholder" class="no-image-placeholder">
-                No clinical image available for this scenario
-              </div>
-            </div>
-          </div>
-
-          <!-- Model Answer Section (will appear after feedback) -->
-          <div id="modelAnswerSection" class="model-answer-section initially-hidden">
-            <h3>Model Answer</h3>
-            <div id="modelAnswerContent" class="model-answer-content">
-              Model answer will appear here after the scenario is completed.
-            </div>
-          </div>
-        </div>
-
-        <!-- Right Panel (25%): Voice Orb with Examiner Background -->
-        <div class="right-panel">
-          <!-- Voice Orb Container -->
-          <div class="voice-orb-container">
+          <!-- Voice Orb Overlay (centered-lower) -->
+          <div class="persona-orb-overlay">
             <!-- AI Status Bubble -->
             <div id="aiStatusBubble" class="ai-status-bubble">
               <span id="aiStatus">Ready</span>
             </div>
-            <div id="voiceOrb" class="voice-orb"></div>
-            <!-- Audio Waveform Visualizer -->
+            <div id="voiceOrb" class="voice-orb idle"></div>
+          </div>
+
+          <!-- Control Pill (bottom center) -->
+          <div class="persona-controls-overlay">
+            <div class="control-pill">
+              <button type="button" id="connectBtn" class="control-btn" title="Start Session" aria-label="Start Session">▶</button>
+              <button type="button" id="recordBtn" class="control-btn control-btn-record initially-hidden" disabled title="Push to Talk" aria-label="Push to Talk">🎤</button>
+              <button type="button" id="interruptBtn" class="control-btn initially-hidden" disabled title="Pause AI" aria-label="Pause AI">⏸</button>
+              <button type="button" id="disconnectBtn" class="control-btn control-btn-danger" disabled title="End Session" aria-label="End Session">⏹</button>
+            </div>
+          </div>
+
+          <!-- Waveform Overlay (bottom) -->
+          <div class="persona-waveform-overlay">
             <div id="audioWaveform" class="audio-waveform">
               <div class="waveform-bar"></div>
               <div class="waveform-bar"></div>
@@ -809,8 +792,49 @@
               <div class="waveform-bar"></div>
               <div class="waveform-bar"></div>
             </div>
+            <span id="waveformStatus" class="waveform-status">AI is speaking...</span>
           </div>
         </div>
+
+        <!-- Right Panel (40%): Sidebar with Clinical Image + Transcript -->
+        <div class="sidebar-panel">
+          <!-- Clinical Image Section -->
+          <div id="imageSection" class="clinical-section">
+            <div class="section-header">
+              <span class="case-badge">Clinical Image</span>
+              <button type="button" class="expand-btn" onclick="openImageModal()" title="Fullscreen" aria-label="View fullscreen">⤢</button>
+            </div>
+            <div class="clinical-image-container">
+              <img id="clinicalImage" class="clinical-image initially-hidden" src="" alt="Clinical image" onclick="openImageModal()">
+              <div class="image-overlay initially-hidden">
+                <span>Click to examine</span>
+              </div>
+              <div id="noImagePlaceholder" class="no-image-placeholder">
+                No clinical image for this scenario
+              </div>
+            </div>
+          </div>
+
+          <!-- Transcript Section -->
+          <div class="transcript-section">
+            <div class="section-header">
+              <span class="section-header-title">Transcript</span>
+            </div>
+            <div id="transcriptContainer" class="transcript-container">
+              <div id="transcriptMessages" class="transcript-messages">
+                <div class="transcript-empty">
+                  Conversation will appear here...
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hidden status elements for compatibility -->
+      <div class="visually-hidden" aria-hidden="true">
+        <span id="sessionStatus" class="status-value status-disconnected">No Session</span>
+        <span id="micStatus" class="status-value status-disconnected">Inactive</span>
       </div>
 
       <!-- Mobile Layout: Vertical stacking - VUI Dark Theme -->
@@ -876,6 +900,20 @@
             <span id="mobileMicStatus" class="status-value status-disconnected">Off</span>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Model Answer Drawer -->
+  <div id="drawerBackdrop" class="drawer-backdrop" onclick="closeModelAnswerDrawer()"></div>
+  <div id="modelAnswerDrawer" class="drawer">
+    <div class="drawer-header">
+      <h3>Model Answer</h3>
+      <button type="button" class="drawer-close" onclick="closeModelAnswerDrawer()" aria-label="Close drawer">&times;</button>
+    </div>
+    <div class="drawer-content">
+      <div id="modelAnswerContent">
+        <p>Model answer will appear here after the scenario is completed.</p>
       </div>
     </div>
   </div>
