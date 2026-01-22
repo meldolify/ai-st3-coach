@@ -26,6 +26,127 @@
 
   <!-- Styles (extracted from inline) -->
   <link rel="stylesheet" href="styles/main.css">
+  <style>
+    /* ==================================== */
+    /* POST-REMODEL ADJUSTMENTS             */
+    /* ==================================== */
+
+    /* 1. Restore Better Voice Orb Animation */
+    .voice-orb {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6, #10b981, #fbbf24, #ef4444, #f97316, #a855f7, #6366f1);
+      background-size: 800% 800%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+      overflow: hidden;
+      animation: color-cycle 30s ease-in-out infinite;
+    }
+
+    .voice-orb::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: inherit;
+      opacity: 0;
+      animation: none;
+    }
+
+    .voice-orb::after {
+      content: '';
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      background: conic-gradient(from 0deg, transparent 0%, rgba(255, 255, 255, 0.08) 15%, rgba(255, 255, 255, 0.2) 25%, rgba(255, 255, 255, 0.08) 35%, transparent 50%, rgba(255, 255, 255, 0.08) 65%, rgba(255, 255, 255, 0.2) 75%, rgba(255, 255, 255, 0.08) 85%, transparent 100%);
+      border-radius: 50%;
+      opacity: 0;
+      animation: none;
+      filter: blur(8px);
+    }
+
+    .voice-orb.idle { animation: color-cycle 30s ease-in-out infinite, breathe 3s ease-in-out infinite; }
+    .voice-orb.listening { animation: color-cycle 30s ease-in-out infinite; box-shadow: 0 8px 40px rgba(99, 102, 241, 0.6); }
+    .voice-orb.listening::before { animation: listening-pulse 1.5s ease-out infinite; }
+    .voice-orb.thinking { animation: color-cycle 30s ease-in-out infinite, thinking-bounce 2.0s ease-in-out infinite; box-shadow: 0 8px 35px rgba(139, 92, 246, 0.5); }
+    .voice-orb.thinking::after { opacity: 1; animation: thinking-spin 3s ease-in-out infinite; }
+    .voice-orb.speaking { animation: color-cycle 30s ease-in-out infinite, speaking-scale 1.5s ease-in-out infinite; box-shadow: 0 10px 50px rgba(99, 102, 241, 0.7); }
+    .voice-orb.speaking::before { animation: speaking-pulse 1.8s ease-out infinite; }
+
+    @keyframes color-cycle { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+    @keyframes breathe { 0%, 100% { transform: scale(1); box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3); } 50% { transform: scale(1.05); box-shadow: 0 8px 30px rgba(99, 102, 241, 0.5); } }
+    @keyframes listening-pulse { 0% { transform: scale(1); opacity: 0.5; } 100% { transform: scale(1.6); opacity: 0; } }
+    @keyframes thinking-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    @keyframes thinking-bounce { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-15px) scale(1.08); } }
+    @keyframes speaking-scale { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+    @keyframes speaking-pulse { 0% { transform: scale(1); opacity: 0.6; } 100% { transform: scale(1.8); opacity: 0; } }
+
+    /* 2. Floating Buttons (3x Larger) */
+    .persona-controls-overlay {
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      pointer-events: none;
+    }
+
+    .control-pill {
+      background: transparent !important;
+      backdrop-filter: none !important;
+      box-shadow: none !important;
+      gap: 48px !important;
+      padding: 0 !important;
+      pointer-events: auto;
+    }
+
+    .control-btn {
+      width: 120px !important;
+      height: 120px !important;
+      font-size: 48px !important;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2) !important;
+      border-radius: 50% !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      transition: all 0.2s ease !important;
+    }
+
+    .control-btn:hover {
+      transform: scale(1.1) translateY(-5px) !important;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3) !important;
+    }
+
+    #connectBtn { background: #10B981 !important; color: white !important; }
+    #recordBtn { background: #3B82F6 !important; color: white !important; }
+    #interruptBtn { background: #F59E0B !important; color: white !important; }
+    #disconnectBtn { background: #EF4444 !important; color: white !important; }
+    
+    #recordBtn.recording {
+      background: linear-gradient(135deg, #DC2626, #EF4444) !important;
+      animation: recording-pulse 1.5s ease-in-out infinite !important;
+    }
+
+    /* 3. Fix Back Button Text Color */
+    .back-button {
+      color: #1F2937 !important;
+      background: white;
+      border: 1px solid #E5E7EB;
+    }
+    .back-button span {
+      color: #1F2937 !important;
+    }
+    .back-button:hover {
+      background: #F3F4F6;
+    }
+  </style>
 </head>
 
 <body>
