@@ -17,7 +17,7 @@ const PERSONA_CONFIG = {
   easy: {
     name: 'Dr. John Mitchell',
     title: 'Consultant Plastic Surgeon',
-    image: 'images/interviewer_persona_John.png',
+    image: 'images/interviewer_persona_john.png',
     fallbackImage: PERSONA_DEFAULT_IMAGE,
     voice: 'en-GB-Chirp3-HD-Fenrir',
     accentColor: '#10B981' // Emerald
