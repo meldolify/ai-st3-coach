@@ -17,7 +17,7 @@ const PERSONA_CONFIG = {
   easy: {
     name: 'Dr. John Mitchell',
     title: 'Consultant Plastic Surgeon',
-    image: 'images/persona-easy.webp',
+    image: 'images/interviewer_persona_John.png',
     fallbackImage: PERSONA_DEFAULT_IMAGE,
     voice: 'en-GB-Chirp3-HD-Fenrir',
     accentColor: '#10B981' // Emerald
@@ -25,7 +25,7 @@ const PERSONA_CONFIG = {
   medium: {
     name: 'Dr. Sarah Chen',
     title: 'Senior Examiner',
-    image: 'images/persona-medium.webp',
+    image: 'images/interviewer_persona_elliot.png',
     fallbackImage: PERSONA_DEFAULT_IMAGE,
     voice: 'en-GB-Chirp3-HD-Kore',
     accentColor: '#F59E0B' // Amber
@@ -33,7 +33,7 @@ const PERSONA_CONFIG = {
   strict: {
     name: 'Prof. James Thornton',
     title: 'Chief Examiner',
-    image: 'images/persona-strict.webp',
+    image: 'images/interviewer_persona_perry.png',
     fallbackImage: PERSONA_DEFAULT_IMAGE,
     voice: 'en-GB-Chirp3-HD-Charon',
     accentColor: '#EF4444' // Red
