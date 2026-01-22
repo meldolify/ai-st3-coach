@@ -4562,10 +4562,6 @@ body.has-header {
    ============================================ */
 
 /* Display utilities */
-.hidden {
-  display: none !important;
-}
-
 .initially-hidden {
   display: none;
 }
