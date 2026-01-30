@@ -181,8 +181,11 @@ wss.on('connection', (ws, req) => {
             console.log('[WHISPER STT] ' + transcriptionText);
             console.log(`[TIMING] Whisper: ${t2 - t1}ms`);
 
-            // PASSTHROUGH (PTT Mode): Send whatever we get.
-            // if (isNoiseTranscript(transcriptionText)) { ... } removed per user request.
+            // Filter noise transcripts (important for VAD mode)
+            if (isNoiseTranscript(transcriptionText)) {
+              console.log('[WHISPER] Filtered as noise, not sending to frontend');
+              break;
+            }
 
             // Send transcript back to frontend
             ws.send(JSON.stringify({

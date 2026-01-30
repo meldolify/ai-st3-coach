@@ -1,7 +1,7 @@
 // ============================================================================
 // SESSION.JS - WebSocket Session and Audio Playback
 // ============================================================================
-// Dependencies: state.js, config.js, speech.js, ui-helpers.js
+// Dependencies: state.js, config.js, speech.js, vad/VADManager.js, ui-helpers.js
 // Classes: AudioPlayer, V4Session
 // Handles: WebSocket connection, message handling, AI audio playback
 // ============================================================================
@@ -93,15 +93,27 @@ class V4Session {
     this.ws = null;
     this.sessionId = null;
 
-    // STT: Push-to-Talk PRIMARY, Web Speech API FALLBACK
+    // STT: VAD (continuous) or Push-to-Talk (fallback)
+    // VAD uses Silero VAD for continuous voice detection
     // PTT uses MediaRecorder to capture audio when user clicks Record button
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
-    // Always use Push-to-Talk as primary (no VAD needed)
-    this.speechRecognition = new PushToTalkManager(null); // WebSocket set after connection
-    this.usingWhisper = true; // Sends to Whisper for transcription
-    this.usingPTT = true;
-    log('Using Push-to-Talk for STT', 'success');
+    // Choose speech recognition mode based on config
+    if (CONFIG.SPEECH_RECOGNITION.USE_VAD && typeof VADManager !== 'undefined') {
+      // VAD mode: continuous voice detection
+      this.speechRecognition = new VADManager(null); // WebSocket set after connection
+      this.usingWhisper = true;
+      this.usingVAD = true;
+      this.usingPTT = false;
+      log('Using VAD for continuous voice input', 'success');
+    } else {
+      // PTT mode: click to record
+      this.speechRecognition = new PushToTalkManager(null); // WebSocket set after connection
+      this.usingWhisper = true;
+      this.usingVAD = false;
+      this.usingPTT = true;
+      log('Using Push-to-Talk for STT', 'success');
+    }
 
     this.audioPlayer = new AudioPlayer();
     this.backendUrl = backendUrl;

@@ -181,13 +181,21 @@ document.getElementById('connectBtn').addEventListener('click', async () => {
     document.getElementById('connectBtn').disabled = true;
     document.getElementById('disconnectBtn').disabled = false;
 
-    // Show and enable the Record button
+    // Show/hide Record button based on mode
     const recordBtn = document.getElementById('recordBtn');
-    recordBtn.style.display = 'flex'; // Use flex to maintain centering
-    recordBtn.disabled = false;
+    if (session.usingVAD) {
+      // VAD mode: hide record button (continuous listening)
+      recordBtn.style.display = 'none';
+      recordBtn.disabled = true;
+      log('Session ready! Voice detection active - just speak naturally.', 'success');
+    } else {
+      // PTT mode: show record button
+      recordBtn.style.display = 'flex'; // Use flex to maintain centering
+      recordBtn.disabled = false;
+      log('Session ready! Click the Record button to speak.', 'success');
+    }
 
     syncMobileButtonStates(); // Sync mobile buttons
-    log('Session ready! Click the Record button to speak.', 'success');
 
     // Log session start for analytics
     await logSessionStart();
