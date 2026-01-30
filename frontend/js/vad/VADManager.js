@@ -56,6 +56,11 @@ class VADManager {
       }
 
       this.myvad = await vad.MicVAD.new({
+        // WASM and model paths - use CDN with correct paths
+        // See: https://github.com/ricky0123/vad/issues/169
+        onnxWASMBasePath: "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.19.2/dist/",
+        baseAssetPath: "https://cdn.jsdelivr.net/npm/@ricky0123/vad-web@0.0.19/dist/",
+
         // Speech detection thresholds
         positiveSpeechThreshold: this.config.positiveSpeechThreshold,
         negativeSpeechThreshold: this.config.negativeSpeechThreshold,
