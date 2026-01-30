@@ -13,7 +13,9 @@
   <!-- Supabase Auth -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <!-- Silero VAD (Removed - Switched to Push-to-Talk) -->
+  <!-- Silero VAD via @ricky0123/vad-web -->
+  <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@ricky0123/vad-web@0.0.30/dist/bundle.min.js"></script>
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1510,6 +1512,7 @@
   <script src="js/tracking.js"></script>
   <script src="js/ui-helpers.js"></script>
   <script src="js/speech.js"></script>
+  <script src="js/vad/VADManager.js"></script>
   <script src="js/session.js"></script>
   <script src="js/scenarios.js"></script>
   <script src="js/mock-exam.js"></script>
