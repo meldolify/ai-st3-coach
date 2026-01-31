@@ -198,11 +198,16 @@ class V4Session {
           window.transcript.addAIMessage(msg.text);
         }
         this.audioPlayer.playBase64Audio(msg.audio);
-        // Show interrupt button and set speaking state
+        // Show interrupt button with active styling
         const interruptBtn = document.getElementById('interruptBtn');
         if (interruptBtn) {
           interruptBtn.style.display = 'inline-block';
           interruptBtn.disabled = false;
+          interruptBtn.classList.add('active');
+        }
+        const mobileInterruptBtn = document.getElementById('mobileInterruptBtn');
+        if (mobileInterruptBtn) {
+          mobileInterruptBtn.classList.add('active');
         }
         syncMobileButtonStates(); // Sync mobile buttons
         updateStatus('aiStatus', 'Speaking', 'speaking'); // Hide bubble when speaking
@@ -227,11 +232,16 @@ class V4Session {
 
       case 'interrupt':
         this.audioPlayer.interrupt();
-        // Hide interrupt button
+        // Hide interrupt button and remove active styling
         const interruptBtnOnInterrupt = document.getElementById('interruptBtn');
         if (interruptBtnOnInterrupt) {
           interruptBtnOnInterrupt.style.display = 'none';
           interruptBtnOnInterrupt.disabled = true;
+          interruptBtnOnInterrupt.classList.remove('active');
+        }
+        const mobileInterruptBtnOnInterrupt = document.getElementById('mobileInterruptBtn');
+        if (mobileInterruptBtnOnInterrupt) {
+          mobileInterruptBtnOnInterrupt.classList.remove('active');
         }
         syncMobileButtonStates(); // Sync mobile buttons
         setOrbState('listening');
@@ -328,11 +338,16 @@ class V4Session {
     };
 
     this.audioPlayer.onEnd = () => {
-      // Hide interrupt button
+      // Hide interrupt button and remove active styling
       const interruptBtnOnEnd = document.getElementById('interruptBtn');
       if (interruptBtnOnEnd) {
         interruptBtnOnEnd.style.display = 'none';
         interruptBtnOnEnd.disabled = true;
+        interruptBtnOnEnd.classList.remove('active');
+      }
+      const mobileInterruptBtnOnEnd = document.getElementById('mobileInterruptBtn');
+      if (mobileInterruptBtnOnEnd) {
+        mobileInterruptBtnOnEnd.classList.remove('active');
       }
       syncMobileButtonStates(); // Sync mobile buttons
 

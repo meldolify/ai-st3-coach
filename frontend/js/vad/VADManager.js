@@ -28,8 +28,7 @@ class VADManager {
       preSpeechPadFrames: 10,    // ~300ms pre-roll
       redemptionFrames: 8,       // ~240ms hangover
       minSpeechFrames: 3,        // ~90ms minimum
-      interruptMinMs: 200,       // Minimum duration for interrupt during TTS
-      postTTSCooldownMs: 100     // Cooldown after TTS ends
+      postTTSCooldownMs: 150     // Cooldown after TTS ends before resuming VAD
     };
   }
 
@@ -52,7 +51,7 @@ class VADManager {
         this.config.preSpeechPadFrames = vadConfig.PRE_SPEECH_FRAMES || this.config.preSpeechPadFrames;
         this.config.redemptionFrames = vadConfig.REDEMPTION_FRAMES || this.config.redemptionFrames;
         this.config.minSpeechFrames = vadConfig.MIN_SPEECH_FRAMES || this.config.minSpeechFrames;
-        this.config.interruptMinMs = vadConfig.INTERRUPT_MIN_MS || this.config.interruptMinMs;
+        this.config.postTTSCooldownMs = vadConfig.POST_TTS_COOLDOWN_MS || this.config.postTTSCooldownMs;
       }
 
       this.myvad = await vad.MicVAD.new({
@@ -87,18 +86,7 @@ class VADManager {
         onSpeechEnd: async (audio) => {
           const duration = Date.now() - this.speechStartTime;
 
-          // During TTS playback: check for interrupt
-          if (this.isAISpeaking) {
-            if (duration >= this.config.interruptMinMs) {
-              console.log(`[VAD] Interrupt detected (${duration}ms speech during TTS)`);
-              if (this.onInterruptRequest) this.onInterruptRequest();
-            } else {
-              console.log(`[VAD] Ignoring short speech during TTS (${duration}ms, need ${this.config.interruptMinMs}ms)`);
-            }
-            return;
-          }
-
-          // During cooldown: ignore
+          // During cooldown: ignore (residual echo)
           if (this.postTTSCooldown) {
             console.log(`[VAD] Ignoring speech during post-TTS cooldown (${duration}ms)`);
             return;
@@ -230,17 +218,26 @@ class VADManager {
   setAISpeaking(isSpeaking) {
     const wasAISpeaking = this.isAISpeaking;
     this.isAISpeaking = isSpeaking;
-    console.log(`[VAD] AI speaking: ${isSpeaking}`);
 
-    if (!isSpeaking && wasAISpeaking) {
-      // AI just finished speaking - enable cooldown
+    if (isSpeaking && !wasAISpeaking) {
+      // AI starting to speak - PAUSE VAD to prevent echo pickup
+      if (this.myvad) {
+        this.myvad.pause();
+        console.log('[VAD] Paused during TTS');
+      }
+    } else if (!isSpeaking && wasAISpeaking) {
+      // AI finished speaking - RESUME VAD after short delay
       this.postTTSCooldown = true;
-      console.log(`[VAD] Post-TTS cooldown started (${this.config.postTTSCooldownMs}ms)`);
+      console.log('[VAD] Post-TTS cooldown started (150ms)');
 
       setTimeout(() => {
         this.postTTSCooldown = false;
-        console.log('[VAD] Post-TTS cooldown ended, ready for new speech');
-      }, this.config.postTTSCooldownMs);
+        // Only resume if AI hasn't started speaking again
+        if (this.myvad && !this.isAISpeaking) {
+          this.myvad.start();
+          console.log('[VAD] Resumed after TTS');
+        }
+      }, 150); // 150ms delay to let residual echo clear
     }
   }
 
