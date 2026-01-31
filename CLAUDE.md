@@ -325,6 +325,22 @@ Edit `isNoiseTranscript()` in `server.js:97-147`:
 - **Development log:** Track all changes in `DEVELOPMENT_LOG.md`
 - Recent commits focused on: VAD tuning, development environment setup, testing framework
 
+## Development Tools
+
+### UI Annotator (`frontend/tools/ui-annotator.html`)
+
+Interactive playground for visually annotating UI elements and generating design change requests.
+
+**Usage:**
+1. Start frontend server: `cd frontend && npx serve . -l 5500` (note: no `-s` flag)
+2. Open: `http://localhost:5500/tools/ui-annotator.html`
+3. Navigate pages via tabs, click to add markers, fill in change requests
+4. Copy generated prompt and paste to Claude for implementation
+
+**Features:** 10 page tabs, priority-colored markers, persistent localStorage, markdown output
+
+See `frontend/tools/README.md` for full documentation.
+
 ## External Documentation
 
 - Google TTS: https://cloud.google.com/text-to-speech
