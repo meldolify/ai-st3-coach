@@ -6,6 +6,448 @@
 //            startScenario, exitSimulation, mobile navigation functions
 // ============================================================================
 
+// ============================================================================
+// CARD-BASED SCENARIO NAVIGATION (New System)
+// ============================================================================
+
+// Store current selection state for card navigation
+let currentScenarioCategory = null;
+let currentScenarioSubcategory = null;
+
+// Subcategory definitions for each category
+const categorySubcategories = {
+  'clinical': [
+    { id: 'breast-and-aesthetic', name: 'Breast & Aesthetic', icon: '💎' },
+    { id: 'burns', name: 'Burns', icon: '🔥' },
+    { id: 'elective-hand', name: 'Elective Hand', icon: '✋' },
+    { id: 'emergencies', name: 'Emergencies', icon: '🚨' },
+    { id: 'hand-trauma', name: 'Hand Trauma', icon: '🩹' },
+    { id: 'lower-limb', name: 'Lower Limb', icon: '🦵' },
+    { id: 'skin-cancer', name: 'Skin Cancer', icon: '🔬' },
+    { id: 'head-and-neck', name: 'Head & Neck', icon: '👤' },
+    { id: 'congenital', name: 'Congenital', icon: '👶' },
+    { id: 'microsurgery', name: 'Microsurgery', icon: '🔍' }
+  ],
+  'call-the-boss': [
+    { id: 'call-the-boss-scenarios', name: 'Scenarios', icon: '📞' }
+  ],
+  'consent': [
+    { id: 'consent-breast-and-aesthetic', name: 'Breast & Aesthetic', icon: '💎' },
+    { id: 'consent-hand-surgery', name: 'Hand Surgery', icon: '✋' },
+    { id: 'consent-skin-surgery', name: 'Skin Surgery', icon: '🔬' },
+    { id: 'consent-emergency-procedures', name: 'Emergency Procedures', icon: '🚨' },
+    { id: 'consent-reconstructive', name: 'Reconstructive', icon: '🔧' }
+  ],
+  'structured': [
+    { id: 'structured-audit', name: 'Audit', icon: '📊' },
+    { id: 'structured-clinical-governance', name: 'Clinical Governance', icon: '🏥' },
+    { id: 'structured-complaints', name: 'Complaints', icon: '📝' },
+    { id: 'structured-consent-ethics', name: 'Consent & Ethics', icon: '⚖️' },
+    { id: 'structured-ethics', name: 'Ethics', icon: '🤝' },
+    { id: 'structured-research', name: 'Research', icon: '🔬' },
+    { id: 'structured-risk-management', name: 'Risk Management', icon: '⚠️' },
+    { id: 'structured-teaching', name: 'Teaching', icon: '📚' }
+  ]
+};
+
+// Category display names
+const categoryNames = {
+  'clinical': 'Clinical Stations',
+  'call-the-boss': 'Call-The-Boss',
+  'consent': 'Consent',
+  'structured': 'Structured Interview'
+};
+
+// Select a category (Level 1 -> Level 2)
+function selectScenarioCategory(category) {
+  currentScenarioCategory = category;
+  currentScenarioSubcategory = null;
+
+  // Update breadcrumb
+  const breadcrumbSubcat = document.getElementById('breadcrumbSubcat');
+  breadcrumbSubcat.querySelector('.breadcrumb-label').textContent = categoryNames[category] || category;
+  breadcrumbSubcat.classList.remove('disabled');
+  breadcrumbSubcat.classList.add('active');
+
+  // Update category breadcrumb to not be active
+  document.querySelector('.breadcrumb-item[data-level="category"]').classList.remove('active');
+
+  // Update eyebrow
+  document.getElementById('subcatEyebrow').textContent = categoryNames[category] || category;
+
+  // Populate subcategory cards
+  populateSubcategoryCards(category);
+
+  // Show subcategory level, hide category level
+  document.getElementById('categoryLevel').classList.add('hidden');
+  document.getElementById('subcategoryLevel').classList.remove('hidden');
+  document.getElementById('topicLevel').classList.add('hidden');
+
+  log('Selected scenario category: ' + category, 'info');
+}
+
+// Populate subcategory cards based on category
+function populateSubcategoryCards(category) {
+  const container = document.getElementById('subcategoryCards');
+  const subcategories = categorySubcategories[category] || [];
+
+  container.innerHTML = subcategories.map(sub => `
+    <article class="scenario-card" data-subcategory="${sub.id}" onclick="selectScenarioSubcategory('${sub.id}', '${sub.name}')">
+      <div class="card-header">
+        <div class="card-icon-frame">
+          <span style="font-size: 1.25rem;">${sub.icon}</span>
+        </div>
+      </div>
+      <h3 class="card-title">${sub.name}</h3>
+    </article>
+  `).join('');
+}
+
+// Select a subcategory (Level 2 -> Level 3)
+function selectScenarioSubcategory(subcategoryId, subcategoryName) {
+  currentScenarioSubcategory = subcategoryId;
+
+  // Update breadcrumb
+  const breadcrumbTopic = document.getElementById('breadcrumbTopic');
+  breadcrumbTopic.querySelector('.breadcrumb-label').textContent = subcategoryName;
+  breadcrumbTopic.classList.remove('disabled');
+
+  // Update subcategory breadcrumb
+  document.getElementById('breadcrumbSubcat').classList.remove('active');
+
+  // Update eyebrow
+  document.getElementById('topicEyebrow').textContent = subcategoryName;
+
+  // Populate topic cards
+  populateTopicCards(subcategoryId);
+
+  // Show topic level, hide subcategory level
+  document.getElementById('categoryLevel').classList.add('hidden');
+  document.getElementById('subcategoryLevel').classList.add('hidden');
+  document.getElementById('topicLevel').classList.remove('hidden');
+
+  log('Selected scenario subcategory: ' + subcategoryId, 'info');
+}
+
+// Get topics data structure (mirrors the data in updateTopicsContent)
+function getTopicsData() {
+  return {
+    // ========== CLINICAL HEADING ==========
+    'breast-and-aesthetic': {
+      title: 'Breast & Aesthetic',
+      topics: [
+        ['clinical/breast_and_aesthetic/breast_reconstruction', 'Breast Reconstruction'],
+        ['clinical/breast_and_aesthetic/breast_reduction', 'Breast Reduction'],
+        ['clinical/breast_and_aesthetic/mastopexy', 'Mastopexy'],
+        ['clinical/breast_and_aesthetic/gynaecomastia', 'Gynaecomastia'],
+        ['clinical/breast_and_aesthetic/liposuction', 'Liposuction'],
+        ['clinical/breast_and_aesthetic/abdominoplasty', 'Abdominoplasty'],
+        ['clinical/breast_and_aesthetic/blepharoplasty', 'Blepharoplasty'],
+        ['clinical/breast_and_aesthetic/otoplasty', 'Otoplasty'],
+        ['clinical/breast_and_aesthetic/rhinoplasty', 'Rhinoplasty']
+      ]
+    },
+    'burns': {
+      title: 'Burns',
+      topics: [
+        ['clinical/burns/acute_burns_assessment', 'Acute Burns Assessment'],
+        ['clinical/burns/fluid_resuscitation', 'Fluid Resuscitation'],
+        ['clinical/burns/escharotomy', 'Escharotomy'],
+        ['clinical/burns/burn_wound_management', 'Burn Wound Management'],
+        ['clinical/burns/chemical_burns', 'Chemical Burns'],
+        ['clinical/burns/electrical_burns', 'Electrical Burns']
+      ]
+    },
+    'elective-hand': {
+      title: 'Elective Hand',
+      topics: [
+        ['clinical/elective_hand/carpal_tunnel_syndrome', 'Carpal Tunnel Syndrome'],
+        ['clinical/elective_hand/cubital_tunnel_syndrome', 'Cubital Tunnel Syndrome'],
+        ['clinical/elective_hand/trigger_finger', 'Trigger Finger'],
+        ['clinical/elective_hand/dupuytrens_disease', "Dupuytren's Disease"],
+        ['clinical/elective_hand/ganglion_cyst', 'Ganglion Cyst']
+      ]
+    },
+    'emergencies': {
+      title: 'Emergencies',
+      topics: [
+        ['clinical/emergencies/necrotising_fasciitis', 'Necrotising Fasciitis'],
+        ['clinical/emergencies/compartment_syndrome', 'Compartment Syndrome'],
+        ['clinical/emergencies/high_pressure_injection_injury', 'High Pressure Injection Injury'],
+        ['clinical/emergencies/septic_arthritis_hand', 'Septic Arthritis Hand'],
+        ['clinical/emergencies/flexor_sheath_infection', 'Flexor Sheath Infection']
+      ]
+    },
+    'hand-trauma': {
+      title: 'Hand Trauma',
+      topics: [
+        ['clinical/hand_trauma/flexor_tendon_injury', 'Flexor Tendon Injury'],
+        ['clinical/hand_trauma/extensor_tendon_injury', 'Extensor Tendon Injury'],
+        ['clinical/hand_trauma/digital_nerve_injury', 'Digital Nerve Injury'],
+        ['clinical/hand_trauma/replantation', 'Replantation'],
+        ['clinical/hand_trauma/fingertip_amputation', 'Fingertip Amputation']
+      ]
+    },
+    'lower-limb': {
+      title: 'Lower Limb',
+      topics: [
+        ['clinical/lower_limb/diabetic_foot', 'Diabetic Foot'],
+        ['clinical/lower_limb/chronic_leg_ulcer', 'Chronic Leg Ulcer'],
+        ['clinical/lower_limb/pressure_sores', 'Pressure Sores'],
+        ['clinical/lower_limb/lower_limb_reconstruction', 'Lower Limb Reconstruction']
+      ]
+    },
+    'skin-cancer': {
+      title: 'Skin Cancer',
+      topics: [
+        ['clinical/skin_cancer/basal_cell_carcinoma', 'Basal Cell Carcinoma'],
+        ['clinical/skin_cancer/squamous_cell_carcinoma', 'Squamous Cell Carcinoma'],
+        ['clinical/skin_cancer/melanoma', 'Melanoma'],
+        ['clinical/skin_cancer/sentinel_lymph_node_biopsy', 'Sentinel Lymph Node Biopsy']
+      ]
+    },
+    'head-and-neck': {
+      title: 'Head & Neck',
+      topics: [
+        ['clinical/head_and_neck/facial_laceration', 'Facial Laceration'],
+        ['clinical/head_and_neck/facial_nerve_injury', 'Facial Nerve Injury'],
+        ['clinical/head_and_neck/nasal_fracture', 'Nasal Fracture'],
+        ['clinical/head_and_neck/orbital_fracture', 'Orbital Fracture']
+      ]
+    },
+    'congenital': {
+      title: 'Congenital',
+      topics: [
+        ['clinical/congenital/cleft_lip', 'Cleft Lip'],
+        ['clinical/congenital/cleft_palate', 'Cleft Palate'],
+        ['clinical/congenital/syndactyly', 'Syndactyly'],
+        ['clinical/congenital/polydactyly', 'Polydactyly']
+      ]
+    },
+    'microsurgery': {
+      title: 'Microsurgery',
+      topics: [
+        ['clinical/microsurgery/free_flap_principles', 'Free Flap Principles'],
+        ['clinical/microsurgery/flap_monitoring', 'Flap Monitoring'],
+        ['clinical/microsurgery/anastomosis_complications', 'Anastomosis Complications']
+      ]
+    },
+    // ========== CALL THE BOSS HEADING ==========
+    'call-the-boss-scenarios': {
+      title: 'Call-The-Boss Scenarios',
+      topics: [
+        ['call_the_boss/scenarios/major_burn', 'Major Burn'],
+        ['call_the_boss/scenarios/compromised_flap', 'Compromised Flap'],
+        ['call_the_boss/scenarios/necrotising_fasciitis', 'Necrotising Fasciitis'],
+        ['call_the_boss/scenarios/compartment_syndrome', 'Compartment Syndrome']
+      ]
+    },
+    // ========== CONSENT HEADING ==========
+    'consent-breast-and-aesthetic': {
+      title: 'Consent: Breast & Aesthetic',
+      topics: [
+        ['consent/breast_and_aesthetic/breast_reconstruction_consent', 'Breast Reconstruction'],
+        ['consent/breast_and_aesthetic/breast_reduction_consent', 'Breast Reduction'],
+        ['consent/breast_and_aesthetic/abdominoplasty_consent', 'Abdominoplasty']
+      ]
+    },
+    'consent-hand-surgery': {
+      title: 'Consent: Hand Surgery',
+      topics: [
+        ['consent/hand_surgery/carpal_tunnel_release_consent', 'Carpal Tunnel Release'],
+        ['consent/hand_surgery/trigger_finger_release_consent', 'Trigger Finger Release'],
+        ['consent/hand_surgery/dupuytrens_fasciectomy_consent', "Dupuytren's Fasciectomy"]
+      ]
+    },
+    'consent-skin-surgery': {
+      title: 'Consent: Skin Surgery',
+      topics: [
+        ['consent/skin_surgery/excision_biopsy_consent', 'Excision Biopsy'],
+        ['consent/skin_surgery/wide_local_excision_consent', 'Wide Local Excision'],
+        ['consent/skin_surgery/skin_graft_consent', 'Skin Graft']
+      ]
+    },
+    'consent-emergency-procedures': {
+      title: 'Consent: Emergency Procedures',
+      topics: [
+        ['consent/emergency_procedures/debridement_consent', 'Debridement'],
+        ['consent/emergency_procedures/escharotomy_consent', 'Escharotomy'],
+        ['consent/emergency_procedures/fasciotomy_consent', 'Fasciotomy']
+      ]
+    },
+    'consent-reconstructive': {
+      title: 'Consent: Reconstructive',
+      topics: [
+        ['consent/reconstructive/free_flap_consent', 'Free Flap'],
+        ['consent/reconstructive/local_flap_consent', 'Local Flap']
+      ]
+    },
+    // ========== STRUCTURED INTERVIEW HEADING ==========
+    'structured-audit': {
+      title: 'Audit',
+      topics: [
+        ['structured_interview/audit/focused_interview', 'Focused Interview'],
+        ['structured_interview/audit/audit_cycle', 'Audit Cycle'],
+        ['structured_interview/audit/quality_improvement', 'Quality Improvement']
+      ]
+    },
+    'structured-clinical-governance': {
+      title: 'Clinical Governance',
+      topics: [
+        ['structured_interview/clinical_governance/clinical_governance_principles', 'Clinical Governance Principles'],
+        ['structured_interview/clinical_governance/morbidity_mortality', 'Morbidity & Mortality']
+      ]
+    },
+    'structured-complaints': {
+      title: 'Complaints',
+      topics: [
+        ['structured_interview/complaints/handling_complaints', 'Handling Complaints'],
+        ['structured_interview/complaints/duty_of_candour', 'Duty of Candour']
+      ]
+    },
+    'structured-consent-ethics': {
+      title: 'Consent & Ethics',
+      topics: [
+        ['structured_interview/consent_ethics/consent_principles', 'Consent Principles'],
+        ['structured_interview/consent_ethics/capacity_assessment', 'Capacity Assessment']
+      ]
+    },
+    'structured-ethics': {
+      title: 'Ethics',
+      topics: [
+        ['structured_interview/ethics/ethical_dilemmas', 'Ethical Dilemmas'],
+        ['structured_interview/ethics/confidentiality', 'Confidentiality']
+      ]
+    },
+    'structured-research': {
+      title: 'Research',
+      topics: [
+        ['structured_interview/research/research_methodology', 'Research Methodology'],
+        ['structured_interview/research/evidence_based_medicine', 'Evidence Based Medicine']
+      ]
+    },
+    'structured-risk-management': {
+      title: 'Risk Management',
+      topics: [
+        ['structured_interview/risk_management/risk_assessment', 'Risk Assessment'],
+        ['structured_interview/risk_management/patient_safety', 'Patient Safety']
+      ]
+    },
+    'structured-teaching': {
+      title: 'Teaching',
+      topics: [
+        ['structured_interview/teaching/teaching_principles', 'Teaching Principles'],
+        ['structured_interview/teaching/feedback_methods', 'Feedback Methods']
+      ]
+    }
+  };
+}
+
+// Get topics for a subcategory
+function getTopicsForSubheading(subcategoryId) {
+  const topicsDataRef = getTopicsData();
+  const data = topicsDataRef[subcategoryId];
+
+  if (!data || !data.topics) {
+    return [];
+  }
+
+  // Transform array format [file, name, image?] to object format
+  return data.topics.map(topic => ({
+    file: topic[0],
+    name: topic[1],
+    image: topic[2] || null,
+    difficulty: selectedDifficulty || 'easy' // Use current difficulty
+  }));
+}
+
+// Populate topic cards based on subcategory
+function populateTopicCards(subcategoryId) {
+  const container = document.getElementById('topicCards');
+  const topics = getTopicsForSubheading(subcategoryId);
+
+  if (!topics || topics.length === 0) {
+    container.innerHTML = '<p class="no-topics">No scenarios available for this category yet.</p>';
+    return;
+  }
+
+  container.innerHTML = topics.map(topic => {
+    const difficultyClass = topic.difficulty ? `difficulty-badge--${topic.difficulty}` : '';
+    const difficultyLabel = topic.difficulty ? topic.difficulty.charAt(0).toUpperCase() + topic.difficulty.slice(1) : '';
+
+    return `
+      <article class="scenario-card topic-card" data-scenario="${topic.file}" onclick="selectScenarioFromCard('${topic.file}', '${topic.name.replace(/'/g, "\\'")}')">
+        ${difficultyLabel ? `<span class="difficulty-badge ${difficultyClass}">${difficultyLabel}</span>` : ''}
+        <h3 class="card-title">${topic.name}</h3>
+        ${topic.description ? `<p class="card-description">${topic.description}</p>` : ''}
+      </article>
+    `;
+  }).join('');
+}
+
+// Select a scenario from card and start it
+function selectScenarioFromCard(scenarioFile, scenarioName) {
+  // Use the existing selectScenario logic
+  selectScenario(scenarioFile, scenarioName, true);
+}
+
+// Navigate via breadcrumb
+function navigateToBreadcrumb(level) {
+  if (level === 'category') {
+    // Reset to category level
+    currentScenarioCategory = null;
+    currentScenarioSubcategory = null;
+
+    // Reset breadcrumbs
+    document.querySelector('.breadcrumb-item[data-level="category"]').classList.add('active');
+    document.getElementById('breadcrumbSubcat').classList.add('disabled');
+    document.getElementById('breadcrumbSubcat').classList.remove('active');
+    document.getElementById('breadcrumbTopic').classList.add('disabled');
+
+    // Show category level
+    document.getElementById('categoryLevel').classList.remove('hidden');
+    document.getElementById('subcategoryLevel').classList.add('hidden');
+    document.getElementById('topicLevel').classList.add('hidden');
+  } else if (level === 'subcategory' && currentScenarioCategory) {
+    // Go back to subcategory level
+    currentScenarioSubcategory = null;
+
+    // Update breadcrumbs
+    document.getElementById('breadcrumbSubcat').classList.add('active');
+    document.getElementById('breadcrumbTopic').classList.add('disabled');
+
+    // Show subcategory level
+    document.getElementById('categoryLevel').classList.add('hidden');
+    document.getElementById('subcategoryLevel').classList.remove('hidden');
+    document.getElementById('topicLevel').classList.add('hidden');
+  }
+}
+
+// Back to mode selection from scenarios
+function backToModeFromScenarios() {
+  // Reset card navigation state
+  currentScenarioCategory = null;
+  currentScenarioSubcategory = null;
+
+  // Reset breadcrumbs
+  document.querySelector('.breadcrumb-item[data-level="category"]').classList.add('active');
+  document.getElementById('breadcrumbSubcat').classList.add('disabled');
+  document.getElementById('breadcrumbSubcat').classList.remove('active');
+  document.getElementById('breadcrumbTopic').classList.add('disabled');
+
+  // Reset to category level view
+  document.getElementById('categoryLevel').classList.remove('hidden');
+  document.getElementById('subcategoryLevel').classList.add('hidden');
+  document.getElementById('topicLevel').classList.add('hidden');
+
+  // Go back to mode selection
+  transitionToPage('scenarioSelection', 'modeSelection');
+}
+
+// ============================================================================
+// LEGACY PANEL NAVIGATION (Keeping for backwards compatibility)
+// ============================================================================
+
 function toggleMenu(menuId) {
   const content = document.getElementById('content-' + menuId);
   const arrow = document.getElementById('arrow-' + menuId);

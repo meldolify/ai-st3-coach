@@ -8,7 +8,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>ST3 Plastic Surgery Interview Trainer</title>
+  <title>ReViva - Interview Trainer</title>
 
   <!-- Supabase Auth -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -18,11 +18,11 @@
   <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.19.2/dist/ort.wasm.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@ricky0123/vad-web@0.0.19/dist/bundle.min.js"></script>
 
-  <!-- Fonts -->
+  <!-- Fonts: Instrument Serif (display) + Outfit (body) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;500;600;700&display=swap"
     rel="stylesheet">
 
   <!-- Styles (extracted from inline) -->
@@ -70,24 +70,69 @@
       padding-bottom: 16px !important;
     }
 
-    /* Bottom banner for simulation room */
-    .simulation-footer {
-      height: 36px;
-      min-height: 36px;
-      background: linear-gradient(180deg, #f0f2f5 0%, #e4e8ec 100%);
-      border-top: 1px solid rgba(0, 0, 0, 0.05);
-      display: flex;
+    /* ===== PERSISTENT APP FOOTER ===== */
+    .app-footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 52px;
+      background: var(--bg-warm-white, #FDFCFA);
+      border-top: 1px solid rgba(74, 93, 76, 0.1);
+      display: none; /* Hidden by default */
       align-items: center;
       justify-content: center;
-      flex-shrink: 0;
-      box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.03);
+      z-index: 100;
     }
 
-    .simulation-footer span {
-      font-size: 11px;
-      color: #9ca3af;
-      letter-spacing: 0.3px;
-      font-weight: 500;
+    .app-footer.visible {
+      display: flex;
+    }
+
+    /* Paper texture on footer */
+    .app-footer::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: 0.02;
+      pointer-events: none;
+    }
+
+    /* ReViva Logo Component */
+    .reviva-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo-mark {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-style: italic;
+      font-size: 2rem;
+      color: var(--brand-sage, #4A5D4C);
+      line-height: 1;
+    }
+
+    .logo-text {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: 1.5rem;
+      color: var(--text-primary, #1A1A18);
+      letter-spacing: -0.02em;
+    }
+
+    /* Compact logo for footer */
+    .reviva-logo--compact {
+      gap: 6px;
+    }
+
+    .reviva-logo--compact .logo-mark {
+      font-size: 1.25rem;
+    }
+
+    .reviva-logo--compact .logo-text {
+      font-size: 1rem;
+      color: var(--text-muted, #8A8680);
     }
 
     .persona-panel img,
@@ -616,7 +661,7 @@
   <noscript>
     <div style="background: #1a1a2e; color: white; padding: 40px; text-align: center; min-height: 100vh;">
       <h1>JavaScript Required</h1>
-      <p>Please enable JavaScript to use the ST3 Interview Trainer.</p>
+      <p>Please enable JavaScript to use ReViva.</p>
     </div>
   </noscript>
 
@@ -628,8 +673,10 @@
   <!-- App Header (shown on protected pages) -->
   <header id="appHeader" class="app-header initially-hidden">
     <a href="#" class="header-logo-link" onclick="navigateToLanding(); return false;">
-      <div class="header-logo-icon">ST3</div>
-      <span class="header-logo-text">Interview Trainer</span>
+      <div class="reviva-logo reviva-logo--compact">
+        <span class="logo-mark">R</span>
+        <span class="logo-text">ReViva</span>
+      </div>
     </a>
     <div class="header-right">
       <button class="user-menu-btn" onclick="toggleUserMenu()">
@@ -650,8 +697,10 @@
     <!-- Top Navigation -->
     <nav class="landing-nav">
       <a href="#" class="nav-logo">
-        <div class="nav-logo-icon">ST3</div>
-        <span class="nav-logo-text">Interview Trainer</span>
+        <div class="reviva-logo">
+          <span class="logo-mark">R</span>
+          <span class="logo-text">ReViva</span>
+        </div>
       </a>
       <div class="nav-links" id="navLinksGuest">
         <a href="#pricingSection" class="nav-link">Pricing</a>
@@ -678,7 +727,7 @@
           AI-Powered Interview Practice
         </div>
         <h1 class="hero-title">
-          Master Your <span class="highlight">ST3 Surgical</span> Interview
+          Master Your <span class="highlight">Surgical</span> Interview
         </h1>
         <p class="hero-description">
           Practice anytime with AI-powered voice simulation designed by current trainees.
@@ -686,38 +735,130 @@
         </p>
       </section>
 
-      <!-- Features Section -->
-      <section class="landing-features">
-        <p class="section-label">Why Choose Us</p>
-        <h2 class="section-title">Everything you need to succeed</h2>
-        <div class="features-grid">
-          <div class="feature-card animate-in delay-1">
-            <div class="feature-icon">⏰</div>
-            <h3>Practice Anytime</h3>
-            <p>AI-powered interview simulation available 24/7. No scheduling, no waiting. Practice at your own pace.</p>
-          </div>
-          <div class="feature-card animate-in delay-2">
-            <div class="feature-icon">🎯</div>
-            <h3>Expert-Designed</h3>
-            <p>Scenarios crafted by current high-ranking trainees. Content mirrors the real ST3 interview as closely as
-              possible.</p>
-          </div>
-          <div class="feature-card animate-in delay-3">
-            <div class="feature-icon">🆓</div>
-            <h3>Try Before You Subscribe</h3>
-            <p>Explore the platform and test selected scenarios completely free. Experience the quality before
-              committing.</p>
-          </div>
+      <!-- Action Cards Section -->
+      <section class="action-cards-section">
+        <div class="action-cards-grid">
+          <!-- Explore Card -->
+          <article class="action-card" onclick="browseAsGuest()" role="button" tabindex="0">
+            <div class="card-number">01</div>
+            <h3 class="card-title">Explore <em>Scenarios</em></h3>
+            <p class="card-description">Browse our curated library of clinical, communication, and structured interview scenarios</p>
+            <div class="card-cta">
+              <span>Begin exploring</span>
+              <svg class="cta-arrow" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M4 10h12m0 0l-4-4m4 4l-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </article>
+
+          <!-- View Pricing Card -->
+          <article class="action-card" onclick="document.getElementById('pricingSection').scrollIntoView({behavior: 'smooth'})" role="button" tabindex="0">
+            <div class="card-number">02</div>
+            <h3 class="card-title">View <em>Pricing</em></h3>
+            <p class="card-description">Simple, transparent plans designed for surgical trainees at every stage</p>
+            <div class="card-cta">
+              <span>See plans</span>
+              <svg class="cta-arrow" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M4 10h12m0 0l-4-4m4 4l-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </article>
         </div>
       </section>
 
-      <!-- Call to Action Buttons (moved below Features) -->
+      <!-- Features Scroll Section -->
+      <section class="features-scroll-section">
+        <!-- Feature 1: Practice Anytime -->
+        <article class="feature-block scroll-reveal">
+          <div class="feature-block__inner">
+            <div class="feature-content">
+              <span class="feature-label">Always Available</span>
+              <h2 class="feature-title">Practice on <em>your</em> schedule</h2>
+              <p class="feature-description">
+                24/7 availability means you can practice whenever inspiration strikes.
+                Early morning before a shift. Late night after studying. During a quiet moment between cases.
+              </p>
+              <ul class="feature-list">
+                <li>No scheduling, no waiting</li>
+                <li>Works on any device</li>
+                <li>Instant, actionable feedback</li>
+              </ul>
+            </div>
+            <div class="feature-visual">
+              <div class="visual-frame">
+                <div class="visual-icon">
+                  <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+                    <circle cx="40" cy="40" r="36" stroke="currentColor" stroke-width="2"/>
+                    <path d="M40 20v22l14 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Feature 2: Expert-Designed (reversed layout) -->
+        <article class="feature-block scroll-reveal">
+          <div class="feature-block__inner feature-block__inner--reversed">
+            <div class="feature-visual">
+              <div class="visual-frame visual-frame--accent">
+                <div class="visual-icon">
+                  <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+                    <path d="M40 8l8 16 18 3-13 12 3 18-16-8-16 8 3-18-13-12 18-3z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div class="feature-content">
+              <span class="feature-label">Crafted by Surgeons</span>
+              <h2 class="feature-title">Scenarios that <em>matter</em></h2>
+              <p class="feature-description">
+                Every scenario is designed by surgical trainees who've been through the interview process.
+                Real questions. Real challenges. Real preparation.
+              </p>
+              <ul class="feature-list">
+                <li>231 curated scenarios</li>
+                <li>Clinical, communication & structured formats</li>
+                <li>Progressive difficulty levels</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <!-- Feature 3: Try Before Subscribe -->
+        <article class="feature-block scroll-reveal">
+          <div class="feature-block__inner">
+            <div class="feature-content">
+              <span class="feature-label">Risk-Free</span>
+              <h2 class="feature-title">Try before you <em>commit</em></h2>
+              <p class="feature-description">
+                Explore our platform with no strings attached. Access sample scenarios from each category
+                and experience the quality firsthand.
+              </p>
+              <ul class="feature-list">
+                <li>Free sample scenarios</li>
+                <li>Full platform preview</li>
+                <li>No credit card required</li>
+              </ul>
+            </div>
+            <div class="feature-visual">
+              <div class="visual-frame">
+                <div class="visual-icon">
+                  <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+                    <rect x="16" y="24" width="48" height="32" rx="2" stroke="currentColor" stroke-width="2"/>
+                    <path d="M16 32h48M28 40h24M28 48h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <!-- Login CTA (for authenticated features) -->
       <section class="landing-cta">
         <div class="hero-buttons">
-          <button class="btn-primary" id="heroPrimaryBtn" onclick="showAuthPage('signup')">Login to Practise Free Sample
-            Scenarios</button>
-          <button class="btn-secondary" id="heroSecondaryBtn" onclick="browseAsGuest()">Explore the website without
-            login</button>
+          <button class="btn-primary" id="heroPrimaryBtn" onclick="showAuthPage('signup')">Login to Access All Scenarios</button>
         </div>
       </section>
 
@@ -747,8 +888,10 @@
         <div class="footer-content">
           <div class="footer-brand">
             <a href="#" class="nav-logo">
-              <div class="nav-logo-icon">ST3</div>
-              <span class="nav-logo-text">Interview Trainer</span>
+              <div class="reviva-logo">
+                <span class="logo-mark">R</span>
+                <span class="logo-text">ReViva</span>
+              </div>
             </a>
             <p>AI-powered interview preparation for surgical trainees. Practice smarter, not harder.</p>
           </div>
@@ -771,7 +914,7 @@
           </div>
         </div>
         <div class="footer-bottom">
-          <p class="footer-copyright">© 2025 ST3 Interview Trainer. All rights reserved.</p>
+          <p class="footer-copyright">© 2025 ReViva. All rights reserved.</p>
           <div class="footer-social">
             <a href="#" title="Twitter">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -1003,7 +1146,7 @@
     <!-- Page 1: Specialty Selection -->
     <div id="specialtySelection" class="page initially-hidden">
       <div class="header">
-        <h1>🎯 ST3 Interview Trainer</h1>
+        <h1>🎯 ReViva Interview Trainer</h1>
         <p class="subtitle">Select your specialty to begin</p>
       </div>
 
@@ -1086,7 +1229,12 @@
 
       <div class="mode-grid">
         <div class="mode-card mode-practice" onclick="selectMode('practice')">
-          <div class="mode-icon">📚</div>
+          <div class="mode-icon">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+              <rect x="8" y="6" width="32" height="36" rx="2" stroke="currentColor" stroke-width="2"/>
+              <path d="M14 14h20M14 22h20M14 30h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
           <h2>Practice Mode</h2>
           <p>Choose specific scenarios to practice at your own pace</p>
           <ul>
@@ -1098,7 +1246,14 @@
         </div>
 
         <div class="mode-card mode-mock-exam" onclick="selectMode('mock-exam')">
-          <div class="mode-icon">🎯</div>
+          <div class="mode-icon">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+              <circle cx="24" cy="24" r="18" stroke="currentColor" stroke-width="2"/>
+              <circle cx="24" cy="24" r="12" stroke="currentColor" stroke-width="2"/>
+              <circle cx="24" cy="24" r="6" stroke="currentColor" stroke-width="2"/>
+              <circle cx="24" cy="24" r="2" fill="currentColor"/>
+            </svg>
+          </div>
           <h2>Mock Exam Mode</h2>
           <p>Simulate real interview conditions with timed scenarios</p>
           <ul>
@@ -1123,7 +1278,16 @@
 
       <div class="mock-type-grid">
         <div class="mock-type-card mock-by-station" onclick="selectMockType('by-station')">
-          <div class="mock-type-icon">🎲</div>
+          <div class="mock-type-icon">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+              <rect x="8" y="8" width="32" height="32" rx="4" stroke="currentColor" stroke-width="2"/>
+              <circle cx="16" cy="16" r="2" fill="currentColor"/>
+              <circle cx="32" cy="16" r="2" fill="currentColor"/>
+              <circle cx="24" cy="24" r="2" fill="currentColor"/>
+              <circle cx="16" cy="32" r="2" fill="currentColor"/>
+              <circle cx="32" cy="32" r="2" fill="currentColor"/>
+            </svg>
+          </div>
           <h2>Mock by Station</h2>
           <p>Practice a single random station from a specific category</p>
           <ul>
@@ -1135,7 +1299,13 @@
         </div>
 
         <div class="mock-type-card full-mock-exam" onclick="selectMockType('full-mock')">
-          <div class="mock-type-icon">📋</div>
+          <div class="mock-type-icon">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+              <rect x="8" y="6" width="32" height="36" rx="2" stroke="currentColor" stroke-width="2"/>
+              <path d="M14 14h8M14 22h20M14 30h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M14 14l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
           <h2>Full Mock Exam</h2>
           <p>Complete 3-station mock interview experience</p>
           <ul>
@@ -1185,112 +1355,115 @@
       </div>
     </div>
 
-    <!-- Page: Scenario Selection View -->
+    <!-- Page: Scenario Selection View (Card-based) -->
     <div id="scenarioSelection" class="page initially-hidden">
-      <div class="scenario-selection-layout" id="panelContainer">
-        <!-- Panel 1: Headings (12.5%) -->
-        <div class="headings-panel" id="headings-panel" onmouseleave="handlePanelMouseLeave('headings')">
-          <div class="panel-header">
-            <button class="top-back-button" onclick="backToDifficulty()">← Back</button>
-            <p id="selectedDifficultyIndicator" class="difficulty-indicator"></p>
+      <!-- Breadcrumb Navigation -->
+      <nav class="scenario-breadcrumb">
+        <div class="breadcrumb-inner">
+          <button class="top-back-button" onclick="backToModeFromScenarios()">← Back</button>
+          <div class="breadcrumb-trail">
+            <button class="breadcrumb-item active" data-level="category" onclick="navigateToBreadcrumb('category')">
+              <span class="breadcrumb-label">Categories</span>
+            </button>
+            <span class="breadcrumb-separator">/</span>
+            <button class="breadcrumb-item disabled" data-level="subcategory" id="breadcrumbSubcat" onclick="navigateToBreadcrumb('subcategory')">
+              <span class="breadcrumb-label">Subcategory</span>
+            </button>
+            <span class="breadcrumb-separator">/</span>
+            <button class="breadcrumb-item disabled" data-level="topic" id="breadcrumbTopic">
+              <span class="breadcrumb-label">Topics</span>
+            </button>
           </div>
-
-          <div class="heading-item" onmouseenter="showSubheadings('clinical')" data-heading="clinical">
-            📋 Clinical
-          </div>
-          <div class="heading-item" onmouseenter="showSubheadings('call-the-boss')" data-heading="call-the-boss">
-            📞 Call-The-Boss
-          </div>
-          <div class="heading-item" onmouseenter="showSubheadings('consent')" data-heading="consent">
-            ✍️ Consent
-          </div>
-          <div class="heading-item" onmouseenter="showSubheadings('structured')" data-heading="structured">
-            📝 Structured Interview
-          </div>
+          <p id="selectedDifficultyIndicator" class="difficulty-indicator"></p>
         </div>
+      </nav>
 
-        <!-- Panel 2: Subheadings (12.5%) -->
-        <div id="subheadings-panel" class="subheadings-panel" onmouseenter="cancelSubheadingsTimer()"
-          onmouseleave="handlePanelMouseLeave('subheadings')">
-          <!-- Clinical subheadings -->
-          <div id="subheadings-clinical" class="subheading-group initially-hidden">
-            <div class="subheading-item" onmouseenter="showTopics('breast-and-aesthetic')">Breast & Aesthetic</div>
-            <div class="subheading-item" onmouseenter="showTopics('burns')">Burns</div>
-            <div class="subheading-item" onmouseenter="showTopics('elective-hand')">Elective Hand</div>
-            <div class="subheading-item" onmouseenter="showTopics('emergencies')">Emergencies</div>
-            <div class="subheading-item" onmouseenter="showTopics('hand-trauma')">Hand Trauma</div>
-            <div class="subheading-item" onmouseenter="showTopics('lower-limb')">Lower Limb</div>
-            <div class="subheading-item" onmouseenter="showTopics('skin-cancer')">Skin Cancer</div>
-            <div class="subheading-item" onmouseenter="showTopics('head-and-neck')">Head & Neck</div>
-            <div class="subheading-item" onmouseenter="showTopics('congenital')">Congenital</div>
-            <div class="subheading-item" onmouseenter="showTopics('microsurgery')">Microsurgery</div>
-          </div>
-
-          <!-- Call-The-Boss subheadings -->
-          <div id="subheadings-call-the-boss" class="subheading-group initially-hidden">
-            <div class="subheading-item" onmouseenter="showTopics('call-the-boss-scenarios')">Scenarios</div>
-          </div>
-
-          <!-- Consent subheadings -->
-          <div id="subheadings-consent" class="subheading-group initially-hidden">
-            <div class="subheading-item" onmouseenter="showTopics('consent-breast-and-aesthetic')">Breast & Aesthetic
+      <!-- Level 1: Category Cards -->
+      <section class="scenario-level" id="categoryLevel">
+        <header class="level-header">
+          <span class="level-eyebrow">Select Category</span>
+          <h2 class="level-title">What would you like to <em>practice?</em></h2>
+        </header>
+        <div class="scenario-cards-grid">
+          <article class="scenario-card" data-category="clinical" onclick="selectScenarioCategory('clinical')">
+            <div class="card-header">
+              <div class="card-icon-frame">
+                <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                  <path d="M14 4v20M4 14h20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <span class="card-count">10 areas</span>
             </div>
-            <div class="subheading-item" onmouseenter="showTopics('consent-hand-surgery')">Hand Surgery</div>
-            <div class="subheading-item" onmouseenter="showTopics('consent-skin-surgery')">Skin Surgery</div>
-            <div class="subheading-item" onmouseenter="showTopics('consent-emergency-procedures')">Emergency Procedures
+            <h3 class="card-title">Clinical Stations</h3>
+            <p class="card-description">Emergency presentations, burns, skin cancer, hand trauma, and more clinical scenarios</p>
+          </article>
+
+          <article class="scenario-card" data-category="call-the-boss" onclick="selectScenarioCategory('call-the-boss')">
+            <div class="card-header">
+              <div class="card-icon-frame">
+                <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                  <path d="M6 4h4l2 5-3 2a11 11 0 005 5l2-3 5 2v4a2 2 0 01-2 2A16 16 0 014 6a2 2 0 012-2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <span class="card-count">1 area</span>
             </div>
-            <div class="subheading-item" onmouseenter="showTopics('consent-reconstructive')">Reconstructive</div>
-          </div>
+            <h3 class="card-title">Call-The-Boss</h3>
+            <p class="card-description">Escalation scenarios and communication with senior colleagues</p>
+          </article>
 
-          <!-- Structured Interview subheadings -->
-          <div id="subheadings-structured" class="subheading-group initially-hidden">
-            <div class="subheading-item" onmouseenter="showTopics('structured-audit')">Audit</div>
-            <div class="subheading-item" onmouseenter="showTopics('structured-clinical-governance')">Clinical Governance
+          <article class="scenario-card" data-category="consent" onclick="selectScenarioCategory('consent')">
+            <div class="card-header">
+              <div class="card-icon-frame">
+                <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                  <path d="M8 4h12a2 2 0 012 2v16a2 2 0 01-2 2H8a2 2 0 01-2-2V6a2 2 0 012-2z" stroke="currentColor" stroke-width="2"/>
+                  <path d="M10 10h8M10 14h8M10 18h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <span class="card-count">5 areas</span>
             </div>
-            <div class="subheading-item" onmouseenter="showTopics('structured-complaints')">Complaints</div>
-            <div class="subheading-item" onmouseenter="showTopics('structured-consent-ethics')">Consent & Ethics</div>
-            <div class="subheading-item" onmouseenter="showTopics('structured-ethics')">Ethics</div>
-            <div class="subheading-item" onmouseenter="showTopics('structured-research')">Research</div>
-            <div class="subheading-item" onmouseenter="showTopics('structured-risk-management')">Risk Management</div>
-            <div class="subheading-item" onmouseenter="showTopics('structured-teaching')">Teaching</div>
-          </div>
+            <h3 class="card-title">Consent</h3>
+            <p class="card-description">Consent conversations across breast, hand, skin, and reconstructive surgery</p>
+          </article>
+
+          <article class="scenario-card" data-category="structured" onclick="selectScenarioCategory('structured')">
+            <div class="card-header">
+              <div class="card-icon-frame">
+                <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                  <rect x="4" y="4" width="8" height="8" rx="1" stroke="currentColor" stroke-width="2"/>
+                  <rect x="16" y="4" width="8" height="8" rx="1" stroke="currentColor" stroke-width="2"/>
+                  <rect x="4" y="16" width="8" height="8" rx="1" stroke="currentColor" stroke-width="2"/>
+                  <rect x="16" y="16" width="8" height="8" rx="1" stroke="currentColor" stroke-width="2"/>
+                </svg>
+              </div>
+              <span class="card-count">8 areas</span>
+            </div>
+            <h3 class="card-title">Structured Interview</h3>
+            <p class="card-description">Audit, ethics, research, governance, and professional questions</p>
+          </article>
         </div>
+      </section>
 
-        <!-- Panel 3: Topics (25%) -->
-        <div id="topics-panel" class="topics-panel" onmouseenter="cancelTopicsTimer()"
-          onmouseleave="handlePanelMouseLeave('topics')">
-          <!-- Topics will be populated dynamically -->
+      <!-- Level 2: Subcategory Cards (dynamically populated) -->
+      <section class="scenario-level hidden" id="subcategoryLevel">
+        <header class="level-header">
+          <span class="level-eyebrow" id="subcatEyebrow">Clinical Stations</span>
+          <h2 class="level-title">Choose an <em>area</em></h2>
+        </header>
+        <div class="scenario-cards-grid scenario-cards-grid--compact" id="subcategoryCards">
+          <!-- Dynamically populated -->
         </div>
+      </section>
 
-        <!-- Right Content Area (50%) - Empty for now -->
-        <div class="content-area" onmouseenter="hideAllPanels()">
-          <!-- Empty for future content -->
+      <!-- Level 3: Topic Cards (dynamically populated) -->
+      <section class="scenario-level hidden" id="topicLevel">
+        <header class="level-header">
+          <span class="level-eyebrow" id="topicEyebrow">Emergencies</span>
+          <h2 class="level-title">Select a <em>scenario</em></h2>
+        </header>
+        <div class="scenario-cards-grid scenario-cards-grid--topics" id="topicCards">
+          <!-- Dynamically populated with difficulty badges -->
         </div>
-      </div>
-
-      <!-- Mobile Scenario Grid (Hidden on desktop, shown on mobile) -->
-      <div id="mobileScenarioGrid" class="initially-hidden">
-        <div class="mobile-scenario-content">
-          <button class="top-back-button" id="mobileBackButton" onclick="backToDifficulty()">← Back to
-            Difficulty</button>
-          <p id="selectedDifficultyIndicatorMobile" class="difficulty-indicator-mobile"></p>
-
-          <!-- Level 1: Headings -->
-          <div id="mobileHeadingsGrid" class="mobile-scenario-grid">
-            <!-- Populated by JS -->
-          </div>
-
-          <!-- Level 2: Subheadings -->
-          <div id="mobileSubheadingsGrid" class="mobile-scenario-grid initially-hidden">
-            <!-- Populated by JS -->
-          </div>
-
-          <!-- Level 3: Topics -->
-          <div id="mobileTopicsGrid" class="mobile-scenario-grid initially-hidden">
-            <!-- Populated by JS -->
-          </div>
-        </div>
-      </div>
+      </section>
     </div>
 
     <!-- Simulation Room View (Hidden by default) -->
@@ -1505,11 +1678,15 @@
       </div>
     </div>
 
-    <!-- Bottom Banner -->
-    <div class="simulation-footer">
-      <span>ST3 Interview Trainer</span>
-    </div>
   </div>
+
+  <!-- Persistent App Footer -->
+  <footer id="appFooter" class="app-footer">
+    <div class="reviva-logo reviva-logo--compact">
+      <span class="logo-mark">R</span>
+      <span class="logo-text">ReViva</span>
+    </div>
+  </footer>
 
   <!-- Model Answer Drawer -->
   <div id="drawerBackdrop" class="drawer-backdrop" onclick="closeModelAnswerDrawer()"></div>
