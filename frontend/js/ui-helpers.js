@@ -250,10 +250,16 @@ function updateStatus(elementId, text, status) {
     if (mobileElement) mobileElement.textContent = text;
 
     if (bubble) {
+      // Remove all state classes first
+      bubble.classList.remove('state-idle', 'state-listening', 'state-thinking', 'state-speaking');
+      if (mobileBubble) {
+        mobileBubble.classList.remove('state-idle', 'state-listening', 'state-thinking', 'state-speaking');
+      }
+
       // Only show bubble when processing/thinking
       if (status === 'processing') {
-        bubble.classList.add('visible', 'processing');
-        if (mobileBubble) mobileBubble.classList.add('visible', 'processing');
+        bubble.classList.add('visible', 'processing', 'state-thinking');
+        if (mobileBubble) mobileBubble.classList.add('visible', 'processing', 'state-thinking');
       } else {
         // Hide bubble when not processing (speaking, idle, etc.)
         bubble.classList.remove('visible', 'processing');
@@ -295,43 +301,35 @@ function updateStatus(elementId, text, status) {
 function setOrbState(state) {
   const orb = document.getElementById('voiceOrb');
   const mobileOrb = document.getElementById('mobileVoiceOrb');
-  const waveform = document.getElementById('audioWaveform');
-  const mobileWaveform = document.getElementById('mobileAudioWaveform');
+  const bubble = document.getElementById('aiStatusBubble');
+  const mobileBubble = document.getElementById('mobileAiStatusBubble');
 
+  // Update orb state classes
   if (orb) {
-    // Remove all state classes
-    orb.classList.remove('idle', 'listening', 'thinking', 'speaking');
-    // Add new state class
+    orb.classList.remove('idle', 'listening', 'thinking', 'speaking', 'processing');
     orb.classList.add(state);
   }
 
   if (mobileOrb) {
-    // Sync mobile orb
-    mobileOrb.classList.remove('idle', 'listening', 'thinking', 'speaking');
+    mobileOrb.classList.remove('idle', 'listening', 'thinking', 'speaking', 'processing');
     mobileOrb.classList.add(state);
   }
 
-  // Control waveform visualizer - active when AI is speaking
-  if (waveform) {
-    if (state === 'speaking') {
-      waveform.classList.add('active');
-    } else {
-      waveform.classList.remove('active');
-    }
+  // Update status bubble state classes for accent line color
+  if (bubble) {
+    bubble.classList.remove('state-idle', 'state-listening', 'state-thinking', 'state-speaking');
+    bubble.classList.add('state-' + state);
   }
 
-  if (mobileWaveform) {
-    if (state === 'speaking') {
-      mobileWaveform.classList.add('active');
-    } else {
-      mobileWaveform.classList.remove('active');
-    }
+  if (mobileBubble) {
+    mobileBubble.classList.remove('state-idle', 'state-listening', 'state-thinking', 'state-speaking');
+    mobileBubble.classList.add('state-' + state);
   }
 
   // Update persona panel state to match orb
   setPersonaPanelState(state);
 
-  // Optional: Log state changes for debugging
+  // Log state changes for debugging
   console.log('[Orb] State changed to:', state);
 }
 
