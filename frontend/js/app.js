@@ -181,20 +181,8 @@ document.getElementById('connectBtn').addEventListener('click', async () => {
     document.getElementById('connectBtn').disabled = true;
     document.getElementById('disconnectBtn').disabled = false;
 
-    // Show/hide Record button based on mode
-    const recordBtn = document.getElementById('recordBtn');
-    if (session.usingVAD) {
-      // VAD mode: hide record button (continuous listening)
-      recordBtn.style.display = 'none';
-      recordBtn.disabled = true;
-      log('Session ready! Voice detection active - just speak naturally.', 'success');
-    } else {
-      // PTT mode: show record button
-      recordBtn.style.display = 'flex'; // Use flex to maintain centering
-      recordBtn.disabled = false;
-      log('Session ready! Click the Record button to speak.', 'success');
-    }
-
+    // VAD mode - continuous listening, no record button needed
+    log('Session ready! Voice detection active - just speak naturally.', 'success');
     syncMobileButtonStates(); // Sync mobile buttons
 
     // Log session start for analytics
@@ -214,39 +202,6 @@ document.getElementById('connectBtn').addEventListener('click', async () => {
   }
 });
 
-// Record button - toggle recording on/off
-document.getElementById('recordBtn').addEventListener('click', () => {
-  if (!session || !session.speechRecognition) {
-    log('No active session', 'warning');
-    return;
-  }
-
-  const recordBtn = document.getElementById('recordBtn');
-  const mobileRecordBtn = document.getElementById('mobileRecordBtn');
-  const pttManager = session.speechRecognition;
-
-  if (pttManager.isRecording) {
-    // Stop recording
-    pttManager.stopRecording();
-    recordBtn.classList.remove('recording');
-    if (mobileRecordBtn) mobileRecordBtn.classList.remove('recording');
-    recordBtn.title = 'Click to Record';
-    log('Recording stopped - processing...', 'info');
-    setOrbState('processing');
-  } else {
-    // Start recording
-    pttManager.startRecording();
-    recordBtn.classList.add('recording');
-    if (mobileRecordBtn) mobileRecordBtn.classList.add('recording');
-    recordBtn.title = 'Click to Stop Recording';
-    log('Recording... Click again to stop', 'info');
-    setOrbState('listening');
-    updateStatus('micStatus', '🟢 Recording', 'connected');
-  }
-
-  syncMobileButtonStates();
-});
-
 document.getElementById('disconnectBtn').addEventListener('click', async () => {
   if (session) {
     session.disconnect();
@@ -259,12 +214,6 @@ document.getElementById('disconnectBtn').addEventListener('click', async () => {
 
   document.getElementById('connectBtn').disabled = false;
   document.getElementById('disconnectBtn').disabled = true;
-
-  // Hide and reset record button
-  const recordBtn = document.getElementById('recordBtn');
-  recordBtn.style.display = 'none';
-  recordBtn.classList.remove('recording');
-  recordBtn.disabled = true;
 
   // Hide and reset interrupt button
   const interruptBtn = document.getElementById('interruptBtn');
@@ -294,6 +243,11 @@ document.getElementById('interruptBtn').addEventListener('click', () => {
   if (session && session.audioPlayer.isPlaying) {
     session.audioPlayer.interrupt();
 
+    // Resume VAD listening
+    if (session.speechRecognition && session.speechRecognition.setAISpeaking) {
+      session.speechRecognition.setAISpeaking(false);
+    }
+
     // Notify backend
     if (session.isConnected && session.sessionId) {
       session.ws.send(JSON.stringify({
@@ -314,7 +268,7 @@ document.getElementById('interruptBtn').addEventListener('click', () => {
     }
 
     syncMobileButtonStates();
-    setOrbState('idle');
+    setOrbState('listening');
     log('AI interrupted by user', 'info');
   }
 });
