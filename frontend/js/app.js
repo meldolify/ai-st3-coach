@@ -10,10 +10,29 @@
 
 // Note: selectedSpecialty and selectedDifficulty are in state.js
 
+// ============================================================================
+// FOOTER VISIBILITY CONTROL
+// ============================================================================
+// Pages that should show the footer: simulationRoom, scenarioSelection
+// Pages that should hide the footer: landingPage, authPage, modeSelection, etc.
+
+function showAppFooter() {
+  const footer = document.getElementById('appFooter');
+  if (footer) footer.classList.add('visible');
+}
+
+function hideAppFooter() {
+  const footer = document.getElementById('appFooter');
+  if (footer) footer.classList.remove('visible');
+}
+
 // Helper function to transition between pages with fade effect
 function transitionToPage(fromPageId, toPageId, callback) {
   const fromPage = document.getElementById(fromPageId);
   const toPage = document.getElementById(toPageId);
+
+  // Pages that should show the app footer
+  const pagesWithFooter = ['simulationRoom', 'scenarioSelection'];
 
   // Fade out current page
   fromPage.classList.add('fade-out');
@@ -27,6 +46,13 @@ function transitionToPage(fromPageId, toPageId, callback) {
     // (inline styles have higher specificity than CSS classes)
     toPage.style.display = 'block';
     toPage.classList.add('fade-in');
+
+    // Handle footer visibility based on destination page
+    if (pagesWithFooter.includes(toPageId)) {
+      showAppFooter();
+    } else {
+      hideAppFooter();
+    }
 
     // Execute callback if provided
     if (callback) callback();
@@ -298,6 +324,27 @@ function initScrollAnimations() {
   // Observe all elements with scroll animation class
   document.querySelectorAll('.animate-on-scroll').forEach((el) => {
     animationObserver.observe(el);
+  });
+
+  // Feature block scroll reveal animations (Paraform style)
+  const scrollRevealOptions = {
+    root: null,
+    rootMargin: '0px 0px -50px 0px',
+    threshold: 0.15
+  };
+
+  const scrollRevealObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('revealed');
+        scrollRevealObserver.unobserve(entry.target);
+      }
+    });
+  }, scrollRevealOptions);
+
+  // Observe all scroll-reveal elements
+  document.querySelectorAll('.scroll-reveal').forEach((el) => {
+    scrollRevealObserver.observe(el);
   });
 
   console.log('[ANIM] Scroll animations initialized');
