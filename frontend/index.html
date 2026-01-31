@@ -812,13 +812,6 @@
         <div class="parallax-element parallax-shape-2" data-speed="0.5"></div>
         <div class="parallax-element parallax-shape-3" data-speed="0.2"></div>
 
-        <div class="hero-badge scroll-reveal">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-            <polyline points="22 4 12 14.01 9 11.01" />
-          </svg>
-          AI-Powered Interview Practice
-        </div>
         <!-- Brand Name -->
         <h1 class="hero-brand scroll-reveal">ReViva</h1>
 
@@ -828,30 +821,26 @@
             <!-- Animated infinity symbol with gradient -->
             <defs>
               <linearGradient id="infinityGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="#4A5D4C">
-                  <animate attributeName="offset" values="0;1;0" dur="3s" repeatCount="indefinite" />
-                </stop>
-                <stop offset="50%" stop-color="#B87333">
-                  <animate attributeName="offset" values="0.5;1.5;0.5" dur="3s" repeatCount="indefinite" />
-                </stop>
-                <stop offset="100%" stop-color="#4A5D4C">
-                  <animate attributeName="offset" values="1;2;1" dur="3s" repeatCount="indefinite" />
-                </stop>
+                <stop offset="0%" stop-color="#4A5D4C" />
+                <stop offset="50%" stop-color="#B87333" />
+                <stop offset="100%" stop-color="#4A5D4C" />
               </linearGradient>
+              <!-- Motion path: figure-8 traced as two connected circular arcs -->
+              <!-- Start at center (60,30), go right loop, then left loop, back to center -->
+              <path id="infinityMotionPath"
+                d="M60,30 C75,30 90,15 90,30 C90,45 75,45 60,30 C45,15 30,15 30,30 C30,45 45,45 60,30"
+                fill="none" />
             </defs>
-            <!-- Main infinity path -->
+            <!-- Main infinity path - static, styled stroke -->
             <path class="infinity-path infinity-path--bg"
-              d="M30 30 C30 15, 45 15, 60 30 C75 45, 90 45, 90 30 C90 15, 75 15, 60 30 C45 45, 30 45, 30 30"
+              d="M60,30 C75,30 90,15 90,30 C90,45 75,45 60,30 C45,15 30,15 30,30 C30,45 45,45 60,30"
               stroke="url(#infinityGradient)" stroke-width="5" stroke-linecap="round" fill="none" />
-            <!-- Animated flowing dot - continuous loop -->
+            <!-- Animated flowing dot - seamless continuous loop -->
             <circle class="infinity-dot" r="6" fill="#B87333">
-              <animateMotion dur="4s" repeatCount="indefinite" calcMode="linear">
+              <animateMotion dur="4s" repeatCount="indefinite" calcMode="linear" rotate="auto">
                 <mpath href="#infinityMotionPath" />
               </animateMotion>
             </circle>
-            <path id="infinityMotionPath"
-              d="M30 30 C30 15, 45 15, 60 30 C75 45, 90 45, 90 30 C90 15, 75 15, 60 30 C45 45, 30 45, 30 30"
-              fill="none" stroke="none" />
           </svg>
         </div>
 
