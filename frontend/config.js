@@ -12,7 +12,7 @@ const CONFIG = {
 
     // Production - use secure WebSocket (wss://)
     // Update this with your Railway/Render backend URL after deployment
-    const productionBackendUrl = 'ai-st3-coach-backend.onrender.com'; // Render backend URL
+    const productionBackendUrl = 'api.reviva.live'; // Custom domain for Render backend
 
     if (productionBackendUrl === 'YOUR_BACKEND_URL_HERE') {
       console.warn('⚠️ Production backend URL not configured. Update config.js with your deployment URL.');
@@ -30,7 +30,7 @@ const CONFIG = {
       return 'http://localhost:3000';
     }
 
-    return 'https://ai-st3-coach-backend.onrender.com';
+    return 'https://api.reviva.live';
   })(),
 
   // Supabase Configuration
