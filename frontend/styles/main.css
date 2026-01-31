@@ -328,6 +328,28 @@ h1 {
   letter-spacing: -0.5px;
 }
 
+/* Professional page title - clean Instrument Serif */
+.page-title {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 5vw, 42px);
+  font-weight: 400;
+  color: var(--text-light-primary);
+  letter-spacing: -0.5px;
+  margin-bottom: 12px;
+}
+
+/* Minimal header variant */
+.header--minimal {
+  padding: 40px 0 24px;
+  margin-bottom: 32px;
+}
+
+.header--minimal .subtitle {
+  font-size: 15px;
+  color: var(--text-light-secondary);
+  font-weight: 400;
+}
+
 .subtitle {
   color: var(--text-secondary);
   font-size: 16px;
@@ -781,11 +803,12 @@ body.has-header .simulation-room.active {
   flex: 1;
   gap: 24px;
   padding: 24px;
+  padding-bottom: 32px;
   max-width: 1600px;
-  margin: 0 auto;
+  margin: 0 auto 24px;
   min-height: 0;
-  height: calc(100vh - 80px);
-  /* Account for header */
+  height: calc(100vh - 80px - 76px);
+  /* Account for header (80px) + footer (52px) + bottom margin (24px) */
   box-sizing: border-box;
 }
 
@@ -2516,6 +2539,24 @@ button.top-back-button:active {
   filter: drop-shadow(0 0 15px currentColor);
 }
 
+/* SVG difficulty icons - professional style */
+.difficulty-icon--svg {
+  font-size: inherit;
+  filter: none;
+}
+
+.difficulty-icon--svg svg {
+  width: 64px;
+  height: 64px;
+  stroke-width: 1.5;
+  filter: drop-shadow(0 2px 8px currentColor);
+  transition: transform 0.3s ease;
+}
+
+.difficulty-card:hover .difficulty-icon--svg svg {
+  transform: scale(1.1);
+}
+
 .difficulty-card h2 {
   font-size: 32px;
   font-weight: 600;
@@ -4095,6 +4136,48 @@ a.nav-link:hover {
   height: 16px;
 }
 
+/* ============================================
+   HERO SECTION - ReViva Brand Layout
+   ============================================ */
+
+/* Brand Name - Large, bold title */
+.hero-brand {
+  font-family: var(--font-display);
+  font-size: clamp(56px, 10vw, 96px);
+  font-weight: 700;
+  color: var(--text-light-primary);
+  letter-spacing: -2px;
+  margin: 0 0 16px 0;
+  animation: fadeInUp 0.6s ease-out backwards;
+}
+
+/* Infinity Icon Hero Container */
+.hero-infinity-hero {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 16px 0 24px 0;
+  animation: fadeInUp 0.6s ease-out 0.15s backwards;
+}
+
+.hero-infinity-large {
+  width: clamp(100px, 18vw, 180px);
+  height: clamp(50px, 9vw, 90px);
+  animation: infinityFloat 4s ease-in-out infinite;
+}
+
+/* Tagline below infinity */
+.hero-tagline {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 4vw, 40px);
+  font-weight: 400;
+  color: var(--text-light-secondary);
+  letter-spacing: -0.5px;
+  margin: 0 0 24px 0;
+  animation: fadeInUp 0.6s ease-out 0.25s backwards;
+}
+
+/* Legacy hero title support */
 .hero-title {
   font-size: clamp(40px, 6vw, 64px);
   font-weight: 700;
