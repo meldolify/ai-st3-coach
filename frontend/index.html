@@ -135,14 +135,12 @@
       border-radius: 50% !important;
 
       /* Glassmorphic frosted appearance */
-      background: radial-gradient(
-        ellipse at 30% 20%,
-        rgba(255, 255, 255, 0.9) 0%,
-        rgba(255, 255, 255, 0.6) 40%,
-        rgba(200, 220, 240, 0.4) 100%
-      ) !important;
-      backdrop-filter: blur(20px);
+      background: radial-gradient(ellipse at 30% 20%,
+          rgba(255, 255, 255, 0.9) 0%,
+          rgba(255, 255, 255, 0.6) 40%,
+          rgba(200, 220, 240, 0.4) 100%) !important;
       -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(20px);
 
       /* Soft inner glow and outer shadow */
       box-shadow:
@@ -157,7 +155,7 @@
       align-items: center;
       justify-content: center;
       transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-                  box-shadow 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow 0.5s cubic-bezier(0.4, 0, 0.2, 1);
       overflow: visible;
     }
 
@@ -188,11 +186,9 @@
       left: 15%;
       width: 35%;
       height: 20%;
-      background: linear-gradient(
-        135deg,
-        rgba(255, 255, 255, 0.8) 0%,
-        rgba(255, 255, 255, 0) 100%
-      );
+      background: linear-gradient(135deg,
+          rgba(255, 255, 255, 0.8) 0%,
+          rgba(255, 255, 255, 0) 100%);
       border-radius: 50%;
       opacity: 0.7;
     }
@@ -205,7 +201,9 @@
     }
 
     @keyframes orb-idle-breathe {
-      0%, 100% {
+
+      0%,
+      100% {
         transform: scale(1);
         box-shadow:
           inset 0 0 30px rgba(255, 255, 255, 0.8),
@@ -213,6 +211,7 @@
           0 8px 32px rgba(31, 38, 135, 0.15),
           0 0 0 1px rgba(255, 255, 255, 0.4);
       }
+
       50% {
         transform: scale(1.03);
         box-shadow:
@@ -226,12 +225,10 @@
     /* LISTENING: Attentive glow with ring pulse */
     .voice-orb.listening {
       animation: orb-listening 2s ease-in-out infinite;
-      background: radial-gradient(
-        ellipse at 30% 20%,
-        rgba(255, 255, 255, 0.95) 0%,
-        rgba(230, 245, 255, 0.7) 40%,
-        rgba(180, 210, 240, 0.5) 100%
-      ) !important;
+      background: radial-gradient(ellipse at 30% 20%,
+          rgba(255, 255, 255, 0.95) 0%,
+          rgba(230, 245, 255, 0.7) 40%,
+          rgba(180, 210, 240, 0.5) 100%) !important;
     }
 
     .voice-orb.listening::before {
@@ -239,7 +236,9 @@
     }
 
     @keyframes orb-listening {
-      0%, 100% {
+
+      0%,
+      100% {
         transform: scale(1);
         box-shadow:
           inset 0 0 35px rgba(255, 255, 255, 0.9),
@@ -247,6 +246,7 @@
           0 8px 32px rgba(66, 165, 245, 0.25),
           0 0 0 1px rgba(255, 255, 255, 0.5);
       }
+
       50% {
         transform: scale(1.02);
         box-shadow:
@@ -263,6 +263,7 @@
         opacity: 0.6;
         border-color: rgba(66, 165, 245, 0.5);
       }
+
       100% {
         transform: scale(1.5);
         opacity: 0;
@@ -273,16 +274,16 @@
     /* THINKING: Subtle bounce with rotating inner glow */
     .voice-orb.thinking {
       animation: orb-thinking-bounce 2.5s ease-in-out infinite;
-      background: radial-gradient(
-        ellipse at 30% 20%,
-        rgba(255, 255, 255, 0.9) 0%,
-        rgba(240, 230, 255, 0.6) 40%,
-        rgba(200, 180, 230, 0.4) 100%
-      ) !important;
+      background: radial-gradient(ellipse at 30% 20%,
+          rgba(255, 255, 255, 0.9) 0%,
+          rgba(240, 230, 255, 0.6) 40%,
+          rgba(200, 180, 230, 0.4) 100%) !important;
     }
 
     @keyframes orb-thinking-bounce {
-      0%, 100% {
+
+      0%,
+      100% {
         transform: translateY(0) scale(1);
         box-shadow:
           inset 0 0 30px rgba(255, 255, 255, 0.8),
@@ -290,6 +291,7 @@
           0 8px 32px rgba(149, 117, 205, 0.2),
           0 0 0 1px rgba(255, 255, 255, 0.4);
       }
+
       50% {
         transform: translateY(-10px) scale(1.04);
         box-shadow:
@@ -303,12 +305,10 @@
     /* SPEAKING: Rhythmic pulse with warm glow */
     .voice-orb.speaking {
       animation: orb-speaking-pulse 1.2s ease-in-out infinite;
-      background: radial-gradient(
-        ellipse at 30% 20%,
-        rgba(255, 255, 255, 0.95) 0%,
-        rgba(255, 245, 230, 0.7) 40%,
-        rgba(255, 200, 150, 0.4) 100%
-      ) !important;
+      background: radial-gradient(ellipse at 30% 20%,
+          rgba(255, 255, 255, 0.95) 0%,
+          rgba(255, 245, 230, 0.7) 40%,
+          rgba(255, 200, 150, 0.4) 100%) !important;
     }
 
     .voice-orb.speaking::before {
@@ -316,7 +316,9 @@
     }
 
     @keyframes orb-speaking-pulse {
-      0%, 100% {
+
+      0%,
+      100% {
         transform: scale(1);
         box-shadow:
           inset 0 0 35px rgba(255, 255, 255, 0.9),
@@ -324,6 +326,7 @@
           0 8px 32px rgba(255, 167, 38, 0.2),
           0 0 0 1px rgba(255, 255, 255, 0.5);
       }
+
       50% {
         transform: scale(1.06);
         box-shadow:
@@ -340,6 +343,7 @@
         opacity: 0.5;
         border-color: rgba(255, 167, 38, 0.4);
       }
+
       100% {
         transform: scale(1.6);
         opacity: 0;
@@ -350,8 +354,8 @@
     /* ===== AI STATUS BUBBLE ===== */
     .ai-status-bubble {
       background: rgba(255, 255, 255, 0.85) !important;
-      backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
       padding: 8px 20px !important;
       border-radius: 24px !important;
       border: 1px solid rgba(255, 255, 255, 0.6) !important;
@@ -372,8 +376,15 @@
     }
 
     @keyframes status-float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-6px); }
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-6px);
+      }
     }
 
     .ai-status-bubble span {
@@ -504,13 +515,16 @@
     }
 
     @keyframes recording-glow {
-      0%, 100% {
+
+      0%,
+      100% {
         box-shadow:
           0 0 0 4px rgba(216, 27, 96, 0.2),
           0 0 20px rgba(216, 27, 96, 0.3),
           -4px -4px 10px var(--neu-light),
           4px 4px 10px var(--neu-dark);
       }
+
       50% {
         box-shadow:
           0 0 0 8px rgba(216, 27, 96, 0.15),
@@ -534,7 +548,9 @@
     }
 
     @keyframes interrupt-pulse {
-      0%, 100% {
+
+      0%,
+      100% {
         transform: scale(1);
         box-shadow:
           0 0 0 4px rgba(255, 107, 107, 0.2),
@@ -542,6 +558,7 @@
           -4px -4px 10px var(--neu-light),
           4px 4px 10px var(--neu-dark);
       }
+
       50% {
         transform: scale(1.05);
         box-shadow:
@@ -582,6 +599,7 @@
 
     /* ===== REDUCED MOTION ===== */
     @media (prefers-reduced-motion: reduce) {
+
       .voice-orb,
       .voice-orb::before,
       .control-btn,
@@ -1328,30 +1346,30 @@
             <div id="voiceOrb" class="voice-orb idle">
               <!-- Circular Audio Spectrum Bars -->
               <div class="spectrum-container">
-                <div class="spectrum-bar" style="--i:0"></div>
-                <div class="spectrum-bar" style="--i:1"></div>
-                <div class="spectrum-bar" style="--i:2"></div>
-                <div class="spectrum-bar" style="--i:3"></div>
-                <div class="spectrum-bar" style="--i:4"></div>
-                <div class="spectrum-bar" style="--i:5"></div>
-                <div class="spectrum-bar" style="--i:6"></div>
-                <div class="spectrum-bar" style="--i:7"></div>
-                <div class="spectrum-bar" style="--i:8"></div>
-                <div class="spectrum-bar" style="--i:9"></div>
-                <div class="spectrum-bar" style="--i:10"></div>
-                <div class="spectrum-bar" style="--i:11"></div>
-                <div class="spectrum-bar" style="--i:12"></div>
-                <div class="spectrum-bar" style="--i:13"></div>
-                <div class="spectrum-bar" style="--i:14"></div>
-                <div class="spectrum-bar" style="--i:15"></div>
-                <div class="spectrum-bar" style="--i:16"></div>
-                <div class="spectrum-bar" style="--i:17"></div>
-                <div class="spectrum-bar" style="--i:18"></div>
-                <div class="spectrum-bar" style="--i:19"></div>
-                <div class="spectrum-bar" style="--i:20"></div>
-                <div class="spectrum-bar" style="--i:21"></div>
-                <div class="spectrum-bar" style="--i:22"></div>
-                <div class="spectrum-bar" style="--i:23"></div>
+                <div class="spectrum-bar" data-index="0"></div>
+                <div class="spectrum-bar" data-index="1"></div>
+                <div class="spectrum-bar" data-index="2"></div>
+                <div class="spectrum-bar" data-index="3"></div>
+                <div class="spectrum-bar" data-index="4"></div>
+                <div class="spectrum-bar" data-index="5"></div>
+                <div class="spectrum-bar" data-index="6"></div>
+                <div class="spectrum-bar" data-index="7"></div>
+                <div class="spectrum-bar" data-index="8"></div>
+                <div class="spectrum-bar" data-index="9"></div>
+                <div class="spectrum-bar" data-index="10"></div>
+                <div class="spectrum-bar" data-index="11"></div>
+                <div class="spectrum-bar" data-index="12"></div>
+                <div class="spectrum-bar" data-index="13"></div>
+                <div class="spectrum-bar" data-index="14"></div>
+                <div class="spectrum-bar" data-index="15"></div>
+                <div class="spectrum-bar" data-index="16"></div>
+                <div class="spectrum-bar" data-index="17"></div>
+                <div class="spectrum-bar" data-index="18"></div>
+                <div class="spectrum-bar" data-index="19"></div>
+                <div class="spectrum-bar" data-index="20"></div>
+                <div class="spectrum-bar" data-index="21"></div>
+                <div class="spectrum-bar" data-index="22"></div>
+                <div class="spectrum-bar" data-index="23"></div>
               </div>
             </div>
           </div>
