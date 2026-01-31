@@ -141,6 +141,15 @@
   --accent-secondary: var(--brand-secondary);
   --accent-glow: rgba(13, 148, 136, 0.4);
   --accent-gradient: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-dark) 100%);
+
+  /* ============================================
+     MOBILE SAFE AREA INSETS
+     For notched devices (iPhone X+, Dynamic Island)
+     ============================================ */
+  --safe-area-top: env(safe-area-inset-top, 0px);
+  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-area-left: env(safe-area-inset-left, 0px);
+  --safe-area-right: env(safe-area-inset-right, 0px);
 }
 
 * {
@@ -190,6 +199,48 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================
+   MOBILE TOUCH OPTIMIZATION
+   Smoother scrolling and better touch feedback
+   ============================================ */
+html {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Prevent overscroll bounce on mobile containers */
+.mobile-simulation-layout,
+#mobileScenarioGrid,
+.scenario-grid {
+  overscroll-behavior: contain;
+}
+
+/* Prevent double-tap zoom on interactive elements */
+button,
+.control-btn,
+.mobile-control-button,
+.specialty-card,
+.difficulty-card,
+.scenario-card,
+.mobile-scenario-card,
+.mode-card {
+  touch-action: manipulation;
+}
+
+/* Custom tap highlight - transparent by default */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Restore subtle tap highlight on interactive elements */
+button,
+a,
+.clickable,
+.specialty-card,
+.difficulty-card,
+.mobile-scenario-card {
+  -webkit-tap-highlight-color: rgba(74, 93, 76, 0.1);
 }
 
 /* ============================================
@@ -3331,14 +3382,16 @@ button.top-back-button:active {
     overflow-y: auto;
   }
 
-  /* MOBILE BACK BUTTON - Top left - VUI Style */
+  /* MOBILE BACK BUTTON - Top left with safe area */
   .mobile-back-button {
     position: fixed;
-    top: 16px;
-    left: 16px;
+    top: calc(16px + var(--safe-area-top));
+    left: calc(16px + var(--safe-area-left));
     z-index: 1000;
     width: 44px;
     height: 44px;
+    min-width: 44px;
+    min-height: 44px;
     font-size: 18px;
     background: rgba(255, 255, 255, 0.05);
     -webkit-backdrop-filter: blur(20px);
@@ -3359,10 +3412,10 @@ button.top-back-button:active {
     box-shadow: 0 0 20px rgba(0, 212, 170, 0.2);
   }
 
-  /* MOBILE VOICE ORB SECTION - Top center */
+  /* MOBILE VOICE ORB SECTION - Top center with safe area */
   .mobile-voice-section {
     position: fixed;
-    top: 50px;
+    top: calc(50px + var(--safe-area-top));
     left: 50%;
     transform: translateX(-50%);
     z-index: 100;
@@ -3383,13 +3436,13 @@ button.top-back-button:active {
     min-width: 120px;
   }
 
-  /* MOBILE IMAGE SECTION - Middle */
+  /* MOBILE IMAGE SECTION - Dynamic positioning with safe areas */
   .mobile-image-section {
     position: fixed;
-    top: 160px;
-    left: 8px;
-    right: 8px;
-    bottom: 200px;
+    top: calc(150px + var(--safe-area-top));
+    left: calc(8px + var(--safe-area-left));
+    right: calc(8px + var(--safe-area-right));
+    bottom: calc(180px + var(--safe-area-bottom));
     display: flex;
     align-items: center;
     justify-content: center;
@@ -3428,10 +3481,10 @@ button.top-back-button:active {
     padding: 20px;
   }
 
-  /* MOBILE ACTION BUTTONS - Bottom center - VUI Style */
+  /* MOBILE ACTION BUTTONS - Bottom center with safe area */
   .mobile-button-group {
     position: fixed;
-    bottom: 100px;
+    bottom: calc(90px + var(--safe-area-bottom));
     left: 50%;
     transform: translateX(-50%);
     z-index: 100;
@@ -3449,13 +3502,15 @@ button.top-back-button:active {
   .mobile-control-button {
     width: 52px;
     height: 52px;
+    min-width: 48px;
+    min-height: 48px;
     font-size: 18px;
     color: var(--text-secondary);
     background: transparent;
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 50%;
     cursor: pointer;
-    transition: all 0.25s ease;
+    transition: transform 0.12s ease, background 0.15s ease, box-shadow 0.15s ease;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -3480,7 +3535,7 @@ button.top-back-button:active {
   }
 
   #mobileConnectBtn:active:not(:disabled) {
-    transform: scale(0.92);
+    transform: scale(0.88);
     background: rgba(0, 212, 170, 0.15);
     box-shadow: 0 0 25px rgba(0, 212, 170, 0.4);
   }
@@ -3493,7 +3548,7 @@ button.top-back-button:active {
   }
 
   #mobileInterruptBtn:active:not(:disabled) {
-    transform: scale(0.92);
+    transform: scale(0.88);
     background: rgba(251, 191, 36, 0.15);
     box-shadow: 0 0 25px rgba(251, 191, 36, 0.4);
   }
@@ -3505,7 +3560,7 @@ button.top-back-button:active {
   }
 
   #mobileDisconnectBtn:active:not(:disabled) {
-    transform: scale(0.92);
+    transform: scale(0.88);
     background: rgba(248, 113, 113, 0.15);
     box-shadow: 0 0 25px rgba(248, 113, 113, 0.4);
   }
@@ -3518,7 +3573,7 @@ button.top-back-button:active {
     border-color: rgba(255, 255, 255, 0.05) !important;
   }
 
-  /* MOBILE STATUS BAR - Bottom fixed - VUI Style */
+  /* MOBILE STATUS BAR - Bottom fixed with safe area */
   .mobile-status-bar {
     position: fixed;
     bottom: 0;
@@ -3528,7 +3583,7 @@ button.top-back-button:active {
     -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
     border-top: 1px solid rgba(255, 255, 255, 0.08);
-    padding: 14px 24px;
+    padding: 14px 24px calc(14px + var(--safe-area-bottom)) 24px;
     z-index: 100;
     display: flex;
     justify-content: space-around;
@@ -6228,9 +6283,66 @@ body.has-header {
     flex-direction: column;
   }
 
+  /* Auth page mobile polish with safe areas */
+  #authPage {
+    padding: calc(40px + var(--safe-area-top)) 16px calc(40px + var(--safe-area-bottom)) 16px;
+    align-items: flex-start;
+  }
+
   .auth-container {
-    margin: 40px auto;
-    padding: 24px;
+    margin: 20px auto;
+    padding: 32px 24px;
+    border-radius: 20px;
+    max-width: 100%;
+  }
+
+  .auth-close-btn {
+    min-width: 44px;
+    min-height: 44px;
+    width: 40px;
+    height: 40px;
+  }
+
+  .auth-header h2 {
+    font-size: 24px;
+  }
+
+  /* Form inputs - larger touch targets, prevent iOS zoom */
+  .form-group input {
+    padding: 16px 18px;
+    min-height: 52px;
+    font-size: 16px;
+    border-radius: 14px;
+  }
+
+  .form-group label {
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  /* Auth buttons - larger for mobile */
+  .auth-form .btn-primary,
+  .auth-form button.btn-primary {
+    padding: 18px 24px !important;
+    min-height: 56px;
+    border-radius: 14px !important;
+  }
+
+  .auth-form .btn-primary:active,
+  .auth-form button.btn-primary:active {
+    transform: scale(0.98) !important;
+  }
+
+  .btn-social,
+  button.btn-social {
+    padding: 16px !important;
+    min-height: 52px;
+    border-radius: 14px !important;
+  }
+
+  .btn-social:active,
+  button.btn-social:active {
+    transform: scale(0.98) !important;
   }
 
   .stats-grid {
@@ -6239,6 +6351,117 @@ body.has-header {
 
   .profile-actions {
     flex-direction: column;
+  }
+}
+
+/* Keyboard visibility - adjusts auth modal when keyboard is open */
+#authPage.keyboard-visible {
+  padding-top: 20px !important;
+  align-items: flex-start !important;
+}
+
+#authPage.keyboard-visible .auth-container {
+  margin-top: 10px;
+}
+
+/* ============================================
+   SMALL PHONE SUPPORT (360px - 380px)
+   Extra tight layouts for older/smaller devices
+   ============================================ */
+@media (max-width: 380px) {
+  /* Tighter body padding */
+  body {
+    padding: 8px;
+  }
+
+  /* Compact header */
+  .app-header {
+    padding: 0 12px;
+    height: 56px;
+  }
+
+  .reviva-logo--compact .logo-mark {
+    font-size: 1.1rem;
+  }
+
+  .reviva-logo--compact .logo-text {
+    font-size: 0.9rem;
+  }
+
+  /* Smaller voice orb on tiny screens */
+  .mobile-voice-section .voice-orb {
+    width: 70px !important;
+    height: 70px !important;
+    min-width: 70px !important;
+    min-height: 70px !important;
+  }
+
+  /* Tighter button group */
+  .mobile-button-group {
+    gap: 12px;
+    padding: 10px 14px;
+  }
+
+  .mobile-control-button {
+    width: 48px;
+    height: 48px;
+    font-size: 16px;
+  }
+
+  /* Compact status bar */
+  .mobile-status-bar {
+    padding: 10px 12px calc(10px + var(--safe-area-bottom)) 12px;
+    gap: 10px;
+  }
+
+  .mobile-status-label {
+    font-size: 9px;
+  }
+
+  .mobile-status-item .status-value {
+    font-size: 11px;
+    padding: 3px 8px;
+  }
+
+  /* Compact auth */
+  .auth-container {
+    padding: 24px 16px;
+  }
+
+  .auth-header h2 {
+    font-size: 22px;
+  }
+
+  /* Smaller selection cards */
+  .specialty-card,
+  .difficulty-card,
+  .mode-card {
+    padding: 28px 16px !important;
+    min-height: 28vh !important;
+  }
+
+  .specialty-icon,
+  .difficulty-icon,
+  .mode-icon {
+    font-size: 44px !important;
+  }
+
+  /* Tighter scenario cards */
+  .mobile-scenario-card {
+    padding: 14px;
+  }
+
+  .mobile-scenario-card h3 {
+    font-size: 15px;
+  }
+
+  /* Smaller typography */
+  h1 {
+    font-size: 24px !important;
+  }
+
+  h2 {
+    font-size: 20px !important;
   }
 }
 
