@@ -18,11 +18,11 @@
   <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.19.2/dist/ort.wasm.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@ricky0123/vad-web@0.0.19/dist/bundle.min.js"></script>
 
-  <!-- Fonts: Instrument Serif (display) + Outfit (body) -->
+  <!-- Fonts: Instrument Serif (display) + Outfit (body) + DM Sans (status) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;500;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;500;600;700&display=swap"
     rel="stylesheet">
 
   <!-- Styles (extracted from inline) -->
@@ -206,297 +206,277 @@
       z-index: 10;
     }
 
+    /* ===== LUMINOUS PEARL ORB - Premium Voice Orb Design ===== */
+
+    /* CSS Variables for state colors */
     .voice-orb {
-      /* FORCE perfect circle */
-      width: 130px !important;
-      height: 130px !important;
-      min-width: 130px !important;
-      min-height: 130px !important;
+      --state-idle: 196, 196, 196;        /* Soft silver */
+      --state-listening: 0, 184, 148;     /* Mint green */
+      --state-thinking: 108, 92, 231;     /* Soft violet */
+      --state-speaking: 253, 126, 80;     /* Warm peach */
+      --current-accent: var(--state-idle);
+    }
+
+    .voice-orb {
+      /* Perfect circle - slightly larger for presence */
+      width: 140px !important;
+      height: 140px !important;
+      min-width: 140px !important;
+      min-height: 140px !important;
       aspect-ratio: 1 / 1 !important;
       border-radius: 50% !important;
 
-      /* Solid color that transitions through spectrum */
-      background-color: #ff6b6b !important;
-      animation: orbColorCycle 30s linear infinite;
-      -webkit-backdrop-filter: blur(12px);
-      backdrop-filter: blur(12px);
+      /* Pearlescent gradient base */
+      background: linear-gradient(135deg,
+        #ffffff 0%,
+        #f8f6f3 25%,
+        #f0ede8 50%,
+        #e8e4df 75%,
+        #f5f3f0 100%) !important;
 
-      /* Soft glow effect */
+      /* Soft depth shadows */
       box-shadow:
-        inset 0 0 40px rgba(255, 255, 255, 0.3),
-        0 8px 32px rgba(0, 0, 0, 0.15),
-        0 0 60px currentColor;
+        inset 0 -20px 40px rgba(200, 200, 200, 0.15),
+        inset 0 10px 20px rgba(255, 255, 255, 0.9),
+        0 8px 32px rgba(0, 0, 0, 0.08),
+        0 0 0 1px rgba(255, 255, 255, 0.6);
 
       border: none !important;
       outline: none !important;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      overflow: visible;
       position: relative;
+      overflow: visible;
+      transition:
+        box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    /* Solid color cycle: red → orange → yellow → green → blue → violet → red */
-    @keyframes orbColorCycle {
-      0%      { background-color: #ff6b6b; box-shadow: inset 0 0 40px rgba(255,255,255,0.3), 0 8px 32px rgba(0,0,0,0.15), 0 0 60px #ff6b6b; }
-      16.67%  { background-color: #ffa94d; box-shadow: inset 0 0 40px rgba(255,255,255,0.3), 0 8px 32px rgba(0,0,0,0.15), 0 0 60px #ffa94d; }
-      33.33%  { background-color: #ffd43b; box-shadow: inset 0 0 40px rgba(255,255,255,0.3), 0 8px 32px rgba(0,0,0,0.15), 0 0 60px #ffd43b; }
-      50%     { background-color: #69db7c; box-shadow: inset 0 0 40px rgba(255,255,255,0.3), 0 8px 32px rgba(0,0,0,0.15), 0 0 60px #69db7c; }
-      66.67%  { background-color: #4dabf7; box-shadow: inset 0 0 40px rgba(255,255,255,0.3), 0 8px 32px rgba(0,0,0,0.15), 0 0 60px #4dabf7; }
-      83.33%  { background-color: #9775fa; box-shadow: inset 0 0 40px rgba(255,255,255,0.3), 0 8px 32px rgba(0,0,0,0.15), 0 0 60px #9775fa; }
-      100%    { background-color: #ff6b6b; box-shadow: inset 0 0 40px rgba(255,255,255,0.3), 0 8px 32px rgba(0,0,0,0.15), 0 0 60px #ff6b6b; }
-    }
-
-    /* Spectrum container - hidden by default */
-    .spectrum-container {
-      display: none !important;
-    }
-
-    /* Outer ring pulse effect - with animated gradient */
-    .voice-orb::before {
-      content: '';
+    /* Inner glow layer for depth */
+    .orb-inner-glow {
       position: absolute;
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      background: transparent;
-      border: 3px solid rgba(255, 255, 255, 0.4);
-      opacity: 1;
-      transform: scale(1.15);
-      transition: all 0.4s ease;
-    }
-
-    /* Inner highlight shimmer - enhanced for rainbow */
-    .voice-orb::after {
-      content: '';
-      position: absolute;
-      top: 10%;
-      left: 15%;
-      width: 35%;
-      height: 20%;
+      top: 8%;
+      left: 12%;
+      width: 40%;
+      height: 25%;
       background: linear-gradient(135deg,
-          rgba(255, 255, 255, 0.85) 0%,
-          rgba(255, 255, 255, 0.3) 50%,
-          rgba(255, 255, 255, 0) 100%);
+        rgba(255, 255, 255, 0.95) 0%,
+        rgba(255, 255, 255, 0.4) 50%,
+        rgba(255, 255, 255, 0) 100%);
       border-radius: 50%;
-      opacity: 0.8;
+      pointer-events: none;
+    }
+
+    /* Outer ambient ring */
+    .orb-outer-ring {
+      position: absolute;
+      inset: -16px;
+      border-radius: 50%;
+      border: 1px solid rgba(var(--current-accent), 0.2);
+      opacity: 0;
+      transition: all 0.4s ease;
+      pointer-events: none;
+    }
+
+    /* Waveform container - centered inside orb */
+    .orb-waveform {
+      position: absolute;
+      width: 70%;
+      height: 70%;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Individual waveform bars - thin 2px lines */
+    .orb-waveform-bar {
+      position: absolute;
+      width: 2px;
+      height: var(--bar-height, 4px);
+      background: rgba(var(--current-accent), 0.6);
+      border-radius: 1px;
+      transform-origin: center center;
+      transform: rotate(var(--rotation, 0deg)) translateY(-22px);
+      transition: background 0.3s ease;
     }
 
     /* ===== ORB STATES ===== */
 
-    /* IDLE: Breathing pulse with color cycling */
+    /* IDLE: Soft pearl with subtle breathing */
     .voice-orb.idle {
-      animation: orb-idle-breathe 3s ease-in-out infinite, orbColorCycle 30s linear infinite;
+      --current-accent: var(--state-idle);
+      animation: orb-idle-breathe 4s ease-in-out infinite;
     }
 
-    .voice-orb.idle::before {
-      animation: idle-ring-pulse 3s ease-in-out infinite;
+    .voice-orb.idle .orb-outer-ring {
+      opacity: 0.3;
+      animation: idle-ring-pulse 4s ease-in-out infinite;
+    }
+
+    .voice-orb.idle .orb-waveform-bar {
+      background: rgba(var(--state-idle), 0.4);
     }
 
     @keyframes orb-idle-breathe {
-      0%, 100% {
-        transform: scale(1);
-      }
-      50% {
-        transform: scale(1.06);
-      }
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.02); }
     }
 
     @keyframes idle-ring-pulse {
-
-      0%,
-      100% {
-        transform: scale(1.1);
-        opacity: 0.3;
-        border-color: rgba(100, 180, 255, 0.2);
-      }
-
-      50% {
-        transform: scale(1.25);
-        opacity: 0.6;
-        border-color: rgba(100, 180, 255, 0.4);
-      }
-    }
-
-    /* LISTENING: Attentive glow with double ring pulse */
-    .voice-orb.listening {
-      animation: orb-listening 1.5s ease-in-out infinite;
-      background: radial-gradient(ellipse at 30% 20%,
-          rgba(255, 255, 255, 0.98) 0%,
-          rgba(230, 245, 255, 0.8) 30%,
-          rgba(150, 200, 255, 0.5) 70%,
-          rgba(100, 180, 255, 0.3) 100%) !important;
-    }
-
-    .voice-orb.listening::before {
-      animation: listening-ring-pulse 1.2s ease-out infinite;
-    }
-
-    @keyframes orb-listening {
-
-      0%,
-      100% {
+      0%, 100% {
         transform: scale(1);
-        box-shadow:
-          inset 0 0 45px rgba(255, 255, 255, 0.95),
-          inset 0 0 80px rgba(66, 165, 245, 0.2),
-          0 8px 32px rgba(66, 165, 245, 0.3),
-          0 0 60px rgba(66, 165, 245, 0.2),
-          0 0 0 1px rgba(255, 255, 255, 0.6);
+        opacity: 0.2;
       }
-
       50% {
-        transform: scale(1.06);
-        box-shadow:
-          inset 0 0 55px rgba(255, 255, 255, 1),
-          inset 0 0 100px rgba(66, 165, 245, 0.3),
-          0 16px 48px rgba(66, 165, 245, 0.4),
-          0 0 100px rgba(66, 165, 245, 0.3),
-          0 0 0 1px rgba(255, 255, 255, 0.8);
+        transform: scale(1.05);
+        opacity: 0.35;
       }
     }
 
-    @keyframes listening-ring-pulse {
-      0% {
-        transform: scale(1.1);
-        opacity: 0.8;
-        border-color: rgba(66, 165, 245, 0.6);
-        border-width: 3px;
-      }
+    /* LISTENING: Mint green glow, alert state */
+    .voice-orb.listening {
+      --current-accent: var(--state-listening);
+      animation: orb-listening-breathe 2s ease-in-out infinite;
+      box-shadow:
+        inset 0 -20px 40px rgba(0, 184, 148, 0.1),
+        inset 0 10px 20px rgba(255, 255, 255, 0.9),
+        0 8px 32px rgba(0, 184, 148, 0.18),
+        0 0 60px rgba(0, 184, 148, 0.15),
+        0 0 0 1px rgba(255, 255, 255, 0.7);
+    }
 
+    .voice-orb.listening .orb-outer-ring {
+      opacity: 1;
+      border-color: rgba(0, 184, 148, 0.4);
+      animation: listening-ring-expand 1.5s ease-out infinite;
+    }
+
+    .voice-orb.listening .orb-waveform-bar {
+      background: rgba(var(--state-listening), 0.7);
+    }
+
+    @keyframes orb-listening-breathe {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.04); }
+    }
+
+    @keyframes listening-ring-expand {
+      0% {
+        transform: scale(1);
+        opacity: 0.6;
+        border-width: 2px;
+      }
       100% {
-        transform: scale(1.8);
+        transform: scale(1.5);
         opacity: 0;
-        border-color: rgba(66, 165, 245, 0);
         border-width: 1px;
       }
     }
 
-    /* THINKING: Pronounced bounce with purple glow */
+    /* THINKING: Violet glow with gentle pulse */
     .voice-orb.thinking {
-      animation: orb-thinking-bounce 2s ease-in-out infinite;
-      background: radial-gradient(ellipse at 30% 20%,
-          rgba(255, 255, 255, 0.95) 0%,
-          rgba(240, 230, 255, 0.7) 30%,
-          rgba(180, 150, 230, 0.5) 70%,
-          rgba(149, 117, 205, 0.3) 100%) !important;
+      --current-accent: var(--state-thinking);
+      animation: orb-thinking-pulse 1.8s ease-in-out infinite;
+      box-shadow:
+        inset 0 -20px 40px rgba(108, 92, 231, 0.12),
+        inset 0 10px 20px rgba(255, 255, 255, 0.9),
+        0 8px 32px rgba(108, 92, 231, 0.2),
+        0 0 60px rgba(108, 92, 231, 0.18),
+        0 0 0 1px rgba(255, 255, 255, 0.7);
     }
 
-    .voice-orb.thinking::before {
-      animation: thinking-ring-rotate 2s linear infinite;
+    .voice-orb.thinking .orb-outer-ring {
+      opacity: 1;
+      border-color: rgba(108, 92, 231, 0.5);
+      border-style: dashed;
+      animation: thinking-ring-rotate 3s linear infinite;
     }
 
-    @keyframes orb-thinking-bounce {
+    .voice-orb.thinking .orb-waveform-bar {
+      background: rgba(var(--state-thinking), 0.7);
+    }
 
-      0%,
-      100% {
-        transform: translateY(0) scale(1);
-        box-shadow:
-          inset 0 0 40px rgba(255, 255, 255, 0.9),
-          inset 0 0 80px rgba(149, 117, 205, 0.15),
-          0 8px 32px rgba(149, 117, 205, 0.25),
-          0 0 50px rgba(149, 117, 205, 0.1),
-          0 0 0 1px rgba(255, 255, 255, 0.5);
-      }
-
-      50% {
-        transform: translateY(-8px) scale(1.08);
-        box-shadow:
-          inset 0 0 50px rgba(255, 255, 255, 1),
-          inset 0 0 100px rgba(149, 117, 205, 0.25),
-          0 20px 56px rgba(149, 117, 205, 0.35),
-          0 0 80px rgba(149, 117, 205, 0.2),
-          0 0 0 1px rgba(255, 255, 255, 0.7);
-      }
+    @keyframes orb-thinking-pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.03); }
     }
 
     @keyframes thinking-ring-rotate {
-      0% {
-        transform: scale(1.15) rotate(0deg);
-        border-color: rgba(149, 117, 205, 0.4);
-        opacity: 0.6;
-      }
-
-      50% {
-        border-color: rgba(149, 117, 205, 0.6);
-        opacity: 0.8;
-      }
-
-      100% {
-        transform: scale(1.15) rotate(360deg);
-        border-color: rgba(149, 117, 205, 0.4);
-        opacity: 0.6;
-      }
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
     }
 
-    /* SPEAKING: Strong rhythmic pulse with warm glow */
+    /* SPEAKING: Warm peach glow, dynamic energy */
     .voice-orb.speaking {
-      animation: orb-speaking-pulse 0.8s ease-in-out infinite;
-      background: radial-gradient(ellipse at 30% 20%,
-          rgba(255, 255, 255, 0.98) 0%,
-          rgba(255, 245, 230, 0.8) 30%,
-          rgba(255, 200, 150, 0.5) 70%,
-          rgba(255, 160, 100, 0.3) 100%) !important;
+      --current-accent: var(--state-speaking);
+      animation: orb-speaking-pulse 0.6s ease-in-out infinite;
+      box-shadow:
+        inset 0 -20px 40px rgba(253, 126, 80, 0.15),
+        inset 0 10px 20px rgba(255, 255, 255, 0.9),
+        0 8px 32px rgba(253, 126, 80, 0.25),
+        0 0 80px rgba(253, 126, 80, 0.2),
+        0 0 0 1px rgba(255, 255, 255, 0.8);
     }
 
-    .voice-orb.speaking::before {
+    .voice-orb.speaking .orb-outer-ring {
+      opacity: 1;
+      border-color: rgba(253, 126, 80, 0.5);
       animation: speaking-ring-pulse 0.8s ease-out infinite;
     }
 
+    .voice-orb.speaking .orb-waveform-bar {
+      background: rgba(var(--state-speaking), 0.8);
+    }
+
     @keyframes orb-speaking-pulse {
-
-      0%,
-      100% {
-        transform: scale(1);
-        box-shadow:
-          inset 0 0 45px rgba(255, 255, 255, 0.95),
-          inset 0 0 80px rgba(255, 167, 38, 0.2),
-          0 8px 32px rgba(255, 167, 38, 0.3),
-          0 0 60px rgba(255, 167, 38, 0.15),
-          0 0 0 1px rgba(255, 255, 255, 0.6);
-      }
-
-      50% {
-        transform: scale(1.12);
-        box-shadow:
-          inset 0 0 55px rgba(255, 255, 255, 1),
-          inset 0 0 100px rgba(255, 167, 38, 0.3),
-          0 16px 52px rgba(255, 167, 38, 0.45),
-          0 0 100px rgba(255, 167, 38, 0.25),
-          0 0 0 1px rgba(255, 255, 255, 0.8);
-      }
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.06); }
     }
 
     @keyframes speaking-ring-pulse {
       0% {
-        transform: scale(1.1);
-        opacity: 0.8;
-        border-color: rgba(255, 167, 38, 0.6);
-        border-width: 3px;
+        transform: scale(1);
+        opacity: 0.7;
+        border-width: 2px;
       }
-
       100% {
-        transform: scale(2);
+        transform: scale(1.8);
         opacity: 0;
-        border-color: rgba(255, 167, 38, 0);
         border-width: 1px;
       }
     }
 
-    /* ===== AI STATUS BUBBLE ===== */
+    /* ===== AI STATUS BUBBLE (Redesigned) ===== */
     .ai-status-bubble {
-      background: rgba(255, 255, 255, 0.85) !important;
-      -webkit-backdrop-filter: blur(12px);
-      backdrop-filter: blur(12px);
-      padding: 8px 20px !important;
-      border-radius: 24px !important;
-      border: 1px solid rgba(255, 255, 255, 0.6) !important;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      background: rgba(255, 255, 255, 0.92) !important;
+      -webkit-backdrop-filter: blur(16px);
+      backdrop-filter: blur(16px);
+      padding: 10px 24px 14px 24px !important;
+      border-radius: 20px !important;
+      border: 1px solid rgba(255, 255, 255, 0.7) !important;
+      box-shadow:
+        0 4px 20px rgba(0, 0, 0, 0.06),
+        0 1px 3px rgba(0, 0, 0, 0.04);
       min-width: auto !important;
       opacity: 0;
       transform: translateY(8px);
-      transition: all 0.3s ease;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Accent underline that changes with state */
+    .status-accent-line {
+      position: absolute;
+      bottom: 0;
+      left: 20%;
+      right: 20%;
+      height: 2px;
+      background: rgba(196, 196, 196, 0.5);
+      border-radius: 1px;
+      transition: background 0.3s ease;
     }
 
     .ai-status-bubble.visible {
@@ -508,23 +488,34 @@
       animation: status-float 2.5s ease-in-out infinite;
     }
 
+    .ai-status-bubble.processing .status-accent-line {
+      background: rgba(108, 92, 231, 0.7);
+    }
+
+    /* State-specific accent colors */
+    .ai-status-bubble.state-listening .status-accent-line {
+      background: rgba(0, 184, 148, 0.7);
+    }
+
+    .ai-status-bubble.state-thinking .status-accent-line {
+      background: rgba(108, 92, 231, 0.7);
+    }
+
+    .ai-status-bubble.state-speaking .status-accent-line {
+      background: rgba(253, 126, 80, 0.7);
+    }
+
     @keyframes status-float {
-
-      0%,
-      100% {
-        transform: translateY(0);
-      }
-
-      50% {
-        transform: translateY(-6px);
-      }
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
     }
 
     .ai-status-bubble span {
-      color: #37474F !important;
+      color: #2d3436 !important;
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
       font-weight: 500 !important;
       font-size: 13px !important;
-      letter-spacing: 0.3px;
+      letter-spacing: 0.02em;
     }
 
     /* ===== CONTROL BUTTONS - NEUMORPHIC ===== */
@@ -1649,38 +1640,18 @@
 
           <!-- Voice Orb Overlay (centered-lower) -->
           <div class="persona-orb-overlay">
-            <!-- AI Status Bubble -->
+            <!-- AI Status Bubble (redesigned with accent line) -->
             <div id="aiStatusBubble" class="ai-status-bubble">
               <span id="aiStatus">Ready</span>
+              <div class="status-accent-line"></div>
             </div>
+            <!-- Voice Orb (Luminous Pearl design) -->
             <div id="voiceOrb" class="voice-orb idle">
-              <!-- Circular Audio Spectrum Bars -->
-              <div class="spectrum-container">
-                <div class="spectrum-bar" data-index="0"></div>
-                <div class="spectrum-bar" data-index="1"></div>
-                <div class="spectrum-bar" data-index="2"></div>
-                <div class="spectrum-bar" data-index="3"></div>
-                <div class="spectrum-bar" data-index="4"></div>
-                <div class="spectrum-bar" data-index="5"></div>
-                <div class="spectrum-bar" data-index="6"></div>
-                <div class="spectrum-bar" data-index="7"></div>
-                <div class="spectrum-bar" data-index="8"></div>
-                <div class="spectrum-bar" data-index="9"></div>
-                <div class="spectrum-bar" data-index="10"></div>
-                <div class="spectrum-bar" data-index="11"></div>
-                <div class="spectrum-bar" data-index="12"></div>
-                <div class="spectrum-bar" data-index="13"></div>
-                <div class="spectrum-bar" data-index="14"></div>
-                <div class="spectrum-bar" data-index="15"></div>
-                <div class="spectrum-bar" data-index="16"></div>
-                <div class="spectrum-bar" data-index="17"></div>
-                <div class="spectrum-bar" data-index="18"></div>
-                <div class="spectrum-bar" data-index="19"></div>
-                <div class="spectrum-bar" data-index="20"></div>
-                <div class="spectrum-bar" data-index="21"></div>
-                <div class="spectrum-bar" data-index="22"></div>
-                <div class="spectrum-bar" data-index="23"></div>
-              </div>
+              <!-- Inner glow layer -->
+              <div class="orb-inner-glow"></div>
+              <!-- Waveform bars created dynamically by orb-visualizer.js -->
+              <!-- Outer ambient ring -->
+              <div class="orb-outer-ring"></div>
             </div>
           </div>
 
@@ -1760,8 +1731,12 @@
         <div class="mobile-voice-section">
           <div id="mobileAiStatusBubble" class="ai-status-bubble">
             <span id="mobileAiStatus">Ready</span>
+            <div class="status-accent-line"></div>
           </div>
-          <div id="mobileVoiceOrb" class="voice-orb"></div>
+          <div id="mobileVoiceOrb" class="voice-orb idle">
+            <div class="orb-inner-glow"></div>
+            <div class="orb-outer-ring"></div>
+          </div>
           <!-- Mobile Audio Waveform -->
           <div id="mobileAudioWaveform" class="audio-waveform">
             <div class="waveform-bar"></div>
@@ -1870,6 +1845,7 @@
   <script src="js/subscription.js"></script>
   <script src="js/tracking.js"></script>
   <script src="js/ui-helpers.js"></script>
+  <script src="js/orb-visualizer.js"></script>
   <script src="js/speech.js"></script>
   <script src="js/vad/VADManager.js"></script>
   <script src="js/session.js"></script>

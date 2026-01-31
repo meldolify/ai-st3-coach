@@ -13,9 +13,50 @@ class AudioPlayer {
     this.onStart = null;
     this.onEnd = null;
     this.playbackTimeout = null; // Safety timeout for stuck playback
+    this.useVisualizer = false; // Whether to use orb visualizer
+    this.visualizerInitialized = false;
+  }
+
+  /**
+   * Initialize orb visualizer for audio-reactive waveform
+   * Must be called after a user gesture (click/tap)
+   */
+  async initVisualizer() {
+    if (this.visualizerInitialized) return true;
+
+    try {
+      if (window.orbVisualizer) {
+        await window.orbVisualizer.init();
+        this.useVisualizer = true;
+        this.visualizerInitialized = true;
+        console.log('[AudioPlayer] Orb visualizer initialized');
+        return true;
+      }
+    } catch (error) {
+      console.warn('[AudioPlayer] Orb visualizer init failed, using fallback:', error);
+    }
+    return false;
   }
 
   playBase64Audio(base64Audio) {
+    // Use orb visualizer if available and initialized
+    if (this.useVisualizer && window.orbVisualizer) {
+      this.isPlaying = true;
+      if (this.onStart) this.onStart();
+
+      // Connect visualizer callbacks
+      window.orbVisualizer.onStart = null; // Already called above
+      window.orbVisualizer.onEnd = () => {
+        this.isPlaying = false;
+        if (this.onEnd) this.onEnd();
+      };
+
+      // Play with visualization
+      window.orbVisualizer.playWithVisualization(base64Audio);
+      return;
+    }
+
+    // Fallback: standard Audio element playback
     const binaryString = atob(base64Audio);
     const bytes = Uint8Array.from(binaryString, char => char.charCodeAt(0));
     const blob = new Blob([bytes], { type: 'audio/mp3' });
@@ -71,6 +112,11 @@ class AudioPlayer {
   }
 
   interrupt() {
+    // Interrupt visualizer if in use
+    if (this.useVisualizer && window.orbVisualizer) {
+      window.orbVisualizer.interrupt();
+    }
+
     if (this.isPlaying) {
       // Clear safety timeout
       if (this.playbackTimeout) {
@@ -132,6 +178,9 @@ class V4Session {
   }
 
   async connect() {
+    // Initialize orb visualizer (requires user gesture - we're in a click handler)
+    await this.audioPlayer.initVisualizer();
+
     return new Promise((resolve, reject) => {
       let wsUrl = this.backendUrl + '?scenario=' + this.promptFile;
       if (this.difficulty) {
