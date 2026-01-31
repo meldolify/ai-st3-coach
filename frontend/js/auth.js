@@ -227,6 +227,96 @@ function updateLandingPageForAuthState() {
   if (pricingSection) {
     pricingSection.style.display = isSubscribed ? 'none' : 'block';
   }
+
+  // === DYNAMIC ACTION CARDS ===
+  renderActionCards();
+}
+
+// Render dynamic action cards based on user tier
+function renderActionCards() {
+  const container = document.getElementById('actionCardsContainer');
+  if (!container) return;
+
+  const isLoggedIn = !!currentUser;
+  const isPremium = userSubscription?.status === 'active';
+
+  // Determine effective tier (with test override support)
+  let effectiveTier = 'unlogged';
+  if (typeof testTierOverride !== 'undefined' && testTierOverride) {
+    effectiveTier = testTierOverride;
+  } else if (isPremium) {
+    effectiveTier = 'premium';
+  } else if (isLoggedIn) {
+    effectiveTier = 'free';
+  }
+
+  let cardsHTML = '';
+  let cardNumber = 1;
+
+  if (effectiveTier === 'unlogged') {
+    // Card 1: Explore without login
+    cardsHTML += createActionCard(cardNumber++, 'Explore', 'Scenarios',
+      'Browse our curated library of clinical, communication, and structured interview scenarios',
+      'Begin exploring', 'browseAsGuest()');
+
+    // Card 2: Login to practise
+    cardsHTML += createActionCard(cardNumber++, 'Login to', 'Practise',
+      'Sign in to practise sample scenarios for free and track your progress',
+      'Sign in', "showAuthPage('login')");
+
+    // Card 3: Pricing
+    cardsHTML += createActionCard(cardNumber++, 'View', 'Pricing',
+      'Simple, transparent plans designed for surgical trainees at every stage',
+      'See plans', "document.getElementById('pricingSection').scrollIntoView({behavior: 'smooth'})");
+
+    container.classList.add('three-cards');
+    container.classList.remove('single-card');
+
+  } else if (effectiveTier === 'free') {
+    // Card 1: Dashboard
+    cardsHTML += createActionCard(cardNumber++, 'Go to', 'Dashboard',
+      'Practise sample scenarios for free - upgrade for full access to all topics',
+      'Start practising', 'showProtectedContent()');
+
+    // Card 2: Pricing
+    cardsHTML += createActionCard(cardNumber++, 'View', 'Pricing',
+      'Unlock all scenarios and features with a premium subscription',
+      'See plans', "document.getElementById('pricingSection').scrollIntoView({behavior: 'smooth'})");
+
+    container.classList.remove('three-cards');
+    container.classList.remove('single-card');
+
+  } else if (effectiveTier === 'premium') {
+    // Card 1: Dashboard (single card)
+    cardsHTML += createActionCard(cardNumber++, 'Go to', 'Dashboard',
+      'Unlimited access to all modes and topics in the specialty - continue your preparation',
+      'Continue training', 'showProtectedContent()', true);
+
+    container.classList.remove('three-cards');
+    container.classList.add('single-card');
+  }
+
+  container.innerHTML = cardsHTML;
+}
+
+// Helper to create action card HTML
+function createActionCard(number, titlePart1, titlePart2, description, ctaText, onclickAction, fullWidth = false) {
+  const paddedNumber = String(number).padStart(2, '0');
+  const fullWidthClass = fullWidth ? 'action-card--full' : '';
+
+  return `
+    <article class="action-card ${fullWidthClass}" onclick="${onclickAction}" role="button" tabindex="0">
+      <div class="card-number">${paddedNumber}</div>
+      <h3 class="card-title">${titlePart1} <em>${titlePart2}</em></h3>
+      <p class="card-description">${description}</p>
+      <div class="card-cta">
+        <span>${ctaText}</span>
+        <svg class="cta-arrow" width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M4 10h12m0 0l-4-4m4 4l-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </article>
+  `;
 }
 
 function showAuthPage(mode = 'login') {

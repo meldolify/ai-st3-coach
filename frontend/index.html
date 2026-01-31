@@ -67,7 +67,30 @@
     #simulationRoom .desktop-simulation-layout {
       flex: 1;
       min-height: 0;
+      max-height: calc(100vh - 80px - 52px); /* header (80px) + footer (52px) */
       padding-bottom: 16px !important;
+      overflow: hidden;
+    }
+
+    /* Sidebar panel constraints */
+    .sidebar-panel {
+      max-height: 100%;
+      overflow-y: auto;
+    }
+
+    /* Clinical image section constraints */
+    .clinical-section {
+      flex: 0 0 auto;
+      max-height: 40%;
+      overflow: hidden;
+    }
+
+    /* Transcript section constraints */
+    .transcript-section {
+      flex: 1 1 auto;
+      min-height: 200px;
+      max-height: 60%;
+      overflow-y: auto;
     }
 
     /* ===== PERSISTENT APP FOOTER ===== */
@@ -717,52 +740,33 @@
     </nav>
 
     <div class="landing-content">
-      <!-- Hero Section -->
+      <!-- Hero Section with Interactive Elements -->
       <section class="landing-hero">
-        <div class="hero-badge">
+        <!-- Parallax floating decorative elements -->
+        <div class="parallax-element parallax-shape-1" data-speed="0.3"></div>
+        <div class="parallax-element parallax-shape-2" data-speed="0.5"></div>
+        <div class="parallax-element parallax-shape-3" data-speed="0.2"></div>
+
+        <div class="hero-badge scroll-reveal">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
             <polyline points="22 4 12 14.01 9 11.01" />
           </svg>
           AI-Powered Interview Practice
         </div>
-        <h1 class="hero-title">
-          Master Your <span class="highlight">Surgical</span> Interview
+        <h1 class="hero-title scroll-reveal scroll-reveal--delay-1">
+          Master Your <span class="highlight highlight-animated">Surgical</span> Interview
         </h1>
-        <p class="hero-description">
+        <p class="hero-description scroll-reveal scroll-reveal--delay-2">
           Practice anytime with AI-powered voice simulation designed by current trainees.
           Get real-time feedback that mirrors actual interview conditions.
         </p>
       </section>
 
-      <!-- Action Cards Section -->
+      <!-- Action Cards Section (dynamically populated based on tier) -->
       <section class="action-cards-section">
-        <div class="action-cards-grid">
-          <!-- Explore Card -->
-          <article class="action-card" onclick="browseAsGuest()" role="button" tabindex="0">
-            <div class="card-number">01</div>
-            <h3 class="card-title">Explore <em>Scenarios</em></h3>
-            <p class="card-description">Browse our curated library of clinical, communication, and structured interview scenarios</p>
-            <div class="card-cta">
-              <span>Begin exploring</span>
-              <svg class="cta-arrow" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                <path d="M4 10h12m0 0l-4-4m4 4l-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-          </article>
-
-          <!-- View Pricing Card -->
-          <article class="action-card" onclick="document.getElementById('pricingSection').scrollIntoView({behavior: 'smooth'})" role="button" tabindex="0">
-            <div class="card-number">02</div>
-            <h3 class="card-title">View <em>Pricing</em></h3>
-            <p class="card-description">Simple, transparent plans designed for surgical trainees at every stage</p>
-            <div class="card-cta">
-              <span>See plans</span>
-              <svg class="cta-arrow" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                <path d="M4 10h12m0 0l-4-4m4 4l-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-          </article>
+        <div class="action-cards-grid" id="actionCardsContainer">
+          <!-- Cards will be dynamically populated by renderActionCards() in auth.js -->
         </div>
       </section>
 
@@ -1395,7 +1399,7 @@
               <span class="card-count">10 areas</span>
             </div>
             <h3 class="card-title">Clinical Stations</h3>
-            <p class="card-description">Emergency presentations, burns, skin cancer, hand trauma, and more clinical scenarios</p>
+            <p class="card-description">Infections, hand trauma, skin cancer, burns, aesthetics, and more clinical scenarios</p>
           </article>
 
           <article class="scenario-card" data-category="call-the-boss" onclick="selectScenarioCategory('call-the-boss')">
@@ -1405,7 +1409,7 @@
                   <path d="M6 4h4l2 5-3 2a11 11 0 005 5l2-3 5 2v4a2 2 0 01-2 2A16 16 0 014 6a2 2 0 012-2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </div>
-              <span class="card-count">1 area</span>
+              <span class="card-count">15 scenarios</span>
             </div>
             <h3 class="card-title">Call-The-Boss</h3>
             <p class="card-description">Escalation scenarios and communication with senior colleagues</p>
@@ -1419,10 +1423,10 @@
                   <path d="M10 10h8M10 14h8M10 18h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                 </svg>
               </div>
-              <span class="card-count">5 areas</span>
+              <span class="card-count">7 areas</span>
             </div>
             <h3 class="card-title">Consent</h3>
-            <p class="card-description">Consent conversations across breast, hand, skin, and reconstructive surgery</p>
+            <p class="card-description">Consent discussions for hand trauma, burns, skin cancer, and breast surgery</p>
           </article>
 
           <article class="scenario-card" data-category="structured" onclick="selectScenarioCategory('structured')">
@@ -1438,7 +1442,7 @@
               <span class="card-count">8 areas</span>
             </div>
             <h3 class="card-title">Structured Interview</h3>
-            <p class="card-description">Audit, ethics, research, governance, and professional questions</p>
+            <p class="card-description">Audit, research, teaching, ethics, consent, and leadership questions</p>
           </article>
         </div>
       </section>

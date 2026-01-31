@@ -347,6 +347,18 @@ function initScrollAnimations() {
     scrollRevealObserver.observe(el);
   });
 
+  // Parallax effect on scroll for hero decorative elements
+  const parallaxElements = document.querySelectorAll('.parallax-element');
+  if (parallaxElements.length > 0) {
+    window.addEventListener('scroll', () => {
+      const scrollY = window.scrollY;
+      parallaxElements.forEach(el => {
+        const speed = parseFloat(el.dataset.speed) || 0.5;
+        el.style.transform = `translateY(${scrollY * speed}px)`;
+      });
+    }, { passive: true });
+  }
+
   console.log('[ANIM] Scroll animations initialized');
 }
 

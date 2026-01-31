@@ -14,39 +14,41 @@
 let currentScenarioCategory = null;
 let currentScenarioSubcategory = null;
 
-// Subcategory definitions for each category
+// Subcategory definitions for each category (matching Scenarios hierarchy.txt)
 const categorySubcategories = {
   'clinical': [
-    { id: 'breast-and-aesthetic', name: 'Breast & Aesthetic', icon: '💎' },
-    { id: 'burns', name: 'Burns', icon: '🔥' },
-    { id: 'elective-hand', name: 'Elective Hand', icon: '✋' },
-    { id: 'emergencies', name: 'Emergencies', icon: '🚨' },
+    { id: 'infections', name: 'Infections', icon: '🦠' },
     { id: 'hand-trauma', name: 'Hand Trauma', icon: '🩹' },
-    { id: 'lower-limb', name: 'Lower Limb', icon: '🦵' },
+    { id: 'elective-hand', name: 'Elective Hand', icon: '✋' },
     { id: 'skin-cancer', name: 'Skin Cancer', icon: '🔬' },
-    { id: 'head-and-neck', name: 'Head & Neck', icon: '👤' },
-    { id: 'congenital', name: 'Congenital', icon: '👶' },
-    { id: 'microsurgery', name: 'Microsurgery', icon: '🔍' }
+    { id: 'chronic-wounds', name: 'Chronic Wounds', icon: '🩹' },
+    { id: 'breast-and-aesthetic', name: 'Breast & Aesthetics', icon: '💎' },
+    { id: 'burns', name: 'Burns', icon: '🔥' },
+    { id: 'lower-limb-trauma', name: 'Lower Limb Trauma', icon: '🦵' },
+    { id: 'paediatrics', name: 'Paediatrics', icon: '👶' },
+    { id: 'miscellaneous', name: 'Miscellaneous', icon: '📋' }
   ],
   'call-the-boss': [
     { id: 'call-the-boss-scenarios', name: 'Scenarios', icon: '📞' }
   ],
   'consent': [
-    { id: 'consent-breast-and-aesthetic', name: 'Breast & Aesthetic', icon: '💎' },
-    { id: 'consent-hand-surgery', name: 'Hand Surgery', icon: '✋' },
-    { id: 'consent-skin-surgery', name: 'Skin Surgery', icon: '🔬' },
-    { id: 'consent-emergency-procedures', name: 'Emergency Procedures', icon: '🚨' },
-    { id: 'consent-reconstructive', name: 'Reconstructive', icon: '🔧' }
+    { id: 'consent-hand-trauma', name: 'Hand Trauma', icon: '🩹' },
+    { id: 'consent-elective-hand', name: 'Elective Hand', icon: '✋' },
+    { id: 'consent-burn', name: 'Burn', icon: '🔥' },
+    { id: 'consent-lower-limb', name: 'Lower Limb', icon: '🦵' },
+    { id: 'consent-chronic-wounds', name: 'Chronic Wounds', icon: '🩹' },
+    { id: 'consent-skin-cancer', name: 'Skin Cancer', icon: '🔬' },
+    { id: 'consent-breast-and-aesthetic', name: 'Breast & Aesthetics', icon: '💎' }
   ],
   'structured': [
     { id: 'structured-audit', name: 'Audit', icon: '📊' },
-    { id: 'structured-clinical-governance', name: 'Clinical Governance', icon: '🏥' },
-    { id: 'structured-complaints', name: 'Complaints', icon: '📝' },
-    { id: 'structured-consent-ethics', name: 'Consent & Ethics', icon: '⚖️' },
-    { id: 'structured-ethics', name: 'Ethics', icon: '🤝' },
     { id: 'structured-research', name: 'Research', icon: '🔬' },
-    { id: 'structured-risk-management', name: 'Risk Management', icon: '⚠️' },
-    { id: 'structured-teaching', name: 'Teaching', icon: '📚' }
+    { id: 'structured-teaching', name: 'Teaching', icon: '📚' },
+    { id: 'structured-risk-and-safety', name: 'Risk & Safety', icon: '⚠️' },
+    { id: 'structured-leadership', name: 'Leadership & Management', icon: '👔' },
+    { id: 'structured-consent', name: 'Consent', icon: '📝' },
+    { id: 'structured-ethics', name: 'Ethics', icon: '⚖️' },
+    { id: 'structured-misc', name: 'Misc', icon: '📋' }
   ]
 };
 
@@ -91,16 +93,35 @@ function populateSubcategoryCards(category) {
   const container = document.getElementById('subcategoryCards');
   const subcategories = categorySubcategories[category] || [];
 
-  container.innerHTML = subcategories.map(sub => `
-    <article class="scenario-card" data-subcategory="${sub.id}" onclick="selectScenarioSubcategory('${sub.id}', '${sub.name}')">
-      <div class="card-header">
-        <div class="card-icon-frame">
-          <span style="font-size: 1.25rem;">${sub.icon}</span>
+  container.innerHTML = subcategories.map(sub => {
+    // Check if ANY topic in this subcategory is unlocked
+    const topics = getTopicsForSubheading(sub.id);
+    const hasUnlockedTopics = topics.some(topic => {
+      const folderName = topic.file.split('/').pop();
+      const heading = topic.file.split('/')[0];
+      const promptFile = `prompts/${topic.file}/easy_${heading}_${folderName}_1.txt`;
+      return canAccessScenario(promptFile);
+    });
+
+    const lockedClass = !hasUnlockedTopics ? 'locked' : '';
+    const lockIndicator = !hasUnlockedTopics ? '<span class="subcategory-lock">🔒</span>' : '';
+
+    const onclickAction = hasUnlockedTopics
+      ? `selectScenarioSubcategory('${sub.id}', '${sub.name}')`
+      : `showLockedScenarioMessage()`;
+
+    return `
+      <article class="scenario-card ${lockedClass}" data-subcategory="${sub.id}" onclick="${onclickAction}">
+        <div class="card-header">
+          <div class="card-icon-frame">
+            <span style="font-size: 1.25rem;">${sub.icon}</span>
+          </div>
+          ${lockIndicator}
         </div>
-      </div>
-      <h3 class="card-title">${sub.name}</h3>
-    </article>
-  `).join('');
+        <h3 class="card-title">${sub.name}</h3>
+      </article>
+    `;
+  }).join('');
 }
 
 // Select a subcategory (Level 2 -> Level 3)
@@ -129,215 +150,281 @@ function selectScenarioSubcategory(subcategoryId, subcategoryName) {
   log('Selected scenario subcategory: ' + subcategoryId, 'info');
 }
 
-// Get topics data structure (mirrors the data in updateTopicsContent)
+// Get topics data structure (matching Scenarios hierarchy.txt)
+// NOTE: Backend paths must match actual folder structure in backend/prompts/
 function getTopicsData() {
   return {
-    // ========== CLINICAL HEADING ==========
-    'breast-and-aesthetic': {
-      title: 'Breast & Aesthetic',
-      topics: [
-        ['clinical/breast_and_aesthetic/breast_reconstruction', 'Breast Reconstruction'],
-        ['clinical/breast_and_aesthetic/breast_reduction', 'Breast Reduction'],
-        ['clinical/breast_and_aesthetic/mastopexy', 'Mastopexy'],
-        ['clinical/breast_and_aesthetic/gynaecomastia', 'Gynaecomastia'],
-        ['clinical/breast_and_aesthetic/liposuction', 'Liposuction'],
-        ['clinical/breast_and_aesthetic/abdominoplasty', 'Abdominoplasty'],
-        ['clinical/breast_and_aesthetic/blepharoplasty', 'Blepharoplasty'],
-        ['clinical/breast_and_aesthetic/otoplasty', 'Otoplasty'],
-        ['clinical/breast_and_aesthetic/rhinoplasty', 'Rhinoplasty']
-      ]
-    },
-    'burns': {
-      title: 'Burns',
-      topics: [
-        ['clinical/burns/acute_burns_assessment', 'Acute Burns Assessment'],
-        ['clinical/burns/fluid_resuscitation', 'Fluid Resuscitation'],
-        ['clinical/burns/escharotomy', 'Escharotomy'],
-        ['clinical/burns/burn_wound_management', 'Burn Wound Management'],
-        ['clinical/burns/chemical_burns', 'Chemical Burns'],
-        ['clinical/burns/electrical_burns', 'Electrical Burns']
-      ]
-    },
-    'elective-hand': {
-      title: 'Elective Hand',
-      topics: [
-        ['clinical/elective_hand/carpal_tunnel_syndrome', 'Carpal Tunnel Syndrome'],
-        ['clinical/elective_hand/cubital_tunnel_syndrome', 'Cubital Tunnel Syndrome'],
-        ['clinical/elective_hand/trigger_finger', 'Trigger Finger'],
-        ['clinical/elective_hand/dupuytrens_disease', "Dupuytren's Disease"],
-        ['clinical/elective_hand/ganglion_cyst', 'Ganglion Cyst']
-      ]
-    },
-    'emergencies': {
-      title: 'Emergencies',
+    // ========== CLINICAL HEADING (10 subcategories) ==========
+    'infections': {
+      title: 'Infections',
       topics: [
         ['clinical/emergencies/necrotising_fasciitis', 'Necrotising Fasciitis'],
-        ['clinical/emergencies/compartment_syndrome', 'Compartment Syndrome'],
-        ['clinical/emergencies/high_pressure_injection_injury', 'High Pressure Injection Injury'],
-        ['clinical/emergencies/septic_arthritis_hand', 'Septic Arthritis Hand'],
-        ['clinical/emergencies/flexor_sheath_infection', 'Flexor Sheath Infection']
+        ['clinical/infections/flexor_sheath_infections', 'Flexor Sheath Infections'],
+        ['clinical/infections/hand_space_infections', 'Hand Space Infections'],
+        ['clinical/infections/animal_bites', 'Animal Bites'],
+        ['clinical/infections/fight_bites', 'Fight Bites'],
+        ['clinical/infections/paronychia', 'Paronychia']
       ]
     },
     'hand-trauma': {
       title: 'Hand Trauma',
       topics: [
         ['clinical/hand_trauma/flexor_tendon_injury', 'Flexor Tendon Injury'],
+        ['clinical/hand_trauma/revascularisation', 'Revascularisation'],
+        ['clinical/hand_trauma/reimplantation', 'Reimplantation'],
         ['clinical/hand_trauma/extensor_tendon_injury', 'Extensor Tendon Injury'],
-        ['clinical/hand_trauma/digital_nerve_injury', 'Digital Nerve Injury'],
-        ['clinical/hand_trauma/replantation', 'Replantation'],
-        ['clinical/hand_trauma/fingertip_amputation', 'Fingertip Amputation']
+        ['clinical/hand_trauma/mangled_hand', 'Mangled Hand'],
+        ['clinical/hand_trauma/fdp_avulsion', 'FDP Avulsion'],
+        ['clinical/hand_trauma/nailbed_injury', 'Nailbed Injury / Seymour Fracture'],
+        ['clinical/hand_trauma/fingertip_injury', 'Fingertip Injury'],
+        ['clinical/hand_trauma/open_hand_fractures', 'Open Hand Fractures'],
+        ['clinical/hand_trauma/closed_hand_fractures', 'Closed Hand Fractures'],
+        ['clinical/hand_trauma/crps', 'Complex Regional Pain Syndrome (CRPS)']
       ]
     },
-    'lower-limb': {
-      title: 'Lower Limb',
+    'elective-hand': {
+      title: 'Elective Hand',
       topics: [
-        ['clinical/lower_limb/diabetic_foot', 'Diabetic Foot'],
-        ['clinical/lower_limb/chronic_leg_ulcer', 'Chronic Leg Ulcer'],
-        ['clinical/lower_limb/pressure_sores', 'Pressure Sores'],
-        ['clinical/lower_limb/lower_limb_reconstruction', 'Lower Limb Reconstruction']
+        ['clinical/elective_hand/compressive_neuropathies', 'Compressive Neuropathies'],
+        ['clinical/elective_hand/dupuytrens_disease', "Dupuytren's Disease"],
+        ['clinical/elective_hand/trigger_finger', 'Trigger Finger'],
+        ['clinical/elective_hand/finger_mass', 'Finger Mass'],
+        ['clinical/elective_hand/finger_deformity', 'Finger Deformity'],
+        ['clinical/elective_hand/nerve_palsies', 'Nerve Palsies']
       ]
     },
     'skin-cancer': {
       title: 'Skin Cancer',
       topics: [
-        ['clinical/skin_cancer/basal_cell_carcinoma', 'Basal Cell Carcinoma'],
-        ['clinical/skin_cancer/squamous_cell_carcinoma', 'Squamous Cell Carcinoma'],
-        ['clinical/skin_cancer/melanoma', 'Melanoma'],
-        ['clinical/skin_cancer/sentinel_lymph_node_biopsy', 'Sentinel Lymph Node Biopsy']
+        ['clinical/skin_cancer/bcc', 'BCC'],
+        ['clinical/skin_cancer/scc', 'SCC'],
+        ['clinical/skin_cancer/mm', 'MM (Melanoma)'],
+        ['clinical/skin_cancer/scalp', 'Scalp'],
+        ['clinical/skin_cancer/forehead_temple', 'Forehead / Temple'],
+        ['clinical/skin_cancer/eyelid', 'Eyelid'],
+        ['clinical/skin_cancer/nose', 'Nose'],
+        ['clinical/skin_cancer/lip', 'Lip'],
+        ['clinical/skin_cancer/ear', 'Ear'],
+        ['clinical/skin_cancer/subungual', 'Subungual'],
+        ['clinical/skin_cancer/mucosal', 'Mucosal'],
+        ['clinical/skin_cancer/fungating_massive', 'Fungating / Massive'],
+        ['clinical/skin_cancer/lymph_node_management', 'Lymph Node Management']
       ]
     },
-    'head-and-neck': {
-      title: 'Head & Neck',
+    'chronic-wounds': {
+      title: 'Chronic Wounds',
       topics: [
-        ['clinical/head_and_neck/facial_laceration', 'Facial Laceration'],
-        ['clinical/head_and_neck/facial_nerve_injury', 'Facial Nerve Injury'],
-        ['clinical/head_and_neck/nasal_fracture', 'Nasal Fracture'],
-        ['clinical/head_and_neck/orbital_fracture', 'Orbital Fracture']
+        ['clinical/chronic_wounds/abdominal_wound_dehiscence', 'Abdominal Wound Dehiscence'],
+        ['clinical/chronic_wounds/sternal_wound_dehiscence', 'Sternal Wound Dehiscence'],
+        ['clinical/chronic_wounds/pressure_ulcer', 'Pressure Ulcer']
       ]
     },
-    'congenital': {
-      title: 'Congenital',
+    'breast-and-aesthetic': {
+      title: 'Breast & Aesthetics',
       topics: [
-        ['clinical/congenital/cleft_lip', 'Cleft Lip'],
-        ['clinical/congenital/cleft_palate', 'Cleft Palate'],
-        ['clinical/congenital/syndactyly', 'Syndactyly'],
-        ['clinical/congenital/polydactyly', 'Polydactyly']
+        ['clinical/breast_and_aesthetic/breast_reduction', 'Breast Reduction'],
+        ['clinical/breast_and_aesthetic/breast_augmentation', 'Breast Augmentation'],
+        ['clinical/breast_and_aesthetic/mastopexy', 'Mastopexy'],
+        ['clinical/breast_and_aesthetic/breast_reconstruction', 'Breast Reconstruction (DIEP)'],
+        ['clinical/breast_and_aesthetic/pinnaplasty', 'Pinnaplasty'],
+        ['clinical/breast_and_aesthetic/rhinoplasty', 'Rhinoplasty'],
+        ['clinical/breast_and_aesthetic/blepharoplasty', 'Blepharoplasty'],
+        ['clinical/breast_and_aesthetic/abdominoplasty', 'Abdominoplasty'],
+        ['clinical/breast_and_aesthetic/gynaecomastia', 'Gynaecomastia']
       ]
     },
-    'microsurgery': {
-      title: 'Microsurgery',
+    'burns': {
+      title: 'Burns',
       topics: [
-        ['clinical/microsurgery/free_flap_principles', 'Free Flap Principles'],
-        ['clinical/microsurgery/flap_monitoring', 'Flap Monitoring'],
-        ['clinical/microsurgery/anastomosis_complications', 'Anastomosis Complications']
+        ['clinical/burns/flame_burn', 'Flame Burn'],
+        ['clinical/burns/electric_burn', 'Electric Burn'],
+        ['clinical/burns/chemical_burn', 'Chemical Burn'],
+        ['clinical/burns/paediatric_burn', 'Paediatric Burn'],
+        ['clinical/burns/tss', 'Toxic Shock Syndrome (TSS)']
       ]
     },
-    // ========== CALL THE BOSS HEADING ==========
+    'lower-limb-trauma': {
+      title: 'Lower Limb Trauma',
+      topics: [
+        ['clinical/lower_limb_trauma/pretibial_laceration', 'Pretibial Laceration / Hematoma'],
+        ['clinical/lower_limb_trauma/open_lower_limb_fracture', 'Open Lower Limb Fracture']
+      ]
+    },
+    'paediatrics': {
+      title: 'Paediatrics',
+      topics: [
+        ['clinical/paediatrics/cleft_lip', 'Cleft Lip'],
+        ['clinical/paediatrics/cleft_palate', 'Cleft Palate'],
+        ['clinical/paediatrics/hypospadias', 'Hypospadias'],
+        ['clinical/paediatrics/paediatric_hand_fracture', 'Paediatric Hand Fracture'],
+        ['clinical/paediatrics/tip_amputation_composite_graft', 'Tip Amputation / Composite Graft'],
+        ['clinical/paediatrics/prominent_ear', 'Prominent Ear']
+      ]
+    },
+    'miscellaneous': {
+      title: 'Miscellaneous',
+      topics: [
+        ['clinical/miscellaneous/compromised_flap', 'Compromised Flap'],
+        ['clinical/miscellaneous/facial_laceration', 'Facial Laceration'],
+        ['clinical/miscellaneous/extravasation_injury', 'Extravasation Injury'],
+        ['clinical/miscellaneous/distal_humerus_fracture', 'Distal Humerus Fracture with Vascular Compromise'],
+        ['clinical/miscellaneous/high_pressure_injection_injury', 'High Pressure Injection Injury']
+      ]
+    },
+    // ========== CALL THE BOSS (15 scenarios - flat list) ==========
     'call-the-boss-scenarios': {
       title: 'Call-The-Boss Scenarios',
       topics: [
-        ['call_the_boss/scenarios/major_burn', 'Major Burn'],
-        ['call_the_boss/scenarios/compromised_flap', 'Compromised Flap'],
+        ['call_the_boss/scenarios/revascularisation', 'Revascularisation'],
+        ['call_the_boss/scenarios/reimplantation', 'Reimplantation'],
+        ['call_the_boss/scenarios/extravasation_injury', 'Extravasation Injury'],
+        ['call_the_boss/scenarios/mangled_hand', 'Mangled Hand'],
+        ['call_the_boss/scenarios/high_pressure_injection_injury', 'High Pressure Injection Injury / Compartment Syndrome'],
+        ['call_the_boss/scenarios/flexor_sheath_infection', 'Flexor Sheath Infection'],
         ['call_the_boss/scenarios/necrotising_fasciitis', 'Necrotising Fasciitis'],
-        ['call_the_boss/scenarios/compartment_syndrome', 'Compartment Syndrome']
+        ['call_the_boss/scenarios/distal_humerus_vascular', 'Distal Humerus with Vascular Compromise'],
+        ['call_the_boss/scenarios/flame_burn', 'Flame Burn'],
+        ['call_the_boss/scenarios/electric_burn', 'Electric Burn'],
+        ['call_the_boss/scenarios/chemical_burn', 'Chemical Burn'],
+        ['call_the_boss/scenarios/paediatric_burn_tss', 'Paediatric Burn / TSS'],
+        ['call_the_boss/scenarios/open_leg_fracture', 'Open Leg Fracture + Vascular Compromise / Compartment Syndrome'],
+        ['call_the_boss/scenarios/facial_laceration', 'Facial Laceration'],
+        ['call_the_boss/scenarios/compromised_flap', 'Compromised Flap']
       ]
     },
-    // ========== CONSENT HEADING ==========
-    'consent-breast-and-aesthetic': {
-      title: 'Consent: Breast & Aesthetic',
+    // ========== CONSENT HEADING (7 subcategories) ==========
+    'consent-hand-trauma': {
+      title: 'Consent: Hand Trauma',
       topics: [
-        ['consent/breast_and_aesthetic/breast_reconstruction_consent', 'Breast Reconstruction'],
-        ['consent/breast_and_aesthetic/breast_reduction_consent', 'Breast Reduction'],
-        ['consent/breast_and_aesthetic/abdominoplasty_consent', 'Abdominoplasty']
+        ['consent/hand_trauma/flexor_tendon_repair', 'Flexor Tendon Repair'],
+        ['consent/hand_trauma/revasc', 'Revasc'],
+        ['consent/hand_trauma/reimplant', 'Reimplant'],
+        ['consent/hand_trauma/debridement_extravasation_hpii', 'Debridement of Extravasation / HPII'],
+        ['consent/hand_trauma/exploration_mangled_hand', 'Exploration of Mangled Hand'],
+        ['consent/hand_trauma/washout_kwires_open_fracture', 'Washout + K-wires of Open Fracture'],
+        ['consent/hand_trauma/fixation_paediatric_fracture', 'Fixation of Paediatric Fracture'],
+        ['consent/hand_trauma/orif_closed_fracture', 'ORIF of Closed Fracture'],
+        ['consent/hand_trauma/local_flap_fingertip', 'Local Flap to Fingertip Injury'],
+        ['consent/hand_trauma/composite_graft_tip', 'Composite Graft for Tip Amputation'],
+        ['consent/hand_trauma/nailbed_repair', 'Nailbed Repair'],
+        ['consent/hand_trauma/release_hand_compartments', 'Release of Hand Compartments'],
+        ['consent/hand_trauma/repair_fdp_avulsion', 'Repair of FDP Avulsion'],
+        ['consent/hand_trauma/repair_nerve_injury', 'Repair of Nerve Injury']
       ]
     },
-    'consent-hand-surgery': {
-      title: 'Consent: Hand Surgery',
+    'consent-elective-hand': {
+      title: 'Consent: Elective Hand',
       topics: [
+        ['consent/hand_surgery/dupuytrens_fasciectomy_consent', "Fasciectomy of Dupuytren's Disease"],
         ['consent/hand_surgery/carpal_tunnel_release_consent', 'Carpal Tunnel Release'],
-        ['consent/hand_surgery/trigger_finger_release_consent', 'Trigger Finger Release'],
-        ['consent/hand_surgery/dupuytrens_fasciectomy_consent', "Dupuytren's Fasciectomy"]
+        ['consent/elective_hand/trigger_finger_release', 'Release of Trigger Finger'],
+        ['consent/elective_hand/excision_finger_mass', 'Excision of Finger Mass'],
+        ['consent/elective_hand/washout_flexor_sheath', 'Washout of Flexor Sheath Infection'],
+        ['consent/elective_hand/debridement_nec_fasc', 'Debridement of Necrotising Fasciitis'],
+        ['consent/elective_hand/drainage_paronychia', 'Drainage of Paronychia'],
+        ['consent/elective_hand/washout_bite', 'Washout of Animal / Fight Bite'],
+        ['consent/elective_hand/drainage_hand_space_infection', 'Drainage of Hand Space Infection']
       ]
     },
-    'consent-skin-surgery': {
-      title: 'Consent: Skin Surgery',
+    'consent-burn': {
+      title: 'Consent: Burn',
       topics: [
-        ['consent/skin_surgery/excision_biopsy_consent', 'Excision Biopsy'],
-        ['consent/skin_surgery/wide_local_excision_consent', 'Wide Local Excision'],
-        ['consent/skin_surgery/skin_graft_consent', 'Skin Graft']
+        ['consent/burn/excision_grafting', 'Excision and Grafting of Burn'],
+        ['consent/burn/excision_btm_biobrane', 'Excision and BTM / Biobrane of Burn'],
+        ['consent/burn/versajet_epiprotect', 'Versajet and Epiprotect of Burn']
       ]
     },
-    'consent-emergency-procedures': {
-      title: 'Consent: Emergency Procedures',
+    'consent-lower-limb': {
+      title: 'Consent: Lower Limb',
       topics: [
-        ['consent/emergency_procedures/debridement_consent', 'Debridement'],
-        ['consent/emergency_procedures/escharotomy_consent', 'Escharotomy'],
-        ['consent/emergency_procedures/fasciotomy_consent', 'Fasciotomy']
+        ['consent/lower_limb/first_stage_excision_open_leg', 'First Stage Excision of Open Leg Fracture + Temporary Stabilisation'],
+        ['consent/lower_limb/fix_and_flap', 'Fix and Flap Open Leg Fracture'],
+        ['consent/lower_limb/debridement_pretibial_ssg', 'Debridement of Pretibial Laceration / Hematoma + SSG'],
+        ['consent/lower_limb/release_leg_compartments', 'Release of Leg Compartments']
       ]
     },
-    'consent-reconstructive': {
-      title: 'Consent: Reconstructive',
+    'consent-chronic-wounds': {
+      title: 'Consent: Chronic Wounds',
       topics: [
-        ['consent/reconstructive/free_flap_consent', 'Free Flap'],
-        ['consent/reconstructive/local_flap_consent', 'Local Flap']
+        ['consent/chronic_wounds/debridement_sternal_pec_major', 'Debridement of Sternal Wound + Reconstruction with Pec Major Flap'],
+        ['consent/chronic_wounds/debridement_sacral_vy_flap', 'Debridement of Sacral Pressure Sore + Reconstruction with V-Y Flap']
       ]
     },
-    // ========== STRUCTURED INTERVIEW HEADING ==========
+    'consent-skin-cancer': {
+      title: 'Consent: Skin Cancer',
+      topics: [
+        ['consent/skin_cancer/excision_ssg', 'Excision of Skin Lesion + SSG'],
+        ['consent/skin_cancer/excision_ftsg', 'Excision of Skin Lesion + FTSG'],
+        ['consent/skin_cancer/excision_local_flap', 'Excision of Skin Lesion + Local Flap'],
+        ['consent/skin_cancer/wle_slnb', 'WLE + SLNB'],
+        ['consent/skin_cancer/neck_dissection', 'Neck Dissection'],
+        ['consent/skin_cancer/axillary_dissection', 'Axillary Dissection'],
+        ['consent/skin_cancer/groin_dissection', 'Groin Dissection']
+      ]
+    },
+    'consent-breast-and-aesthetic': {
+      title: 'Consent: Breast & Aesthetics',
+      topics: [
+        ['consent/breast_and_aesthetic/breast_reduction_consent', 'Breast Reduction'],
+        ['consent/breast_and_aesthetic/breast_augmentation_consent', 'Breast Augmentation'],
+        ['consent/breast_and_aesthetic/mastopexy_consent', 'Mastopexy'],
+        ['consent/breast_and_aesthetic/breast_reconstruction_consent', 'Breast Recon (DIEP)'],
+        ['consent/breast_and_aesthetic/flap_salvage_consent', 'Flap Salvage'],
+        ['consent/breast_and_aesthetic/pinnaplasty_consent', 'Pinnaplasty'],
+        ['consent/breast_and_aesthetic/rhinoplasty_consent', 'Rhinoplasty'],
+        ['consent/breast_and_aesthetic/blepharoplasty_consent', 'Blepharoplasty'],
+        ['consent/breast_and_aesthetic/abdominoplasty_consent', 'Abdominoplasty'],
+        ['consent/breast_and_aesthetic/liposuction_consent', 'Liposuction'],
+        ['consent/breast_and_aesthetic/liposuction_disc_excision_consent', 'Liposuction + Disc Excision (Gynaecomastia)']
+      ]
+    },
+    // ========== STRUCTURED INTERVIEW HEADING (8 subcategories) ==========
     'structured-audit': {
       title: 'Audit',
       topics: [
-        ['structured_interview/audit/focused_interview', 'Focused Interview'],
-        ['structured_interview/audit/audit_cycle', 'Audit Cycle'],
-        ['structured_interview/audit/quality_improvement', 'Quality Improvement']
-      ]
-    },
-    'structured-clinical-governance': {
-      title: 'Clinical Governance',
-      topics: [
-        ['structured_interview/clinical_governance/clinical_governance_principles', 'Clinical Governance Principles'],
-        ['structured_interview/clinical_governance/morbidity_mortality', 'Morbidity & Mortality']
-      ]
-    },
-    'structured-complaints': {
-      title: 'Complaints',
-      topics: [
-        ['structured_interview/complaints/handling_complaints', 'Handling Complaints'],
-        ['structured_interview/complaints/duty_of_candour', 'Duty of Candour']
-      ]
-    },
-    'structured-consent-ethics': {
-      title: 'Consent & Ethics',
-      topics: [
-        ['structured_interview/consent_ethics/consent_principles', 'Consent Principles'],
-        ['structured_interview/consent_ethics/capacity_assessment', 'Capacity Assessment']
-      ]
-    },
-    'structured-ethics': {
-      title: 'Ethics',
-      topics: [
-        ['structured_interview/ethics/ethical_dilemmas', 'Ethical Dilemmas'],
-        ['structured_interview/ethics/confidentiality', 'Confidentiality']
+        ['structured_interview/audit/focused_interview', 'Audit Interview']
       ]
     },
     'structured-research': {
       title: 'Research',
       topics: [
-        ['structured_interview/research/research_methodology', 'Research Methodology'],
-        ['structured_interview/research/evidence_based_medicine', 'Evidence Based Medicine']
-      ]
-    },
-    'structured-risk-management': {
-      title: 'Risk Management',
-      topics: [
-        ['structured_interview/risk_management/risk_assessment', 'Risk Assessment'],
-        ['structured_interview/risk_management/patient_safety', 'Patient Safety']
+        ['structured_interview/research/research_interview', 'Research Interview']
       ]
     },
     'structured-teaching': {
       title: 'Teaching',
       topics: [
-        ['structured_interview/teaching/teaching_principles', 'Teaching Principles'],
-        ['structured_interview/teaching/feedback_methods', 'Feedback Methods']
+        ['structured_interview/teaching/teaching_interview', 'Teaching Interview']
+      ]
+    },
+    'structured-risk-and-safety': {
+      title: 'Risk & Safety',
+      topics: [
+        ['structured_interview/risk_and_safety/risk_safety_interview', 'Risk & Safety Interview']
+      ]
+    },
+    'structured-leadership': {
+      title: 'Leadership & Management',
+      topics: [
+        ['structured_interview/leadership/leadership_interview', 'Leadership & Management Interview']
+      ]
+    },
+    'structured-consent': {
+      title: 'Consent',
+      topics: [
+        ['structured_interview/consent/consent_interview', 'Consent Interview']
+      ]
+    },
+    'structured-ethics': {
+      title: 'Ethics',
+      topics: [
+        ['structured_interview/ethics/ethics_interview', 'Ethics Interview']
+      ]
+    },
+    'structured-misc': {
+      title: 'Misc',
+      topics: [
+        ['structured_interview/misc/misc_interview', 'Miscellaneous Interview']
       ]
     }
   };
@@ -375,14 +462,40 @@ function populateTopicCards(subcategoryId) {
     const difficultyClass = topic.difficulty ? `difficulty-badge--${topic.difficulty}` : '';
     const difficultyLabel = topic.difficulty ? topic.difficulty.charAt(0).toUpperCase() + topic.difficulty.slice(1) : '';
 
+    // Build prompt file path to check access (same logic as selectScenario)
+    const folderName = topic.file.split('/').pop();
+    const heading = topic.file.split('/')[0];
+    const promptFile = `prompts/${topic.file}/${topic.difficulty || 'easy'}_${heading}_${folderName}_1.txt`;
+
+    // Check if user has access to this scenario
+    const isLocked = !canAccessScenario(promptFile);
+    const lockedClass = isLocked ? 'locked' : '';
+    const lockBadge = isLocked ? `
+      <div class="lock-badge" title="Premium subscription required">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+      </div>` : '';
+
+    const onclickAction = isLocked
+      ? `showLockedScenarioMessage()`
+      : `selectScenarioFromCard('${topic.file}', '${topic.name.replace(/'/g, "\\'")}')`;
+
     return `
-      <article class="scenario-card topic-card" data-scenario="${topic.file}" onclick="selectScenarioFromCard('${topic.file}', '${topic.name.replace(/'/g, "\\'")}')">
+      <article class="scenario-card topic-card ${lockedClass}" data-scenario="${topic.file}" onclick="${onclickAction}">
+        ${lockBadge}
         ${difficultyLabel ? `<span class="difficulty-badge ${difficultyClass}">${difficultyLabel}</span>` : ''}
         <h3 class="card-title">${topic.name}</h3>
         ${topic.description ? `<p class="card-description">${topic.description}</p>` : ''}
       </article>
     `;
   }).join('');
+}
+
+// Show message when clicking a locked scenario
+function showLockedScenarioMessage() {
+  alert('This scenario requires a Premium subscription.\n\nUpgrade to access all scenarios and features.');
 }
 
 // Select a scenario from card and start it

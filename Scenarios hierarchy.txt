@@ -1,0 +1,168 @@
+Clinical:
+●	Infections
+o	Necrotising Fasciitis
+o	Flexor sheath infections
+o	Hand space infections
+o	Animal bites
+o	Fight bites
+o	Paronychia
+●	Hand trauma
+o	Flexor tendon injury
+o	Revascularisation
+o	Reimplantation
+o	Extensor tendon injury
+o	Mangled hand
+o	FDP avulsion
+o	Nailbed injury/Seymour fracture
+o	Fingertip injury
+o	Open hand fractures
+o	Closed hand fractures
+o	Complex Regional Pain Syndrome (CRPS)
+●	Elective hand
+o	Compressive neuropathies
+o	Dupuytren’s disease
+o	Trigger finger
+o	Finger mass
+o	Finger deformity
+o	Nerve palsies
+●	Skin cancer
+o	BCC
+o	SCC
+o	MM
+o	Scalp
+o	Forehead / Temple
+o	Eyelid
+o	Nose
+o	Lip
+o	Ear
+o	Subungual
+o	Mucosal
+o	Fungating / Massive
+o	Lymph Node Management
+●	Chronic wounds
+o	Abdominal wound dehiscence
+o	Sternal wound dehiscence
+o	Pressure ulcer
+●	Breast and Aesthetics
+o	Breast reduction
+o	Breast augmentation
+o	Mastopexy
+o	Breast reconstruction (DIEP)
+o	Pinnaplasty
+o	Rhinoplasty
+o	Blepheroplasty
+o	Abdominoplasty
+o	Gynaecomastia
+●	Burns
+o	Flame burn
+o	Electric burn
+o	Chemical burn
+o	Paediatric burn
+o	Toxic Shock Syndrome (TSS)
+●	Lower limb trauma
+o	Pretibial laceration/hematoma
+o	Open Lower limb fracture
+●	Paediatrics
+o	Cleft lip
+o	Cleft palate
+o	Hypospadius
+o	Paediatric hand fracture
+o	Tip amputation / Composite graft
+o	Prominent ear
+●	Miscellaneous 
+o	Compromised flap
+o	Facial laceration
+o	Extravasation injury
+o	Distal humerus fracture with vascular compromise
+o	High pressure injection injury
+
+
+Call the boss
+●	Revascularisation
+●	Reimplantation
+●	Extravasation injury
+●	Mangled Hand
+●	High pressure injection injury / compartment syndrome
+●	Flexor sheath infection
+●	Necrotising Fasciitis
+●	Distal humerus with vascular compromise
+●	Flame burn
+●	Electric burn
+●	Chemical burn
+●	Paediatric burn / TSS
+●	Open leg fracture + vascular compromise/compartment syndrome
+●	Facial laceration
+●	Compromised flap
+
+
+
+Consent
+Hand Trauma
+●	Flexor tendon repair
+●	Revasc
+●	Reimplant
+●	Debridement of extravasation injury/high pressure injection injury
+●	Exploration of mangled hand
+●	Washout + k-wires of open hand fracture
+●	Fixation of paediatric fracture
+●	ORIF of closed fracture
+●	Local flap to fingertip injury
+●	Composite graft for tip amputation
+●	Nailbed repair
+●	Release of hand compartments
+●	Repair of FDP avulsion
+●	Repair of nerve injury
+Elective hand
+●	Fasciectomy of Dupuytren’s disease
+●	Carpal tunnel release
+●	Release of trigger finger
+●	Excision of finger mass
+●	Washout of flexor sheath infection
+●	Debridement of necrotising fasciitis
+●	Drainage of paronychia
+●	Washout and debridement of animal bite/fight bite
+●	Drainage of hand space infection
+Burn
+●	Excision and grafting of burn
+●	Excision and BTM/biobrane of burn
+●	Versajet and epiprotect of burn
+Lower Limb
+●	First stage excision of open leg fracture + temporary stabilisation
+●	Fix and flap open leg fracture
+●	Debridement of pretibial laceration/hematoma + SSG
+●	Release of leg compartments
+Chronic wounds
+●	Debridement of sternal wound + reconstruction with pec major flap
+●	Debridement of sacral pressure sore + reconstruction with V-Y flap
+Skin cancer
+●	Excision of skin lesion + SSG
+●	Excision of skin lesion + FTSG
+●	Excision of skin lesion + local flap (scalp, forehead, eye, nose, ear, cheek,lip)
+●	WLE + SLNB
+●	Neck dissection
+●	Axillary dissection
+●	Groin dissection
+Breast and Aesthetics
+●	Breast reduction
+●	Breast augmentation
+●	Mastopexy
+●	Breast recon (DIEP)
+●	Flap salvage
+●	Pinnaplasty
+●	Rhinoplasty
+●	Blepheroplasty
+●	Abdominoplasty
+●	Liposuction
+●	Liposuction and disc excision (gynecomastia)
+
+
+Structured interview
+
+Audit
+Research
+Teaching
+Risk and safety
+Leadership and mangement
+Consent
+Ethics
+Misc
