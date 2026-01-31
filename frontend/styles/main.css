@@ -177,6 +177,11 @@ button {
   border: 0;
 }
 
+/* Utility class for hiding elements */
+.d-none {
+  display: none !important;
+}
+
 body {
   font-family: var(--font-body);
   background: var(--bg-light);
@@ -704,8 +709,13 @@ body.has-header .scenario-selection-layout {
 }
 
 @keyframes room-fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 /* Adjust simulation room when header is visible */
@@ -774,7 +784,8 @@ body.has-header .simulation-room.active {
   max-width: 1600px;
   margin: 0 auto;
   min-height: 0;
-  height: calc(100vh - 80px); /* Account for header */
+  height: calc(100vh - 80px);
+  /* Account for header */
   box-sizing: border-box;
 }
 
@@ -801,6 +812,7 @@ body.has-header .simulation-room.active {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -813,8 +825,15 @@ body.has-header .simulation-room.active {
 }
 
 @keyframes persona-breathe {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.003); }
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.003);
+  }
 }
 
 /* Persona responds to AI state */
@@ -841,7 +860,7 @@ body.has-header .simulation-room.active {
   left: 0;
   right: 0;
   padding: 20px 24px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0) 100%);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0) 100%);
   z-index: 5;
 }
 
@@ -887,6 +906,7 @@ body.has-header .simulation-room.active {
     opacity: 0;
     transform: translateX(-50%) translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
@@ -958,8 +978,15 @@ body.has-header .simulation-room.active {
 }
 
 @keyframes record-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
-  50% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+  }
+
+  50% {
+    box-shadow: 0 0 0 8px rgba(239, 68, 68, 0);
+  }
 }
 
 /* Danger button (disconnect) */
@@ -980,7 +1007,7 @@ body.has-header .simulation-room.active {
   left: 0;
   right: 0;
   padding: 16px 24px 24px;
-  background: linear-gradient(transparent, rgba(255,255,255,0.9));
+  background: linear-gradient(transparent, rgba(255, 255, 255, 0.9));
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1572,11 +1599,9 @@ body.has-header .simulation-room.active {
   height: 120px;
   border-radius: 50%;
   /* Glass morphism with teal tint for light theme */
-  background: radial-gradient(
-    circle at 30% 30%,
-    rgba(255, 255, 255, 0.9),
-    rgba(13, 148, 136, 0.15)
-  );
+  background: radial-gradient(circle at 30% 30%,
+      rgba(255, 255, 255, 0.9),
+      rgba(13, 148, 136, 0.15));
   -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
   border: none;
@@ -1631,13 +1656,16 @@ body.has-header .simulation-room.active {
 }
 
 @keyframes orb-breathe {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: scale(1);
     box-shadow:
       inset 0 0 30px rgba(13, 148, 136, 0.1),
       0 8px 32px rgba(0, 0, 0, 0.1),
       0 0 0 1px rgba(255, 255, 255, 0.5) inset;
   }
+
   50% {
     transform: scale(1.03);
     box-shadow:
@@ -1664,6 +1692,7 @@ body.has-header .simulation-room.active {
     transform: scale(1);
     opacity: 0.5;
   }
+
   100% {
     transform: scale(1.8);
     opacity: 0;
@@ -1685,14 +1714,22 @@ body.has-header .simulation-room.active {
 }
 
 @keyframes thinking-spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes thinking-bounce {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0) scale(1);
   }
+
   50% {
     transform: translateY(-8px) scale(1.03);
   }
@@ -1712,8 +1749,15 @@ body.has-header .simulation-room.active {
 }
 
 @keyframes speaking-scale {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.06); }
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.06);
+  }
 }
 
 @keyframes speaking-pulse {
@@ -1721,6 +1765,7 @@ body.has-header .simulation-room.active {
     transform: scale(1);
     opacity: 0.6;
   }
+
   100% {
     transform: scale(2);
     opacity: 0;
@@ -4121,8 +4166,15 @@ a.nav-link:hover {
 }
 
 @keyframes gradientShift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 /* Parallax floating decorative elements */
@@ -4537,7 +4589,7 @@ button.btn-secondary:active {
   direction: rtl;
 }
 
-.feature-block__inner--reversed > * {
+.feature-block__inner--reversed>* {
   direction: ltr;
 }
 
@@ -4664,6 +4716,7 @@ button.btn-secondary:active {
     opacity: 0;
     transform: translateY(24px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -5010,6 +5063,7 @@ button.btn-secondary:active {
 
 /* Responsive Scenario Cards */
 @media (max-width: 900px) {
+
   .scenario-cards-grid,
   .scenario-cards-grid--compact {
     grid-template-columns: 1fr;
