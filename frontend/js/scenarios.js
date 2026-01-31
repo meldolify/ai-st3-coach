@@ -1585,7 +1585,9 @@ function syncMobileButtonStates() {
   const mobileInterruptBtn = document.getElementById('mobileInterruptBtn');
   if (interruptBtn && mobileInterruptBtn) {
     mobileInterruptBtn.disabled = interruptBtn.disabled;
-    mobileInterruptBtn.style.display = interruptBtn.style.display;
+    // Mobile interrupt button should always be visible (just disabled when not active)
+    // Unlike desktop where it's hidden when not needed
+    mobileInterruptBtn.style.display = 'flex';
   }
 
   const disconnectBtn = document.getElementById('disconnectBtn');

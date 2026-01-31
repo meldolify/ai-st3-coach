@@ -470,7 +470,18 @@ async function populateProfilePage() {
 }
 
 function hideAllPages() {
-  const pages = ['landingPage', 'authPage', 'profilePage', 'specialtySelection', 'difficultySelection', 'scenarioSelection', 'simulationRoom'];
+  const pages = [
+    'landingPage',
+    'authPage',
+    'profilePage',
+    'specialtySelection',
+    'difficultySelection',
+    'modeSelection',
+    'mockTypeSelection',
+    'stationTypeSelection',
+    'scenarioSelection',
+    'simulationRoom'
+  ];
   pages.forEach(id => {
     const el = document.getElementById(id);
     if (el) {
