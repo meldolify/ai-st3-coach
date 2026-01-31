@@ -1,16 +1,16 @@
 // ============================================================================
-// ORB-VISUALIZER.JS - Audio-Reactive Voice Orb with Web Audio API
+// ORB-VISUALIZER.JS - Audio-Reactive Voice Orb with SVG Arc Equalizer
 // ============================================================================
-// Provides real-time audio visualization for the voice orb using frequency analysis.
-// Creates 32 radial waveform bars that respond to AI speech audio.
+// Provides real-time audio visualization using 16 curved arc segments.
+// Creates a polished equalizer effect around the orb perimeter.
 // ============================================================================
 
 class OrbVisualizer {
   constructor() {
     this.orb = null;
     this.mobileOrb = null;
-    this.bars = [];
-    this.mobileBars = [];
+    this.arcs = [];
+    this.mobileArcs = [];
     this.audioContext = null;
     this.analyser = null;
     this.isActive = false;
@@ -18,6 +18,17 @@ class OrbVisualizer {
     this.shimmerAnimationId = null;
     this.visualizationAnimationId = null;
     this.currentSource = null;
+
+    // Arc configuration
+    this.config = {
+      segmentCount: 16,
+      gapDegrees: 8,
+      innerRadius: 38,
+      minOuterRadius: 44,
+      maxOuterRadius: 62,
+      centerX: 70,
+      centerY: 70
+    };
 
     // Callbacks (mirror AudioPlayer interface)
     this.onStart = null;
@@ -29,7 +40,7 @@ class OrbVisualizer {
 
   /**
    * Initialize the visualizer - must be called after user gesture (click/tap)
-   * Creates AudioContext and builds waveform bars inside orb elements
+   * Creates AudioContext and builds SVG arc segments inside orb elements
    */
   async init() {
     // Get orb elements
@@ -47,21 +58,21 @@ class OrbVisualizer {
 
       // Create analyser node for frequency data
       this.analyser = this.audioContext.createAnalyser();
-      this.analyser.fftSize = 64; // 32 frequency bins
-      this.analyser.smoothingTimeConstant = 0.75; // Smooth transitions
-      this.analyser.minDecibels = -90;
+      this.analyser.fftSize = 64; // 32 frequency bins (we use first 16)
+      this.analyser.smoothingTimeConstant = 0.75;
+      this.analyser.minDecibels = -85;
       this.analyser.maxDecibels = -10;
 
-      // Build waveform bars
-      this.createWaveformBars(this.orb, this.bars);
+      // Build SVG arc equalizers
+      this.createArcEqualizer(this.orb, this.arcs);
       if (this.mobileOrb) {
-        this.createWaveformBars(this.mobileOrb, this.mobileBars);
+        this.createArcEqualizer(this.mobileOrb, this.mobileArcs);
       }
 
       // Start idle shimmer
       this.startIdleShimmer();
 
-      console.log('[OrbVisualizer] Initialized successfully');
+      console.log('[OrbVisualizer] Initialized with arc equalizer');
     } catch (error) {
       console.error('[OrbVisualizer] Failed to initialize AudioContext:', error);
       throw error;
@@ -69,36 +80,100 @@ class OrbVisualizer {
   }
 
   /**
-   * Create 32 radial waveform bars inside an orb element
+   * Create SVG arc equalizer inside an orb element
    */
-  createWaveformBars(orbElement, barsArray) {
-    // Remove existing waveform container if present
-    const existing = orbElement.querySelector('.orb-waveform');
+  createArcEqualizer(orbElement, arcsArray) {
+    // Remove existing equalizer if present
+    const existing = orbElement.querySelector('.orb-equalizer');
     if (existing) {
       existing.remove();
     }
 
-    // Create container
-    const container = document.createElement('div');
-    container.className = 'orb-waveform';
+    const { segmentCount, gapDegrees, innerRadius, minOuterRadius, centerX, centerY } = this.config;
+    const segmentDegrees = (360 / segmentCount) - gapDegrees;
 
-    // Create 32 bars arranged radially
-    const barCount = 32;
-    for (let i = 0; i < barCount; i++) {
-      const bar = document.createElement('div');
-      bar.className = 'orb-waveform-bar';
-      // Rotate each bar to form a circle (360 / 32 = 11.25 degrees)
-      bar.style.setProperty('--rotation', `${i * 11.25}deg`);
-      container.appendChild(bar);
-      barsArray.push(bar);
+    // Create SVG element
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('class', 'orb-equalizer');
+    svg.setAttribute('viewBox', '0 0 140 140');
+
+    // Create group for arcs
+    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    g.setAttribute('class', 'equalizer-arcs');
+
+    // Create 16 arc segments
+    for (let i = 0; i < segmentCount; i++) {
+      const startAngle = (i * (360 / segmentCount)) - 90; // Start from top
+      const endAngle = startAngle + segmentDegrees;
+
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('class', 'equalizer-arc');
+      path.dataset.index = i;
+
+      // Create arc data object
+      const arcData = {
+        path,
+        startAngle,
+        endAngle,
+        currentOuterRadius: minOuterRadius
+      };
+
+      // Set initial arc path
+      this.updateArcPath(arcData, minOuterRadius);
+
+      g.appendChild(path);
+      arcsArray.push(arcData);
     }
 
-    orbElement.appendChild(container);
+    svg.appendChild(g);
+    orbElement.appendChild(svg);
+  }
+
+  /**
+   * Update an arc path with new outer radius
+   */
+  updateArcPath(arcData, outerRadius) {
+    const { innerRadius, centerX, centerY } = this.config;
+    const { path, startAngle, endAngle } = arcData;
+
+    const startRad = (startAngle * Math.PI) / 180;
+    const endRad = (endAngle * Math.PI) / 180;
+
+    // Calculate points
+    const innerStart = {
+      x: centerX + innerRadius * Math.cos(startRad),
+      y: centerY + innerRadius * Math.sin(startRad)
+    };
+    const innerEnd = {
+      x: centerX + innerRadius * Math.cos(endRad),
+      y: centerY + innerRadius * Math.sin(endRad)
+    };
+    const outerStart = {
+      x: centerX + outerRadius * Math.cos(startRad),
+      y: centerY + outerRadius * Math.sin(startRad)
+    };
+    const outerEnd = {
+      x: centerX + outerRadius * Math.cos(endRad),
+      y: centerY + outerRadius * Math.sin(endRad)
+    };
+
+    const largeArc = (endAngle - startAngle) > 180 ? 1 : 0;
+
+    // Build path: inner arc → line to outer → outer arc (reverse) → close
+    const d = [
+      `M ${innerStart.x.toFixed(2)} ${innerStart.y.toFixed(2)}`,
+      `A ${innerRadius} ${innerRadius} 0 ${largeArc} 1 ${innerEnd.x.toFixed(2)} ${innerEnd.y.toFixed(2)}`,
+      `L ${outerEnd.x.toFixed(2)} ${outerEnd.y.toFixed(2)}`,
+      `A ${outerRadius} ${outerRadius} 0 ${largeArc} 0 ${outerStart.x.toFixed(2)} ${outerStart.y.toFixed(2)}`,
+      'Z'
+    ].join(' ');
+
+    path.setAttribute('d', d);
+    arcData.currentOuterRadius = outerRadius;
   }
 
   /**
    * Play base64-encoded audio with real-time visualization
-   * This replaces the standard AudioPlayer.playBase64Audio method
    */
   async playWithVisualization(base64Audio) {
     // Stop any idle shimmer
@@ -160,7 +235,7 @@ class OrbVisualizer {
           console.warn('[OrbVisualizer] Playback timeout - forcing end state');
           this.handlePlaybackEnd();
         }
-      }, durationMs + 5000); // 5 second buffer
+      }, durationMs + 5000);
 
       // Handle natural playback end
       source.onended = () => {
@@ -190,8 +265,8 @@ class OrbVisualizer {
       this.visualizationAnimationId = null;
     }
 
-    // Reset bars and start shimmer
-    this.resetBars();
+    // Reset arcs and start shimmer
+    this.resetArcs();
     this.startIdleShimmer();
 
     // Trigger callback
@@ -208,44 +283,54 @@ class OrbVisualizer {
     const dataArray = new Uint8Array(this.analyser.frequencyBinCount);
     this.analyser.getByteFrequencyData(dataArray);
 
-    // Update bar heights based on frequency data
-    this.updateBars(this.bars, dataArray);
-    this.updateBars(this.mobileBars, dataArray);
+    // Update arc sizes based on frequency data
+    this.updateArcs(this.arcs, dataArray);
+    this.updateArcs(this.mobileArcs, dataArray);
 
     // Continue loop
     this.visualizationAnimationId = requestAnimationFrame(() => this.animateVisualization());
   }
 
   /**
-   * Update bar heights from frequency data
+   * Update arc outer radii from frequency data
    */
-  updateBars(barsArray, dataArray) {
-    if (!barsArray || barsArray.length === 0) return;
+  updateArcs(arcsArray, dataArray) {
+    if (!arcsArray || arcsArray.length === 0) return;
 
-    barsArray.forEach((bar, i) => {
-      // Map frequency bin to bar (32 bars, 32 bins)
+    const { minOuterRadius, maxOuterRadius } = this.config;
+    const radiusRange = maxOuterRadius - minOuterRadius;
+
+    arcsArray.forEach((arc, i) => {
+      // Map frequency bin to arc (use first 16 bins)
       const value = dataArray[i] / 255; // Normalize 0-1
 
-      // Scale: 4px min, 28px max with some easing
-      const easedValue = Math.pow(value, 0.8); // Slight compression for smoother look
-      const height = 4 + easedValue * 24;
+      // Apply easing for smoother visual
+      const easedValue = Math.pow(value, 0.7);
 
-      bar.style.setProperty('--bar-height', `${height}px`);
+      // Calculate new outer radius
+      const targetRadius = minOuterRadius + easedValue * radiusRange;
+
+      // Smooth transition (lerp towards target)
+      const smoothRadius = arc.currentOuterRadius + (targetRadius - arc.currentOuterRadius) * 0.3;
+
+      this.updateArcPath(arc, smoothRadius);
     });
   }
 
   /**
-   * Reset all bars to minimum height
+   * Reset all arcs to minimum size
    */
-  resetBars() {
-    [...this.bars, ...this.mobileBars].forEach(bar => {
-      bar.style.setProperty('--bar-height', '4px');
+  resetArcs() {
+    const { minOuterRadius } = this.config;
+
+    [...this.arcs, ...this.mobileArcs].forEach(arc => {
+      this.updateArcPath(arc, minOuterRadius);
     });
   }
 
   /**
    * Start subtle idle shimmer animation
-   * Bars gently oscillate to show the orb is "alive"
+   * Arcs gently oscillate to show the orb is "alive"
    */
   startIdleShimmer() {
     if (this.isShimmering || this.isActive) return;
@@ -265,19 +350,22 @@ class OrbVisualizer {
   }
 
   /**
-   * Shimmer animation loop
+   * Shimmer animation loop - gentle wave effect
    */
   shimmerLoop() {
     if (!this.isShimmering || this.isActive) return;
 
     const time = Date.now() / 1000;
+    const { minOuterRadius } = this.config;
 
-    [...this.bars, ...this.mobileBars].forEach((bar, i) => {
-      // Each bar has unique phase offset for organic wave effect
-      const phase = (time * 0.8 + i * 0.15) % (Math.PI * 2);
-      const value = 0.5 + Math.sin(phase) * 0.3; // Oscillate 0.2-0.8
-      const height = 4 + value * 6; // 4-10px range (subtle)
-      bar.style.setProperty('--bar-height', `${height}px`);
+    [...this.arcs, ...this.mobileArcs].forEach((arc, i) => {
+      // Each arc has unique phase offset for wave effect
+      const phase = (time * 0.6 + i * 0.25) % (Math.PI * 2);
+      const wave = 0.5 + Math.sin(phase) * 0.5; // Oscillate 0-1
+
+      // Subtle radius change (44 to 50px)
+      const shimmerRadius = minOuterRadius + wave * 6;
+      this.updateArcPath(arc, shimmerRadius);
     });
 
     this.shimmerAnimationId = requestAnimationFrame(() => this.shimmerLoop());
@@ -307,7 +395,7 @@ class OrbVisualizer {
     }
 
     this.isActive = false;
-    this.resetBars();
+    this.resetArcs();
     this.startIdleShimmer();
   }
 
@@ -322,5 +410,4 @@ class OrbVisualizer {
 // ============================================================================
 // GLOBAL INSTANCE
 // ============================================================================
-// Create singleton instance for use across the application
 window.orbVisualizer = new OrbVisualizer();
