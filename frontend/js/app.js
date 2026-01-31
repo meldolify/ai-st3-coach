@@ -372,6 +372,23 @@ window.addEventListener('DOMContentLoaded', async () => {
   // Initialize scroll animations (Squarespace-style)
   initScrollAnimations();
 
+  // ============================================================================
+  // MOBILE KEYBOARD VISIBILITY DETECTION
+  // ============================================================================
+  // Detects when mobile keyboard opens and adjusts auth modal positioning
+  if ('visualViewport' in window) {
+    window.visualViewport.addEventListener('resize', () => {
+      const authPage = document.getElementById('authPage');
+      if (authPage && authPage.classList.contains('active')) {
+        const viewportHeight = window.visualViewport.height;
+        const windowHeight = window.innerHeight;
+        const isKeyboardOpen = viewportHeight < windowHeight * 0.75;
+        authPage.classList.toggle('keyboard-visible', isKeyboardOpen);
+      }
+    });
+    console.log('[MOBILE] Keyboard visibility detection initialized');
+  }
+
   try {
     // Initialize Supabase and check auth state
     // Loading overlay is shown by default - will be hidden after auth resolves

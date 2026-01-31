@@ -717,15 +717,42 @@
         6px 6px 14px var(--neu-dark);
     }
 
+    /* ===== MOBILE ORB OPTIMIZATION ===== */
+    @media (max-width: 1023px) {
+      .voice-orb {
+        will-change: transform, box-shadow;
+      }
+
+      /* Slower animations for better battery life on mobile */
+      .voice-orb.idle {
+        animation-duration: 5s;
+      }
+
+      .voice-orb.listening {
+        animation-duration: 2.5s;
+      }
+
+      /* Reduce outer ring complexity on mobile */
+      .voice-orb .orb-outer-ring {
+        animation-duration: 2.5s;
+      }
+    }
+
     /* ===== REDUCED MOTION ===== */
     @media (prefers-reduced-motion: reduce) {
 
       .voice-orb,
       .voice-orb::before,
+      .orb-outer-ring,
       .control-btn,
       .ai-status-bubble {
         animation: none !important;
         transition: none !important;
+      }
+
+      /* Static fallback for orb */
+      .voice-orb .orb-outer-ring {
+        opacity: 0.3;
       }
     }
   </style>
