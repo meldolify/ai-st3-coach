@@ -34,13 +34,25 @@ function transitionToPage(fromPageId, toPageId, callback) {
   // Pages that should show the app footer
   const pagesWithFooter = ['simulationRoom', 'scenarioSelection'];
 
+  // All navigable pages - ensure only one is visible at a time
+  const allPages = [
+    'landingPage', 'authPage', 'profilePage', 'specialtySelection',
+    'difficultySelection', 'modeSelection', 'mockTypeSelection',
+    'stationTypeSelection', 'scenarioSelection', 'simulationRoom'
+  ];
+
   // Fade out current page
   fromPage.classList.add('fade-out');
 
   setTimeout(() => {
-    // Hide current page
-    fromPage.style.display = 'none';
-    fromPage.classList.remove('fade-out');
+    // Hide ALL pages first to prevent stacking issues
+    allPages.forEach(pageId => {
+      const page = document.getElementById(pageId);
+      if (page && pageId !== toPageId) {
+        page.style.display = 'none';
+        page.classList.remove('fade-out', 'fade-in', 'active');
+      }
+    });
 
     // Show new page - must set inline style to override hideAllPages()
     // (inline styles have higher specificity than CSS classes)

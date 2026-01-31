@@ -46,10 +46,17 @@ let currentPersona = PERSONA_CONFIG.medium;
 function setPersona(difficulty) {
   currentPersona = PERSONA_CONFIG[difficulty] || PERSONA_CONFIG.medium;
 
+  // Desktop persona elements
   const nameEl = document.getElementById('personaName');
   const titleEl = document.getElementById('personaTitle');
   const imageEl = document.getElementById('personaImage');
 
+  // Mobile persona elements
+  const mobileNameEl = document.getElementById('mobilePersonaName');
+  const mobileTitleEl = document.getElementById('mobilePersonaTitle');
+  const mobileImageEl = document.getElementById('mobilePersonaImage');
+
+  // Update desktop elements
   if (nameEl) nameEl.textContent = currentPersona.name;
   if (titleEl) titleEl.textContent = currentPersona.title;
   if (imageEl) {
@@ -59,6 +66,17 @@ function setPersona(difficulty) {
       imageEl.src = currentPersona.fallbackImage || PERSONA_DEFAULT_IMAGE;
     };
     imageEl.src = currentPersona.image;
+  }
+
+  // Update mobile elements
+  if (mobileNameEl) mobileNameEl.textContent = currentPersona.name;
+  if (mobileTitleEl) mobileTitleEl.textContent = currentPersona.title;
+  if (mobileImageEl) {
+    mobileImageEl.onerror = () => {
+      mobileImageEl.onerror = null;
+      mobileImageEl.src = currentPersona.fallbackImage || PERSONA_DEFAULT_IMAGE;
+    };
+    mobileImageEl.src = currentPersona.image;
   }
 
   console.log('[Persona] Set to:', currentPersona.name);
@@ -98,19 +116,20 @@ const transcript = {
 
   render() {
     const container = document.getElementById('transcriptMessages');
-    if (!container) return;
+    const mobileContainer = document.getElementById('mobileTranscriptMessages');
+
+    const emptyHtml = '<div class="transcript-empty">Conversation will appear here...</div>';
 
     if (this.messages.length === 0) {
-      container.innerHTML = `
-        <div class="transcript-empty">
-          Conversation will appear here...
-        </div>`;
+      if (container) container.innerHTML = emptyHtml;
+      if (mobileContainer) mobileContainer.innerHTML = emptyHtml;
       return;
     }
 
     const personaName = getPersonaName();
 
-    container.innerHTML = this.messages.map(msg => `
+    // Desktop transcript (full version with headers) - escapeHtml sanitizes user input
+    const desktopHtml = this.messages.map(msg => `
       <div class="transcript-message ${msg.role === 'user' ? 'message-user' : 'message-ai'}">
         <div class="message-header">
           <span class="message-role">${msg.role === 'user' ? 'You' : personaName}</span>
@@ -120,8 +139,20 @@ const transcript = {
       </div>
     `).join('');
 
-    // Auto-scroll to bottom
-    container.scrollTop = container.scrollHeight;
+    // Mobile transcript (compact version) - escapeHtml sanitizes user input
+    const mobileHtml = this.messages.map(msg => `
+      <div class="message ${msg.role}">${escapeHtml(msg.text)}</div>
+    `).join('');
+
+    if (container) {
+      container.innerHTML = desktopHtml;
+      container.scrollTop = container.scrollHeight;
+    }
+
+    if (mobileContainer) {
+      mobileContainer.innerHTML = mobileHtml;
+      mobileContainer.scrollTop = mobileContainer.scrollHeight;
+    }
   }
 };
 
