@@ -4231,7 +4231,7 @@ a.nav-link:hover {
 }
 
 .infinity-path--bg {
-  animation: infinityDraw 3s ease-in-out infinite;
+  animation: infinityDraw 6s ease-in-out infinite;
 }
 
 /* Floating dot on infinity path */
@@ -4249,19 +4249,19 @@ a.nav-link:hover {
   }
 }
 
-/* Draw animation for infinity path */
+/* Draw/undraw animation for infinity path - seamless loop */
 @keyframes infinityDraw {
   0% {
     stroke-dashoffset: 0;
-    opacity: 0.7;
-  }
-  50% {
-    stroke-dashoffset: 150;
     opacity: 1;
   }
-  100% {
+  50% {
     stroke-dashoffset: 300;
     opacity: 0.7;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 1;
   }
 }
 
