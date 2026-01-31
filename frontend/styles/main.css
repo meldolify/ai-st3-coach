@@ -4231,7 +4231,7 @@ a.nav-link:hover {
 }
 
 .infinity-path--bg {
-  animation: infinityDraw 6s ease-in-out infinite;
+  animation: infinityDraw 7.5s ease-in-out infinite;
 }
 
 /* Floating dot on infinity path */
