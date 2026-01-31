@@ -422,4 +422,39 @@ window.addEventListener('DOMContentLoaded', async () => {
     // Web Speech API available - optimal performance
     console.log('[SPEECH] Using Web Speech API for speech recognition (native browser support)');
   }
+
+  // ============================================================================
+  // UI ANNOTATOR TOOL SUPPORT
+  // ============================================================================
+  // Listen for postMessage from UI Annotator tool to navigate between pages
+  window.addEventListener('message', function(e) {
+    if (e.data && e.data.type === 'showPage') {
+      const pageId = e.data.pageId;
+      const validPages = [
+        'landingPage', 'authPage', 'profilePage', 'specialtySelection',
+        'difficultySelection', 'modeSelection', 'mockTypeSelection',
+        'stationTypeSelection', 'scenarioSelection', 'simulationRoom'
+      ];
+
+      if (validPages.includes(pageId)) {
+        // Hide all pages first
+        validPages.forEach(function(id) {
+          const page = document.getElementById(id);
+          if (page) page.style.display = 'none';
+        });
+
+        // Show requested page
+        const targetPage = document.getElementById(pageId);
+        if (targetPage) {
+          targetPage.style.display = 'block';
+          console.log('[ANNOTATOR] Navigated to page:', pageId);
+
+          // Notify parent window of page change
+          if (window.parent !== window) {
+            window.parent.postMessage({ type: 'pageChanged', pageId: pageId }, '*');
+          }
+        }
+      }
+    }
+  });
 });

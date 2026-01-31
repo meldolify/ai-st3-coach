@@ -77,8 +77,7 @@ const transcript = {
   addMessage(role, text) {
     const timestamp = new Date().toLocaleTimeString([], {
       hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit'
+      minute: '2-digit'
     });
     this.messages.push({ role, text, timestamp });
     this.render();

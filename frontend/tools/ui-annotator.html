@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UI Annotator - ST3 Interview Coach</title>
+  <style>
+    /* ========================================
+       UI ANNOTATOR PLAYGROUND
+       Dark theme, minimal chrome
+       ======================================== */
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-dark: #0d0d0d;
+      --bg-panel: #1a1a1a;
+      --bg-elevated: #242424;
+      --bg-hover: #2a2a2a;
+      --border: #333;
+      --text-primary: #e8e8e8;
+      --text-secondary: #999;
+      --text-muted: #666;
+      --accent-cyan: #00d4ff;
+      --accent-magenta: #ff00d4;
+      --accent-green: #00ff88;
+      --accent-orange: #ff8800;
+      --priority-high: #ff4444;
+      --priority-medium: #ffaa00;
+      --priority-low: #44aa44;
+      --font-ui: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'SF Mono', 'Cascadia Code', 'Fira Code', monospace;
+    }
+
+    body {
+      font-family: var(--font-ui);
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* ===== HEADER / PAGE TABS ===== */
+    header {
+      background: var(--bg-panel);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-shrink: 0;
+    }
+
+    .header-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--accent-cyan);
+      white-space: nowrap;
+    }
+
+    .tabs-container {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      flex: 1;
+    }
+
+    .tab {
+      padding: 6px 12px;
+      font-size: 12px;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+
+    .tab:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+
+    .tab.active {
+      background: var(--accent-cyan);
+      color: #000;
+      border-color: var(--accent-cyan);
+      font-weight: 500;
+    }
+
+    .tab .badge {
+      display: inline-block;
+      background: var(--accent-magenta);
+      color: #fff;
+      font-size: 10px;
+      padding: 1px 5px;
+      border-radius: 8px;
+      margin-left: 4px;
+    }
+
+    .tab.active .badge {
+      background: #000;
+      color: var(--accent-cyan);
+    }
+
+    .overlay-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+      color: var(--text-secondary);
+      transition: all 0.15s;
+    }
+
+    .overlay-toggle:hover {
+      background: var(--bg-hover);
+    }
+
+    .overlay-toggle.enabled {
+      border-color: var(--accent-green);
+      color: var(--accent-green);
+    }
+
+    .overlay-toggle .indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--text-muted);
+    }
+
+    .overlay-toggle.enabled .indicator {
+      background: var(--accent-green);
+      box-shadow: 0 0 8px var(--accent-green);
+    }
+
+    /* ===== MAIN LAYOUT ===== */
+    main {
+      display: flex;
+      flex: 1;
+      min-height: 0;
+    }
+
+    /* ===== PREVIEW CONTAINER ===== */
+    .preview-container {
+      flex: 1;
+      position: relative;
+      background: var(--bg-panel);
+      border-right: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .preview-container iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: #fff;
+    }
+
+    .click-overlay {
+      position: absolute;
+      inset: 0;
+      cursor: crosshair;
+      z-index: 10;
+    }
+
+    .click-overlay.disabled {
+      pointer-events: none;
+    }
+
+    .click-overlay::after {
+      content: 'Click to add marker';
+      position: absolute;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.8);
+      color: var(--accent-cyan);
+      padding: 8px 16px;
+      border-radius: 4px;
+      font-size: 12px;
+      opacity: 0;
+      transition: opacity 0.2s;
+      pointer-events: none;
+    }
+
+    .click-overlay:not(.disabled):hover::after {
+      opacity: 1;
+    }
+
+    .markers-layer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 11;
+    }
+
+    .marker {
+      position: absolute;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--accent-magenta);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 2px 8px rgba(255, 0, 212, 0.5);
+      pointer-events: auto;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .marker:hover {
+      transform: translate(-50%, -50%) scale(1.2);
+      box-shadow: 0 4px 16px rgba(255, 0, 212, 0.7);
+    }
+
+    .marker.priority-high {
+      background: var(--priority-high);
+      box-shadow: 0 2px 8px rgba(255, 68, 68, 0.5);
+    }
+
+    .marker.priority-medium {
+      background: var(--priority-medium);
+      box-shadow: 0 2px 8px rgba(255, 170, 0, 0.5);
+    }
+
+    .marker.priority-low {
+      background: var(--priority-low);
+      box-shadow: 0 2px 8px rgba(68, 170, 68, 0.5);
+    }
+
+    .marker.editing {
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); }
+      50% { transform: translate(-50%, -50%) scale(1.3); }
+    }
+
+    /* ===== ANNOTATIONS PANEL ===== */
+    .annotations-panel {
+      width: 320px;
+      background: var(--bg-panel);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+
+    .panel-header {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .panel-header h2 {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .panel-header .count {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .annotations-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px;
+    }
+
+    .annotation-card {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .annotation-card:hover {
+      border-color: var(--accent-cyan);
+      background: var(--bg-hover);
+    }
+
+    .annotation-card.editing {
+      border-color: var(--accent-magenta);
+    }
+
+    .annotation-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .annotation-number {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--accent-magenta);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .annotation-number.priority-high { background: var(--priority-high); }
+    .annotation-number.priority-medium { background: var(--priority-medium); }
+    .annotation-number.priority-low { background: var(--priority-low); }
+
+    .annotation-element {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .annotation-delete {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      transition: all 0.15s;
+    }
+
+    .annotation-delete:hover {
+      background: var(--priority-high);
+      color: #fff;
+    }
+
+    .annotation-change {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .annotation-meta {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .annotation-tag {
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 3px;
+      background: var(--bg-dark);
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .empty-state {
+      padding: 32px 16px;
+      text-align: center;
+      color: var(--text-muted);
+    }
+
+    .empty-state p {
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .empty-state .hint {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* ===== PROMPT OUTPUT ===== */
+    .prompt-section {
+      background: var(--bg-panel);
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .prompt-header {
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .prompt-header h3 {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .copy-btn {
+      padding: 6px 16px;
+      background: var(--accent-cyan);
+      color: #000;
+      border: none;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .copy-btn:hover {
+      background: #00b8dd;
+    }
+
+    .copy-btn.copied {
+      background: var(--accent-green);
+    }
+
+    .prompt-output {
+      height: 150px;
+      padding: 12px 16px;
+      overflow-y: auto;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--text-secondary);
+      white-space: pre-wrap;
+      background: var(--bg-dark);
+    }
+
+    .prompt-output .placeholder {
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    /* ===== MODAL ===== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.2s;
+    }
+
+    .modal-overlay.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      width: 400px;
+      max-width: 90vw;
+      transform: translateY(20px);
+      transition: transform 0.2s;
+    }
+
+    .modal-overlay.visible .modal {
+      transform: translateY(0);
+    }
+
+    .modal-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-header h3 {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .modal-close {
+      width: 28px;
+      height: 28px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      transition: all 0.15s;
+    }
+
+    .modal-close:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+
+    .modal-body {
+      padding: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 10px 12px;
+      background: var(--bg-dark);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text-primary);
+      font-family: var(--font-ui);
+      font-size: 14px;
+      transition: border-color 0.15s;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--accent-cyan);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .form-group select {
+      cursor: pointer;
+    }
+
+    .priority-options {
+      display: flex;
+      gap: 8px;
+    }
+
+    .priority-option {
+      flex: 1;
+      padding: 10px;
+      background: var(--bg-dark);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      cursor: pointer;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 500;
+      transition: all 0.15s;
+    }
+
+    .priority-option:hover {
+      border-color: var(--text-muted);
+    }
+
+    .priority-option.selected {
+      border-width: 2px;
+    }
+
+    .priority-option.high.selected {
+      border-color: var(--priority-high);
+      background: rgba(255, 68, 68, 0.1);
+      color: var(--priority-high);
+    }
+
+    .priority-option.medium.selected {
+      border-color: var(--priority-medium);
+      background: rgba(255, 170, 0, 0.1);
+      color: var(--priority-medium);
+    }
+
+    .priority-option.low.selected {
+      border-color: var(--priority-low);
+      background: rgba(68, 170, 68, 0.1);
+      color: var(--priority-low);
+    }
+
+    .modal-footer {
+      padding: 16px 20px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+
+    .btn-primary {
+      background: var(--accent-cyan);
+      border: none;
+      color: #000;
+    }
+
+    .btn-primary:hover {
+      background: #00b8dd;
+    }
+
+    /* ===== INSTRUCTIONS BANNER ===== */
+    .instructions {
+      position: absolute;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.9);
+      border: 1px solid var(--accent-cyan);
+      border-radius: 8px;
+      padding: 12px 20px;
+      z-index: 20;
+      max-width: 500px;
+      text-align: center;
+    }
+
+    .instructions p {
+      font-size: 13px;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .instructions .dismiss {
+      font-size: 11px;
+      color: var(--accent-cyan);
+      cursor: pointer;
+    }
+
+    .instructions .dismiss:hover {
+      text-decoration: underline;
+    }
+
+    /* ===== SCROLLBAR ===== */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg-dark);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER WITH TABS -->
+  <header>
+    <div class="header-title">UI Annotator</div>
+    <div class="tabs-container" id="tabsContainer"></div>
+    <button class="overlay-toggle enabled" id="overlayToggle">
+      <span class="indicator"></span>
+      <span>Overlay</span>
+    </button>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main>
+    <!-- PREVIEW AREA -->
+    <div class="preview-container">
+      <iframe id="previewFrame" src="http://localhost:5500"></iframe>
+      <div class="click-overlay" id="clickOverlay"></div>
+      <div class="markers-layer" id="markersLayer"></div>
+
+      <!-- Instructions (dismissible) -->
+      <div class="instructions" id="instructions">
+        <p>Click anywhere on the preview to add an annotation marker. Use the tabs to navigate between pages.</p>
+        <span class="dismiss" id="dismissInstructions">Got it, dismiss</span>
+      </div>
+    </div>
+
+    <!-- ANNOTATIONS PANEL -->
+    <aside class="annotations-panel">
+      <div class="panel-header">
+        <h2>Annotations</h2>
+        <span class="count" id="annotationCount">0 total</span>
+      </div>
+      <div class="annotations-list" id="annotationsList"></div>
+    </aside>
+  </main>
+
+  <!-- PROMPT OUTPUT -->
+  <section class="prompt-section">
+    <div class="prompt-header">
+      <h3>Generated Prompt</h3>
+      <button class="copy-btn" id="copyBtn">Copy Prompt</button>
+    </div>
+    <div class="prompt-output" id="promptOutput"></div>
+  </section>
+
+  <!-- ANNOTATION MODAL -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="modalTitle">Add Annotation</h3>
+        <button class="modal-close" id="modalClose">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="elementName">Element Name</label>
+          <input type="text" id="elementName" placeholder="e.g., Voice Orb, Record Button, Header">
+        </div>
+        <div class="form-group">
+          <label for="changeRequest">Change Request</label>
+          <textarea id="changeRequest" placeholder="Describe what you want changed..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Priority</label>
+          <div class="priority-options">
+            <div class="priority-option high" data-priority="high">High</div>
+            <div class="priority-option medium selected" data-priority="medium">Medium</div>
+            <div class="priority-option low" data-priority="low">Low</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="category">Category</label>
+          <select id="category">
+            <option value="color">Color</option>
+            <option value="size">Size</option>
+            <option value="spacing">Spacing</option>
+            <option value="typography">Typography</option>
+            <option value="animation">Animation</option>
+            <option value="layout">Layout</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="modalCancel">Cancel</button>
+        <button class="btn btn-primary" id="modalSave">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ========================================
+    // UI ANNOTATOR - STATE & LOGIC
+    // ========================================
+
+    // Page definitions
+    const PAGES = [
+      { id: 'landingPage', label: 'Landing' },
+      { id: 'authPage', label: 'Auth' },
+      { id: 'profilePage', label: 'Profile' },
+      { id: 'specialtySelection', label: 'Specialty' },
+      { id: 'difficultySelection', label: 'Difficulty' },
+      { id: 'modeSelection', label: 'Mode' },
+      { id: 'mockTypeSelection', label: 'Mock Type' },
+      { id: 'stationTypeSelection', label: 'Station Type' },
+      { id: 'scenarioSelection', label: 'Scenarios' },
+      { id: 'simulationRoom', label: 'Simulation' }
+    ];
+
+    // State
+    const state = {
+      currentPage: 'landingPage',
+      overlayEnabled: true,
+      annotations: [],
+      nextId: 1,
+      editingId: null,
+      pendingMarker: null  // { x, y } for new marker being created
+    };
+
+    // Try to load from localStorage
+    try {
+      const saved = localStorage.getItem('ui-annotator-state');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        state.annotations = parsed.annotations || [];
+        state.nextId = parsed.nextId || 1;
+      }
+    } catch (e) {
+      console.warn('Could not load saved state:', e);
+    }
+
+    // DOM elements
+    const tabsContainer = document.getElementById('tabsContainer');
+    const overlayToggle = document.getElementById('overlayToggle');
+    const previewFrame = document.getElementById('previewFrame');
+    const clickOverlay = document.getElementById('clickOverlay');
+    const markersLayer = document.getElementById('markersLayer');
+    const annotationsList = document.getElementById('annotationsList');
+    const annotationCount = document.getElementById('annotationCount');
+    const promptOutput = document.getElementById('promptOutput');
+    const copyBtn = document.getElementById('copyBtn');
+    const modalOverlay = document.getElementById('modalOverlay');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalClose = document.getElementById('modalClose');
+    const modalCancel = document.getElementById('modalCancel');
+    const modalSave = document.getElementById('modalSave');
+    const elementNameInput = document.getElementById('elementName');
+    const changeRequestInput = document.getElementById('changeRequest');
+    const categorySelect = document.getElementById('category');
+    const priorityOptions = document.querySelectorAll('.priority-option');
+    const dismissInstructions = document.getElementById('dismissInstructions');
+    const instructionsEl = document.getElementById('instructions');
+
+    // Dismiss instructions
+    dismissInstructions.addEventListener('click', function() {
+      instructionsEl.style.display = 'none';
+    });
+
+    // ========================================
+    // SAFE DOM HELPERS
+    // ========================================
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.textContent;
+    }
+
+    function createMarkerElement(annotation) {
+      const marker = document.createElement('div');
+      marker.className = 'marker priority-' + annotation.priority;
+      if (state.editingId === annotation.id) {
+        marker.className += ' editing';
+      }
+      marker.style.left = annotation.x + '%';
+      marker.style.top = annotation.y + '%';
+      marker.dataset.id = annotation.id;
+      marker.textContent = annotation.id;
+      marker.addEventListener('click', function(e) {
+        e.stopPropagation();
+        editAnnotation(annotation.id);
+      });
+      return marker;
+    }
+
+    function createAnnotationCard(annotation) {
+      const card = document.createElement('div');
+      card.className = 'annotation-card';
+      if (state.editingId === annotation.id) {
+        card.className += ' editing';
+      }
+      card.dataset.id = annotation.id;
+
+      const header = document.createElement('div');
+      header.className = 'annotation-header';
+
+      const number = document.createElement('span');
+      number.className = 'annotation-number priority-' + annotation.priority;
+      number.textContent = annotation.id;
+
+      const element = document.createElement('span');
+      element.className = 'annotation-element';
+      element.textContent = annotation.element || 'Unnamed element';
+
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className = 'annotation-delete';
+      deleteBtn.dataset.id = annotation.id;
+      deleteBtn.textContent = '\u00d7';
+      deleteBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        deleteAnnotation(annotation.id);
+      });
+
+      header.appendChild(number);
+      header.appendChild(element);
+      header.appendChild(deleteBtn);
+
+      const change = document.createElement('div');
+      change.className = 'annotation-change';
+      change.textContent = annotation.change || 'No change specified';
+
+      const meta = document.createElement('div');
+      meta.className = 'annotation-meta';
+
+      const priorityTag = document.createElement('span');
+      priorityTag.className = 'annotation-tag';
+      priorityTag.textContent = annotation.priority;
+
+      const categoryTag = document.createElement('span');
+      categoryTag.className = 'annotation-tag';
+      categoryTag.textContent = annotation.category;
+
+      meta.appendChild(priorityTag);
+      meta.appendChild(categoryTag);
+
+      card.appendChild(header);
+      card.appendChild(change);
+      card.appendChild(meta);
+
+      card.addEventListener('click', function(e) {
+        if (e.target.classList.contains('annotation-delete')) return;
+        editAnnotation(annotation.id);
+      });
+
+      return card;
+    }
+
+    function createTabElement(page, isActive, count) {
+      const tab = document.createElement('button');
+      tab.className = 'tab' + (isActive ? ' active' : '');
+      tab.dataset.page = page.id;
+      tab.textContent = page.label;
+
+      if (count > 0) {
+        const badge = document.createElement('span');
+        badge.className = 'badge';
+        badge.textContent = count;
+        tab.appendChild(badge);
+      }
+
+      tab.addEventListener('click', function() {
+        state.currentPage = page.id;
+        navigateToPage(state.currentPage);
+        renderTabs();
+        renderMarkers();
+        renderAnnotationsList();
+      });
+
+      return tab;
+    }
+
+    // ========================================
+    // TABS
+    // ========================================
+    function renderTabs() {
+      tabsContainer.textContent = '';
+      PAGES.forEach(function(page) {
+        const count = state.annotations.filter(function(a) { return a.page === page.id; }).length;
+        const isActive = state.currentPage === page.id;
+        const tab = createTabElement(page, isActive, count);
+        tabsContainer.appendChild(tab);
+      });
+    }
+
+    function navigateToPage(pageId) {
+      // Send message to iframe to show the page
+      try {
+        previewFrame.contentWindow.postMessage({ type: 'showPage', pageId: pageId }, '*');
+      } catch (e) {
+        console.warn('Could not send message to iframe:', e);
+      }
+    }
+
+    // ========================================
+    // OVERLAY TOGGLE
+    // ========================================
+    overlayToggle.addEventListener('click', function() {
+      state.overlayEnabled = !state.overlayEnabled;
+      overlayToggle.classList.toggle('enabled', state.overlayEnabled);
+      clickOverlay.classList.toggle('disabled', !state.overlayEnabled);
+    });
+
+    // ========================================
+    // CLICK OVERLAY - ADD MARKERS
+    // ========================================
+    clickOverlay.addEventListener('click', function(e) {
+      if (!state.overlayEnabled) return;
+
+      const rect = clickOverlay.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+
+      // Store pending marker position and open modal
+      state.pendingMarker = { x: x, y: y };
+      state.editingId = null;
+      openModal();
+    });
+
+    // ========================================
+    // MARKERS
+    // ========================================
+    function renderMarkers() {
+      markersLayer.textContent = '';
+      const pageAnnotations = state.annotations.filter(function(a) {
+        return a.page === state.currentPage;
+      });
+
+      pageAnnotations.forEach(function(annotation) {
+        const marker = createMarkerElement(annotation);
+        markersLayer.appendChild(marker);
+      });
+    }
+
+    // ========================================
+    // ANNOTATIONS LIST
+    // ========================================
+    function renderAnnotationsList() {
+      annotationsList.textContent = '';
+      const pageAnnotations = state.annotations.filter(function(a) {
+        return a.page === state.currentPage;
+      });
+      const totalCount = state.annotations.length;
+
+      annotationCount.textContent = totalCount + ' total';
+
+      if (pageAnnotations.length === 0) {
+        const emptyState = document.createElement('div');
+        emptyState.className = 'empty-state';
+
+        const p = document.createElement('p');
+        p.textContent = 'No annotations on this page';
+
+        const hint = document.createElement('span');
+        hint.className = 'hint';
+        hint.textContent = 'Click on the preview to add one';
+
+        emptyState.appendChild(p);
+        emptyState.appendChild(hint);
+        annotationsList.appendChild(emptyState);
+        return;
+      }
+
+      pageAnnotations.forEach(function(annotation) {
+        const card = createAnnotationCard(annotation);
+        annotationsList.appendChild(card);
+      });
+    }
+
+    // ========================================
+    // MODAL
+    // ========================================
+    function openModal() {
+      if (state.editingId) {
+        // Editing existing
+        const annotation = state.annotations.find(function(a) { return a.id === state.editingId; });
+        if (annotation) {
+          modalTitle.textContent = 'Edit Annotation';
+          elementNameInput.value = annotation.element || '';
+          changeRequestInput.value = annotation.change || '';
+          categorySelect.value = annotation.category || 'other';
+          setSelectedPriority(annotation.priority || 'medium');
+        }
+      } else {
+        // New annotation
+        modalTitle.textContent = 'Add Annotation';
+        elementNameInput.value = '';
+        changeRequestInput.value = '';
+        categorySelect.value = 'other';
+        setSelectedPriority('medium');
+      }
+
+      modalOverlay.classList.add('visible');
+      elementNameInput.focus();
+    }
+
+    function closeModal() {
+      modalOverlay.classList.remove('visible');
+      state.pendingMarker = null;
+      state.editingId = null;
+      renderMarkers();
+      renderAnnotationsList();
+    }
+
+    function setSelectedPriority(priority) {
+      priorityOptions.forEach(function(opt) {
+        opt.classList.toggle('selected', opt.dataset.priority === priority);
+      });
+    }
+
+    function getSelectedPriority() {
+      const selected = document.querySelector('.priority-option.selected');
+      return selected ? selected.dataset.priority : 'medium';
+    }
+
+    // Priority option clicks
+    priorityOptions.forEach(function(opt) {
+      opt.addEventListener('click', function() { setSelectedPriority(opt.dataset.priority); });
+    });
+
+    // Modal controls
+    modalClose.addEventListener('click', closeModal);
+    modalCancel.addEventListener('click', closeModal);
+    modalOverlay.addEventListener('click', function(e) {
+      if (e.target === modalOverlay) closeModal();
+    });
+
+    modalSave.addEventListener('click', function() {
+      const element = elementNameInput.value.trim();
+      const change = changeRequestInput.value.trim();
+      const category = categorySelect.value;
+      const priority = getSelectedPriority();
+
+      if (!element && !change) {
+        alert('Please provide at least an element name or change request.');
+        return;
+      }
+
+      if (state.editingId) {
+        // Update existing
+        const annotation = state.annotations.find(function(a) { return a.id === state.editingId; });
+        if (annotation) {
+          annotation.element = element;
+          annotation.change = change;
+          annotation.category = category;
+          annotation.priority = priority;
+        }
+      } else if (state.pendingMarker) {
+        // Create new
+        state.annotations.push({
+          id: state.nextId++,
+          page: state.currentPage,
+          x: state.pendingMarker.x,
+          y: state.pendingMarker.y,
+          element: element,
+          change: change,
+          category: category,
+          priority: priority
+        });
+      }
+
+      saveState();
+      closeModal();
+      renderTabs();
+      renderMarkers();
+      renderAnnotationsList();
+      updatePrompt();
+    });
+
+    // ========================================
+    // EDIT / DELETE
+    // ========================================
+    function editAnnotation(id) {
+      state.editingId = id;
+      state.pendingMarker = null;
+      renderMarkers();
+      renderAnnotationsList();
+      openModal();
+    }
+
+    function deleteAnnotation(id) {
+      state.annotations = state.annotations.filter(function(a) { return a.id !== id; });
+      saveState();
+      renderTabs();
+      renderMarkers();
+      renderAnnotationsList();
+      updatePrompt();
+    }
+
+    // ========================================
+    // PROMPT GENERATION
+    // ========================================
+    function updatePrompt() {
+      if (state.annotations.length === 0) {
+        promptOutput.textContent = 'Add annotations to generate a prompt...';
+        return;
+      }
+
+      // Group by page
+      const byPage = {};
+      state.annotations.forEach(function(a) {
+        if (!byPage[a.page]) byPage[a.page] = [];
+        byPage[a.page].push(a);
+      });
+
+      // Sort each page's annotations by priority
+      const priorityOrder = { high: 0, medium: 1, low: 2 };
+      Object.keys(byPage).forEach(function(page) {
+        byPage[page].sort(function(a, b) {
+          return priorityOrder[a.priority] - priorityOrder[b.priority];
+        });
+      });
+
+      // Generate prompt
+      var prompt = '# UI Design Changes for ST3 Interview Coach\n\n';
+
+      var pageOrder = PAGES.map(function(p) { return p.id; });
+      pageOrder.forEach(function(pageId) {
+        if (!byPage[pageId]) return;
+
+        var pageObj = PAGES.find(function(p) { return p.id === pageId; });
+        var pageName = pageObj ? pageObj.label : pageId;
+        prompt += '## ' + pageName + '\n\n';
+
+        byPage[pageId].forEach(function(a, i) {
+          var priorityLabel = a.priority.charAt(0).toUpperCase() + a.priority.slice(1);
+          var categoryLabel = a.category.charAt(0).toUpperCase() + a.category.slice(1);
+          prompt += (i + 1) + '. **' + (a.element || 'Element') + '** [' + priorityLabel + ' Priority - ' + categoryLabel + ']\n';
+          prompt += '   \u2192 ' + (a.change || 'No change specified') + '\n\n';
+        });
+      });
+
+      prompt += '---\n*Generated with UI Annotator Playground*';
+
+      promptOutput.textContent = prompt;
+    }
+
+    // ========================================
+    // COPY
+    // ========================================
+    copyBtn.addEventListener('click', function() {
+      var text = promptOutput.textContent;
+      if (text.indexOf('Add annotations to generate') !== -1) {
+        return;
+      }
+
+      navigator.clipboard.writeText(text).then(function() {
+        copyBtn.textContent = 'Copied!';
+        copyBtn.classList.add('copied');
+        setTimeout(function() {
+          copyBtn.textContent = 'Copy Prompt';
+          copyBtn.classList.remove('copied');
+        }, 2000);
+      }).catch(function(e) {
+        console.error('Could not copy:', e);
+        alert('Could not copy to clipboard. Please select and copy manually.');
+      });
+    });
+
+    // ========================================
+    // PERSISTENCE
+    // ========================================
+    function saveState() {
+      try {
+        localStorage.setItem('ui-annotator-state', JSON.stringify({
+          annotations: state.annotations,
+          nextId: state.nextId
+        }));
+      } catch (e) {
+        console.warn('Could not save state:', e);
+      }
+    }
+
+    // ========================================
+    // IFRAME COMMUNICATION
+    // ========================================
+    window.addEventListener('message', function(e) {
+      if (e.data && e.data.type === 'pageChanged') {
+        // If iframe reports it changed page, update our state
+        var pageId = e.data.pageId;
+        var pageExists = PAGES.find(function(p) { return p.id === pageId; });
+        if (pageExists) {
+          state.currentPage = pageId;
+          renderTabs();
+          renderMarkers();
+          renderAnnotationsList();
+        }
+      }
+    });
+
+    // When iframe loads, try to navigate to current page
+    previewFrame.addEventListener('load', function() {
+      setTimeout(function() { navigateToPage(state.currentPage); }, 500);
+    });
+
+    // ========================================
+    // KEYBOARD SHORTCUTS
+    // ========================================
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        if (modalOverlay.classList.contains('visible')) {
+          closeModal();
+        }
+      }
+    });
+
+    // ========================================
+    // INIT
+    // ========================================
+    renderTabs();
+    renderMarkers();
+    renderAnnotationsList();
+    updatePrompt();
+  </script>
+</body>
+</html>

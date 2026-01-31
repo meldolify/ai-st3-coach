@@ -4105,6 +4105,83 @@ a.nav-link:hover {
   animation: fadeInUp 0.6s ease-out 0.1s backwards;
 }
 
+/* Animated Hero Title - Headroom-inspired layout */
+.hero-title--animated {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  line-height: 1.05;
+}
+
+.hero-title__line {
+  display: block;
+}
+
+.hero-title__line--main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
+}
+
+/* Infinity icon container */
+.hero-infinity-container {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin: 0 4px;
+}
+
+.hero-infinity {
+  width: clamp(60px, 10vw, 100px);
+  height: clamp(30px, 5vw, 50px);
+  animation: infinityFloat 4s ease-in-out infinite;
+}
+
+/* Infinity path styling */
+.infinity-path {
+  stroke-dasharray: 300;
+  stroke-dashoffset: 0;
+}
+
+.infinity-path--bg {
+  animation: infinityDraw 3s ease-in-out infinite;
+}
+
+/* Floating dot on infinity path */
+.infinity-dot {
+  filter: drop-shadow(0 0 6px rgba(184, 115, 51, 0.6));
+}
+
+/* Infinity float animation */
+@keyframes infinityFloat {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-3px) scale(1.02);
+  }
+}
+
+/* Draw animation for infinity path */
+@keyframes infinityDraw {
+  0% {
+    stroke-dashoffset: 0;
+    opacity: 0.7;
+  }
+  50% {
+    stroke-dashoffset: 150;
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: 300;
+    opacity: 0.7;
+  }
+}
+
 .hero-title .highlight {
   color: var(--brand-primary);
 }
