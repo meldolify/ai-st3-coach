@@ -22,13 +22,14 @@ class VADManager {
     this.onError = null;
 
     // Configuration (can be overridden from CONFIG)
+    // Tuned for short utterances like "yes", "no", "okay"
     this.config = {
-      positiveSpeechThreshold: 0.5,
-      negativeSpeechThreshold: 0.35,
-      preSpeechPadFrames: 10,    // ~300ms pre-roll
-      redemptionFrames: 8,       // ~240ms hangover
-      minSpeechFrames: 3,        // ~90ms minimum
-      postTTSCooldownMs: 150     // Cooldown after TTS ends before resuming VAD
+      positiveSpeechThreshold: 0.3,   // Lower = more sensitive to speech start (was 0.5)
+      negativeSpeechThreshold: 0.2,   // Lower = less likely to cut off early (was 0.35)
+      preSpeechPadFrames: 10,         // ~300ms pre-roll
+      redemptionFrames: 12,           // ~360ms hangover - prevents premature cutoff (was 8)
+      minSpeechFrames: 2,             // ~60ms minimum - allows short words (was 3)
+      postTTSCooldownMs: 150          // Cooldown after TTS ends before resuming VAD
     };
   }
 

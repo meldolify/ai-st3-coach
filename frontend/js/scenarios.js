@@ -1026,19 +1026,6 @@ function syncMobileButtonStates() {
     mobileConnectBtn.disabled = connectBtn.disabled;
   }
 
-  const recordBtn = document.getElementById('recordBtn');
-  const mobileRecordBtn = document.getElementById('mobileRecordBtn');
-  if (recordBtn && mobileRecordBtn) {
-    mobileRecordBtn.disabled = recordBtn.disabled;
-    mobileRecordBtn.style.display = recordBtn.style.display;
-    // Sync recording state class
-    if (recordBtn.classList.contains('recording')) {
-      mobileRecordBtn.classList.add('recording');
-    } else {
-      mobileRecordBtn.classList.remove('recording');
-    }
-  }
-
   const interruptBtn = document.getElementById('interruptBtn');
   const mobileInterruptBtn = document.getElementById('mobileInterruptBtn');
   if (interruptBtn && mobileInterruptBtn) {
@@ -1061,8 +1048,6 @@ function setupMobileButtonListeners() {
 
   const connectBtn = document.getElementById('connectBtn');
   const mobileConnectBtn = document.getElementById('mobileConnectBtn');
-  const recordBtn = document.getElementById('recordBtn');
-  const mobileRecordBtn = document.getElementById('mobileRecordBtn');
   const disconnectBtn = document.getElementById('disconnectBtn');
   const mobileDisconnectBtn = document.getElementById('mobileDisconnectBtn');
 
@@ -1070,12 +1055,6 @@ function setupMobileButtonListeners() {
     mobileConnectBtn.onclick = () => {
       console.log('[Mobile] Connect button clicked');
       connectBtn.click();
-    };
-  }
-  if (mobileRecordBtn && recordBtn) {
-    mobileRecordBtn.onclick = () => {
-      console.log('[Mobile] Record button clicked');
-      recordBtn.click();
     };
   }
   const interruptBtn = document.getElementById('interruptBtn');
@@ -1129,7 +1108,6 @@ function exitSimulation() {
 
     document.getElementById('connectBtn').disabled = false;
     document.getElementById('disconnectBtn').disabled = true;
-    document.getElementById('recordBtn').style.display = 'none';
     syncMobileButtonStates(); // Sync mobile buttons
     updateStatus('connectionStatus', 'Disconnected', 'disconnected');
     updateStatus('sessionStatus', 'No Session', 'disconnected');
