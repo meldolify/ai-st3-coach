@@ -302,10 +302,16 @@ document.getElementById('interruptBtn').addEventListener('click', () => {
       }));
     }
 
-    // Hide interrupt button
+    // Hide interrupt button and remove active styling
     const interruptBtn = document.getElementById('interruptBtn');
     interruptBtn.style.display = 'none';
     interruptBtn.disabled = true;
+    interruptBtn.classList.remove('active');
+
+    const mobileInterruptBtn = document.getElementById('mobileInterruptBtn');
+    if (mobileInterruptBtn) {
+      mobileInterruptBtn.classList.remove('active');
+    }
 
     syncMobileButtonStates();
     setOrbState('idle');

@@ -520,6 +520,38 @@
       }
     }
 
+    /* Interrupt button - active state during TTS */
+    #interruptBtn.active,
+    #mobileInterruptBtn.active {
+      background: linear-gradient(145deg, #ff6b6b, #ee5a5a) !important;
+      color: white !important;
+      box-shadow:
+        0 0 0 4px rgba(255, 107, 107, 0.2),
+        0 0 20px rgba(255, 107, 107, 0.3),
+        -4px -4px 10px var(--neu-light),
+        4px 4px 10px var(--neu-dark) !important;
+      animation: interrupt-pulse 1.5s ease-in-out infinite !important;
+    }
+
+    @keyframes interrupt-pulse {
+      0%, 100% {
+        transform: scale(1);
+        box-shadow:
+          0 0 0 4px rgba(255, 107, 107, 0.2),
+          0 0 20px rgba(255, 107, 107, 0.3),
+          -4px -4px 10px var(--neu-light),
+          4px 4px 10px var(--neu-dark);
+      }
+      50% {
+        transform: scale(1.05);
+        box-shadow:
+          0 0 0 8px rgba(255, 107, 107, 0.15),
+          0 0 30px rgba(255, 107, 107, 0.4),
+          -4px -4px 10px var(--neu-light),
+          4px 4px 10px var(--neu-dark);
+      }
+    }
+
     /* Legacy class cleanup */
     .control-pill {
       display: contents !important;
