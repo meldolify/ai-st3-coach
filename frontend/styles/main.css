@@ -6903,14 +6903,10 @@ body.has-header {
   align-items: flex-start;
   gap: clamp(12px, 2vw, 20px);
   max-width: 520px;
+  /* Initial state - GSAP controls animation */
   opacity: 0;
   transform: translateY(40px);
-}
-
-.feature-content.animate-in {
-  opacity: 1;
-  transform: translateY(0);
-  transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+  will-change: opacity, transform;
 }
 
 /* Feature Label */
@@ -6970,15 +6966,11 @@ body.has-header {
   background-repeat: no-repeat;
   border-radius: 24px;
   z-index: 1;
+  /* Initial state - GSAP controls animation */
   opacity: 0;
   transform: translateY(20px);
   filter: blur(1px);
-}
-
-.feature-mockup-bg.animate-in {
-  opacity: 0.6;
-  transform: translateY(-20px);
-  transition: opacity 1s ease-out, transform 1.2s ease-out;
+  will-change: opacity, transform;
 }
 
 /* Position background based on layout */
@@ -7002,8 +6994,10 @@ body.has-header {
   background-repeat: no-repeat;
   border-radius: 24px;
   z-index: 2;
+  /* Initial state - GSAP controls animation */
   opacity: 0;
   transform: translateY(40px);
+  will-change: opacity, transform;
   box-shadow:
     0 25px 50px -12px rgba(74, 93, 76, 0.15),
     0 12px 24px -8px rgba(0, 0, 0, 0.08);
@@ -7021,12 +7015,6 @@ body.has-header {
   );
   border-radius: inherit;
   pointer-events: none;
-}
-
-.feature-mockup-main.animate-in {
-  opacity: 1;
-  transform: translateY(0);
-  transition: opacity 0.8s ease-out 0.1s, transform 1s ease-out 0.1s;
 }
 
 /* Feature Images - Practice Anytime */
