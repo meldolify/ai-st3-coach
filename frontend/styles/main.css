@@ -7082,41 +7082,19 @@ body.has-header {
   bottom: 0;
   width: 100vw;
   height: 100vh;
-  background: #0a0a0a;
+  background: #f8f9fa;
   overflow: hidden;
-  z-index: 1100;
+  z-index: 100;
 }
 
-/* Hide app header when lumina page is active */
-#difficultySelection.lumina-page:not(.initially-hidden):not(.hidden) ~ #appHeader,
-body:has(#difficultySelection.lumina-page:not(.initially-hidden):not(.hidden)) #appHeader {
-  display: none;
+/* Hide back button - header provides navigation */
+.lumina-page .lumina-back,
+.lumina-page .top-back-button {
+  display: none !important;
 }
 
 .lumina-page .lumina-canvas {
   position: fixed;
-}
-
-.lumina-page .top-back-button,
-.lumina-back {
-  position: absolute;
-  top: 24px;
-  left: 24px;
-  z-index: 10;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: rgba(255, 255, 255, 0.8);
-  padding: 10px 20px;
-  border-radius: 6px;
-  font-family: var(--font-body);
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.lumina-back:hover {
-  background: rgba(255, 255, 255, 0.2);
-  color: #ffffff;
 }
 
 /* ============================================
@@ -7124,10 +7102,10 @@ body:has(#difficultySelection.lumina-page:not(.initially-hidden):not(.hidden)) #
    ============================================ */
 .lumina-tabs--top {
   position: fixed;
-  top: 32px;
+  top: 100px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 1200;
+  z-index: 150;
   display: flex;
   gap: 48px;
   padding: 0;
@@ -7137,7 +7115,7 @@ body:has(#difficultySelection.lumina-page:not(.initially-hidden):not(.hidden)) #
 .lumina-tab {
   background: transparent;
   border: none;
-  padding: 12px 0;
+  padding: 16px 0;
   cursor: pointer;
   position: relative;
   transition: all 0.3s ease;
@@ -7145,20 +7123,20 @@ body:has(#difficultySelection.lumina-page:not(.initially-hidden):not(.hidden)) #
 
 .lumina-tab .tab-label {
   font-family: var(--font-body);
-  font-size: 0.7rem;
+  font-size: 1.05rem;
   font-weight: 500;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(0, 0, 0, 0.4);
   transition: color 0.3s ease;
 }
 
 .lumina-tab:hover .tab-label {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(0, 0, 0, 0.7);
 }
 
 .lumina-tab.active .tab-label {
-  color: #ffffff;
+  color: #000000;
 }
 
 /* Active indicator line */
@@ -7168,8 +7146,8 @@ body:has(#difficultySelection.lumina-page:not(.initially-hidden):not(.hidden)) #
   bottom: 0;
   left: 0;
   right: 0;
-  height: 2px;
-  background: #ffffff;
+  height: 3px;
+  background: #000000;
   transform: scaleX(0);
   transition: transform 0.3s ease;
 }
@@ -7198,7 +7176,7 @@ body:has(#difficultySelection.lumina-page:not(.initially-hidden):not(.hidden)) #
   position: fixed;
   top: 0;
   bottom: 0;
-  width: 25%;
+  width: 15%;
   z-index: 2;
   pointer-events: none;
 }
@@ -7206,10 +7184,8 @@ body:has(#difficultySelection.lumina-page:not(.initially-hidden):not(.hidden)) #
 .lumina-page .lumina-edge-blur--left {
   left: 0;
   background: linear-gradient(to right,
-    #0a0a0a 0%,
-    rgba(10, 10, 10, 0.9) 25%,
-    rgba(10, 10, 10, 0.6) 50%,
-    rgba(10, 10, 10, 0.2) 75%,
+    rgba(248, 249, 250, 0.7) 0%,
+    rgba(248, 249, 250, 0.3) 40%,
     transparent 100%
   );
 }
@@ -7217,10 +7193,8 @@ body:has(#difficultySelection.lumina-page:not(.initially-hidden):not(.hidden)) #
 .lumina-page .lumina-edge-blur--right {
   right: 0;
   background: linear-gradient(to left,
-    #0a0a0a 0%,
-    rgba(10, 10, 10, 0.9) 25%,
-    rgba(10, 10, 10, 0.6) 50%,
-    rgba(10, 10, 10, 0.2) 75%,
+    rgba(248, 249, 250, 0.7) 0%,
+    rgba(248, 249, 250, 0.3) 40%,
     transparent 100%
   );
 }
@@ -7234,11 +7208,11 @@ body:has(#difficultySelection.lumina-page:not(.initially-hidden):not(.hidden)) #
   left: 0;
   right: 0;
   z-index: 5;
-  background: rgba(10, 10, 10, 0.5);
-  -webkit-backdrop-filter: blur(24px);
-  backdrop-filter: blur(24px);
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 48px 40px 56px;
+  background: rgba(255, 255, 255, 0.9);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  padding: 40px 40px 48px;
   text-align: center;
 }
 
@@ -7246,11 +7220,11 @@ body:has(#difficultySelection.lumina-page:not(.initially-hidden):not(.hidden)) #
 .lumina-content-card::before {
   content: '';
   position: absolute;
-  top: -100px;
+  top: -80px;
   left: 0;
   right: 0;
-  height: 100px;
-  background: linear-gradient(to bottom, transparent, rgba(10, 10, 10, 0.3));
+  height: 80px;
+  background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.4));
   pointer-events: none;
 }
 
@@ -7269,7 +7243,7 @@ body:has(#difficultySelection.lumina-page:not(.initially-hidden):not(.hidden)) #
   font-size: clamp(3rem, 8vw, 5rem);
   font-weight: 400;
   font-style: italic;
-  color: #ffffff;
+  color: #1a1a1a;
   margin-bottom: 8px;
   line-height: 1;
 }
@@ -7299,7 +7273,7 @@ body:has(#difficultySelection.lumina-page:not(.initially-hidden):not(.hidden)) #
   font-family: var(--font-body);
   font-size: 1rem;
   line-height: 1.8;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(0, 0, 0, 0.7);
   margin-bottom: 32px;
 }
 
@@ -7316,10 +7290,10 @@ body:has(#difficultySelection.lumina-page:not(.initially-hidden):not(.hidden)) #
 .persona-traits li {
   font-family: var(--font-body);
   font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(0, 0, 0, 0.6);
   padding: 8px 16px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 20px;
   letter-spacing: 0.05em;
 }
@@ -7330,8 +7304,8 @@ body:has(#difficultySelection.lumina-page:not(.initially-hidden):not(.hidden)) #
   font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #0a0a0a;
-  background: #ffffff;
+  color: #ffffff;
+  background: #1a1a1a;
   border: none;
   padding: 16px 40px;
   border-radius: 4px;
@@ -7340,37 +7314,66 @@ body:has(#difficultySelection.lumina-page:not(.initially-hidden):not(.hidden)) #
 }
 
 .btn-select:hover {
-  background: rgba(255, 255, 255, 0.9);
+  background: #333333;
   transform: translateY(-2px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
 }
 
 /* Responsive - Difficulty Selection Page */
 @media (max-width: 768px) {
+  #difficultySelection.lumina-page,
+  .page.lumina-page {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+
   .lumina-tabs--top {
     top: 70px;
-    gap: 12px;
-    flex-wrap: wrap;
+    gap: 6px;
+    flex-wrap: nowrap;
     justify-content: center;
-    padding: 0 16px;
+    padding: 0 8px;
     width: 100%;
+    box-sizing: border-box;
   }
 
   .lumina-tab {
     min-width: auto;
+    padding: 10px 0;
   }
 
   .lumina-tab .tab-label {
-    font-size: 0.6rem;
-    letter-spacing: 0.1em;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
   }
 
-  .lumina-edge-blur {
+  .lumina-page .lumina-edge-blur {
     width: 10%;
   }
 
+  /* Ensure canvas fills properly */
+  .lumina-page .lumina-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+  }
+
   .lumina-content-card {
-    padding: 32px 20px 40px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 24px 16px 32px;
+    max-height: 55vh;
+    overflow-y: auto;
   }
 
   .lumina-content-card .lumina-slide {
@@ -7397,13 +7400,6 @@ body:has(#difficultySelection.lumina-page:not(.initially-hidden):not(.hidden)) #
 
   .btn-select {
     padding: 14px 32px;
-    font-size: 0.8rem;
-  }
-
-  .lumina-page .top-back-button {
-    top: 16px;
-    left: 16px;
-    padding: 8px 16px;
     font-size: 0.8rem;
   }
 }
