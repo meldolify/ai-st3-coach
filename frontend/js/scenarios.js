@@ -501,7 +501,8 @@ function showLockedScenarioMessage() {
 // Select a scenario from card and start it
 function selectScenarioFromCard(scenarioFile, scenarioName) {
   // Use the existing selectScenario logic
-  selectScenario(scenarioFile, scenarioName, true);
+  // Pass null for imageFile - clinical images are loaded separately based on scenario
+  selectScenario(scenarioFile, scenarioName, null);
 }
 
 // Navigate via breadcrumb
@@ -1458,6 +1459,14 @@ function startScenario(category, title, promptFile, imageFile) {
   const simulationRoom = document.getElementById('simulationRoom');
   simulationRoom.classList.add('active');
 
+  // Initialize and expand sidebar to current scenario
+  if (typeof initSimSidebar === 'function') {
+    initSimSidebar();
+    if (typeof expandToCurrentScenario === 'function') {
+      expandToCurrentScenario(promptFile);
+    }
+  }
+
   // Set scenario information
   document.getElementById('currentScenarioTitle').textContent = title;
   document.getElementById('currentScenarioCategory').textContent = category;
@@ -1639,6 +1648,11 @@ function exitSimulation() {
   // Clear transcript on exit
   if (window.transcript) {
     window.transcript.clear();
+  }
+
+  // Reset sidebar state
+  if (typeof resetSimSidebar === 'function') {
+    resetSimSidebar();
   }
 
   // Close model answer drawer if open

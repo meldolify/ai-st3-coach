@@ -2022,63 +2022,183 @@
         </div>
       </div>
 
-      <!-- Simulation Header Bar -->
-      <div class="simulation-header">
-        <button type="button" class="back-button" onclick="exitSimulation()">
-          <span>←</span>
-          <span class="back-button-text">Back</span>
-        </button>
-        <div class="simulation-header-title">
-          <h2 id="currentScenarioTitle">Scenario Title</h2>
-          <p id="currentScenarioCategory">Category</p>
-        </div>
-        <div class="simulation-header-spacer"></div>
-      </div>
-
-      <!-- Desktop Layout: 60/40 split -->
-      <div class="desktop-simulation-layout">
-        <!-- Left Panel (60%): Persona with overlaid controls -->
-        <div id="personaPanel" class="persona-panel breathing">
-          <!-- Persona Image -->
-          <img id="personaImage" class="persona-image" src="" alt="Examiner">
-
-          <!-- Persona Info Overlay (top) -->
-          <div class="persona-info-overlay">
-            <h3 id="personaName" class="persona-name">Miss Elliot</h3>
-            <p id="personaTitle" class="persona-title">Senior Examiner</p>
+      <!-- ============================================
+           NEW FLOATING PANELS LAYOUT (Desktop)
+           ============================================ -->
+      <div class="sim-layout">
+        <!-- Collapsible Scenario Navigation Sidebar -->
+        <aside class="sim-sidebar" id="simSidebar">
+          <div class="sidebar-header">
+            <button type="button" class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+              <svg class="toggle-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 12h18M3 6h18M3 18h18"/>
+              </svg>
+            </button>
+            <span class="sidebar-title">Scenarios</span>
           </div>
 
-          <!-- Voice Orb Overlay (centered-lower) -->
-          <div class="persona-orb-overlay">
-            <!-- AI Status Bubble (redesigned with accent line) -->
+          <!-- Category Navigation -->
+          <nav class="sidebar-nav" id="sidebarNav">
+            <!-- Categories will be populated by sidebar.js -->
+            <div class="nav-category" data-category="clinical">
+              <button type="button" class="nav-category-btn" onclick="toggleSimCategory('clinical')">
+                <span class="nav-icon">🔪</span>
+                <span class="nav-label">Clinical Stations</span>
+                <svg class="nav-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 18l6-6-6-6"/>
+                </svg>
+              </button>
+              <div class="nav-subcategories" id="subcats-clinical"></div>
+            </div>
+
+            <div class="nav-category" data-category="call-the-boss">
+              <button type="button" class="nav-category-btn" onclick="toggleSimCategory('call-the-boss')">
+                <span class="nav-icon">📞</span>
+                <span class="nav-label">Call-The-Boss</span>
+                <svg class="nav-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 18l6-6-6-6"/>
+                </svg>
+              </button>
+              <div class="nav-subcategories" id="subcats-call-the-boss"></div>
+            </div>
+
+            <div class="nav-category" data-category="consent">
+              <button type="button" class="nav-category-btn" onclick="toggleSimCategory('consent')">
+                <span class="nav-icon">📝</span>
+                <span class="nav-label">Consent</span>
+                <svg class="nav-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 18l6-6-6-6"/>
+                </svg>
+              </button>
+              <div class="nav-subcategories" id="subcats-consent"></div>
+            </div>
+
+            <div class="nav-category" data-category="structured">
+              <button type="button" class="nav-category-btn" onclick="toggleSimCategory('structured')">
+                <span class="nav-icon">📊</span>
+                <span class="nav-label">Structured Interview</span>
+                <svg class="nav-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 18l6-6-6-6"/>
+                </svg>
+              </button>
+              <div class="nav-subcategories" id="subcats-structured"></div>
+            </div>
+          </nav>
+
+          <!-- Back to Selection Button -->
+          <div class="sidebar-footer">
+            <button type="button" class="sidebar-back-btn" onclick="exitSimulation()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+              </svg>
+              <span class="nav-label">Exit Session</span>
+            </button>
+          </div>
+        </aside>
+
+        <!-- Main Simulation Area -->
+        <main class="sim-main">
+          <!-- Persona Backdrop (Full Background) -->
+          <div class="persona-backdrop" id="personaBackdrop">
+            <!-- Persona Image -->
+            <img id="personaImage" class="persona-image" src="" alt="Examiner">
+
+            <!-- Vignette Overlay for depth -->
+            <div class="persona-vignette"></div>
+
+            <!-- Persona Info Badge (top-left) -->
+            <div class="persona-info-badge">
+              <h3 id="personaName" class="persona-name">Miss Elliot</h3>
+              <p id="personaTitle" class="persona-title">Senior Examiner</p>
+            </div>
+
+            <!-- Scenario Title Badge (top-center) -->
+            <div class="scenario-title-badge">
+              <h2 id="currentScenarioTitle">Scenario Title</h2>
+              <p id="currentScenarioCategory">Category</p>
+            </div>
+          </div>
+
+          <!-- Floating Panels Container -->
+          <div class="floating-panels">
+            <!-- Clinical Image Panel (top-right) -->
+            <div class="float-panel clinical-panel" id="imageSection">
+              <div class="panel-header">
+                <span class="panel-badge">Clinical Image</span>
+                <button type="button" class="panel-expand-btn" onclick="openImageModal()" title="Fullscreen"
+                  aria-label="View fullscreen">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="panel-content clinical-image-container">
+                <img id="clinicalImage" class="clinical-image initially-hidden" src="" alt="Clinical image"
+                  onclick="openImageModal()">
+                <div class="image-overlay initially-hidden">
+                  <span>Click to examine</span>
+                </div>
+                <div id="noImagePlaceholder" class="no-image-placeholder">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.4">
+                    <rect x="3" y="3" width="18" height="18" rx="2"/>
+                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                    <path d="M21 15l-5-5L5 21"/>
+                  </svg>
+                  <span>No clinical image</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Transcript Panel (right, below clinical) -->
+            <div class="float-panel transcript-panel">
+              <div class="panel-header">
+                <span class="panel-badge">Transcript</span>
+              </div>
+              <div class="panel-content transcript-container" id="transcriptContainer">
+                <div id="transcriptMessages" class="transcript-messages">
+                  <div class="transcript-empty">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.4">
+                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                    </svg>
+                    <span>Conversation will appear here...</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Voice Orb Overlay (center-bottom) -->
+          <div class="orb-control-overlay">
+            <!-- AI Status Bubble -->
             <div id="aiStatusBubble" class="ai-status-bubble">
               <span id="aiStatus">Ready</span>
               <div class="status-accent-line"></div>
             </div>
-            <!-- Voice Orb (Luminous Pearl design with Siri-style gradients) -->
+
+            <!-- Voice Orb (Luminous Pearl design) -->
             <div id="voiceOrb" class="voice-orb idle">
-              <!-- Rotating gradient container (Siri-style) -->
               <div class="orb-gradient-container"></div>
-              <!-- Inner glow layer -->
               <div class="orb-inner-glow"></div>
-              <!-- Canvas visualizer - created dynamically by orb-visualizer.js -->
-              <!-- Outer ambient ring -->
               <div class="orb-outer-ring"></div>
             </div>
-          </div>
 
-          <!-- Control Pill (bottom center) -->
-          <div class="persona-controls-overlay">
-            <!-- Controls Row -->
-            <div class="controls-row">
-              <button type="button" id="connectBtn" class="control-btn standard" title="Start Session"
-                aria-label="Start Session">▶</button>
-
-              <button type="button" id="interruptBtn" class="control-btn standard initially-hidden" disabled
-                title="Pause AI" aria-label="Pause AI">⏸</button>
-
-              <button type="button" id="disconnectBtn" class="control-btn standard" disabled title="End Session"
-                aria-label="End Session">⏹</button>
+            <!-- Control Buttons -->
+            <div class="orb-controls">
+              <button type="button" id="connectBtn" class="orb-control-btn" title="Start Session" aria-label="Start Session">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M8 5v14l11-7z"/>
+                </svg>
+              </button>
+              <button type="button" id="interruptBtn" class="orb-control-btn initially-hidden" disabled title="Pause AI" aria-label="Pause AI">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M6 4h4v16H6zM14 4h4v16h-4z"/>
+                </svg>
+              </button>
+              <button type="button" id="disconnectBtn" class="orb-control-btn" disabled title="End Session" aria-label="End Session">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <rect x="6" y="6" width="12" height="12"/>
+                </svg>
+              </button>
             </div>
           </div>
 
@@ -2089,43 +2209,7 @@
             </div>
             <span id="waveformStatus" class="waveform-status">AI is speaking...</span>
           </div>
-        </div>
-
-        <!-- Right Panel (40%): Sidebar with Clinical Image + Transcript -->
-        <div class="sidebar-panel">
-          <!-- Clinical Image Section -->
-          <div id="imageSection" class="clinical-section">
-            <div class="section-header">
-              <span class="case-badge">Clinical Image</span>
-              <button type="button" class="expand-btn" onclick="openImageModal()" title="Fullscreen"
-                aria-label="View fullscreen">⤢</button>
-            </div>
-            <div class="clinical-image-container">
-              <img id="clinicalImage" class="clinical-image initially-hidden" src="" alt="Clinical image"
-                onclick="openImageModal()">
-              <div class="image-overlay initially-hidden">
-                <span>Click to examine</span>
-              </div>
-              <div id="noImagePlaceholder" class="no-image-placeholder">
-                No clinical image for this scenario
-              </div>
-            </div>
-          </div>
-
-          <!-- Transcript Section -->
-          <div class="transcript-section">
-            <div class="section-header">
-              <span class="section-header-title">Transcript</span>
-            </div>
-            <div id="transcriptContainer" class="transcript-container">
-              <div id="transcriptMessages" class="transcript-messages">
-                <div class="transcript-empty">
-                  Conversation will appear here...
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        </main>
       </div>
 
       <!-- Hidden status elements for compatibility -->
@@ -2293,6 +2377,7 @@
   <script src="js/vad/SimpleVAD.js"></script>
   <script src="js/session.js"></script>
   <script src="js/scenarios.js"></script>
+  <script src="js/sidebar.js"></script>
   <script src="js/mock-exam.js"></script>
   <script src="js/app.js"></script>
   <!-- Glow Effect (Desktop only) -->

@@ -1334,6 +1334,761 @@ body.has-header .simulation-room.active {
 }
 
 /* ============================================
+   NEW SIMULATION ROOM - FLOATING PANELS LAYOUT
+   Immersive persona background with glass-morphic panels
+   ============================================ */
+
+/* Design Tokens */
+:root {
+  --sim-panel-bg: rgba(255, 255, 255, 0.88);
+  --sim-panel-blur: 20px;
+  --sim-panel-border: rgba(74, 93, 76, 0.12);
+  --sim-panel-radius: 16px;
+  --sim-panel-shadow: 0 4px 24px rgba(74, 93, 76, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+
+  --sim-sidebar-collapsed: 64px;
+  --sim-sidebar-expanded: 280px;
+  --sim-sidebar-transition: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  --sim-orb-bottom-offset: 100px;
+  --sim-panel-gap: 20px;
+  --sim-panel-width: 340px;
+}
+
+/* Main Simulation Layout Container */
+.sim-layout {
+  display: none;
+  flex: 1;
+  min-height: 0;
+}
+
+.simulation-room.active .sim-layout {
+  display: flex;
+}
+
+/* Hide old desktop layout when new layout is active */
+.simulation-room.active .desktop-simulation-layout {
+  display: none;
+}
+
+.simulation-room.active .simulation-header {
+  display: none;
+}
+
+/* ============================================
+   COLLAPSIBLE SIDEBAR
+   ============================================ */
+.sim-sidebar {
+  width: var(--sim-sidebar-collapsed);
+  min-width: var(--sim-sidebar-collapsed);
+  height: 100%;
+  background: var(--sim-bg-secondary);
+  border-right: 1px solid var(--sim-border);
+  display: flex;
+  flex-direction: column;
+  transition: width var(--sim-sidebar-transition), min-width var(--sim-sidebar-transition);
+  overflow: hidden;
+  z-index: 100;
+}
+
+.sim-sidebar:hover,
+.sim-sidebar.expanded {
+  width: var(--sim-sidebar-expanded);
+  min-width: var(--sim-sidebar-expanded);
+}
+
+/* Sidebar Header */
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border-bottom: 1px solid var(--sim-border);
+  min-height: 56px;
+}
+
+.sidebar-toggle {
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  border-radius: 8px;
+  border: none;
+  background: var(--sim-bg-accent);
+  color: var(--sim-text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.sidebar-toggle:hover {
+  background: var(--sim-accent-muted);
+  color: var(--sim-accent-primary);
+}
+
+.sidebar-title {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--sim-text-primary);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.15s ease 0.1s;
+}
+
+.sim-sidebar:hover .sidebar-title,
+.sim-sidebar.expanded .sidebar-title {
+  opacity: 1;
+}
+
+/* Sidebar Navigation */
+.sidebar-nav {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 8px;
+}
+
+.nav-category {
+  margin-bottom: 4px;
+}
+
+.nav-category-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: none;
+  background: transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: left;
+}
+
+.nav-category-btn:hover {
+  background: var(--sim-bg-accent);
+}
+
+.nav-category.active > .nav-category-btn {
+  background: var(--sim-accent-muted);
+}
+
+.nav-icon {
+  font-size: 18px;
+  min-width: 24px;
+  text-align: center;
+}
+
+.nav-label {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--sim-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0;
+  transition: opacity 0.15s ease 0.1s;
+}
+
+.sim-sidebar:hover .nav-label,
+.sim-sidebar.expanded .nav-label {
+  opacity: 1;
+}
+
+.nav-chevron {
+  margin-left: auto;
+  color: var(--sim-text-muted);
+  transition: transform 0.2s ease, opacity 0.15s ease 0.1s;
+  opacity: 0;
+  flex-shrink: 0;
+}
+
+.sim-sidebar:hover .nav-chevron,
+.sim-sidebar.expanded .nav-chevron {
+  opacity: 1;
+}
+
+.nav-category.expanded > .nav-category-btn .nav-chevron {
+  transform: rotate(90deg);
+}
+
+/* Subcategories (Accordion) */
+.nav-subcategories {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.25s ease;
+  padding-left: 12px;
+}
+
+.nav-category.expanded > .nav-subcategories {
+  max-height: 500px;
+}
+
+.nav-subcategory-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: left;
+  margin-top: 2px;
+}
+
+.nav-subcategory-btn:hover {
+  background: var(--sim-bg-accent);
+}
+
+.nav-subcategory-btn.active {
+  background: var(--sim-accent-muted);
+  color: var(--sim-accent-primary);
+}
+
+.nav-subcategory-btn .nav-icon {
+  font-size: 14px;
+  min-width: 20px;
+}
+
+.nav-subcategory-btn .nav-label {
+  font-size: 12px;
+  font-weight: 400;
+}
+
+/* Topics list inside subcategory */
+.nav-topics {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease;
+  padding-left: 8px;
+}
+
+.nav-subcategory.expanded > .nav-topics {
+  max-height: 1000px;
+}
+
+.nav-topic-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: left;
+  margin-top: 2px;
+}
+
+.nav-topic-btn:hover {
+  background: var(--sim-bg-accent);
+}
+
+.nav-topic-btn.current {
+  background: var(--sim-accent-primary);
+  color: white;
+}
+
+.nav-topic-btn .topic-name {
+  font-family: var(--font-body);
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+}
+
+.nav-topic-btn .topic-difficulty {
+  font-size: 8px;
+  padding: 2px 5px;
+  border-radius: 4px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.topic-difficulty.easy {
+  background: rgba(16, 185, 129, 0.15);
+  color: #059669;
+}
+
+.topic-difficulty.moderate {
+  background: rgba(245, 158, 11, 0.15);
+  color: #D97706;
+}
+
+.topic-difficulty.strict {
+  background: rgba(239, 68, 68, 0.15);
+  color: #DC2626;
+}
+
+.nav-topic-btn.locked {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.nav-topic-btn.locked::after {
+  content: '🔒';
+  font-size: 10px;
+  margin-left: auto;
+}
+
+/* Sidebar Footer */
+.sidebar-footer {
+  padding: 12px;
+  border-top: 1px solid var(--sim-border);
+}
+
+.sidebar-back-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: none;
+  background: transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  color: var(--sim-text-secondary);
+}
+
+.sidebar-back-btn:hover {
+  background: rgba(239, 68, 68, 0.1);
+  color: #DC2626;
+}
+
+.sidebar-back-btn svg {
+  min-width: 16px;
+}
+
+/* ============================================
+   MAIN SIMULATION AREA
+   ============================================ */
+.sim-main {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Persona Backdrop (Full Background) */
+.persona-backdrop {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #F7F5F2 0%, #EBE8E4 50%, #F7F5F2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.persona-backdrop .persona-image {
+  position: relative;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+  z-index: 1;
+}
+
+/* Vignette overlay for depth */
+.persona-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(247, 245, 242, 0.6) 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Hide old persona-info-overlay in new layout */
+.sim-layout .persona-info-overlay {
+  display: none !important;
+}
+
+/* Persona Info Badge (top-left floating) */
+.persona-info-badge {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  padding: 14px 20px;
+  background: var(--sim-panel-bg);
+  backdrop-filter: blur(var(--sim-panel-blur));
+  -webkit-backdrop-filter: blur(var(--sim-panel-blur));
+  border: 1px solid var(--sim-panel-border);
+  border-radius: 12px;
+  box-shadow: var(--sim-panel-shadow);
+  z-index: 10;
+  animation: badge-fade-in 0.4s ease-out 0.2s both;
+}
+
+@keyframes badge-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.persona-info-badge .persona-name {
+  font-family: var(--font-display);
+  font-size: 16px;
+  color: var(--sim-text-primary);
+  margin: 0 0 2px 0;
+}
+
+.persona-info-badge .persona-title {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--sim-text-muted);
+  margin: 0;
+}
+
+/* Scenario Title Badge (top-center floating) */
+.scenario-title-badge {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 24px;
+  background: var(--sim-panel-bg);
+  backdrop-filter: blur(var(--sim-panel-blur));
+  -webkit-backdrop-filter: blur(var(--sim-panel-blur));
+  border: 1px solid var(--sim-panel-border);
+  border-radius: 12px;
+  box-shadow: var(--sim-panel-shadow);
+  text-align: center;
+  z-index: 10;
+  animation: badge-fade-in 0.4s ease-out 0.3s both;
+}
+
+.scenario-title-badge h2 {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--sim-text-primary);
+  margin: 0 0 2px 0;
+  white-space: nowrap;
+}
+
+.scenario-title-badge p {
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: var(--sim-text-muted);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ============================================
+   FLOATING PANELS
+   ============================================ */
+.floating-panels {
+  position: absolute;
+  top: 80px;
+  right: var(--sim-panel-gap);
+  bottom: calc(var(--sim-orb-bottom-offset) + 120px);
+  width: var(--sim-panel-width);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sim-panel-gap);
+  z-index: 20;
+  pointer-events: none;
+}
+
+.float-panel {
+  background: var(--sim-panel-bg);
+  backdrop-filter: blur(var(--sim-panel-blur));
+  -webkit-backdrop-filter: blur(var(--sim-panel-blur));
+  border: 1px solid var(--sim-panel-border);
+  border-radius: var(--sim-panel-radius);
+  box-shadow: var(--sim-panel-shadow);
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  transform: translateX(20px);
+  animation: panel-slide-in-right 0.5s ease-out forwards;
+}
+
+@keyframes panel-slide-in-right {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.float-panel:nth-child(1) {
+  animation-delay: 0.2s;
+}
+
+.float-panel:nth-child(2) {
+  animation-delay: 0.35s;
+}
+
+/* Panel Header */
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--sim-border);
+}
+
+.panel-badge {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--sim-text-secondary);
+  text-transform: uppercase;
+}
+
+.panel-expand-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  color: var(--sim-text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.panel-expand-btn:hover {
+  background: var(--sim-bg-accent);
+  color: var(--sim-accent-primary);
+}
+
+/* Panel Content */
+.panel-content {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Clinical Panel */
+.clinical-panel {
+  flex: 0 0 auto;
+  max-height: 280px;
+}
+
+.clinical-panel .panel-content {
+  padding: 12px;
+}
+
+.clinical-panel .clinical-image-container {
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--sim-bg-accent);
+  height: 100%;
+  min-height: 140px;
+}
+
+.clinical-panel .clinical-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.clinical-panel .no-image-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 100%;
+  min-height: 140px;
+  color: var(--sim-text-muted);
+  font-family: var(--font-body);
+  font-size: 12px;
+}
+
+/* Transcript Panel */
+.transcript-panel {
+  flex: 1;
+  min-height: 200px;
+  max-height: 400px;
+}
+
+.transcript-panel .panel-content {
+  padding: 12px;
+  overflow-y: auto;
+}
+
+.transcript-panel .transcript-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.transcript-panel .transcript-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 120px;
+  color: var(--sim-text-muted);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-style: italic;
+}
+
+.transcript-panel .transcript-message {
+  padding: 10px 14px;
+  border-radius: 12px;
+  max-width: 90%;
+  font-family: var(--font-body);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+/* ============================================
+   ORB CONTROL OVERLAY (Center-Bottom)
+   ============================================ */
+.orb-control-overlay {
+  position: absolute;
+  bottom: var(--sim-orb-bottom-offset);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  z-index: 30;
+  animation: orb-rise 0.5s ease-out 0.4s both;
+}
+
+@keyframes orb-rise {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* Orb Controls (Play/Pause/Stop buttons) */
+.orb-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--sim-panel-bg);
+  backdrop-filter: blur(var(--sim-panel-blur));
+  -webkit-backdrop-filter: blur(var(--sim-panel-blur));
+  border: 1px solid var(--sim-panel-border);
+  border-radius: 40px;
+  box-shadow: var(--sim-panel-shadow);
+}
+
+.orb-control-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  background: var(--sim-bg-accent);
+  color: var(--sim-text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.orb-control-btn:hover:not(:disabled) {
+  background: var(--sim-accent-primary);
+  color: white;
+  transform: scale(1.05);
+}
+
+.orb-control-btn:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.orb-control-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* Connect button special styling */
+#connectBtn:not(:disabled) {
+  background: var(--sim-accent-primary);
+  color: white;
+}
+
+#connectBtn:hover:not(:disabled) {
+  background: var(--brand-dark);
+}
+
+/* Disconnect button danger styling */
+#disconnectBtn:not(:disabled):hover {
+  background: #EF4444;
+  color: white;
+}
+
+/* Adjust new simulation layout when header is visible */
+body.has-header .sim-layout {
+  height: calc(100vh - 60px - 52px); /* Subtract header (60px) and footer (52px) */
+}
+
+body.has-header .sim-sidebar {
+  height: calc(100vh - 60px - 52px);
+}
+
+body.has-header .sim-main {
+  height: calc(100vh - 60px - 52px);
+}
+
+/* ============================================
+   MOBILE RESPONSIVE ADJUSTMENTS
+   ============================================ */
+@media (max-width: 1024px) {
+  :root {
+    --sim-panel-width: 300px;
+  }
+
+  .floating-panels {
+    width: var(--sim-panel-width);
+  }
+}
+
+@media (max-width: 768px) {
+  /* Hide new layout on mobile, show mobile layout */
+  .sim-layout {
+    display: none !important;
+  }
+
+  .simulation-room.active .mobile-simulation-layout {
+    display: flex;
+  }
+
+  .simulation-room.active .desktop-simulation-layout {
+    display: none;
+  }
+}
+
+/* ============================================
    MODEL ANSWER DRAWER
    ============================================ */
 .drawer {
