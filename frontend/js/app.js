@@ -188,6 +188,32 @@ function selectDifficulty(difficulty) {
   log('Selected difficulty: ' + difficulty, 'info');
 }
 
+// Handle gradient card click for difficulty selection
+// Desktop: click directly selects
+// Mobile: first tap expands, second tap (on button) selects
+function handleCardClick(cardElement, difficulty) {
+  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  const isMobileView = window.innerWidth <= 768;
+
+  if (isTouchDevice && isMobileView) {
+    // Mobile: toggle expanded state
+    const allCards = document.querySelectorAll('.gradient-card');
+    const isAlreadyExpanded = cardElement.classList.contains('expanded');
+
+    // Collapse all cards first
+    allCards.forEach(card => card.classList.remove('expanded'));
+
+    // If this card wasn't expanded, expand it now
+    if (!isAlreadyExpanded) {
+      cardElement.classList.add('expanded');
+    }
+    // If it was already expanded, user tapped again - they should use the button
+  } else {
+    // Desktop: click directly selects
+    selectDifficulty(difficulty);
+  }
+}
+
 // Helper to update difficulty indicator on multiple pages
 function updateAllDifficultyIndicators(difficulty) {
   const difficultyEmoji = {
