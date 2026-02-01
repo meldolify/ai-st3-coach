@@ -2345,7 +2345,7 @@ button.top-back-button:active {
   text-align: center;
   border: 1px solid var(--border-light);
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   min-height: 50vh;
   display: flex;
   flex-direction: column;
@@ -2479,7 +2479,7 @@ button.top-back-button:active {
   transition: all 0.4s ease;
   text-align: center;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   min-height: 50vh;
   display: flex;
   flex-direction: column;
@@ -2668,7 +2668,7 @@ button.top-back-button:active {
   transition: all 0.4s ease;
   text-align: center;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   min-height: 45vh;
   display: flex;
   flex-direction: column;
@@ -4623,6 +4623,8 @@ button.btn-primary {
   text-decoration: none !important;
   white-space: nowrap;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: visible;
 }
 
 .btn-primary:hover,
@@ -4657,6 +4659,8 @@ button.btn-secondary {
   text-decoration: none !important;
   white-space: nowrap;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: visible;
 }
 
 .btn-secondary:hover,
@@ -6690,4 +6694,81 @@ body.has-header {
 #mobileInterruptBtn:not(:disabled):hover {
   background: linear-gradient(135deg, #EF4444, #DC2626);
   box-shadow: 0 0 15px rgba(220, 38, 38, 0.5);
+}
+
+/* ============================================
+   GLOWING BORDER EFFECT (Desktop Only)
+   Mouse-following conic gradient border
+   Inspired by Aceternity UI glowing-effect
+   ============================================ */
+
+.glow-effect {
+  --glow-blur: 0px;
+  --glow-spread: 40;
+  --glow-angle: 0;
+  --glow-active: 0;
+  --glow-border-width: 3px;
+  --glow-gradient:
+    radial-gradient(circle, #dd7bbb 10%, transparent 20%),
+    radial-gradient(circle at 40% 40%, #d79f1e 5%, transparent 15%),
+    radial-gradient(circle at 60% 60%, #5a922c 10%, transparent 20%),
+    radial-gradient(circle at 40% 60%, #4c7894 10%, transparent 20%),
+    repeating-conic-gradient(
+      from 236.84deg at 50% 50%,
+      #dd7bbb 0%,
+      #d79f1e 5%,
+      #5a922c 10%,
+      #4c7894 15%,
+      #dd7bbb 20%
+    );
+}
+
+.glow-effect::after {
+  content: '';
+  position: absolute;
+  inset: calc(-1 * var(--glow-border-width));
+  border-radius: inherit;
+  border: var(--glow-border-width) solid transparent;
+  background: var(--glow-gradient);
+  background-attachment: fixed;
+  opacity: var(--glow-active);
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 1;
+
+  /* Mask to show only the rotating border segment */
+  -webkit-mask:
+    linear-gradient(#0000, #0000),
+    conic-gradient(
+      from calc((var(--glow-angle) - var(--glow-spread)) * 1deg),
+      transparent 0deg,
+      #fff calc(var(--glow-spread) * 1deg),
+      #fff calc(var(--glow-spread) * 2deg),
+      transparent calc(var(--glow-spread) * 2deg)
+    );
+  mask:
+    linear-gradient(#0000, #0000),
+    conic-gradient(
+      from calc((var(--glow-angle) - var(--glow-spread)) * 1deg),
+      transparent 0deg,
+      #fff calc(var(--glow-spread) * 1deg),
+      #fff calc(var(--glow-spread) * 2deg),
+      transparent calc(var(--glow-spread) * 2deg)
+    );
+  -webkit-mask-clip: padding-box, border-box;
+  mask-clip: padding-box, border-box;
+  -webkit-mask-composite: intersect;
+  mask-composite: intersect;
+}
+
+/* Blur variant for softer glow */
+.glow-effect.glow-blur::after {
+  filter: blur(var(--glow-blur));
+}
+
+/* Desktop only - disable on touch devices */
+@media (hover: none), (pointer: coarse) {
+  .glow-effect::after {
+    display: none;
+  }
 }
