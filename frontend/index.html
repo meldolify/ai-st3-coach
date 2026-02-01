@@ -208,6 +208,13 @@
 
     /* ===== LUMINOUS PEARL ORB - Premium Voice Orb Design ===== */
 
+    /* CSS Houdini @property for smooth conic gradient rotation */
+    @property --orb-angle {
+      syntax: '<angle>';
+      initial-value: 0deg;
+      inherits: false;
+    }
+
     /* CSS Variables for state colors */
     .voice-orb {
       --state-idle: 196, 196, 196;
@@ -251,10 +258,105 @@
       align-items: center;
       justify-content: center;
       position: relative;
-      overflow: visible;
+      overflow: hidden;
+      --orb-angle: 0deg;
       transition:
         box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
         transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* ===== SIRI-STYLE ROTATING GRADIENT CONTAINER ===== */
+    .orb-gradient-container {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+
+      /* Multiple overlapping conic-gradients with OKLCH colors */
+      background:
+        /* Pink/coral sweep */
+        conic-gradient(
+          from calc(var(--orb-angle) * 1.2) at 30% 65%,
+          oklch(65% 0.22 350) 0deg,
+          transparent 60deg,
+          transparent 300deg,
+          oklch(65% 0.22 350) 360deg
+        ),
+        /* Cyan sweep */
+        conic-gradient(
+          from calc(var(--orb-angle) * 0.8 + 120deg) at 70% 35%,
+          oklch(70% 0.20 200) 0deg,
+          transparent 50deg,
+          transparent 310deg,
+          oklch(70% 0.20 200) 360deg
+        ),
+        /* Purple sweep (counter-rotating) */
+        conic-gradient(
+          from calc(var(--orb-angle) * -1.5 + 60deg) at 65% 75%,
+          oklch(68% 0.22 280) 0deg,
+          transparent 70deg,
+          transparent 290deg,
+          oklch(68% 0.22 280) 360deg
+        ),
+        /* Secondary pink (faster) */
+        conic-gradient(
+          from calc(var(--orb-angle) * 2.1 + 180deg) at 25% 25%,
+          oklch(65% 0.18 350 / 0.7) 0deg,
+          transparent 40deg,
+          transparent 320deg,
+          oklch(65% 0.18 350 / 0.7) 360deg
+        ),
+        /* Secondary cyan (slower, counter) */
+        conic-gradient(
+          from calc(var(--orb-angle) * -0.7 + 240deg) at 80% 50%,
+          oklch(70% 0.16 200 / 0.6) 0deg,
+          transparent 55deg,
+          transparent 305deg,
+          oklch(70% 0.16 200 / 0.6) 360deg
+        ),
+        /* Radial glow for depth */
+        radial-gradient(
+          ellipse 120% 80% at 40% 60%,
+          oklch(68% 0.18 280 / 0.5) 0%,
+          transparent 50%
+        );
+
+      /* Blur and enhance for soft glow effect */
+      filter: blur(14px) saturate(1.4);
+
+      /* Blend with pearlescent background */
+      mix-blend-mode: multiply;
+      opacity: 0.75;
+
+      /* Continuous rotation animation */
+      animation: orb-gradient-rotate 20s linear infinite;
+
+      /* Performance optimization */
+      transform: translateZ(0);
+      will-change: transform;
+
+      z-index: 0;
+    }
+
+    /* Gradient rotation keyframe */
+    @keyframes orb-gradient-rotate {
+      from { --orb-angle: 0deg; }
+      to { --orb-angle: 360deg; }
+    }
+
+    /* Highlight overlay on gradient container */
+    .orb-gradient-container::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: radial-gradient(
+        circle at 35% 35%,
+        rgba(255, 255, 255, 0.25) 0%,
+        rgba(255, 255, 255, 0.08) 35%,
+        transparent 60%
+      );
+      mix-blend-mode: overlay;
+      pointer-events: none;
     }
 
     /* Inner glow layer for depth */
@@ -265,11 +367,12 @@
       width: 40%;
       height: 25%;
       background: linear-gradient(135deg,
-          rgba(255, 255, 255, 0.95) 0%,
-          rgba(255, 255, 255, 0.4) 50%,
+          rgba(255, 255, 255, 0.85) 0%,
+          rgba(255, 255, 255, 0.3) 50%,
           rgba(255, 255, 255, 0) 100%);
       border-radius: 50%;
       pointer-events: none;
+      z-index: 3;
     }
 
     /* Outer ambient ring */
@@ -281,6 +384,7 @@
       opacity: 0;
       transition: all 0.4s ease;
       pointer-events: none;
+      z-index: 4;
     }
 
     /* SVG Arc Equalizer */
@@ -313,6 +417,40 @@
 
     .voice-orb.idle .equalizer-arc {
       fill: rgba(var(--state-idle), 0.4);
+    }
+
+    /* IDLE gradient: Muted blue-gray, slow rotation */
+    .voice-orb.idle .orb-gradient-container {
+      animation-duration: 25s;
+      filter: blur(16px) saturate(1.1);
+      opacity: 0.5;
+      background:
+        conic-gradient(
+          from calc(var(--orb-angle) * 1.2) at 30% 65%,
+          oklch(72% 0.08 220) 0deg,
+          transparent 60deg,
+          transparent 300deg,
+          oklch(72% 0.08 220) 360deg
+        ),
+        conic-gradient(
+          from calc(var(--orb-angle) * 0.8 + 120deg) at 70% 35%,
+          oklch(68% 0.06 240) 0deg,
+          transparent 50deg,
+          transparent 310deg,
+          oklch(68% 0.06 240) 360deg
+        ),
+        conic-gradient(
+          from calc(var(--orb-angle) * -1.5 + 60deg) at 65% 75%,
+          oklch(70% 0.07 200) 0deg,
+          transparent 70deg,
+          transparent 290deg,
+          oklch(70% 0.07 200) 360deg
+        ),
+        radial-gradient(
+          ellipse 120% 80% at 40% 60%,
+          oklch(70% 0.06 220 / 0.4) 0%,
+          transparent 50%
+        );
     }
 
     @keyframes orb-idle-breathe {
@@ -361,6 +499,47 @@
 
     .voice-orb.listening .equalizer-arc {
       fill: rgba(var(--state-listening), 0.6);
+    }
+
+    /* LISTENING gradient: Vibrant mint/teal, faster rotation */
+    .voice-orb.listening .orb-gradient-container {
+      animation-duration: 15s;
+      filter: blur(12px) saturate(1.5);
+      opacity: 0.7;
+      background:
+        conic-gradient(
+          from calc(var(--orb-angle) * 1.2) at 30% 65%,
+          oklch(78% 0.20 160) 0deg,
+          transparent 60deg,
+          transparent 300deg,
+          oklch(78% 0.20 160) 360deg
+        ),
+        conic-gradient(
+          from calc(var(--orb-angle) * 0.8 + 120deg) at 70% 35%,
+          oklch(75% 0.18 180) 0deg,
+          transparent 50deg,
+          transparent 310deg,
+          oklch(75% 0.18 180) 360deg
+        ),
+        conic-gradient(
+          from calc(var(--orb-angle) * -1.5 + 60deg) at 65% 75%,
+          oklch(80% 0.15 140) 0deg,
+          transparent 70deg,
+          transparent 290deg,
+          oklch(80% 0.15 140) 360deg
+        ),
+        conic-gradient(
+          from calc(var(--orb-angle) * 2.1 + 180deg) at 25% 25%,
+          oklch(75% 0.16 170 / 0.7) 0deg,
+          transparent 40deg,
+          transparent 320deg,
+          oklch(75% 0.16 170 / 0.7) 360deg
+        ),
+        radial-gradient(
+          ellipse 120% 80% at 40% 60%,
+          oklch(78% 0.18 155 / 0.5) 0%,
+          transparent 50%
+        );
     }
 
     @keyframes orb-listening-breathe {
@@ -412,6 +591,47 @@
       fill: rgba(var(--state-thinking), 0.6);
     }
 
+    /* THINKING gradient: Violet/purple, medium rotation */
+    .voice-orb.thinking .orb-gradient-container {
+      animation-duration: 12s;
+      filter: blur(13px) saturate(1.4);
+      opacity: 0.72;
+      background:
+        conic-gradient(
+          from calc(var(--orb-angle) * 1.2) at 30% 65%,
+          oklch(70% 0.22 280) 0deg,
+          transparent 60deg,
+          transparent 300deg,
+          oklch(70% 0.22 280) 360deg
+        ),
+        conic-gradient(
+          from calc(var(--orb-angle) * 0.8 + 120deg) at 70% 35%,
+          oklch(65% 0.24 300) 0deg,
+          transparent 50deg,
+          transparent 310deg,
+          oklch(65% 0.24 300) 360deg
+        ),
+        conic-gradient(
+          from calc(var(--orb-angle) * -1.5 + 60deg) at 65% 75%,
+          oklch(75% 0.18 260) 0deg,
+          transparent 70deg,
+          transparent 290deg,
+          oklch(75% 0.18 260) 360deg
+        ),
+        conic-gradient(
+          from calc(var(--orb-angle) * 2.1 + 180deg) at 25% 25%,
+          oklch(68% 0.20 290 / 0.7) 0deg,
+          transparent 40deg,
+          transparent 320deg,
+          oklch(68% 0.20 290 / 0.7) 360deg
+        ),
+        radial-gradient(
+          ellipse 120% 80% at 40% 60%,
+          oklch(70% 0.20 275 / 0.5) 0%,
+          transparent 50%
+        );
+    }
+
     @keyframes orb-thinking-pulse {
 
       0%,
@@ -456,6 +676,54 @@
       fill: rgba(var(--state-speaking), 0.7);
     }
 
+    /* SPEAKING gradient: Warm coral/peach, fast energetic rotation */
+    .voice-orb.speaking .orb-gradient-container {
+      animation-duration: 8s;
+      filter: blur(11px) saturate(1.5);
+      opacity: 0.8;
+      background:
+        conic-gradient(
+          from calc(var(--orb-angle) * 1.2) at 30% 65%,
+          oklch(78% 0.22 30) 0deg,
+          transparent 60deg,
+          transparent 300deg,
+          oklch(78% 0.22 30) 360deg
+        ),
+        conic-gradient(
+          from calc(var(--orb-angle) * 0.8 + 120deg) at 70% 35%,
+          oklch(75% 0.20 15) 0deg,
+          transparent 50deg,
+          transparent 310deg,
+          oklch(75% 0.20 15) 360deg
+        ),
+        conic-gradient(
+          from calc(var(--orb-angle) * -1.5 + 60deg) at 65% 75%,
+          oklch(80% 0.18 45) 0deg,
+          transparent 70deg,
+          transparent 290deg,
+          oklch(80% 0.18 45) 360deg
+        ),
+        conic-gradient(
+          from calc(var(--orb-angle) * 2.1 + 180deg) at 25% 25%,
+          oklch(76% 0.19 25 / 0.7) 0deg,
+          transparent 40deg,
+          transparent 320deg,
+          oklch(76% 0.19 25 / 0.7) 360deg
+        ),
+        conic-gradient(
+          from calc(var(--orb-angle) * -0.7 + 240deg) at 80% 50%,
+          oklch(78% 0.16 40 / 0.6) 0deg,
+          transparent 55deg,
+          transparent 305deg,
+          oklch(78% 0.16 40 / 0.6) 360deg
+        ),
+        radial-gradient(
+          ellipse 120% 80% at 40% 60%,
+          oklch(78% 0.20 35 / 0.5) 0%,
+          transparent 50%
+        );
+    }
+
     @keyframes orb-speaking-pulse {
 
       0%,
@@ -479,6 +747,29 @@
         transform: scale(1.8);
         opacity: 0;
         border-width: 1px;
+      }
+    }
+
+    /* ===== REDUCED MOTION SUPPORT ===== */
+    @media (prefers-reduced-motion: reduce) {
+      .orb-gradient-container {
+        animation: none !important;
+      }
+
+      .orb-visualizer-canvas {
+        opacity: 0.3;
+      }
+
+      .voice-orb,
+      .voice-orb.idle,
+      .voice-orb.listening,
+      .voice-orb.thinking,
+      .voice-orb.speaking {
+        animation: none !important;
+      }
+
+      .orb-outer-ring {
+        animation: none !important;
       }
     }
 
@@ -1358,8 +1649,8 @@
       <div class="gradient-cards-container">
         <!-- John Card - Easy (Green) -->
         <div class="gradient-card" data-difficulty="easy" onclick="handleCardClick(this, 'easy')">
-          <span class="gradient-panel" style="--gradient-from: #4dff03; --gradient-to: #00d0ff;"></span>
-          <span class="gradient-panel gradient-panel--blur" style="--gradient-from: #4dff03; --gradient-to: #00d0ff;"></span>
+          <span class="gradient-panel" style="--gradient-from: #6ec26e; --gradient-to: #5eb8b8;"></span>
+          <span class="gradient-panel gradient-panel--blur" style="--gradient-from: #6ec26e; --gradient-to: #5eb8b8;"></span>
           <span class="animated-blobs">
             <span class="blob blob--top"></span>
             <span class="blob blob--bottom"></span>
@@ -1375,8 +1666,8 @@
 
         <!-- Elliot Card - Medium (Orange) -->
         <div class="gradient-card" data-difficulty="medium" onclick="handleCardClick(this, 'medium')">
-          <span class="gradient-panel" style="--gradient-from: #ffbc00; --gradient-to: #ff0058;"></span>
-          <span class="gradient-panel gradient-panel--blur" style="--gradient-from: #ffbc00; --gradient-to: #ff0058;"></span>
+          <span class="gradient-panel" style="--gradient-from: #e8a849; --gradient-to: #d4707a;"></span>
+          <span class="gradient-panel gradient-panel--blur" style="--gradient-from: #e8a849; --gradient-to: #d4707a;"></span>
           <span class="animated-blobs">
             <span class="blob blob--top"></span>
             <span class="blob blob--bottom"></span>
@@ -1392,8 +1683,8 @@
 
         <!-- Perry Card - Strict (Red) -->
         <div class="gradient-card" data-difficulty="strict" onclick="handleCardClick(this, 'strict')">
-          <span class="gradient-panel" style="--gradient-from: #ff0058; --gradient-to: #7c3aed;"></span>
-          <span class="gradient-panel gradient-panel--blur" style="--gradient-from: #ff0058; --gradient-to: #7c3aed;"></span>
+          <span class="gradient-panel" style="--gradient-from: #d4707a; --gradient-to: #9b7dc9;"></span>
+          <span class="gradient-panel gradient-panel--blur" style="--gradient-from: #d4707a; --gradient-to: #9b7dc9;"></span>
           <span class="animated-blobs">
             <span class="blob blob--top"></span>
             <span class="blob blob--bottom"></span>
@@ -1720,11 +2011,13 @@
               <span id="aiStatus">Ready</span>
               <div class="status-accent-line"></div>
             </div>
-            <!-- Voice Orb (Luminous Pearl design) -->
+            <!-- Voice Orb (Luminous Pearl design with Siri-style gradients) -->
             <div id="voiceOrb" class="voice-orb idle">
+              <!-- Rotating gradient container (Siri-style) -->
+              <div class="orb-gradient-container"></div>
               <!-- Inner glow layer -->
               <div class="orb-inner-glow"></div>
-              <!-- SVG arc equalizer - created dynamically by orb-visualizer.js -->
+              <!-- Canvas visualizer - created dynamically by orb-visualizer.js -->
               <!-- Outer ambient ring -->
               <div class="orb-outer-ring"></div>
             </div>
@@ -1818,6 +2111,8 @@
             <div class="status-accent-line"></div>
           </div>
           <div id="mobileVoiceOrb" class="voice-orb idle">
+            <!-- Rotating gradient container (Siri-style) -->
+            <div class="orb-gradient-container"></div>
             <div class="orb-inner-glow"></div>
             <div class="orb-outer-ring"></div>
           </div>

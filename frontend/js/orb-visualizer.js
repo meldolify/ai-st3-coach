@@ -1,16 +1,19 @@
 // ============================================================================
-// ORB-VISUALIZER.JS - Audio-Reactive Voice Orb with SVG Arc Equalizer
+// ORB-VISUALIZER.JS - Audio-Reactive Voice Orb with Canvas Radiating Rings
 // ============================================================================
-// Provides real-time audio visualization using 16 curved arc segments.
-// Creates a polished equalizer effect around the orb perimeter.
+// Provides real-time audio visualization using concentric radiating rings.
+// Creates a polished gradient ripple effect that responds to audio frequencies.
 // ============================================================================
 
 class OrbVisualizer {
   constructor() {
     this.orb = null;
     this.mobileOrb = null;
-    this.arcs = [];
-    this.mobileArcs = [];
+    this.canvas = null;
+    this.mobileCanvas = null;
+    this.ctx = null;
+    this.mobileCtx = null;
+    this.rings = [];
     this.audioContext = null;
     this.analyser = null;
     this.isActive = false;
@@ -19,15 +22,13 @@ class OrbVisualizer {
     this.visualizationAnimationId = null;
     this.currentSource = null;
 
-    // Arc configuration
+    // Ring configuration
     this.config = {
-      segmentCount: 16,
-      gapDegrees: 8,
-      innerRadius: 38,
-      minOuterRadius: 44,
-      maxOuterRadius: 62,
-      centerX: 70,
-      centerY: 70
+      ringCount: 6,           // Number of concentric rings
+      baseRadius: 25,         // Starting radius from center
+      maxExpansion: 35,       // Maximum expansion per ring when audio peaks
+      spacing: 10,            // Base space between rings
+      canvasSize: 140         // Canvas dimensions (matches orb size)
     };
 
     // Callbacks (mirror AudioPlayer interface)
@@ -40,7 +41,7 @@ class OrbVisualizer {
 
   /**
    * Initialize the visualizer - must be called after user gesture (click/tap)
-   * Creates AudioContext and builds SVG arc segments inside orb elements
+   * Creates AudioContext and builds canvas visualizers inside orb elements
    */
   async init() {
     // Get orb elements
@@ -65,21 +66,24 @@ class OrbVisualizer {
 
       // Create analyser node for frequency data
       this.analyser = this.audioContext.createAnalyser();
-      this.analyser.fftSize = 64; // 32 frequency bins (we use first 16)
+      this.analyser.fftSize = 64; // 32 frequency bins (we use first 6)
       this.analyser.smoothingTimeConstant = 0.75;
       this.analyser.minDecibels = -85;
       this.analyser.maxDecibels = -10;
 
-      // Build SVG arc equalizers
-      this.createArcEqualizer(this.orb, this.arcs);
+      // Build canvas visualizers
+      this.createCanvasVisualizer(this.orb, false);
       if (this.mobileOrb) {
-        this.createArcEqualizer(this.mobileOrb, this.mobileArcs);
+        this.createCanvasVisualizer(this.mobileOrb, true);
       }
+
+      // Initialize ring data
+      this.initRings();
 
       // Start idle shimmer
       this.startIdleShimmer();
 
-      console.log('[OrbVisualizer] Initialized with arc equalizer');
+      console.log('[OrbVisualizer] Initialized with canvas radiating rings');
     } catch (error) {
       console.error('[OrbVisualizer] Failed to initialize AudioContext:', error);
       // Don't throw - visualizer is optional, audio should still work
@@ -88,96 +92,140 @@ class OrbVisualizer {
   }
 
   /**
-   * Create SVG arc equalizer inside an orb element
+   * Create canvas visualizer inside an orb element
    */
-  createArcEqualizer(orbElement, arcsArray) {
-    // Remove existing equalizer if present
-    const existing = orbElement.querySelector('.orb-equalizer');
-    if (existing) {
-      existing.remove();
+  createCanvasVisualizer(orbElement, isMobile = false) {
+    // Remove existing equalizer/canvas if present
+    const existingEq = orbElement.querySelector('.orb-equalizer');
+    if (existingEq) existingEq.remove();
+
+    const existingCanvas = orbElement.querySelector('.orb-visualizer-canvas');
+    if (existingCanvas) existingCanvas.remove();
+
+    const { canvasSize } = this.config;
+
+    // Create canvas element
+    const canvas = document.createElement('canvas');
+    canvas.className = 'orb-visualizer-canvas';
+    canvas.width = canvasSize;
+    canvas.height = canvasSize;
+    canvas.style.cssText = `
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 2;
+      border-radius: 50%;
+    `;
+
+    orbElement.appendChild(canvas);
+
+    if (!isMobile) {
+      this.canvas = canvas;
+      this.ctx = canvas.getContext('2d');
+    } else {
+      this.mobileCanvas = canvas;
+      this.mobileCtx = canvas.getContext('2d');
     }
-
-    const { segmentCount, gapDegrees, innerRadius, minOuterRadius, centerX, centerY } = this.config;
-    const segmentDegrees = (360 / segmentCount) - gapDegrees;
-
-    // Create SVG element
-    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    svg.setAttribute('class', 'orb-equalizer');
-    svg.setAttribute('viewBox', '0 0 140 140');
-
-    // Create group for arcs
-    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-    g.setAttribute('class', 'equalizer-arcs');
-
-    // Create 16 arc segments
-    for (let i = 0; i < segmentCount; i++) {
-      const startAngle = (i * (360 / segmentCount)) - 90; // Start from top
-      const endAngle = startAngle + segmentDegrees;
-
-      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-      path.setAttribute('class', 'equalizer-arc');
-      path.dataset.index = i;
-
-      // Create arc data object
-      const arcData = {
-        path,
-        startAngle,
-        endAngle,
-        currentOuterRadius: minOuterRadius
-      };
-
-      // Set initial arc path
-      this.updateArcPath(arcData, minOuterRadius);
-
-      g.appendChild(path);
-      arcsArray.push(arcData);
-    }
-
-    svg.appendChild(g);
-    orbElement.appendChild(svg);
   }
 
   /**
-   * Update an arc path with new outer radius
+   * Initialize ring data structures
    */
-  updateArcPath(arcData, outerRadius) {
-    const { innerRadius, centerX, centerY } = this.config;
-    const { path, startAngle, endAngle } = arcData;
+  initRings() {
+    const { ringCount, baseRadius, spacing } = this.config;
+    this.rings = [];
 
-    const startRad = (startAngle * Math.PI) / 180;
-    const endRad = (endAngle * Math.PI) / 180;
+    for (let i = 0; i < ringCount; i++) {
+      this.rings.push({
+        baseRadius: baseRadius + (i * spacing),
+        currentExpansion: 0,
+        targetExpansion: 0,
+        // Outer rings are more transparent
+        baseOpacity: 0.7 - (i * 0.08)
+      });
+    }
+  }
 
-    // Calculate points
-    const innerStart = {
-      x: centerX + innerRadius * Math.cos(startRad),
-      y: centerY + innerRadius * Math.sin(startRad)
-    };
-    const innerEnd = {
-      x: centerX + innerRadius * Math.cos(endRad),
-      y: centerY + innerRadius * Math.sin(endRad)
-    };
-    const outerStart = {
-      x: centerX + outerRadius * Math.cos(startRad),
-      y: centerY + outerRadius * Math.sin(startRad)
-    };
-    const outerEnd = {
-      x: centerX + outerRadius * Math.cos(endRad),
-      y: centerY + outerRadius * Math.sin(endRad)
-    };
+  /**
+   * Get state-aware color for visualization
+   */
+  getStateColor() {
+    if (!this.orb) return { r: 196, g: 196, b: 196 }; // Default gray
 
-    const largeArc = (endAngle - startAngle) > 180 ? 1 : 0;
+    if (this.orb.classList.contains('speaking')) {
+      return { r: 253, g: 126, b: 80 };  // Warm peach
+    } else if (this.orb.classList.contains('listening')) {
+      return { r: 0, g: 184, b: 148 };   // Mint green
+    } else if (this.orb.classList.contains('thinking')) {
+      return { r: 108, g: 92, b: 231 };  // Violet
+    } else {
+      return { r: 180, g: 180, b: 190 }; // Soft silver-blue for idle
+    }
+  }
 
-    // Build path: inner arc → line to outer → outer arc (reverse) → close
-    const d = [
-      `M ${innerStart.x.toFixed(2)} ${innerStart.y.toFixed(2)}`,
-      `A ${innerRadius} ${innerRadius} 0 ${largeArc} 1 ${innerEnd.x.toFixed(2)} ${innerEnd.y.toFixed(2)}`,
-      `L ${outerEnd.x.toFixed(2)} ${outerEnd.y.toFixed(2)}`,
-      `A ${outerRadius} ${outerRadius} 0 ${largeArc} 0 ${outerStart.x.toFixed(2)} ${outerStart.y.toFixed(2)}`,
-      'Z'
-    ].join(' ');
+  /**
+   * Draw radiating rings on canvas
+   */
+  drawRings(ctx, canvas) {
+    if (!ctx || !canvas) return;
 
-    path.setAttribute('d', d);
-    arcData.currentOuterRadius = outerRadius;
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+
+    // Clear canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Get current state color
+    const color = this.getStateColor();
+
+    // Draw each ring (from outer to inner for proper layering)
+    for (let i = this.rings.length - 1; i >= 0; i--) {
+      const ring = this.rings[i];
+      const radius = ring.baseRadius + ring.currentExpansion;
+
+      // Dynamic opacity based on expansion (more visible when expanded)
+      const expansionFactor = ring.currentExpansion / this.config.maxExpansion;
+      const opacity = ring.baseOpacity * (0.4 + expansionFactor * 0.6);
+
+      // Create radial gradient for soft glow effect
+      const innerRadius = Math.max(0, radius - 6);
+      const outerRadius = radius + 6;
+
+      const gradient = ctx.createRadialGradient(
+        centerX, centerY, innerRadius,
+        centerX, centerY, outerRadius
+      );
+
+      gradient.addColorStop(0, `rgba(${color.r}, ${color.g}, ${color.b}, 0)`);
+      gradient.addColorStop(0.4, `rgba(${color.r}, ${color.g}, ${color.b}, ${opacity})`);
+      gradient.addColorStop(0.6, `rgba(${color.r}, ${color.g}, ${color.b}, ${opacity * 0.8})`);
+      gradient.addColorStop(1, `rgba(${color.r}, ${color.g}, ${color.b}, 0)`);
+
+      // Draw ring as stroked circle with gradient
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+      ctx.strokeStyle = gradient;
+      ctx.lineWidth = 10;
+      ctx.stroke();
+    }
+
+    // Add central glow when active
+    if (this.isActive) {
+      const glowGradient = ctx.createRadialGradient(
+        centerX, centerY, 0,
+        centerX, centerY, this.config.baseRadius
+      );
+      glowGradient.addColorStop(0, `rgba(${color.r}, ${color.g}, ${color.b}, 0.3)`);
+      glowGradient.addColorStop(0.5, `rgba(${color.r}, ${color.g}, ${color.b}, 0.1)`);
+      glowGradient.addColorStop(1, `rgba(${color.r}, ${color.g}, ${color.b}, 0)`);
+
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, this.config.baseRadius, 0, Math.PI * 2);
+      ctx.fillStyle = glowGradient;
+      ctx.fill();
+    }
   }
 
   /**
@@ -287,8 +335,8 @@ class OrbVisualizer {
       this.visualizationAnimationId = null;
     }
 
-    // Reset arcs and start shimmer
-    this.resetArcs();
+    // Reset rings and start shimmer
+    this.resetRings();
     this.startIdleShimmer();
 
     // Trigger callback
@@ -305,54 +353,63 @@ class OrbVisualizer {
     const dataArray = new Uint8Array(this.analyser.frequencyBinCount);
     this.analyser.getByteFrequencyData(dataArray);
 
-    // Update arc sizes based on frequency data
-    this.updateArcs(this.arcs, dataArray);
-    this.updateArcs(this.mobileArcs, dataArray);
+    // Update ring expansions based on frequency data
+    this.updateRings(dataArray);
+
+    // Draw on canvases
+    this.drawRings(this.ctx, this.canvas);
+    if (this.mobileCtx) {
+      this.drawRings(this.mobileCtx, this.mobileCanvas);
+    }
 
     // Continue loop
     this.visualizationAnimationId = requestAnimationFrame(() => this.animateVisualization());
   }
 
   /**
-   * Update arc outer radii from frequency data
+   * Update ring expansions from frequency data
    */
-  updateArcs(arcsArray, dataArray) {
-    if (!arcsArray || arcsArray.length === 0) return;
+  updateRings(dataArray) {
+    const { maxExpansion, ringCount } = this.config;
+    const binCount = Math.min(dataArray.length, ringCount);
 
-    const { minOuterRadius, maxOuterRadius } = this.config;
-    const radiusRange = maxOuterRadius - minOuterRadius;
-
-    arcsArray.forEach((arc, i) => {
-      // Map frequency bin to arc (use first 16 bins)
-      const value = dataArray[i] / 255; // Normalize 0-1
+    this.rings.forEach((ring, i) => {
+      // Map frequency bin to ring (low frequencies = inner rings)
+      const binIndex = Math.floor(i * (dataArray.length / ringCount));
+      const value = dataArray[binIndex] / 255; // Normalize 0-1
 
       // Apply easing for smoother visual
-      const easedValue = Math.pow(value, 0.7);
+      const easedValue = Math.pow(value, 0.6);
 
-      // Calculate new outer radius
-      const targetRadius = minOuterRadius + easedValue * radiusRange;
+      // Set target expansion
+      ring.targetExpansion = easedValue * maxExpansion;
 
-      // Smooth transition (lerp towards target)
-      const smoothRadius = arc.currentOuterRadius + (targetRadius - arc.currentOuterRadius) * 0.3;
-
-      this.updateArcPath(arc, smoothRadius);
+      // Smooth interpolation (lerp towards target)
+      ring.currentExpansion += (ring.targetExpansion - ring.currentExpansion) * 0.25;
     });
   }
 
   /**
-   * Reset all arcs to minimum size
+   * Reset all rings to base state
    */
-  resetArcs() {
-    const { minOuterRadius } = this.config;
-
-    [...this.arcs, ...this.mobileArcs].forEach(arc => {
-      this.updateArcPath(arc, minOuterRadius);
+  resetRings() {
+    this.rings.forEach(ring => {
+      ring.currentExpansion = 0;
+      ring.targetExpansion = 0;
     });
+
+    // Clear canvases
+    if (this.ctx && this.canvas) {
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+    if (this.mobileCtx && this.mobileCanvas) {
+      this.mobileCtx.clearRect(0, 0, this.mobileCanvas.width, this.mobileCanvas.height);
+    }
   }
 
   /**
    * Start subtle idle shimmer animation
-   * Arcs gently oscillate to show the orb is "alive"
+   * Rings gently pulse to show the orb is "alive"
    */
   startIdleShimmer() {
     if (this.isShimmering || this.isActive) return;
@@ -378,17 +435,21 @@ class OrbVisualizer {
     if (!this.isShimmering || this.isActive) return;
 
     const time = Date.now() / 1000;
-    const { minOuterRadius } = this.config;
 
-    [...this.arcs, ...this.mobileArcs].forEach((arc, i) => {
-      // Each arc has unique phase offset for wave effect
-      const phase = (time * 0.6 + i * 0.25) % (Math.PI * 2);
+    this.rings.forEach((ring, i) => {
+      // Each ring has unique phase offset for wave effect
+      const phase = (time * 0.5 + i * 0.4) % (Math.PI * 2);
       const wave = 0.5 + Math.sin(phase) * 0.5; // Oscillate 0-1
 
-      // Subtle radius change (44 to 50px)
-      const shimmerRadius = minOuterRadius + wave * 6;
-      this.updateArcPath(arc, shimmerRadius);
+      // Subtle expansion (0 to 8px)
+      ring.currentExpansion = wave * 8;
     });
+
+    // Draw shimmer
+    this.drawRings(this.ctx, this.canvas);
+    if (this.mobileCtx) {
+      this.drawRings(this.mobileCtx, this.mobileCanvas);
+    }
 
     this.shimmerAnimationId = requestAnimationFrame(() => this.shimmerLoop());
   }
@@ -417,7 +478,7 @@ class OrbVisualizer {
     }
 
     this.isActive = false;
-    this.resetArcs();
+    this.resetRings();
     this.startIdleShimmer();
   }
 
