@@ -742,3 +742,92 @@ document.addEventListener('click', (event) => {
   }
 });
 
+// ============================================================================
+// AUTH MODAL VISUAL EFFECTS
+// ============================================================================
+
+/**
+ * Initialize auth modal cursor-following effects
+ * - Panel glow that follows cursor
+ * - Input border glow on hover
+ */
+function initAuthModalEffects() {
+  const formPanel = document.getElementById('authFormPanel');
+  const glow = document.getElementById('authGlow');
+
+  if (!formPanel || !glow) return;
+
+  // Check if device supports hover
+  const supportsHover = window.matchMedia('(hover: hover)').matches;
+  if (!supportsHover) return;
+
+  // Track mouse position for panel glow
+  formPanel.addEventListener('mousemove', (e) => {
+    const rect = formPanel.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    glow.style.left = x + 'px';
+    glow.style.top = y + 'px';
+  });
+
+  // Initialize input hover effects
+  initAuthInputEffects();
+
+  console.log('[AUTH] Modal visual effects initialized');
+}
+
+/**
+ * Initialize input border glow effects
+ * Creates a radial gradient glow that wraps around the entire border following cursor
+ */
+function initAuthInputEffects() {
+  const inputWrappers = document.querySelectorAll('.auth-input-wrapper');
+
+  inputWrappers.forEach(wrapper => {
+    const input = wrapper.querySelector('.auth-input');
+    const glowBorder = wrapper.querySelector('.input-glow-border');
+
+    if (!input || !glowBorder) return;
+
+    // Track mouse position relative to input for full border glow
+    wrapper.addEventListener('mousemove', (e) => {
+      const rect = wrapper.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      // Create radial gradient at mouse position
+      const gradient = `radial-gradient(80px circle at ${x}px ${y}px, var(--brand-primary) 0%, transparent 70%)`;
+      glowBorder.style.setProperty('--glow-gradient', gradient);
+    });
+
+    wrapper.addEventListener('mouseleave', () => {
+      glowBorder.style.setProperty('--glow-gradient', 'transparent');
+    });
+  });
+}
+
+// Initialize effects when auth page is shown
+const originalShowAuthPage = typeof showAuthPage !== 'undefined' ? showAuthPage : null;
+
+// Reinitialize effects when DOM is ready and when auth modal opens
+document.addEventListener('DOMContentLoaded', () => {
+  // Initial setup
+  initAuthModalEffects();
+
+  // Also observe for auth page becoming visible
+  const authPage = document.getElementById('authPage');
+  if (authPage) {
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach(mutation => {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+          if (authPage.classList.contains('active')) {
+            initAuthModalEffects();
+          }
+        }
+      });
+    });
+    observer.observe(authPage, { attributes: true });
+  }
+});
+

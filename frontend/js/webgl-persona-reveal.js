@@ -68,13 +68,13 @@
 
       varying vec2 vUv;
 
-      // Cover UV calculation - fills viewport without stretching, crops excess
-      // Y offset 0.7 shifts visible area down to show more of the face/head
+      // Cover UV calculation - zoomed out to show more of the image
+      // Scale 0.5 = half zoom (shows twice as much), centered horizontally, offset down for face
       vec2 getCoverUV(vec2 uv, vec2 textureSize, vec2 resolution) {
         vec2 s = resolution / textureSize;
-        float scale = max(s.x, s.y);
+        float scale = max(s.x, s.y) * 0.5;  // Zoom out to half
         vec2 scaledSize = textureSize * scale;
-        vec2 offset = (resolution - scaledSize) * vec2(0.5, 0.7);
+        vec2 offset = (resolution - scaledSize) * vec2(0.5, 0.3);  // Center horizontally, offset down for face
         return (uv * resolution - offset) / scaledSize;
       }
 
