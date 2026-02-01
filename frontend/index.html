@@ -1346,81 +1346,65 @@
       </div>
     </div>
 
-    <!-- Page 2: Difficulty Selection - Lumina Style -->
-    <div id="difficultySelection" class="page initially-hidden lumina-page">
-      <button class="top-back-button lumina-back" onclick="backToSpecialties()">← Back</button>
+    <!-- Page 2: Difficulty Selection - Gradient Cards -->
+    <div id="difficultySelection" class="page initially-hidden gradient-cards-page">
+      <button class="top-back-button" onclick="backToSpecialties()">← Back</button>
 
-      <!-- Top Center Tabs -->
-      <nav class="lumina-tabs lumina-tabs--top">
-        <button type="button" class="lumina-tab active" data-difficulty="easy">
-          <span class="tab-label">JOHN · EASY</span>
-        </button>
-        <button type="button" class="lumina-tab" data-difficulty="medium">
-          <span class="tab-label">ELLIOT · MEDIUM</span>
-        </button>
-        <button type="button" class="lumina-tab" data-difficulty="strict">
-          <span class="tab-label">PERRY · STRICT</span>
-        </button>
-      </nav>
+      <div class="gradient-cards-header">
+        <h1>Choose Your Examiner</h1>
+        <p>Select your interview difficulty</p>
+      </div>
 
-      <!-- Full-viewport WebGL Canvas Background -->
-      <canvas class="lumina-canvas" id="difficultyCanvas"></canvas>
-
-      <!-- Edge blur overlays -->
-      <div class="lumina-edge-blur lumina-edge-blur--left"></div>
-      <div class="lumina-edge-blur lumina-edge-blur--right"></div>
-
-      <!-- Glassmorphism Content Card -->
-      <div class="lumina-content-card">
-        <div class="lumina-slide active" data-difficulty="easy">
-          <h1 class="persona-name">John</h1>
-          <p class="persona-role">Easy Examiner</p>
-          <p class="persona-description">
-            Your friendly neighborhood consultant who remembers being a trainee.
-            Warm encouragement, generous hints, and celebrates your wins.
-          </p>
-          <ul class="persona-traits">
-            <li>Warm encouragement</li>
-            <li>Generous hints</li>
-            <li>Celebrates your wins</li>
-          </ul>
-          <button type="button" class="btn-select" onclick="selectDifficulty('easy')">
-            Select John
-          </button>
+      <div class="gradient-cards-container">
+        <!-- John Card - Easy (Green) -->
+        <div class="gradient-card" data-difficulty="easy" onclick="handleCardClick(this, 'easy')">
+          <span class="gradient-panel" style="--gradient-from: #4dff03; --gradient-to: #00d0ff;"></span>
+          <span class="gradient-panel gradient-panel--blur" style="--gradient-from: #4dff03; --gradient-to: #00d0ff;"></span>
+          <span class="animated-blobs">
+            <span class="blob blob--top"></span>
+            <span class="blob blob--bottom"></span>
+          </span>
+          <div class="card-content">
+            <img src="images/interviewer_persona_john.png" alt="John" class="persona-avatar">
+            <h2 class="persona-name">John</h2>
+            <p class="persona-role persona-role--easy">Easy Examiner</p>
+            <p class="persona-description">Your friendly neighborhood consultant who remembers being a trainee. Warm encouragement, generous hints, and celebrates your wins.</p>
+            <button type="button" class="btn-select-persona" onclick="event.stopPropagation(); selectDifficulty('easy')">Select John</button>
+          </div>
         </div>
 
-        <div class="lumina-slide" data-difficulty="medium">
-          <h1 class="persona-name">Elliot</h1>
-          <p class="persona-role">Medium Examiner</p>
-          <p class="persona-description">
-            Fair and balanced - the real ST3 interview experience.
-            Straight-shooting feedback with occasional nudges.
-          </p>
-          <ul class="persona-traits">
-            <li>Straight-shooting feedback</li>
-            <li>Occasional nudges</li>
-            <li>Professional demeanor</li>
-          </ul>
-          <button type="button" class="btn-select" onclick="selectDifficulty('medium')">
-            Select Elliot
-          </button>
+        <!-- Elliot Card - Medium (Orange) -->
+        <div class="gradient-card" data-difficulty="medium" onclick="handleCardClick(this, 'medium')">
+          <span class="gradient-panel" style="--gradient-from: #ffbc00; --gradient-to: #ff0058;"></span>
+          <span class="gradient-panel gradient-panel--blur" style="--gradient-from: #ffbc00; --gradient-to: #ff0058;"></span>
+          <span class="animated-blobs">
+            <span class="blob blob--top"></span>
+            <span class="blob blob--bottom"></span>
+          </span>
+          <div class="card-content">
+            <img src="images/interviewer_persona_elliot.png" alt="Elliot" class="persona-avatar">
+            <h2 class="persona-name">Elliot</h2>
+            <p class="persona-role persona-role--medium">Medium Examiner</p>
+            <p class="persona-description">Fair and balanced - the real ST3 interview experience. Straight-shooting feedback with occasional nudges.</p>
+            <button type="button" class="btn-select-persona" onclick="event.stopPropagation(); selectDifficulty('medium')">Select Elliot</button>
+          </div>
         </div>
 
-        <div class="lumina-slide" data-difficulty="strict">
-          <h1 class="persona-name">Perry</h1>
-          <p class="persona-role">Strict Examiner</p>
-          <p class="persona-description">
-            No nonsense. High standards. Expects excellence or you'll hear about it.
-            Brutally honest with sky-high expectations.
-          </p>
-          <ul class="persona-traits">
-            <li>Brutally honest</li>
-            <li>Sky-high expectations</li>
-            <li>Sink or swim</li>
-          </ul>
-          <button type="button" class="btn-select" onclick="selectDifficulty('strict')">
-            Select Perry
-          </button>
+        <!-- Perry Card - Strict (Red) -->
+        <div class="gradient-card" data-difficulty="strict" onclick="handleCardClick(this, 'strict')">
+          <span class="gradient-panel" style="--gradient-from: #ff0058; --gradient-to: #7c3aed;"></span>
+          <span class="gradient-panel gradient-panel--blur" style="--gradient-from: #ff0058; --gradient-to: #7c3aed;"></span>
+          <span class="animated-blobs">
+            <span class="blob blob--top"></span>
+            <span class="blob blob--bottom"></span>
+          </span>
+          <div class="card-content">
+            <img src="images/interviewer_persona_perry.png" alt="Perry" class="persona-avatar">
+            <h2 class="persona-name">Perry</h2>
+            <p class="persona-role persona-role--strict">Strict Examiner</p>
+            <p class="persona-description">No nonsense. High standards. Expects excellence or you'll hear about it. Brutally honest with sky-high expectations.</p>
+            <button type="button" class="btn-select-persona" onclick="event.stopPropagation(); selectDifficulty('strict')">Select Perry</button>
+          </div>
         </div>
       </div>
     </div>
@@ -1976,8 +1960,9 @@
   <script src="js/glow-effect.js"></script>
   <!-- Features Section Scroll Animations -->
   <script src="js/features-scroll-animation.js"></script>
-  <!-- WebGL Persona Reveal (for difficulty selection) -->
+  <!-- WebGL Persona Reveal (disabled - replaced with gradient cards)
   <script src="js/webgl-persona-reveal.js"></script>
+  -->
 </body>
 
 </html>
