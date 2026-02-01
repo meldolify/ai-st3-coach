@@ -2100,22 +2100,22 @@
         <main class="sim-main">
           <!-- Persona Backdrop (Full Background) -->
           <div class="persona-backdrop" id="personaBackdrop">
-            <!-- Persona Image -->
+            <!-- Blurred Background Image (extends beyond edges) -->
+            <img id="personaImageBlur" class="persona-backdrop-blur" src="" alt="" aria-hidden="true">
+
+            <!-- Sharp Persona Image (centered) -->
             <img id="personaImage" class="persona-image" src="" alt="Examiner">
 
             <!-- Vignette Overlay for depth -->
             <div class="persona-vignette"></div>
 
-            <!-- Persona Info Badge (top-left) -->
+            <!-- Unified Info Badge (top-left) - Persona + Scenario -->
             <div class="persona-info-badge">
               <h3 id="personaName" class="persona-name">Miss Elliot</h3>
               <p id="personaTitle" class="persona-title">Senior Examiner</p>
-            </div>
-
-            <!-- Scenario Title Badge (top-center) -->
-            <div class="scenario-title-badge">
-              <h2 id="currentScenarioTitle">Scenario Title</h2>
-              <p id="currentScenarioCategory">Category</p>
+              <div class="badge-divider"></div>
+              <h4 id="currentScenarioTitle" class="scenario-name">Scenario Title</h4>
+              <p id="currentScenarioCategory" class="scenario-category">Category</p>
             </div>
           </div>
 
