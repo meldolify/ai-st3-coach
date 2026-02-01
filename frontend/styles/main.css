@@ -7407,3 +7407,117 @@ body:has(#difficultySelection.lumina-page:not(.initially-hidden):not(.hidden)) #
     font-size: 0.8rem;
   }
 }
+
+/* ============================================
+   BROWSER COMPATIBILITY WARNING BANNER
+   ============================================ */
+
+.browser-warning-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10000;
+  background: linear-gradient(135deg, #fef3cd 0%, #ffeeba 100%);
+  border-bottom: 1px solid #ffc107;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-100%);
+  transition: transform 0.3s ease-out;
+}
+
+.browser-warning-banner.visible {
+  transform: translateY(0);
+}
+
+.browser-warning-banner.warning {
+  background: linear-gradient(135deg, #fef3cd 0%, #ffeeba 100%);
+  border-bottom-color: #ffc107;
+}
+
+.browser-warning-banner.error {
+  background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+  border-bottom-color: #dc3545;
+}
+
+.browser-warning-banner.info {
+  background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+  border-bottom-color: #17a2b8;
+}
+
+.browser-warning-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.browser-warning-icon {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.browser-warning-text {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 8px;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: #856404;
+  line-height: 1.4;
+}
+
+.browser-warning-banner.error .browser-warning-text {
+  color: #721c24;
+}
+
+.browser-warning-banner.info .browser-warning-text {
+  color: #0c5460;
+}
+
+.browser-warning-text strong {
+  font-weight: 600;
+}
+
+.browser-warning-dismiss {
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  color: #856404;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.browser-warning-banner.error .browser-warning-dismiss {
+  color: #721c24;
+}
+
+.browser-warning-banner.info .browser-warning-dismiss {
+  color: #0c5460;
+}
+
+.browser-warning-dismiss:hover {
+  opacity: 1;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .browser-warning-content {
+    padding: 10px 16px;
+  }
+
+  .browser-warning-text {
+    font-size: 0.85rem;
+  }
+
+  .browser-warning-icon {
+    font-size: 1.1rem;
+  }
+}

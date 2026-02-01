@@ -139,27 +139,11 @@ class V4Session {
     this.ws = null;
     this.sessionId = null;
 
-    // STT: VAD (continuous) or Push-to-Talk (fallback)
-    // VAD uses Silero VAD for continuous voice detection
-    // PTT uses MediaRecorder to capture audio when user clicks Record button
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
-    // Choose speech recognition mode based on config
-    if (CONFIG.SPEECH_RECOGNITION.USE_VAD && typeof VADManager !== 'undefined') {
-      // VAD mode: continuous voice detection
-      this.speechRecognition = new VADManager(null); // WebSocket set after connection
-      this.usingWhisper = true;
-      this.usingVAD = true;
-      this.usingPTT = false;
-      log('Using VAD for continuous voice input', 'success');
-    } else {
-      // PTT mode: click to record
-      this.speechRecognition = new PushToTalkManager(null); // WebSocket set after connection
-      this.usingWhisper = true;
-      this.usingVAD = false;
-      this.usingPTT = true;
-      log('Using Push-to-Talk for STT', 'success');
-    }
+    // STT: Auto-detect best mode based on browser capabilities
+    // 1. Silero VAD (Chrome/Edge/Firefox with WASM) - best accuracy
+    // 2. SimpleVAD (Safari/iOS) - volume-based fallback
+    // 3. Push-to-Talk (last resort)
+    this._initializeSpeechRecognition();
 
     this.audioPlayer = new AudioPlayer();
     this.backendUrl = backendUrl;
@@ -175,6 +159,59 @@ class V4Session {
       'strict': 'en-GB-Chirp3-HD-Charon'     // Perry: Male voice
     };
     this.voice = this.voiceMap[difficulty] || 'en-GB-Chirp3-HD-Fenrir';
+  }
+
+  /**
+   * Initialize speech recognition based on browser capabilities
+   * Automatically selects the best available method
+   */
+  _initializeSpeechRecognition() {
+    // Use BrowserDetect to determine best VAD method
+    const browserInfo = window.BrowserDetect ? window.BrowserDetect.detect() : null;
+    const recommendedVAD = browserInfo?.vad?.recommended;
+
+    console.log('[V4Session] Browser detection:', browserInfo?.browser?.name, '- Recommended VAD:', recommendedVAD);
+
+    // Try Silero VAD first (best accuracy)
+    if (recommendedVAD === 'silero' && CONFIG.SPEECH_RECOGNITION.USE_VAD && typeof VADManager !== 'undefined') {
+      this.speechRecognition = new VADManager(null);
+      this.usingWhisper = true;
+      this.usingVAD = true;
+      this.usingSimpleVAD = false;
+      this.usingPTT = false;
+      log('Using Silero VAD for continuous voice input', 'success');
+      return;
+    }
+
+    // Try SimpleVAD (Safari/iOS fallback)
+    if ((recommendedVAD === 'simple' || !recommendedVAD) && typeof SimpleVAD !== 'undefined') {
+      this.speechRecognition = new SimpleVAD(null);
+      this.usingWhisper = true;
+      this.usingVAD = false;
+      this.usingSimpleVAD = true;
+      this.usingPTT = false;
+      log('Using SimpleVAD for voice input (Safari/iOS mode)', 'success');
+      return;
+    }
+
+    // Fallback to PTT if neither VAD is available
+    if (typeof PushToTalkManager !== 'undefined') {
+      this.speechRecognition = new PushToTalkManager(null);
+      this.usingWhisper = true;
+      this.usingVAD = false;
+      this.usingSimpleVAD = false;
+      this.usingPTT = true;
+      log('Using Push-to-Talk for voice input', 'warning');
+      return;
+    }
+
+    // Last resort: no speech recognition available
+    console.error('[V4Session] No speech recognition method available');
+    this.speechRecognition = null;
+    this.usingWhisper = false;
+    this.usingVAD = false;
+    this.usingSimpleVAD = false;
+    this.usingPTT = false;
   }
 
   async connect() {
@@ -238,7 +275,7 @@ class V4Session {
       case 'ai_response':
         // Set AI speaking state IMMEDIATELY when response arrives (before audio decode)
         // This eliminates the 100-200ms timing gap that caused incorrect contamination
-        if (this.usingWhisper && this.speechRecognition.setAISpeaking) {
+        if ((this.usingVAD || this.usingSimpleVAD) && this.speechRecognition?.setAISpeaking) {
           this.speechRecognition.setAISpeaking(true);
         }
         log('AI: ' + msg.text, 'info');
@@ -372,13 +409,13 @@ class V4Session {
     }
 
     this.audioPlayer.onStart = () => {
-      // For Whisper: use continuous listening - just set AI speaking flag
+      // For VAD/SimpleVAD: use continuous listening - just set AI speaking flag
       // For Web Speech API: must stop mic to prevent browser issues
-      if (this.usingWhisper && this.speechRecognition.setAISpeaking) {
+      if ((this.usingVAD || this.usingSimpleVAD) && this.speechRecognition?.setAISpeaking) {
         this.speechRecognition.setAISpeaking(true);
         updateStatus('micStatus', 'Listening (AI speaking)', 'active');
-      } else {
-        // Web Speech API - stop mic to prevent feedback
+      } else if (this.speechRecognition) {
+        // Web Speech API or PTT - stop mic to prevent feedback
         this.speechRecognition.stop();
         updateStatus('micStatus', 'Paused', 'active');
       }
@@ -400,8 +437,8 @@ class V4Session {
       }
       syncMobileButtonStates(); // Sync mobile buttons
 
-      // For Whisper: clear AI speaking flag
-      if (this.usingWhisper && this.speechRecognition.setAISpeaking) {
+      // For VAD/SimpleVAD: clear AI speaking flag
+      if ((this.usingVAD || this.usingSimpleVAD) && this.speechRecognition?.setAISpeaking) {
         this.speechRecognition.setAISpeaking(false);
       }
 
@@ -415,10 +452,11 @@ class V4Session {
 
       // Wait to see if we're in feedback mode
       setTimeout(() => {
-        // Only restart mic if NOT in feedback mode (for Web Speech API)
-        // Whisper is already running continuously
+        // Only restart mic if NOT in feedback mode
+        // VAD/SimpleVAD handle continuous listening internally
         if (!this.inFeedbackMode && !this.audioPlayer.isPlaying) {
-          if (!this.usingWhisper) {
+          if (!this.usingVAD && !this.usingSimpleVAD && this.speechRecognition) {
+            // Web Speech API or PTT needs manual restart
             this.speechRecognition.start();
           }
           updateStatus('micStatus', '🎤 Listening', 'connected');
@@ -426,7 +464,7 @@ class V4Session {
           // Reset feedback mode flag after processing
           this.inFeedbackMode = false;
         }
-      }, 500); // Reduced delay since Whisper handles continuous listening
+      }, 500); // Reduced delay since VAD/SimpleVAD handle continuous listening
     };
 
     // Initialize (async for Whisper, sync for Web Speech API)

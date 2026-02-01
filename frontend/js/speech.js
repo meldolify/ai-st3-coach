@@ -127,24 +127,29 @@ class PushToTalkManager {
     try {
       console.log('[PTT] Initializing Push-to-Talk...');
 
-      // Request microphone permission
+      // Request microphone permission (Safari-compatible constraints)
+      // Note: sampleRate is not supported on Safari, so we omit it
       this.stream = await navigator.mediaDevices.getUserMedia({
         audio: {
           echoCancellation: true,
           noiseSuppression: true,
-          sampleRate: 16000
+          autoGainControl: true
         }
       });
 
       // Reuse existing AudioContext if still valid, or create new one
+      // Note: Don't specify sampleRate - Safari doesn't support it
       if (this.audioContext && this.audioContext.state !== 'closed') {
         if (this.audioContext.state === 'suspended') {
           await this.audioContext.resume();
         }
       } else {
-        this.audioContext = new (window.AudioContext || window.webkitAudioContext)({
-          sampleRate: 16000
-        });
+        this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      }
+
+      // Ensure AudioContext is resumed (iOS requires user gesture)
+      if (this.audioContext.state === 'suspended') {
+        await this.audioContext.resume();
       }
 
       this.isInitialized = true;
@@ -188,10 +193,9 @@ class PushToTalkManager {
       this.audioChunks = [];
       this.recordingStartTime = Date.now(); // Track recording start time
 
-      // Use webm for MediaRecorder (widely supported)
-      const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
-        ? 'audio/webm;codecs=opus'
-        : 'audio/webm';
+      // Detect supported MIME type (Safari needs MP4/AAC, others use WebM)
+      const mimeType = this._getPreferredMimeType();
+      console.log(`[PTT] Using MIME type: ${mimeType}`);
 
       // Clean up previous MediaRecorder handlers to prevent memory leaks
       if (this.mediaRecorder) {
@@ -395,6 +399,34 @@ class PushToTalkManager {
   setAISpeaking(isSpeaking) {
     // PTT doesn't need to track AI speaking state
     // (user controls when to record)
+  }
+
+  /**
+   * Get preferred MIME type based on browser support
+   * Safari doesn't support WebM, so we fall back to MP4/AAC
+   */
+  _getPreferredMimeType() {
+    const types = [
+      'audio/webm;codecs=opus',   // Best quality, Chrome/Firefox/Edge
+      'audio/webm',               // Fallback WebM
+      'audio/mp4',                // Safari
+      'audio/mp4;codecs=mp4a.40.2', // Safari with explicit AAC codec
+      'audio/ogg;codecs=opus'     // Firefox fallback
+    ];
+
+    for (const type of types) {
+      try {
+        if (MediaRecorder.isTypeSupported(type)) {
+          return type;
+        }
+      } catch (e) {
+        // Ignore and try next
+      }
+    }
+
+    // Last resort - let browser choose default
+    console.warn('[PTT] No preferred MIME type found, using browser default');
+    return '';
   }
 
   destroy() {

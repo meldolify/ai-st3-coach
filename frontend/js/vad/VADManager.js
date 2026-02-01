@@ -3,9 +3,41 @@
 // ============================================================================
 // Replaces Push-to-Talk with continuous voice detection using Silero VAD
 // Dependencies: @ricky0123/vad-web (loaded via CDN in index.html)
+// Note: Requires WASM support - use SimpleVAD as fallback for Safari/iOS
 // ============================================================================
 
 class VADManager {
+  /**
+   * Check if Silero VAD is supported in current browser
+   * @returns {boolean} True if VAD library is loaded and WASM is supported
+   */
+  static isSupported() {
+    // Check for WASM support
+    if (typeof WebAssembly === 'undefined') {
+      console.log('[VAD] WebAssembly not supported');
+      return false;
+    }
+
+    // Check if VAD library is loaded
+    if (typeof vad === 'undefined' || typeof vad.MicVAD === 'undefined') {
+      console.log('[VAD] @ricky0123/vad-web library not loaded');
+      return false;
+    }
+
+    // Check for required audio APIs
+    if (typeof MediaRecorder === 'undefined') {
+      console.log('[VAD] MediaRecorder not supported');
+      return false;
+    }
+
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      console.log('[VAD] getUserMedia not supported');
+      return false;
+    }
+
+    return true;
+  }
+
   constructor(websocket) {
     this.websocket = websocket;
     this.myvad = null;
@@ -34,10 +66,11 @@ class VADManager {
   }
 
   async initialize() {
-    // Check if vad library is loaded
-    if (typeof vad === 'undefined' || typeof vad.MicVAD === 'undefined') {
-      console.error('[VAD] @ricky0123/vad-web library not loaded');
-      if (this.onError) this.onError('VAD library not loaded. Please refresh the page.');
+    // Pre-flight check for VAD support
+    if (!VADManager.isSupported()) {
+      const errorMsg = 'Silero VAD not supported in this browser. Use SimpleVAD instead.';
+      console.error('[VAD]', errorMsg);
+      if (this.onError) this.onError(errorMsg);
       return false;
     }
 
@@ -115,8 +148,23 @@ class VADManager {
 
     } catch (error) {
       console.error('[VAD] Initialization failed:', error);
+
+      // Provide helpful error messages
+      let errorMessage = 'Voice detection initialization failed. ';
+      if (error.name === 'NotAllowedError') {
+        errorMessage = 'Microphone access denied. Please allow microphone access and try again.';
+      } else if (error.name === 'NotFoundError') {
+        errorMessage = 'No microphone found. Please connect a microphone and try again.';
+      } else if (error.message?.includes('WASM') || error.message?.includes('WebAssembly')) {
+        errorMessage = 'Your browser does not fully support voice detection. Try using Chrome or Edge.';
+      } else if (error.message?.includes('SharedArrayBuffer')) {
+        errorMessage = 'Voice detection requires secure context. Please use HTTPS.';
+      } else {
+        errorMessage += error.message || 'Unknown error occurred.';
+      }
+
       if (this.onError) {
-        this.onError('VAD initialization failed: ' + error.message);
+        this.onError(errorMessage);
       }
       return false;
     }

@@ -52,9 +52,16 @@ class OrbVisualizer {
       return;
     }
 
-    // Create AudioContext (requires user gesture)
+    // Create AudioContext (requires user gesture on iOS)
     try {
+      // Create AudioContext without specifying sampleRate (Safari compatibility)
       this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+      // iOS/Safari may start AudioContext in suspended state
+      // We'll resume it when actually playing audio
+      if (this.audioContext.state === 'suspended') {
+        console.log('[OrbVisualizer] AudioContext suspended, will resume on playback');
+      }
 
       // Create analyser node for frequency data
       this.analyser = this.audioContext.createAnalyser();
@@ -75,7 +82,8 @@ class OrbVisualizer {
       console.log('[OrbVisualizer] Initialized with arc equalizer');
     } catch (error) {
       console.error('[OrbVisualizer] Failed to initialize AudioContext:', error);
-      throw error;
+      // Don't throw - visualizer is optional, audio should still work
+      console.warn('[OrbVisualizer] Continuing without visualization');
     }
   }
 
@@ -196,9 +204,22 @@ class OrbVisualizer {
     }
 
     try {
-      // Resume AudioContext if suspended (browser autoplay policy)
+      // Ensure AudioContext exists
+      if (!this.audioContext) {
+        console.warn('[OrbVisualizer] No AudioContext, skipping visualization');
+        this.handlePlaybackEnd();
+        return;
+      }
+
+      // Resume AudioContext if suspended (iOS/Safari autoplay policy)
       if (this.audioContext.state === 'suspended') {
-        await this.audioContext.resume();
+        try {
+          await this.audioContext.resume();
+          console.log('[OrbVisualizer] AudioContext resumed');
+        } catch (resumeError) {
+          console.warn('[OrbVisualizer] Failed to resume AudioContext:', resumeError);
+          // Continue anyway - some browsers may still work
+        }
       }
 
       // Decode base64 to ArrayBuffer
@@ -208,8 +229,9 @@ class OrbVisualizer {
         bytes[i] = binaryString.charCodeAt(i);
       }
 
-      // Decode audio data
-      const audioBuffer = await this.audioContext.decodeAudioData(bytes.buffer);
+      // Decode audio data (use copy of buffer for Safari compatibility)
+      const arrayBuffer = bytes.buffer.slice(0);
+      const audioBuffer = await this.audioContext.decodeAudioData(arrayBuffer);
 
       // Create source node
       const source = this.audioContext.createBufferSource();
