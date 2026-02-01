@@ -186,8 +186,10 @@ class OrbVisualizer {
       const radius = ring.baseRadius + ring.currentExpansion;
 
       // Dynamic opacity based on expansion (more visible when expanded)
+      // Minimum opacity of 0.5 * baseOpacity when active to prevent flicker
       const expansionFactor = ring.currentExpansion / this.config.maxExpansion;
-      const opacity = ring.baseOpacity * (0.4 + expansionFactor * 0.6);
+      const minOpacity = this.isActive ? 0.5 : 0.4;
+      const opacity = ring.baseOpacity * (minOpacity + expansionFactor * (1 - minOpacity));
 
       // Create radial gradient for soft glow effect
       const innerRadius = Math.max(0, radius - 6);

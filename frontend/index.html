@@ -318,6 +318,13 @@
           ellipse 120% 80% at 40% 60%,
           oklch(68% 0.18 280 / 0.5) 0%,
           transparent 50%
+        ),
+        /* BASE LAYER - constant soft gradient to prevent gaps */
+        radial-gradient(
+          circle at 50% 50%,
+          oklch(75% 0.08 260 / 0.3) 0%,
+          oklch(72% 0.06 220 / 0.2) 50%,
+          transparent 80%
         );
 
       /* Blur and enhance for soft glow effect */
@@ -450,6 +457,13 @@
           ellipse 120% 80% at 40% 60%,
           oklch(70% 0.06 220 / 0.4) 0%,
           transparent 50%
+        ),
+        /* BASE LAYER - constant soft glow */
+        radial-gradient(
+          circle at 50% 50%,
+          oklch(72% 0.05 220 / 0.25) 0%,
+          oklch(70% 0.04 230 / 0.15) 50%,
+          transparent 85%
         );
     }
 
@@ -539,6 +553,13 @@
           ellipse 120% 80% at 40% 60%,
           oklch(78% 0.18 155 / 0.5) 0%,
           transparent 50%
+        ),
+        /* BASE LAYER - constant mint glow */
+        radial-gradient(
+          circle at 50% 50%,
+          oklch(78% 0.12 160 / 0.35) 0%,
+          oklch(75% 0.10 170 / 0.25) 50%,
+          transparent 85%
         );
     }
 
@@ -629,6 +650,13 @@
           ellipse 120% 80% at 40% 60%,
           oklch(70% 0.20 275 / 0.5) 0%,
           transparent 50%
+        ),
+        /* BASE LAYER - constant violet glow */
+        radial-gradient(
+          circle at 50% 50%,
+          oklch(70% 0.12 280 / 0.35) 0%,
+          oklch(68% 0.10 290 / 0.25) 50%,
+          transparent 85%
         );
     }
 
@@ -678,49 +706,65 @@
 
     /* SPEAKING gradient: Warm coral/peach, fast energetic rotation */
     .voice-orb.speaking .orb-gradient-container {
-      animation-duration: 8s;
+      animation-duration: 10s;
       filter: blur(11px) saturate(1.5);
       opacity: 0.8;
       background:
+        /* Wider sweeps with less transparent gaps */
         conic-gradient(
           from calc(var(--orb-angle) * 1.2) at 30% 65%,
           oklch(78% 0.22 30) 0deg,
-          transparent 60deg,
-          transparent 300deg,
+          oklch(78% 0.18 30 / 0.5) 40deg,
+          transparent 90deg,
+          transparent 270deg,
+          oklch(78% 0.18 30 / 0.5) 320deg,
           oklch(78% 0.22 30) 360deg
         ),
         conic-gradient(
           from calc(var(--orb-angle) * 0.8 + 120deg) at 70% 35%,
           oklch(75% 0.20 15) 0deg,
-          transparent 50deg,
-          transparent 310deg,
+          oklch(75% 0.16 15 / 0.5) 35deg,
+          transparent 80deg,
+          transparent 280deg,
+          oklch(75% 0.16 15 / 0.5) 325deg,
           oklch(75% 0.20 15) 360deg
         ),
         conic-gradient(
           from calc(var(--orb-angle) * -1.5 + 60deg) at 65% 75%,
           oklch(80% 0.18 45) 0deg,
-          transparent 70deg,
-          transparent 290deg,
+          oklch(80% 0.14 45 / 0.5) 50deg,
+          transparent 100deg,
+          transparent 260deg,
+          oklch(80% 0.14 45 / 0.5) 310deg,
           oklch(80% 0.18 45) 360deg
         ),
         conic-gradient(
           from calc(var(--orb-angle) * 2.1 + 180deg) at 25% 25%,
           oklch(76% 0.19 25 / 0.7) 0deg,
-          transparent 40deg,
-          transparent 320deg,
+          transparent 60deg,
+          transparent 300deg,
           oklch(76% 0.19 25 / 0.7) 360deg
         ),
         conic-gradient(
           from calc(var(--orb-angle) * -0.7 + 240deg) at 80% 50%,
           oklch(78% 0.16 40 / 0.6) 0deg,
-          transparent 55deg,
-          transparent 305deg,
+          transparent 70deg,
+          transparent 290deg,
           oklch(78% 0.16 40 / 0.6) 360deg
         ),
+        /* Radial depth */
         radial-gradient(
           ellipse 120% 80% at 40% 60%,
           oklch(78% 0.20 35 / 0.5) 0%,
           transparent 50%
+        ),
+        /* BASE LAYER - constant warm glow to prevent gaps */
+        radial-gradient(
+          circle at 50% 50%,
+          oklch(78% 0.12 30 / 0.4) 0%,
+          oklch(76% 0.10 25 / 0.3) 40%,
+          oklch(75% 0.08 20 / 0.2) 70%,
+          transparent 90%
         );
     }
 
