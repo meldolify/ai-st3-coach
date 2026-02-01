@@ -854,13 +854,17 @@ body.has-header .simulation-room.active {
   flex: 1;
   gap: 24px;
   padding: 24px;
-  padding-bottom: 32px;
+  padding-bottom: 24px;
+  /* Reduced to avoid double padding with container */
   max-width: 1600px;
-  margin: 0 auto 24px;
+  margin: 0 auto;
+  /* Removed bottom margin */
   min-height: 0;
-  height: calc(100vh - 80px - 76px);
-  /* Account for header (80px) + footer (52px) + bottom margin (24px) */
+  /* check this */
+  height: auto;
   box-sizing: border-box;
+  overflow: hidden;
+  /* Ensure content doesn't spill out */
 }
 
 .mobile-simulation-layout {
@@ -2492,6 +2496,29 @@ button.top-back-button:active {
   backdrop-filter: blur(20px);
   border: 1px solid var(--border-light);
   box-shadow: var(--shadow-light);
+}
+
+/* WebGL Persona Background Canvas - Full Page */
+.persona-background-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Ensure difficulty page content stays above background */
+#difficultySelection {
+  position: relative;
+}
+
+#difficultySelection .top-back-button,
+#difficultySelection .header,
+#difficultySelection .difficulty-grid {
+  position: relative;
+  z-index: 1;
 }
 
 .difficulty-card::before {
@@ -4420,9 +4447,12 @@ a.nav-link:hover {
 
 /* Infinity float animation */
 @keyframes infinityFloat {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0) scale(1);
   }
+
   50% {
     transform: translateY(-3px) scale(1.02);
   }
@@ -4434,10 +4464,12 @@ a.nav-link:hover {
     stroke-dashoffset: 0;
     opacity: 1;
   }
+
   50% {
     stroke-dashoffset: 300;
     opacity: 0.7;
   }
+
   100% {
     stroke-dashoffset: 0;
     opacity: 1;
@@ -5031,6 +5063,64 @@ button.btn-secondary:active {
 .visual-icon {
   color: var(--brand-sage, #4A5D4C);
   opacity: 0.7;
+}
+
+/* ============================================
+   WEBGL GLASS EFFECT CONTAINERS
+   ============================================ */
+
+.webgl-glass-container {
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-soft-gray, #EBE8E4);
+}
+
+.webgl-glass-container .webgl-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  z-index: 1;
+}
+
+.webgl-glass-container .glass-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.12) 0%,
+      rgba(255, 255, 255, 0.04) 40%,
+      transparent 70%);
+  pointer-events: none;
+  border-radius: inherit;
+  z-index: 2;
+}
+
+/* Subtle inner shadow for depth */
+.webgl-glass-container::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.06);
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* Fallback for browsers without WebGL */
+.webgl-glass-container.no-webgl {
+  background-size: cover;
+  background-position: center;
+}
+
+.webgl-glass-container.no-webgl::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(74, 93, 76, 0.05);
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
 }
 
 /* Scroll reveal animations */
@@ -6497,6 +6587,7 @@ body.has-header {
    Extra tight layouts for older/smaller devices
    ============================================ */
 @media (max-width: 380px) {
+
   /* Tighter body padding */
   body {
     padding: 8px;
@@ -6713,14 +6804,12 @@ body.has-header {
     radial-gradient(circle at 40% 40%, #d79f1e 5%, transparent 15%),
     radial-gradient(circle at 60% 60%, #5a922c 10%, transparent 20%),
     radial-gradient(circle at 40% 60%, #4c7894 10%, transparent 20%),
-    repeating-conic-gradient(
-      from 236.84deg at 50% 50%,
+    repeating-conic-gradient(from 236.84deg at 50% 50%,
       #dd7bbb 0%,
       #d79f1e 5%,
       #5a922c 10%,
       #4c7894 15%,
-      #dd7bbb 20%
-    );
+      #dd7bbb 20%);
 }
 
 .glow-effect::after {
@@ -6739,22 +6828,18 @@ body.has-header {
   /* Mask to show only the rotating border segment */
   -webkit-mask:
     linear-gradient(#0000, #0000),
-    conic-gradient(
-      from calc((var(--glow-angle) - var(--glow-spread)) * 1deg),
+    conic-gradient(from calc((var(--glow-angle) - var(--glow-spread)) * 1deg),
       transparent 0deg,
       #fff calc(var(--glow-spread) * 1deg),
       #fff calc(var(--glow-spread) * 2deg),
-      transparent calc(var(--glow-spread) * 2deg)
-    );
+      transparent calc(var(--glow-spread) * 2deg));
   mask:
     linear-gradient(#0000, #0000),
-    conic-gradient(
-      from calc((var(--glow-angle) - var(--glow-spread)) * 1deg),
+    conic-gradient(from calc((var(--glow-angle) - var(--glow-spread)) * 1deg),
       transparent 0deg,
       #fff calc(var(--glow-spread) * 1deg),
       #fff calc(var(--glow-spread) * 2deg),
-      transparent calc(var(--glow-spread) * 2deg)
-    );
+      transparent calc(var(--glow-spread) * 2deg));
   -webkit-mask-clip: padding-box, border-box;
   mask-clip: padding-box, border-box;
   -webkit-mask-composite: intersect;
@@ -6767,7 +6852,8 @@ body.has-header {
 }
 
 /* Desktop only - disable on touch devices */
-@media (hover: none), (pointer: coarse) {
+@media (hover: none),
+(pointer: coarse) {
   .glow-effect::after {
     display: none;
   }
