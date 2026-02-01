@@ -50,6 +50,7 @@ function setPersona(difficulty) {
   const nameEl = document.getElementById('personaName');
   const titleEl = document.getElementById('personaTitle');
   const imageEl = document.getElementById('personaImage');
+  const blurImageEl = document.getElementById('personaImageBlur');
 
   // Mobile persona elements
   const mobileNameEl = document.getElementById('mobilePersonaName');
@@ -64,8 +65,15 @@ function setPersona(difficulty) {
     imageEl.onerror = () => {
       imageEl.onerror = null; // Prevent infinite loop
       imageEl.src = currentPersona.fallbackImage || PERSONA_DEFAULT_IMAGE;
+      // Also update blur image on error
+      if (blurImageEl) blurImageEl.src = currentPersona.fallbackImage || PERSONA_DEFAULT_IMAGE;
     };
     imageEl.src = currentPersona.image;
+  }
+
+  // Update blur background image to match persona
+  if (blurImageEl) {
+    blurImageEl.src = currentPersona.image;
   }
 
   // Update mobile elements
@@ -118,40 +126,74 @@ const transcript = {
     const container = document.getElementById('transcriptMessages');
     const mobileContainer = document.getElementById('mobileTranscriptMessages');
 
-    const emptyHtml = '<div class="transcript-empty">Conversation will appear here...</div>';
-
     if (this.messages.length === 0) {
-      if (container) container.innerHTML = emptyHtml;
-      if (mobileContainer) mobileContainer.innerHTML = emptyHtml;
+      const emptyText = 'Conversation will appear here...';
+      if (container) {
+        container.textContent = '';
+        const emptyDiv = document.createElement('div');
+        emptyDiv.className = 'transcript-empty';
+        emptyDiv.textContent = emptyText;
+        container.appendChild(emptyDiv);
+      }
+      if (mobileContainer) {
+        mobileContainer.textContent = '';
+        const emptyDiv = document.createElement('div');
+        emptyDiv.className = 'transcript-empty';
+        emptyDiv.textContent = emptyText;
+        mobileContainer.appendChild(emptyDiv);
+      }
       return;
     }
 
     const personaName = getPersonaName();
 
-    // Desktop transcript (full version with headers) - escapeHtml sanitizes user input
-    const desktopHtml = this.messages.map(msg => `
-      <div class="transcript-message ${msg.role === 'user' ? 'message-user' : 'message-ai'}">
-        <div class="message-header">
-          <span class="message-role">${msg.role === 'user' ? 'You' : personaName}</span>
-          <span class="message-time">${msg.timestamp}</span>
-        </div>
-        <div class="message-text">${escapeHtml(msg.text)}</div>
-      </div>
-    `).join('');
+    // Reverse messages so newest appears at top
+    const reversedMessages = [...this.messages].reverse();
 
-    // Mobile transcript (compact version) - escapeHtml sanitizes user input
-    const mobileHtml = this.messages.map(msg => `
-      <div class="message ${msg.role}">${escapeHtml(msg.text)}</div>
-    `).join('');
-
+    // Desktop transcript - build using DOM methods for security
     if (container) {
-      container.innerHTML = desktopHtml;
-      container.scrollTop = container.scrollHeight;
+      container.textContent = '';
+      reversedMessages.forEach(msg => {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `transcript-message ${msg.role === 'user' ? 'message-user' : 'message-ai'}`;
+
+        const headerDiv = document.createElement('div');
+        headerDiv.className = 'message-header';
+
+        const roleSpan = document.createElement('span');
+        roleSpan.className = 'message-role';
+        roleSpan.textContent = msg.role === 'user' ? 'You' : personaName;
+
+        const timeSpan = document.createElement('span');
+        timeSpan.className = 'message-time';
+        timeSpan.textContent = msg.timestamp;
+
+        headerDiv.appendChild(roleSpan);
+        headerDiv.appendChild(timeSpan);
+
+        const textDiv = document.createElement('div');
+        textDiv.className = 'message-text';
+        textDiv.textContent = msg.text;
+
+        msgDiv.appendChild(headerDiv);
+        msgDiv.appendChild(textDiv);
+        container.appendChild(msgDiv);
+      });
+      // Newest is at top, so scroll to top
+      container.scrollTop = 0;
     }
 
+    // Mobile transcript - build using DOM methods for security
     if (mobileContainer) {
-      mobileContainer.innerHTML = mobileHtml;
-      mobileContainer.scrollTop = mobileContainer.scrollHeight;
+      mobileContainer.textContent = '';
+      reversedMessages.forEach(msg => {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `message ${msg.role}`;
+        msgDiv.textContent = msg.text;
+        mobileContainer.appendChild(msgDiv);
+      });
+      // Newest is at top, so scroll to top
+      mobileContainer.scrollTop = 0;
     }
   }
 };

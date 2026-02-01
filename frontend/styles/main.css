@@ -1686,12 +1686,28 @@ body.has-header .simulation-room.active {
 .persona-backdrop {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, #F7F5F2 0%, #EBE8E4 50%, #F7F5F2 100%);
+  background: #1a1a1a;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
+/* Blurred Background Image - extends beyond edges for seamless blur */
+.persona-backdrop-blur {
+  position: absolute;
+  inset: -15%;
+  width: 130%;
+  height: 130%;
+  object-fit: cover;
+  object-position: center;
+  filter: blur(50px) saturate(1.3) brightness(1.05);
+  opacity: 0.9;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Sharp Persona Image (centered on top) */
 .persona-backdrop .persona-image {
   position: relative;
   max-width: 100%;
@@ -1700,16 +1716,16 @@ body.has-header .simulation-room.active {
   height: 100%;
   object-fit: contain;
   object-position: center bottom;
-  z-index: 1;
+  z-index: 2;
 }
 
-/* Vignette overlay for depth */
+/* Vignette overlay for depth and edge softening */
 .persona-vignette {
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at center, transparent 40%, rgba(247, 245, 242, 0.6) 100%);
+  background: radial-gradient(ellipse at center, transparent 30%, rgba(0, 0, 0, 0.15) 100%);
   pointer-events: none;
-  z-index: 2;
+  z-index: 3;
 }
 
 /* Hide old persona-info-overlay in new layout */
@@ -1717,81 +1733,82 @@ body.has-header .simulation-room.active {
   display: none !important;
 }
 
-/* Persona Info Badge (top-left floating) */
+/* Unified Info Badge (top-left floating) - Persona + Scenario */
 .persona-info-badge {
   position: absolute;
-  top: 20px;
-  left: 20px;
-  padding: 14px 20px;
-  background: var(--sim-panel-bg);
-  backdrop-filter: blur(var(--sim-panel-blur));
-  -webkit-backdrop-filter: blur(var(--sim-panel-blur));
-  border: 1px solid var(--sim-panel-border);
-  border-radius: 12px;
-  box-shadow: var(--sim-panel-shadow);
+  top: 24px;
+  left: 24px;
+  padding: 18px 22px;
+  min-width: 200px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 18px;
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.08),
+    0 1px 3px rgba(0, 0, 0, 0.04),
+    inset 0 1px 1px rgba(255, 255, 255, 0.9);
   z-index: 10;
-  animation: badge-fade-in 0.4s ease-out 0.2s both;
+  animation: badge-fade-in 0.5s ease-out 0.2s both;
 }
 
 @keyframes badge-fade-in {
   from {
     opacity: 0;
-    transform: translateY(-10px);
+    transform: translateY(-12px) scale(0.96);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
 .persona-info-badge .persona-name {
   font-family: var(--font-display);
-  font-size: 16px;
-  color: var(--sim-text-primary);
-  margin: 0 0 2px 0;
+  font-size: 18px;
+  font-weight: 500;
+  color: #1a1a1a;
+  margin: 0 0 3px 0;
+  letter-spacing: -0.01em;
 }
 
 .persona-info-badge .persona-title {
   font-family: var(--font-body);
   font-size: 12px;
-  color: var(--sim-text-muted);
+  color: #6b7280;
   margin: 0;
 }
 
-/* Scenario Title Badge (top-center floating) */
-.scenario-title-badge {
-  position: absolute;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 12px 24px;
-  background: var(--sim-panel-bg);
-  backdrop-filter: blur(var(--sim-panel-blur));
-  -webkit-backdrop-filter: blur(var(--sim-panel-blur));
-  border: 1px solid var(--sim-panel-border);
-  border-radius: 12px;
-  box-shadow: var(--sim-panel-shadow);
-  text-align: center;
-  z-index: 10;
-  animation: badge-fade-in 0.4s ease-out 0.3s both;
+/* Divider between persona and scenario */
+.persona-info-badge .badge-divider {
+  height: 1px;
+  margin: 14px 0;
+  background: linear-gradient(90deg, rgba(74, 93, 76, 0.25) 0%, transparent 100%);
 }
 
-.scenario-title-badge h2 {
+/* Scenario info within badge */
+.persona-info-badge .scenario-name {
   font-family: var(--font-display);
-  font-size: 16px;
-  font-weight: 400;
-  color: var(--sim-text-primary);
-  margin: 0 0 2px 0;
-  white-space: nowrap;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  margin: 0 0 3px 0;
 }
 
-.scenario-title-badge p {
+.persona-info-badge .scenario-category {
   font-family: var(--font-body);
-  font-size: 11px;
-  color: var(--sim-text-muted);
-  margin: 0;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  color: var(--sim-accent-primary);
+  margin: 0;
+}
+
+/* Hide old separate scenario badge - now merged into persona badge */
+.scenario-title-badge {
+  display: none;
 }
 
 /* ============================================
@@ -1811,18 +1828,23 @@ body.has-header .simulation-room.active {
 }
 
 .float-panel {
-  background: var(--sim-panel-bg);
-  backdrop-filter: blur(var(--sim-panel-blur));
-  -webkit-backdrop-filter: blur(var(--sim-panel-blur));
-  border: 1px solid var(--sim-panel-border);
-  border-radius: var(--sim-panel-radius);
-  box-shadow: var(--sim-panel-shadow);
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 20px;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.05),
+    0 10px 15px -3px rgba(0, 0, 0, 0.08),
+    0 20px 25px -5px rgba(0, 0, 0, 0.04),
+    inset 0 1px 1px rgba(255, 255, 255, 0.8);
   pointer-events: auto;
   display: flex;
   flex-direction: column;
   opacity: 0;
   transform: translateX(20px);
   animation: panel-slide-in-right 0.5s ease-out forwards;
+  overflow: hidden;
 }
 
 @keyframes panel-slide-in-right {
@@ -1845,16 +1867,17 @@ body.has-header .simulation-room.active {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 16px;
-  border-bottom: 1px solid var(--sim-border);
+  padding: 14px 18px;
+  background: linear-gradient(180deg, rgba(74, 93, 76, 0.06) 0%, transparent 100%);
+  border-bottom: 1px solid rgba(74, 93, 76, 0.08);
 }
 
 .panel-badge {
-  font-family: var(--font-body);
+  font-family: var(--font-display);
   font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.03em;
-  color: var(--sim-text-secondary);
+  letter-spacing: 0.08em;
+  color: var(--sim-accent-primary);
   text-transform: uppercase;
 }
 
@@ -1953,12 +1976,60 @@ body.has-header .simulation-room.active {
 }
 
 .transcript-panel .transcript-message {
-  padding: 10px 14px;
-  border-radius: 12px;
-  max-width: 90%;
+  padding: 12px 16px;
+  border-radius: 14px;
+  max-width: 88%;
   font-family: var(--font-body);
   font-size: 13px;
-  line-height: 1.45;
+  line-height: 1.5;
+  position: relative;
+}
+
+/* User messages - right aligned */
+.transcript-panel .transcript-message.message-user {
+  background: linear-gradient(135deg, var(--sim-accent-primary) 0%, #3d7a5a 100%);
+  color: white;
+  margin-left: auto;
+  border-bottom-right-radius: 4px;
+  box-shadow: 0 2px 8px rgba(5, 150, 105, 0.2);
+}
+
+.transcript-panel .transcript-message.message-user .message-header {
+  opacity: 0.85;
+}
+
+/* AI messages - left aligned */
+.transcript-panel .transcript-message.message-ai {
+  background: rgba(255, 255, 255, 0.8);
+  color: var(--sim-text-primary);
+  margin-right: auto;
+  border-bottom-left-radius: 4px;
+  border: 1px solid rgba(74, 93, 76, 0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+/* Message header with role and time */
+.transcript-panel .message-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.transcript-panel .message-role {
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.transcript-panel .message-time {
+  font-size: 10px;
+  opacity: 0.7;
+}
+
+.transcript-panel .message-text {
+  line-height: 1.5;
 }
 
 /* ============================================

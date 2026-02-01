@@ -195,7 +195,7 @@ function createTopicButton(topic, diff, promptFile, canAccess, isCurrent) {
 }
 
 /**
- * Load topics for a subcategory
+ * Load topics for a subcategory - filtered by user's selected difficulty
  */
 function loadSidebarTopics(subcategoryId, container) {
   // Get topics from scenarios.js
@@ -208,8 +208,16 @@ function loadSidebarTopics(subcategoryId, container) {
     return;
   }
 
-  // Clear container
-  container.innerHTML = '';
+  // Clear container using DOM method
+  while (container.firstChild) {
+    container.removeChild(container.firstChild);
+  }
+
+  // Get the user's selected difficulty (from state.js global)
+  // Map 'medium' to 'moderate' for prompt file naming
+  const difficultyMap = { 'easy': 'easy', 'medium': 'moderate', 'strict': 'strict' };
+  const userDiff = selectedDifficulty || 'easy';
+  const targetDiff = difficultyMap[userDiff] || userDiff;
 
   topics.forEach(topic => {
     // topic structure from getTopicsForSubheading: { file, name, image, difficulty }
@@ -217,17 +225,13 @@ function loadSidebarTopics(subcategoryId, container) {
     const folderName = topic.file.split('/').pop();
     const heading = topic.file.split('/')[0];
 
-    // Generate prompt files for each difficulty
-    const difficulties = ['easy', 'moderate', 'strict'];
+    // Only create ONE button per topic for the user's selected difficulty
+    const promptFile = `prompts/${topic.file}/${targetDiff}_${heading}_${folderName}_1.txt`;
+    const canAccess = typeof canAccessScenario === 'function' ? canAccessScenario(promptFile) : true;
+    const isCurrent = currentScenarioFile === promptFile;
 
-    difficulties.forEach(diff => {
-      const promptFile = `prompts/${topic.file}/${diff}_${heading}_${folderName}_1.txt`;
-      const canAccess = typeof canAccessScenario === 'function' ? canAccessScenario(promptFile) : true;
-      const isCurrent = currentScenarioFile === promptFile;
-
-      const btn = createTopicButton(topic, diff, promptFile, canAccess, isCurrent);
-      container.appendChild(btn);
-    });
+    const btn = createTopicButton(topic, targetDiff, promptFile, canAccess, isCurrent);
+    container.appendChild(btn);
   });
 }
 
