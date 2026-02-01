@@ -70,7 +70,7 @@ function transitionToPage(fromPageId, toPageId, callback) {
     if (toPageId === 'difficultySelection' && typeof initDifficultyPersonaEffects === 'function') {
       // Delay to ensure layout is complete
       setTimeout(() => {
-        if (!window.difficultyPersonaEffects || window.difficultyPersonaEffects.length === 0) {
+        if (!window.difficultyPersonaEffect) {
           initDifficultyPersonaEffects();
         }
       }, 200);

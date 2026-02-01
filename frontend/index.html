@@ -67,8 +67,9 @@
     #simulationRoom .desktop-simulation-layout {
       flex: 1;
       min-height: 0;
-      /* Removed fixed max-height calculation */
-      margin-bottom: 0 !important;
+      max-height: calc(100vh - 80px - 52px - 24px);
+      /* header (80px) + footer (52px) + bottom margin (24px) */
+      margin-bottom: 24px !important;
       padding-bottom: 24px !important;
       overflow: hidden;
     }
@@ -918,82 +919,59 @@
         </div>
       </section>
 
-      <!-- Features Scroll Section -->
-      <section class="features-scroll-section">
-        <!-- Feature 1: Practice Anytime -->
-        <article class="feature-block scroll-reveal">
-          <div class="feature-block__inner">
-            <div class="feature-content">
-              <span class="feature-label">Always Available</span>
-              <h2 class="feature-title">Practice on <em>your</em> schedule</h2>
-              <p class="feature-description">
-                24/7 availability means you can practice whenever inspiration strikes.
-                Early morning before a shift. Late night after studying. During a quiet moment between cases.
-              </p>
-              <ul class="feature-list">
-                <li>No scheduling, no waiting</li>
-                <li>Works on any device</li>
-                <li>Instant, actionable feedback</li>
-              </ul>
-            </div>
-            <div class="feature-visual">
-              <div class="visual-frame webgl-glass-container"
-                data-image="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=600&q=80">
-                <!-- WebGL canvas will be inserted here -->
-              </div>
-            </div>
-          </div>
-        </article>
+      <!-- Features Section - Lumina Interactive List Style -->
+      <section class="lumina-section" id="featuresSection">
+        <!-- Full-viewport WebGL Canvas Background -->
+        <canvas class="lumina-canvas" id="featuresCanvas"></canvas>
 
-        <!-- Feature 2: Expert-Designed (reversed layout) -->
-        <article class="feature-block scroll-reveal">
-          <div class="feature-block__inner feature-block__inner--reversed">
-            <div class="feature-visual">
-              <div class="visual-frame visual-frame--accent webgl-glass-container"
-                data-image="https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=600&q=80">
-                <!-- WebGL canvas will be inserted here -->
-              </div>
-            </div>
-            <div class="feature-content">
-              <span class="feature-label">Crafted by Surgeons</span>
-              <h2 class="feature-title">Scenarios that <em>matter</em></h2>
-              <p class="feature-description">
-                Every scenario is designed by surgical trainees who've been through the interview process.
-                Real questions. Real challenges. Real preparation.
-              </p>
-              <ul class="feature-list">
-                <li>231 curated scenarios</li>
-                <li>Clinical, communication & structured formats</li>
-                <li>Progressive difficulty levels</li>
-              </ul>
-            </div>
-          </div>
-        </article>
+        <!-- Counter (left side) -->
+        <div class="lumina-counter">
+          <span class="counter-current">01</span>
+        </div>
 
-        <!-- Feature 3: Try Before Subscribe -->
-        <article class="feature-block scroll-reveal">
-          <div class="feature-block__inner">
-            <div class="feature-content">
-              <span class="feature-label">Risk-Free</span>
-              <h2 class="feature-title">Try before you <em>commit</em></h2>
-              <p class="feature-description">
-                Explore our platform with no strings attached. Access sample scenarios from each category
-                and experience the quality firsthand.
-              </p>
-              <ul class="feature-list">
-                <li>Free sample scenarios</li>
-                <li>Full platform preview</li>
-                <li>No credit card required</li>
-              </ul>
-            </div>
-            <div class="feature-visual">
-              <div class="visual-frame webgl-glass-container"
-                data-image="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&q=80">
-                <!-- WebGL canvas will be inserted here -->
-              </div>
-            </div>
+        <!-- Centered Content Overlay -->
+        <div class="lumina-content">
+          <div class="lumina-slide active" data-slide="0">
+            <span class="slide-label">Always Available</span>
+            <h2 class="slide-title">Practice on <em>your</em> schedule</h2>
+            <p class="slide-description">
+              24/7 availability means you can practice whenever inspiration strikes.
+              Early morning before a shift. Late night after studying.
+            </p>
           </div>
-        </article>
+          <div class="lumina-slide" data-slide="1">
+            <span class="slide-label">Crafted by Surgeons</span>
+            <h2 class="slide-title">Scenarios that <em>matter</em></h2>
+            <p class="slide-description">
+              Every scenario is designed by surgical trainees who've been through the interview.
+              Real questions. Real challenges. Real preparation.
+            </p>
+          </div>
+          <div class="lumina-slide" data-slide="2">
+            <span class="slide-label">Risk-Free</span>
+            <h2 class="slide-title">Try before you <em>commit</em></h2>
+            <p class="slide-description">
+              Explore our platform with no strings attached.
+              Access sample scenarios and experience the quality firsthand.
+            </p>
+          </div>
+        </div>
+
+        <!-- Bottom Center Tabs -->
+        <nav class="lumina-tabs">
+          <button type="button" class="lumina-tab active" data-slide="0">
+            <span class="tab-label">PRACTICE ANYTIME</span>
+            <div class="tab-progress"><div class="tab-progress-fill"></div></div>
+          </button>
+          <button type="button" class="lumina-tab" data-slide="1">
+            <span class="tab-label">EXPERT DESIGNED</span>
+            <div class="tab-progress"><div class="tab-progress-fill"></div></div>
+          </button>
+          <button type="button" class="lumina-tab" data-slide="2">
+            <span class="tab-label">RISK FREE</span>
+            <div class="tab-progress"><div class="tab-progress-fill"></div></div>
+          </button>
+        </nav>
       </section>
 
       <!-- Login CTA (for authenticated features) -->
@@ -1314,83 +1292,87 @@
       </div>
     </div>
 
-    <!-- Page 2: Difficulty Selection -->
-    <div id="difficultySelection" class="page initially-hidden">
-      <button class="top-back-button" onclick="backToSpecialties()">← Back</button>
+    <!-- Page 2: Difficulty Selection - Lumina Style -->
+    <div id="difficultySelection" class="page initially-hidden lumina-page">
+      <button class="top-back-button lumina-back" onclick="backToSpecialties()">← Back</button>
 
-      <div class="header header--minimal">
-        <h1 class="page-title">Plastic Surgery ST3</h1>
-        <p class="subtitle">Select examiner difficulty level</p>
+      <!-- Full-viewport WebGL Canvas Background -->
+      <canvas class="lumina-canvas" id="difficultyCanvas"></canvas>
+
+      <!-- Counter (left side) -->
+      <div class="lumina-counter">
+        <span class="counter-current">01</span>
       </div>
 
-      <div class="difficulty-grid">
-        <div class="difficulty-card difficulty-easy" onclick="selectDifficulty('easy')">
-          <div class="difficulty-icon difficulty-icon--svg">
-            <!-- Friendly smiling face - warm, approachable -->
-            <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
-              <circle cx="28" cy="28" r="22" stroke="currentColor" stroke-width="2" />
-              <!-- Happy eyes (curved lines) -->
-              <path d="M18 22C19 20 21 19 23 20" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-              <path d="M38 22C37 20 35 19 33 20" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-              <!-- Wide smile -->
-              <path d="M18 32C22 38 34 38 38 32" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-            </svg>
-          </div>
-          <h2>John: Easy</h2>
-          <p>Your friendly neighborhood consultant who remembers being a trainee</p>
-          <ul>
+      <!-- Centered Content -->
+      <div class="lumina-content difficulty-content">
+        <div class="lumina-slide active" data-difficulty="easy">
+          <h1 class="persona-name">John</h1>
+          <p class="persona-role">Easy Examiner</p>
+          <p class="persona-description">
+            Your friendly neighborhood consultant who remembers being a trainee.
+            Warm encouragement, generous hints, and celebrates your wins.
+          </p>
+          <ul class="persona-traits">
             <li>Warm encouragement</li>
             <li>Generous hints</li>
             <li>Celebrates your wins</li>
           </ul>
+          <button type="button" class="btn-select" onclick="selectDifficulty('easy')">
+            Select John
+          </button>
         </div>
 
-        <div class="difficulty-card difficulty-moderate" onclick="selectDifficulty('medium')">
-          <div class="difficulty-icon difficulty-icon--svg">
-            <!-- Neutral/thoughtful face - professional, balanced -->
-            <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
-              <circle cx="28" cy="28" r="22" stroke="currentColor" stroke-width="2" />
-              <!-- Neutral eyes (simple dots) -->
-              <circle cx="20" cy="24" r="2.5" fill="currentColor" />
-              <circle cx="36" cy="24" r="2.5" fill="currentColor" />
-              <!-- Straight neutral mouth -->
-              <path d="M20 36H36" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-              <!-- Slight raised eyebrow for thoughtfulness -->
-              <path d="M32 18C34 17 38 17 40 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-            </svg>
-          </div>
-          <h2>Elliot: Medium</h2>
-          <p>Fair and balanced - the real ST3 interview experience</p>
-          <ul>
+        <div class="lumina-slide" data-difficulty="medium">
+          <h1 class="persona-name">Elliot</h1>
+          <p class="persona-role">Medium Examiner</p>
+          <p class="persona-description">
+            Fair and balanced - the real ST3 interview experience.
+            Straight-shooting feedback with occasional nudges.
+          </p>
+          <ul class="persona-traits">
             <li>Straight-shooting feedback</li>
             <li>Occasional nudges</li>
             <li>Professional demeanor</li>
           </ul>
+          <button type="button" class="btn-select" onclick="selectDifficulty('medium')">
+            Select Elliot
+          </button>
         </div>
 
-        <div class="difficulty-card difficulty-strict" onclick="selectDifficulty('strict')">
-          <div class="difficulty-icon difficulty-icon--svg">
-            <!-- Stern/serious face - demanding, intense -->
-            <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
-              <circle cx="28" cy="28" r="22" stroke="currentColor" stroke-width="2" />
-              <!-- Furrowed brow eyes -->
-              <path d="M16 20L24 23" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-              <path d="M40 20L32 23" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-              <circle cx="21" cy="26" r="2" fill="currentColor" />
-              <circle cx="35" cy="26" r="2" fill="currentColor" />
-              <!-- Slight frown -->
-              <path d="M20 38C24 35 32 35 36 38" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-            </svg>
-          </div>
-          <h2>Perry: Strict</h2>
-          <p>No nonsense. High standards. Expects excellence or you'll hear about it</p>
-          <ul>
+        <div class="lumina-slide" data-difficulty="strict">
+          <h1 class="persona-name">Perry</h1>
+          <p class="persona-role">Strict Examiner</p>
+          <p class="persona-description">
+            No nonsense. High standards. Expects excellence or you'll hear about it.
+            Brutally honest with sky-high expectations.
+          </p>
+          <ul class="persona-traits">
             <li>Brutally honest</li>
             <li>Sky-high expectations</li>
             <li>Sink or swim</li>
           </ul>
+          <button type="button" class="btn-select" onclick="selectDifficulty('strict')">
+            Select Perry
+          </button>
         </div>
       </div>
+
+      <!-- Bottom Center Tabs -->
+      <nav class="lumina-tabs">
+        <button type="button" class="lumina-tab active" data-difficulty="easy">
+          <span class="tab-label">JOHN · EASY</span>
+          <div class="tab-progress"><div class="tab-progress-fill"></div></div>
+        </button>
+        <button type="button" class="lumina-tab" data-difficulty="medium">
+          <span class="tab-label">ELLIOT · MEDIUM</span>
+          <div class="tab-progress"><div class="tab-progress-fill"></div></div>
+        </button>
+        <button type="button" class="lumina-tab" data-difficulty="strict">
+          <span class="tab-label">PERRY · STRICT</span>
+          <div class="tab-progress"><div class="tab-progress-fill"></div></div>
+        </button>
+      </nav>
     </div>
 
     <!-- Page: Mode Selection (Practice vs Mock Exam) -->
