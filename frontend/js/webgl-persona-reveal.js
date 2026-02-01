@@ -28,7 +28,6 @@
     // Configuration
     const CONFIG = {
       transitionDuration: 1.8,
-      autoPlayInterval: 5000,
       maxOpacity: 0.35,
       refractionStrength: 0.8,
       chromaticAberration: 0.6,
@@ -163,10 +162,8 @@
         this.isTransitioning = false;
         this.animationId = null;
         this.isDestroyed = false;
-        this.autoPlayTimer = null;
         this.tabs = null;
         this.contentItems = null;
-        this.counter = null;
       }
 
       async init() {
@@ -229,10 +226,7 @@
           // Start render loop
           this.animate();
 
-          // Start auto-play
-          this.startAutoPlay();
-
-          // Set initial active state
+          // Set initial active state (no auto-play)
           this.updateActiveStates('easy');
 
           console.log('[PersonaBackground] Initialized successfully');
@@ -285,8 +279,7 @@
 
       setupTabListeners() {
         this.tabs = this.container.querySelectorAll('.lumina-tab');
-        this.contentItems = this.container.querySelectorAll('.lumina-slide');
-        this.counter = this.container.querySelector('.counter-current');
+        this.contentItems = this.container.querySelectorAll('.lumina-content-card .lumina-slide');
 
         this.tabs.forEach(tab => {
           const difficulty = tab.dataset.difficulty;
@@ -307,9 +300,6 @@
           return;
         }
 
-        // Stop auto-play timer
-        this.stopAutoPlay();
-
         // Kill any ongoing transition
         if (this.isTransitioning) {
           gsap.killTweensOf(this.uniforms.uProgress);
@@ -317,7 +307,7 @@
 
         this.targetDifficulty = difficulty;
 
-        // Update UI immediately
+        // Update UI with animations
         this.updateActiveStates(difficulty);
 
         // Set up textures for transition
@@ -341,59 +331,63 @@
             this.uniforms.uTexture1.value = targetTexture;
             this.uniforms.uTexture1Size.value = this.textureSizes[this.targetDifficulty];
             this.isTransitioning = false;
-
-            // Restart auto-play
-            this.startAutoPlay();
           }
         });
       }
 
       updateActiveStates(difficulty) {
-        const index = DIFFICULTY_ORDER.indexOf(difficulty);
-
         // Update tabs
         this.tabs.forEach(tab => {
-          const isActive = tab.dataset.difficulty === difficulty;
-          tab.classList.toggle('active', isActive);
+          tab.classList.toggle('active', tab.dataset.difficulty === difficulty);
+        });
 
-          // Reset progress bar animation
-          const progressFill = tab.querySelector('.tab-progress-fill');
-          if (progressFill) {
-            progressFill.style.width = '0%';
-            progressFill.style.animation = 'none';
-            if (isActive) {
-              // Trigger reflow then animate
-              progressFill.offsetHeight;
-              progressFill.style.animation = `fillProgress ${CONFIG.autoPlayInterval}ms linear forwards`;
-            }
+        // Animate content transitions with GSAP
+        this.contentItems.forEach(item => {
+          const isActive = item.dataset.difficulty === difficulty;
+          const wasActive = item.classList.contains('active');
+
+          if (isActive && !wasActive) {
+            // Animate in the new content
+            item.classList.add('active');
+
+            // Reset initial state
+            gsap.set(item, { opacity: 0, y: 30 });
+            gsap.set(item.querySelectorAll('.persona-name, .persona-role, .persona-description, .persona-traits, .btn-select'), {
+              opacity: 0,
+              y: 20
+            });
+
+            // Animate container
+            gsap.to(item, {
+              opacity: 1,
+              y: 0,
+              duration: 0.6,
+              ease: 'power2.out'
+            });
+
+            // Stagger animate child elements
+            gsap.to(item.querySelectorAll('.persona-name, .persona-role, .persona-description, .persona-traits, .btn-select'), {
+              opacity: 1,
+              y: 0,
+              duration: 0.5,
+              stagger: 0.08,
+              ease: 'power2.out',
+              delay: 0.15
+            });
+
+          } else if (!isActive && wasActive) {
+            // Animate out the old content
+            gsap.to(item, {
+              opacity: 0,
+              y: -20,
+              duration: 0.3,
+              ease: 'power2.in',
+              onComplete: () => {
+                item.classList.remove('active');
+              }
+            });
           }
         });
-
-        // Update content items
-        this.contentItems.forEach(item => {
-          item.classList.toggle('active', item.dataset.difficulty === difficulty);
-        });
-
-        // Update counter
-        if (this.counter) {
-          this.counter.textContent = String(index + 1).padStart(2, '0');
-        }
-      }
-
-      startAutoPlay() {
-        this.stopAutoPlay();
-        this.autoPlayTimer = setTimeout(() => {
-          const currentIndex = DIFFICULTY_ORDER.indexOf(this.currentDifficulty);
-          const nextIndex = (currentIndex + 1) % DIFFICULTY_ORDER.length;
-          this.goToDifficulty(DIFFICULTY_ORDER[nextIndex]);
-        }, CONFIG.autoPlayInterval);
-      }
-
-      stopAutoPlay() {
-        if (this.autoPlayTimer) {
-          clearTimeout(this.autoPlayTimer);
-          this.autoPlayTimer = null;
-        }
       }
 
       animate() {
@@ -416,7 +410,6 @@
 
       destroy() {
         this.isDestroyed = true;
-        this.stopAutoPlay();
 
         if (this.animationId) {
           cancelAnimationFrame(this.animationId);

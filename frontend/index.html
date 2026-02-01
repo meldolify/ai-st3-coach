@@ -1294,16 +1294,28 @@
     <div id="difficultySelection" class="page initially-hidden lumina-page">
       <button class="top-back-button lumina-back" onclick="backToSpecialties()">← Back</button>
 
+      <!-- Top Center Tabs -->
+      <nav class="lumina-tabs lumina-tabs--top">
+        <button type="button" class="lumina-tab active" data-difficulty="easy">
+          <span class="tab-label">JOHN · EASY</span>
+        </button>
+        <button type="button" class="lumina-tab" data-difficulty="medium">
+          <span class="tab-label">ELLIOT · MEDIUM</span>
+        </button>
+        <button type="button" class="lumina-tab" data-difficulty="strict">
+          <span class="tab-label">PERRY · STRICT</span>
+        </button>
+      </nav>
+
       <!-- Full-viewport WebGL Canvas Background -->
       <canvas class="lumina-canvas" id="difficultyCanvas"></canvas>
 
-      <!-- Counter (left side) -->
-      <div class="lumina-counter">
-        <span class="counter-current">01</span>
-      </div>
+      <!-- Edge blur overlays -->
+      <div class="lumina-edge-blur lumina-edge-blur--left"></div>
+      <div class="lumina-edge-blur lumina-edge-blur--right"></div>
 
-      <!-- Centered Content -->
-      <div class="lumina-content difficulty-content">
+      <!-- Glassmorphism Content Card -->
+      <div class="lumina-content-card">
         <div class="lumina-slide active" data-difficulty="easy">
           <h1 class="persona-name">John</h1>
           <p class="persona-role">Easy Examiner</p>
@@ -1355,22 +1367,6 @@
           </button>
         </div>
       </div>
-
-      <!-- Bottom Center Tabs -->
-      <nav class="lumina-tabs">
-        <button type="button" class="lumina-tab active" data-difficulty="easy">
-          <span class="tab-label">JOHN · EASY</span>
-          <div class="tab-progress"><div class="tab-progress-fill"></div></div>
-        </button>
-        <button type="button" class="lumina-tab" data-difficulty="medium">
-          <span class="tab-label">ELLIOT · MEDIUM</span>
-          <div class="tab-progress"><div class="tab-progress-fill"></div></div>
-        </button>
-        <button type="button" class="lumina-tab" data-difficulty="strict">
-          <span class="tab-label">PERRY · STRICT</span>
-          <div class="tab-progress"><div class="tab-progress-fill"></div></div>
-        </button>
-      </nav>
     </div>
 
     <!-- Page: Mode Selection (Practice vs Mock Exam) -->

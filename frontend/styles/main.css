@@ -7073,11 +7073,24 @@ body.has-header {
    LUMINA PAGE - Difficulty Selection
    ============================================ */
 
-.lumina-page {
-  position: relative;
-  min-height: 100vh;
+#difficultySelection.lumina-page,
+.page.lumina-page {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
   background: #0a0a0a;
   overflow: hidden;
+  z-index: 1100;
+}
+
+/* Hide app header when lumina page is active */
+#difficultySelection.lumina-page:not(.initially-hidden):not(.hidden) ~ #appHeader,
+body:has(#difficultySelection.lumina-page:not(.initially-hidden):not(.hidden)) #appHeader {
+  display: none;
 }
 
 .lumina-page .lumina-canvas {
@@ -7106,9 +7119,149 @@ body.has-header {
   color: #ffffff;
 }
 
-/* Difficulty Content - Centered Card */
-.difficulty-content .lumina-slide {
-  max-width: 500px;
+/* ============================================
+   LUMINA TABS - Top Center Navigation
+   ============================================ */
+.lumina-tabs--top {
+  position: fixed;
+  top: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1200;
+  display: flex;
+  gap: 48px;
+  padding: 0;
+  margin: 0;
+}
+
+.lumina-tab {
+  background: transparent;
+  border: none;
+  padding: 12px 0;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.lumina-tab .tab-label {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  transition: color 0.3s ease;
+}
+
+.lumina-tab:hover .tab-label {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.lumina-tab.active .tab-label {
+  color: #ffffff;
+}
+
+/* Active indicator line */
+.lumina-tab::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #ffffff;
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.lumina-tab.active::after {
+  transform: scaleX(1);
+}
+
+/* Difficulty color coding for active tabs */
+.lumina-tab[data-difficulty="easy"].active::after {
+  background: #10b981;
+}
+
+.lumina-tab[data-difficulty="medium"].active::after {
+  background: #f59e0b;
+}
+
+.lumina-tab[data-difficulty="strict"].active::after {
+  background: #ef4444;
+}
+
+/* ============================================
+   LUMINA EDGE BLUR - Side Overlays
+   ============================================ */
+.lumina-page .lumina-edge-blur {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: 25%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.lumina-page .lumina-edge-blur--left {
+  left: 0;
+  background: linear-gradient(to right,
+    #0a0a0a 0%,
+    rgba(10, 10, 10, 0.9) 25%,
+    rgba(10, 10, 10, 0.6) 50%,
+    rgba(10, 10, 10, 0.2) 75%,
+    transparent 100%
+  );
+}
+
+.lumina-page .lumina-edge-blur--right {
+  right: 0;
+  background: linear-gradient(to left,
+    #0a0a0a 0%,
+    rgba(10, 10, 10, 0.9) 25%,
+    rgba(10, 10, 10, 0.6) 50%,
+    rgba(10, 10, 10, 0.2) 75%,
+    transparent 100%
+  );
+}
+
+/* ============================================
+   LUMINA CONTENT CARD - Glassmorphism Overlay
+   ============================================ */
+.lumina-content-card {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 5;
+  background: rgba(10, 10, 10, 0.5);
+  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 48px 40px 56px;
+  text-align: center;
+}
+
+/* Gradient fade above card */
+.lumina-content-card::before {
+  content: '';
+  position: absolute;
+  top: -100px;
+  left: 0;
+  right: 0;
+  height: 100px;
+  background: linear-gradient(to bottom, transparent, rgba(10, 10, 10, 0.3));
+  pointer-events: none;
+}
+
+.lumina-content-card .lumina-slide {
+  display: none;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.lumina-content-card .lumina-slide.active {
+  display: block;
 }
 
 .persona-name {
@@ -7194,37 +7347,57 @@ body.has-header {
 
 /* Responsive - Difficulty Selection Page */
 @media (max-width: 768px) {
-  .lumina-slide {
-    position: relative;
-    top: auto;
-    left: auto;
-    transform: none;
-    display: none;
-  }
-
-  .lumina-slide.active {
-    display: block;
-  }
-
-  .lumina-tabs {
-    bottom: 32px;
-    gap: 24px;
+  .lumina-tabs--top {
+    top: 70px;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
     padding: 0 16px;
     width: 100%;
-    justify-content: center;
-    flex-wrap: wrap;
   }
 
   .lumina-tab {
-    min-width: 80px;
+    min-width: auto;
   }
 
   .lumina-tab .tab-label {
     font-size: 0.6rem;
+    letter-spacing: 0.1em;
+  }
+
+  .lumina-edge-blur {
+    width: 10%;
+  }
+
+  .lumina-content-card {
+    padding: 32px 20px 40px;
+  }
+
+  .lumina-content-card .lumina-slide {
+    max-width: 100%;
   }
 
   .persona-name {
     font-size: 2.5rem;
+  }
+
+  .persona-description {
+    font-size: 0.9rem;
+  }
+
+  .persona-traits {
+    gap: 8px;
+    margin-bottom: 28px;
+  }
+
+  .persona-traits li {
+    font-size: 0.65rem;
+    padding: 6px 12px;
+  }
+
+  .btn-select {
+    padding: 14px 32px;
+    font-size: 0.8rem;
   }
 
   .lumina-page .top-back-button {
