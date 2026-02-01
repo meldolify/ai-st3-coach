@@ -6,6 +6,21 @@
 (function () {
   'use strict';
 
+  // Preload images to prevent flickering
+  function preloadImages(urls) {
+    return Promise.all(
+      urls.map(
+        (url) =>
+          new Promise((resolve) => {
+            const img = new Image();
+            img.onload = resolve;
+            img.onerror = resolve; // Resolve even on error to not block
+            img.src = url;
+          })
+      )
+    );
+  }
+
   // Wait for GSAP and ScrollTrigger to be available
   function waitForGSAP(callback, maxAttempts = 50) {
     let attempts = 0;
@@ -31,7 +46,8 @@
       '.feature-content, .feature-mockup-bg, .feature-mockup-main'
     );
     elements.forEach((el) => {
-      el.classList.add('animate-in');
+      el.style.opacity = '1';
+      el.style.transform = 'translateY(0)';
     });
   }
 
@@ -43,109 +59,87 @@
       return;
     }
 
-    featureSections.forEach((section, index) => {
+    // Collect all image URLs for preloading
+    const imageUrls = [
+      'https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?w=600&q=80',
+      'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800&q=80',
+      'https://images.unsplash.com/photo-1551076805-e1869033e561?w=600&q=80',
+      'https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=800&q=80',
+      'https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?w=600&q=80',
+      'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80',
+    ];
+
+    // Preload images then setup animations
+    preloadImages(imageUrls).then(() => {
+      setupAnimations(featureSections);
+    });
+
+    // Also start setup after a short delay as fallback
+    setTimeout(() => {
+      if (!window._featuresAnimationSetup) {
+        setupAnimations(featureSections);
+      }
+    }, 500);
+  }
+
+  function setupAnimations(featureSections) {
+    if (window._featuresAnimationSetup) return;
+    window._featuresAnimationSetup = true;
+
+    featureSections.forEach((section) => {
       const content = section.querySelector('.feature-content');
       const mockupBg = section.querySelector('.feature-mockup-bg');
       const mockupMain = section.querySelector('.feature-mockup-main');
       const isReversed = section.classList.contains('reverse');
 
-      // Create a timeline for this section
+      // Set initial states immediately (GSAP overrides CSS)
+      if (content) {
+        gsap.set(content, { opacity: 0, y: 40, immediateRender: true });
+      }
+      if (mockupBg) {
+        gsap.set(mockupBg, { opacity: 0, y: isReversed ? -15 : 15, immediateRender: true });
+      }
+      if (mockupMain) {
+        gsap.set(mockupMain, { opacity: 0, y: 50, immediateRender: true });
+      }
+
+      // Create entrance animation timeline
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
-          start: 'top 75%',
-          end: 'bottom 25%',
-          toggleActions: 'play none none reverse',
+          start: 'top 80%',
+          toggleActions: 'play none none none', // Play once, don't reverse
         },
       });
 
       // Animate content (text side)
       if (content) {
-        // Set initial state
-        gsap.set(content, {
-          opacity: 0,
-          y: 50,
-        });
-
-        tl.to(
-          content,
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.7,
-            ease: 'power2.out',
-            onComplete: () => content.classList.add('animate-in'),
-          },
-          0
-        );
+        tl.to(content, {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          ease: 'power2.out',
+        }, 0);
       }
 
-      // Animate background mockup (decorative, offset layer)
-      if (mockupBg) {
-        const bgStartY = isReversed ? -20 : 20;
-        const bgEndY = isReversed ? 20 : -30;
-
-        gsap.set(mockupBg, {
-          opacity: 0,
-          y: bgStartY,
-        });
-
-        tl.to(
-          mockupBg,
-          {
-            opacity: 0.6,
-            y: bgEndY,
-            duration: 1.2,
-            ease: 'power2.out',
-            onComplete: () => mockupBg.classList.add('animate-in'),
-          },
-          0.1
-        );
-      }
-
-      // Animate main mockup card
+      // Animate main mockup card (appears first, more prominent)
       if (mockupMain) {
-        gsap.set(mockupMain, {
-          opacity: 0,
-          y: 60,
-        });
-
-        tl.to(
-          mockupMain,
-          {
-            opacity: 1,
-            y: 0,
-            duration: 1,
-            ease: 'power2.out',
-            onComplete: () => mockupMain.classList.add('animate-in'),
-          },
-          0.15
-        );
+        tl.to(mockupMain, {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: 'power2.out',
+        }, 0.1);
       }
 
-      // Add parallax effect on scroll for mockup elements
-      if (mockupBg && mockupMain) {
-        gsap.to(mockupBg, {
-          y: isReversed ? -40 : -50,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: section,
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: 1,
-          },
-        });
-
-        gsap.to(mockupMain, {
-          y: isReversed ? 20 : 30,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: section,
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: 1.5,
-          },
-        });
+      // Animate background mockup (subtle, decorative)
+      if (mockupBg) {
+        tl.to(mockupBg, {
+          opacity: 0.5,
+          y: isReversed ? 10 : -20,
+          duration: 1,
+          ease: 'power2.out',
+        }, 0.2);
       }
     });
 
