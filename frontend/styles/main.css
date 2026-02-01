@@ -7953,17 +7953,17 @@ body.has-header {
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  gap: 20px;
-  max-width: 1200px;
+  gap: 30px;
+  max-width: 1400px;
   width: 100%;
 }
 
 /* Individual Gradient Card */
 .gradient-card {
   position: relative;
-  width: 320px;
-  height: 420px;
-  margin: 20px 15px;
+  width: 340px;
+  height: 480px;
+  margin: 20px 10px;
   transition: all 0.5s ease;
   cursor: pointer;
 }
@@ -8083,14 +8083,14 @@ body.has-header {
 
 /* Persona avatar - circular */
 .persona-avatar {
-  width: 100px;
-  height: 100px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
   object-fit: cover;
   object-position: center top;
   border: 3px solid rgba(255, 255, 255, 0.4);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-  margin-bottom: 16px;
+  margin-bottom: 20px;
   transition: all 0.5s ease;
 }
 
@@ -8103,61 +8103,76 @@ body.has-header {
 /* Persona name */
 .gradient-card .persona-name {
   font-family: var(--font-display);
-  font-size: 1.8rem;
+  font-size: 2.2rem;
   font-weight: 400;
   font-style: italic;
-  margin: 0 0 4px 0;
+  margin: 0 0 6px 0;
   color: #fff;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  text-shadow:
+    -1px -1px 0 rgba(0, 0, 0, 0.25),
+    1px -1px 0 rgba(0, 0, 0, 0.25),
+    -1px 1px 0 rgba(0, 0, 0, 0.25),
+    1px 1px 0 rgba(0, 0, 0, 0.25),
+    0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* Persona role with difficulty colors */
 .gradient-card .persona-role {
   font-family: var(--font-body);
-  font-size: 0.85rem;
+  font-size: 1rem;
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 1.5px;
-  margin: 0 0 16px 0;
-  padding: 4px 12px;
+  margin: 0 0 20px 0;
+  padding: 6px 16px;
   border-radius: 20px;
   background: rgba(255, 255, 255, 0.2);
+  text-shadow:
+    -1px -1px 0 rgba(0, 0, 0, 0.2),
+    1px -1px 0 rgba(0, 0, 0, 0.2),
+    -1px 1px 0 rgba(0, 0, 0, 0.2),
+    1px 1px 0 rgba(0, 0, 0, 0.2);
 }
 
 .persona-role--easy {
-  background: rgba(77, 255, 3, 0.25);
-  color: #d4ffcc;
+  background: rgba(110, 194, 110, 0.3);
+  color: #e8f5e8;
 }
 
 .persona-role--medium {
-  background: rgba(255, 188, 0, 0.25);
-  color: #fff4cc;
+  background: rgba(232, 168, 73, 0.3);
+  color: #fff5e6;
 }
 
 .persona-role--strict {
-  background: rgba(255, 0, 88, 0.25);
-  color: #ffccdd;
+  background: rgba(201, 107, 132, 0.3);
+  color: #fce8ed;
 }
 
 /* Persona description */
 .gradient-card .persona-description {
   font-family: var(--font-body);
-  font-size: 0.95rem;
-  line-height: 1.5;
-  color: rgba(255, 255, 255, 0.9);
-  margin: 0 0 20px 0;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0 0 24px 0;
   flex-grow: 1;
+  text-shadow:
+    -1px -1px 0 rgba(0, 0, 0, 0.2),
+    1px -1px 0 rgba(0, 0, 0, 0.2),
+    -1px 1px 0 rgba(0, 0, 0, 0.2),
+    1px 1px 0 rgba(0, 0, 0, 0.2);
 }
 
 /* Select button */
 .btn-select-persona {
   display: inline-block;
   font-family: var(--font-body);
-  font-size: 0.95rem;
+  font-size: 1.1rem;
   font-weight: 600;
   color: #1A1A18;
   background: #fff;
-  padding: 12px 28px;
+  padding: 14px 32px;
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -8266,8 +8281,8 @@ body.has-header {
 /* Tablet adjustments */
 @media (min-width: 769px) and (max-width: 1024px) {
   .gradient-card {
-    width: 280px;
-    height: 400px;
+    width: 320px;
+    height: 460px;
     margin: 15px 10px;
   }
 
