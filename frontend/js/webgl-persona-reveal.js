@@ -28,7 +28,7 @@
     // Configuration
     const CONFIG = {
       transitionDuration: 1.8,
-      maxOpacity: 0.35,
+      maxOpacity: 1.0,
       refractionStrength: 0.8,
       chromaticAberration: 0.6,
       liquidFlow: 0.5
@@ -69,11 +69,12 @@
       varying vec2 vUv;
 
       // Cover UV calculation - fills viewport without stretching, crops excess
+      // Y offset 0.7 shifts visible area down to show more of the face/head
       vec2 getCoverUV(vec2 uv, vec2 textureSize, vec2 resolution) {
         vec2 s = resolution / textureSize;
         float scale = max(s.x, s.y);
         vec2 scaledSize = textureSize * scale;
-        vec2 offset = (resolution - scaledSize) * 0.5;
+        vec2 offset = (resolution - scaledSize) * vec2(0.5, 0.7);
         return (uv * resolution - offset) / scaledSize;
       }
 
@@ -127,17 +128,13 @@
         // Mix based on transition progress
         vec3 finalColor = mix(color1, color2, edge);
 
-        // Edge glow effect
-        float glow = edgeEffect * 0.15;
+        // Edge glow effect (subtle)
+        float glow = edgeEffect * 0.1;
         finalColor += vec3(glow * 0.5, glow * 0.6, glow * 0.7);
 
-        // Soft vignette for depth
-        float vignette = 1.0 - smoothstep(0.4, 1.2, dist) * 0.3;
+        // Very subtle vignette for depth
+        float vignette = 1.0 - smoothstep(0.5, 1.4, dist) * 0.15;
         finalColor *= vignette;
-
-        // Slight desaturation for background feel
-        float gray = dot(finalColor, vec3(0.299, 0.587, 0.114));
-        finalColor = mix(vec3(gray), finalColor, 0.9);
 
         gl_FragColor = vec4(finalColor, uOpacity);
       }
