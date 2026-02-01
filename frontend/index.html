@@ -919,59 +919,57 @@
         </div>
       </section>
 
-      <!-- Features Section - Lumina Interactive List Style -->
-      <section class="lumina-section" id="featuresSection">
-        <!-- Full-viewport WebGL Canvas Background -->
-        <canvas class="lumina-canvas" id="featuresCanvas"></canvas>
+      <!-- Features Section - Section with Mockup Style -->
+      <section class="features-container" id="featuresSection">
 
-        <!-- Counter (left side) -->
-        <div class="lumina-counter">
-          <span class="counter-current">01</span>
-        </div>
-
-        <!-- Centered Content Overlay -->
-        <div class="lumina-content">
-          <div class="lumina-slide active" data-slide="0">
-            <span class="slide-label">Always Available</span>
-            <h2 class="slide-title">Practice on <em>your</em> schedule</h2>
-            <p class="slide-description">
+        <!-- Feature 1: Practice Anytime -->
+        <div class="feature-section" data-feature="practice">
+          <div class="feature-content">
+            <span class="feature-label">Always Available</span>
+            <h2 class="feature-title">Practice on <em>your</em> schedule</h2>
+            <p class="feature-description">
               24/7 availability means you can practice whenever inspiration strikes.
               Early morning before a shift. Late night after studying.
             </p>
           </div>
-          <div class="lumina-slide" data-slide="1">
-            <span class="slide-label">Crafted by Surgeons</span>
-            <h2 class="slide-title">Scenarios that <em>matter</em></h2>
-            <p class="slide-description">
+          <div class="feature-mockup">
+            <div class="feature-mockup-bg feature-img-practice-bg"></div>
+            <div class="feature-mockup-main feature-img-practice-main"></div>
+          </div>
+        </div>
+
+        <!-- Feature 2: Expert Designed (reversed layout) -->
+        <div class="feature-section reverse" data-feature="expert">
+          <div class="feature-content">
+            <span class="feature-label">Crafted by Surgeons</span>
+            <h2 class="feature-title">Scenarios that <em>matter</em></h2>
+            <p class="feature-description">
               Every scenario is designed by surgical trainees who've been through the interview.
               Real questions. Real challenges. Real preparation.
             </p>
           </div>
-          <div class="lumina-slide" data-slide="2">
-            <span class="slide-label">Risk-Free</span>
-            <h2 class="slide-title">Try before you <em>commit</em></h2>
-            <p class="slide-description">
+          <div class="feature-mockup">
+            <div class="feature-mockup-bg feature-img-expert-bg"></div>
+            <div class="feature-mockup-main feature-img-expert-main"></div>
+          </div>
+        </div>
+
+        <!-- Feature 3: Risk Free -->
+        <div class="feature-section" data-feature="riskfree">
+          <div class="feature-content">
+            <span class="feature-label">Risk-Free</span>
+            <h2 class="feature-title">Try before you <em>commit</em></h2>
+            <p class="feature-description">
               Explore our platform with no strings attached.
               Access sample scenarios and experience the quality firsthand.
             </p>
           </div>
+          <div class="feature-mockup">
+            <div class="feature-mockup-bg feature-img-riskfree-bg"></div>
+            <div class="feature-mockup-main feature-img-riskfree-main"></div>
+          </div>
         </div>
 
-        <!-- Bottom Center Tabs -->
-        <nav class="lumina-tabs">
-          <button type="button" class="lumina-tab active" data-slide="0">
-            <span class="tab-label">PRACTICE ANYTIME</span>
-            <div class="tab-progress"><div class="tab-progress-fill"></div></div>
-          </button>
-          <button type="button" class="lumina-tab" data-slide="1">
-            <span class="tab-label">EXPERT DESIGNED</span>
-            <div class="tab-progress"><div class="tab-progress-fill"></div></div>
-          </button>
-          <button type="button" class="lumina-tab" data-slide="2">
-            <span class="tab-label">RISK FREE</span>
-            <div class="tab-progress"><div class="tab-progress-fill"></div></div>
-          </button>
-        </nav>
       </section>
 
       <!-- Login CTA (for authenticated features) -->
@@ -1900,8 +1898,10 @@
     </div>
   </div>
 
-  <!-- WebGL Libraries for Glass Effects -->
+  <!-- Animation Libraries -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <!-- Three.js for persona reveal effects -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
   <!-- JavaScript Files (load order matters!) -->
@@ -1920,8 +1920,9 @@
   <script src="js/app.js"></script>
   <!-- Glow Effect (Desktop only) -->
   <script src="js/glow-effect.js"></script>
-  <!-- WebGL Glass Effects -->
-  <script src="js/webgl-glass-effect.js"></script>
+  <!-- Features Section Scroll Animations -->
+  <script src="js/features-scroll-animation.js"></script>
+  <!-- WebGL Persona Reveal (for difficulty selection) -->
   <script src="js/webgl-persona-reveal.js"></script>
 </body>
 
