@@ -65,14 +65,14 @@
       uniform float uRefractionStrength;
       uniform float uChromaticAberration;
       uniform float uLiquidFlow;
+      uniform float uZoomScale;
 
       varying vec2 vUv;
 
-      // Cover UV calculation - zoomed out to show more of the image
-      // Scale 0.5 = half zoom (shows twice as much), centered horizontally, offset down for face
+      // Cover UV calculation with adjustable zoom
       vec2 getCoverUV(vec2 uv, vec2 textureSize, vec2 resolution) {
         vec2 s = resolution / textureSize;
-        float scale = max(s.x, s.y) * 0.5;  // Zoom out to half
+        float scale = max(s.x, s.y) * uZoomScale;
         vec2 scaledSize = textureSize * scale;
         vec2 offset = (resolution - scaledSize) * vec2(0.5, 0.3);  // Center horizontally, offset down for face
         return (uv * resolution - offset) / scaledSize;
@@ -90,9 +90,12 @@
         // Smooth edge for the transition circle
         float edge = smoothstep(radius + 0.2, radius - 0.08, dist);
 
-        // Liquid flow distortion at the edge
+        // Only apply effects during actual transitions (uProgress between 0.001 and 0.999)
+        float isTransitioning = step(0.001, uProgress) * step(uProgress, 0.999);
+
+        // Liquid flow distortion at the edge - only during transitions
         float edgeDist = abs(dist - radius);
-        float edgeEffect = smoothstep(0.3, 0.0, edgeDist);
+        float edgeEffect = smoothstep(0.3, 0.0, edgeDist) * isTransitioning;
         float flowX = sin(vUv.y * 10.0 + time * 2.5) * 0.03 * edgeEffect * uLiquidFlow;
         float flowY = cos(vUv.x * 8.0 + time * 2.0) * 0.025 * edgeEffect * uLiquidFlow;
 
@@ -196,7 +199,8 @@
             uOpacity: { value: CONFIG.maxOpacity },
             uRefractionStrength: { value: CONFIG.refractionStrength },
             uChromaticAberration: { value: CONFIG.chromaticAberration },
-            uLiquidFlow: { value: CONFIG.liquidFlow }
+            uLiquidFlow: { value: CONFIG.liquidFlow },
+            uZoomScale: { value: 0.5 }  // Desktop default (zoomed out)
           };
 
           // Create shader material
@@ -403,6 +407,10 @@
 
         this.renderer.setSize(width, height);
         this.uniforms.uResolution.value.set(width, height);
+
+        // Responsive zoom: mobile uses original zoom (1.0), desktop uses zoomed out (0.5)
+        const isMobile = width < 768;
+        this.uniforms.uZoomScale.value = isMobile ? 1.0 : 0.5;
       }
 
       destroy() {
