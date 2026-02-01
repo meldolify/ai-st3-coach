@@ -7157,17 +7157,18 @@ body.has-header {
   --glow-angle: 0;
   --glow-active: 0;
   --glow-border-width: 3px;
+  /* Sage green gradient - matches brand colors */
   --glow-gradient:
-    radial-gradient(circle, #dd7bbb 10%, transparent 20%),
-    radial-gradient(circle at 40% 40%, #d79f1e 5%, transparent 15%),
-    radial-gradient(circle at 60% 60%, #5a922c 10%, transparent 20%),
-    radial-gradient(circle at 40% 60%, #4c7894 10%, transparent 20%),
+    radial-gradient(circle, #5C7260 10%, transparent 20%),
+    radial-gradient(circle at 40% 40%, #6B8A6F 5%, transparent 15%),
+    radial-gradient(circle at 60% 60%, #4A5D4C 10%, transparent 20%),
+    radial-gradient(circle at 40% 60%, #3A4A3C 10%, transparent 20%),
     repeating-conic-gradient(from 236.84deg at 50% 50%,
-      #dd7bbb 0%,
-      #d79f1e 5%,
-      #5a922c 10%,
-      #4c7894 15%,
-      #dd7bbb 20%);
+      #5C7260 0%,
+      #6B8A6F 5%,
+      #4A5D4C 10%,
+      #3A4A3C 15%,
+      #5C7260 20%);
 }
 
 .glow-effect::after {
@@ -7559,7 +7560,7 @@ body.has-header {
   position: fixed;
   top: 0;
   bottom: 0;
-  width: 15%;
+  width: 8%;
   z-index: 2;
   pointer-events: none;
 }
