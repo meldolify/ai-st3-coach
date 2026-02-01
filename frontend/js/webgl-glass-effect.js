@@ -1,7 +1,7 @@
 /**
- * WebGL Glass Effect for Features Section
- * Adapted from Lumina Interactive List component
- * Uses Three.js and GSAP for premium glass/refraction shader transitions
+ * WebGL Glass Effect for Features Section - Lumina Interactive List Style
+ * Full-panel background that transitions between feature images on tab click
+ * Uses Three.js and GSAP for premium glass shader transitions
  */
 
 (function () {
@@ -17,393 +17,466 @@
       } else if (attempts < maxAttempts) {
         setTimeout(check, 100);
       } else {
-        console.warn('[WebGL Glass] Dependencies not loaded after timeout');
-        // Apply fallback for all containers
-        document.querySelectorAll('.webgl-glass-container').forEach(container => {
-          container.classList.add('no-webgl');
-          if (container.dataset.image) {
-            container.style.backgroundImage = `url(${container.dataset.image})`;
-          }
-        });
+        console.warn('[FeaturesGlass] Dependencies not loaded after timeout');
       }
     };
     check();
   }
 
-  // Configuration
-  const CONFIG = {
-    transitionDuration: 2.0,
-    glassRefractionStrength: 0.8,
-    glassChromaticAberration: 0.6,
-    glassEdgeGlow: 0.5,
-    glassLiquidFlow: 0.4,
-    globalIntensity: 0.8,
-    speedMultiplier: 0.8
-  };
+  // Main module initialization
+  function initModule() {
+    // Configuration
+    const CONFIG = {
+      transitionDuration: 1.5,
+      autoPlayInterval: 5000,
+      refractionStrength: 0.7,
+      chromaticAberration: 0.5,
+      liquidFlow: 0.4
+    };
 
-  // Vertex Shader
-  const vertexShader = `
-    varying vec2 vUv;
-    void main() {
-      vUv = uv;
-      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-    }
-  `;
+    // Feature images - high quality, context-appropriate
+    const FEATURE_IMAGES = [
+      'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800&q=80', // Practice anytime - late night study
+      'https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=800&q=80', // Expert designed - medical/surgical
+      'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80'  // Try before commit - exploration
+    ];
 
-  // Fragment Shader - Glass Refraction Effect
-  const fragmentShader = `
-    uniform sampler2D uTexture;
-    uniform float uProgress;
-    uniform float uTime;
-    uniform vec2 uResolution;
-    uniform vec2 uTextureSize;
-    uniform vec2 uMouse;
-    uniform float uGlobalIntensity;
-    uniform float uRefractionStrength;
-    uniform float uChromaticAberration;
-    uniform float uEdgeGlow;
-    uniform float uLiquidFlow;
+    // Vertex Shader
+    const vertexShader = `
+      varying vec2 vUv;
+      void main() {
+        vUv = uv;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }
+    `;
 
-    varying vec2 vUv;
+    // Fragment Shader - Glass transition between two textures
+    const fragmentShader = `
+      uniform sampler2D uTexture1;
+      uniform sampler2D uTexture2;
+      uniform float uProgress;
+      uniform float uTime;
+      uniform vec2 uResolution;
+      uniform vec2 uTexture1Size;
+      uniform vec2 uTexture2Size;
+      uniform float uRefractionStrength;
+      uniform float uChromaticAberration;
+      uniform float uLiquidFlow;
 
-    // Cover UV calculation for responsive images
-    vec2 getCoverUV(vec2 uv, vec2 textureSize) {
-      vec2 s = uResolution / textureSize;
-      float scale = max(s.x, s.y);
-      vec2 scaledSize = textureSize * scale;
-      vec2 offset = (uResolution - scaledSize) * 0.5;
-      return (uv * uResolution - offset) / scaledSize;
-    }
+      varying vec2 vUv;
 
-    void main() {
-      vec2 uv = getCoverUV(vUv, uTextureSize);
+      // Cover UV calculation for responsive images
+      vec2 getCoverUV(vec2 uv, vec2 textureSize, vec2 resolution) {
+        vec2 s = resolution / textureSize;
+        float scale = max(s.x, s.y);
+        vec2 scaledSize = textureSize * scale;
+        vec2 offset = (resolution - scaledSize) * 0.5;
+        return (uv * resolution - offset) / scaledSize;
+      }
 
-      // Glass distortion calculations
-      float time = uTime * 0.5;
-      vec2 center = vec2(0.5, 0.5);
-      float dist = length(vUv - center);
+      void main() {
+        float time = uTime * 0.3;
 
-      // Liquid flow distortion
-      float flowX = sin(vUv.y * 8.0 + time * 2.0) * 0.01 * uLiquidFlow * uProgress;
-      float flowY = cos(vUv.x * 6.0 + time * 1.5) * 0.008 * uLiquidFlow * uProgress;
+        // Create expanding circle transition from center
+        vec2 center = vec2(0.5, 0.5);
+        float dist = length(vUv - center);
+        float maxRadius = 1.2;
+        float radius = uProgress * maxRadius;
 
-      // Refraction based on distance from center
-      float refraction = (1.0 - smoothstep(0.0, 0.7, dist)) * uRefractionStrength * uProgress * 0.05;
-      vec2 dir = normalize(vUv - center);
+        // Smooth edge for the transition circle
+        float edge = smoothstep(radius + 0.15, radius - 0.05, dist);
 
-      // Apply distortions
-      vec2 distortedUv = uv;
-      distortedUv += dir * refraction;
-      distortedUv.x += flowX;
-      distortedUv.y += flowY;
+        // Liquid flow distortion at the edge
+        float edgeDist = abs(dist - radius);
+        float edgeEffect = smoothstep(0.25, 0.0, edgeDist);
+        float flowX = sin(vUv.y * 12.0 + time * 3.0) * 0.025 * edgeEffect * uLiquidFlow;
+        float flowY = cos(vUv.x * 10.0 + time * 2.5) * 0.02 * edgeEffect * uLiquidFlow;
 
-      // Chromatic aberration
-      float aberration = uChromaticAberration * uProgress * 0.015 * uGlobalIntensity;
-      float r = texture2D(uTexture, distortedUv + dir * aberration).r;
-      float g = texture2D(uTexture, distortedUv).g;
-      float b = texture2D(uTexture, distortedUv - dir * aberration * 0.8).b;
+        vec2 distortedUv = vUv;
+        distortedUv.x += flowX;
+        distortedUv.y += flowY;
 
-      vec3 color = vec3(r, g, b);
+        // Refraction at transition edge
+        vec2 dir = normalize(vUv - center);
+        float refraction = edgeEffect * uRefractionStrength * 0.06;
+        vec2 refractedUv1 = distortedUv - dir * refraction;
+        vec2 refractedUv2 = distortedUv + dir * refraction;
 
-      // Edge glow effect
-      float edgeGlow = smoothstep(0.3, 0.5, dist) * uEdgeGlow * uProgress * 0.1;
-      color += vec3(edgeGlow * 0.8, edgeGlow * 0.9, edgeGlow);
+        // Convert to cover UVs
+        vec2 coverUv1 = getCoverUV(refractedUv1, uTexture1Size, uResolution);
+        vec2 coverUv2 = getCoverUV(refractedUv2, uTexture2Size, uResolution);
 
-      // Glass highlight overlay
-      float highlight = pow(1.0 - dist, 3.0) * 0.08 * uProgress;
-      color = mix(color, vec3(1.0), highlight);
+        // Chromatic aberration
+        float aberration = edgeEffect * uChromaticAberration * 0.012;
 
-      // Subtle vignette
-      float vignette = 1.0 - smoothstep(0.4, 0.9, dist) * 0.15;
-      color *= vignette;
+        // Sample texture 1 (current/fading out)
+        vec3 color1;
+        color1.r = texture2D(uTexture1, coverUv1 + vec2(aberration, 0.0)).r;
+        color1.g = texture2D(uTexture1, coverUv1).g;
+        color1.b = texture2D(uTexture1, coverUv1 - vec2(aberration, 0.0)).b;
 
-      gl_FragColor = vec4(color, 1.0);
-    }
-  `;
+        // Sample texture 2 (new/fading in)
+        vec3 color2;
+        color2.r = texture2D(uTexture2, coverUv2 + vec2(aberration, 0.0)).r;
+        color2.g = texture2D(uTexture2, coverUv2).g;
+        color2.b = texture2D(uTexture2, coverUv2 - vec2(aberration, 0.0)).b;
 
-  /**
-   * GlassEffect Class - Manages WebGL rendering for a single container
-   */
-  class GlassEffect {
-    constructor(container, imageUrl) {
-      this.container = container;
-      this.imageUrl = imageUrl;
-      this.scene = null;
-      this.camera = null;
-      this.renderer = null;
-      this.mesh = null;
-      this.uniforms = null;
-      this.animationId = null;
-      this.isRevealed = false;
-      this.isDestroyed = false;
-      this.texture = null;
-    }
+        // Mix based on transition progress
+        vec3 finalColor = mix(color1, color2, edge);
 
-    async init() {
-      try {
-        // Create canvas
-        this.canvas = document.createElement('canvas');
-        this.canvas.className = 'webgl-canvas';
-        this.container.appendChild(this.canvas);
+        // Edge glow effect
+        float glow = edgeEffect * 0.12;
+        finalColor += vec3(glow * 0.6, glow * 0.7, glow * 0.8);
 
-        // Create glass overlay
-        const overlay = document.createElement('div');
-        overlay.className = 'glass-overlay';
-        this.container.appendChild(overlay);
+        gl_FragColor = vec4(finalColor, 1.0);
+      }
+    `;
 
-        // Initialize Three.js
-        this.scene = new THREE.Scene();
-        this.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+    /**
+     * FeaturesGlassEffect - WebGL background for features section
+     */
+    class FeaturesGlassEffect {
+      constructor(canvas, container) {
+        this.canvas = canvas;
+        this.container = container;
+        this.scene = null;
+        this.camera = null;
+        this.renderer = null;
+        this.mesh = null;
+        this.uniforms = null;
+        this.textures = [];
+        this.textureSizes = [];
+        this.currentIndex = 0;
+        this.targetIndex = 0;
+        this.isTransitioning = false;
+        this.animationId = null;
+        this.isDestroyed = false;
+        this.autoPlayTimer = null;
+        this.tabs = null;
+        this.contentItems = null;
+        this.counter = null;
+      }
 
-        this.renderer = new THREE.WebGLRenderer({
-          canvas: this.canvas,
-          antialias: true,
-          alpha: false
+      async init() {
+        try {
+          // Initialize Three.js
+          this.scene = new THREE.Scene();
+          this.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+
+          this.renderer = new THREE.WebGLRenderer({
+            canvas: this.canvas,
+            alpha: false,
+            antialias: true
+          });
+          this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+          // Load all textures
+          await this.loadAllTextures();
+
+          // Create uniforms
+          this.uniforms = {
+            uTexture1: { value: this.textures[0] },
+            uTexture2: { value: this.textures[0] },
+            uProgress: { value: 0.0 },
+            uTime: { value: 0.0 },
+            uResolution: { value: new THREE.Vector2(1, 1) },
+            uTexture1Size: { value: this.textureSizes[0] || new THREE.Vector2(800, 600) },
+            uTexture2Size: { value: this.textureSizes[0] || new THREE.Vector2(800, 600) },
+            uRefractionStrength: { value: CONFIG.refractionStrength },
+            uChromaticAberration: { value: CONFIG.chromaticAberration },
+            uLiquidFlow: { value: CONFIG.liquidFlow }
+          };
+
+          // Create shader material
+          const material = new THREE.ShaderMaterial({
+            uniforms: this.uniforms,
+            vertexShader: vertexShader,
+            fragmentShader: fragmentShader
+          });
+
+          // Create full-screen mesh
+          const geometry = new THREE.PlaneGeometry(2, 2);
+          this.mesh = new THREE.Mesh(geometry, material);
+          this.scene.add(this.mesh);
+
+          // Setup tab listeners
+          this.setupTabListeners();
+
+          // Initial sizing
+          this.resize();
+
+          // Start render loop
+          this.animate();
+
+          // Start auto-play
+          this.startAutoPlay();
+
+          console.log('[FeaturesGlass] Initialized successfully');
+          return true;
+        } catch (error) {
+          console.error('[FeaturesGlass] Initialization failed:', error);
+          return false;
+        }
+      }
+
+      loadTexture(url) {
+        return new Promise((resolve, reject) => {
+          const loader = new THREE.TextureLoader();
+          loader.crossOrigin = 'anonymous';
+          loader.load(
+            url,
+            (texture) => {
+              texture.minFilter = THREE.LinearFilter;
+              texture.magFilter = THREE.LinearFilter;
+              texture.generateMipmaps = false;
+              resolve(texture);
+            },
+            undefined,
+            (error) => {
+              console.warn('[FeaturesGlass] Failed to load texture:', url);
+              reject(error);
+            }
+          );
         });
-        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      }
 
-        // Load texture
-        await this.loadTexture();
+      async loadAllTextures() {
+        for (let i = 0; i < FEATURE_IMAGES.length; i++) {
+          try {
+            const texture = await this.loadTexture(FEATURE_IMAGES[i]);
+            this.textures[i] = texture;
+            this.textureSizes[i] = new THREE.Vector2(
+              texture.image.width,
+              texture.image.height
+            );
+          } catch (e) {
+            console.warn('[FeaturesGlass] Skipping texture:', i);
+            // Create fallback
+            this.textures[i] = this.textures[0] || null;
+            this.textureSizes[i] = new THREE.Vector2(800, 600);
+          }
+        }
+        console.log('[FeaturesGlass] Loaded', this.textures.length, 'textures');
+      }
 
-        // Create shader material
-        this.createShaderMaterial();
+      setupTabListeners() {
+        const section = document.getElementById('featuresSection');
+        if (!section) return;
 
-        // Create mesh
-        const geometry = new THREE.PlaneGeometry(2, 2);
-        this.mesh = new THREE.Mesh(geometry, this.material);
-        this.scene.add(this.mesh);
+        this.tabs = section.querySelectorAll('.lumina-tab');
+        this.contentItems = section.querySelectorAll('.lumina-slide');
+        this.counter = section.querySelector('.counter-current');
 
-        // Initial sizing
-        this.resize();
+        this.tabs.forEach((tab, index) => {
+          tab.addEventListener('click', () => this.goToSlide(index));
+        });
+      }
 
-        // Start render loop
-        this.animate();
+      goToSlide(index) {
+        if (this.isDestroyed || index === this.currentIndex) return;
+        if (index < 0 || index >= this.textures.length) return;
 
-        // Set initial hidden state
+        // Stop auto-play timer
+        this.stopAutoPlay();
+
+        this.targetIndex = index;
+        const targetTexture = this.textures[index];
+
+        if (!targetTexture) return;
+
+        // Kill any ongoing transition
+        if (this.isTransitioning) {
+          gsap.killTweensOf(this.uniforms.uProgress);
+        }
+
+        // Update UI
+        this.updateActiveStates(index);
+
+        // Set up textures for transition
+        this.uniforms.uTexture1.value = this.textures[this.currentIndex];
+        this.uniforms.uTexture1Size.value = this.textureSizes[this.currentIndex];
+        this.uniforms.uTexture2.value = targetTexture;
+        this.uniforms.uTexture2Size.value = this.textureSizes[index];
         this.uniforms.uProgress.value = 0;
 
-        return true;
-      } catch (error) {
-        console.error('[WebGL Glass] Initialization failed:', error);
-        this.handleFallback();
-        return false;
-      }
-    }
+        this.isTransitioning = true;
 
-    loadTexture() {
-      return new Promise((resolve, reject) => {
-        const loader = new THREE.TextureLoader();
-        loader.crossOrigin = 'anonymous';
+        // Animate the transition
+        gsap.to(this.uniforms.uProgress, {
+          value: 1.0,
+          duration: CONFIG.transitionDuration,
+          ease: 'power2.inOut',
+          onComplete: () => {
+            this.currentIndex = this.targetIndex;
+            this.uniforms.uTexture1.value = targetTexture;
+            this.uniforms.uTexture1Size.value = this.textureSizes[index];
+            this.isTransitioning = false;
 
-        loader.load(
-          this.imageUrl,
-          (texture) => {
-            texture.minFilter = THREE.LinearFilter;
-            texture.magFilter = THREE.LinearFilter;
-            texture.generateMipmaps = false;
-            this.texture = texture;
-            resolve(texture);
-          },
-          undefined,
-          (error) => {
-            console.error('[WebGL Glass] Texture load failed:', this.imageUrl, error);
-            reject(error);
+            // Restart auto-play
+            this.startAutoPlay();
           }
-        );
-      });
-    }
-
-    createShaderMaterial() {
-      this.uniforms = {
-        uTexture: { value: this.texture },
-        uProgress: { value: 0.0 },
-        uTime: { value: 0.0 },
-        uResolution: { value: new THREE.Vector2(1, 1) },
-        uTextureSize: { value: new THREE.Vector2(
-          this.texture.image.width,
-          this.texture.image.height
-        )},
-        uMouse: { value: new THREE.Vector2(0.5, 0.5) },
-        uGlobalIntensity: { value: CONFIG.globalIntensity },
-        uRefractionStrength: { value: CONFIG.glassRefractionStrength },
-        uChromaticAberration: { value: CONFIG.glassChromaticAberration },
-        uEdgeGlow: { value: CONFIG.glassEdgeGlow },
-        uLiquidFlow: { value: CONFIG.glassLiquidFlow }
-      };
-
-      this.material = new THREE.ShaderMaterial({
-        uniforms: this.uniforms,
-        vertexShader: vertexShader,
-        fragmentShader: fragmentShader
-      });
-    }
-
-    animate() {
-      if (this.isDestroyed) return;
-
-      this.uniforms.uTime.value += 0.016 * CONFIG.speedMultiplier;
-      this.renderer.render(this.scene, this.camera);
-      this.animationId = requestAnimationFrame(() => this.animate());
-    }
-
-    reveal() {
-      if (this.isRevealed || this.isDestroyed) return;
-      this.isRevealed = true;
-
-      gsap.to(this.uniforms.uProgress, {
-        value: 1.0,
-        duration: CONFIG.transitionDuration,
-        ease: 'power2.out'
-      });
-    }
-
-    resize() {
-      if (this.isDestroyed || !this.renderer) return;
-
-      const rect = this.container.getBoundingClientRect();
-      const width = rect.width || 320;
-      const height = rect.height || 320;
-
-      this.renderer.setSize(width, height);
-      this.uniforms.uResolution.value.set(width, height);
-    }
-
-    handleFallback() {
-      // CSS fallback for browsers without WebGL
-      this.container.classList.add('no-webgl');
-      this.container.style.backgroundImage = `url(${this.imageUrl})`;
-    }
-
-    destroy() {
-      this.isDestroyed = true;
-
-      if (this.animationId) {
-        cancelAnimationFrame(this.animationId);
+        });
       }
 
-      if (this.texture) {
-        this.texture.dispose();
+      updateActiveStates(index) {
+        // Update tabs
+        this.tabs.forEach((tab, i) => {
+          tab.classList.toggle('active', i === index);
+          // Reset progress bar animation
+          const progressFill = tab.querySelector('.tab-progress-fill');
+          if (progressFill) {
+            progressFill.style.width = '0%';
+            if (i === index) {
+              // Trigger reflow then animate
+              progressFill.offsetHeight;
+              progressFill.style.transition = `width ${CONFIG.autoPlayInterval}ms linear`;
+              progressFill.style.width = '100%';
+            } else {
+              progressFill.style.transition = 'none';
+            }
+          }
+        });
+
+        // Update content items
+        this.contentItems.forEach((item, i) => {
+          item.classList.toggle('active', i === index);
+        });
+
+        // Update counter
+        if (this.counter) {
+          this.counter.textContent = String(index + 1).padStart(2, '0');
+        }
       }
 
-      if (this.material) {
-        this.material.dispose();
+      startAutoPlay() {
+        this.stopAutoPlay();
+        this.autoPlayTimer = setTimeout(() => {
+          const nextIndex = (this.currentIndex + 1) % this.textures.length;
+          this.goToSlide(nextIndex);
+        }, CONFIG.autoPlayInterval);
       }
 
-      if (this.mesh && this.mesh.geometry) {
-        this.mesh.geometry.dispose();
+      stopAutoPlay() {
+        if (this.autoPlayTimer) {
+          clearTimeout(this.autoPlayTimer);
+          this.autoPlayTimer = null;
+        }
       }
 
-      if (this.renderer) {
-        this.renderer.dispose();
+      animate() {
+        if (this.isDestroyed) return;
+
+        this.uniforms.uTime.value += 0.016;
+        this.renderer.render(this.scene, this.camera);
+        this.animationId = requestAnimationFrame(() => this.animate());
       }
 
-      if (this.canvas && this.canvas.parentNode) {
-        this.canvas.parentNode.removeChild(this.canvas);
+      resize() {
+        if (this.isDestroyed || !this.renderer) return;
+
+        const rect = this.container.getBoundingClientRect();
+        const width = rect.width || 800;
+        const height = rect.height || 500;
+
+        this.renderer.setSize(width, height);
+        this.uniforms.uResolution.value.set(width, height);
+      }
+
+      destroy() {
+        this.isDestroyed = true;
+        this.stopAutoPlay();
+
+        if (this.animationId) {
+          cancelAnimationFrame(this.animationId);
+        }
+
+        this.textures.forEach(texture => {
+          if (texture) texture.dispose();
+        });
+
+        if (this.mesh) {
+          if (this.mesh.material) this.mesh.material.dispose();
+          if (this.mesh.geometry) this.mesh.geometry.dispose();
+        }
+
+        if (this.renderer) {
+          this.renderer.dispose();
+        }
       }
     }
-  }
 
-  /**
-   * Initialize all glass effects in the features section
-   */
-  function initFeatureGlassEffects() {
-    // Check WebGL support
-    const testCanvas = document.createElement('canvas');
-    const gl = testCanvas.getContext('webgl') || testCanvas.getContext('experimental-webgl');
-
-    if (!gl) {
-      console.warn('[WebGL Glass] WebGL not supported, using fallback');
-      document.querySelectorAll('.webgl-glass-container').forEach(container => {
-        container.classList.add('no-webgl');
-        container.style.backgroundImage = `url(${container.dataset.image})`;
-      });
-      return;
-    }
-
-    const containers = document.querySelectorAll('.webgl-glass-container');
-    const effects = [];
-
-    containers.forEach(container => {
-      const imageUrl = container.dataset.image;
-      if (!imageUrl) {
-        console.warn('[WebGL Glass] No data-image attribute found');
+    /**
+     * Initialize features glass effect
+     */
+    function initFeatureGlassEffects() {
+      // Prevent multiple initializations
+      if (window.featuresGlassEffect) {
+        console.log('[FeaturesGlass] Already initialized');
         return;
       }
 
-      const effect = new GlassEffect(container, imageUrl);
+      // Check for hover support (not essential but nice)
+      const supportsHover = window.matchMedia('(hover: hover)').matches;
+
+      // Check WebGL support
+      const testCanvas = document.createElement('canvas');
+      const gl = testCanvas.getContext('webgl') || testCanvas.getContext('experimental-webgl');
+      if (!gl) {
+        console.warn('[FeaturesGlass] WebGL not supported');
+        return;
+      }
+
+      const canvas = document.getElementById('featuresCanvas');
+      const section = document.getElementById('featuresSection');
+
+      if (!canvas || !section) {
+        console.warn('[FeaturesGlass] Canvas or section not found');
+        return;
+      }
+
+      const effect = new FeaturesGlassEffect(canvas, section);
       effect.init().then(success => {
         if (success) {
-          effects.push(effect);
+          window.featuresGlassEffect = effect;
+
+          // Handle resize
+          let resizeTimeout;
+          window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => effect.resize(), 100);
+          });
+
+          console.log('[FeaturesGlass] Ready');
         }
       });
-    });
+    }
 
-    // Set up Intersection Observer for scroll-triggered reveal
-    const observerOptions = {
-      threshold: 0.3,
-      rootMargin: '0px 0px -50px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const container = entry.target;
-          const effect = effects.find(e => e.container === container);
-          if (effect && !effect.isRevealed) {
-            // Delay reveal slightly for smoother experience
-            setTimeout(() => effect.reveal(), 100);
-          }
-        }
-      });
-    }, observerOptions);
-
-    containers.forEach(container => observer.observe(container));
-
-    // Handle window resize
-    let resizeTimeout;
-    window.addEventListener('resize', () => {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(() => {
-        effects.forEach(effect => effect.resize());
-      }, 100);
-    });
-
-    // Store reference for cleanup
-    window.featureGlassEffects = effects;
-
-    console.log('[WebGL Glass] Initialized', effects.length, 'glass effects');
-  }
-
-  // Main initialization function that waits for dependencies
-  function init() {
-    waitForDependencies(() => {
-      // Expose to global scope
-      window.GlassEffect = GlassEffect;
-      window.initFeatureGlassEffects = initFeatureGlassEffects;
-
-      // Auto-initialize if containers exist and DOM is ready
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => {
-          setTimeout(() => {
-            const containers = document.querySelectorAll('.webgl-glass-container');
-            if (containers.length > 0) {
-              initFeatureGlassEffects();
-            }
-          }, 100);
-        });
-      } else {
-        // DOM already loaded
-        setTimeout(() => {
-          const containers = document.querySelectorAll('.webgl-glass-container');
-          if (containers.length > 0) {
-            initFeatureGlassEffects();
-          }
-        }, 100);
+    /**
+     * Cleanup
+     */
+    function cleanupFeatureGlassEffects() {
+      if (window.featuresGlassEffect) {
+        window.featuresGlassEffect.destroy();
+        window.featuresGlassEffect = null;
       }
-    });
+    }
+
+    // Expose to global scope
+    window.FeaturesGlassEffect = FeaturesGlassEffect;
+    window.initFeatureGlassEffects = initFeatureGlassEffects;
+    window.cleanupFeatureGlassEffects = cleanupFeatureGlassEffects;
+
+    // Auto-initialize when DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(initFeatureGlassEffects, 300);
+      });
+    } else {
+      setTimeout(initFeatureGlassEffects, 300);
+    }
   }
 
-  // Start initialization
-  init();
+  // Wait for dependencies then initialize
+  waitForDependencies(initModule);
 
 })();

@@ -854,17 +854,13 @@ body.has-header .simulation-room.active {
   flex: 1;
   gap: 24px;
   padding: 24px;
-  padding-bottom: 24px;
-  /* Reduced to avoid double padding with container */
+  padding-bottom: 32px;
   max-width: 1600px;
-  margin: 0 auto;
-  /* Removed bottom margin */
+  margin: 0 auto 24px;
   min-height: 0;
-  /* check this */
-  height: auto;
+  height: calc(100vh - 80px - 76px);
+  /* Account for header (80px) + footer (52px) + bottom margin (24px) */
   box-sizing: border-box;
-  overflow: hidden;
-  /* Ensure content doesn't spill out */
 }
 
 .mobile-simulation-layout {
@@ -6856,5 +6852,360 @@ body.has-header {
 (pointer: coarse) {
   .glow-effect::after {
     display: none;
+  }
+}
+
+/* ============================================
+   LUMINA SECTION - Full Viewport Image Slider
+   ============================================ */
+
+/* Base Lumina Section - Full Viewport */
+.lumina-section {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: 600px;
+  overflow: hidden;
+  background: #0a0a0a;
+}
+
+/* Full-viewport Canvas */
+.lumina-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+/* Counter - Left Side */
+.lumina-counter {
+  position: absolute;
+  top: 50%;
+  left: 48px;
+  transform: translateY(-50%);
+  z-index: 2;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 0.05em;
+}
+
+/* Centered Content */
+.lumina-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 2;
+  width: 90%;
+  max-width: 700px;
+}
+
+.lumina-slide {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+  width: 100%;
+}
+
+.lumina-slide.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Slide Content - Features */
+.slide-label {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-copper, #B87333);
+  margin-bottom: 20px;
+}
+
+.slide-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 400;
+  font-style: italic;
+  color: #ffffff;
+  margin-bottom: 24px;
+  line-height: 1.1;
+}
+
+.slide-title em {
+  font-style: italic;
+  color: var(--accent-copper, #B87333);
+}
+
+.slide-description {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.8;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* Bottom Center Tabs */
+.lumina-tabs {
+  position: absolute;
+  bottom: 48px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 48px;
+  z-index: 2;
+}
+
+.lumina-tab {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-align: center;
+  min-width: 100px;
+}
+
+.lumina-tab .tab-label {
+  font-family: var(--font-body);
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  transition: color 0.3s ease;
+  white-space: nowrap;
+}
+
+.lumina-tab.active .tab-label,
+.lumina-tab:hover .tab-label {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.lumina-tab .tab-progress {
+  width: 100%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.15);
+  margin-top: 12px;
+  position: relative;
+}
+
+.lumina-tab .tab-progress-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 0%;
+  background: #ffffff;
+}
+
+.lumina-tab.active .tab-progress-fill {
+  animation: luminaFillProgress 5s linear forwards;
+}
+
+@keyframes luminaFillProgress {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+
+/* ============================================
+   LUMINA PAGE - Difficulty Selection
+   ============================================ */
+
+.lumina-page {
+  position: relative;
+  min-height: 100vh;
+  background: #0a0a0a;
+  overflow: hidden;
+}
+
+.lumina-page .lumina-canvas {
+  position: fixed;
+}
+
+.lumina-page .top-back-button,
+.lumina-back {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.8);
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.lumina-back:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+/* Difficulty Content - Centered Card */
+.difficulty-content .lumina-slide {
+  max-width: 500px;
+}
+
+.persona-name {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 8vw, 5rem);
+  font-weight: 400;
+  font-style: italic;
+  color: #ffffff;
+  margin-bottom: 8px;
+  line-height: 1;
+}
+
+.persona-role {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+}
+
+.lumina-slide[data-difficulty="easy"] .persona-role {
+  color: #10b981;
+}
+
+.lumina-slide[data-difficulty="medium"] .persona-role {
+  color: #f59e0b;
+}
+
+.lumina-slide[data-difficulty="strict"] .persona-role {
+  color: #ef4444;
+}
+
+.persona-description {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 32px;
+}
+
+.persona-traits {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 40px 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+
+.persona-traits li {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  letter-spacing: 0.05em;
+}
+
+.btn-select {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #0a0a0a;
+  background: #ffffff;
+  border: none;
+  padding: 16px 40px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-select:hover {
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .lumina-section {
+    height: auto;
+    min-height: 100vh;
+    padding: 100px 0;
+  }
+
+  .lumina-counter {
+    top: 24px;
+    left: 24px;
+    transform: none;
+    font-size: 1rem;
+  }
+
+  .lumina-content {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    padding: 0 24px;
+    margin-bottom: 120px;
+  }
+
+  .lumina-slide {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    display: none;
+  }
+
+  .lumina-slide.active {
+    display: block;
+  }
+
+  .slide-title {
+    font-size: 2rem;
+  }
+
+  .lumina-tabs {
+    bottom: 32px;
+    gap: 24px;
+    padding: 0 16px;
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .lumina-tab {
+    min-width: 80px;
+  }
+
+  .lumina-tab .tab-label {
+    font-size: 0.6rem;
+  }
+
+  .persona-name {
+    font-size: 2.5rem;
+  }
+
+  .lumina-page .top-back-button {
+    top: 16px;
+    left: 16px;
+    padding: 8px 16px;
+    font-size: 0.8rem;
   }
 }

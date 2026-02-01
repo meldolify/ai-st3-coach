@@ -1,6 +1,6 @@
 /**
- * WebGL Persona Background Effect for Difficulty Selection Page
- * Full-page background that transitions between persona images on card hover
+ * WebGL Persona Background Effect for Difficulty Selection - Lumina Style
+ * Full-page background that transitions between persona images on tab selection
  * Uses Three.js and GSAP for premium glass shader transitions
  */
 
@@ -27,20 +27,22 @@
   function initModule() {
     // Configuration
     const CONFIG = {
-      transitionDuration: 1.2,
-      maxOpacity: 0.25,
-      refractionStrength: 0.6,
-      chromaticAberration: 0.5,
-      liquidFlow: 0.3
+      transitionDuration: 1.8,
+      autoPlayInterval: 5000,
+      maxOpacity: 0.35,
+      refractionStrength: 0.8,
+      chromaticAberration: 0.6,
+      liquidFlow: 0.5
     };
 
     // Persona image mapping
     const PERSONA_IMAGES = {
       easy: 'images/interviewer_persona_john.png',
       medium: 'images/interviewer_persona_elliot.png',
-      moderate: 'images/interviewer_persona_elliot.png',
       strict: 'images/interviewer_persona_perry.png'
     };
+
+    const DIFFICULTY_ORDER = ['easy', 'medium', 'strict'];
 
     // Vertex Shader
     const vertexShader = `
@@ -51,13 +53,15 @@
       }
     `;
 
-    // Fragment Shader - Glass transition between two textures
+    // Fragment Shader - Glass transition between two textures with cover-fit
     const fragmentShader = `
       uniform sampler2D uTexture1;
       uniform sampler2D uTexture2;
       uniform float uProgress;
       uniform float uTime;
       uniform vec2 uResolution;
+      uniform vec2 uTexture1Size;
+      uniform vec2 uTexture2Size;
       uniform float uOpacity;
       uniform float uRefractionStrength;
       uniform float uChromaticAberration;
@@ -65,65 +69,78 @@
 
       varying vec2 vUv;
 
-      void main() {
-        vec2 uv = vUv;
-        float time = uTime * 0.3;
+      // Cover UV calculation - fills viewport without stretching, crops excess
+      vec2 getCoverUV(vec2 uv, vec2 textureSize, vec2 resolution) {
+        vec2 s = resolution / textureSize;
+        float scale = max(s.x, s.y);
+        vec2 scaledSize = textureSize * scale;
+        vec2 offset = (resolution - scaledSize) * 0.5;
+        return (uv * resolution - offset) / scaledSize;
+      }
 
-        // Create expanding circle transition from center
-        vec2 center = vec2(0.5, 0.5);
-        float dist = length(uv - center);
-        float maxRadius = 1.0;
+      void main() {
+        float time = uTime * 0.25;
+
+        // Create expanding circle transition from right side
+        vec2 center = vec2(0.85, 0.5);
+        float dist = length(vUv - center);
+        float maxRadius = 1.5;
         float radius = uProgress * maxRadius;
 
         // Smooth edge for the transition circle
-        float edge = smoothstep(radius + 0.1, radius - 0.05, dist);
+        float edge = smoothstep(radius + 0.2, radius - 0.08, dist);
 
         // Liquid flow distortion at the edge
         float edgeDist = abs(dist - radius);
-        float edgeEffect = smoothstep(0.2, 0.0, edgeDist);
-        float flowX = sin(uv.y * 15.0 + time * 3.0) * 0.02 * edgeEffect * uLiquidFlow;
-        float flowY = cos(uv.x * 12.0 + time * 2.5) * 0.015 * edgeEffect * uLiquidFlow;
+        float edgeEffect = smoothstep(0.3, 0.0, edgeDist);
+        float flowX = sin(vUv.y * 10.0 + time * 2.5) * 0.03 * edgeEffect * uLiquidFlow;
+        float flowY = cos(vUv.x * 8.0 + time * 2.0) * 0.025 * edgeEffect * uLiquidFlow;
 
-        vec2 distortedUv = uv;
+        vec2 distortedUv = vUv;
         distortedUv.x += flowX;
         distortedUv.y += flowY;
 
         // Refraction at transition edge
-        vec2 dir = normalize(uv - center);
-        float refraction = edgeEffect * uRefractionStrength * 0.05;
+        vec2 dir = normalize(vUv - center);
+        float refraction = edgeEffect * uRefractionStrength * 0.07;
         vec2 refractedUv1 = distortedUv - dir * refraction;
         vec2 refractedUv2 = distortedUv + dir * refraction;
 
+        // Apply cover-fit UV mapping
+        vec2 coverUv1 = getCoverUV(refractedUv1, uTexture1Size, uResolution);
+        vec2 coverUv2 = getCoverUV(refractedUv2, uTexture2Size, uResolution);
+
         // Chromatic aberration
-        float aberration = edgeEffect * uChromaticAberration * 0.01;
+        float aberration = edgeEffect * uChromaticAberration * 0.015;
 
-        // Sample texture 1 (current/fading out)
+        // Sample texture 1 (current/fading out) - treat as opaque
         vec3 color1;
-        color1.r = texture2D(uTexture1, refractedUv1 + vec2(aberration, 0.0)).r;
-        color1.g = texture2D(uTexture1, refractedUv1).g;
-        color1.b = texture2D(uTexture1, refractedUv1 - vec2(aberration, 0.0)).b;
+        color1.r = texture2D(uTexture1, coverUv1 + vec2(aberration, 0.0)).r;
+        color1.g = texture2D(uTexture1, coverUv1).g;
+        color1.b = texture2D(uTexture1, coverUv1 - vec2(aberration, 0.0)).b;
 
-        // Sample texture 2 (new/fading in)
+        // Sample texture 2 (new/fading in) - treat as opaque
         vec3 color2;
-        color2.r = texture2D(uTexture2, refractedUv2 + vec2(aberration, 0.0)).r;
-        color2.g = texture2D(uTexture2, refractedUv2).g;
-        color2.b = texture2D(uTexture2, refractedUv2 - vec2(aberration, 0.0)).b;
+        color2.r = texture2D(uTexture2, coverUv2 + vec2(aberration, 0.0)).r;
+        color2.g = texture2D(uTexture2, coverUv2).g;
+        color2.b = texture2D(uTexture2, coverUv2 - vec2(aberration, 0.0)).b;
 
         // Mix based on transition progress
         vec3 finalColor = mix(color1, color2, edge);
 
         // Edge glow effect
-        float glow = edgeEffect * 0.1;
+        float glow = edgeEffect * 0.15;
         finalColor += vec3(glow * 0.5, glow * 0.6, glow * 0.7);
 
-        // Apply overall opacity
-        float alpha = uOpacity;
+        // Soft vignette for depth
+        float vignette = 1.0 - smoothstep(0.4, 1.2, dist) * 0.3;
+        finalColor *= vignette;
 
-        // Fade edges to transparent
-        float vignette = 1.0 - smoothstep(0.3, 0.9, dist) * 0.4;
-        alpha *= vignette;
+        // Slight desaturation for background feel
+        float gray = dot(finalColor, vec3(0.299, 0.587, 0.114));
+        finalColor = mix(vec3(gray), finalColor, 0.9);
 
-        gl_FragColor = vec4(finalColor, alpha);
+        gl_FragColor = vec4(finalColor, uOpacity);
       }
     `;
 
@@ -131,30 +148,29 @@
      * PersonaBackgroundEffect - Full page WebGL background
      */
     class PersonaBackgroundEffect {
-      constructor(container) {
+      constructor(canvas, container) {
+        this.canvas = canvas;
         this.container = container;
-        this.canvas = null;
         this.scene = null;
         this.camera = null;
         this.renderer = null;
         this.mesh = null;
         this.uniforms = null;
         this.textures = {};
-        this.currentPersona = null;
-        this.targetPersona = null;
+        this.textureSizes = {};
+        this.currentDifficulty = 'easy';
+        this.targetDifficulty = 'easy';
         this.isTransitioning = false;
         this.animationId = null;
         this.isDestroyed = false;
-        this.isVisible = false;
+        this.autoPlayTimer = null;
+        this.tabs = null;
+        this.contentItems = null;
+        this.counter = null;
       }
 
       async init() {
         try {
-          // Create canvas element
-          this.canvas = document.createElement('canvas');
-          this.canvas.className = 'persona-background-canvas';
-          this.container.insertBefore(this.canvas, this.container.firstChild);
-
           // Initialize Three.js
           this.scene = new THREE.Scene();
           this.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
@@ -173,14 +189,17 @@
 
           // Create uniforms with first texture
           const firstTexture = this.textures.easy || Object.values(this.textures)[0];
+          const firstSize = this.textureSizes.easy || new THREE.Vector2(800, 1000);
 
           this.uniforms = {
             uTexture1: { value: firstTexture },
             uTexture2: { value: firstTexture },
+            uTexture1Size: { value: firstSize.clone() },
+            uTexture2Size: { value: firstSize.clone() },
             uProgress: { value: 0.0 },
             uTime: { value: 0.0 },
             uResolution: { value: new THREE.Vector2(1, 1) },
-            uOpacity: { value: 0.0 },
+            uOpacity: { value: CONFIG.maxOpacity },
             uRefractionStrength: { value: CONFIG.refractionStrength },
             uChromaticAberration: { value: CONFIG.chromaticAberration },
             uLiquidFlow: { value: CONFIG.liquidFlow }
@@ -201,8 +220,8 @@
           this.mesh = new THREE.Mesh(geometry, material);
           this.scene.add(this.mesh);
 
-          // Setup card hover listeners
-          this.setupCardListeners();
+          // Setup tab listeners
+          this.setupTabListeners();
 
           // Initial sizing
           this.resize();
@@ -210,11 +229,16 @@
           // Start render loop
           this.animate();
 
+          // Start auto-play
+          this.startAutoPlay();
+
+          // Set initial active state
+          this.updateActiveStates('easy');
+
           console.log('[PersonaBackground] Initialized successfully');
           return true;
         } catch (error) {
           console.error('[PersonaBackground] Initialization failed:', error);
-          this.cleanup();
           return false;
         }
       }
@@ -242,67 +266,67 @@
       async loadAllTextures() {
         const loadPromises = Object.entries(PERSONA_IMAGES).map(async ([key, url]) => {
           try {
-            this.textures[key] = await this.loadTexture(url);
+            const texture = await this.loadTexture(url);
+            this.textures[key] = texture;
+            // Store texture dimensions for cover-fit calculation
+            this.textureSizes[key] = new THREE.Vector2(
+              texture.image.width,
+              texture.image.height
+            );
           } catch (e) {
             console.warn('[PersonaBackground] Skipping texture:', key);
+            // Default size for fallback
+            this.textureSizes[key] = new THREE.Vector2(800, 1000);
           }
         });
         await Promise.all(loadPromises);
         console.log('[PersonaBackground] Loaded', Object.keys(this.textures).length, 'textures');
       }
 
-      setupCardListeners() {
-        const cards = this.container.querySelectorAll('.difficulty-card');
+      setupTabListeners() {
+        this.tabs = this.container.querySelectorAll('.lumina-tab');
+        this.contentItems = this.container.querySelectorAll('.lumina-slide');
+        this.counter = this.container.querySelector('.counter-current');
 
-        cards.forEach(card => {
-          // Determine difficulty from class
-          let difficulty = 'medium';
-          if (card.classList.contains('difficulty-easy')) difficulty = 'easy';
-          if (card.classList.contains('difficulty-moderate')) difficulty = 'medium';
-          if (card.classList.contains('difficulty-strict')) difficulty = 'strict';
-
-          card.addEventListener('mouseenter', () => this.onCardHover(difficulty));
-          card.addEventListener('mouseleave', () => this.onCardLeave());
+        this.tabs.forEach(tab => {
+          const difficulty = tab.dataset.difficulty;
+          tab.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.goToDifficulty(difficulty);
+          });
         });
       }
 
-      onCardHover(difficulty) {
+      goToDifficulty(difficulty) {
         if (this.isDestroyed) return;
+        if (difficulty === this.currentDifficulty && !this.isTransitioning) return;
 
-        // Show background if not visible
-        if (!this.isVisible) {
-          this.isVisible = true;
-          gsap.to(this.uniforms.uOpacity, {
-            value: CONFIG.maxOpacity,
-            duration: 0.5,
-            ease: 'power2.out'
-          });
-        }
-
-        // If same persona, no transition needed
-        if (this.currentPersona === difficulty && !this.isTransitioning) {
-          return;
-        }
-
-        // Start transition to new persona
-        this.targetPersona = difficulty;
         const targetTexture = this.textures[difficulty];
-
         if (!targetTexture) {
           console.warn('[PersonaBackground] Texture not found for:', difficulty);
           return;
         }
 
-        // If already transitioning, interrupt and start new transition
+        // Stop auto-play timer
+        this.stopAutoPlay();
+
+        // Kill any ongoing transition
         if (this.isTransitioning) {
           gsap.killTweensOf(this.uniforms.uProgress);
         }
 
+        this.targetDifficulty = difficulty;
+
+        // Update UI immediately
+        this.updateActiveStates(difficulty);
+
         // Set up textures for transition
-        if (this.currentPersona && this.textures[this.currentPersona]) {
-          this.uniforms.uTexture1.value = this.textures[this.currentPersona];
+        if (this.textures[this.currentDifficulty]) {
+          this.uniforms.uTexture1.value = this.textures[this.currentDifficulty];
+          this.uniforms.uTexture1Size.value = this.textureSizes[this.currentDifficulty];
         }
         this.uniforms.uTexture2.value = targetTexture;
+        this.uniforms.uTexture2Size.value = this.textureSizes[difficulty];
         this.uniforms.uProgress.value = 0;
 
         this.isTransitioning = true;
@@ -313,23 +337,63 @@
           duration: CONFIG.transitionDuration,
           ease: 'power2.inOut',
           onComplete: () => {
-            this.currentPersona = this.targetPersona;
+            this.currentDifficulty = this.targetDifficulty;
             this.uniforms.uTexture1.value = targetTexture;
+            this.uniforms.uTexture1Size.value = this.textureSizes[this.targetDifficulty];
             this.isTransitioning = false;
+
+            // Restart auto-play
+            this.startAutoPlay();
           }
         });
       }
 
-      onCardLeave() {
-        if (this.isDestroyed) return;
+      updateActiveStates(difficulty) {
+        const index = DIFFICULTY_ORDER.indexOf(difficulty);
 
-        // Fade out background
-        this.isVisible = false;
-        gsap.to(this.uniforms.uOpacity, {
-          value: 0.0,
-          duration: 0.4,
-          ease: 'power2.in'
+        // Update tabs
+        this.tabs.forEach(tab => {
+          const isActive = tab.dataset.difficulty === difficulty;
+          tab.classList.toggle('active', isActive);
+
+          // Reset progress bar animation
+          const progressFill = tab.querySelector('.tab-progress-fill');
+          if (progressFill) {
+            progressFill.style.width = '0%';
+            progressFill.style.animation = 'none';
+            if (isActive) {
+              // Trigger reflow then animate
+              progressFill.offsetHeight;
+              progressFill.style.animation = `fillProgress ${CONFIG.autoPlayInterval}ms linear forwards`;
+            }
+          }
         });
+
+        // Update content items
+        this.contentItems.forEach(item => {
+          item.classList.toggle('active', item.dataset.difficulty === difficulty);
+        });
+
+        // Update counter
+        if (this.counter) {
+          this.counter.textContent = String(index + 1).padStart(2, '0');
+        }
+      }
+
+      startAutoPlay() {
+        this.stopAutoPlay();
+        this.autoPlayTimer = setTimeout(() => {
+          const currentIndex = DIFFICULTY_ORDER.indexOf(this.currentDifficulty);
+          const nextIndex = (currentIndex + 1) % DIFFICULTY_ORDER.length;
+          this.goToDifficulty(DIFFICULTY_ORDER[nextIndex]);
+        }, CONFIG.autoPlayInterval);
+      }
+
+      stopAutoPlay() {
+        if (this.autoPlayTimer) {
+          clearTimeout(this.autoPlayTimer);
+          this.autoPlayTimer = null;
+        }
       }
 
       animate() {
@@ -343,22 +407,16 @@
       resize() {
         if (this.isDestroyed || !this.renderer) return;
 
-        const rect = this.container.getBoundingClientRect();
-        const width = rect.width || window.innerWidth;
-        const height = rect.height || window.innerHeight;
+        const width = window.innerWidth;
+        const height = window.innerHeight;
 
         this.renderer.setSize(width, height);
         this.uniforms.uResolution.value.set(width, height);
       }
 
-      cleanup() {
-        if (this.canvas && this.canvas.parentNode) {
-          this.canvas.parentNode.removeChild(this.canvas);
-        }
-      }
-
       destroy() {
         this.isDestroyed = true;
+        this.stopAutoPlay();
 
         if (this.animationId) {
           cancelAnimationFrame(this.animationId);
@@ -381,27 +439,34 @@
         if (this.renderer) {
           this.renderer.dispose();
         }
-
-        this.cleanup();
       }
     }
 
     /**
+     * Global function to select difficulty tab (called from HTML onclick)
+     */
+    window.selectDifficultyTab = function(difficulty) {
+      if (window.difficultyPersonaEffect) {
+        window.difficultyPersonaEffect.goToDifficulty(difficulty);
+      }
+    };
+
+    /**
      * Initialize persona background effect for difficulty selection page
      */
+    let isInitializing = false;
+
     function initDifficultyPersonaEffects() {
       // Prevent multiple initializations
-      if (window.difficultyPersonaEffects) {
-        console.log('[PersonaBackground] Already initialized, skipping');
+      if (window.difficultyPersonaEffect || isInitializing) {
+        console.log('[PersonaBackground] Already initialized or initializing, skipping');
         return;
       }
 
-      // Check for hover support (skip on touch-only devices)
+      isInitializing = true;
+
+      // Check for hover support (skip on touch-only devices for auto-play behavior)
       const supportsHover = window.matchMedia('(hover: hover)').matches;
-      if (!supportsHover) {
-        console.log('[PersonaBackground] Disabled: touch-only device detected');
-        return;
-      }
 
       // Check WebGL support
       const testCanvas = document.createElement('canvas');
@@ -411,22 +476,28 @@
         return;
       }
 
-      const difficultyPage = document.getElementById('difficultySelection');
-      if (!difficultyPage) {
-        console.warn('[PersonaBackground] Difficulty selection page not found');
+      const canvas = document.getElementById('difficultyCanvas');
+      const container = document.getElementById('difficultySelection');
+
+      if (!canvas || !container) {
+        console.warn('[PersonaBackground] Canvas or container not found');
         return;
       }
 
-      const effect = new PersonaBackgroundEffect(difficultyPage);
+      const effect = new PersonaBackgroundEffect(canvas, container);
       effect.init().then(success => {
         if (success) {
-          window.difficultyPersonaEffects = effect;
+          window.difficultyPersonaEffect = effect;
 
           // Handle resize
           window.addEventListener('resize', () => effect.resize());
 
           console.log('[PersonaBackground] Ready');
+        } else {
+          isInitializing = false;
         }
+      }).catch(() => {
+        isInitializing = false;
       });
     }
 
@@ -434,9 +505,9 @@
      * Cleanup persona effects
      */
     function cleanupDifficultyPersonaEffects() {
-      if (window.difficultyPersonaEffects) {
-        window.difficultyPersonaEffects.destroy();
-        window.difficultyPersonaEffects = null;
+      if (window.difficultyPersonaEffect) {
+        window.difficultyPersonaEffect.destroy();
+        window.difficultyPersonaEffect = null;
       }
     }
 
@@ -453,6 +524,14 @@
         return;
       }
 
+      // Check if already visible
+      const style = window.getComputedStyle(difficultyPage);
+      const isVisible = style.display !== 'none' && style.visibility !== 'hidden';
+
+      if (isVisible && !window.difficultyPersonaEffect) {
+        setTimeout(initDifficultyPersonaEffects, 200);
+      }
+
       // Observe for visibility changes
       const observer = new MutationObserver((mutations) => {
         mutations.forEach(mutation => {
@@ -460,7 +539,7 @@
             const style = window.getComputedStyle(difficultyPage);
             const isNowVisible = style.display !== 'none' && style.visibility !== 'hidden';
 
-            if (isNowVisible && !window.difficultyPersonaEffects) {
+            if (isNowVisible && !window.difficultyPersonaEffect) {
               setTimeout(initDifficultyPersonaEffects, 200);
             }
           }
