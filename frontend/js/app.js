@@ -4,11 +4,91 @@
 // Dependencies: All other JS files must be loaded before this one
 // This file contains: Page transitions, button event handlers, DOMContentLoaded,
 //                     scroll animations, browser compatibility check
-// Load Order: state.js -> config.js -> auth.js -> subscription.js -> tracking.js
-//             -> speech.js -> session.js -> ui-helpers.js -> scenarios.js -> app.js
+// Load Order: state.js -> browser-detect.js -> config.js -> auth.js -> subscription.js
+//             -> tracking.js -> speech.js -> vad/*.js -> session.js -> ui-helpers.js
+//             -> scenarios.js -> app.js
 // ============================================================================
 
 // Note: selectedSpecialty and selectedDifficulty are in state.js
+
+// ============================================================================
+// BROWSER COMPATIBILITY WARNING BANNER
+// ============================================================================
+
+const BROWSER_WARNING_DISMISSED_KEY = 'browserWarningDismissed';
+
+/**
+ * Show browser compatibility warning if needed
+ */
+function showBrowserWarningIfNeeded() {
+  // Check if warning was previously dismissed
+  const dismissed = localStorage.getItem(BROWSER_WARNING_DISMISSED_KEY);
+  if (dismissed === 'true') {
+    console.log('[BrowserWarning] Previously dismissed by user');
+    return;
+  }
+
+  // Use BrowserDetect to check if we should show warning
+  if (!window.BrowserDetect) {
+    console.warn('[BrowserWarning] BrowserDetect not available');
+    return;
+  }
+
+  const warning = BrowserDetect.getWarning();
+  if (!warning) {
+    console.log('[BrowserWarning] No warning needed for this browser');
+    return;
+  }
+
+  // Show the warning banner
+  const banner = document.getElementById('browserWarningBanner');
+  const title = document.getElementById('browserWarningTitle');
+  const message = document.getElementById('browserWarningMessage');
+
+  if (!banner || !title || !message) {
+    console.warn('[BrowserWarning] Banner elements not found');
+    return;
+  }
+
+  // Set content
+  title.textContent = warning.title;
+  message.textContent = warning.message;
+
+  // Set type class (warning, error, info)
+  banner.classList.remove('warning', 'error', 'info');
+  banner.classList.add(warning.type || 'warning');
+
+  // Show banner with animation
+  banner.style.display = 'block';
+  // Force reflow for animation
+  banner.offsetHeight;
+  banner.classList.add('visible');
+
+  console.log(`[BrowserWarning] Showing ${warning.type} banner:`, warning.title);
+}
+
+/**
+ * Dismiss browser warning banner
+ */
+function dismissBrowserWarning() {
+  const banner = document.getElementById('browserWarningBanner');
+  if (!banner) return;
+
+  // Animate out
+  banner.classList.remove('visible');
+
+  // Hide after animation
+  setTimeout(() => {
+    banner.style.display = 'none';
+  }, 300);
+
+  // Remember dismissal
+  localStorage.setItem(BROWSER_WARNING_DISMISSED_KEY, 'true');
+  console.log('[BrowserWarning] Dismissed by user');
+}
+
+// Make dismissBrowserWarning available globally (called from HTML onclick)
+window.dismissBrowserWarning = dismissBrowserWarning;
 
 // ============================================================================
 // FOOTER VISIBILITY CONTROL
@@ -396,6 +476,9 @@ function initScrollAnimations() {
 window.addEventListener('DOMContentLoaded', async () => {
   console.log('[INIT] DOMContentLoaded fired');
 
+  // Check browser compatibility and show warning if needed
+  showBrowserWarningIfNeeded();
+
   // Initialize scroll animations (Squarespace-style)
   initScrollAnimations();
 
@@ -457,14 +540,21 @@ window.addEventListener('DOMContentLoaded', async () => {
     window.history.replaceState({}, '', window.location.pathname);
   }
 
-  // Browser speech recognition check
+  // Log browser detection results
+  if (window.BrowserDetect) {
+    const detection = BrowserDetect.detect();
+    console.log(`[BROWSER] Detected: ${detection.browser.name}`);
+    console.log(`[BROWSER] Platform: ${detection.platform.isMobile ? 'Mobile' : 'Desktop'}`);
+    console.log(`[BROWSER] VAD Support: ${detection.vad.recommended || 'none'} (${detection.vad.reason})`);
+    console.log(`[BROWSER] MediaRecorder codecs:`, detection.mediaRecorderCodecs.supported);
+  }
+
+  // Browser speech recognition check (legacy log)
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SpeechRecognition) {
-    // Whisper API fallback available - all browsers supported
-    console.log('[SPEECH] Using Whisper API for speech recognition (browser fallback)');
+    console.log('[SPEECH] Web Speech API not available - will use Whisper via VAD/SimpleVAD');
   } else {
-    // Web Speech API available - optimal performance
-    console.log('[SPEECH] Using Web Speech API for speech recognition (native browser support)');
+    console.log('[SPEECH] Web Speech API available (but using VAD/Whisper for better accuracy)');
   }
 
   // ============================================================================
