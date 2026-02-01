@@ -66,6 +66,21 @@ function transitionToPage(fromPageId, toPageId, callback) {
       hideAppFooter();
     }
 
+    // Initialize WebGL effects for difficulty selection page
+    if (toPageId === 'difficultySelection' && typeof initDifficultyPersonaEffects === 'function') {
+      // Delay to ensure layout is complete
+      setTimeout(() => {
+        if (!window.difficultyPersonaEffects || window.difficultyPersonaEffects.length === 0) {
+          initDifficultyPersonaEffects();
+        }
+      }, 200);
+    }
+
+    // Cleanup WebGL effects when leaving difficulty selection
+    if (fromPageId === 'difficultySelection' && typeof cleanupDifficultyPersonaEffects === 'function') {
+      cleanupDifficultyPersonaEffects();
+    }
+
     // Execute callback if provided
     if (callback) callback();
 
