@@ -5746,15 +5746,15 @@ button.btn-secondary:active {
   top: 50%;
   transform: translate(-50%, -50%) rotate(-90deg);
   white-space: nowrap;
-  font-family: var(--font-display);
-  font-size: 16px;
-  font-weight: 500;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
   color: var(--bg-warm-white);
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
   z-index: 10;
   opacity: 1;
   transition: opacity 300ms ease;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
 }
 
 .accordion-panel.active .accordion-title-vertical {
@@ -5807,9 +5807,6 @@ button.btn-secondary:active {
     height: auto;
     gap: 0;
     flex-direction: row;
-  }
-
-  .features-accordion.carousel-mode {
     overflow: hidden;
   }
 
@@ -5817,39 +5814,33 @@ button.btn-secondary:active {
     display: flex;
     transition: transform 400ms cubic-bezier(0.4, 0, 0.2, 1);
     touch-action: pan-y pinch-zoom;
+    width: 300%; /* 3 panels */
   }
 
-  .carousel-mode .accordion-panel {
-    flex: 0 0 100%;
-    min-width: 100%;
+  .accordion-panel {
+    flex: 0 0 calc(100% / 3);
+    width: calc(100% / 3);
+    min-width: unset;
     height: 400px;
     border-radius: 16px;
     overflow: hidden;
   }
 
   /* Show copper bar on all panels in mobile */
-  .carousel-mode .accordion-panel::after {
+  .accordion-panel::after {
     transform: scaleX(1);
   }
 
-  /* All panels show content in carousel mode */
-  .carousel-mode .accordion-content {
+  /* All panels show content in mobile */
+  .accordion-content {
     opacity: 1;
     transform: translateY(0);
-  }
-
-  /* Hide vertical titles in carousel mode */
-  .carousel-mode .accordion-title-vertical {
-    display: none;
-  }
-
-  /* Hide panel dividers in carousel mode */
-  .carousel-mode .accordion-panel::before {
-    display: none;
-  }
-
-  .accordion-content {
     padding: 24px;
+  }
+
+  /* Hide vertical titles in mobile */
+  .accordion-title-vertical {
+    display: none;
   }
 
   .accordion-title {
@@ -5891,7 +5882,7 @@ button.btn-secondary:active {
 }
 
 @media (max-width: 480px) {
-  .carousel-mode .accordion-panel {
+  .accordion-panel {
     height: 350px;
     border-radius: 12px;
   }
