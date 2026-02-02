@@ -542,6 +542,7 @@ document.getElementById('connectBtn').addEventListener('click', async () => {
   try {
     log('Initializing session...', 'info');
     session = new V4Session(CONFIG.BACKEND_URL, currentScenario.promptFile, selectedDifficulty);
+    window.session = session; // Expose globally for cross-module access
     await session.connect();
     session.startListening();
     document.getElementById('connectBtn').disabled = true;
