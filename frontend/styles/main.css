@@ -1687,83 +1687,19 @@ body.has-header .simulation-room.active {
   flex-direction: column;
 }
 
-/* Persona Backdrop - Animated Mesh Gradient Effect */
+/* Persona Backdrop - Natural Dark Sage Green */
 .persona-backdrop {
   position: absolute;
   inset: 0;
   overflow: hidden;
-  /* Base layer - warm cream */
-  background-color: #FAF7F4;
-  /* Multi-layer animated mesh effect */
-  background-image:
-    /* Layer 1: Primary copper blob */
-    radial-gradient(
-      ellipse 85% 75% at 50% 48%,
-      rgba(220, 160, 100, 0.65) 0%,
-      rgba(220, 160, 100, 0.35) 25%,
-      rgba(230, 180, 130, 0.25) 50%,
-      transparent 75%
-    ),
-    /* Layer 2: Secondary peach blob */
-    radial-gradient(
-      ellipse 70% 60% at 55% 45%,
-      rgba(230, 180, 130, 0.45) 0%,
-      rgba(230, 180, 130, 0.20) 30%,
-      transparent 65%
-    ),
-    /* Layer 3: Tertiary warm accent */
-    radial-gradient(
-      ellipse 60% 50% at 48% 52%,
-      rgba(240, 200, 160, 0.35) 0%,
-      rgba(240, 200, 160, 0.12) 35%,
-      transparent 70%
-    ),
-    /* Layer 4: Subtle ambient glow */
-    radial-gradient(
-      ellipse 90% 80% at 50% 50%,
-      rgba(248, 235, 220, 0.12) 0%,
-      transparent 60%
-    );
-  animation: meshGradientFlow 20s ease-in-out infinite;
-}
-
-/* Mesh Gradient Flow Animation - creates organic morphing effect */
-@keyframes meshGradientFlow {
-  0%, 100% {
-    background-image:
-      radial-gradient(ellipse 85% 75% at 50% 48%, rgba(220, 160, 100, 0.65) 0%, rgba(220, 160, 100, 0.35) 25%, rgba(230, 180, 130, 0.25) 50%, transparent 75%),
-      radial-gradient(ellipse 70% 60% at 55% 45%, rgba(230, 180, 130, 0.45) 0%, rgba(230, 180, 130, 0.20) 30%, transparent 65%),
-      radial-gradient(ellipse 60% 50% at 48% 52%, rgba(240, 200, 160, 0.35) 0%, rgba(240, 200, 160, 0.12) 35%, transparent 70%),
-      radial-gradient(ellipse 90% 80% at 50% 50%, rgba(248, 235, 220, 0.12) 0%, transparent 60%);
-  }
-  25% {
-    background-image:
-      radial-gradient(ellipse 82% 72% at 53% 46%, rgba(220, 160, 100, 0.60) 0%, rgba(220, 160, 100, 0.32) 25%, rgba(230, 180, 130, 0.22) 50%, transparent 75%),
-      radial-gradient(ellipse 72% 62% at 52% 48%, rgba(230, 180, 130, 0.42) 0%, rgba(230, 180, 130, 0.18) 30%, transparent 65%),
-      radial-gradient(ellipse 62% 52% at 51% 50%, rgba(240, 200, 160, 0.38) 0%, rgba(240, 200, 160, 0.14) 35%, transparent 70%),
-      radial-gradient(ellipse 88% 78% at 52% 48%, rgba(248, 235, 220, 0.14) 0%, transparent 60%);
-  }
-  50% {
-    background-image:
-      radial-gradient(ellipse 80% 70% at 47% 52%, rgba(220, 160, 100, 0.58) 0%, rgba(220, 160, 100, 0.30) 25%, rgba(230, 180, 130, 0.20) 50%, transparent 75%),
-      radial-gradient(ellipse 68% 58% at 48% 54%, rgba(230, 180, 130, 0.40) 0%, rgba(230, 180, 130, 0.16) 30%, transparent 65%),
-      radial-gradient(ellipse 64% 54% at 45% 48%, rgba(240, 200, 160, 0.32) 0%, rgba(240, 200, 160, 0.10) 35%, transparent 70%),
-      radial-gradient(ellipse 92% 82% at 48% 52%, rgba(248, 235, 220, 0.10) 0%, transparent 60%);
-  }
-  75% {
-    background-image:
-      radial-gradient(ellipse 83% 73% at 51% 49%, rgba(220, 160, 100, 0.62) 0%, rgba(220, 160, 100, 0.33) 25%, rgba(230, 180, 130, 0.23) 50%, transparent 75%),
-      radial-gradient(ellipse 71% 61% at 57% 43%, rgba(230, 180, 130, 0.43) 0%, rgba(230, 180, 130, 0.19) 30%, transparent 65%),
-      radial-gradient(ellipse 61% 51% at 53% 55%, rgba(240, 200, 160, 0.36) 0%, rgba(240, 200, 160, 0.13) 35%, transparent 70%),
-      radial-gradient(ellipse 89% 79% at 51% 49%, rgba(248, 235, 220, 0.13) 0%, transparent 60%);
-  }
-}
-
-/* Respect user's reduced motion preference */
-@media (prefers-reduced-motion: reduce) {
-  .persona-backdrop {
-    animation: none;
-  }
+  /* Dark sage green - natural, earthy tone */
+  background: radial-gradient(
+    ellipse 80% 70% at 50% 50%,
+    #5C6F5E 0%,                        /* Lighter sage center */
+    #4A5D4C 40%,                       /* Brand sage green */
+    #3E4F40 70%,                       /* Darker sage */
+    #354536 100%                       /* Deep sage edge */
+  );
 }
 
 /* Hide blur element - not using this approach anymore */
@@ -2098,6 +2034,10 @@ body.has-header .simulation-room.active {
 
 .transcript-panel .transcript-message.message-user .message-time {
   color: rgba(255, 255, 255, 0.8);
+}
+
+.transcript-panel .transcript-message.message-user .message-text {
+  color: white;
 }
 
 /* AI messages - left aligned */
@@ -2599,200 +2539,324 @@ body.has-header .sim-main {
   }
 }
 
-/* Voice Orb - VUI Dark Theme with Teal/Cyan Glow */
-.voice-orb {
+/* ============================================
+   VOICE ORB - UIverse Circular Arc Design
+   Layered circular arcs with 3D hover effect
+   ============================================ */
+
+/* Base Container */
+.voice-orb.svg-frame {
   position: relative;
   width: 120px;
   height: 120px;
-  border-radius: 50%;
-  /* Glass morphism with teal tint for light theme */
-  background: radial-gradient(circle at 30% 30%,
-      rgba(255, 255, 255, 0.9),
-      rgba(13, 148, 136, 0.15));
-  -webkit-backdrop-filter: blur(20px);
-  backdrop-filter: blur(20px);
-  border: none;
+  transform-style: preserve-3d;
   display: flex;
-  align-items: center;
   justify-content: center;
-  transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
-  box-shadow:
-    inset 0 0 30px rgba(13, 148, 136, 0.1),
-    0 8px 32px rgba(0, 0, 0, 0.1),
-    0 0 0 1px rgba(255, 255, 255, 0.5) inset;
-  overflow: hidden;
+  align-items: center;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
 }
 
-/* Outer glow ring for pulse states */
-.voice-orb::before {
-  content: '';
+/* SVG Layers */
+.voice-orb.svg-frame svg {
   position: absolute;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(13, 148, 136, 0.3) 0%, transparent 70%);
-  opacity: 0;
-  animation: none;
+  width: 140px;
+  height: 140px;
+  transition: transform 0.5s ease;
+  z-index: calc(1 - (0.2 * var(--j, 0)));
+  transform-origin: center;
+  fill: none;
 }
 
-/* Inner pattern for thinking state */
-.voice-orb::after {
-  content: '';
-  position: absolute;
-  width: 150%;
-  height: 150%;
-  background: conic-gradient(from 0deg,
-      transparent 0%,
-      rgba(13, 148, 136, 0.1) 15%,
-      rgba(13, 148, 136, 0.2) 25%,
-      rgba(13, 148, 136, 0.1) 35%,
-      transparent 50%,
-      rgba(13, 148, 136, 0.1) 65%,
-      rgba(13, 148, 136, 0.2) 75%,
-      rgba(13, 148, 136, 0.1) 85%,
-      transparent 100%);
-  border-radius: 50%;
-  opacity: 0;
-  animation: none;
-  filter: blur(8px);
+/* Default path styles - Cyan color scheme */
+.voice-orb.svg-frame svg path,
+.voice-orb.svg-frame svg g {
+  transform-origin: center;
+  transition: stroke 0.3s ease, fill 0.3s ease, filter 0.3s ease;
 }
 
-/* STATE: Idle - Soft breathing pulse */
-.voice-orb.idle {
-  animation: orb-breathe 4s ease-in-out infinite;
+/* Out1 - Outer donut ring */
+.voice-orb.svg-frame svg [id$="out1"] path {
+  stroke: #00FFFF;
+  fill: none;
 }
 
-@keyframes orb-breathe {
+/* Out2 - Segmented arcs (cyan) */
+.voice-orb.svg-frame svg [id$="out2"] path {
+  fill: #00FFFF;
+}
 
-  0%,
-  100% {
-    transform: scale(1);
-    box-shadow:
-      inset 0 0 30px rgba(13, 148, 136, 0.1),
-      0 8px 32px rgba(0, 0, 0, 0.1),
-      0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+/* Out3 - Partial circle (yellow accent) */
+.voice-orb.svg-frame svg [id$="out3"] {
+  stroke: #ff0;
+  stroke-width: 1;
+  fill: none;
+}
+
+/* Inner3 - Small inner arcs (cyan) */
+.voice-orb.svg-frame svg [id$="inner3"] path {
+  fill: #00FFFF;
+}
+
+/* Inner1 - Complex inner arcs (cyan) */
+.voice-orb.svg-frame svg [id$="inner1"] path {
+  fill: #00FFFF;
+}
+
+/* Center1 - Center arc (yellow accent) */
+.voice-orb.svg-frame svg [id$="center1"] {
+  fill: #ff0;
+}
+
+/* Center - Center dot (cyan) */
+.voice-orb.svg-frame svg [id$="center"]:not([id$="center1"]) {
+  fill: #00FFFF;
+}
+
+/* Hover 3D Effect - Desktop only */
+.voice-orb.svg-frame:hover svg {
+  transform: rotate(-80deg) skew(30deg)
+             translateX(calc(45px * var(--i, 0)))
+             translateY(calc(-35px * var(--i, 0)));
+}
+
+/* Center element transform on hover */
+.voice-orb.svg-frame svg [id$="center"]:not([id$="center1"]) {
+  transition: transform 0.5s ease;
+}
+
+.voice-orb.svg-frame:hover svg [id$="center"]:not([id$="center1"]) {
+  transform: rotate(-30deg) translateX(45px) translateY(-3px);
+}
+
+/* ============================================
+   STATE: Idle - Gentle rotating layers
+   ============================================ */
+.voice-orb.svg-frame.idle [id$="out2"] {
+  animation: svg-rotate-slow 7s ease-in-out infinite alternate;
+}
+
+.voice-orb.svg-frame.idle [id$="out3"] {
+  animation: svg-rotate-slow 3s ease-in-out infinite alternate;
+}
+
+.voice-orb.svg-frame.idle [id$="inner3"],
+.voice-orb.svg-frame.idle [id$="inner1"] {
+  animation: svg-rotate-slow 4s ease-in-out infinite alternate;
+}
+
+.voice-orb.svg-frame.idle [id$="center1"] {
+  animation: svg-rotate-slow 2s ease-in-out infinite alternate;
+}
+
+@keyframes svg-rotate-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ============================================
+   STATE: Listening - Pulsing glow effect
+   ============================================ */
+.voice-orb.svg-frame.listening svg {
+  filter: drop-shadow(0 0 4px #00FFFF);
+}
+
+.voice-orb.svg-frame.listening [id$="out2"] {
+  animation: svg-rotate-slow 5s ease-in-out infinite alternate;
+}
+
+.voice-orb.svg-frame.listening [id$="out3"] {
+  animation: svg-rotate-slow 2s ease-in-out infinite alternate;
+}
+
+.voice-orb.svg-frame.listening [id$="inner3"],
+.voice-orb.svg-frame.listening [id$="inner1"] {
+  animation: svg-rotate-slow 3s ease-in-out infinite alternate;
+}
+
+.voice-orb.svg-frame.listening [id$="center1"] {
+  animation: svg-listening-glow 1.5s ease-in-out infinite;
+}
+
+@keyframes svg-listening-glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 2px #ff0);
   }
-
   50% {
-    transform: scale(1.03);
-    box-shadow:
-      inset 0 0 40px rgba(13, 148, 136, 0.15),
-      0 12px 40px rgba(0, 0, 0, 0.12),
-      0 0 0 1px rgba(255, 255, 255, 0.6) inset;
+    filter: drop-shadow(0 0 10px #ff0);
   }
 }
 
-/* STATE: Listening - Active expanding pulse */
-.voice-orb.listening {
-  box-shadow:
-    inset 0 0 40px rgba(13, 148, 136, 0.15),
-    0 8px 32px rgba(13, 148, 136, 0.2),
-    0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+/* ============================================
+   STATE: Thinking - Fast counter-rotating layers
+   ============================================ */
+.voice-orb.svg-frame.thinking [id$="out2"] {
+  animation: svg-thinking-spin 2s linear infinite;
 }
 
-.voice-orb.listening::before {
-  animation: listening-pulse 1.5s ease-out infinite;
+.voice-orb.svg-frame.thinking [id$="out3"] {
+  animation: svg-thinking-spin 1.5s linear infinite reverse;
 }
 
-@keyframes listening-pulse {
-  0% {
-    transform: scale(1);
-    opacity: 0.5;
-  }
-
-  100% {
-    transform: scale(1.8);
-    opacity: 0;
-  }
+.voice-orb.svg-frame.thinking [id$="inner1"] {
+  animation: svg-thinking-spin 1s linear infinite;
 }
 
-/* STATE: Thinking - Smooth rotating swirl pattern with bounce */
-.voice-orb.thinking::after {
-  opacity: 1;
-  animation: thinking-spin 3s linear infinite;
+.voice-orb.svg-frame.thinking [id$="inner3"] {
+  animation: svg-thinking-spin 0.8s linear infinite reverse;
 }
 
-.voice-orb.thinking {
-  animation: thinking-bounce 2.0s ease-in-out infinite;
-  box-shadow:
-    inset 0 0 35px rgba(13, 148, 136, 0.12),
-    0 8px 32px rgba(13, 148, 136, 0.15),
-    0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+.voice-orb.svg-frame.thinking [id$="center1"] {
+  animation: svg-thinking-spin 0.5s linear infinite;
 }
 
-@keyframes thinking-spin {
-  0% {
-    transform: rotate(0deg);
-  }
+@keyframes svg-thinking-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
 
-  100% {
-    transform: rotate(360deg);
-  }
+/* Thinking container bounce */
+.voice-orb.svg-frame.thinking {
+  animation: thinking-bounce 2s ease-in-out infinite;
 }
 
 @keyframes thinking-bounce {
-
-  0%,
-  100% {
+  0%, 100% {
     transform: translateY(0) scale(1);
   }
-
   50% {
     transform: translateY(-8px) scale(1.03);
   }
 }
 
-/* STATE: Speaking - Rhythmic wave pulses */
-.voice-orb.speaking {
-  animation: speaking-scale 0.8s ease-in-out infinite;
-  box-shadow:
-    inset 0 0 50px rgba(13, 148, 136, 0.2),
-    0 8px 40px rgba(13, 148, 136, 0.25),
-    0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+/* ============================================
+   STATE: Speaking - Rhythmic scale pulses
+   ============================================ */
+.voice-orb.svg-frame.speaking svg {
+  filter: drop-shadow(0 0 6px #ff0);
 }
 
-.voice-orb.speaking::before {
-  animation: speaking-pulse 1.2s ease-out infinite;
+.voice-orb.svg-frame.speaking [id$="out1"] {
+  animation: svg-speaking-expand 0.8s ease-in-out infinite;
 }
 
-@keyframes speaking-scale {
+.voice-orb.svg-frame.speaking [id$="out2"] {
+  animation: svg-speaking-expand 0.8s ease-in-out infinite 0.1s;
+}
 
-  0%,
-  100% {
+.voice-orb.svg-frame.speaking [id$="out3"] {
+  animation: svg-speaking-expand 0.8s ease-in-out infinite 0.15s;
+}
+
+.voice-orb.svg-frame.speaking [id$="inner1"] {
+  animation: svg-speaking-expand 0.8s ease-in-out infinite 0.2s;
+}
+
+.voice-orb.svg-frame.speaking [id$="inner3"] {
+  animation: svg-speaking-expand 0.8s ease-in-out infinite 0.25s;
+}
+
+.voice-orb.svg-frame.speaking [id$="center1"] {
+  animation: svg-speaking-expand 0.8s ease-in-out infinite 0.3s;
+}
+
+@keyframes svg-speaking-expand {
+  0%, 100% {
     transform: scale(1);
   }
-
   50% {
-    transform: scale(1.06);
+    transform: scale(1.05);
   }
 }
 
-@keyframes speaking-pulse {
-  0% {
-    transform: scale(1);
-    opacity: 0.6;
-  }
-
-  100% {
-    transform: scale(2);
-    opacity: 0;
-  }
-}
-
-/* Accessibility: Reduced motion support */
+/* ============================================
+   Accessibility: Reduced motion support
+   ============================================ */
 @media (prefers-reduced-motion: reduce) {
-
-  .voice-orb,
-  .voice-orb::before,
-  .voice-orb::after {
+  .voice-orb.svg-frame,
+  .voice-orb.svg-frame svg,
+  .voice-orb.svg-frame svg polygon {
     animation: none !important;
+    transition: none !important;
   }
 
-  .voice-orb.idle,
-  .voice-orb.listening,
-  .voice-orb.thinking,
-  .voice-orb.speaking {
-    box-shadow: 0 0 60px rgba(0, 212, 170, 0.4);
+  /* Static visual differentiation for states */
+  .voice-orb.svg-frame.idle svg polygon {
+    stroke: var(--brand-primary, #4A5D4C);
+  }
+
+  .voice-orb.svg-frame.listening svg polygon {
+    stroke: var(--accent-copper, #B87333);
+    stroke-width: 2px;
+  }
+
+  .voice-orb.svg-frame.thinking svg polygon {
+    stroke: var(--brand-secondary, #5C7260);
+    stroke-dasharray: 5 3;
+  }
+
+  .voice-orb.svg-frame.speaking svg polygon {
+    stroke: var(--accent-copper-light, #D4915A);
+    stroke-width: 2.5px;
+  }
+
+  /* Disable hover transform for reduced motion */
+  .voice-orb.svg-frame:hover svg {
+    transform: none;
+  }
+}
+
+/* ============================================
+   Mobile Responsive Overrides
+   ============================================ */
+/* Mobile: 80px orb */
+.mobile-voice-section .voice-orb.svg-frame {
+  width: 80px;
+  height: 80px;
+}
+
+.mobile-voice-section .voice-orb.svg-frame svg {
+  width: 95px;
+  height: 95px;
+}
+
+/* Disable hover on touch devices */
+@media (hover: none) {
+  .voice-orb.svg-frame:hover svg {
+    transform: none;
+  }
+
+  .voice-orb.svg-frame:hover svg [id^="center"]:not([id$="1"]),
+  .voice-orb.svg-frame:hover svg [id^="m-center"]:not([id$="1"]) {
+    transform: none;
+  }
+}
+
+/* Very small screens: 70px */
+@media (max-width: 360px) {
+  .mobile-voice-section .voice-orb.svg-frame {
+    width: 70px;
+    height: 70px;
+  }
+
+  .mobile-voice-section .voice-orb.svg-frame svg {
+    width: 85px;
+    height: 85px;
+  }
+}
+
+/* Large screens: slightly larger orb */
+@media (min-width: 1600px) {
+  .voice-orb.svg-frame {
+    width: 140px;
+    height: 140px;
+  }
+
+  .voice-orb.svg-frame svg {
+    width: 165px;
+    height: 165px;
   }
 }
 
