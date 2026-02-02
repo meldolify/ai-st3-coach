@@ -210,10 +210,6 @@ body {
    MOBILE TOUCH OPTIMIZATION
    Smoother scrolling and better touch feedback
    ============================================ */
-html {
-  -webkit-overflow-scrolling: touch;
-}
-
 /* Prevent overscroll bounce on mobile containers */
 .mobile-simulation-layout,
 #mobileScenarioGrid,
@@ -1763,8 +1759,8 @@ body.has-header .simulation-room.active {
   padding: 18px 22px;
   min-width: 200px;
   background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
   border: 1px solid rgba(255, 255, 255, 0.7);
   border-radius: 18px;
   box-shadow:
@@ -1863,8 +1859,8 @@ body.has-header .simulation-room.active {
 
 .float-panel {
   background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
   border: 1px solid rgba(255, 255, 255, 0.6);
   border-radius: 20px;
   box-shadow:
@@ -2112,8 +2108,8 @@ body.has-header .simulation-room.active {
   gap: 8px;
   padding: 8px 12px;
   background: var(--sim-panel-bg);
-  backdrop-filter: blur(var(--sim-panel-blur));
   -webkit-backdrop-filter: blur(var(--sim-panel-blur));
+  backdrop-filter: blur(var(--sim-panel-blur));
   border: 1px solid var(--sim-panel-border);
   border-radius: 40px;
   box-shadow: var(--sim-panel-shadow);
@@ -4678,7 +4674,6 @@ button.top-back-button:active {
     flex: 1;
     overflow-y: auto;
     padding: 8px 12px;
-    -webkit-overflow-scrolling: touch;
   }
 
   .mobile-transcript-messages {
@@ -9357,8 +9352,8 @@ body.has-header {
   left: 0;
   padding: 30px 35px;
   background: rgba(0, 0, 0, 0.18);
-  backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.15);
@@ -9582,3 +9577,40 @@ body.has-header {
     font-size: 0.9rem;
   }
 }
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+.initially-hidden {
+  display: none;
+}
+
+/* ============================================
+   GRADIENT PANEL COLOR VARIANTS
+   ============================================ */
+
+.gradient-panel--green {
+  --gradient-from: #6ec26e;
+  --gradient-to: #5eb8b8;
+}
+
+.gradient-panel--orange {
+  --gradient-from: #e8a849;
+  --gradient-to: #d4707a;
+}
+
+.gradient-panel--purple {
+  --gradient-from: #d4707a;
+  --gradient-to: #9b7dc9;
+}
+
+/* ============================================
+   VOICE ORB ANIMATION INDICES
+   ============================================ */
+
+.voice-orb-svg--0 { --i: 0; --j: 0; }
+.voice-orb-svg--1 { --i: 1; --j: 1; }
+.voice-orb-svg--2 { --i: 0; --j: 2; }
+.voice-orb-svg--3 { --i: 1; --j: 3; }
+.voice-orb-svg--4 { --i: 2; --j: 4; }

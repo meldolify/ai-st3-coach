@@ -42,7 +42,28 @@ const stationTypeSubheadings = {
   ]
 };
 
-// Topics data for random selection (same structure as scenarios.js)
+/**
+ * Get topics for a subheading from the shared getTopicsData() source
+ * This consolidates the duplicate data that was previously in mockExamTopicsData
+ * @param {string} subheadingId - The subheading ID (e.g., 'breast-and-aesthetic')
+ * @returns {Array} Array of [folder, title] pairs
+ */
+function getMockExamTopics(subheadingId) {
+  if (typeof getTopicsData !== 'function') {
+    console.error('[MOCK] getTopicsData function not available - scenarios.js may not be loaded');
+    return [];
+  }
+  const topicsData = getTopicsData();
+  const subcategory = topicsData[subheadingId];
+  if (!subcategory || !subcategory.topics) {
+    console.warn('[MOCK] No topics found for subheading:', subheadingId);
+    return [];
+  }
+  return subcategory.topics;
+}
+
+// LEGACY: Topics data kept for backwards compatibility during refactor verification
+// TODO: Remove after confirming getMockExamTopics works correctly
 const mockExamTopicsData = {
   // ========== CLINICAL ==========
   'breast-and-aesthetic': [
@@ -280,8 +301,12 @@ function getRandomScenarioFromStationType(stationType) {
   // Pick a random subheading
   const randomSubheading = subheadings[Math.floor(Math.random() * subheadings.length)];
 
-  // Get topics for this subheading
-  const topics = mockExamTopicsData[randomSubheading];
+  // Get topics for this subheading - use consolidated function, fall back to legacy data
+  let topics = getMockExamTopics(randomSubheading);
+  if (!topics || topics.length === 0) {
+    // Fallback to legacy data during transition
+    topics = mockExamTopicsData[randomSubheading];
+  }
   if (!topics || topics.length === 0) {
     console.error('[MOCK] No topics found for subheading:', randomSubheading);
     return null;

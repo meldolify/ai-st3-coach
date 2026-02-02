@@ -179,12 +179,12 @@ class VADManager {
     try {
       const startTime = Date.now();
 
-      // Convert Float32Array to WAV
-      const wavBlob = this.float32ToWav(float32Audio, 16000);
+      // Convert Float32Array to WAV using shared utility
+      const wavBlob = window.AudioUtils.float32ToWav(float32Audio, 16000);
       console.log(`[VAD] WAV blob: ${wavBlob.size} bytes`);
 
-      // Convert to base64
-      const base64 = await this.blobToBase64(wavBlob);
+      // Convert to base64 using shared utility
+      const base64 = await window.AudioUtils.blobToBase64(wavBlob);
 
       // Send to backend
       const sessionId = window.currentSessionId || 'unknown';
@@ -200,54 +200,6 @@ class VADManager {
     } catch (error) {
       console.error('[VAD] Error sending audio:', error);
     }
-  }
-
-  float32ToWav(float32Array, sampleRate) {
-    const buffer = new ArrayBuffer(44 + float32Array.length * 2);
-    const view = new DataView(buffer);
-
-    const writeString = (offset, string) => {
-      for (let i = 0; i < string.length; i++) {
-        view.setUint8(offset + i, string.charCodeAt(i));
-      }
-    };
-
-    // WAV header
-    writeString(0, 'RIFF');
-    view.setUint32(4, 36 + float32Array.length * 2, true);
-    writeString(8, 'WAVE');
-    writeString(12, 'fmt ');
-    view.setUint32(16, 16, true);         // fmt chunk size
-    view.setUint16(20, 1, true);          // PCM format
-    view.setUint16(22, 1, true);          // mono
-    view.setUint32(24, sampleRate, true); // sample rate
-    view.setUint32(28, sampleRate * 2, true); // byte rate
-    view.setUint16(32, 2, true);          // block align
-    view.setUint16(34, 16, true);         // bits per sample
-    writeString(36, 'data');
-    view.setUint32(40, float32Array.length * 2, true);
-
-    // Convert float32 [-1, 1] to int16 [-32768, 32767]
-    let offset = 44;
-    for (let i = 0; i < float32Array.length; i++) {
-      const s = Math.max(-1, Math.min(1, float32Array[i]));
-      view.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
-      offset += 2;
-    }
-
-    return new Blob([buffer], { type: 'audio/wav' });
-  }
-
-  blobToBase64(blob) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64 = reader.result.split(',')[1];
-        resolve(base64);
-      };
-      reader.onerror = reject;
-      reader.readAsDataURL(blob);
-    });
   }
 
   start() {

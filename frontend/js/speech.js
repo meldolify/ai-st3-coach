@@ -303,8 +303,8 @@ class PushToTalkManager {
       const wavBlob = await this.convertToWav(audioBlob);
       console.log(`[PTT] WAV: ${wavBlob.size} bytes`);
 
-      // Convert to base64
-      const base64Audio = await this.blobToBase64(wavBlob);
+      // Convert to base64 using shared utility
+      const base64Audio = await window.AudioUtils.blobToBase64(wavBlob);
 
       // Send to backend
       const sessionId = window.currentSessionId || 'unknown';
@@ -331,56 +331,8 @@ class PushToTalkManager {
     const channelData = audioBuffer.getChannelData(0);
     const sampleRate = audioBuffer.sampleRate;
 
-    // Create WAV file
-    return this.float32ToWav(channelData, sampleRate);
-  }
-
-  float32ToWav(float32Array, sampleRate) {
-    const buffer = new ArrayBuffer(44 + float32Array.length * 2);
-    const view = new DataView(buffer);
-
-    // Write WAV header
-    const writeString = (offset, string) => {
-      for (let i = 0; i < string.length; i++) {
-        view.setUint8(offset + i, string.charCodeAt(i));
-      }
-    };
-
-    writeString(0, 'RIFF');
-    view.setUint32(4, 36 + float32Array.length * 2, true);
-    writeString(8, 'WAVE');
-    writeString(12, 'fmt ');
-    view.setUint32(16, 16, true);
-    view.setUint16(20, 1, true);
-    view.setUint16(22, 1, true);
-    view.setUint32(24, sampleRate, true);
-    view.setUint32(28, sampleRate * 2, true);
-    view.setUint16(32, 2, true);
-    view.setUint16(34, 16, true);
-    writeString(36, 'data');
-    view.setUint32(40, float32Array.length * 2, true);
-
-    // Convert float32 [-1, 1] to int16 [-32768, 32767]
-    let offset = 44;
-    for (let i = 0; i < float32Array.length; i++) {
-      const s = Math.max(-1, Math.min(1, float32Array[i]));
-      view.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
-      offset += 2;
-    }
-
-    return new Blob([buffer], { type: 'audio/wav' });
-  }
-
-  blobToBase64(blob) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64 = reader.result.split(',')[1];
-        resolve(base64);
-      };
-      reader.onerror = reject;
-      reader.readAsDataURL(blob);
-    });
+    // Create WAV file using shared utility
+    return window.AudioUtils.float32ToWav(channelData, sampleRate);
   }
 
   // Compatibility methods (for interface consistency with old VAD)
@@ -403,30 +355,10 @@ class PushToTalkManager {
 
   /**
    * Get preferred MIME type based on browser support
-   * Safari doesn't support WebM, so we fall back to MP4/AAC
+   * Uses shared AudioUtils
    */
   _getPreferredMimeType() {
-    const types = [
-      'audio/webm;codecs=opus',   // Best quality, Chrome/Firefox/Edge
-      'audio/webm',               // Fallback WebM
-      'audio/mp4',                // Safari
-      'audio/mp4;codecs=mp4a.40.2', // Safari with explicit AAC codec
-      'audio/ogg;codecs=opus'     // Firefox fallback
-    ];
-
-    for (const type of types) {
-      try {
-        if (MediaRecorder.isTypeSupported(type)) {
-          return type;
-        }
-      } catch (e) {
-        // Ignore and try next
-      }
-    }
-
-    // Last resort - let browser choose default
-    console.warn('[PTT] No preferred MIME type found, using browser default');
-    return '';
+    return window.AudioUtils.getPreferredMimeType();
   }
 
   destroy() {

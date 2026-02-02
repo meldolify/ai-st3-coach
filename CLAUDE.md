@@ -200,14 +200,28 @@ backend/
 └── package.json                   # Dependencies + scripts
 
 frontend/
-├── index.html                     # UI (4,354 lines)
-├── index.js                       # Client logic (2,684 lines)
-│   ├── Lines 1-80: Supabase initialization & auth
-│   ├── Lines 86-150: Auth state management
-│   ├── Lines 200-400: Scenario selection UI
-│   ├── Lines 500-700: Web Speech API integration
-│   ├── Lines 800-1000: WebSocket communication
-│   └── Lines 1200+: Audio playback & microphone control
+├── index.html                     # UI (~1,800 lines)
+├── js/                            # Modular JavaScript (refactored from monolithic index.js)
+│   ├── app.js                     # Main application logic (~620 lines)
+│   ├── auth.js                    # Supabase authentication (~830 lines)
+│   ├── scenarios.js               # Scenario selection & navigation (~950 lines)
+│   ├── session.js                 # V4Session WebSocket management (~560 lines)
+│   ├── speech.js                  # Web Speech API / Whisper integration (~385 lines)
+│   ├── sidebar.js                 # Simulation room sidebar navigation (~385 lines)
+│   ├── mock-exam.js               # Mock exam mode logic (~800 lines)
+│   ├── orb-visualizer.js          # Voice orb WebGL animation (~500 lines)
+│   ├── ui-helpers.js              # UI utility functions (~450 lines)
+│   ├── state.js                   # Global state variables (~85 lines)
+│   ├── browser-detect.js          # Browser compatibility checks (~325 lines)
+│   ├── subscription.js            # Stripe subscription handling (~105 lines)
+│   ├── tracking.js                # Analytics tracking (~50 lines)
+│   ├── glow-effect.js             # Visual effects (~310 lines)
+│   ├── features-*.js              # Landing page animations (~360 lines total)
+│   ├── vad/                       # Voice Activity Detection
+│   │   ├── VADManager.js          # SileroVAD wrapper (~270 lines)
+│   │   └── SimpleVAD.js           # Volume-based VAD fallback (~470 lines)
+│   └── utils/
+│       └── audio-utils.js         # Shared audio utilities (~100 lines)
 ├── config.js                      # Environment config (Supabase, Stripe)
 └── serve.js                       # Static file server
 ```
