@@ -2102,63 +2102,134 @@ body.has-header .simulation-room.active {
   }
 }
 
-/* Orb Controls (Play/Pause/Stop buttons) */
-.orb-controls {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
-  background: var(--sim-panel-bg);
-  -webkit-backdrop-filter: blur(var(--sim-panel-blur));
-  backdrop-filter: blur(var(--sim-panel-blur));
-  border: 1px solid var(--sim-panel-border);
-  border-radius: 40px;
-  box-shadow: var(--sim-panel-shadow);
-}
+/* ============================================
+   SIMULATION CONTROL BUTTONS
+   Neumorphic design inspired by UIverse
+   Theme: Sage green + Copper + Warm neutrals
+   ============================================ */
 
-.orb-control-btn {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  border: none;
-  background: var(--sim-bg-accent);
-  color: var(--sim-text-secondary);
-  cursor: pointer;
+/* Invisible container - controls layout only */
+.sim-control-buttons {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
+  gap: 16px;
 }
 
-.orb-control-btn:hover:not(:disabled) {
-  background: var(--sim-accent-primary);
-  color: white;
-  transform: scale(1.05);
+/* Base button - outer shell */
+.sim-ctrl-btn {
+  position: relative;
+  padding: 0;
+  width: 72px;
+  height: 72px;
+  border: 1px solid var(--sim-border);
+  outline: none;
+  background-color: var(--sim-bg-secondary);
+  border-radius: 16px;
+  box-shadow:
+    -2px -6px 10px #ffffff,
+    -2px -4px 6px #ffffff,
+    2px 6px 10px rgba(74, 93, 76, 0.12),
+    4px 8px 16px rgba(0, 0, 0, 0.08);
+  transition: all 0.25s ease;
+  cursor: pointer;
 }
 
-.orb-control-btn:active:not(:disabled) {
-  transform: scale(0.95);
+/* Hover: lift + enhance shadows */
+.sim-ctrl-btn:hover:not(:disabled) {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow:
+    -3px -10px 15px #ffffff,
+    -3px -6px 8px #ffffff,
+    4px 10px 20px rgba(74, 93, 76, 0.15),
+    6px 12px 24px rgba(0, 0, 0, 0.1);
 }
 
-.orb-control-btn:disabled {
-  opacity: 0.35;
+/* Active: press down */
+.sim-ctrl-btn:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+  box-shadow:
+    inset 2px 2px 4px rgba(74, 93, 76, 0.1),
+    inset -2px -2px 4px #ffffff;
+}
+
+/* Inner content wrapper - centered */
+.sim-ctrl-btn__content {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 15px;
+  box-shadow: inset 0px -2px 0px rgba(74, 93, 76, 0.08);
+  transition: all 0.25s ease;
+}
+
+/* Icon - centered, no background */
+.sim-ctrl-btn__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #888888;
+  transition: all 0.25s ease;
+}
+
+.sim-ctrl-btn:hover:not(:disabled) .sim-ctrl-btn__icon {
+  transform: translateY(-2px);
+}
+
+.sim-ctrl-btn__icon svg {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+}
+
+/* Text label - hidden */
+.sim-ctrl-btn__text {
+  display: none;
+}
+
+/* ===== COLOR VARIANTS ===== */
+
+/* Primary (Start) - Sage green icon */
+.sim-ctrl-btn--primary .sim-ctrl-btn__icon {
+  color: var(--brand-primary);
+}
+
+.sim-ctrl-btn--primary:hover:not(:disabled) .sim-ctrl-btn__icon {
+  color: var(--brand-dark);
+}
+
+/* Warning (Pause) - Copper icon */
+.sim-ctrl-btn--warning .sim-ctrl-btn__icon {
+  color: var(--accent-copper);
+}
+
+.sim-ctrl-btn--warning:hover:not(:disabled) .sim-ctrl-btn__icon {
+  color: var(--accent-copper-light);
+}
+
+/* Danger (End) - Warm red icon */
+.sim-ctrl-btn--danger .sim-ctrl-btn__icon {
+  color: var(--error);
+}
+
+.sim-ctrl-btn--danger:hover:not(:disabled) .sim-ctrl-btn__icon {
+  color: #a03d30;
+}
+
+/* ===== DISABLED STATE ===== */
+.sim-ctrl-btn:disabled {
   cursor: not-allowed;
+  opacity: 0.5;
+  box-shadow:
+    -1px -3px 5px rgba(255, 255, 255, 0.5),
+    1px 3px 5px rgba(0, 0, 0, 0.05);
 }
 
-/* Connect button special styling */
-#connectBtn:not(:disabled) {
-  background: var(--sim-accent-primary);
-  color: white;
-}
-
-#connectBtn:hover:not(:disabled) {
-  background: var(--brand-dark);
-}
-
-/* Disconnect button danger styling */
-#disconnectBtn:not(:disabled):hover {
-  background: #EF4444;
-  color: white;
+.sim-ctrl-btn:disabled .sim-ctrl-btn__icon {
+  color: var(--sim-text-muted);
 }
 
 /* Adjust new simulation layout when header is visible */
@@ -5146,89 +5217,70 @@ button.top-back-button:active {
     color: #D4915A;
   }
 
-  /* Control Buttons Row */
-  .mobile-control-buttons {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
+  /* ============================================
+     MOBILE SIMULATION ROOM - DARK THEME BUTTONS
+     Neumorphic buttons adapted for dark background
+     ============================================ */
+  .mobile-simulation-layout .sim-control-buttons {
+    gap: 12px;
   }
 
-  .mobile-ctrl-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    min-width: 48px;
-    height: 48px;
-    padding: 0 16px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 24px;
-    color: #FFFFFF;
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.15s ease;
+  .mobile-simulation-layout .sim-ctrl-btn {
+    width: 64px;
+    height: 64px;
+    background: rgba(30, 35, 40, 0.9);
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow:
+      -2px -4px 8px rgba(255, 255, 255, 0.03),
+      2px 4px 12px rgba(0, 0, 0, 0.4);
   }
 
-  .mobile-ctrl-btn span {
-    display: none;
+  .mobile-simulation-layout .sim-ctrl-btn:hover:not(:disabled) {
+    box-shadow:
+      -3px -6px 12px rgba(255, 255, 255, 0.05),
+      4px 8px 20px rgba(0, 0, 0, 0.5);
   }
 
-  /* Primary button (Start) - larger with label */
-  .mobile-ctrl-btn--primary {
-    min-width: 100px;
-    background: rgba(0, 212, 170, 0.2);
-    border-color: rgba(0, 212, 170, 0.4);
-    color: #00ffcc;
+  .mobile-simulation-layout .sim-ctrl-btn:active:not(:disabled) {
+    transform: translateY(0) scale(0.98);
+    box-shadow:
+      inset 2px 2px 4px rgba(0, 0, 0, 0.3),
+      inset -1px -1px 2px rgba(255, 255, 255, 0.05);
   }
 
-  .mobile-ctrl-btn--primary span {
-    display: inline;
+  .mobile-simulation-layout .sim-ctrl-btn__content {
+    box-shadow: inset 0px -2px 0px rgba(0, 0, 0, 0.2);
   }
 
-  .mobile-ctrl-btn--primary:active:not(:disabled) {
-    transform: scale(0.95);
-    background: rgba(0, 212, 170, 0.3);
-    box-shadow: 0 0 20px rgba(0, 255, 204, 0.4);
+  .mobile-simulation-layout .sim-ctrl-btn__icon {
+    color: rgba(255, 255, 255, 0.5);
   }
 
-  /* Warning button (Pause) */
-  .mobile-ctrl-btn--warning {
-    color: #fcd34d;
-    border-color: rgba(252, 211, 77, 0.4);
-    background: rgba(252, 211, 77, 0.15);
+  /* Primary on dark - Sage */
+  .mobile-simulation-layout .sim-ctrl-btn--primary .sim-ctrl-btn__icon {
+    color: var(--brand-secondary);
   }
 
-  .mobile-ctrl-btn--warning:active:not(:disabled) {
-    transform: scale(0.95);
-    background: rgba(252, 211, 77, 0.25);
-    box-shadow: 0 0 20px rgba(252, 211, 77, 0.4);
+  .mobile-simulation-layout .sim-ctrl-btn--primary:hover:not(:disabled) .sim-ctrl-btn__icon {
+    color: var(--brand-primary);
   }
 
-  /* Danger button (End) - with label */
-  .mobile-ctrl-btn--danger {
-    min-width: 80px;
+  /* Warning on dark - Copper */
+  .mobile-simulation-layout .sim-ctrl-btn--warning .sim-ctrl-btn__icon {
+    color: var(--accent-copper-light);
+  }
+
+  .mobile-simulation-layout .sim-ctrl-btn--warning:hover:not(:disabled) .sim-ctrl-btn__icon {
+    color: var(--accent-copper);
+  }
+
+  /* Danger on dark - Warm red */
+  .mobile-simulation-layout .sim-ctrl-btn--danger .sim-ctrl-btn__icon {
     color: #fca5a5;
-    border-color: rgba(252, 165, 165, 0.4);
-    background: rgba(252, 165, 165, 0.15);
   }
 
-  .mobile-ctrl-btn--danger span {
-    display: inline;
-  }
-
-  .mobile-ctrl-btn--danger:active:not(:disabled) {
-    transform: scale(0.95);
-    background: rgba(252, 165, 165, 0.25);
-    box-shadow: 0 0 20px rgba(252, 165, 165, 0.4);
-  }
-
-  /* Disabled state */
-  .mobile-ctrl-btn:disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
+  .mobile-simulation-layout .sim-ctrl-btn--danger:hover:not(:disabled) .sim-ctrl-btn__icon {
+    color: var(--error);
   }
 
   /* Status Row */
