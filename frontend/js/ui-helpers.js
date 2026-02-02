@@ -428,6 +428,23 @@ function setOrbState(state) {
     mobileOrb.classList.add(state);
   }
 
+  // Update mobile orb status text (new thumb-zone layout)
+  const mobileOrbStatus = document.getElementById('mobileAiStatus');
+  if (mobileOrbStatus) {
+    const stateLabels = {
+      'idle': 'Ready',
+      'listening': 'Listening...',
+      'thinking': 'Thinking...',
+      'speaking': 'Speaking...',
+      'processing': 'Processing...'
+    };
+    mobileOrbStatus.textContent = stateLabels[state] || 'Ready';
+    mobileOrbStatus.classList.remove('listening', 'speaking', 'thinking');
+    if (state === 'listening' || state === 'speaking' || state === 'thinking') {
+      mobileOrbStatus.classList.add(state);
+    }
+  }
+
   // Update status bubble state classes for accent line color
   if (bubble) {
     bubble.classList.remove('state-idle', 'state-listening', 'state-thinking', 'state-speaking');

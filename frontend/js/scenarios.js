@@ -624,6 +624,16 @@ function startScenario(category, title, promptFile, imageFile) {
     }
   }
 
+  // Initialize mobile sidebar
+  if (typeof initMobileSidebar === 'function') {
+    initMobileSidebar();
+  }
+
+  // Update mobile header scenario info
+  if (typeof updateMobileScenarioInfo === 'function') {
+    updateMobileScenarioInfo(title);
+  }
+
   // Set scenario information
   document.getElementById('currentScenarioTitle').textContent = title;
 
@@ -719,16 +729,34 @@ function syncMobileSimulationElements() {
   // Sync status values
   const sessionStatus = document.getElementById('sessionStatus');
   const mobileSessionStatus = document.getElementById('mobileSessionStatus');
+  const mobileSessionDot = document.getElementById('mobileSessionDot');
   if (sessionStatus && mobileSessionStatus) {
     mobileSessionStatus.textContent = sessionStatus.textContent;
-    mobileSessionStatus.className = sessionStatus.className;
+    // Update status dot for new mobile layout
+    if (mobileSessionDot) {
+      mobileSessionDot.classList.remove('connected', 'active');
+      if (sessionStatus.classList.contains('status-connected')) {
+        mobileSessionDot.classList.add('connected');
+      } else if (sessionStatus.classList.contains('status-active')) {
+        mobileSessionDot.classList.add('active');
+      }
+    }
   }
 
   const micStatus = document.getElementById('micStatus');
   const mobileMicStatus = document.getElementById('mobileMicStatus');
+  const mobileMicDot = document.getElementById('mobileMicDot');
   if (micStatus && mobileMicStatus) {
     mobileMicStatus.textContent = micStatus.textContent;
-    mobileMicStatus.className = micStatus.className;
+    // Update mic dot for new mobile layout
+    if (mobileMicDot) {
+      mobileMicDot.classList.remove('connected', 'active');
+      if (micStatus.classList.contains('status-active')) {
+        mobileMicDot.classList.add('active');
+      } else if (micStatus.classList.contains('status-connected')) {
+        mobileMicDot.classList.add('connected');
+      }
+    }
   }
 
   // Sync AI status bubble
