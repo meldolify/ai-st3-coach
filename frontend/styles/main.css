@@ -1682,33 +1682,23 @@ body.has-header .simulation-room.active {
   flex-direction: column;
 }
 
-/* Persona Backdrop (Full Background) */
+/* Persona Backdrop (Full Background) - Editorial Studio Style */
 .persona-backdrop {
   position: absolute;
   inset: 0;
-  /* Soft neutral base that won't look harsh if image has transparent edges */
-  background: linear-gradient(135deg, #e8e4df 0%, #d5d0c8 50%, #c9c4bc 100%);
+  /* Warm sophisticated gradient - taupe to cream, subtle radial for depth */
+  background:
+    radial-gradient(ellipse 120% 100% at 50% 100%, rgba(245, 240, 235, 0.9) 0%, transparent 70%),
+    linear-gradient(180deg, #d8d3cc 0%, #e5e0d9 40%, #ebe7e2 100%);
   overflow: hidden;
 }
 
-/* Blurred Background Image - extends beyond edges for seamless blur */
+/* Hide blur element - not using this approach anymore */
 .persona-backdrop-blur {
-  position: absolute;
-  /* Extend moderately to fill edges without over-zooming */
-  inset: -10%;
-  width: 120%;
-  height: 120%;
-  object-fit: cover;
-  /* Position slightly higher to capture more background/context, less torso */
-  object-position: center 20%;
-  /* Heavy blur for dreamy, soft edge effect + brightness to keep it light */
-  filter: blur(80px) saturate(1.1) brightness(1.4);
-  opacity: 0.85;
-  z-index: 1 !important;
-  pointer-events: none;
+  display: none !important;
 }
 
-/* Sharp Persona Image (centered on top of blur) */
+/* Sharp Persona Image - clean centered portrait with soft edge fade */
 .persona-backdrop .persona-image,
 .persona-backdrop #personaImage,
 #personaImage.persona-image {
@@ -1722,15 +1712,35 @@ body.has-header .simulation-room.active {
   height: 100%;
   object-fit: contain;
   object-position: center bottom;
-  z-index: 10 !important;
+  z-index: 2;
+  /* Subtle drop shadow for depth separation from background */
+  filter: drop-shadow(0 8px 32px rgba(0, 0, 0, 0.1));
+  /* Soft edge fade using mask - fades left/right edges gently into backdrop */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 8%,
+    black 92%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 8%,
+    black 92%,
+    transparent 100%
+  );
 }
 
-/* Vignette overlay for subtle depth - very light to avoid darkening edges */
+/* Subtle vignette for cinematic depth - focuses attention on center */
 .persona-vignette {
   position: absolute;
   inset: 0;
-  /* Much lighter vignette - just a hint of depth without darkening */
-  background: radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, 0.06) 100%);
+  background: radial-gradient(
+    ellipse 80% 70% at 50% 45%,
+    transparent 30%,
+    rgba(180, 170, 160, 0.15) 100%
+  );
   pointer-events: none;
   z-index: 3;
 }
@@ -4941,7 +4951,7 @@ button.top-back-button:active {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 32px;
+  padding: 0 48px;
   z-index: 1000;
 }
 
@@ -5627,6 +5637,304 @@ button.btn-secondary:active {
   line-height: 1.6;
   color: var(--text-light-secondary);
   margin: 0;
+}
+
+/* ============================================
+   FEATURES ACCORDION (Interactive Image Panels)
+   ============================================ */
+
+.features-accordion {
+  display: flex;
+  width: 100%;
+  height: 450px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--shadow-light-lg);
+}
+
+.carousel-track {
+  display: contents;
+}
+
+.accordion-panel {
+  position: relative;
+  flex: 1;
+  min-width: 80px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: flex 700ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.accordion-panel.active {
+  flex: 4;
+}
+
+/* Background Image */
+.accordion-image {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.accordion-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 700ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.accordion-panel.active .accordion-image img {
+  transform: scale(1.05);
+}
+
+/* Gradient Overlay - sage tinted */
+.accordion-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(58, 74, 60, 0.9) 0%,
+    rgba(74, 93, 76, 0.5) 50%,
+    rgba(74, 93, 76, 0.2) 100%
+  );
+  z-index: 2;
+}
+
+/* Content (visible when expanded) */
+.accordion-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 32px;
+  z-index: 10;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 500ms ease 200ms, transform 500ms ease 200ms;
+}
+
+.accordion-panel.active .accordion-content {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.accordion-title {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 400;
+  color: var(--bg-warm-white);
+  margin: 0 0 12px 0;
+  letter-spacing: -0.5px;
+}
+
+.accordion-description {
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.6;
+  color: rgba(253, 252, 250, 0.9);
+  margin: 0;
+  max-width: 380px;
+}
+
+/* Vertical Title (visible when collapsed) */
+.accordion-title-vertical {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-90deg);
+  transform-origin: center center;
+  white-space: nowrap;
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--bg-warm-white);
+  letter-spacing: 1px;
+  z-index: 10;
+  opacity: 1;
+  transition: opacity 300ms ease;
+}
+
+.accordion-panel.active .accordion-title-vertical {
+  opacity: 0;
+}
+
+/* Copper accent bar on active panel */
+.accordion-panel::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 4px;
+  background: var(--accent-copper);
+  transition: width 700ms cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 15;
+}
+
+.accordion-panel.active::after {
+  width: 100%;
+}
+
+/* Panel dividers */
+.accordion-panel:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  top: 10%;
+  right: 0;
+  width: 1px;
+  height: 80%;
+  background: rgba(253, 252, 250, 0.2);
+  z-index: 10;
+  transition: opacity 700ms ease;
+}
+
+.accordion-panel.active:not(:last-child)::before {
+  opacity: 0;
+}
+
+/* Temporary gradient fallbacks for missing images */
+.accordion-panel[data-panel="1"] .accordion-image {
+  background: linear-gradient(135deg, #4A5D4C 0%, #3A4A3C 100%);
+}
+.accordion-panel[data-panel="2"] .accordion-image {
+  background: linear-gradient(135deg, #5C7260 0%, #4A5D4C 100%);
+}
+.accordion-panel[data-panel="3"] .accordion-image {
+  background: linear-gradient(135deg, #B87333 0%, #4A5D4C 100%);
+}
+
+/* Hide carousel dots on desktop */
+.carousel-dots {
+  display: none;
+}
+
+/* ============================================
+   FEATURES ACCORDION - Mobile Carousel (≤768px)
+   ============================================ */
+
+@media (max-width: 768px) {
+  .features-accordion {
+    position: relative;
+    height: auto;
+    flex-direction: column;
+  }
+
+  .features-accordion.carousel-mode {
+    overflow: hidden;
+  }
+
+  .carousel-track {
+    display: flex;
+    transition: transform 400ms cubic-bezier(0.4, 0, 0.2, 1);
+    touch-action: pan-y pinch-zoom;
+  }
+
+  .carousel-mode .accordion-panel {
+    flex: 0 0 100%;
+    min-width: 100%;
+    height: 400px;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  /* All panels show content in carousel mode */
+  .carousel-mode .accordion-content {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Hide vertical titles in carousel mode */
+  .carousel-mode .accordion-title-vertical {
+    display: none;
+  }
+
+  /* Hide panel dividers in carousel mode */
+  .carousel-mode .accordion-panel::before {
+    display: none;
+  }
+
+  .accordion-content {
+    padding: 24px;
+  }
+
+  .accordion-title {
+    font-size: 24px;
+  }
+
+  .accordion-description {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  /* Carousel dot indicators */
+  .carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .carousel-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--border-light);
+    border: none;
+    cursor: pointer;
+    transition: background 300ms ease, transform 300ms ease;
+    padding: 0;
+  }
+
+  .carousel-dot.active {
+    background: var(--brand-primary);
+    transform: scale(1.2);
+  }
+
+  .carousel-dot:hover {
+    background: var(--brand-sage-light);
+  }
+}
+
+@media (max-width: 480px) {
+  .carousel-mode .accordion-panel {
+    height: 350px;
+    border-radius: 12px;
+  }
+
+  .accordion-content {
+    padding: 20px;
+  }
+
+  .accordion-title {
+    font-size: 20px;
+    margin-bottom: 8px;
+  }
+
+  .accordion-description {
+    font-size: 13px;
+  }
+
+  .carousel-dots {
+    margin-top: 16px;
+  }
+
+  .carousel-dot {
+    width: 8px;
+    height: 8px;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .accordion-panel,
+  .accordion-content,
+  .accordion-image img,
+  .accordion-overlay,
+  .accordion-title-vertical,
+  .accordion-panel::after,
+  .carousel-track {
+    transition: none;
+  }
 }
 
 /* ============================================

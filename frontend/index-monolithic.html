@@ -3750,23 +3750,54 @@
 
       <!-- Features Section -->
       <section class="landing-features">
-        <p class="section-label">Why Choose Us</p>
-        <h2 class="section-title">Everything you need to succeed</h2>
-        <div class="features-grid">
-          <div class="feature-card animate-in delay-1">
-            <div class="feature-icon">⏰</div>
-            <h3>Practice Anytime</h3>
-            <p>AI-powered interview simulation available 24/7. No scheduling, no waiting. Practice at your own pace.</p>
+        <p class="section-label">Why Trainees Trust Us</p>
+        <h2 class="section-title">Preparation that makes the difference</h2>
+
+        <div class="features-accordion animate-in">
+          <!-- Carousel track wrapper (for mobile swipe) -->
+          <div class="carousel-track">
+            <div class="accordion-panel active" data-panel="1">
+              <div class="accordion-image">
+                <img src="images/features/practice-anytime.jpg" alt="24/7 AI interview practice" loading="lazy">
+                <div class="accordion-overlay"></div>
+              </div>
+              <div class="accordion-content">
+                <h3 class="accordion-title">Practice Anytime</h3>
+                <p class="accordion-description">AI-powered interview simulation available 24/7. No scheduling, no waiting. Practice at your pace, on your terms.</p>
+              </div>
+              <span class="accordion-title-vertical">Practice Anytime</span>
+            </div>
+
+            <div class="accordion-panel" data-panel="2">
+              <div class="accordion-image">
+                <img src="images/features/expert-designed.jpg" alt="Scenarios by expert trainees" loading="lazy">
+                <div class="accordion-overlay"></div>
+              </div>
+              <div class="accordion-content">
+                <h3 class="accordion-title">Expert-Designed</h3>
+                <p class="accordion-description">Scenarios crafted by current high-ranking trainees who know exactly what the ST3 interview demands.</p>
+              </div>
+              <span class="accordion-title-vertical">Expert-Designed</span>
+            </div>
+
+            <div class="accordion-panel" data-panel="3">
+              <div class="accordion-image">
+                <img src="images/features/try-free.jpg" alt="Free tier experience" loading="lazy">
+                <div class="accordion-overlay"></div>
+              </div>
+              <div class="accordion-content">
+                <h3 class="accordion-title">Try Before You Subscribe</h3>
+                <p class="accordion-description">Explore the platform and test selected scenarios completely free. Experience the quality before committing.</p>
+              </div>
+              <span class="accordion-title-vertical">Try Free</span>
+            </div>
           </div>
-          <div class="feature-card animate-in delay-2">
-            <div class="feature-icon">🎯</div>
-            <h3>Expert-Designed</h3>
-            <p>Scenarios crafted by current high-ranking trainees. Content mirrors the real ST3 interview as closely as possible.</p>
-          </div>
-          <div class="feature-card animate-in delay-3">
-            <div class="feature-icon">🆓</div>
-            <h3>Try Before You Subscribe</h3>
-            <p>Explore the platform and test selected scenarios completely free. Experience the quality before committing.</p>
+
+          <!-- Carousel dots (visible on mobile only) -->
+          <div class="carousel-dots">
+            <button class="carousel-dot active" aria-label="Slide 1"></button>
+            <button class="carousel-dot" aria-label="Slide 2"></button>
+            <button class="carousel-dot" aria-label="Slide 3"></button>
           </div>
         </div>
       </section>
@@ -4350,5 +4381,6 @@
 
   <script src="config.js"></script>
   <script src="index.js"></script>
+  <script src="js/features-accordion.js"></script>
 </body>
 </html>
