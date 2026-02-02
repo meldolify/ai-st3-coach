@@ -1698,38 +1698,35 @@ body.has-header .simulation-room.active {
   display: none !important;
 }
 
-/* Sharp Persona Image - clean centered portrait with soft edge fade */
+/* Desktop: Landscape persona image - full-bleed cover */
 .persona-backdrop .persona-image,
 .persona-backdrop #personaImage,
 #personaImage.persona-image {
   position: absolute !important;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  max-width: 100%;
-  max-height: 100%;
-  width: auto;
+  inset: 0;
+  width: 100%;
   height: 100%;
-  object-fit: contain;
-  object-position: center bottom;
+  object-fit: cover;
+  object-position: center 35%; /* Keep face visible in upper portion */
   z-index: 2;
-  /* Subtle drop shadow for depth separation from background */
-  filter: drop-shadow(0 8px 32px rgba(0, 0, 0, 0.1));
-  /* Soft edge fade using mask - fades left/right edges gently into backdrop */
-  -webkit-mask-image: linear-gradient(
-    to right,
-    transparent 0%,
-    black 8%,
-    black 92%,
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    to right,
-    transparent 0%,
-    black 8%,
-    black 92%,
-    transparent 100%
-  );
+}
+
+/* Mobile: Portrait persona image - centered with contain */
+@media (max-width: 768px) {
+  .persona-backdrop .persona-image,
+  .persona-backdrop #personaImage,
+  #personaImage.persona-image {
+    inset: auto;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: auto;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    object-position: center bottom;
+  }
 }
 
 /* Subtle vignette for cinematic depth - focuses attention on center */

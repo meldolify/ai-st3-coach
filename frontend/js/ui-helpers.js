@@ -17,7 +17,8 @@ const PERSONA_CONFIG = {
   easy: {
     name: 'Mr John',
     title: 'Consultant Plastic Surgeon',
-    image: 'images/interviewer_persona_john.png',
+    image: 'images/interviewer_persona_john.png',           // Mobile (portrait)
+    imageWide: 'images/interviewer_persona_john_wide.png',  // Desktop (landscape)
     fallbackImage: PERSONA_DEFAULT_IMAGE,
     voice: 'en-GB-Chirp3-HD-Fenrir',
     accentColor: '#10B981' // Emerald
@@ -25,7 +26,8 @@ const PERSONA_CONFIG = {
   medium: {
     name: 'Miss Elliot',
     title: 'Senior Examiner',
-    image: 'images/interviewer_persona_elliot.png',
+    image: 'images/interviewer_persona_elliot.png',           // Mobile (portrait)
+    imageWide: 'images/interviewer_persona_elliot_wide.png',  // Desktop (landscape)
     fallbackImage: PERSONA_DEFAULT_IMAGE,
     voice: 'en-GB-Chirp3-HD-Kore',
     accentColor: '#F59E0B' // Amber
@@ -33,7 +35,8 @@ const PERSONA_CONFIG = {
   strict: {
     name: 'Mr Perry',
     title: 'Chief Examiner',
-    image: 'images/interviewer_persona_perry.png',
+    image: 'images/interviewer_persona_perry.png',           // Mobile (portrait)
+    imageWide: 'images/interviewer_persona_perry_wide.png',  // Desktop (landscape)
     fallbackImage: PERSONA_DEFAULT_IMAGE,
     voice: 'en-GB-Chirp3-HD-Charon',
     accentColor: '#EF4444' // Red
@@ -43,6 +46,50 @@ const PERSONA_CONFIG = {
 // Current persona (set on scenario selection)
 let currentPersona = PERSONA_CONFIG.medium;
 
+// Breakpoint for responsive images (matches CSS media query)
+const PERSONA_BREAKPOINT = 768;
+
+/**
+ * Get the appropriate image source based on viewport width
+ * Desktop (>768px): use wide landscape image
+ * Mobile (≤768px): use portrait image
+ */
+function getResponsivePersonaImage(persona) {
+  const isDesktop = window.innerWidth > PERSONA_BREAKPOINT;
+  return isDesktop && persona.imageWide ? persona.imageWide : persona.image;
+}
+
+/**
+ * Update desktop persona image based on current viewport
+ * Called on setPersona and on window resize
+ */
+function updateDesktopPersonaImage() {
+  if (!currentPersona) return;
+
+  const imageEl = document.getElementById('personaImage');
+  if (!imageEl) return;
+
+  const newSrc = getResponsivePersonaImage(currentPersona);
+
+  // Only update if source changed
+  if (imageEl.src !== newSrc && !imageEl.src.endsWith(newSrc)) {
+    imageEl.onerror = () => {
+      imageEl.onerror = null;
+      imageEl.src = currentPersona.fallbackImage || PERSONA_DEFAULT_IMAGE;
+    };
+    imageEl.src = newSrc;
+    console.log('[Persona] Image updated for viewport:', window.innerWidth > PERSONA_BREAKPOINT ? 'desktop' : 'mobile');
+  }
+}
+
+// Listen for viewport changes to switch between portrait/landscape
+let resizeTimeout;
+window.addEventListener('resize', () => {
+  // Debounce resize handler
+  clearTimeout(resizeTimeout);
+  resizeTimeout = setTimeout(updateDesktopPersonaImage, 150);
+});
+
 function setPersona(difficulty) {
   currentPersona = PERSONA_CONFIG[difficulty] || PERSONA_CONFIG.medium;
 
@@ -50,7 +97,6 @@ function setPersona(difficulty) {
   const nameEl = document.getElementById('personaName');
   const titleEl = document.getElementById('personaTitle');
   const imageEl = document.getElementById('personaImage');
-  const blurImageEl = document.getElementById('personaImageBlur');
 
   // Mobile persona elements
   const mobileNameEl = document.getElementById('mobilePersonaName');
@@ -61,22 +107,16 @@ function setPersona(difficulty) {
   if (nameEl) nameEl.textContent = currentPersona.name;
   if (titleEl) titleEl.textContent = currentPersona.title;
   if (imageEl) {
-    // Try to load persona image, fallback to default placeholder
+    // Use responsive image based on viewport width
+    const imageSrc = getResponsivePersonaImage(currentPersona);
     imageEl.onerror = () => {
-      imageEl.onerror = null; // Prevent infinite loop
+      imageEl.onerror = null;
       imageEl.src = currentPersona.fallbackImage || PERSONA_DEFAULT_IMAGE;
-      // Also update blur image on error
-      if (blurImageEl) blurImageEl.src = currentPersona.fallbackImage || PERSONA_DEFAULT_IMAGE;
     };
-    imageEl.src = currentPersona.image;
+    imageEl.src = imageSrc;
   }
 
-  // Update blur background image to match persona
-  if (blurImageEl) {
-    blurImageEl.src = currentPersona.image;
-  }
-
-  // Update mobile elements
+  // Update mobile elements (always use portrait image)
   if (mobileNameEl) mobileNameEl.textContent = currentPersona.name;
   if (mobileTitleEl) mobileTitleEl.textContent = currentPersona.title;
   if (mobileImageEl) {
@@ -84,10 +124,10 @@ function setPersona(difficulty) {
       mobileImageEl.onerror = null;
       mobileImageEl.src = currentPersona.fallbackImage || PERSONA_DEFAULT_IMAGE;
     };
-    mobileImageEl.src = currentPersona.image;
+    mobileImageEl.src = currentPersona.image; // Always portrait for mobile
   }
 
-  console.log('[Persona] Set to:', currentPersona.name);
+  console.log('[Persona] Set to:', currentPersona.name, '| Image:', getResponsivePersonaImage(currentPersona));
 }
 
 function getPersonaName() {
