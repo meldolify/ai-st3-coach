@@ -223,16 +223,16 @@ const transcript = {
       container.scrollTop = 0;
     }
 
-    // Mobile transcript - build using DOM methods for security
+    // Mobile transcript - use original order since CSS column-reverse handles display
     if (mobileContainer) {
       mobileContainer.textContent = '';
-      reversedMessages.forEach(msg => {
+      this.messages.forEach(msg => {
         const msgDiv = document.createElement('div');
         msgDiv.className = `message ${msg.role}`;
         msgDiv.textContent = msg.text;
         mobileContainer.appendChild(msgDiv);
       });
-      // Newest is at top, so scroll to top
+      // With column-reverse CSS, scroll to top shows newest
       mobileContainer.scrollTop = 0;
     }
   }
