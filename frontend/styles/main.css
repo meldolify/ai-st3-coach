@@ -2553,10 +2553,34 @@ body.has-header .sim-main {
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 0;
+  border-radius: 50%;
   background: transparent;
-  box-shadow: none;
+  /* Warm copper glow shadow for visibility */
+  box-shadow:
+    0 0 30px rgba(212, 145, 90, 0.4),
+    0 0 60px rgba(184, 115, 51, 0.25),
+    0 0 90px rgba(184, 115, 51, 0.15);
   overflow: visible;
+}
+
+/* Warm Copper Backdrop Glow - enhances visibility against dark sage background */
+.voice-orb.svg-frame::before {
+  content: '';
+  position: absolute;
+  inset: -50px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 180, 120, 0.5) 0%,
+    rgba(212, 145, 90, 0.35) 25%,
+    rgba(184, 115, 51, 0.2) 50%,
+    rgba(184, 115, 51, 0.08) 70%,
+    transparent 85%
+  );
+  z-index: 0;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.3s ease, transform 0.3s ease, background 0.3s ease;
 }
 
 /* SVG Layers */
@@ -2656,11 +2680,25 @@ body.has-header .sim-main {
   to { transform: rotate(360deg); }
 }
 
+/* Idle: subtle copper glow with breathing animation */
+.voice-orb.svg-frame.idle svg {
+  filter: drop-shadow(0 0 12px rgba(184, 115, 51, 0.4));
+}
+
+.voice-orb.svg-frame.idle::before {
+  animation: copper-breathe 4s ease-in-out infinite;
+}
+
+@keyframes copper-breathe {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.03); opacity: 0.8; }
+}
+
 /* ============================================
    STATE: Listening - Pulsing glow effect
    ============================================ */
 .voice-orb.svg-frame.listening svg {
-  filter: drop-shadow(0 0 4px #4A5D4C);
+  filter: drop-shadow(0 0 16px rgba(184, 115, 51, 0.6)) drop-shadow(0 0 8px rgba(212, 145, 90, 0.4));
 }
 
 .voice-orb.svg-frame.listening [id$="out2"] {
@@ -2682,11 +2720,29 @@ body.has-header .sim-main {
 
 @keyframes svg-listening-glow {
   0%, 100% {
-    filter: drop-shadow(0 0 2px #B87333);
+    filter: drop-shadow(0 0 4px #B87333);
   }
   50% {
-    filter: drop-shadow(0 0 10px #B87333);
+    filter: drop-shadow(0 0 14px #B87333);
   }
+}
+
+/* Listening: intensified copper backdrop with pulse */
+.voice-orb.svg-frame.listening::before {
+  opacity: 1;
+  background: radial-gradient(
+    circle,
+    rgba(184, 115, 51, 0.35) 0%,
+    rgba(184, 115, 51, 0.2) 35%,
+    rgba(184, 115, 51, 0.08) 60%,
+    transparent 75%
+  );
+  animation: copper-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes copper-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.1); opacity: 1; }
 }
 
 /* ============================================
@@ -2731,11 +2787,21 @@ body.has-header .sim-main {
   }
 }
 
+/* Thinking: copper glow with energetic pulse */
+.voice-orb.svg-frame.thinking svg {
+  filter: drop-shadow(0 0 14px rgba(184, 115, 51, 0.5));
+}
+
+.voice-orb.svg-frame.thinking::before {
+  opacity: 0.9;
+  animation: copper-pulse 0.8s ease-in-out infinite;
+}
+
 /* ============================================
    STATE: Speaking - Rhythmic scale pulses
    ============================================ */
 .voice-orb.svg-frame.speaking svg {
-  filter: drop-shadow(0 0 6px #B87333);
+  filter: drop-shadow(0 0 20px rgba(212, 145, 90, 0.7)) drop-shadow(0 0 10px rgba(255, 200, 150, 0.3));
 }
 
 .voice-orb.svg-frame.speaking [id$="out1"] {
@@ -2769,6 +2835,18 @@ body.has-header .sim-main {
   50% {
     transform: scale(1.05);
   }
+}
+
+/* Speaking: bright steady warm glow backdrop */
+.voice-orb.svg-frame.speaking::before {
+  opacity: 1;
+  background: radial-gradient(
+    circle,
+    rgba(212, 145, 90, 0.4) 0%,
+    rgba(255, 200, 150, 0.2) 30%,
+    rgba(184, 115, 51, 0.1) 55%,
+    transparent 75%
+  );
 }
 
 /* ============================================
