@@ -1569,21 +1569,35 @@
             </div>
 
             <!-- Control Buttons -->
-            <div class="orb-controls">
-              <button type="button" id="connectBtn" class="orb-control-btn" title="Start Session" aria-label="Start Session">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M8 5v14l11-7z"/>
-                </svg>
+            <div class="sim-control-buttons">
+              <button type="button" id="connectBtn" class="sim-ctrl-btn sim-ctrl-btn--primary" title="Start Session" aria-label="Start Session">
+                <div class="sim-ctrl-btn__content">
+                  <div class="sim-ctrl-btn__icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M8 5v14l11-7z"/>
+                    </svg>
+                  </div>
+                  <p class="sim-ctrl-btn__text">Start</p>
+                </div>
               </button>
-              <button type="button" id="interruptBtn" class="orb-control-btn initially-hidden" disabled title="Pause AI" aria-label="Pause AI">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M6 4h4v16H6zM14 4h4v16h-4z"/>
-                </svg>
+              <button type="button" id="interruptBtn" class="sim-ctrl-btn sim-ctrl-btn--warning sim-ctrl-btn--icon-only initially-hidden" disabled title="Pause AI" aria-label="Pause AI">
+                <div class="sim-ctrl-btn__content">
+                  <div class="sim-ctrl-btn__icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M6 4h4v16H6zM14 4h4v16h-4z"/>
+                    </svg>
+                  </div>
+                </div>
               </button>
-              <button type="button" id="disconnectBtn" class="orb-control-btn" disabled title="End Session" aria-label="End Session">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                  <rect x="6" y="6" width="12" height="12"/>
-                </svg>
+              <button type="button" id="disconnectBtn" class="sim-ctrl-btn sim-ctrl-btn--danger" disabled title="End Session" aria-label="End Session">
+                <div class="sim-ctrl-btn__content">
+                  <div class="sim-ctrl-btn__icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                      <rect x="6" y="6" width="12" height="12"/>
+                    </svg>
+                  </div>
+                  <p class="sim-ctrl-btn__text">End</p>
+                </div>
               </button>
             </div>
           </div>
@@ -1783,23 +1797,35 @@
           </div>
 
           <!-- Control Buttons -->
-          <div class="mobile-control-buttons">
-            <button type="button" id="mobileConnectBtn" class="mobile-ctrl-btn mobile-ctrl-btn--primary" title="Start Session">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M8 5v14l11-7z"/>
-              </svg>
-              <span>Start</span>
+          <div class="sim-control-buttons">
+            <button type="button" id="mobileConnectBtn" class="sim-ctrl-btn sim-ctrl-btn--primary" title="Start Session">
+              <div class="sim-ctrl-btn__content">
+                <div class="sim-ctrl-btn__icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M8 5v14l11-7z"/>
+                  </svg>
+                </div>
+                <p class="sim-ctrl-btn__text">Start</p>
+              </div>
             </button>
-            <button type="button" id="mobileInterruptBtn" class="mobile-ctrl-btn mobile-ctrl-btn--warning" disabled title="Pause AI">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
-              </svg>
+            <button type="button" id="mobileInterruptBtn" class="sim-ctrl-btn sim-ctrl-btn--warning sim-ctrl-btn--icon-only" disabled title="Pause AI">
+              <div class="sim-ctrl-btn__content">
+                <div class="sim-ctrl-btn__icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M6 4h4v16H6zM14 4h4v16h-4z"/>
+                  </svg>
+                </div>
+              </div>
             </button>
-            <button type="button" id="mobileDisconnectBtn" class="mobile-ctrl-btn mobile-ctrl-btn--danger" disabled title="End Session">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M6 6h12v12H6z"/>
-              </svg>
-              <span>End</span>
+            <button type="button" id="mobileDisconnectBtn" class="sim-ctrl-btn sim-ctrl-btn--danger" disabled title="End Session">
+              <div class="sim-ctrl-btn__content">
+                <div class="sim-ctrl-btn__icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <rect x="6" y="6" width="12" height="12"/>
+                  </svg>
+                </div>
+                <p class="sim-ctrl-btn__text">End</p>
+              </div>
             </button>
           </div>
 
