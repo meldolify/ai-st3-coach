@@ -4548,7 +4548,7 @@ button.top-back-button:active {
     right: 0;
     bottom: 0;
     background: var(--bg-primary);
-    overflow: hidden;
+    overflow-x: hidden;
   }
 
   /* ===== MOBILE HEADER BAR ===== */
@@ -5105,7 +5105,7 @@ button.top-back-button:active {
     flex-direction: column;
     align-items: center;
     gap: 12px;
-    padding: 16px 20px;
+    padding: 28px 20px 16px;
     padding-bottom: calc(16px + var(--safe-area-bottom));
     background: rgba(42, 56, 44, 0.96);
     -webkit-backdrop-filter: blur(24px);
