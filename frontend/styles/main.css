@@ -4551,10 +4551,10 @@ button.top-back-button:active {
     height: 56px;
     padding: 0 12px;
     padding-top: var(--safe-area-top);
-    background: rgba(20, 24, 28, 0.95);
+    background: rgba(42, 56, 44, 0.96);
     -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     flex-shrink: 0;
   }
 
@@ -4566,10 +4566,10 @@ button.top-back-button:active {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 12px;
-    color: var(--text-secondary);
+    color: #FFFFFF;
     cursor: pointer;
     transition: all 0.2s ease;
   }
@@ -4591,7 +4591,7 @@ button.top-back-button:active {
     display: block;
     font-size: 14px;
     font-weight: 600;
-    color: var(--text-primary);
+    color: #FFFFFF;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -4601,7 +4601,7 @@ button.top-back-button:active {
   .mobile-scenario-category {
     display: block;
     font-size: 11px;
-    color: var(--text-muted);
+    color: rgba(255, 255, 255, 0.7);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -4631,7 +4631,7 @@ button.top-back-button:active {
   .mobile-persona-pill .mobile-persona-name {
     font-size: 12px;
     font-weight: 500;
-    color: var(--text-secondary);
+    color: #FFFFFF;
     max-width: 80px;
     white-space: nowrap;
     overflow: hidden;
@@ -5096,11 +5096,12 @@ button.top-back-button:active {
     gap: 12px;
     padding: 16px 20px;
     padding-bottom: calc(16px + var(--safe-area-bottom));
-    background: rgba(20, 24, 28, 0.98);
+    background: rgba(42, 56, 44, 0.96);
     -webkit-backdrop-filter: blur(24px);
     backdrop-filter: blur(24px);
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
     flex-shrink: 0;
+    overflow: visible;
   }
 
   /* Voice Orb Container */
@@ -5109,6 +5110,7 @@ button.top-back-button:active {
     flex-direction: column;
     align-items: center;
     gap: 6px;
+    overflow: visible;
   }
 
   .mobile-orb {
@@ -5119,18 +5121,18 @@ button.top-back-button:active {
   .mobile-orb-status {
     font-size: 12px;
     font-weight: 500;
-    color: var(--text-muted);
+    color: rgba(255, 255, 255, 0.8);
     text-transform: uppercase;
     letter-spacing: 0.5px;
     transition: color 0.2s ease;
   }
 
   .mobile-orb-status.listening {
-    color: var(--accent-primary);
+    color: #00d4aa;
   }
 
   .mobile-orb-status.speaking {
-    color: var(--accent-secondary);
+    color: #D4915A;
   }
 
   /* Control Buttons Row */
@@ -5149,10 +5151,10 @@ button.top-back-button:active {
     min-width: 48px;
     height: 48px;
     padding: 0 16px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 24px;
-    color: var(--text-secondary);
+    color: #FFFFFF;
     font-size: 13px;
     font-weight: 500;
     cursor: pointer;
@@ -5166,9 +5168,9 @@ button.top-back-button:active {
   /* Primary button (Start) - larger with label */
   .mobile-ctrl-btn--primary {
     min-width: 100px;
-    background: rgba(0, 212, 170, 0.15);
-    border-color: rgba(0, 212, 170, 0.3);
-    color: var(--accent-primary);
+    background: rgba(0, 212, 170, 0.2);
+    border-color: rgba(0, 212, 170, 0.4);
+    color: #00ffcc;
   }
 
   .mobile-ctrl-btn--primary span {
@@ -5177,27 +5179,29 @@ button.top-back-button:active {
 
   .mobile-ctrl-btn--primary:active:not(:disabled) {
     transform: scale(0.95);
-    background: rgba(0, 212, 170, 0.25);
-    box-shadow: 0 0 20px rgba(0, 212, 170, 0.3);
+    background: rgba(0, 212, 170, 0.3);
+    box-shadow: 0 0 20px rgba(0, 255, 204, 0.4);
   }
 
   /* Warning button (Pause) */
   .mobile-ctrl-btn--warning {
-    color: #fbbf24;
-    border-color: rgba(251, 191, 36, 0.3);
+    color: #fcd34d;
+    border-color: rgba(252, 211, 77, 0.4);
+    background: rgba(252, 211, 77, 0.15);
   }
 
   .mobile-ctrl-btn--warning:active:not(:disabled) {
     transform: scale(0.95);
-    background: rgba(251, 191, 36, 0.15);
-    box-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
+    background: rgba(252, 211, 77, 0.25);
+    box-shadow: 0 0 20px rgba(252, 211, 77, 0.4);
   }
 
   /* Danger button (End) - with label */
   .mobile-ctrl-btn--danger {
     min-width: 80px;
-    color: #f87171;
-    border-color: rgba(248, 113, 113, 0.3);
+    color: #fca5a5;
+    border-color: rgba(252, 165, 165, 0.4);
+    background: rgba(252, 165, 165, 0.15);
   }
 
   .mobile-ctrl-btn--danger span {
@@ -5206,8 +5210,8 @@ button.top-back-button:active {
 
   .mobile-ctrl-btn--danger:active:not(:disabled) {
     transform: scale(0.95);
-    background: rgba(248, 113, 113, 0.15);
-    box-shadow: 0 0 20px rgba(248, 113, 113, 0.3);
+    background: rgba(252, 165, 165, 0.25);
+    box-shadow: 0 0 20px rgba(252, 165, 165, 0.4);
   }
 
   /* Disabled state */
@@ -5237,7 +5241,7 @@ button.top-back-button:active {
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: var(--text-muted);
+    background: rgba(255, 255, 255, 0.4);
     transition: background 0.2s ease;
   }
 
@@ -5259,7 +5263,7 @@ button.top-back-button:active {
   .mobile-status-text {
     font-size: 11px;
     font-weight: 500;
-    color: var(--text-muted);
+    color: rgba(255, 255, 255, 0.7);
     text-transform: uppercase;
     letter-spacing: 0.3px;
   }
