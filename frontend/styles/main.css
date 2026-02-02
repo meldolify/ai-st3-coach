@@ -1702,16 +1702,16 @@ body.has-header .simulation-room.active {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: 140%;
-  height: 140%;
+  width: 160%;
+  height: 160%;
   background: radial-gradient(
     ellipse at center,
-    rgba(var(--glow-primary), 0.28) 0%,
-    rgba(var(--glow-primary), 0.12) 25%,
-    rgba(var(--glow-primary), 0.04) 45%,
-    transparent 65%
+    rgb(var(--glow-primary) / 0.5) 0%,
+    rgb(var(--glow-primary) / 0.3) 20%,
+    rgb(var(--glow-primary) / 0.12) 40%,
+    transparent 60%
   );
-  filter: blur(80px);
+  filter: blur(100px);
   z-index: 1;
   animation: glow-pulse 6s ease-in-out infinite;
 }
@@ -1723,16 +1723,16 @@ body.has-header .simulation-room.active {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: 90%;
-  height: 90%;
+  width: 120%;
+  height: 120%;
   background: radial-gradient(
     ellipse at center,
-    rgba(var(--glow-secondary), 0.2) 0%,
-    rgba(var(--glow-secondary), 0.08) 20%,
-    rgba(var(--glow-secondary), 0.02) 40%,
+    rgb(var(--glow-secondary) / 0.45) 0%,
+    rgb(var(--glow-secondary) / 0.2) 20%,
+    rgb(var(--glow-secondary) / 0.06) 40%,
     transparent 55%
   );
-  filter: blur(50px);
+  filter: blur(70px);
   z-index: 1;
   animation: glow-pulse 6s ease-in-out infinite 1s;
 }
@@ -1742,7 +1742,7 @@ body.has-header .simulation-room.active {
   display: none !important;
 }
 
-/* Desktop: Landscape persona image - larger, centered with glow behind */
+/* Desktop: Landscape persona image - centered with glow visible around edges */
 .persona-backdrop .persona-image,
 .persona-backdrop #personaImage,
 #personaImage.persona-image {
@@ -1752,11 +1752,15 @@ body.has-header .simulation-room.active {
   left: 50%;
   transform: translate(-50%, -50%);
   width: auto;
-  height: 100%;
-  max-width: 95%;
+  height: 88%;
+  max-width: 85%;
   object-fit: contain;
   object-position: center center;
   z-index: 2;
+  border-radius: 12px;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.15),
+    0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Mobile: Portrait persona image - slightly smaller for panel clearance */
@@ -1764,8 +1768,8 @@ body.has-header .simulation-room.active {
   .persona-backdrop .persona-image,
   .persona-backdrop #personaImage,
   #personaImage.persona-image {
-    height: 88%;
-    max-width: 100%;
+    height: 80%;
+    max-width: 92%;
     object-position: center bottom;
   }
 
@@ -1790,8 +1794,8 @@ body.has-header .simulation-room.active {
   background: radial-gradient(
     ellipse 75% 70% at 50% 50%,
     transparent 35%,
-    rgba(var(--glow-primary), 0.06) 60%,
-    rgba(var(--glow-primary), 0.12) 85%,
+    rgb(var(--glow-primary) / 0.06) 60%,
+    rgb(var(--glow-primary) / 0.12) 85%,
     rgba(58, 74, 60, 0.18) 100%
   );
   pointer-events: none;
