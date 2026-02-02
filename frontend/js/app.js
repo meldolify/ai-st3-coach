@@ -118,7 +118,8 @@ function transitionToPage(fromPageId, toPageId, callback) {
   const allPages = [
     'landingPage', 'authPage', 'profilePage', 'specialtySelection',
     'difficultySelection', 'modeSelection', 'mockTypeSelection',
-    'stationTypeSelection', 'scenarioSelection', 'simulationRoom'
+    'stationTypeSelection', 'scenarioSelection', 'simulationRoom',
+    'sessionSummary'
   ];
 
   // Fade out current page
@@ -169,6 +170,214 @@ function transitionToPage(fromPageId, toPageId, callback) {
       toPage.classList.remove('fade-in');
     }, 500);
   }, 500); // Match CSS transition duration
+}
+
+// ============================================================================
+// SESSION EXIT MODAL & NAVIGATION GATE
+// ============================================================================
+
+/**
+ * Pending navigation callback - stored when user needs to confirm session exit
+ */
+let pendingNavigationCallback = null;
+
+/**
+ * Show the session exit confirmation modal
+ * @param {Function} onConfirm - Callback when user confirms exit
+ * @param {Function} onCancel - Callback when user cancels (optional)
+ */
+function showSessionExitModal(onConfirm, onCancel) {
+  const modal = document.getElementById('sessionExitModal');
+  const backdrop = modal?.querySelector('.session-exit-modal__backdrop');
+  const continueBtn = document.getElementById('modalContinueBtn');
+  const endBtn = document.getElementById('modalEndBtn');
+
+  if (!modal) {
+    console.error('[SessionExitModal] Modal element not found');
+    // Fallback: just run the confirm callback
+    if (onConfirm) onConfirm();
+    return;
+  }
+
+  // Store the pending callback
+  pendingNavigationCallback = onConfirm;
+
+  // Show modal
+  modal.classList.add('active');
+
+  // Handle continue button (cancel exit)
+  const handleContinue = () => {
+    hideSessionExitModal();
+    pendingNavigationCallback = null;
+    if (onCancel) onCancel();
+  };
+
+  // Handle end button (confirm exit)
+  const handleEnd = async () => {
+    hideSessionExitModal();
+
+    // Show loading state
+    if (endBtn) {
+      endBtn.disabled = true;
+      endBtn.textContent = 'Getting Feedback...';
+    }
+
+    // Request feedback and disconnect
+    let feedback = null;
+    if (window.session && window.session.isConnected) {
+      try {
+        feedback = await window.session.requestFeedbackAndDisconnect();
+      } catch (error) {
+        console.error('[SessionExitModal] Error getting feedback:', error);
+      }
+    }
+
+    // Reset button state
+    if (endBtn) {
+      endBtn.disabled = false;
+      endBtn.textContent = 'End & Get Feedback';
+    }
+
+    // Show summary screen with feedback
+    // currentScenario and selectedDifficulty are global variables from state.js
+    if (typeof showSummaryScreen === 'function') {
+      const scenarioInfo = {
+        name: (typeof currentScenario !== 'undefined' && currentScenario?.title) || 'Interview Session',
+        difficulty: selectedDifficulty || ''
+      };
+      showSummaryScreen(feedback, scenarioInfo);
+    }
+
+    pendingNavigationCallback = null;
+  };
+
+  // Handle backdrop click (same as continue)
+  const handleBackdropClick = () => {
+    handleContinue();
+  };
+
+  // Remove old listeners and add new ones
+  if (continueBtn) {
+    continueBtn.onclick = handleContinue;
+  }
+  if (endBtn) {
+    endBtn.onclick = handleEnd;
+  }
+  if (backdrop) {
+    backdrop.onclick = handleBackdropClick;
+  }
+}
+
+/**
+ * Hide the session exit confirmation modal
+ */
+function hideSessionExitModal() {
+  const modal = document.getElementById('sessionExitModal');
+  if (modal) {
+    modal.classList.remove('active');
+  }
+}
+
+/**
+ * Navigation gate that checks for active session before navigating
+ * If session is active, shows confirmation modal
+ * @param {string} fromPageId - Current page ID
+ * @param {string} toPageId - Target page ID
+ * @param {Function} callback - Optional callback after navigation
+ */
+function navigateWithSessionCheck(fromPageId, toPageId, callback) {
+  // Check if there's an active session
+  if (window.session && window.session.isConnected) {
+    console.log('[NavigationGate] Active session detected, showing exit modal');
+    showSessionExitModal(
+      // On confirm: user will see summary screen, then can navigate
+      null,
+      // On cancel: do nothing, stay in session
+      null
+    );
+    return;
+  }
+
+  // No active session, proceed with navigation
+  transitionToPage(fromPageId, toPageId, callback);
+}
+
+/**
+ * Request feedback and show summary screen (for disconnect button)
+ * @returns {Promise<void>}
+ */
+async function endSessionWithFeedback() {
+  if (!window.session || !window.session.isConnected) {
+    console.warn('[EndSession] No active session');
+    return;
+  }
+
+  // Update button states to show loading
+  const disconnectBtn = document.getElementById('disconnectBtn');
+  const mobileDisconnectBtn = document.getElementById('mobileDisconnectBtn');
+
+  if (disconnectBtn) {
+    disconnectBtn.disabled = true;
+    const textEl = disconnectBtn.querySelector('.sim-ctrl-btn__text');
+    if (textEl) textEl.textContent = 'Ending...';
+  }
+  if (mobileDisconnectBtn) {
+    mobileDisconnectBtn.disabled = true;
+    const textEl = mobileDisconnectBtn.querySelector('.sim-ctrl-btn__text');
+    if (textEl) textEl.textContent = 'Ending...';
+  }
+
+  // Request feedback
+  let feedback = null;
+  try {
+    feedback = await window.session.requestFeedbackAndDisconnect();
+  } catch (error) {
+    console.error('[EndSession] Error getting feedback:', error);
+    // Ensure session is disconnected even on error
+    if (window.session) {
+      window.session.disconnect();
+    }
+  }
+
+  // Log session end for analytics
+  if (typeof logSessionEnd === 'function') {
+    await logSessionEnd();
+  }
+
+  // Reset button states
+  if (disconnectBtn) {
+    disconnectBtn.disabled = true;
+    const textEl = disconnectBtn.querySelector('.sim-ctrl-btn__text');
+    if (textEl) textEl.textContent = 'End';
+  }
+  if (mobileDisconnectBtn) {
+    mobileDisconnectBtn.disabled = true;
+    const textEl = mobileDisconnectBtn.querySelector('.sim-ctrl-btn__text');
+    if (textEl) textEl.textContent = 'End';
+  }
+
+  // Enable connect button
+  const connectBtn = document.getElementById('connectBtn');
+  if (connectBtn) connectBtn.disabled = false;
+
+  syncMobileButtonStates();
+  setOrbState('idle');
+
+  // Clear session reference
+  window.session = null;
+  session = null;
+
+  // Show summary screen
+  // currentScenario and selectedDifficulty are global variables from state.js
+  if (typeof showSummaryScreen === 'function') {
+    const scenarioInfo = {
+      name: (typeof currentScenario !== 'undefined' && currentScenario?.title) || 'Interview Session',
+      difficulty: selectedDifficulty || ''
+    };
+    showSummaryScreen(feedback, scenarioInfo);
+  }
+
+  log('Session ended with feedback', 'info');
 }
 
 function selectSpecialty(specialty) {
@@ -360,39 +569,8 @@ document.getElementById('connectBtn').addEventListener('click', async () => {
 });
 
 document.getElementById('disconnectBtn').addEventListener('click', async () => {
-  if (session) {
-    session.disconnect();
-    session = null;
-    log('Session ended by user', 'info');
-  }
-
-  // Log session end for analytics
-  await logSessionEnd();
-
-  document.getElementById('connectBtn').disabled = false;
-  document.getElementById('disconnectBtn').disabled = true;
-
-  // Hide and reset interrupt button
-  const interruptBtn = document.getElementById('interruptBtn');
-  if (interruptBtn) {
-    interruptBtn.style.display = 'none';
-    interruptBtn.disabled = true;
-  }
-
-  syncMobileButtonStates(); // Sync mobile buttons
-  updateStatus('sessionStatus', 'No Session', 'disconnected');
-  updateStatus('micStatus', 'Inactive', 'disconnected');
-  setOrbState('idle'); // Reset orb when disconnecting
-
-  // Hide image with transition
-  const imageSection = document.getElementById('imageSection');
-  const mobileImageSection = document.getElementById('mobileImageSection');
-  if (imageSection) {
-    imageSection.classList.remove('visible');
-  }
-  if (mobileImageSection) {
-    mobileImageSection.classList.remove('visible');
-  }
+  // Use new feedback-aware end session flow
+  await endSessionWithFeedback();
 });
 
 // Interrupt button - stops AI and activates microphone
@@ -505,6 +683,16 @@ window.addEventListener('DOMContentLoaded', async () => {
 
   // Initialize scroll animations (Squarespace-style)
   initScrollAnimations();
+
+  // Add beforeunload warning when session is active
+  window.addEventListener('beforeunload', (event) => {
+    if (window.session && window.session.isConnected) {
+      // Show browser confirmation dialog
+      event.preventDefault();
+      event.returnValue = 'You have an active interview session. Are you sure you want to leave?';
+      return event.returnValue;
+    }
+  });
 
   // ============================================================================
   // MOBILE KEYBOARD VISIBILITY DETECTION

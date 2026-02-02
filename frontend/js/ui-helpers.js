@@ -463,3 +463,168 @@ function setOrbState(state) {
   console.log('[Orb] State changed to:', state);
 }
 
+// ============================================================================
+// SESSION SUMMARY SCREEN
+// ============================================================================
+
+/**
+ * Score labels for each score value
+ */
+const SCORE_LABELS = {
+  1: 'Needs Improvement',
+  2: 'Below Expected',
+  3: 'Meets Standard',
+  4: 'Above Expected',
+  5: 'Exceptional'
+};
+
+/**
+ * Show the session summary screen with feedback data
+ * @param {Object} feedback - Feedback object from backend
+ * @param {number} feedback.score - Score from 1-5
+ * @param {string[]} feedback.strengths - Array of strength points
+ * @param {string[]} feedback.improvements - Array of improvement points
+ * @param {string} feedback.summary - Summary text
+ * @param {Object} scenarioInfo - Current scenario information
+ * @param {string} scenarioInfo.name - Scenario name
+ * @param {string} scenarioInfo.difficulty - Difficulty level
+ */
+function showSummaryScreen(feedback, scenarioInfo) {
+  console.log('[Summary] Showing summary screen with feedback:', feedback);
+
+  // Get elements
+  const summaryPage = document.getElementById('sessionSummary');
+  const scoreCircle = document.getElementById('summaryScoreCircle');
+  const scoreValue = document.getElementById('summaryScoreValue');
+  const scoreLabel = document.getElementById('summaryScoreLabel');
+  const scenarioNameEl = document.getElementById('summaryScenarioName');
+  const strengthsList = document.getElementById('summaryStrengthsList');
+  const improvementsList = document.getElementById('summaryImprovementsList');
+  const summaryText = document.getElementById('summaryText');
+
+  if (!summaryPage) {
+    console.error('[Summary] Summary page not found');
+    return;
+  }
+
+  // Set scenario name
+  if (scenarioNameEl && scenarioInfo) {
+    const difficultyLabel = scenarioInfo.difficulty ?
+      scenarioInfo.difficulty.charAt(0).toUpperCase() + scenarioInfo.difficulty.slice(1) : '';
+    scenarioNameEl.textContent = `${scenarioInfo.name || 'Interview Session'}${difficultyLabel ? ' (' + difficultyLabel + ')' : ''}`;
+  }
+
+  // Handle null feedback (timeout case)
+  if (!feedback) {
+    feedback = {
+      score: 3,
+      strengths: ['Session completed'],
+      improvements: ['Feedback unavailable - please try again'],
+      summary: 'Unable to generate detailed feedback. Your session was recorded successfully.'
+    };
+  }
+
+  // Set score with color coding
+  const score = Math.min(5, Math.max(1, feedback.score || 3));
+  if (scoreValue) scoreValue.textContent = score;
+  if (scoreLabel) scoreLabel.textContent = SCORE_LABELS[score] || 'Meets Standard';
+
+  // Set score circle color class
+  if (scoreCircle) {
+    scoreCircle.classList.remove('summary-score-circle--low', 'summary-score-circle--medium', 'summary-score-circle--high');
+    if (score <= 2) {
+      scoreCircle.classList.add('summary-score-circle--low');
+    } else if (score === 3) {
+      scoreCircle.classList.add('summary-score-circle--medium');
+    } else {
+      scoreCircle.classList.add('summary-score-circle--high');
+    }
+  }
+
+  // Populate strengths list (clear and rebuild safely)
+  if (strengthsList) {
+    while (strengthsList.firstChild) {
+      strengthsList.removeChild(strengthsList.firstChild);
+    }
+    const strengths = feedback.strengths || ['Good effort'];
+    strengths.forEach(strength => {
+      const li = document.createElement('li');
+      li.textContent = strength;
+      strengthsList.appendChild(li);
+    });
+  }
+
+  // Populate improvements list (clear and rebuild safely)
+  if (improvementsList) {
+    while (improvementsList.firstChild) {
+      improvementsList.removeChild(improvementsList.firstChild);
+    }
+    const improvements = feedback.improvements || ['Continue practicing'];
+    improvements.forEach(improvement => {
+      const li = document.createElement('li');
+      li.textContent = improvement;
+      improvementsList.appendChild(li);
+    });
+  }
+
+  // Set summary text
+  if (summaryText) {
+    summaryText.textContent = feedback.summary || 'Session completed successfully.';
+  }
+
+  // Hide all other pages and show summary
+  document.querySelectorAll('.page').forEach(page => {
+    page.classList.remove('active');
+    page.style.display = 'none';
+  });
+
+  summaryPage.style.display = 'flex';
+  summaryPage.classList.add('active');
+
+  // Wire up button handlers
+  const retryBtn = document.getElementById('summaryRetryBtn');
+  const newScenarioBtn = document.getElementById('summaryNewScenarioBtn');
+  const exitBtn = document.getElementById('summaryExitBtn');
+
+  if (retryBtn) {
+    retryBtn.onclick = () => {
+      hideSummaryScreen();
+      // Re-enter simulation room with same scenario
+      // currentScenario is a global variable from state.js
+      if (typeof startScenario === 'function' && typeof currentScenario !== 'undefined' && currentScenario) {
+        startScenario(currentScenario);
+      } else {
+        // Fallback to showing simulation room
+        transitionToPage('sessionSummary', 'simulationRoom');
+      }
+    };
+  }
+
+  if (newScenarioBtn) {
+    newScenarioBtn.onclick = () => {
+      hideSummaryScreen();
+      transitionToPage('sessionSummary', 'scenarioSelection');
+    };
+  }
+
+  if (exitBtn) {
+    exitBtn.onclick = () => {
+      hideSummaryScreen();
+      transitionToPage('sessionSummary', 'specialtySelection');
+    };
+  }
+
+  console.log('[Summary] Summary screen displayed');
+}
+
+/**
+ * Hide the summary screen
+ */
+function hideSummaryScreen() {
+  const summaryPage = document.getElementById('sessionSummary');
+  if (summaryPage) {
+    summaryPage.classList.remove('active');
+    summaryPage.style.display = 'none';
+  }
+}
+
