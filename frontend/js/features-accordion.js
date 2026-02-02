@@ -121,12 +121,11 @@
   }
 
   function handleTouchMove(e) {
-    if (!isDragging || !isMobile() || !track || !panels.length) return;
+    if (!isDragging || !isMobile() || !track || !accordion) return;
     const diff = e.touches[0].clientX - startX;
-    const slidePercent = 100 / panels.length;
-    const baseTransform = -currentSlide * slidePercent;
+    const baseTransform = -currentSlide * 100;
     // Drag amount relative to the viewport (accordion width)
-    const dragPercent = (diff / accordion.offsetWidth) * slidePercent;
+    const dragPercent = (diff / accordion.offsetWidth) * 100;
     track.style.transform = `translateX(${baseTransform + dragPercent}%)`;
   }
 
@@ -161,10 +160,9 @@
   function goToSlide(index) {
     currentSlide = index;
 
-    if (track && panels.length > 0) {
-      // Each panel is 1/n of the track, so slide by (100/n)% per panel
-      const slidePercent = 100 / panels.length;
-      track.style.transform = `translateX(-${currentSlide * slidePercent}%)`;
+    if (track) {
+      // Each panel is 100% width, so slide by 100% per panel
+      track.style.transform = `translateX(-${currentSlide * 100}%)`;
     }
 
     // Update active states
