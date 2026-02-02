@@ -115,8 +115,9 @@ class OrbVisualizer {
       width: 100%;
       height: 100%;
       pointer-events: none;
-      z-index: 2;
-      border-radius: 50%;
+      z-index: 10;
+      border-radius: 0;
+      mix-blend-mode: screen;
     `;
 
     orbElement.appendChild(canvas);
@@ -149,19 +150,19 @@ class OrbVisualizer {
   }
 
   /**
-   * Get state-aware color for visualization
+   * Get state-aware color for visualization (matches SVG orb brand palette)
    */
   getStateColor() {
-    if (!this.orb) return { r: 196, g: 196, b: 196 }; // Default gray
+    if (!this.orb) return { r: 74, g: 93, b: 76 }; // Brand primary sage
 
     if (this.orb.classList.contains('speaking')) {
-      return { r: 253, g: 126, b: 80 };  // Warm peach
+      return { r: 212, g: 145, b: 90 };  // Copper light
     } else if (this.orb.classList.contains('listening')) {
-      return { r: 0, g: 184, b: 148 };   // Mint green
+      return { r: 184, g: 115, b: 51 };  // Copper
     } else if (this.orb.classList.contains('thinking')) {
-      return { r: 108, g: 92, b: 231 };  // Violet
+      return { r: 92, g: 114, b: 96 };   // Brand secondary sage
     } else {
-      return { r: 180, g: 180, b: 190 }; // Soft silver-blue for idle
+      return { r: 74, g: 93, b: 76 };    // Brand primary sage
     }
   }
 
