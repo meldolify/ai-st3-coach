@@ -2029,7 +2029,11 @@ body.has-header .simulation-room.active {
 }
 
 .transcript-panel .transcript-message.message-user .message-header {
-  color: rgba(255, 255, 255, 0.95);
+  color: white;
+}
+
+.transcript-panel .transcript-message.message-user .message-role {
+  color: white;
 }
 
 .transcript-panel .transcript-message.message-user .message-time {
@@ -2577,42 +2581,42 @@ body.has-header .sim-main {
   transition: stroke 0.3s ease, fill 0.3s ease, filter 0.3s ease;
 }
 
-/* Out1 - Outer donut ring */
+/* Out1 - Outer donut ring (sage green) */
 .voice-orb.svg-frame svg [id$="out1"] path {
-  stroke: #00FFFF;
+  stroke: #4A5D4C;
   fill: none;
 }
 
-/* Out2 - Segmented arcs (cyan) */
+/* Out2 - Segmented arcs (sage green) */
 .voice-orb.svg-frame svg [id$="out2"] path {
-  fill: #00FFFF;
+  fill: #4A5D4C;
 }
 
-/* Out3 - Partial circle (yellow accent) */
+/* Out3 - Partial circle (copper accent) */
 .voice-orb.svg-frame svg [id$="out3"] {
-  stroke: #ff0;
+  stroke: #B87333;
   stroke-width: 1;
   fill: none;
 }
 
-/* Inner3 - Small inner arcs (cyan) */
+/* Inner3 - Small inner arcs (sage green) */
 .voice-orb.svg-frame svg [id$="inner3"] path {
-  fill: #00FFFF;
+  fill: #4A5D4C;
 }
 
-/* Inner1 - Complex inner arcs (cyan) */
+/* Inner1 - Complex inner arcs (sage green) */
 .voice-orb.svg-frame svg [id$="inner1"] path {
-  fill: #00FFFF;
+  fill: #4A5D4C;
 }
 
-/* Center1 - Center arc (yellow accent) */
+/* Center1 - Center arc (copper accent) */
 .voice-orb.svg-frame svg [id$="center1"] {
-  fill: #ff0;
+  fill: #B87333;
 }
 
-/* Center - Center dot (cyan) */
+/* Center - Center dot (sage green) */
 .voice-orb.svg-frame svg [id$="center"]:not([id$="center1"]) {
-  fill: #00FFFF;
+  fill: #4A5D4C;
 }
 
 /* Hover 3D Effect - Desktop only */
@@ -2660,7 +2664,7 @@ body.has-header .sim-main {
    STATE: Listening - Pulsing glow effect
    ============================================ */
 .voice-orb.svg-frame.listening svg {
-  filter: drop-shadow(0 0 4px #00FFFF);
+  filter: drop-shadow(0 0 4px #4A5D4C);
 }
 
 .voice-orb.svg-frame.listening [id$="out2"] {
@@ -2682,10 +2686,10 @@ body.has-header .sim-main {
 
 @keyframes svg-listening-glow {
   0%, 100% {
-    filter: drop-shadow(0 0 2px #ff0);
+    filter: drop-shadow(0 0 2px #B87333);
   }
   50% {
-    filter: drop-shadow(0 0 10px #ff0);
+    filter: drop-shadow(0 0 10px #B87333);
   }
 }
 
@@ -2735,7 +2739,7 @@ body.has-header .sim-main {
    STATE: Speaking - Rhythmic scale pulses
    ============================================ */
 .voice-orb.svg-frame.speaking svg {
-  filter: drop-shadow(0 0 6px #ff0);
+  filter: drop-shadow(0 0 6px #B87333);
 }
 
 .voice-orb.svg-frame.speaking [id$="out1"] {
