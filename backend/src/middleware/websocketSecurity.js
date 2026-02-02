@@ -126,6 +126,10 @@ const MESSAGE_SCHEMAS = {
   ai_finished: {
     required: ['sessionId'],
     sessionId: { type: 'string', maxLength: 100 }
+  },
+  request_feedback: {
+    required: ['sessionId'],
+    sessionId: { type: 'string', maxLength: 100 }
   }
 };
 

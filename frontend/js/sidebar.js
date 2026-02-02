@@ -228,10 +228,34 @@ function loadSidebarTopics(subcategoryId, container) {
 
 /**
  * Select a scenario from the sidebar
+ * If there's an active session, shows exit modal first
  */
 function selectScenarioFromSidebar(title, imageFile, promptFile) {
   console.log('[Sidebar] Selecting scenario:', title);
 
+  // Check if there's an active connected session
+  if (window.session && window.session.isConnected) {
+    console.log('[Sidebar] Active session detected, showing exit modal');
+
+    // Show exit confirmation modal
+    if (typeof showSessionExitModal === 'function') {
+      showSessionExitModal();
+      // Note: After user gets feedback and dismisses summary screen,
+      // they'll need to click the new scenario again
+      return;
+    }
+    // Fallback: disconnect and continue if modal not available
+    window.session.disconnect();
+  }
+
+  // No active session - proceed with scenario switch
+  performScenarioSwitch(title, imageFile, promptFile);
+}
+
+/**
+ * Perform the actual scenario switch (after session check)
+ */
+function performScenarioSwitch(title, imageFile, promptFile) {
   // Update current scenario tracking
   currentScenarioFile = promptFile;
 

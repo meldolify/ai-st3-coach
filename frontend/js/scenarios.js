@@ -838,6 +838,24 @@ function setupMobileButtonListeners() {
 }
 
 function exitSimulation() {
+  // Check if there's an active connected session
+  if (window.session && window.session.isConnected) {
+    // Show exit confirmation modal - endSessionWithFeedback will handle cleanup and show summary
+    if (typeof showSessionExitModal === 'function') {
+      showSessionExitModal();
+      return;
+    }
+  }
+
+  // No active session or modal not available - do direct cleanup
+  performSimulationCleanup();
+}
+
+/**
+ * Perform simulation room cleanup (called after session ends or when no session active)
+ */
+function performSimulationCleanup() {
+  // Disconnect session if exists (shouldn't be connected at this point)
   if (session) {
     session.disconnect();
     session = null;

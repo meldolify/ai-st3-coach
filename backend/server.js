@@ -284,6 +284,55 @@ wss.on('connection', (ws, req) => {
             session.inFeedbackMode = false;
           }
           break;
+
+        case 'request_feedback':
+          // Generate structured feedback summary at end of session
+          console.log('[FEEDBACK] Generating structured feedback summary');
+          try {
+            const feedbackPromptPath = path.join(__dirname, 'prompts/system/feedback_summary.txt');
+            const feedbackPrompt = fs.readFileSync(feedbackPromptPath, 'utf8');
+            session.history.push({ role: 'user', content: feedbackPrompt });
+
+            const feedbackText = await callGPT4oMini(session.history);
+            console.log('[FEEDBACK] Raw response:', feedbackText);
+
+            // Parse JSON from response (with fallback)
+            let feedback;
+            try {
+              const jsonMatch = feedbackText.match(/\{[\s\S]*\}/);
+              if (jsonMatch) {
+                feedback = JSON.parse(jsonMatch[0]);
+              } else {
+                throw new Error('No JSON found in response');
+              }
+            } catch (parseError) {
+              console.warn('[FEEDBACK] JSON parse failed, using fallback:', parseError.message);
+              feedback = {
+                score: 3,
+                strengths: ['Unable to parse detailed feedback'],
+                improvements: ['Please try again'],
+                summary: feedbackText.substring(0, 500)
+              };
+            }
+
+            ws.send(JSON.stringify({
+              type: 'feedback_summary',
+              feedback: feedback
+            }));
+            console.log('[FEEDBACK] Summary sent:', JSON.stringify(feedback));
+          } catch (error) {
+            console.error('[FEEDBACK ERROR]', error.message);
+            ws.send(JSON.stringify({
+              type: 'feedback_summary',
+              feedback: {
+                score: 3,
+                strengths: ['Session completed'],
+                improvements: ['Feedback generation encountered an error'],
+                summary: 'Unable to generate detailed feedback. Please try again.'
+              }
+            }));
+          }
+          break;
       }
     } catch (error) {
       console.error('[ERROR]', error.message);

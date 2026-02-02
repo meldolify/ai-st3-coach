@@ -555,5 +555,53 @@ class V4Session {
     window.currentSessionId = null; // Clear global session ID
     setOrbState('idle'); // Reset orb to idle when disconnected
   }
+
+  /**
+   * Request feedback summary from AI before disconnecting
+   * Returns a promise that resolves with feedback data or null on timeout
+   */
+  async requestFeedbackAndDisconnect() {
+    if (!this.isConnected || !this.ws) {
+      console.warn('[V4Session] Cannot request feedback - not connected');
+      return null;
+    }
+
+    return new Promise((resolve) => {
+      let timeoutId;
+
+      // Set up one-time handler for feedback_summary
+      const feedbackHandler = (event) => {
+        try {
+          const msg = JSON.parse(event.data);
+          if (msg.type === 'feedback_summary') {
+            console.log('[V4Session] Received feedback summary');
+            clearTimeout(timeoutId);
+            this.ws.removeEventListener('message', feedbackHandler);
+            this.disconnect();
+            resolve(msg.feedback);
+          }
+        } catch (e) {
+          console.error('[V4Session] Error parsing feedback message:', e);
+        }
+      };
+
+      this.ws.addEventListener('message', feedbackHandler);
+
+      // Send feedback request
+      console.log('[V4Session] Requesting feedback summary...');
+      this.ws.send(JSON.stringify({
+        type: 'request_feedback',
+        sessionId: this.sessionId
+      }));
+
+      // Timeout after 20 seconds
+      timeoutId = setTimeout(() => {
+        console.warn('[V4Session] Feedback request timed out');
+        this.ws.removeEventListener('message', feedbackHandler);
+        this.disconnect();
+        resolve(null);
+      }, 20000);
+    });
+  }
 }
 
