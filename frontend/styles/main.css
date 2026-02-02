@@ -1687,9 +1687,6 @@ body.has-header .simulation-room.active {
   position: absolute;
   inset: 0;
   background: #1a1a1a;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   overflow: hidden;
 }
 
@@ -1703,20 +1700,25 @@ body.has-header .simulation-room.active {
   object-position: center;
   filter: blur(50px) saturate(1.3) brightness(1.05);
   opacity: 0.9;
-  z-index: 1;
+  z-index: 1 !important;
   pointer-events: none;
 }
 
-/* Sharp Persona Image (centered on top) */
-.persona-backdrop .persona-image {
-  position: relative;
+/* Sharp Persona Image (centered on top of blur) */
+.persona-backdrop .persona-image,
+.persona-backdrop #personaImage,
+#personaImage.persona-image {
+  position: absolute !important;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   max-width: 100%;
   max-height: 100%;
   width: auto;
   height: 100%;
   object-fit: contain;
   object-position: center bottom;
-  z-index: 2;
+  z-index: 10 !important;
 }
 
 /* Vignette overlay for depth and edge softening */
@@ -1802,8 +1804,20 @@ body.has-header .simulation-room.active {
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--sim-accent-primary);
   margin: 0;
+}
+
+/* Difficulty mode colors */
+.persona-info-badge .scenario-category.difficulty-easy {
+  color: #059669;
+}
+
+.persona-info-badge .scenario-category.difficulty-medium {
+  color: #d97706;
+}
+
+.persona-info-badge .scenario-category.difficulty-strict {
+  color: #dc2626;
 }
 
 /* Hide old separate scenario badge - now merged into persona badge */
@@ -1995,7 +2009,11 @@ body.has-header .simulation-room.active {
 }
 
 .transcript-panel .transcript-message.message-user .message-header {
-  opacity: 0.85;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.transcript-panel .transcript-message.message-user .message-time {
+  color: rgba(255, 255, 255, 0.8);
 }
 
 /* AI messages - left aligned */
@@ -2156,6 +2174,15 @@ body.has-header .sim-main {
 
   .simulation-room.active .desktop-simulation-layout {
     display: none;
+  }
+
+  /* Logo responsive sizing for tablet */
+  .logo-img--hero {
+    height: clamp(60px, 12vw, 100px);
+  }
+
+  .logo-img--nav {
+    height: 36px;
   }
 }
 
@@ -7163,6 +7190,19 @@ button.btn-secondary:active {
   .btn-auth-submit {
     padding: 14px 20px;
   }
+
+  /* Logo responsive sizing for mobile */
+  .logo-img--hero {
+    height: 70px;
+  }
+
+  .logo-img--nav {
+    height: 32px;
+  }
+
+  .logo-img--compact {
+    height: 26px;
+  }
 }
 
 /* Profile Page */
@@ -7775,12 +7815,9 @@ body.has-header {
     height: 56px;
   }
 
-  .reviva-logo--compact .logo-mark {
-    font-size: 1.1rem;
-  }
-
-  .reviva-logo--compact .logo-text {
-    font-size: 0.9rem;
+  /* Compact logo sizing for very small phones */
+  .logo-img--compact {
+    height: 24px;
   }
 
   /* Smaller voice orb on tiny screens */

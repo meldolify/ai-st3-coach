@@ -260,13 +260,19 @@ function selectScenarioFromSidebar(title, imageFile, promptFile) {
 
   if (titleEl) titleEl.textContent = title;
 
-  // Extract category from prompt file path
+  // Show difficulty mode instead of category
   if (categoryEl) {
-    const pathParts = promptFile.split('/');
-    if (pathParts.length >= 2) {
-      const category = pathParts[1].replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-      categoryEl.textContent = category;
-    }
+    const diff = selectedDifficulty || 'easy';
+    const difficultyLabels = {
+      'easy': 'Easy Mode',
+      'medium': 'Medium Mode',
+      'strict': 'Strict Mode'
+    };
+    categoryEl.textContent = difficultyLabels[diff] || 'Easy Mode';
+
+    // Update CSS class for color
+    categoryEl.classList.remove('difficulty-easy', 'difficulty-medium', 'difficulty-strict');
+    categoryEl.classList.add(`difficulty-${diff}`);
   }
 }
 

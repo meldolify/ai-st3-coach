@@ -1469,7 +1469,20 @@ function startScenario(category, title, promptFile, imageFile) {
 
   // Set scenario information
   document.getElementById('currentScenarioTitle').textContent = title;
-  document.getElementById('currentScenarioCategory').textContent = category;
+
+  // Show difficulty mode instead of category
+  const categoryEl = document.getElementById('currentScenarioCategory');
+  if (categoryEl) {
+    const diff = selectedDifficulty || 'easy';
+    const difficultyLabels = {
+      'easy': 'Easy Mode',
+      'medium': 'Medium Mode',
+      'strict': 'Strict Mode'
+    };
+    categoryEl.textContent = difficultyLabels[diff] || 'Easy Mode';
+    categoryEl.classList.remove('difficulty-easy', 'difficulty-medium', 'difficulty-strict');
+    categoryEl.classList.add(`difficulty-${diff}`);
+  }
 
   // Set persona based on selected difficulty
   if (typeof setPersona === 'function' && selectedDifficulty) {

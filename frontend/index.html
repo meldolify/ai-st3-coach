@@ -10,6 +10,12 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>ReViva - Interview Trainer</title>
 
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
   <!-- Supabase Auth -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -126,40 +132,45 @@
       pointer-events: none;
     }
 
-    /* ReViva Logo Component */
-    .reviva-logo {
+    /* ===== LOGO IMAGE COMPONENT ===== */
+    .logo-img {
+      height: auto;
+      width: auto;
+      max-width: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    /* Size variants */
+    .logo-img--hero {
+      height: clamp(80px, 15vw, 140px);
+      animation: logoFloat 3s ease-in-out infinite;
+    }
+
+    .logo-img--nav {
+      height: clamp(36px, 5vw, 48px);
+    }
+
+    .logo-img--footer {
+      height: clamp(32px, 4vw, 44px);
+    }
+
+    .logo-img--compact {
+      height: 32px;
+    }
+
+    /* Hero logo container */
+    .hero-logo-container {
       display: flex;
+      justify-content: center;
       align-items: center;
-      gap: 8px;
+      margin: 24px 0 32px 0;
     }
 
-    .logo-mark {
-      font-family: 'Instrument Serif', Georgia, serif;
-      font-style: italic;
-      font-size: 2rem;
-      color: var(--brand-sage, #4A5D4C);
-      line-height: 1;
-    }
-
-    .logo-text {
-      font-family: 'Instrument Serif', Georgia, serif;
-      font-size: 1.5rem;
-      color: var(--text-primary, #1A1A18);
-      letter-spacing: -0.02em;
-    }
-
-    /* Compact logo for footer */
-    .reviva-logo--compact {
-      gap: 6px;
-    }
-
-    .reviva-logo--compact .logo-mark {
-      font-size: 1.25rem;
-    }
-
-    .reviva-logo--compact .logo-text {
-      font-size: 1rem;
-      color: var(--text-muted, #8A8680);
+    /* Subtle float animation for hero */
+    @keyframes logoFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
     }
 
     .persona-panel img,
@@ -1171,10 +1182,7 @@
   <!-- App Header (shown on protected pages) -->
   <header id="appHeader" class="app-header initially-hidden">
     <a href="#" class="header-logo-link" onclick="navigateToLanding(); return false;">
-      <div class="reviva-logo reviva-logo--compact">
-        <span class="logo-mark">R</span>
-        <span class="logo-text">ReViva</span>
-      </div>
+      <img src="images/logo/logo-sm.png" alt="ReViva" class="logo-img logo-img--compact">
     </a>
     <div class="header-right">
       <button class="user-menu-btn" onclick="toggleUserMenu()">
@@ -1195,10 +1203,7 @@
     <!-- Top Navigation -->
     <nav class="landing-nav">
       <a href="#" class="nav-logo">
-        <div class="reviva-logo">
-          <span class="logo-mark">R</span>
-          <span class="logo-text">ReViva</span>
-        </div>
+        <img src="images/logo/logo-md.png" alt="ReViva" class="logo-img logo-img--nav">
       </a>
       <div class="nav-links" id="navLinksGuest">
         <a href="#pricingSection" class="nav-link">Pricing</a>
@@ -1222,33 +1227,9 @@
         <div class="parallax-element parallax-shape-2" data-speed="0.5"></div>
         <div class="parallax-element parallax-shape-3" data-speed="0.2"></div>
 
-        <!-- Brand Name -->
-        <h1 class="hero-brand scroll-reveal">ReViva</h1>
-
-        <!-- Animated Infinity Icon -->
-        <div class="hero-infinity-hero scroll-reveal scroll-reveal--delay-1">
-          <svg class="hero-infinity-large" viewBox="0 0 120 60" fill="none">
-            <defs>
-              <linearGradient id="infinityGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="#4A5D4C" />
-                <stop offset="50%" stop-color="#B87333" />
-                <stop offset="100%" stop-color="#4A5D4C" />
-              </linearGradient>
-            </defs>
-            <!-- Main infinity path with draw/undraw animation -->
-            <path class="infinity-path infinity-path--bg"
-              d="M30 30 C30 15, 45 15, 60 30 C75 45, 90 45, 90 30 C90 15, 75 15, 60 30 C45 45, 30 45, 30 30"
-              stroke="url(#infinityGradient)" stroke-width="5" stroke-linecap="round" fill="none" />
-            <!-- Animated dot following the path -->
-            <circle class="infinity-dot" r="6" fill="#B87333">
-              <animateMotion dur="4.5s" repeatCount="indefinite" calcMode="linear">
-                <mpath href="#infinityMotionPath" />
-              </animateMotion>
-            </circle>
-            <path id="infinityMotionPath"
-              d="M30 30 C30 15, 45 15, 60 30 C75 45, 90 45, 90 30 C90 15, 75 15, 60 30 C45 45, 30 45, 30 30" fill="none"
-              stroke="none" />
-          </svg>
+        <!-- Hero Logo -->
+        <div class="hero-logo-container scroll-reveal">
+          <img src="images/logo/logo-full.png" alt="ReViva" class="logo-img logo-img--hero">
         </div>
 
         <!-- Tagline -->
@@ -1353,10 +1334,7 @@
         <div class="footer-content">
           <div class="footer-brand">
             <a href="#" class="nav-logo">
-              <div class="reviva-logo">
-                <span class="logo-mark">R</span>
-                <span class="logo-text">ReViva</span>
-              </div>
+              <img src="images/logo/logo-md.png" alt="ReViva" class="logo-img logo-img--footer">
             </a>
             <p>AI-powered interview preparation for surgical trainees. Practice smarter, not harder.</p>
           </div>
@@ -2313,10 +2291,7 @@
 
   <!-- Persistent App Footer -->
   <footer id="appFooter" class="app-footer">
-    <div class="reviva-logo reviva-logo--compact">
-      <span class="logo-mark">R</span>
-      <span class="logo-text">ReViva</span>
-    </div>
+    <img src="images/logo/logo-sm.png" alt="ReViva" class="logo-img logo-img--compact">
   </footer>
 
   <!-- Model Answer Drawer -->
