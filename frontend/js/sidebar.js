@@ -11,15 +11,6 @@ let expandedSubcategories = new Set();
 let currentScenarioFile = null;
 
 /**
- * Escape HTML to prevent XSS
- */
-function escapeHtmlSidebar(text) {
-  const div = document.createElement('div');
-  div.textContent = text;
-  return div.innerHTML;
-}
-
-/**
  * Initialize the simulation room sidebar
  * Populates categories and subcategories from scenarios.js data
  */

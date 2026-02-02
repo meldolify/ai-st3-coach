@@ -252,9 +252,7 @@ function selectMode(mode) {
 
   if (mode === 'practice') {
     // Practice mode goes to existing scenario selection
-    transitionToPage('modeSelection', 'scenarioSelection', () => {
-      initMobilePanelNavigation();
-    });
+    transitionToPage('modeSelection', 'scenarioSelection');
     log('Selected mode: Practice', 'info');
   } else if (mode === 'mock-exam') {
     // Mock exam mode goes to mock type selection
