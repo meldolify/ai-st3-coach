@@ -538,7 +538,16 @@ function startMockScenario(scenario, hideTitle) {
     categoryElement.textContent = 'Scenario details hidden';
   } else {
     titleElement.textContent = scenario.title;
-    categoryElement.textContent = scenario.stationType;
+    // Show difficulty mode instead of station type
+    const diff = selectedDifficulty || 'easy';
+    const difficultyLabels = {
+      'easy': 'Easy Mode',
+      'medium': 'Medium Mode',
+      'strict': 'Strict Mode'
+    };
+    categoryElement.textContent = difficultyLabels[diff] || 'Easy Mode';
+    categoryElement.classList.remove('difficulty-easy', 'difficulty-medium', 'difficulty-strict');
+    categoryElement.classList.add(`difficulty-${diff}`);
   }
 
   // Apply active class to simulation room
