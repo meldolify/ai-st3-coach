@@ -1694,16 +1694,16 @@ body.has-header .simulation-room.active {
 /* Blurred Background Image - extends beyond edges for seamless blur */
 .persona-backdrop-blur {
   position: absolute;
-  /* Smaller extension to avoid over-zooming into dark center areas */
-  inset: -8%;
-  width: 116%;
-  height: 116%;
+  /* Extend moderately to fill edges without over-zooming */
+  inset: -10%;
+  width: 120%;
+  height: 120%;
   object-fit: cover;
   /* Position slightly higher to capture more background/context, less torso */
-  object-position: center 25%;
-  /* Softer blur with more brightness to avoid dark muddy edges */
-  filter: blur(45px) saturate(1.2) brightness(1.35);
-  opacity: 0.9;
+  object-position: center 20%;
+  /* Heavy blur for dreamy, soft edge effect + brightness to keep it light */
+  filter: blur(80px) saturate(1.1) brightness(1.4);
+  opacity: 0.85;
   z-index: 1 !important;
   pointer-events: none;
 }
@@ -2184,10 +2184,6 @@ body.has-header .sim-main {
   /* Logo responsive sizing for tablet */
   .logo-img--hero {
     height: clamp(60px, 12vw, 100px);
-  }
-
-  .logo-img--nav {
-    height: 36px;
   }
 }
 
@@ -5088,7 +5084,7 @@ button.top-back-button:active {
   top: 0;
   left: 0;
   right: 0;
-  height: 72px;
+  height: 80px;
   background: rgba(250, 251, 252, 0.85);
   -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
@@ -7201,10 +7197,7 @@ button.btn-secondary:active {
     height: 70px;
   }
 
-  .logo-img--nav {
-    height: 32px;
-  }
-
+  .logo-img--nav,
   .logo-img--compact {
     height: 52px;
   }
