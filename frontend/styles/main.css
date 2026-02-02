@@ -2088,6 +2088,7 @@ body.has-header .simulation-room.active {
   gap: 16px;
   z-index: 30;
   animation: orb-rise 0.5s ease-out 0.4s both;
+  overflow: visible; /* Allow copper glow to extend beyond container */
 }
 
 @keyframes orb-rise {
@@ -2577,7 +2578,7 @@ body.has-header .sim-main {
     rgba(184, 115, 51, 0.08) 70%,
     transparent 85%
   );
-  z-index: 0;
+  z-index: -1; /* Behind orb elements but still visible */
   pointer-events: none;
   opacity: 1;
   transition: opacity 0.3s ease, transform 0.3s ease, background 0.3s ease;
@@ -2594,49 +2595,56 @@ body.has-header .sim-main {
   fill: none;
 }
 
-/* Default path styles - Cyan color scheme */
+/* Default path styles - Copper gradient color scheme */
 .voice-orb.svg-frame svg path,
 .voice-orb.svg-frame svg g {
   transform-origin: center;
   transition: stroke 0.3s ease, fill 0.3s ease, filter 0.3s ease;
 }
 
-/* Out1 - Outer donut ring (sage green) */
+/* Out1 - Outer donut ring (dark bronze copper) */
 .voice-orb.svg-frame svg [id$="out1"] path {
-  stroke: #4A5D4C;
+  stroke: #8B5A2B;
   fill: none;
+  filter: drop-shadow(0 0 3px rgba(139, 90, 43, 0.6));
 }
 
-/* Out2 - Segmented arcs (sage green) */
+/* Out2 - Segmented arcs (sienna copper) */
 .voice-orb.svg-frame svg [id$="out2"] path {
-  fill: #4A5D4C;
+  fill: #A0522D;
+  filter: drop-shadow(0 0 4px rgba(160, 82, 45, 0.5));
 }
 
-/* Out3 - Partial circle (copper accent) */
+/* Out3 - Partial circle (classic copper - enhanced glow) */
 .voice-orb.svg-frame svg [id$="out3"] {
   stroke: #B87333;
-  stroke-width: 1;
+  stroke-width: 1.5;
   fill: none;
+  filter: drop-shadow(0 0 5px rgba(184, 115, 51, 0.7));
 }
 
-/* Inner3 - Small inner arcs (sage green) */
-.voice-orb.svg-frame svg [id$="inner3"] path {
-  fill: #4A5D4C;
-}
-
-/* Inner1 - Complex inner arcs (sage green) */
+/* Inner1 - Complex inner arcs (peru copper) */
 .voice-orb.svg-frame svg [id$="inner1"] path {
-  fill: #4A5D4C;
+  fill: #CD853F;
+  filter: drop-shadow(0 0 4px rgba(205, 133, 63, 0.6));
 }
 
-/* Center1 - Center arc (copper accent) */
+/* Inner3 - Small inner arcs (light copper) */
+.voice-orb.svg-frame svg [id$="inner3"] path {
+  fill: #D4915A;
+  filter: drop-shadow(0 0 5px rgba(212, 145, 90, 0.7));
+}
+
+/* Center1 - Center arc (bright copper) */
 .voice-orb.svg-frame svg [id$="center1"] {
-  fill: #B87333;
+  fill: #E8A96A;
+  filter: drop-shadow(0 0 6px rgba(232, 169, 106, 0.8));
 }
 
-/* Center - Center dot (sage green) */
+/* Center - Center dot (cream copper highlight - luminous core) */
 .voice-orb.svg-frame svg [id$="center"]:not([id$="center1"]) {
-  fill: #4A5D4C;
+  fill: #F5C08B;
+  filter: drop-shadow(0 0 8px rgba(245, 192, 139, 0.9));
 }
 
 /* Hover 3D Effect - Desktop only */
@@ -2740,6 +2748,14 @@ body.has-header .sim-main {
   animation: copper-pulse 1.5s ease-in-out infinite;
 }
 
+/* Listening: brighter copper colors for active feedback */
+.voice-orb.svg-frame.listening svg [id$="out1"] path { stroke: #9B6A3B; }
+.voice-orb.svg-frame.listening svg [id$="out2"] path { fill: #B0623D; }
+.voice-orb.svg-frame.listening svg [id$="inner1"] path { fill: #DD954F; }
+.voice-orb.svg-frame.listening svg [id$="inner3"] path { fill: #E4A16A; }
+.voice-orb.svg-frame.listening svg [id$="center1"] { fill: #F8B97A; }
+.voice-orb.svg-frame.listening svg [id$="center"]:not([id$="center1"]) { fill: #FFD09B; }
+
 @keyframes copper-pulse {
   0%, 100% { transform: scale(1); opacity: 0.8; }
   50% { transform: scale(1.1); opacity: 1; }
@@ -2797,6 +2813,14 @@ body.has-header .sim-main {
   animation: copper-pulse 0.8s ease-in-out infinite;
 }
 
+/* Thinking: energetic brightness for processing state */
+.voice-orb.svg-frame.thinking svg [id$="out1"] path { stroke: #A57A4B; }
+.voice-orb.svg-frame.thinking svg [id$="out2"] path { fill: #BA724D; }
+.voice-orb.svg-frame.thinking svg [id$="inner1"] path { fill: #E7A55F; }
+.voice-orb.svg-frame.thinking svg [id$="inner3"] path { fill: #EEB17A; }
+.voice-orb.svg-frame.thinking svg [id$="center1"] { fill: #FFC98A; }
+.voice-orb.svg-frame.thinking svg [id$="center"]:not([id$="center1"]) { fill: #FFE0AB; }
+
 /* ============================================
    STATE: Speaking - Rhythmic scale pulses
    ============================================ */
@@ -2847,6 +2871,23 @@ body.has-header .sim-main {
     rgba(184, 115, 51, 0.1) 55%,
     transparent 75%
   );
+}
+
+/* Speaking: maximum brightness for active output */
+.voice-orb.svg-frame.speaking svg [id$="out1"] path {
+  stroke: #B08A5B;
+  filter: drop-shadow(0 0 8px rgba(176, 138, 91, 0.9));
+}
+.voice-orb.svg-frame.speaking svg [id$="out2"] path {
+  fill: #C4825D;
+  filter: drop-shadow(0 0 10px rgba(196, 130, 93, 0.8));
+}
+.voice-orb.svg-frame.speaking svg [id$="inner1"] path { fill: #F1B56F; }
+.voice-orb.svg-frame.speaking svg [id$="inner3"] path { fill: #F8C18A; }
+.voice-orb.svg-frame.speaking svg [id$="center1"] { fill: #FFD99A; }
+.voice-orb.svg-frame.speaking svg [id$="center"]:not([id$="center1"]) {
+  fill: #FFF0BB;
+  filter: drop-shadow(0 0 12px rgba(255, 240, 187, 1));
 }
 
 /* ============================================
