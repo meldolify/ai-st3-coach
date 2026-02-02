@@ -150,19 +150,20 @@ class OrbVisualizer {
   }
 
   /**
-   * Get state-aware color for visualization (matches SVG orb brand palette)
+   * Get state-aware color for visualization (warm copper tones for visibility)
+   * Brighter colors provide better contrast against dark sage background
    */
   getStateColor() {
-    if (!this.orb) return { r: 74, g: 93, b: 76 }; // Brand primary sage
+    if (!this.orb) return { r: 184, g: 140, b: 90 }; // Soft warm copper (idle)
 
     if (this.orb.classList.contains('speaking')) {
-      return { r: 212, g: 145, b: 90 };  // Copper light
+      return { r: 242, g: 185, b: 130 };  // Bright warm copper
     } else if (this.orb.classList.contains('listening')) {
-      return { r: 184, g: 115, b: 51 };  // Copper
+      return { r: 224, g: 165, b: 101 };  // Warm copper
     } else if (this.orb.classList.contains('thinking')) {
-      return { r: 92, g: 114, b: 96 };   // Brand secondary sage
+      return { r: 200, g: 155, b: 100 };  // Warm muted copper
     } else {
-      return { r: 74, g: 93, b: 76 };    // Brand primary sage
+      return { r: 184, g: 140, b: 90 };   // Soft warm copper (idle)
     }
   }
 
