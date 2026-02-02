@@ -1247,57 +1247,58 @@
         </div>
       </section>
 
-      <!-- Features Section - Section with Mockup Style -->
-      <section class="features-container" id="featuresSection">
+      <!-- Features Section - Interactive Image Accordion -->
+      <section class="landing-features" id="featuresSection">
+        <p class="section-label">Why Trainees Trust Us</p>
+        <h2 class="section-title">Preparation that makes the difference</h2>
 
-        <!-- Feature 1: Practice Anytime -->
-        <div class="feature-section" data-feature="practice">
-          <div class="feature-content">
-            <span class="feature-label">Always Available</span>
-            <h2 class="feature-title">Practice on <em>your</em> schedule</h2>
-            <p class="feature-description">
-              24/7 availability means you can practice whenever inspiration strikes.
-              Early morning before a shift. Late night after studying.
-            </p>
+        <div class="features-accordion animate-in">
+          <!-- Carousel track wrapper (for mobile swipe) -->
+          <div class="carousel-track">
+            <div class="accordion-panel active" data-panel="1">
+              <div class="accordion-image">
+                <img src="images/features/practice-anytime.jpg" alt="24/7 AI interview practice" loading="lazy">
+                <div class="accordion-overlay"></div>
+              </div>
+              <div class="accordion-content">
+                <h3 class="accordion-title">Practice Anytime</h3>
+                <p class="accordion-description">AI-powered interview simulation available 24/7. No scheduling, no waiting. Practice at your pace, on your terms.</p>
+              </div>
+              <span class="accordion-title-vertical">Practice Anytime</span>
+            </div>
+
+            <div class="accordion-panel" data-panel="2">
+              <div class="accordion-image">
+                <img src="images/features/expert-designed.jpg" alt="Scenarios by expert trainees" loading="lazy">
+                <div class="accordion-overlay"></div>
+              </div>
+              <div class="accordion-content">
+                <h3 class="accordion-title">Expert-Designed</h3>
+                <p class="accordion-description">Scenarios crafted by current high-ranking trainees who know exactly what the ST3 interview demands.</p>
+              </div>
+              <span class="accordion-title-vertical">Expert-Designed</span>
+            </div>
+
+            <div class="accordion-panel" data-panel="3">
+              <div class="accordion-image">
+                <img src="images/features/try-free.jpg" alt="Free tier experience" loading="lazy">
+                <div class="accordion-overlay"></div>
+              </div>
+              <div class="accordion-content">
+                <h3 class="accordion-title">Try Before You Subscribe</h3>
+                <p class="accordion-description">Explore the platform and test selected scenarios completely free. Experience the quality before committing.</p>
+              </div>
+              <span class="accordion-title-vertical">Try Free</span>
+            </div>
           </div>
-          <div class="feature-mockup">
-            <div class="feature-mockup-bg feature-img-practice-bg"></div>
-            <div class="feature-mockup-main feature-img-practice-main"></div>
+
+          <!-- Carousel dots (visible on mobile only) -->
+          <div class="carousel-dots">
+            <button class="carousel-dot active" aria-label="Slide 1" type="button"></button>
+            <button class="carousel-dot" aria-label="Slide 2" type="button"></button>
+            <button class="carousel-dot" aria-label="Slide 3" type="button"></button>
           </div>
         </div>
-
-        <!-- Feature 2: Expert Designed (reversed layout) -->
-        <div class="feature-section reverse" data-feature="expert">
-          <div class="feature-content">
-            <span class="feature-label">Crafted by Surgeons</span>
-            <h2 class="feature-title">Scenarios that <em>matter</em></h2>
-            <p class="feature-description">
-              Every scenario is designed by surgical trainees who've been through the interview.
-              Real questions. Real challenges. Real preparation.
-            </p>
-          </div>
-          <div class="feature-mockup">
-            <div class="feature-mockup-bg feature-img-expert-bg"></div>
-            <div class="feature-mockup-main feature-img-expert-main"></div>
-          </div>
-        </div>
-
-        <!-- Feature 3: Risk Free -->
-        <div class="feature-section" data-feature="riskfree">
-          <div class="feature-content">
-            <span class="feature-label">Risk-Free</span>
-            <h2 class="feature-title">Try before you <em>commit</em></h2>
-            <p class="feature-description">
-              Explore our platform with no strings attached.
-              Access sample scenarios and experience the quality firsthand.
-            </p>
-          </div>
-          <div class="feature-mockup">
-            <div class="feature-mockup-bg feature-img-riskfree-bg"></div>
-            <div class="feature-mockup-main feature-img-riskfree-main"></div>
-          </div>
-        </div>
-
       </section>
 
       <!-- Login CTA (for authenticated features) -->
@@ -2359,6 +2360,8 @@
   <script src="js/glow-effect.js"></script>
   <!-- Features Section Scroll Animations -->
   <script src="js/features-scroll-animation.js"></script>
+  <!-- Features Accordion (Interactive Image Panels) -->
+  <script src="js/features-accordion.js"></script>
   <!-- WebGL Persona Reveal (disabled - replaced with gradient cards)
   <script src="js/webgl-persona-reveal.js"></script>
   -->
