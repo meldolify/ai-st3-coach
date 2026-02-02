@@ -10189,7 +10189,7 @@ body.has-header {
    ============================================ */
 
 .session-summary-page {
-  display: flex;
+  display: none;  /* Hidden by default, shown via inline style.display = 'flex' */
   align-items: center;
   justify-content: center;
   min-height: 100vh;
