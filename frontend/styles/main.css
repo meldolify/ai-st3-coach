@@ -2605,6 +2605,7 @@ body.has-header .sim-main {
 /* Out1 - Outer donut ring (dark bronze copper) */
 .voice-orb.svg-frame svg [id$="out1"] path {
   stroke: #8B5A2B;
+  stroke-width: 3;
   fill: none;
   filter: drop-shadow(0 0 3px rgba(139, 90, 43, 0.6));
 }
@@ -2612,13 +2613,15 @@ body.has-header .sim-main {
 /* Out2 - Segmented arcs (sienna copper) */
 .voice-orb.svg-frame svg [id$="out2"] path {
   fill: #A0522D;
+  stroke: #A0522D;
+  stroke-width: 1.5;
   filter: drop-shadow(0 0 4px rgba(160, 82, 45, 0.5));
 }
 
 /* Out3 - Partial circle (classic copper - enhanced glow) */
 .voice-orb.svg-frame svg [id$="out3"] {
   stroke: #B87333;
-  stroke-width: 1.5;
+  stroke-width: 3;
   fill: none;
   filter: drop-shadow(0 0 5px rgba(184, 115, 51, 0.7));
 }
@@ -2626,24 +2629,32 @@ body.has-header .sim-main {
 /* Inner1 - Complex inner arcs (peru copper) */
 .voice-orb.svg-frame svg [id$="inner1"] path {
   fill: #CD853F;
+  stroke: #CD853F;
+  stroke-width: 1.5;
   filter: drop-shadow(0 0 4px rgba(205, 133, 63, 0.6));
 }
 
 /* Inner3 - Small inner arcs (light copper) */
 .voice-orb.svg-frame svg [id$="inner3"] path {
   fill: #D4915A;
+  stroke: #D4915A;
+  stroke-width: 1.5;
   filter: drop-shadow(0 0 5px rgba(212, 145, 90, 0.7));
 }
 
 /* Center1 - Center arc (bright copper) */
 .voice-orb.svg-frame svg [id$="center1"] {
   fill: #E8A96A;
+  stroke: #E8A96A;
+  stroke-width: 2;
   filter: drop-shadow(0 0 6px rgba(232, 169, 106, 0.8));
 }
 
 /* Center - Center dot (cream copper highlight - luminous core) */
 .voice-orb.svg-frame svg [id$="center"]:not([id$="center1"]) {
   fill: #F5C08B;
+  stroke: #F5C08B;
+  stroke-width: 2;
   filter: drop-shadow(0 0 8px rgba(245, 192, 139, 0.9));
 }
 
