@@ -1687,21 +1687,83 @@ body.has-header .simulation-room.active {
   flex-direction: column;
 }
 
-/* Persona Backdrop (Full Background) - Warm Copper Glow Effect */
+/* Persona Backdrop - Animated Mesh Gradient Effect */
 .persona-backdrop {
   position: absolute;
   inset: 0;
-  /* Rich copper glow radiating from center - inspired by 21st.dev glow */
-  background: radial-gradient(
-    ellipse 80% 70% at 50% 50%,
-    rgba(220, 160, 100, 0.65) 0%,     /* Rich warm copper center */
-    rgba(230, 180, 130, 0.45) 20%,    /* Peachy warmth */
-    rgba(240, 200, 160, 0.30) 40%,    /* Soft peach */
-    rgba(248, 235, 220, 0.20) 60%,    /* Fading warmth */
-    #FAF7F4 80%,                       /* Warm cream */
-    #FDFCFB 100%                       /* Near white edge */
-  );
   overflow: hidden;
+  /* Base layer - warm cream */
+  background-color: #FAF7F4;
+  /* Multi-layer animated mesh effect */
+  background-image:
+    /* Layer 1: Primary copper blob */
+    radial-gradient(
+      ellipse 85% 75% at 50% 48%,
+      rgba(220, 160, 100, 0.65) 0%,
+      rgba(220, 160, 100, 0.35) 25%,
+      rgba(230, 180, 130, 0.25) 50%,
+      transparent 75%
+    ),
+    /* Layer 2: Secondary peach blob */
+    radial-gradient(
+      ellipse 70% 60% at 55% 45%,
+      rgba(230, 180, 130, 0.45) 0%,
+      rgba(230, 180, 130, 0.20) 30%,
+      transparent 65%
+    ),
+    /* Layer 3: Tertiary warm accent */
+    radial-gradient(
+      ellipse 60% 50% at 48% 52%,
+      rgba(240, 200, 160, 0.35) 0%,
+      rgba(240, 200, 160, 0.12) 35%,
+      transparent 70%
+    ),
+    /* Layer 4: Subtle ambient glow */
+    radial-gradient(
+      ellipse 90% 80% at 50% 50%,
+      rgba(248, 235, 220, 0.12) 0%,
+      transparent 60%
+    );
+  animation: meshGradientFlow 20s ease-in-out infinite;
+}
+
+/* Mesh Gradient Flow Animation - creates organic morphing effect */
+@keyframes meshGradientFlow {
+  0%, 100% {
+    background-image:
+      radial-gradient(ellipse 85% 75% at 50% 48%, rgba(220, 160, 100, 0.65) 0%, rgba(220, 160, 100, 0.35) 25%, rgba(230, 180, 130, 0.25) 50%, transparent 75%),
+      radial-gradient(ellipse 70% 60% at 55% 45%, rgba(230, 180, 130, 0.45) 0%, rgba(230, 180, 130, 0.20) 30%, transparent 65%),
+      radial-gradient(ellipse 60% 50% at 48% 52%, rgba(240, 200, 160, 0.35) 0%, rgba(240, 200, 160, 0.12) 35%, transparent 70%),
+      radial-gradient(ellipse 90% 80% at 50% 50%, rgba(248, 235, 220, 0.12) 0%, transparent 60%);
+  }
+  25% {
+    background-image:
+      radial-gradient(ellipse 82% 72% at 53% 46%, rgba(220, 160, 100, 0.60) 0%, rgba(220, 160, 100, 0.32) 25%, rgba(230, 180, 130, 0.22) 50%, transparent 75%),
+      radial-gradient(ellipse 72% 62% at 52% 48%, rgba(230, 180, 130, 0.42) 0%, rgba(230, 180, 130, 0.18) 30%, transparent 65%),
+      radial-gradient(ellipse 62% 52% at 51% 50%, rgba(240, 200, 160, 0.38) 0%, rgba(240, 200, 160, 0.14) 35%, transparent 70%),
+      radial-gradient(ellipse 88% 78% at 52% 48%, rgba(248, 235, 220, 0.14) 0%, transparent 60%);
+  }
+  50% {
+    background-image:
+      radial-gradient(ellipse 80% 70% at 47% 52%, rgba(220, 160, 100, 0.58) 0%, rgba(220, 160, 100, 0.30) 25%, rgba(230, 180, 130, 0.20) 50%, transparent 75%),
+      radial-gradient(ellipse 68% 58% at 48% 54%, rgba(230, 180, 130, 0.40) 0%, rgba(230, 180, 130, 0.16) 30%, transparent 65%),
+      radial-gradient(ellipse 64% 54% at 45% 48%, rgba(240, 200, 160, 0.32) 0%, rgba(240, 200, 160, 0.10) 35%, transparent 70%),
+      radial-gradient(ellipse 92% 82% at 48% 52%, rgba(248, 235, 220, 0.10) 0%, transparent 60%);
+  }
+  75% {
+    background-image:
+      radial-gradient(ellipse 83% 73% at 51% 49%, rgba(220, 160, 100, 0.62) 0%, rgba(220, 160, 100, 0.33) 25%, rgba(230, 180, 130, 0.23) 50%, transparent 75%),
+      radial-gradient(ellipse 71% 61% at 57% 43%, rgba(230, 180, 130, 0.43) 0%, rgba(230, 180, 130, 0.19) 30%, transparent 65%),
+      radial-gradient(ellipse 61% 51% at 53% 55%, rgba(240, 200, 160, 0.36) 0%, rgba(240, 200, 160, 0.13) 35%, transparent 70%),
+      radial-gradient(ellipse 89% 79% at 51% 49%, rgba(248, 235, 220, 0.13) 0%, transparent 60%);
+  }
+}
+
+/* Respect user's reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .persona-backdrop {
+    animation: none;
+  }
 }
 
 /* Hide blur element - not using this approach anymore */
