@@ -35,7 +35,7 @@ function handleSimulationLogoClick() {
   } else {
     // No active session, navigate directly
     sessionStorage.removeItem('simulationParams');
-    window.location.href = 'index.html';
+    window.location.href = '/';
   }
 }
 
@@ -50,7 +50,7 @@ function navigateToProfile() {
     }
   } else {
     sessionStorage.removeItem('simulationParams');
-    window.location.href = 'index.html#profilePage';
+    window.location.href = '/#profilePage';
   }
 }
 
@@ -67,7 +67,7 @@ function navigateToScenarioSelection() {
     }
   } else {
     sessionStorage.removeItem('simulationParams');
-    window.location.href = 'index.html#scenarioSelection';
+    window.location.href = '/#scenarioSelection';
   }
 }
 
@@ -84,7 +84,7 @@ function navigateToDifficultySelection() {
     }
   } else {
     sessionStorage.removeItem('simulationParams');
-    window.location.href = 'index.html#difficultySelection';
+    window.location.href = '/#difficultySelection';
   }
 }
 
@@ -103,7 +103,7 @@ function exitSimulation() {
 
   // No active session or modal not available - navigate directly
   sessionStorage.removeItem('simulationParams');
-  window.location.href = 'index.html#scenarioSelection';
+  window.location.href = '/#scenarioSelection';
 }
 
 /**
@@ -447,7 +447,7 @@ function showSimulationSummary(feedback) {
     newScenarioBtn.onclick = () => {
       // Clear params and go to scenario selection
       sessionStorage.removeItem('simulationParams');
-      window.location.href = 'index.html#scenarioSelection';
+      window.location.href = '/#scenarioSelection';
     };
   }
 
@@ -455,7 +455,7 @@ function showSimulationSummary(feedback) {
     exitBtn.onclick = () => {
       // Clear params and go to landing
       sessionStorage.removeItem('simulationParams');
-      window.location.href = 'index.html';
+      window.location.href = '/';
     };
   }
 }
@@ -560,7 +560,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const params = loadSimulationParams();
   if (!params) {
     console.error('[SimulationApp] No simulation params found, redirecting to index');
-    window.location.href = 'index.html';
+    window.location.href = '/';
     return;
   }
 
@@ -585,7 +585,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!hasAccess) {
       console.warn('[SimulationApp] Access denied to scenario:', params.scenario.promptFile);
       sessionStorage.removeItem('simulationParams');
-      window.location.href = 'index.html#accessDenied';
+      window.location.href = '/#accessDenied';
       return;
     }
     console.log('[SimulationApp] Access verified for scenario');
