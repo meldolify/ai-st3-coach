@@ -1016,15 +1016,28 @@
   <!-- Upgrade Modal -->
   <div id="upgradeModal" class="upgrade-modal">
     <div class="upgrade-content">
-      <h2>Upgrade to Premium</h2>
-      <p>Unlock all scenarios and accelerate your interview preparation.</p>
+      <button type="button" class="modal-close" onclick="hideUpgradeModal()" aria-label="Close">&times;</button>
+      <h2 id="upgradeModalTitle">Unlock Plastic Surgery ST3</h2>
+      <p id="upgradeModalMessage">Get full access to all Plastic Surgery interview scenarios and mock exams.</p>
 
       <ul class="upgrade-benefits">
-        <li><span class="check">✓</span> Access to all clinical scenarios</li>
-        <li><span class="check">✓</span> All difficulty levels</li>
-        <li><span class="check">✓</span> Detailed AI feedback</li>
-        <li><span class="check">✓</span> Progress tracking</li>
+        <li><span class="check">✓</span> All 231 Plastic Surgery scenarios</li>
+        <li><span class="check">✓</span> Clinical, Communication & Structured stations</li>
+        <li><span class="check">✓</span> Mock Exam mode with timed stations</li>
+        <li><span class="check">✓</span> Detailed AI feedback after each session</li>
       </ul>
+
+      <!-- Pricing Toggle -->
+      <div class="pricing-toggle">
+        <button class="plan-btn active" data-plan="monthly" onclick="selectPlan('monthly')">Monthly</button>
+        <button class="plan-btn" data-plan="annual" onclick="selectPlan('annual')">Annual</button>
+      </div>
+
+      <div class="pricing-display">
+        <span class="price" id="priceDisplay">£14.99</span>
+        <span class="period" id="periodDisplay">/month</span>
+      </div>
+      <div class="savings-badge" id="savingsDisplay"></div>
 
       <div class="upgrade-buttons">
         <button class="btn-upgrade" onclick="startCheckout()">Subscribe Now</button>
@@ -1032,6 +1045,19 @@
       </div>
     </div>
   </div>
+
+  <!-- Success Modal (post-payment) -->
+  <div id="successModal" class="success-modal">
+    <div class="success-content">
+      <div class="success-icon">✓</div>
+      <h2>Welcome to Plastic Surgery ST3!</h2>
+      <p>You now have full access to all Plastic Surgery scenarios and features.</p>
+      <button class="btn-upgrade" onclick="hideSuccessModal()">Start Training</button>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toastContainer" class="toast-container"></div>
 
   <div class="container">
     <!-- Page 1: Specialty Selection -->

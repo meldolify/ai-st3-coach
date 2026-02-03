@@ -752,7 +752,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   if (urlParams.get('payment') === 'success') {
     // Reload subscription status after successful payment
     await loadSubscription();
-    alert('Payment successful! You now have Premium access.');
+    showSuccessModal('You now have full access to all Plastic Surgery ST3 scenarios and mock exams.');
     window.history.replaceState({}, '', window.location.pathname);
   } else if (urlParams.get('payment') === 'cancelled') {
     window.history.replaceState({}, '', window.location.pathname);
