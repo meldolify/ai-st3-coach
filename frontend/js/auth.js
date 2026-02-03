@@ -146,6 +146,124 @@ async function loadUserStats() {
   }
 }
 
+/**
+ * Load feedback statistics grouped by scenario category
+ * Categories are determined by the scenario_path:
+ * - clinical_stations/* -> Clinical Stations
+ * - communication/* -> Communication
+ * - structured_interview/* -> Structured Interview
+ */
+async function loadFeedbackStats() {
+  if (!supabaseClient || !currentUser) {
+    return {
+      clinical: { count: 0, avgScore: null },
+      communication: { count: 0, avgScore: null },
+      structured: { count: 0, avgScore: null }
+    };
+  }
+
+  try {
+    // Fetch all sessions with feedback for this user
+    const { data, error } = await supabaseClient
+      .from('session_history')
+      .select('scenario_path, feedback_data')
+      .eq('user_id', currentUser.id)
+      .not('feedback_data', 'is', null);
+
+    if (error) throw error;
+
+    // Group and aggregate by category
+    const stats = {
+      clinical: { scores: [], count: 0, avgScore: null },
+      communication: { scores: [], count: 0, avgScore: null },
+      structured: { scores: [], count: 0, avgScore: null }
+    };
+
+    (data || []).forEach(session => {
+      const path = (session.scenario_path || '').toLowerCase();
+      const score = session.feedback_data?.score;
+
+      // Determine category from path
+      let category = null;
+      if (path.includes('clinical_stations') || path.includes('clinical/')) {
+        category = 'clinical';
+      } else if (path.includes('communication') || path.includes('call_boss') || path.includes('consent')) {
+        category = 'communication';
+      } else if (path.includes('structured_interview') || path.includes('structured')) {
+        category = 'structured';
+      }
+
+      if (category && score) {
+        stats[category].scores.push(score);
+        stats[category].count++;
+      }
+    });
+
+    // Calculate averages
+    Object.keys(stats).forEach(cat => {
+      if (stats[cat].scores.length > 0) {
+        const sum = stats[cat].scores.reduce((a, b) => a + b, 0);
+        stats[cat].avgScore = (sum / stats[cat].scores.length).toFixed(1);
+      }
+      delete stats[cat].scores; // Clean up
+    });
+
+    return stats;
+  } catch (error) {
+    console.error('[AUTH] Error loading feedback stats:', error);
+    return {
+      clinical: { count: 0, avgScore: null },
+      communication: { count: 0, avgScore: null },
+      structured: { count: 0, avgScore: null }
+    };
+  }
+}
+
+/**
+ * Populate progress cards with feedback statistics
+ */
+function populateProgressCards(stats) {
+  const categories = [
+    { key: 'clinical', name: 'Clinical Stations' },
+    { key: 'communication', name: 'Communication' },
+    { key: 'structured', name: 'Structured Interview' }
+  ];
+
+  categories.forEach(cat => {
+    const countEl = document.getElementById(`progress-${cat.key}-count`);
+    const scoreEl = document.getElementById(`progress-${cat.key}-score`);
+    const indicatorEl = document.getElementById(`progress-${cat.key}-indicator`);
+    const cardEl = document.getElementById(`progress-${cat.key}-card`);
+
+    if (countEl) countEl.textContent = stats[cat.key]?.count || 0;
+
+    if (scoreEl) {
+      const avg = stats[cat.key]?.avgScore;
+      scoreEl.textContent = avg ? `${avg}/5` : '-';
+    }
+
+    if (indicatorEl && cardEl) {
+      const avg = parseFloat(stats[cat.key]?.avgScore) || 0;
+      // Remove existing color classes
+      indicatorEl.classList.remove('progress-indicator--low', 'progress-indicator--medium', 'progress-indicator--high');
+      cardEl.classList.remove('progress-card--low', 'progress-card--medium', 'progress-card--high');
+
+      if (avg > 0) {
+        if (avg < 3) {
+          indicatorEl.classList.add('progress-indicator--low');
+          cardEl.classList.add('progress-card--low');
+        } else if (avg < 4) {
+          indicatorEl.classList.add('progress-indicator--medium');
+          cardEl.classList.add('progress-card--medium');
+        } else {
+          indicatorEl.classList.add('progress-indicator--high');
+          cardEl.classList.add('progress-card--high');
+        }
+      }
+    }
+  });
+}
+
 // ============================================================================
 // PAGE NAVIGATION (AUTH)
 // ============================================================================
@@ -467,6 +585,10 @@ async function populateProfilePage() {
   if (statLastEl) statLastEl.textContent = stats.lastSessionDate
     ? new Date(stats.lastSessionDate).toLocaleDateString()
     : '-';
+
+  // Load feedback stats and populate progress cards
+  const feedbackStats = await loadFeedbackStats();
+  populateProgressCards(feedbackStats);
 }
 
 function hideAllPages() {

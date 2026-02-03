@@ -45,3 +45,30 @@ async function logSessionEnd() {
   }
 }
 
+/**
+ * Store feedback data for the current session
+ * @param {Object} feedback - Feedback object from AI
+ * @param {number} feedback.score - Score 1-5
+ * @param {string[]} feedback.strengths - Array of strengths
+ * @param {string[]} feedback.improvements - Array of improvements
+ * @param {string} feedback.summary - Summary text
+ */
+async function logSessionFeedback(feedback) {
+  if (!supabaseClient || !currentSessionHistoryId || !feedback) return;
+
+  try {
+    const { error } = await supabaseClient
+      .from('session_history')
+      .update({
+        feedback_data: feedback,
+        ended_at: new Date().toISOString()
+      })
+      .eq('id', currentSessionHistoryId);
+
+    if (error) throw error;
+    console.log('[TRACKING] Feedback saved for session:', currentSessionHistoryId);
+  } catch (error) {
+    console.error('[TRACKING] Error saving feedback:', error);
+  }
+}
+

@@ -339,6 +339,11 @@ async function endSessionWithFeedback() {
     }
   }
 
+  // Save feedback to database
+  if (feedback && typeof logSessionFeedback === 'function') {
+    await logSessionFeedback(feedback);
+  }
+
   // Log session end for analytics
   if (typeof logSessionEnd === 'function') {
     await logSessionEnd();
