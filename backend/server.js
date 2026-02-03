@@ -110,28 +110,96 @@ wss.on('connection', (ws, req) => {
   const scenarioFile = queryParams.scenario || 'template.txt';
   const difficulty = queryParams.difficulty || null;
   const voice = queryParams.voice || config.TTS_VOICE;
+  const userId = queryParams.userId || null;
+  const authToken = queryParams.token || null;
+
   console.log('[CLIENT] Requested scenario: ' + scenarioFile + (difficulty ? ' (difficulty: ' + difficulty + ')' : '') + (voice ? ' (voice: ' + voice + ')' : ''));
 
-  const scenarioPrompt = loadScenarioPrompt(scenarioFile, difficulty);
-  const sessionId = generateSecureSessionId();
+  // Async IIFE for access validation
+  (async () => {
+    // Server-side tier validation if Supabase is enabled
+    if (config.isSupabaseEnabled && supabaseAdmin) {
+      try {
+        // Check if this is a free tier scenario (no auth required)
+        const isFreeScenario = config.FREE_TIER_SCENARIOS.includes(scenarioFile);
 
-  sessions.set(sessionId, {
-    history: [{ role: 'system', content: scenarioPrompt }],
-    ws: ws,
-    scenario: scenarioFile,
-    voice: voice,
-    isAISpeaking: false,
-    inFeedbackMode: false,
-    feedbackCount: 0
-  });
+        if (!isFreeScenario) {
+          // Premium scenario - require authentication
+          if (!userId || !authToken) {
+            console.warn('[ACCESS] Rejected: No auth credentials for premium scenario');
+            ws.send(JSON.stringify({ type: 'error', message: 'Authentication required' }));
+            ws.close(4001, 'Unauthorized');
+            return;
+          }
 
-  ws.send(JSON.stringify({
-    type: 'scenario_loaded',
-    sessionId: sessionId,
-    scenario: scenarioFile
-  }));
+          // Verify the auth token with Supabase
+          const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(authToken);
 
-  ws.on('message', async (data) => {
+          if (authError || !user) {
+            console.warn('[ACCESS] Rejected: Invalid auth token');
+            ws.send(JSON.stringify({ type: 'error', message: 'Authentication failed' }));
+            ws.close(4001, 'Unauthorized');
+            return;
+          }
+
+          if (user.id !== userId) {
+            console.warn('[ACCESS] Rejected: User ID mismatch');
+            ws.send(JSON.stringify({ type: 'error', message: 'Authentication failed' }));
+            ws.close(4001, 'Unauthorized');
+            return;
+          }
+
+          // Check subscription status
+          const { data: subscription, error: subError } = await supabaseAdmin
+            .from('subscriptions')
+            .select('status')
+            .eq('user_id', userId)
+            .single();
+
+          const isPremium = subscription?.status === 'active';
+
+          if (!isPremium) {
+            console.warn('[ACCESS] Rejected: No active subscription for premium scenario');
+            ws.send(JSON.stringify({ type: 'error', message: 'Subscription required' }));
+            ws.close(4003, 'Subscription required');
+            return;
+          }
+
+          console.log('[ACCESS] Verified: Premium user accessing premium scenario');
+        } else {
+          console.log('[ACCESS] Allowed: Free tier scenario');
+        }
+      } catch (err) {
+        console.error('[ACCESS] Validation error:', err);
+        ws.send(JSON.stringify({ type: 'error', message: 'Access validation failed' }));
+        ws.close(4002, 'Validation error');
+        return;
+      }
+    }
+
+    // Access validated - create session
+    const scenarioPrompt = loadScenarioPrompt(scenarioFile, difficulty);
+    const sessionId = generateSecureSessionId();
+
+    sessions.set(sessionId, {
+      history: [{ role: 'system', content: scenarioPrompt }],
+      ws: ws,
+      scenario: scenarioFile,
+      voice: voice,
+      userId: userId, // Track which user is in this session
+      isAISpeaking: false,
+      inFeedbackMode: false,
+      feedbackCount: 0
+    });
+
+    ws.send(JSON.stringify({
+      type: 'scenario_loaded',
+      sessionId: sessionId,
+      scenario: scenarioFile
+    }));
+
+    // Set up message handler only after validation passes
+    ws.on('message', async (data) => {
     try {
       // Parse and validate message
       let msg;
@@ -340,11 +408,12 @@ wss.on('connection', (ws, req) => {
     }
   });
 
-  ws.on('close', () => {
-    sessions.delete(sessionId);
-    wsRateLimiter.removeClient(sessionId);
-    console.log(`[CLIENT] Disconnected: ${sessionId}`);
-  });
+    ws.on('close', () => {
+      sessions.delete(sessionId);
+      wsRateLimiter.removeClient(sessionId);
+      console.log(`[CLIENT] Disconnected: ${sessionId}`);
+    });
+  })();
 });
 
 // ============================================================================

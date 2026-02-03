@@ -269,12 +269,19 @@ function populateProgressCards(stats) {
 // ============================================================================
 
 function showLandingPage() {
-  hideAllPages();
+  // Guard: Only run on pages that have the landing page element (index.html)
   const landingPage = document.getElementById('landingPage');
+  if (!landingPage) {
+    console.log('[AUTH] showLandingPage called on page without landing page element');
+    return;
+  }
+
+  hideAllPages();
   landingPage.classList.remove('hidden');
   landingPage.classList.add('active');
   landingPage.style.display = 'block';
-  document.getElementById('appHeader').style.display = 'none';
+  const appHeader = document.getElementById('appHeader');
+  if (appHeader) appHeader.style.display = 'none';
   document.body.classList.remove('has-header');
 
   // Update landing page content based on auth state

@@ -586,6 +586,22 @@ function selectScenario(topicFolder, title, imageFile) {
     return;
   }
 
+  // Save simulation parameters to sessionStorage for the simulation page
+  if (typeof saveSimulationParams === 'function') {
+    saveSimulationParams({
+      scenario: {
+        category: topicFolder.split('/')[0],
+        title: title,
+        promptFile: promptFile,
+        imageFile: imageFile
+      },
+      difficulty: selectedDifficulty,
+      mode: selectedMode || 'practice',
+      mockExamType: mockExamType,
+      returnPage: 'scenarioSelection'
+    });
+  }
+
   // Show "Entering Simulation Room" overlay
   const overlay = document.getElementById('simulationTransition');
   overlay.style.display = 'flex';
@@ -597,20 +613,10 @@ function selectScenario(topicFolder, title, imageFile) {
     });
   });
 
-  // Wait 1 second then fade out overlay
+  // Wait 1 second then navigate to simulation.html
   setTimeout(() => {
-    overlay.classList.remove('active');
-
-    // After overlay fades out, hide it and start page transition
-    setTimeout(() => {
-      overlay.style.display = 'none';
-
-      // Use the same transition pattern as other page transitions
-      transitionToPage('scenarioSelection', 'simulationRoom', () => {
-        // Load scenario content after page transition starts
-        startScenario(title, title, promptFile, imageFile);
-      });
-    }, 800); // Wait for overlay fade-out
+    // Navigate to separate simulation page
+    window.location.href = 'simulation.html';
   }, 1000); // Display overlay for 1 second
 }
 

@@ -47,6 +47,67 @@ let scenarioTimeLimit = 300;          // 5 minutes default (mock by station)
 let timerWarningShown = false;
 
 // ============================================================================
+// SIMULATION PAGE SESSION STORAGE HELPERS
+// ============================================================================
+// These functions manage state transfer between index.html and simulation.html
+
+/**
+ * Save simulation parameters to sessionStorage before navigating to simulation.html
+ * @param {Object} params - Simulation parameters
+ * @param {Object} params.scenario - Scenario info (title, promptFile, imageFile, category)
+ * @param {string} params.difficulty - Difficulty level (easy/medium/strict)
+ * @param {string} params.mode - Mode (practice/mock-exam)
+ * @param {string} [params.mockExamType] - Mock exam type if applicable
+ * @param {string} [params.returnPage] - Page to return to after exit
+ */
+function saveSimulationParams(params) {
+  const simulationParams = {
+    scenario: params.scenario || currentScenario,
+    difficulty: params.difficulty || selectedDifficulty || 'easy',
+    mode: params.mode || selectedMode || 'practice',
+    mockExamType: params.mockExamType || mockExamType,
+    stationType: params.stationType || selectedStationType,
+    mockExam: params.mockExam || {
+      isActive: isMockExamActive,
+      stations: mockExamStations,
+      currentIndex: currentStationIndex,
+      results: mockExamResults
+    },
+    returnPage: params.returnPage || 'scenarioSelection'
+  };
+  sessionStorage.setItem('simulationParams', JSON.stringify(simulationParams));
+  console.log('[State] Saved simulation params:', simulationParams);
+  return simulationParams;
+}
+
+/**
+ * Load simulation parameters from sessionStorage
+ * @returns {Object|null} Simulation params or null if not found
+ */
+function loadSimulationParams() {
+  const paramsJson = sessionStorage.getItem('simulationParams');
+  if (!paramsJson) {
+    return null;
+  }
+  try {
+    const params = JSON.parse(paramsJson);
+    console.log('[State] Loaded simulation params:', params);
+    return params;
+  } catch (e) {
+    console.error('[State] Error parsing simulation params:', e);
+    return null;
+  }
+}
+
+/**
+ * Clear simulation parameters from sessionStorage
+ */
+function clearSimulationParams() {
+  sessionStorage.removeItem('simulationParams');
+  console.log('[State] Cleared simulation params');
+}
+
+// ============================================================================
 // TIER TESTING MODE (Development Only)
 // ============================================================================
 // Use browser console to test different user tiers:

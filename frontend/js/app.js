@@ -542,77 +542,88 @@ function closeImageModal() {
 // ============================================================================
 // BUTTON EVENT HANDLERS
 // ============================================================================
+// NOTE: Simulation room button handlers are now in simulation-app.js
+// These handlers only run if the buttons exist (for legacy compatibility)
 
-document.getElementById('connectBtn').addEventListener('click', async () => {
-  try {
-    log('Initializing session...', 'info');
-    session = new V4Session(CONFIG.BACKEND_URL, currentScenario.promptFile, selectedDifficulty);
-    window.session = session; // Expose globally for cross-module access
-    await session.connect();
-    session.startListening();
-    document.getElementById('connectBtn').disabled = true;
-    document.getElementById('disconnectBtn').disabled = false;
+const connectBtn = document.getElementById('connectBtn');
+const disconnectBtn = document.getElementById('disconnectBtn');
+const interruptBtn = document.getElementById('interruptBtn');
 
-    // VAD mode - continuous listening, no record button needed
-    log('Session ready! Voice detection active - just speak naturally.', 'success');
-    syncMobileButtonStates(); // Sync mobile buttons
+if (connectBtn) {
+  connectBtn.addEventListener('click', async () => {
+    try {
+      log('Initializing session...', 'info');
+      session = new V4Session(CONFIG.BACKEND_URL, currentScenario.promptFile, selectedDifficulty);
+      window.session = session; // Expose globally for cross-module access
+      await session.connect();
+      session.startListening();
+      document.getElementById('connectBtn').disabled = true;
+      document.getElementById('disconnectBtn').disabled = false;
 
-    // Log session start for analytics
-    await logSessionStart();
+      // VAD mode - continuous listening, no record button needed
+      log('Session ready! Voice detection active - just speak naturally.', 'success');
+      syncMobileButtonStates(); // Sync mobile buttons
 
-    // Show the clinical image with transition when session starts
-    const imageSection = document.getElementById('imageSection');
-    const mobileImageSection = document.getElementById('mobileImageSection');
-    if (imageSection) {
-      imageSection.classList.add('visible');
+      // Log session start for analytics
+      await logSessionStart();
+
+      // Show the clinical image with transition when session starts
+      const imageSection = document.getElementById('imageSection');
+      const mobileImageSection = document.getElementById('mobileImageSection');
+      if (imageSection) {
+        imageSection.classList.add('visible');
+      }
+      if (mobileImageSection) {
+        mobileImageSection.classList.add('visible');
+      }
+    } catch (error) {
+      log('Connection failed: ' + error.message, 'error');
     }
-    if (mobileImageSection) {
-      mobileImageSection.classList.add('visible');
-    }
-  } catch (error) {
-    log('Connection failed: ' + error.message, 'error');
-  }
-});
+  });
+}
 
-document.getElementById('disconnectBtn').addEventListener('click', async () => {
-  // Use new feedback-aware end session flow
-  await endSessionWithFeedback();
-});
+if (disconnectBtn) {
+  disconnectBtn.addEventListener('click', async () => {
+    // Use new feedback-aware end session flow
+    await endSessionWithFeedback();
+  });
+}
 
 // Interrupt button - stops AI and activates microphone
-document.getElementById('interruptBtn').addEventListener('click', () => {
-  if (session && session.audioPlayer.isPlaying) {
-    session.audioPlayer.interrupt();
+if (interruptBtn) {
+  interruptBtn.addEventListener('click', () => {
+    if (session && session.audioPlayer.isPlaying) {
+      session.audioPlayer.interrupt();
 
-    // Resume VAD listening
-    if (session.speechRecognition && session.speechRecognition.setAISpeaking) {
-      session.speechRecognition.setAISpeaking(false);
+      // Resume VAD listening
+      if (session.speechRecognition && session.speechRecognition.setAISpeaking) {
+        session.speechRecognition.setAISpeaking(false);
+      }
+
+      // Notify backend
+      if (session.isConnected && session.sessionId) {
+        session.ws.send(JSON.stringify({
+          type: 'user_speaking',
+          sessionId: session.sessionId
+        }));
+      }
+
+      // Hide interrupt button and remove active styling
+      interruptBtn.style.display = 'none';
+      interruptBtn.disabled = true;
+      interruptBtn.classList.remove('active');
+
+      const mobileInterruptBtn = document.getElementById('mobileInterruptBtn');
+      if (mobileInterruptBtn) {
+        mobileInterruptBtn.classList.remove('active');
+      }
+
+      syncMobileButtonStates();
+      setOrbState('listening');
+      log('AI interrupted by user', 'info');
     }
-
-    // Notify backend
-    if (session.isConnected && session.sessionId) {
-      session.ws.send(JSON.stringify({
-        type: 'user_speaking',
-        sessionId: session.sessionId
-      }));
-    }
-
-    // Hide interrupt button and remove active styling
-    const interruptBtn = document.getElementById('interruptBtn');
-    interruptBtn.style.display = 'none';
-    interruptBtn.disabled = true;
-    interruptBtn.classList.remove('active');
-
-    const mobileInterruptBtn = document.getElementById('mobileInterruptBtn');
-    if (mobileInterruptBtn) {
-      mobileInterruptBtn.classList.remove('active');
-    }
-
-    syncMobileButtonStates();
-    setOrbState('listening');
-    log('AI interrupted by user', 'info');
-  }
-});
+  });
+}
 
 // ============================================================================
 // SCROLL ANIMATIONS (Squarespace-style)
@@ -723,6 +734,34 @@ window.addEventListener('DOMContentLoaded', async () => {
     initSupabase();
     await checkAuthState();
     // Note: hideLoadingOverlay() is called inside checkAuthState() after determining destination
+
+    // Handle return navigation from simulation.html via URL hash
+    if (window.location.hash === '#scenarioSelection') {
+      console.log('[NAV] Returning from simulation - showing scenario selection');
+      showPage('scenarioSelection');
+      history.replaceState(null, '', window.location.pathname);
+    } else if (window.location.hash === '#modeSelection') {
+      console.log('[NAV] Returning to mode selection');
+      showPage('modeSelection');
+      history.replaceState(null, '', window.location.pathname);
+    } else if (window.location.hash === '#difficultySelection') {
+      console.log('[NAV] Returning to difficulty selection');
+      showPage('difficultySelection');
+      history.replaceState(null, '', window.location.pathname);
+    } else if (window.location.hash === '#accessDenied') {
+      console.log('[NAV] Access denied - showing upgrade modal');
+      history.replaceState(null, '', window.location.pathname);
+      showPage('scenarioSelection');
+      // Show upgrade modal after a brief delay to ensure page is rendered
+      setTimeout(() => {
+        if (typeof showUpgradeModal === 'function') {
+          showUpgradeModal({
+            title: 'Access Required',
+            message: 'Please subscribe to access this scenario.'
+          });
+        }
+      }, 100);
+    }
   } catch (error) {
     console.error('[INIT] Critical error during initialization:', error);
     showLandingPage();
