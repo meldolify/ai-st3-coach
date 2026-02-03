@@ -943,44 +943,71 @@
           </div>
         </div>
 
-        <!-- Right Panel - Progress Tracking (Coming Soon) -->
+        <!-- Right Panel - Progress Tracking -->
         <div class="profile-progress-panel">
-          <div class="coming-soon-placeholder">
-            <div class="progress-illustration">
-              <!-- Abstract chart/graph SVG illustration -->
-              <svg viewBox="0 0 180 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <!-- Background grid lines -->
-                <line x1="20" y1="120" x2="160" y2="120" stroke="#1B4D89" stroke-width="1" opacity="0.2" />
-                <line x1="20" y1="90" x2="160" y2="90" stroke="#1B4D89" stroke-width="1" opacity="0.1" />
-                <line x1="20" y1="60" x2="160" y2="60" stroke="#1B4D89" stroke-width="1" opacity="0.1" />
-                <line x1="20" y1="30" x2="160" y2="30" stroke="#1B4D89" stroke-width="1" opacity="0.1" />
+          <h3 class="progress-panel-title">Your Progress</h3>
+          <p class="progress-panel-subtitle">Average scores by category</p>
 
-                <!-- Area chart fill -->
-                <path d="M20 120 L40 95 L60 100 L80 70 L100 75 L120 45 L140 50 L160 25 L160 120 Z"
-                  fill="url(#chartGradient)" opacity="0.3" />
-
-                <!-- Line chart -->
-                <path d="M20 120 L40 95 L60 100 L80 70 L100 75 L120 45 L140 50 L160 25" stroke="#1B4D89"
-                  stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" />
-
-                <!-- Data points -->
-                <circle cx="40" cy="95" r="4" fill="#1B4D89" />
-                <circle cx="80" cy="70" r="4" fill="#1B4D89" />
-                <circle cx="120" cy="45" r="4" fill="#1B4D89" />
-                <circle cx="160" cy="25" r="5" fill="#1B4D89" />
-
-                <!-- Gradient definition -->
-                <defs>
-                  <linearGradient id="chartGradient" x1="90" y1="25" x2="90" y2="120" gradientUnits="userSpaceOnUse">
-                    <stop offset="0%" stop-color="#1B4D89" stop-opacity="0.4" />
-                    <stop offset="100%" stop-color="#1B4D89" stop-opacity="0" />
-                  </linearGradient>
-                </defs>
-              </svg>
+          <div class="progress-cards-grid">
+            <!-- Clinical Stations Card -->
+            <div id="progress-clinical-card" class="progress-card">
+              <div class="progress-card-header">
+                <span class="progress-card-icon">&#129658;</span>
+                <span id="progress-clinical-indicator" class="progress-indicator"></span>
+              </div>
+              <h4 class="progress-card-title">Clinical Stations</h4>
+              <div class="progress-card-stats">
+                <div class="progress-stat">
+                  <span class="progress-stat-value" id="progress-clinical-score">-</span>
+                  <span class="progress-stat-label">Avg Score</span>
+                </div>
+                <div class="progress-stat">
+                  <span class="progress-stat-value" id="progress-clinical-count">0</span>
+                  <span class="progress-stat-label">Sessions</span>
+                </div>
+              </div>
             </div>
-            <h3>Progress Tracking</h3>
-            <p>Detailed analytics and performance insights coming soon...</p>
+
+            <!-- Communication Card -->
+            <div id="progress-communication-card" class="progress-card">
+              <div class="progress-card-header">
+                <span class="progress-card-icon">&#128222;</span>
+                <span id="progress-communication-indicator" class="progress-indicator"></span>
+              </div>
+              <h4 class="progress-card-title">Communication</h4>
+              <div class="progress-card-stats">
+                <div class="progress-stat">
+                  <span class="progress-stat-value" id="progress-communication-score">-</span>
+                  <span class="progress-stat-label">Avg Score</span>
+                </div>
+                <div class="progress-stat">
+                  <span class="progress-stat-value" id="progress-communication-count">0</span>
+                  <span class="progress-stat-label">Sessions</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Structured Interview Card -->
+            <div id="progress-structured-card" class="progress-card">
+              <div class="progress-card-header">
+                <span class="progress-card-icon">&#128203;</span>
+                <span id="progress-structured-indicator" class="progress-indicator"></span>
+              </div>
+              <h4 class="progress-card-title">Structured Interview</h4>
+              <div class="progress-card-stats">
+                <div class="progress-stat">
+                  <span class="progress-stat-value" id="progress-structured-score">-</span>
+                  <span class="progress-stat-label">Avg Score</span>
+                </div>
+                <div class="progress-stat">
+                  <span class="progress-stat-value" id="progress-structured-count">0</span>
+                  <span class="progress-stat-label">Sessions</span>
+                </div>
+              </div>
+            </div>
           </div>
+
+          <p class="progress-footer-note">Complete more sessions to track your improvement</p>
         </div>
       </div>
     </div>
