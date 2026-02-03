@@ -613,10 +613,11 @@ function selectScenario(topicFolder, title, imageFile) {
     });
   });
 
-  // Wait 1 second then navigate to simulation.html
+  // Wait 1 second then navigate to simulation page
+  // Use clean URL (without .html) for Vercel compatibility
   setTimeout(() => {
     // Navigate to separate simulation page
-    window.location.href = 'simulation.html';
+    window.location.href = 'simulation';
   }, 1000); // Display overlay for 1 second
 }
 
