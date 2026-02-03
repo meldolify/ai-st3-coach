@@ -40,9 +40,11 @@ The backend on Render requires these environment variables:
 cd backend
 npm run dev
 
-# Frontend development server
+# Frontend development server (for simulation.html testing)
 cd frontend
-npx serve -s . -l 5500
+python -m http.server 5500
+# OR: npx serve . -l 5500 (without -s flag!)
+# NOTE: Do NOT use `npx serve -s` as SPA mode redirects simulation.html to index.html
 
 # Alternative frontend server
 node serve.js
@@ -133,9 +135,73 @@ Sessions stored in `Map<sessionId, SessionData>` where SessionData contains:
 - `ws` - WebSocket connection
 - `scenario` - Scenario file path
 - `voice` - TTS voice name
+- `userId` - User ID for tracking (if authenticated)
 - `isAISpeaking` - Boolean flag for interrupt handling
 - `inFeedbackMode` - Boolean flag for feedback detection
 - `feedbackCount` - Counter for feedback turns
+
+### Simulation Page Architecture
+
+The simulation room is a **separate HTML page** (`simulation.html`) for complete state isolation:
+
+**Page Structure:**
+- `index.html` - Landing, auth, scenario selection, difficulty selection
+- `simulation.html` - Standalone simulation room with its own header, sidebar, session summary
+
+**Navigation Flow:**
+```
+index.html (select scenario)
+    → save params to sessionStorage
+    → redirect to simulation.html
+    → simulation runs
+    → on exit: redirect back to index.html#scenarioSelection
+```
+
+**State Transfer (via sessionStorage):**
+```javascript
+const simulationParams = {
+  scenario: { title, promptFile, imageFile, category },
+  difficulty: "easy|medium|strict",
+  mode: "practice|mock-exam",
+  mockExamType: "by-station|full-mock|null",
+  returnPage: "scenarioSelection"
+};
+sessionStorage.setItem('simulationParams', JSON.stringify(params));
+```
+
+**Key Files:**
+- `frontend/simulation.html` - Standalone simulation page
+- `frontend/js/simulation-app.js` - Entry point, loads params, initializes session
+- `frontend/js/state.js` - `saveSimulationParams()`, `loadSimulationParams()` helpers
+- `frontend/js/sidebar.js` - `performScenarioSwitch()` reloads page on scenario change
+
+### Access Control Protection
+
+Multi-layer protection prevents unauthorized access to premium scenarios:
+
+**Layer 1: Client-Side Check** (`simulation-app.js:548-558`)
+- After auth loads, calls `canAccessScenario(promptFile)`
+- If denied → clears sessionStorage, redirects to `index.html#accessDenied`
+
+**Layer 2: Hash Handler** (`app.js:751-762`)
+- Detects `#accessDenied` hash on page load
+- Shows upgrade modal with "Access Required" message
+
+**Layer 3: Server-Side Validation** (`server.js:119-177`)
+- WebSocket URL includes `userId` and `token` query params
+- Server validates auth token via Supabase before accepting connection
+- Checks subscription status in database
+- Rejects with error codes: `4001` (Unauthorized), `4002` (Validation error), `4003` (Subscription required)
+- Free tier scenarios bypass auth check
+
+**Tier Access Logic** (`subscription.js:canAccessScenario()`):
+- Unlogged users → ALL scenarios denied
+- Free users (logged in, no subscription) → only `FREE_TIER_SCENARIOS`
+- Premium users (active subscription) → all scenarios allowed
+
+**FREE_TIER_SCENARIOS** defined in:
+- `frontend/config.js` - Client-side checking
+- `backend/src/config/index.js` - Server-side validation (must stay in sync)
 
 ### Scenario Loading
 
@@ -227,21 +293,23 @@ backend/
 └── package.json                   # Dependencies + scripts
 
 frontend/
-├── index.html                     # UI (~1,800 lines)
-├── js/                            # Modular JavaScript (refactored from monolithic index.js)
-│   ├── app.js                     # Main application logic (~620 lines)
+├── index.html                     # Main app: landing, auth, scenario selection (~1,800 lines)
+├── simulation.html                # Standalone simulation room page (~1,080 lines)
+├── js/                            # Modular JavaScript
+│   ├── app.js                     # Main app logic, hash navigation (~770 lines)
 │   ├── auth.js                    # Supabase authentication (~830 lines)
 │   ├── scenarios.js               # Scenario selection & navigation (~950 lines)
-│   ├── session.js                 # V4Session WebSocket management (~560 lines)
+│   ├── session.js                 # V4Session WebSocket + auth params (~590 lines)
+│   ├── simulation-app.js          # simulation.html entry point, access check (~630 lines)
 │   ├── speech.js                  # Web Speech API / Whisper integration (~385 lines)
-│   ├── sidebar.js                 # Simulation room sidebar navigation (~385 lines)
+│   ├── sidebar.js                 # Sidebar navigation, scenario switching (~715 lines)
 │   ├── mock-exam.js               # Mock exam mode logic (~800 lines)
 │   ├── orb-visualizer.js          # Voice orb WebGL animation (~500 lines)
 │   ├── ui-helpers.js              # UI utility functions (~450 lines)
-│   ├── state.js                   # Global state variables (~85 lines)
+│   ├── state.js                   # Global state + sessionStorage helpers (~145 lines)
 │   ├── browser-detect.js          # Browser compatibility checks (~325 lines)
-│   ├── subscription.js            # Stripe subscription handling (~105 lines)
-│   ├── tracking.js                # Analytics tracking (~50 lines)
+│   ├── subscription.js            # Stripe + tier access control (~245 lines)
+│   ├── tracking.js                # Analytics tracking (~75 lines)
 │   ├── glow-effect.js             # Visual effects (~310 lines)
 │   ├── features-*.js              # Landing page animations (~360 lines total)
 │   ├── vad/                       # Voice Activity Detection
@@ -249,7 +317,7 @@ frontend/
 │   │   └── SimpleVAD.js           # Volume-based VAD fallback (~470 lines)
 │   └── utils/
 │       └── audio-utils.js         # Shared audio utilities (~100 lines)
-├── config.js                      # Environment config (Supabase, Stripe)
+├── config.js                      # Environment config (Supabase, Stripe, FREE_TIER_SCENARIOS)
 └── serve.js                       # Static file server
 ```
 
@@ -359,6 +427,8 @@ Edit `isNoiseTranscript()` in `server.js:97-147`:
 - **Google Cloud credentials:** Production deployment requires JSON credentials passed as environment variable
 - **Stripe webhooks:** Must be configured for subscription management
 - **Session cleanup:** No automatic cleanup - sessions persist until WebSocket disconnect
+- **SPA server mode:** Do NOT use `npx serve -s` for frontend - SPA mode redirects `simulation.html` to `index.html`. Use `python -m http.server` or `npx serve` without `-s` flag
+- **FREE_TIER_SCENARIOS sync:** The list in `frontend/config.js` and `backend/src/config/index.js` must stay in sync
 
 ## Git Workflow
 
