@@ -261,8 +261,9 @@ function performScenarioSwitch(title, imageFile, promptFile) {
   // Update current scenario tracking
   currentScenarioFile = promptFile;
 
-  // Check if we're on simulation.html (page-based navigation)
-  const isSimulationPage = window.location.pathname.includes('simulation.html');
+  // Check if we're on simulation page (page-based navigation)
+  // Check for both /simulation and /simulation.html (local dev vs Vercel clean URLs)
+  const isSimulationPage = window.location.pathname.includes('simulation');
 
   if (isSimulationPage) {
     // On simulation.html: Update sessionStorage and reload for fresh state
