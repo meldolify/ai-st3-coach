@@ -218,15 +218,35 @@ class V4Session {
     // Initialize orb visualizer (requires user gesture - we're in a click handler)
     await this.audioPlayer.initVisualizer();
 
+    // Build WebSocket URL with auth params for server-side validation
+    let wsUrl = this.backendUrl + '?scenario=' + this.promptFile;
+    if (this.difficulty) {
+      wsUrl += '&difficulty=' + this.difficulty;
+    }
+    if (this.voice) {
+      wsUrl += '&voice=' + this.voice;
+    }
+
+    // Add userId and auth token for server-side tier validation
+    if (window.currentUser?.id) {
+      wsUrl += '&userId=' + encodeURIComponent(window.currentUser.id);
+    }
+
+    // Get auth token from Supabase session
+    if (window.supabaseClient) {
+      try {
+        const { data } = await window.supabaseClient.auth.getSession();
+        const token = data?.session?.access_token;
+        if (token) {
+          wsUrl += '&token=' + encodeURIComponent(token);
+        }
+      } catch (err) {
+        console.warn('[Session] Could not get auth token:', err);
+      }
+    }
+
     return new Promise((resolve, reject) => {
-      let wsUrl = this.backendUrl + '?scenario=' + this.promptFile;
-      if (this.difficulty) {
-        wsUrl += '&difficulty=' + this.difficulty;
-      }
-      if (this.voice) {
-        wsUrl += '&voice=' + this.voice;
-      }
-      log('Connecting to ' + wsUrl + '...', 'info');
+      log('Connecting to ' + wsUrl.replace(/token=[^&]+/, 'token=***') + '...', 'info');
       this.ws = new WebSocket(wsUrl);
 
       this.ws.onopen = () => {

@@ -254,12 +254,36 @@ function selectScenarioFromSidebar(title, imageFile, promptFile) {
 
 /**
  * Perform the actual scenario switch (after session check)
+ * On simulation.html, this reloads the page with new params for fresh state.
+ * On index.html, it updates the current scenario in-place.
  */
 function performScenarioSwitch(title, imageFile, promptFile) {
   // Update current scenario tracking
   currentScenarioFile = promptFile;
 
-  // Update UI to show current selection
+  // Check if we're on simulation.html (page-based navigation)
+  const isSimulationPage = window.location.pathname.includes('simulation.html');
+
+  if (isSimulationPage) {
+    // On simulation.html: Update sessionStorage and reload for fresh state
+    const newScenario = {
+      category: title,
+      title: title,
+      promptFile: promptFile,
+      imageFile: imageFile || ''
+    };
+
+    // Save new params to sessionStorage (keeps same difficulty/mode)
+    const currentParams = JSON.parse(sessionStorage.getItem('simulationParams') || '{}');
+    currentParams.scenario = newScenario;
+    sessionStorage.setItem('simulationParams', JSON.stringify(currentParams));
+
+    console.log('[Sidebar] Reloading with new scenario:', newScenario);
+    window.location.reload();
+    return;
+  }
+
+  // On index.html: Update in-place (original behavior)
   highlightCurrentScenario(promptFile);
 
   // Load the scenario using existing function from scenarios.js
