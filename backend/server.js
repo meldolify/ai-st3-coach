@@ -452,16 +452,24 @@ app.post('/stripe-webhook',
           const userId = session.metadata?.userId;
           const customerId = session.customer;
           const subscriptionId = session.subscription;
+          const priceType = session.metadata?.priceType || 'monthly';
+          const specialty = session.metadata?.specialty || 'plastic-surgery';
 
           if (userId) {
+            // Use upsert to create or update the subscription record
             await supabaseAdmin
               .from('subscriptions')
-              .update({
+              .upsert({
+                user_id: userId,
                 stripe_customer_id: customerId,
                 stripe_subscription_id: subscriptionId,
-                status: 'active'
-              })
-              .eq('user_id', userId);
+                status: 'active',
+                price_type: priceType,
+                specialty: specialty,
+                created_at: new Date().toISOString()
+              }, {
+                onConflict: 'user_id'
+              });
 
             console.log('[STRIPE] Subscription activated for user:', userId);
           }
@@ -509,7 +517,9 @@ app.post('/create-checkout-session',
   express.json(),
   [
     body('userId').isString().isLength({ min: 1, max: 100 }).trim().escape(),
-    body('email').isEmail().normalizeEmail()
+    body('email').isEmail().normalizeEmail(),
+    body('priceType').optional().isIn(['monthly', 'annual']),
+    body('specialty').optional().isString().isLength({ max: 50 }).trim().escape()
   ],
   async (req, res) => {
     if (!stripe) {
@@ -524,27 +534,32 @@ app.post('/create-checkout-session',
     }
 
     try {
-      const { userId, email } = req.body;
+      const { userId, email, priceType = 'monthly', specialty = 'plastic-surgery' } = req.body;
 
-      // Verify STRIPE_PRICE_ID is configured
-      if (!config.STRIPE_PRICE_ID) {
-        console.error('[STRIPE] STRIPE_PRICE_ID not configured');
+      // Select price ID based on plan type
+      const priceId = priceType === 'annual'
+        ? config.STRIPE_PRICE_ID_ANNUAL
+        : config.STRIPE_PRICE_ID_MONTHLY;
+
+      // Verify price ID is configured
+      if (!priceId) {
+        console.error('[STRIPE] Price ID not configured for:', priceType);
         return res.status(500).json({ error: 'Payment configuration error' });
       }
 
       const session = await stripe.checkout.sessions.create({
         customer_email: email,
         line_items: [{
-          price: config.STRIPE_PRICE_ID,
+          price: priceId,
           quantity: 1
         }],
         mode: 'subscription',
         success_url: `${config.FRONTEND_URL}?payment=success`,
         cancel_url: `${config.FRONTEND_URL}?payment=cancelled`,
-        metadata: { userId }
+        metadata: { userId, priceType, specialty }
       });
 
-      console.log('[STRIPE] Checkout session created for:', email);
+      console.log('[STRIPE] Checkout session created for:', email, 'plan:', priceType, 'specialty:', specialty);
       res.json({ url: session.url });
     } catch (error) {
       console.error('[STRIPE] Error creating checkout session:', error);

@@ -495,7 +495,10 @@ function populateTopicCards(subcategoryId) {
 
 // Show message when clicking a locked scenario
 function showLockedScenarioMessage() {
-  alert('This scenario requires a Premium subscription.\n\nUpgrade to access all scenarios and features.');
+  showUpgradeModal({
+    title: 'Plastic Surgery ST3',
+    message: 'Unlock all 231 Plastic Surgery scenarios with a subscription.'
+  });
 }
 
 // Select a scenario from card and start it
@@ -563,7 +566,7 @@ function selectScenario(topicFolder, title, imageFile) {
   // Ensure we have a difficulty selected
   if (!selectedDifficulty) {
     log('Error: No difficulty selected', 'error');
-    alert('Please select a difficulty level first');
+    showErrorToast('Please select a difficulty level first');
     return;
   }
 
@@ -576,7 +579,10 @@ function selectScenario(topicFolder, title, imageFile) {
 
   // Check if user has access to this scenario
   if (!canAccessScenario(promptFile)) {
-    alert('This scenario requires a Premium subscription.\n\nUpgrade to access all scenarios and features.');
+    showUpgradeModal({
+      title: 'Plastic Surgery ST3',
+      message: 'Unlock all 231 Plastic Surgery scenarios with a subscription.'
+    });
     return;
   }
 

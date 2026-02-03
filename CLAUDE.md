@@ -8,6 +8,29 @@ ST3 Plastic Surgery Interview Trainer V4 - A cost-optimized voice-based AI inter
 
 **Architecture:** Browser → Web Speech API (STT) → WebSocket → GPT-4o-mini → Google Cloud TTS → Audio playback
 
+## Production Deployment
+
+- **Frontend:** https://www.reviva.live/ (Vercel)
+- **Backend API:** https://api.reviva.live/ (Render)
+- **WebSocket:** wss://api.reviva.live/
+
+### Stripe Webhook URL
+```
+https://api.reviva.live/stripe-webhook
+```
+
+### Environment Variables on Render
+The backend on Render requires these environment variables:
+- `OPENAI_API_KEY`
+- `GOOGLE_APPLICATION_CREDENTIALS_JSON` (JSON string, not file path)
+- `SUPABASE_URL`
+- `SUPABASE_SERVICE_KEY`
+- `STRIPE_SECRET_KEY`
+- `STRIPE_WEBHOOK_SECRET`
+- `STRIPE_PRICE_ID_MONTHLY`
+- `STRIPE_PRICE_ID_ANNUAL`
+- `FRONTEND_URL=https://www.reviva.live`
+
 ## Commands
 
 ### Development
@@ -138,6 +161,10 @@ If Supabase configured (`SUPABASE_URL` + `SUPABASE_SERVICE_KEY`):
 - Subscription management via Stripe integration
 - Session history tracking in database
 
+**Subscription Model:** Per-specialty pricing (currently Plastic Surgery ST3 only)
+- Monthly: £14.99/month
+- Annual: £99.99/year (save £80)
+
 If not configured, runs in demo mode without authentication.
 
 ### Noise Filtering
@@ -244,8 +271,9 @@ SUPABASE_URL=https://...           # Supabase project URL
 SUPABASE_SERVICE_KEY=eyJ...        # Service role key
 STRIPE_SECRET_KEY=sk_...           # Stripe secret key
 STRIPE_WEBHOOK_SECRET=whsec_...    # Stripe webhook secret
-STRIPE_PRICE_ID=price_...          # Subscription price ID
-FRONTEND_URL=https://...           # Frontend URL for redirects
+STRIPE_PRICE_ID_MONTHLY=price_...  # Monthly subscription (£14.99)
+STRIPE_PRICE_ID_ANNUAL=price_...   # Annual subscription (£99.99)
+FRONTEND_URL=https://www.reviva.live  # Frontend URL for redirects
 ```
 
 For production deployment, `GOOGLE_APPLICATION_CREDENTIALS_JSON` can be used instead of file path.

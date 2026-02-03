@@ -8782,6 +8782,217 @@ button.btn-cancel:hover {
   border-color: #0F766E !important;
 }
 
+/* Modal close button */
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 28px;
+  color: #9CA3AF;
+  cursor: pointer;
+  padding: 4px 8px;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+.modal-close:hover {
+  color: #1F2937;
+}
+
+.upgrade-content {
+  position: relative;
+}
+
+/* Pricing Toggle */
+.pricing-toggle {
+  display: flex;
+  background: #F3F4F6;
+  border-radius: 12px;
+  padding: 4px;
+  margin-bottom: 16px;
+}
+
+.plan-btn {
+  flex: 1;
+  padding: 12px 24px;
+  border: none;
+  background: transparent;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #6B7280;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.plan-btn.active {
+  background: #FFFFFF;
+  color: #0F766E;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.plan-btn:hover:not(.active) {
+  color: #1F2937;
+}
+
+/* Pricing Display */
+.pricing-display {
+  margin-bottom: 8px;
+}
+
+.pricing-display .price {
+  font-size: 36px;
+  font-weight: 700;
+  color: #0F766E;
+}
+
+.pricing-display .period {
+  font-size: 16px;
+  color: #6B7280;
+}
+
+.savings-badge {
+  height: 24px;
+  margin-bottom: 24px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #059669;
+}
+
+/* Success Modal */
+.success-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.success-modal.active {
+  display: flex;
+}
+
+.success-content {
+  background: #FFFFFF;
+  border: 1px solid #D1D5DB;
+  border-radius: 20px;
+  padding: 40px;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.success-icon {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #059669, #0F766E);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+  font-size: 40px;
+  color: #FFFFFF;
+}
+
+.success-content h2 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #0F766E;
+}
+
+.success-content p {
+  color: #475569;
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+/* Toast Notifications */
+.toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 3000;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.toast {
+  background: #1F2937;
+  color: #FFFFFF;
+  padding: 16px 24px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  animation: slideInRight 0.3s ease;
+  max-width: 360px;
+}
+
+.toast.toast-error {
+  background: #DC2626;
+}
+
+.toast.toast-success {
+  background: #059669;
+}
+
+.toast-message {
+  flex: 1;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.toast-close {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+.toast-close:hover {
+  color: #FFFFFF;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+.toast.hiding {
+  animation: slideOutRight 0.3s ease forwards;
+}
+
 /* Lock icon for premium scenarios */
 .scenario-locked {
   position: relative;

@@ -346,13 +346,16 @@ function startMockByStation(stationType) {
   // Get random scenario
   const scenario = getRandomScenarioFromStationType(stationType);
   if (!scenario) {
-    alert('Error: Could not load scenario. Please try again.');
+    showErrorToast('Could not load scenario. Please try again.');
     return;
   }
 
   // Check access
   if (!canAccessScenario(scenario.promptFile)) {
-    alert('This scenario requires a Premium subscription.\n\nUpgrade to access all scenarios.');
+    showUpgradeModal({
+      title: 'Plastic Surgery ST3',
+      message: 'Unlock all Plastic Surgery mock exam scenarios with a subscription.'
+    });
     return;
   }
 
@@ -394,8 +397,10 @@ function startFullMockExam() {
 
   // Strict Premium Check
   if (!isPremiumUser()) {
-    alert('Full Mock Exam is a Premium feature.\n\nUpgrade to access timed exam simulations with 3 rotating stations.');
-    showUpgradeModal();
+    showUpgradeModal({
+      title: 'Plastic Surgery Mock Exam',
+      message: 'Practice timed Plastic Surgery ST3 exams with 3 rotating stations.'
+    });
     return;
   }
 
@@ -432,7 +437,7 @@ function startFullMockExam() {
   for (const station of mockExamStations) {
     for (const scenario of station.scenarios) {
       if (!scenario) {
-        alert('Error: Could not generate mock exam scenarios. Please try again.');
+        showErrorToast('Could not generate mock exam scenarios. Please try again.');
         return;
       }
     }
@@ -532,7 +537,7 @@ function endFullMockExam() {
 
   // TODO: Show summary page with results
   // For now, just return to mode selection
-  alert('Full Mock Exam Complete!\n\nYou completed all 3 stations.');
+  showSuccessToast('Full Mock Exam Complete! You completed all 3 stations.');
   transitionToPage('simulationRoom', 'modeSelection');
 }
 
