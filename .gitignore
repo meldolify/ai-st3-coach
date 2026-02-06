@@ -53,6 +53,10 @@ coverage/
 backend/__tests__/temp_*
 e2e-tests/screenshots/
 e2e-tests/videos/
+e2e-tests/test-results/
+e2e-tests/playwright-report/
+playwright-report/
+test-results/
 
 # Claude Code cache
 .claude/

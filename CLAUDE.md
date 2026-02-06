@@ -67,6 +67,45 @@ npx jest __tests__/scenario-loader.test.js
 
 **Test Suite:** 51 unit tests covering scenario loading, WebSocket, VAD logic, GPT integration, and TTS integration. Coverage thresholds: 70% (branches, functions, lines, statements).
 
+### E2E Testing (Playwright)
+
+```bash
+# Run all E2E tests (headless) - auto-starts frontend + backend servers
+npm run test:e2e
+
+# Run with visible browser
+npm run test:e2e:headed
+
+# Interactive UI mode (best for debugging)
+npm run test:e2e:ui
+
+# Step-through debugger
+npm run test:e2e:debug
+
+# View HTML report after a run
+npm run test:e2e:report
+
+# Run a specific test file
+npx playwright test e2e-tests/tests/landing.spec.ts
+```
+
+**E2E Test Suite:** 22 specs across 4 files:
+- `landing.spec.ts` (5) - Page load, hero section, navigation links, CTA, Explore flow
+- `navigation.spec.ts` (5) - Guest browse, sessionStorage transfer, simulation room load, missing params redirect, exit navigation
+- `access-control.spec.ts` (5) - Free/premium tier access via `canAccessScenario()`, denied access redirect, upgrade modal
+- `simulation-room.spec.ts` (7) - Room layout, voice orb, control buttons, sidebar categories, AI status, transcript, scenario switching
+
+**Key Architecture Details:**
+- Tests run against Chromium only (Web Speech API requirement)
+- `playwright.config.ts` auto-starts both servers: frontend (`serve.js` on 3001) and backend (`server.js` on 8080)
+- Tier testing uses `page.route()` to intercept `state.js` and modify the `testTierOverride` variable at source level (see `e2e-tests/helpers/tier-control.ts:setTierViaRoute`)
+- Custom fixtures `freeUser`/`premiumUser` in `e2e-tests/fixtures/test-user.ts` provide pre-configured tier pages
+- `navigateToSimulation()` helper injects sessionStorage params and navigates to `simulation.html`
+- Screenshots, videos, and traces are captured on failure in `e2e-tests/test-results/`
+
+**Why `page.route()` instead of `page.addInitScript()`:**
+`testTierOverride` is declared with `let` in `state.js` (script-scoped, NOT a `window` property). `addInitScript` can only set `window` properties which are separate from the script-scoped variable. `page.route()` intercepts and modifies the actual `state.js` source to change the initial value, ensuring `canAccessScenario()` reads the correct tier on every page load including cross-page navigation (index.html → simulation.html).
+
 ### Code Quality
 
 ```bash
@@ -318,7 +357,21 @@ frontend/
 │   └── utils/
 │       └── audio-utils.js         # Shared audio utilities (~100 lines)
 ├── config.js                      # Environment config (Supabase, Stripe, FREE_TIER_SCENARIOS)
-└── serve.js                       # Static file server
+└── serve.js                       # Static file server (port 3001, CWD-relative paths)
+
+e2e-tests/                           # Playwright E2E tests (22 specs)
+├── tests/
+│   ├── landing.spec.ts              # Landing page (5 tests)
+│   ├── navigation.spec.ts          # Multi-page navigation (5 tests)
+│   ├── access-control.spec.ts      # Tier access control (5 tests)
+│   └── simulation-room.spec.ts     # Simulation room UI (7 tests)
+├── fixtures/
+│   ├── test-user.ts                 # freeUser/premiumUser page fixtures
+│   └── mock-data.ts                 # Test scenarios from FREE_TIER_SCENARIOS
+├── helpers/
+│   ├── tier-control.ts              # setTestTier() + setTierViaRoute()
+│   ├── navigation.ts               # navigateToSimulation(), clearSimulationParams()
+│   └── selectors.ts                 # Centralized DOM selectors
 ```
 
 ## Environment Variables
@@ -362,14 +415,16 @@ Per 5-minute session:
 ## Development Practices
 
 ### Before Committing
-1. Run tests: `npm test`
-2. Fix linting: `npm run lint:fix`
-3. Update `DEVELOPMENT_LOG.md` with significant changes
+1. Run backend unit tests: `cd backend && npm test`
+2. Run E2E tests: `npm run test:e2e`
+3. Fix linting: `cd backend && npm run lint:fix`
+4. Update `DEVELOPMENT_LOG.md` with significant changes
 
 ### Debugging Strategy
 - Use VS Code debugger (F5) instead of console.log
 - Set breakpoints in `server.js` for WebSocket issues
 - Use Chrome DevTools for frontend debugging
+- Use `npm run test:e2e:ui` for interactive Playwright debugging with trace viewer
 - Check `DEVELOPMENT_LOG.md` for known issues
 
 ### Test Coverage
