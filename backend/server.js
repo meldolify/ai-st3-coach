@@ -118,7 +118,9 @@ wss.on('connection', (ws, req) => {
   // Async IIFE for access validation
   (async () => {
     // Server-side tier validation if Supabase is enabled
-    if (config.isSupabaseEnabled && supabaseAdmin) {
+    if (config.DEV_BYPASS_AUTH) {
+      console.log('[ACCESS] DEV_BYPASS_AUTH enabled - skipping all access checks');
+    } else if (config.isSupabaseEnabled && supabaseAdmin) {
       try {
         // Check if this is a free tier scenario (no auth required)
         const isFreeScenario = config.FREE_TIER_SCENARIOS.includes(scenarioFile);
