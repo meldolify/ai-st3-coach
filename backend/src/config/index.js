@@ -11,7 +11,7 @@ const path = require('path');
 // In production, credentials are passed as a JSON string via environment variable
 if (process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON) {
   const credsPath = '/tmp/credentials.json';
-  fs.writeFileSync(credsPath, process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON);
+  fs.writeFileSync(credsPath, process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON, { mode: 0o600 });
   process.env.GOOGLE_APPLICATION_CREDENTIALS = credsPath;
   console.log('[CONFIG] Using Google Cloud credentials from environment variable');
 }

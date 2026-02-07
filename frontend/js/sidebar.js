@@ -206,7 +206,7 @@ function loadSidebarTopics(subcategoryId, container) {
 
   // Get the user's selected difficulty (from state.js global)
   // Map 'medium' to 'moderate' for prompt file naming
-  const difficultyMap = { 'easy': 'easy', 'medium': 'moderate', 'strict': 'strict' };
+  const difficultyMap = { 'easy': 'easy', 'medium': 'medium', 'strict': 'strict' };
   const userDiff = selectedDifficulty || 'easy';
   const targetDiff = difficultyMap[userDiff] || userDiff;
 
@@ -594,7 +594,7 @@ function loadMobileSidebarTopics(subcategoryId, container) {
     container.removeChild(container.firstChild);
   }
 
-  const difficultyMap = { 'easy': 'easy', 'medium': 'moderate', 'strict': 'strict' };
+  const difficultyMap = { 'easy': 'easy', 'medium': 'medium', 'strict': 'strict' };
   const userDiff = selectedDifficulty || 'easy';
   const targetDiff = difficultyMap[userDiff] || userDiff;
 

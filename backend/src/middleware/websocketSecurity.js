@@ -163,10 +163,14 @@ function validateMessage(message) {
 
   // Validate field types and constraints
   for (const [field, constraints] of Object.entries(schema)) {
-    if (field === 'required') continue;
+    if (field === 'required') {
+      continue;
+    }
 
     const value = message[field];
-    if (value === undefined) continue;
+    if (value === undefined) {
+      continue;
+    }
 
     // Type check
     if (constraints.type === 'string' && typeof value !== 'string') {
@@ -192,7 +196,9 @@ function validateMessage(message) {
  * @returns {string} Sanitized text
  */
 function sanitizeForLog(text, maxLength = 200) {
-  if (typeof text !== 'string') return '[non-string]';
+  if (typeof text !== 'string') {
+    return '[non-string]';
+  }
 
   // Remove control characters first
   const cleaned = text.replace(/[\x00-\x1F\x7F]/g, '');

@@ -260,7 +260,7 @@ function openModelAnswerDrawer(content) {
     // Parse markdown-like content (basic)
     const formattedContent = content
       .split('\n\n')
-      .map(para => `<p>${para}</p>`)
+      .map(para => `<p>${escapeHtml(para)}</p>`)
       .join('');
     contentEl.innerHTML = formattedContent;
   }

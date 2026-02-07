@@ -65,7 +65,7 @@ class OpenAIService {
       audioBuffer.slice(0, 4).toString() === 'RIFF';
     const extension = isWav || format === 'wav' ? 'wav' : 'webm';
 
-    const tempFilePath = path.join(__dirname, '../../', `temp_audio_${sessionId}.${extension}`);
+    const tempFilePath = path.join(__dirname, '../../', `temp_audio_${sessionId}_${Date.now()}.${extension}`);
 
     try {
       // Write audio to temporary file for Whisper API

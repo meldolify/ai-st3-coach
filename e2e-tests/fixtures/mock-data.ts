@@ -24,8 +24,8 @@ export const FREE_SCENARIOS = {
 
 /** A scenario path that is NOT in FREE_TIER_SCENARIOS (premium only). */
 export const PREMIUM_SCENARIO = {
-  title: 'Breast Augmentation Consent',
-  promptFile: 'prompts/consent/breast_aesthetic/breast_augmentation_consent/easy_consent_breast_augmentation_consent_1.txt',
+  title: 'Breast Reconstruction Consent',
+  promptFile: 'prompts/consent/breast_and_aesthetic/breast_reconstruction_consent/easy_consent_breast_reconstruction_consent_1.txt',
   imageFile: null,
   category: 'Consent',
 };
