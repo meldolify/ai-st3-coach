@@ -48,6 +48,9 @@ const config = {
   // Environment
   NODE_ENV: process.env.NODE_ENV || 'development',
 
+  // Development - bypass auth/subscription checks for local testing
+  DEV_BYPASS_AUTH: process.env.DEV_BYPASS_AUTH === 'true',
+
   // Free tier scenarios - scenarios accessible without subscription
   // Keep in sync with frontend/config.js FREE_TIER_SCENARIOS
   FREE_TIER_SCENARIOS: [

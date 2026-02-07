@@ -27,7 +27,7 @@ export async function setTierViaRoute(page: Page, tier: Tier) {
     const response = await route.fetch();
     const body = await response.text();
     const modified = body.replace(
-      'let testTierOverride = null;',
+      /let testTierOverride = .*?;/,
       `let testTierOverride = '${tier}';`
     );
     await route.fulfill({ body: modified, headers: response.headers() });

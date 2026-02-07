@@ -116,7 +116,11 @@ function clearSimulationParams() {
 //   setTestTier('premium')   - Tier 3: Full access to all scenarios
 //   setTestTier('off')       - Disable test mode, use real auth state
 
-let testTierOverride = null; // null = use real auth, 'unlogged' | 'free' | 'premium'
+let testTierOverride = localStorage.getItem('testTierOverride') || null; // null = use real auth, 'unlogged' | 'free' | 'premium'
+
+if (testTierOverride) {
+  console.log(`[TEST] Restored test tier from localStorage: ${testTierOverride}`);
+}
 
 window.setTestTier = function(tier) {
   const validTiers = ['unlogged', 'free', 'premium', 'off'];
@@ -127,10 +131,12 @@ window.setTestTier = function(tier) {
 
   if (tier === 'off') {
     testTierOverride = null;
+    localStorage.removeItem('testTierOverride');
     console.log('[TEST] Test mode disabled. Using real authentication state.');
   } else {
     testTierOverride = tier;
-    console.log(`[TEST] Test tier set to: ${tier}`);
+    localStorage.setItem('testTierOverride', tier);
+    console.log(`[TEST] Test tier set to: ${tier} (persisted to localStorage)`);
     console.log('[TEST] Refresh scenario list to see changes.');
   }
 
