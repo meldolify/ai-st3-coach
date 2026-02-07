@@ -15,6 +15,7 @@ const url = require('url');
 const openaiService = require('./src/services/OpenAIService');
 const ttsService = require('./src/services/TTSService');
 const { isNoiseTranscript, buildNaturalSSML } = require('./src/utils/audioHelpers');
+const { loadScenarioPrompt } = require('./src/utils/scenarioLoader');
 
 // Import security middleware
 const {
@@ -47,45 +48,19 @@ if (config.isSupabaseEnabled) {
   supabaseAdmin = createClient(config.SUPABASE_URL, config.SUPABASE_SERVICE_KEY);
 }
 
+process.on('unhandledRejection', (reason, _promise) => {
+  console.error('[FATAL] Unhandled Rejection:', reason);
+});
+process.on('uncaughtException', (error) => {
+  console.error('[FATAL] Uncaught Exception:', error);
+});
+
 console.log('API clients initialized');
 
 const sessions = new Map();
 
 // Use secure session ID generation from middleware
 // (keeping function name for backwards compatibility)
-
-function loadScenarioPrompt(scenarioFile) {
-  try {
-    // The scenarioFile now includes the full path from prompts/ directory
-    // e.g., "prompts/digital_amputation/easy_digital_amputation_1.txt"
-    const filePath = path.join(__dirname, scenarioFile);
-
-    // Security check: ensure the file is within the backend directory
-    const normalizedPath = path.normalize(filePath);
-    if (!normalizedPath.startsWith(__dirname)) {
-      throw new Error('Invalid scenario file path');
-    }
-
-    if (!fs.existsSync(filePath)) {
-      console.warn('[SCENARIO] File not found: ' + scenarioFile);
-      // Try fallback to a default scenario in the old structure
-      const fallbackPath = path.join(__dirname, 'scenarios', 'template.txt');
-      if (fs.existsSync(fallbackPath)) {
-        console.warn('[SCENARIO] Using fallback template.txt');
-        return fs.readFileSync(fallbackPath, 'utf8');
-      }
-      throw new Error('Scenario file not found and no fallback available');
-    }
-
-    const prompt = fs.readFileSync(filePath, 'utf8');
-    console.log('[SCENARIO] Loaded prompt from: ' + scenarioFile);
-    return prompt;
-  } catch (error) {
-    console.error('[SCENARIO] Error loading prompt: ' + error.message);
-    // Return a basic template as last resort
-    return 'You are a Plastic Surgery ST3 interview examiner. Conduct a professional interview.';
-  }
-}
 
 // Wrapper functions that use the services (for backwards compatibility with existing code flow)
 async function callGPT4oMini(history) {
@@ -98,13 +73,38 @@ async function googleTTS(text, voiceName) {
 
 const wss = new WebSocket.Server({
   port: config.PORT,
-  host: '0.0.0.0' // Bind to all network interfaces for production deployment
+  host: '0.0.0.0', // Bind to all network interfaces for production deployment
+  verifyClient: (info) => {
+    if (config.isProduction) {
+      const origin = info.origin || info.req.headers.origin;
+      return origin === config.FRONTEND_URL;
+    }
+    return true; // Allow all origins in development
+  }
 });
 
 console.log('WebSocket server running on port ' + config.PORT);
 
+// Ping/pong heartbeat to detect dead connections and prevent zombie sessions
+const heartbeatInterval = setInterval(() => {
+  wss.clients.forEach(ws => {
+    if (ws.isAlive === false) {
+      return ws.terminate();
+    }
+    ws.isAlive = false;
+    ws.ping();
+  });
+}, 30000);
+
+wss.on('close', () => clearInterval(heartbeatInterval));
+
 wss.on('connection', (ws, req) => {
   console.log('\n[CLIENT] New client connected');
+
+  ws.isAlive = true;
+  ws.on('pong', () => {
+    ws.isAlive = true;
+  });
 
   const queryParams = url.parse(req.url, true).query;
   const scenarioFile = queryParams.scenario || 'template.txt';
@@ -150,7 +150,7 @@ wss.on('connection', (ws, req) => {
           }
 
           // Check subscription status
-          const { data: subscription, error: subError } = await supabaseAdmin
+          const { data: subscription } = await supabaseAdmin
             .from('subscriptions')
             .select('status')
             .eq('user_id', userId)
@@ -200,213 +200,221 @@ wss.on('connection', (ws, req) => {
 
     // Set up message handler only after validation passes
     ws.on('message', async (data) => {
-    try {
-      // Parse and validate message
-      let msg;
       try {
-        msg = JSON.parse(data);
-      } catch (parseError) {
-        ws.send(JSON.stringify({ type: 'error', message: 'Invalid JSON' }));
-        return;
-      }
+      // Parse and validate message
+        let msg;
+        try {
+          msg = JSON.parse(data);
+        } catch (parseError) {
+          ws.send(JSON.stringify({ type: 'error', message: 'Invalid JSON' }));
+          return;
+        }
 
-      // Validate message schema
-      const validation = validateMessage(msg);
-      if (!validation.valid) {
-        console.warn(`[SECURITY] Invalid message rejected: ${validation.error}`);
-        ws.send(JSON.stringify({ type: 'error', message: validation.error }));
-        return;
-      }
+        // Validate message schema
+        const validation = validateMessage(msg);
+        if (!validation.valid) {
+          console.warn(`[SECURITY] Invalid message rejected: ${validation.error}`);
+          ws.send(JSON.stringify({ type: 'error', message: validation.error }));
+          return;
+        }
 
-      // Check rate limits
-      const messageType = msg.type === 'whisper_audio' ? 'audio' : 'other';
-      const rateCheck = wsRateLimiter.checkLimit(msg.sessionId, messageType);
-      if (!rateCheck.allowed) {
-        console.warn(`[SECURITY] Rate limit exceeded for session ${msg.sessionId}: ${rateCheck.reason}`);
-        ws.send(JSON.stringify({ type: 'error', message: rateCheck.reason }));
-        return;
-      }
+        // Check rate limits
+        const messageType = msg.type === 'whisper_audio' ? 'audio' : 'other';
+        const rateCheck = wsRateLimiter.checkLimit(msg.sessionId, messageType);
+        if (!rateCheck.allowed) {
+          console.warn(`[SECURITY] Rate limit exceeded for session ${msg.sessionId}: ${rateCheck.reason}`);
+          ws.send(JSON.stringify({ type: 'error', message: rateCheck.reason }));
+          return;
+        }
 
-      const session = sessions.get(msg.sessionId);
+        const session = sessions.get(msg.sessionId);
 
-      if (!session) {
-        ws.send(JSON.stringify({ type: 'error', message: 'Session not found' }));
-        return;
-      }
+        if (!session) {
+          ws.send(JSON.stringify({ type: 'error', message: 'Session not found' }));
+          return;
+        }
 
-      switch (msg.type) {
-        case 'whisper_audio':
+        switch (msg.type) {
+          case 'whisper_audio':
           // Handle Whisper API transcription for browsers without Web Speech API
-          try {
-            const audioBuffer = Buffer.from(msg.audio, 'base64');
-            const audioFormat = msg.format || 'webm'; // Support WAV from Silero VAD
-            const t1 = Date.now();
-
-            // Transcribe using OpenAI service
-            const transcriptionText = await openaiService.transcribeAudio(audioBuffer, msg.sessionId, audioFormat);
-
-            const t2 = Date.now();
-            console.log('[WHISPER STT] ' + transcriptionText);
-            console.log(`[TIMING] Whisper: ${t2 - t1}ms`);
-
-            // Filter noise transcripts (important for VAD mode)
-            if (isNoiseTranscript(transcriptionText)) {
-              console.log('[WHISPER] Filtered as noise, not sending to frontend');
-              break;
-            }
-
-            // Send transcript back to frontend
-            ws.send(JSON.stringify({
-              type: 'whisper_transcript',
-              text: transcriptionText
-            }));
-          } catch (error) {
-            console.error('[WHISPER ERROR]', error.message);
-            ws.send(JSON.stringify({ type: 'error', message: 'Transcription failed' }));
-          }
-          break;
-
-        case 'user_transcript':
-          console.log('[USER] ' + sanitizeForLog(msg.text));
-          session.history.push({ role: 'user', content: msg.text });
-
-          const t1 = Date.now();
-          const responseText = await callGPT4oMini(session.history);
-          const t2 = Date.now();
-          console.log('[AI] ' + responseText);
-          console.log(`[TIMING] GPT: ${t2 - t1}ms`);
-          session.history.push({ role: 'assistant', content: responseText });
-
-          // Detect if we've entered feedback mode
-          if (responseText.toLowerCase().includes('feedback') ||
-            responseText.toLowerCase().includes('concludes the scenario')) {
-            session.inFeedbackMode = true;
-            session.feedbackCount = 0;
-            console.log('[FEEDBACK] Feedback mode activated');
-          }
-
-          const ssmlText = buildNaturalSSML(responseText);
-          const t3 = Date.now();
-          const audioBuffer = await googleTTS(ssmlText, session.voice);
-          const t4 = Date.now();
-          console.log(`[TIMING] TTS: ${t4 - t3}ms, Total: ${t4 - t1}ms`);
-
-          session.isAISpeaking = true;
-          ws.send(JSON.stringify({
-            type: 'ai_response',
-            text: responseText,
-            audio: audioBuffer.toString('base64')
-          }));
-          break;
-
-        case 'user_speaking':
-          if (session.isAISpeaking) {
-            session.isAISpeaking = false;
-            ws.send(JSON.stringify({ type: 'interrupt' }));
-          }
-          break;
-
-        case 'ai_finished':
-          session.isAISpeaking = false;
-
-          // Auto-continue feedback if we're in feedback mode
-          if (session.inFeedbackMode && session.feedbackCount < 6) {
-            session.feedbackCount++;
-            console.log(`[FEEDBACK] Auto-continuing feedback (${session.feedbackCount}/6)`);
-
-            // Notify frontend that we're preparing next chunk
-            ws.send(JSON.stringify({
-              type: 'feedback_processing'
-            }));
-
-            // Wait a brief moment, then trigger next feedback chunk
-            setTimeout(async () => {
-              try {
-                session.history.push({ role: 'user', content: 'continue' });
-
-                const t1 = Date.now();
-                const responseText = await callGPT4oMini(session.history);
-                const t2 = Date.now();
-                console.log('[AI] ' + responseText);
-                console.log(`[TIMING] GPT: ${t2 - t1}ms`);
-                session.history.push({ role: 'assistant', content: responseText });
-
-                const ssmlText = buildNaturalSSML(responseText);
-                const t3 = Date.now();
-                const audioBuffer = await googleTTS(ssmlText, session.voice);
-                const t4 = Date.now();
-                console.log(`[TIMING] TTS: ${t4 - t3}ms, Total: ${t4 - t1}ms`);
-
-                session.isAISpeaking = true;
-                ws.send(JSON.stringify({
-                  type: 'ai_response',
-                  text: responseText,
-                  audio: audioBuffer.toString('base64')
-                }));
-              } catch (error) {
-                console.error('[FEEDBACK AUTO-CONTINUE ERROR]', error.message);
-              }
-            }, 300); // Reduced from 500ms to 300ms for faster transitions
-          } else if (session.inFeedbackMode && session.feedbackCount >= 6) {
-            console.log('[FEEDBACK] Feedback complete');
-            session.inFeedbackMode = false;
-          }
-          break;
-
-        case 'request_feedback':
-          // Generate structured feedback summary at end of session
-          console.log('[FEEDBACK] Generating structured feedback summary');
-          try {
-            const feedbackPromptPath = path.join(__dirname, 'prompts/system/feedback_summary.txt');
-            const feedbackPrompt = fs.readFileSync(feedbackPromptPath, 'utf8');
-            session.history.push({ role: 'user', content: feedbackPrompt });
-
-            const feedbackText = await callGPT4oMini(session.history);
-            console.log('[FEEDBACK] Raw response:', feedbackText);
-
-            // Parse JSON from response (with fallback)
-            let feedback;
             try {
-              const jsonMatch = feedbackText.match(/\{[\s\S]*\}/);
-              if (jsonMatch) {
-                feedback = JSON.parse(jsonMatch[0]);
-              } else {
-                throw new Error('No JSON found in response');
+              const audioBuffer = Buffer.from(msg.audio, 'base64');
+              const audioFormat = msg.format || 'webm'; // Support WAV from Silero VAD
+              const t1 = Date.now();
+
+              // Transcribe using OpenAI service
+              const transcriptionText = await openaiService.transcribeAudio(audioBuffer, msg.sessionId, audioFormat);
+
+              const t2 = Date.now();
+              console.log('[WHISPER STT] ' + transcriptionText);
+              console.log(`[TIMING] Whisper: ${t2 - t1}ms`);
+
+              // Filter noise transcripts (important for VAD mode)
+              if (isNoiseTranscript(transcriptionText)) {
+                console.log('[WHISPER] Filtered as noise, not sending to frontend');
+                break;
               }
-            } catch (parseError) {
-              console.warn('[FEEDBACK] JSON parse failed, using fallback:', parseError.message);
-              feedback = {
-                score: 3,
-                strengths: ['Unable to parse detailed feedback'],
-                improvements: ['Please try again'],
-                summary: feedbackText.substring(0, 500)
-              };
+
+              // Send transcript back to frontend
+              ws.send(JSON.stringify({
+                type: 'whisper_transcript',
+                text: transcriptionText
+              }));
+            } catch (error) {
+              console.error('[WHISPER ERROR]', error.message);
+              ws.send(JSON.stringify({ type: 'error', message: 'Transcription failed' }));
+            }
+            break;
+
+          case 'user_transcript':
+            console.log('[USER] ' + sanitizeForLog(msg.text));
+            session.history.push({ role: 'user', content: msg.text });
+
+            const t1 = Date.now();
+            const responseText = await callGPT4oMini(session.history);
+            const t2 = Date.now();
+            console.log('[AI] ' + responseText);
+            console.log(`[TIMING] GPT: ${t2 - t1}ms`);
+            session.history.push({ role: 'assistant', content: responseText });
+
+            // Detect if we've entered feedback mode
+            if (responseText.toLowerCase().includes('feedback') ||
+            responseText.toLowerCase().includes('concludes the scenario')) {
+              session.inFeedbackMode = true;
+              session.feedbackCount = 0;
+              console.log('[FEEDBACK] Feedback mode activated');
             }
 
+            const ssmlText = buildNaturalSSML(responseText);
+            const t3 = Date.now();
+            const audioBuffer = await googleTTS(ssmlText, session.voice);
+            const t4 = Date.now();
+            console.log(`[TIMING] TTS: ${t4 - t3}ms, Total: ${t4 - t1}ms`);
+
+            session.isAISpeaking = true;
             ws.send(JSON.stringify({
-              type: 'feedback_summary',
-              feedback: feedback
+              type: 'ai_response',
+              text: responseText,
+              audio: audioBuffer.toString('base64')
             }));
-            console.log('[FEEDBACK] Summary sent:', JSON.stringify(feedback));
-          } catch (error) {
-            console.error('[FEEDBACK ERROR]', error.message);
-            ws.send(JSON.stringify({
-              type: 'feedback_summary',
-              feedback: {
-                score: 3,
-                strengths: ['Session completed'],
-                improvements: ['Feedback generation encountered an error'],
-                summary: 'Unable to generate detailed feedback. Please try again.'
+            break;
+
+          case 'user_speaking':
+            if (session.isAISpeaking) {
+              session.isAISpeaking = false;
+              ws.send(JSON.stringify({ type: 'interrupt' }));
+            }
+            break;
+
+          case 'ai_finished':
+            session.isAISpeaking = false;
+
+            // Auto-continue feedback if we're in feedback mode
+            if (session.inFeedbackMode && session.feedbackCount < 6) {
+              session.feedbackCount++;
+              console.log(`[FEEDBACK] Auto-continuing feedback (${session.feedbackCount}/6)`);
+
+              // Notify frontend that we're preparing next chunk
+              ws.send(JSON.stringify({
+                type: 'feedback_processing'
+              }));
+
+              // Wait a brief moment, then trigger next feedback chunk
+              setTimeout(async () => {
+                if (ws.readyState !== WebSocket.OPEN || !sessions.has(sessionId)) {
+                  return;
+                }
+                try {
+                  session.history.push({ role: 'user', content: 'continue' });
+
+                  const t1 = Date.now();
+                  const responseText = await callGPT4oMini(session.history);
+                  const t2 = Date.now();
+                  console.log('[AI] ' + responseText);
+                  console.log(`[TIMING] GPT: ${t2 - t1}ms`);
+                  session.history.push({ role: 'assistant', content: responseText });
+
+                  const ssmlText = buildNaturalSSML(responseText);
+                  const t3 = Date.now();
+                  const audioBuffer = await googleTTS(ssmlText, session.voice);
+                  const t4 = Date.now();
+                  console.log(`[TIMING] TTS: ${t4 - t3}ms, Total: ${t4 - t1}ms`);
+
+                  session.isAISpeaking = true;
+                  ws.send(JSON.stringify({
+                    type: 'ai_response',
+                    text: responseText,
+                    audio: audioBuffer.toString('base64')
+                  }));
+                } catch (error) {
+                  console.error('[FEEDBACK AUTO-CONTINUE ERROR]', error.message);
+                  try {
+                    ws.send(JSON.stringify({ type: 'error', message: 'Feedback generation failed. Please try again.' }));
+                  } catch (sendErr) { /* ws may be closed */ }
+                  session.inFeedbackMode = false;
+                  session.feedbackCount = 0;
+                }
+              }, 300); // Reduced from 500ms to 300ms for faster transitions
+            } else if (session.inFeedbackMode && session.feedbackCount >= 6) {
+              console.log('[FEEDBACK] Feedback complete');
+              session.inFeedbackMode = false;
+            }
+            break;
+
+          case 'request_feedback':
+          // Generate structured feedback summary at end of session
+            console.log('[FEEDBACK] Generating structured feedback summary');
+            try {
+              const feedbackPromptPath = path.join(__dirname, 'prompts/system/feedback_summary.txt');
+              const feedbackPrompt = fs.readFileSync(feedbackPromptPath, 'utf8');
+              session.history.push({ role: 'user', content: feedbackPrompt });
+
+              const feedbackText = await callGPT4oMini(session.history);
+              console.log('[FEEDBACK] Raw response:', feedbackText);
+
+              // Parse JSON from response (with fallback)
+              let feedback;
+              try {
+                const jsonMatch = feedbackText.match(/\{[\s\S]*\}/);
+                if (jsonMatch) {
+                  feedback = JSON.parse(jsonMatch[0]);
+                } else {
+                  throw new Error('No JSON found in response');
+                }
+              } catch (parseError) {
+                console.warn('[FEEDBACK] JSON parse failed, using fallback:', parseError.message);
+                feedback = {
+                  score: 3,
+                  strengths: ['Unable to parse detailed feedback'],
+                  improvements: ['Please try again'],
+                  summary: feedbackText.substring(0, 500)
+                };
               }
-            }));
-          }
-          break;
+
+              ws.send(JSON.stringify({
+                type: 'feedback_summary',
+                feedback: feedback
+              }));
+              console.log('[FEEDBACK] Summary sent:', JSON.stringify(feedback));
+            } catch (error) {
+              console.error('[FEEDBACK ERROR]', error.message);
+              ws.send(JSON.stringify({
+                type: 'feedback_summary',
+                feedback: {
+                  score: 3,
+                  strengths: ['Session completed'],
+                  improvements: ['Feedback generation encountered an error'],
+                  summary: 'Unable to generate detailed feedback. Please try again.'
+                }
+              }));
+            }
+            break;
+        }
+      } catch (error) {
+        console.error('[ERROR]', error.message);
+        ws.send(JSON.stringify({ type: 'error', message: 'An error occurred processing your request' }));
       }
-    } catch (error) {
-      console.error('[ERROR]', error.message);
-      ws.send(JSON.stringify({ type: 'error', message: error.message }));
-    }
-  });
+    });
 
     ws.on('close', () => {
       sessions.delete(sessionId);
@@ -427,7 +435,7 @@ app.use(express.static(path.join(__dirname, '../frontend')));
 
 // Enable CORS for frontend
 app.use(cors({
-  origin: config.FRONTEND_URL || '*',
+  origin: config.FRONTEND_URL || (config.isProduction ? false : '*'),
   methods: ['POST', 'GET', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'stripe-signature']
 }));
@@ -509,7 +517,7 @@ app.post('/stripe-webhook',
       );
     } catch (err) {
       console.error('[STRIPE WEBHOOK] Signature verification failed:', err.message);
-      return res.status(400).send(`Webhook Error: ${err.message}`);
+      return res.status(400).send('Webhook processing failed');
     }
 
     console.log('[STRIPE WEBHOOK] Event received:', event.type);

@@ -17,11 +17,11 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 
   <!-- Supabase Auth -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <!-- Silero VAD via @ricky0123/vad-web -->
-  <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.19.2/dist/ort.wasm.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@ricky0123/vad-web@0.0.19/dist/bundle.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.19.2/dist/ort.wasm.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@ricky0123/vad-web@0.0.19/dist/bundle.min.js"></script>
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1182,23 +1182,23 @@
     <img src="images/logo/logo-sm.png" alt="ReViva" class="logo-img logo-img--compact">
   </footer>
 
-  <!-- JavaScript Dependencies -->
-  <script src="config.js"></script>
-  <script src="js/state.js"></script>
-  <script src="js/browser-detect.js"></script>
-  <script src="js/auth.js"></script>
-  <script src="js/subscription.js"></script>
-  <script src="js/tracking.js"></script>
-  <script src="js/ui-helpers.js"></script>
-  <script src="js/utils/audio-utils.js"></script>
-  <script src="js/orb-visualizer.js"></script>
-  <script src="js/speech.js"></script>
-  <script src="js/vad/VADManager.js"></script>
-  <script src="js/vad/SimpleVAD.js"></script>
-  <script src="js/session.js"></script>
-  <script src="js/scenarios.js"></script>
-  <script src="js/sidebar.js"></script>
-  <script src="js/simulation-app.js"></script>
+  <!-- JavaScript Dependencies (defer preserves execution order) -->
+  <script defer src="config.js"></script>
+  <script defer src="js/state.js"></script>
+  <script defer src="js/browser-detect.js"></script>
+  <script defer src="js/auth.js"></script>
+  <script defer src="js/subscription.js"></script>
+  <script defer src="js/tracking.js"></script>
+  <script defer src="js/ui-helpers.js"></script>
+  <script defer src="js/utils/audio-utils.js"></script>
+  <script defer src="js/orb-visualizer.js"></script>
+  <script defer src="js/speech.js"></script>
+  <script defer src="js/vad/VADManager.js"></script>
+  <script defer src="js/vad/SimpleVAD.js"></script>
+  <script defer src="js/session.js"></script>
+  <script defer src="js/scenarios.js"></script>
+  <script defer src="js/sidebar.js"></script>
+  <script defer src="js/simulation-app.js"></script>
 </body>
 
 </html>

@@ -492,6 +492,45 @@ class OrbVisualizer {
   get isPlaying() {
     return this.isActive;
   }
+
+  /**
+   * Destroy the visualizer and release all resources
+   */
+  destroy() {
+    // Stop any active playback
+    this.interrupt();
+
+    // Stop idle shimmer
+    this.stopIdleShimmer();
+
+    // Clear playback timeout
+    if (this.playbackTimeout) {
+      clearTimeout(this.playbackTimeout);
+      this.playbackTimeout = null;
+    }
+
+    // Disconnect analyser
+    if (this.analyser) {
+      try { this.analyser.disconnect(); } catch (e) { /* ignore */ }
+      this.analyser = null;
+    }
+
+    // Close AudioContext
+    if (this.audioContext && this.audioContext.state !== 'closed') {
+      this.audioContext.close();
+    }
+    this.audioContext = null;
+
+    // Clean up canvas references
+    this.ctx = null;
+    this.mobileCtx = null;
+    this.canvas = null;
+    this.mobileCanvas = null;
+    this.currentSource = null;
+    this.rings = [];
+
+    console.log('[OrbVisualizer] Destroyed');
+  }
 }
 
 // ============================================================================

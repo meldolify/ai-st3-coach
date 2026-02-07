@@ -371,18 +371,17 @@ class SimpleVAD {
    */
   async convertToWav(audioBlob) {
     try {
-      // Create a separate AudioContext for decoding
-      const decodeContext = new (window.AudioContext || window.webkitAudioContext)();
+      if (!this.audioContext || this.audioContext.state === 'closed') {
+        console.warn('[SimpleVAD] AudioContext not available for WAV conversion');
+        return audioBlob;
+      }
 
       const arrayBuffer = await audioBlob.arrayBuffer();
-      const audioBuffer = await decodeContext.decodeAudioData(arrayBuffer);
+      const audioBuffer = await this.audioContext.decodeAudioData(arrayBuffer);
 
       // Get mono audio data
       const channelData = audioBuffer.getChannelData(0);
       const sampleRate = audioBuffer.sampleRate;
-
-      // Clean up decode context
-      decodeContext.close();
 
       // Use shared utility for conversion
       return window.AudioUtils.float32ToWav(channelData, sampleRate);

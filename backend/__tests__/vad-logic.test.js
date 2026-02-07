@@ -1,119 +1,114 @@
 /**
  * VAD (Voice Activity Detection) Logic Tests
- * Tests the threshold and frame confirmation logic used in the frontend
+ * Tests isNoiseTranscript edge cases not covered by audioHelpers.test.js
+ * Focuses on boundary cases, mixed content, and unusual inputs
  */
 
-describe('VAD Threshold Logic', () => {
-  const CONFIG = {
-    SILENCE_THRESHOLD: 0.025,
-    INTERRUPT_THRESHOLD: 0.15,
-    SILENCE_DURATION_MS: 700,
-    MIN_RECORDING_MS: 500,
-    REQUIRED_VOICE_FRAMES: 4,
-    INTERRUPT_VOICE_FRAMES: 8
-  };
+process.env.NODE_ENV = 'test';
+process.env.OPENAI_API_KEY = 'test-api-key';
 
-  describe('RMS Calculation Simulation', () => {
-    function calculateRMS(audioData) {
-      const sumSquares = audioData.reduce((sum, val) => sum + val * val, 0);
-      return Math.sqrt(sumSquares / audioData.length);
-    }
+const { isNoiseTranscript, buildNaturalSSML } = require('../src/utils/audioHelpers');
 
-    test('silence produces RMS below silence threshold', () => {
-      const silence = new Array(100).fill(0.001);
-      const rms = calculateRMS(silence);
-      expect(rms).toBeLessThan(CONFIG.SILENCE_THRESHOLD);
-    });
-
-    test('normal speech produces RMS above silence threshold', () => {
-      const normalSpeech = new Array(100).fill(0).map(() => 0.05 + Math.random() * 0.05);
-      const rms = calculateRMS(normalSpeech);
-      expect(rms).toBeGreaterThan(CONFIG.SILENCE_THRESHOLD);
-    });
-
-    test('loud speech produces RMS above interrupt threshold', () => {
-      const loudSpeech = new Array(100).fill(0).map(() => 0.2 + Math.random() * 0.1);
-      const rms = calculateRMS(loudSpeech);
-      expect(rms).toBeGreaterThan(CONFIG.INTERRUPT_THRESHOLD);
-    });
+describe('isNoiseTranscript - boundary cases', () => {
+  test('returns true for exactly 1 character (below 2-char threshold)', () => {
+    expect(isNoiseTranscript('x')).toBe(true);
   });
 
-  describe('Frame Confirmation Logic', () => {
-    test('requires 4 consecutive frames for normal voice detection', () => {
-      expect(CONFIG.REQUIRED_VOICE_FRAMES).toBe(4);
-    });
-
-    test('requires 8 consecutive frames for interrupt detection', () => {
-      expect(CONFIG.INTERRUPT_VOICE_FRAMES).toBe(8);
-    });
-
-    test('interrupt threshold is higher than silence threshold', () => {
-      expect(CONFIG.INTERRUPT_THRESHOLD).toBeGreaterThan(CONFIG.SILENCE_THRESHOLD);
-    });
-
-    test('interrupt frames required is greater than normal frames', () => {
-      expect(CONFIG.INTERRUPT_VOICE_FRAMES).toBeGreaterThan(CONFIG.REQUIRED_VOICE_FRAMES);
-    });
+  test('returns false for exactly 2 meaningful characters', () => {
+    // "hi" is 2 chars but doesn't match any noise pattern
+    expect(isNoiseTranscript('hi')).toBe(false);
   });
 
-  describe('Timing Configuration', () => {
-    test('minimum recording duration is 500ms', () => {
-      expect(CONFIG.MIN_RECORDING_MS).toBe(500);
-    });
-
-    test('silence duration before stopping is 700ms', () => {
-      expect(CONFIG.SILENCE_DURATION_MS).toBe(700);
-    });
-
-    test('silence duration is longer than minimum recording', () => {
-      expect(CONFIG.SILENCE_DURATION_MS).toBeGreaterThan(CONFIG.MIN_RECORDING_MS);
-    });
+  test('returns true for filler sounds with trailing period', () => {
+    expect(isNoiseTranscript('um.')).toBe(true);
+    expect(isNoiseTranscript('uh.')).toBe(true);
+    expect(isNoiseTranscript('er.')).toBe(true);
   });
 
-  describe('Voice Frame Detection Simulation', () => {
-    test('4 consecutive frames above threshold triggers recording', () => {
-      let consecutiveFrames = 0;
-      const frameRMS = [0.03, 0.04, 0.05, 0.06]; // All above silence threshold
+  test('returns true for case-insensitive filler sounds', () => {
+    expect(isNoiseTranscript('UM')).toBe(true);
+    expect(isNoiseTranscript('Uh')).toBe(true);
+    expect(isNoiseTranscript('ER')).toBe(true);
+    expect(isNoiseTranscript('AH')).toBe(true);
+  });
 
-      frameRMS.forEach(rms => {
-        if (rms > CONFIG.SILENCE_THRESHOLD) {
-          consecutiveFrames++;
-        } else {
-          consecutiveFrames = 0;
-        }
-      });
+  test('returns true for extended filler sounds', () => {
+    expect(isNoiseTranscript('ummm')).toBe(true);
+    expect(isNoiseTranscript('uhhh')).toBe(true);
+    expect(isNoiseTranscript('errr')).toBe(true);
+  });
 
-      expect(consecutiveFrames).toBeGreaterThanOrEqual(CONFIG.REQUIRED_VOICE_FRAMES);
-    });
+  test('returns true for text with no letters at all', () => {
+    expect(isNoiseTranscript('123')).toBe(true);
+    expect(isNoiseTranscript('!@#$')).toBe(true);
+    expect(isNoiseTranscript('   ')).toBe(true);
+  });
 
-    test('interrupted frames reset counter', () => {
-      let consecutiveFrames = 0;
-      const frameRMS = [0.03, 0.04, 0.01, 0.05]; // One frame below threshold
+  test('returns false for text mixing numbers and letters', () => {
+    expect(isNoiseTranscript('The patient is 45 years old')).toBe(false);
+    expect(isNoiseTranscript('Give 2mg of morphine')).toBe(false);
+  });
 
-      frameRMS.forEach(rms => {
-        if (rms > CONFIG.SILENCE_THRESHOLD) {
-          consecutiveFrames++;
-        } else {
-          consecutiveFrames = 0;
-        }
-      });
+  test('returns true for repeated single letter patterns', () => {
+    expect(isNoiseTranscript('aaa')).toBe(true);
+    expect(isNoiseTranscript('bbb')).toBe(true);
+    expect(isNoiseTranscript('zzz')).toBe(true);
+  });
 
-      expect(consecutiveFrames).toBeLessThan(CONFIG.REQUIRED_VOICE_FRAMES);
-    });
+  test('returns true for spaced single letter patterns', () => {
+    expect(isNoiseTranscript('a b c')).toBe(true);
+    expect(isNoiseTranscript('s s s')).toBe(true);
+  });
 
-    test('8 consecutive frames required for interrupt during AI speech', () => {
-      let consecutiveFrames = 0;
-      const frameRMS = new Array(8).fill(0.2); // All above interrupt threshold
+  test('returns false for legitimate multi-word text', () => {
+    expect(isNoiseTranscript('I would examine the wound')).toBe(false);
+    expect(isNoiseTranscript('Can you tell me more about the history')).toBe(false);
+    expect(isNoiseTranscript('The flap is well perfused')).toBe(false);
+  });
 
-      frameRMS.forEach(rms => {
-        if (rms > CONFIG.INTERRUPT_THRESHOLD) {
-          consecutiveFrames++;
-        } else {
-          consecutiveFrames = 0;
-        }
-      });
+  test('returns true for Thanks and Thank you (echo pickup)', () => {
+    expect(isNoiseTranscript('thanks')).toBe(true);
+    expect(isNoiseTranscript('Thank you')).toBe(true);
+    expect(isNoiseTranscript('Thanks.')).toBe(true);
+    expect(isNoiseTranscript('THANK YOU')).toBe(true);
+  });
 
-      expect(consecutiveFrames).toBeGreaterThanOrEqual(CONFIG.INTERRUPT_VOICE_FRAMES);
-    });
+  test('returns false for longer sentences containing noise words', () => {
+    expect(isNoiseTranscript('Yes, I would manage this with antibiotics')).toBe(false);
+    expect(isNoiseTranscript('Thank you for explaining, now let me')).toBe(false);
+    expect(isNoiseTranscript('Okay so the patient has presented with')).toBe(false);
+  });
+
+  test('handles non-string input types', () => {
+    expect(isNoiseTranscript(42)).toBe(true);
+    expect(isNoiseTranscript(true)).toBe(true);
+    expect(isNoiseTranscript({})).toBe(true);
+    expect(isNoiseTranscript([])).toBe(true);
+  });
+
+  test('returns true for whitespace-padded noise', () => {
+    expect(isNoiseTranscript('  um  ')).toBe(true);
+    expect(isNoiseTranscript('  ok  ')).toBe(true);
+    expect(isNoiseTranscript('  yes  ')).toBe(true);
+  });
+});
+
+describe('buildNaturalSSML - additional patterns', () => {
+  test('handles text with multiple consecutive periods', () => {
+    const result = buildNaturalSSML('First. Second. Third.');
+    // Two internal ". " should get breaks, trailing period has no space after it
+    const breakCount = (result.match(/break strength="medium"/g) || []).length;
+    expect(breakCount).toBe(2);
+  });
+
+  test('handles text with only commas', () => {
+    const result = buildNaturalSSML('one, two, three');
+    expect(result).toContain('<speak>');
+    expect(result).toContain(',<break strength="weak"/>');
+  });
+
+  test('preserves text content inside speak tags', () => {
+    const result = buildNaturalSSML('Important medical text');
+    expect(result).toBe('<speak>Important medical text</speak>');
   });
 });

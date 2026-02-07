@@ -1,128 +1,139 @@
 /**
  * Google Cloud TTS Integration Tests
- * Tests the configuration and expected behavior of Text-to-Speech
+ * Tests the TTSService synthesize method with mocked Google TTS client
  */
 
-describe('Google Cloud TTS Integration', () => {
-  describe('Voice Configuration', () => {
-    test('default voice is en-GB-Neural2-D', () => {
-      const defaultVoice = 'en-GB-Neural2-D';
-      expect(defaultVoice).toContain('en-GB');
-      expect(defaultVoice).toContain('Neural2');
-    });
+process.env.NODE_ENV = 'test';
+process.env.OPENAI_API_KEY = 'test-api-key';
 
-    test('voice options include Wavenet and Studio variants', () => {
-      const voiceOptions = [
-        'en-GB-Neural2-D',
-        'en-GB-Wavenet-D',
-        'en-GB-Studio-D'
-      ];
-      expect(voiceOptions.length).toBeGreaterThan(1);
-    });
+describe('TTSService - synthesize', () => {
+  let ttsService;
 
-    test('voice is British English', () => {
-      const voice = 'en-GB-Neural2-D';
-      expect(voice).toContain('en-GB');
-    });
+  beforeEach(() => {
+    jest.resetModules();
+    ttsService = require('../src/services/TTSService');
+  });
 
-    test('gender is detected from voice name', () => {
-      const voiceD = 'en-GB-Neural2-D';
-      const voiceB = 'en-GB-Neural2-B';
+  test('sends correct request structure to Google TTS', async () => {
+    const mockAudio = Buffer.from('fake-mp3-data');
+    const mockSynthesize = jest.fn().mockResolvedValue([{ audioContent: mockAudio }]);
+    ttsService.client = { synthesizeSpeech: mockSynthesize };
 
-      // D typically indicates male voice
-      expect(voiceD).toContain('-D');
-      // B typically indicates female voice
-      expect(voiceB).toContain('-B');
+    const ssml = '<speak>Hello, how are you?</speak>';
+    await ttsService.synthesize(ssml, 'en-GB-Neural2-D');
+
+    expect(mockSynthesize).toHaveBeenCalledWith({
+      input: { ssml },
+      voice: {
+        languageCode: 'en-GB',
+        name: 'en-GB-Neural2-D',
+        ssmlGender: 'MALE'
+      },
+      audioConfig: {
+        audioEncoding: 'MP3',
+        speakingRate: 1.0,
+        volumeGainDb: 0.0
+      }
     });
   });
 
-  describe('Speech Parameters', () => {
-    test('speaking rate is set to 0.95', () => {
-      const speakingRate = 0.95;
-      expect(speakingRate).toBeGreaterThan(0.9);
-      expect(speakingRate).toBeLessThan(1.0);
-    });
+  test('returns audio content buffer', async () => {
+    const mockAudio = Buffer.from('audio-content-here');
+    ttsService.client = {
+      synthesizeSpeech: jest.fn().mockResolvedValue([{ audioContent: mockAudio }])
+    };
 
-    test('audio encoding is MP3', () => {
-      const audioEncoding = 'MP3';
-      expect(audioEncoding).toBe('MP3');
-    });
-
-    test('output is base64 encoded', () => {
-      const sampleBase64 = 'SGVsbG8gV29ybGQ=';
-      const base64Regex = /^[A-Za-z0-9+/=]+$/;
-      expect(base64Regex.test(sampleBase64)).toBe(true);
-    });
+    const result = await ttsService.synthesize('<speak>Test</speak>', 'en-GB-Neural2-D');
+    expect(Buffer.isBuffer(result)).toBe(true);
+    expect(result).toEqual(mockAudio);
   });
 
-  describe('SSML Processing', () => {
-    function addSSMLPauses(text) {
-      return text
-        .replace(/\. /g, '.<break strength="medium"/> ')
-        .replace(/\? /g, '?<break strength="medium"/> ')
-        .replace(/, /g, ',<break strength="weak"/> ');
-    }
+  test('detects female voice for Aoede', async () => {
+    const mockAudio = Buffer.from('audio');
+    const mockSynthesize = jest.fn().mockResolvedValue([{ audioContent: mockAudio }]);
+    ttsService.client = { synthesizeSpeech: mockSynthesize };
 
-    test('adds medium break after period', () => {
-      const input = 'Hello. How are you?';
-      const output = addSSMLPauses(input);
-      expect(output).toContain('.<break strength="medium"/>');
-    });
+    await ttsService.synthesize('<speak>Test</speak>', 'en-GB-Aoede');
 
-    test('adds medium break after question mark', () => {
-      const input = 'How are you? I am fine.';
-      const output = addSSMLPauses(input);
-      expect(output).toContain('?<break strength="medium"/>');
-    });
-
-    test('adds weak break after comma', () => {
-      const input = 'Hello, my name is John.';
-      const output = addSSMLPauses(input);
-      expect(output).toContain(',<break strength="weak"/>');
-    });
-
-    test('handles multiple punctuation marks', () => {
-      const input = 'Hello. How are you? I am fine, thank you.';
-      const output = addSSMLPauses(input);
-      expect(output).toContain('.<break strength="medium"/>');
-      expect(output).toContain('?<break strength="medium"/>');
-      expect(output).toContain(',<break strength="weak"/>');
-    });
+    expect(mockSynthesize).toHaveBeenCalledWith(
+      expect.objectContaining({
+        voice: expect.objectContaining({ ssmlGender: 'FEMALE' })
+      })
+    );
   });
 
-  describe('Cost Estimation', () => {
-    test('TTS cost is approximately £0.0001 per session', () => {
-      const ttsCostPerSession = 0.0001;
-      expect(ttsCostPerSession).toBeLessThan(0.001);
-    });
+  test('detects female voice for Kore', async () => {
+    const mockAudio = Buffer.from('audio');
+    const mockSynthesize = jest.fn().mockResolvedValue([{ audioContent: mockAudio }]);
+    ttsService.client = { synthesizeSpeech: mockSynthesize };
 
-    test('total session cost includes GPT + TTS', () => {
-      const gptCost = 0.0002;
-      const ttsCost = 0.0001;
-      const totalCost = gptCost + ttsCost;
-      expect(totalCost).toBeCloseTo(0.0003, 4); // Floating point precision
-    });
+    await ttsService.synthesize('<speak>Test</speak>', 'en-GB-Kore');
+
+    expect(mockSynthesize).toHaveBeenCalledWith(
+      expect.objectContaining({
+        voice: expect.objectContaining({ ssmlGender: 'FEMALE' })
+      })
+    );
   });
 
-  describe('Audio Output Format', () => {
-    test('audio is returned as base64 string', () => {
-      const mockAudioResponse = {
-        type: 'ai_response',
-        text: 'Hello',
-        audio: 'base64encodedstring'
-      };
-      expect(mockAudioResponse.audio).toBeDefined();
-      expect(typeof mockAudioResponse.audio).toBe('string');
+  test('detects male voice for Neural2-D', async () => {
+    const mockAudio = Buffer.from('audio');
+    const mockSynthesize = jest.fn().mockResolvedValue([{ audioContent: mockAudio }]);
+    ttsService.client = { synthesizeSpeech: mockSynthesize };
+
+    await ttsService.synthesize('<speak>Test</speak>', 'en-GB-Neural2-D');
+
+    expect(mockSynthesize).toHaveBeenCalledWith(
+      expect.objectContaining({
+        voice: expect.objectContaining({ ssmlGender: 'MALE' })
+      })
+    );
+  });
+
+  test('accepts custom speaking rate and volume', async () => {
+    const mockAudio = Buffer.from('audio');
+    const mockSynthesize = jest.fn().mockResolvedValue([{ audioContent: mockAudio }]);
+    ttsService.client = { synthesizeSpeech: mockSynthesize };
+
+    await ttsService.synthesize('<speak>Test</speak>', 'en-GB-Neural2-D', {
+      speakingRate: 0.85,
+      volumeGainDb: 2.0
     });
 
-    test('response includes both text and audio', () => {
-      const response = {
-        type: 'ai_response',
-        text: 'Response text',
-        audio: 'base64audio'
-      };
-      expect(response).toHaveProperty('text');
-      expect(response).toHaveProperty('audio');
-    });
+    expect(mockSynthesize).toHaveBeenCalledWith(
+      expect.objectContaining({
+        audioConfig: {
+          audioEncoding: 'MP3',
+          speakingRate: 0.85,
+          volumeGainDb: 2.0
+        }
+      })
+    );
+  });
+
+  test('propagates errors from Google TTS client', async () => {
+    ttsService.client = {
+      synthesizeSpeech: jest.fn().mockRejectedValue(new Error('TTS quota exceeded'))
+    };
+
+    await expect(
+      ttsService.synthesize('<speak>Test</speak>', 'en-GB-Neural2-D')
+    ).rejects.toThrow('TTS quota exceeded');
+  });
+
+  test('uses default voice from config when voiceName is null', async () => {
+    const mockAudio = Buffer.from('audio');
+    const mockSynthesize = jest.fn().mockResolvedValue([{ audioContent: mockAudio }]);
+    ttsService.client = { synthesizeSpeech: mockSynthesize };
+
+    await ttsService.synthesize('<speak>Test</speak>');
+
+    expect(mockSynthesize).toHaveBeenCalledWith(
+      expect.objectContaining({
+        voice: expect.objectContaining({
+          name: 'en-GB-Neural2-D'
+        })
+      })
+    );
   });
 });

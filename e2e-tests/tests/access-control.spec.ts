@@ -11,9 +11,8 @@ test.describe('Access Control - Three Tier System', () => {
         : null;
     }, FREE_SCENARIOS.necFasc.promptFile);
 
-    if (canAccess !== null) {
-      expect(canAccess).toBe(true);
-    }
+    expect(canAccess).not.toBeNull();
+    expect(canAccess).toBe(true);
   });
 
   test('free user cannot access premium scenario paths', async ({ freeUser }) => {
@@ -23,9 +22,8 @@ test.describe('Access Control - Three Tier System', () => {
         : null;
     }, PREMIUM_SCENARIO.promptFile);
 
-    if (canAccess !== null) {
-      expect(canAccess).toBe(false);
-    }
+    expect(canAccess).not.toBeNull();
+    expect(canAccess).toBe(false);
   });
 
   test('premium user can access all scenario paths', async ({ premiumUser }) => {
@@ -41,8 +39,10 @@ test.describe('Access Control - Three Tier System', () => {
         : null;
     }, PREMIUM_SCENARIO.promptFile);
 
-    if (canAccessFree !== null) expect(canAccessFree).toBe(true);
-    if (canAccessPremium !== null) expect(canAccessPremium).toBe(true);
+    expect(canAccessFree).not.toBeNull();
+    expect(canAccessFree).toBe(true);
+    expect(canAccessPremium).not.toBeNull();
+    expect(canAccessPremium).toBe(true);
   });
 
   test('free user is denied access to premium scenario on simulation.html', async ({ freeUser }) => {

@@ -12,12 +12,16 @@
  */
 function isNoiseTranscript(text) {
   // Empty or invalid input
-  if (!text || typeof text !== 'string') return true;
+  if (!text || typeof text !== 'string') {
+    return true;
+  }
 
   const trimmed = text.trim();
 
   // Very short text (< 2 characters)
-  if (trimmed.length < 2) return true;
+  if (trimmed.length < 2) {
+    return true;
+  }
 
   // Common noise patterns that Whisper produces for ambient sounds
   const noisePatterns = [
@@ -30,7 +34,7 @@ function isNoiseTranscript(text) {
     /^[\s\.\,\!\?]+$/,                            // Just punctuation/whitespace
     /^[^a-zA-Z]*$/,                               // No letters at all
     /^([a-z])\1+$/i,                              // Repeated single letter (sss, aaaa)
-    /^([a-z]\s)+[a-z]?$/i,                        // Repeated letters with spaces (s s s)
+    /^([a-z]\s)+[a-z]?$/i                        // Repeated letters with spaces (s s s)
   ];
 
   // Check against noise patterns

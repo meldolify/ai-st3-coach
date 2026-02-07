@@ -6,23 +6,6 @@
 // ============================================================================
 
 /**
- * Load simulation parameters from sessionStorage
- * @returns {Object|null} Simulation params or null if not found
- */
-function loadSimulationParams() {
-  const paramsJson = sessionStorage.getItem('simulationParams');
-  if (!paramsJson) {
-    return null;
-  }
-  try {
-    return JSON.parse(paramsJson);
-  } catch (e) {
-    console.error('[SimulationApp] Error parsing simulation params:', e);
-    return null;
-  }
-}
-
-/**
  * Handle logo click in simulation page header
  * Shows exit modal if session is active, otherwise navigates to index
  */
