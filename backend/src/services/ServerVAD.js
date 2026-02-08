@@ -247,8 +247,13 @@ class ServerVAD {
 
       if (prob < this.negThreshold) {
         this.silenceFrameCount++;
-        if (this.silenceFrameCount >= this.redemptionFrames) {
-          // Speech ended — compute all data BEFORE clearing state
+        if (this.silenceFrameCount >= this._getRedemptionFrames()) {
+          // Speech ended — log adaptive threshold used
+          const adaptiveFrames = this._getRedemptionFrames();
+          const speechElapsed = Date.now() - this.speechStartTime;
+          console.log(`[VAD] Adaptive: ${adaptiveFrames} frames / ${Math.round(adaptiveFrames * 96)}ms tolerance (speech ${Math.round(speechElapsed / 1000)}s)`);
+
+          // Compute all data BEFORE clearing state
           const audio = this._concatenateBuffers();
           const hadIncrementalExports = this._lastExportIndex > 0;
           const audioSinceExport = hadIncrementalExports ? this.getAudioSinceLastExport() : null;
@@ -266,6 +271,23 @@ class ServerVAD {
       } else {
         this.silenceFrameCount = 0;
       }
+    }
+  }
+
+  /**
+   * Compute adaptive redemption frames based on speech duration.
+   * Short utterances use base value for fast response.
+   * Longer speech gets more patience for thinking pauses.
+   * @returns {number} Number of silence frames before speech end
+   */
+  _getRedemptionFrames() {
+    const elapsed = Date.now() - this.speechStartTime;
+    if (elapsed < 5000) {
+      return this.redemptionFrames;                    // 8 frames = ~768ms
+    } else if (elapsed < 15000) {
+      return this.redemptionFrames * 2;                // 16 frames = ~1536ms
+    } else {
+      return Math.round(this.redemptionFrames * 3.5);  // 28 frames = ~2688ms
     }
   }
 
