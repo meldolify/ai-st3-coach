@@ -37,6 +37,9 @@ class OrbVisualizer {
 
     // Safety timeout for stuck playback
     this.playbackTimeout = null;
+
+    // When true, handlePlaybackEnd() skips idle shimmer (prevents flicker between queued chunks)
+    this.suppressIdleOnEnd = false;
   }
 
   /**
@@ -341,9 +344,11 @@ class OrbVisualizer {
       this.visualizationAnimationId = null;
     }
 
-    // Reset rings and start shimmer
+    // Reset rings — but skip idle shimmer if more audio chunks are queued
     this.resetRings();
-    this.startIdleShimmer();
+    if (!this.suppressIdleOnEnd) {
+      this.startIdleShimmer();
+    }
 
     // Trigger callback
     if (this.onEnd) this.onEnd();

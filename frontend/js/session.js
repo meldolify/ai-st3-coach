@@ -13,9 +13,13 @@ class AudioPlayer {
     this.isPlaying = false;
     this.onStart = null;
     this.onEnd = null;
-    this.playbackTimeout = null; // Safety timeout for stuck playback
-    this.useVisualizer = false; // Whether to use orb visualizer
+    this.playbackTimeout = null;
+    this.useVisualizer = false;
     this.visualizerInitialized = false;
+
+    // Audio queue for streamed sentence chunks
+    this._queue = [];
+    this._isPlayingChunk = false;
   }
 
   /**
@@ -39,20 +43,116 @@ class AudioPlayer {
     return false;
   }
 
+  /**
+   * Queue a base64 audio chunk for sequential playback.
+   * Starts playback immediately if nothing is currently playing.
+   */
+  queueBase64Audio(base64Audio) {
+    this._queue.push(base64Audio);
+    if (!this._isPlayingChunk) {
+      this._playNextInQueue();
+    }
+  }
+
+  /**
+   * Play the next chunk in the queue. When queue empties, fire onEnd.
+   */
+  _playNextInQueue() {
+    if (this._queue.length === 0) {
+      this._isPlayingChunk = false;
+      this.isPlaying = false;
+      // Tell the orb visualizer it can go idle (no more chunks coming)
+      if (this.useVisualizer && window.orbVisualizer) {
+        window.orbVisualizer.suppressIdleOnEnd = false;
+      }
+      if (this.onEnd) this.onEnd();
+      return;
+    }
+
+    this._isPlayingChunk = true;
+    this.isPlaying = true;
+    const base64Audio = this._queue.shift();
+    const hasMore = this._queue.length > 0;
+
+    // Suppress idle shimmer between chunks so orb doesn't flicker
+    if (this.useVisualizer && window.orbVisualizer) {
+      window.orbVisualizer.suppressIdleOnEnd = hasMore || true;
+      // We always suppress between chunks; _playNextInQueue sets false when queue empties
+    }
+
+    this._playSingleChunk(base64Audio, () => {
+      this._playNextInQueue();
+    });
+  }
+
+  /**
+   * Play a single audio chunk and call the callback when done.
+   */
+  _playSingleChunk(base64Audio, callback) {
+    if (this.useVisualizer && window.orbVisualizer) {
+      window.orbVisualizer.onEnd = () => {
+        callback();
+      };
+      window.orbVisualizer.playWithVisualization(base64Audio);
+      return;
+    }
+
+    // Fallback: standard Audio element
+    const binaryString = atob(base64Audio);
+    const bytes = Uint8Array.from(binaryString, char => char.charCodeAt(0));
+    const blob = new Blob([bytes], { type: 'audio/mp3' });
+    const url = URL.createObjectURL(blob);
+
+    if (this.playbackTimeout) {
+      clearTimeout(this.playbackTimeout);
+      this.playbackTimeout = null;
+    }
+
+    this.audio.src = url;
+    this.audio.play();
+
+    const estimatedDurationMs = (bytes.length / 4000) * 1000;
+    this.playbackTimeout = setTimeout(() => {
+      console.warn('[AUDIO] Chunk playback timeout');
+      URL.revokeObjectURL(url);
+      callback();
+    }, estimatedDurationMs + 10000);
+
+    this.audio.onended = () => {
+      if (this.playbackTimeout) {
+        clearTimeout(this.playbackTimeout);
+        this.playbackTimeout = null;
+      }
+      URL.revokeObjectURL(url);
+      callback();
+    };
+
+    this.audio.onerror = (e) => {
+      if (this.playbackTimeout) {
+        clearTimeout(this.playbackTimeout);
+        this.playbackTimeout = null;
+      }
+      console.error('Audio chunk playback error:', e);
+      URL.revokeObjectURL(url);
+      callback();
+    };
+  }
+
+  /**
+   * Play a single base64 audio (non-queued, for legacy ai_response and feedback).
+   */
   playBase64Audio(base64Audio) {
     // Use orb visualizer if available and initialized
     if (this.useVisualizer && window.orbVisualizer) {
       this.isPlaying = true;
       if (this.onStart) this.onStart();
 
-      // Connect visualizer callbacks
-      window.orbVisualizer.onStart = null; // Already called above
+      window.orbVisualizer.suppressIdleOnEnd = false;
       window.orbVisualizer.onEnd = () => {
         this.isPlaying = false;
         if (this.onEnd) this.onEnd();
       };
 
-      // Play with visualization
       window.orbVisualizer.playWithVisualization(base64Audio);
       return;
     }
@@ -63,7 +163,6 @@ class AudioPlayer {
     const blob = new Blob([bytes], { type: 'audio/mp3' });
     const url = URL.createObjectURL(blob);
 
-    // Clear any existing timeout
     if (this.playbackTimeout) {
       clearTimeout(this.playbackTimeout);
       this.playbackTimeout = null;
@@ -74,8 +173,6 @@ class AudioPlayer {
     this.isPlaying = true;
     if (this.onStart) this.onStart();
 
-    // Safety timeout: estimate duration from byte size (rough MP3 estimate ~4KB/sec)
-    // Add generous buffer (10 seconds) to avoid premature cutoff
     const estimatedDurationMs = (bytes.length / 4000) * 1000;
     this.playbackTimeout = setTimeout(() => {
       if (this.isPlaying) {
@@ -87,19 +184,16 @@ class AudioPlayer {
     }, estimatedDurationMs + 10000);
 
     this.audio.onended = () => {
-      // Clear safety timeout
       if (this.playbackTimeout) {
         clearTimeout(this.playbackTimeout);
         this.playbackTimeout = null;
       }
       this.isPlaying = false;
       URL.revokeObjectURL(url);
-      // Call onEnd immediately to restart mic ASAP
       if (this.onEnd) this.onEnd();
     };
 
     this.audio.onerror = (e) => {
-      // Clear safety timeout
       if (this.playbackTimeout) {
         clearTimeout(this.playbackTimeout);
         this.playbackTimeout = null;
@@ -112,14 +206,21 @@ class AudioPlayer {
     };
   }
 
+  /**
+   * Interrupt all playback — clears queue + stops current chunk.
+   */
   interrupt() {
+    // Clear the queue
+    this._queue = [];
+    this._isPlayingChunk = false;
+
     // Interrupt visualizer if in use
     if (this.useVisualizer && window.orbVisualizer) {
+      window.orbVisualizer.suppressIdleOnEnd = false;
       window.orbVisualizer.interrupt();
     }
 
     if (this.isPlaying) {
-      // Clear safety timeout
       if (this.playbackTimeout) {
         clearTimeout(this.playbackTimeout);
         this.playbackTimeout = null;
@@ -239,7 +340,7 @@ class V4Session {
         break;
 
       case 'ai_response': {
-        // Pause audio streaming during AI speech
+        // Legacy single-response (used by feedback mode)
         this.audioStreamer.setAISpeaking(true);
         const aiRoundTrip = this._speechStartAt ? Math.round(performance.now() - this._speechStartAt) : '?';
         console.log(`[TIMING] AI response received, round-trip from speech start: ${aiRoundTrip}ms`);
@@ -248,7 +349,6 @@ class V4Session {
           window.transcript.addAIMessage(msg.text);
         }
         this.audioPlayer.playBase64Audio(msg.audio);
-        // Show interrupt button with active styling
         const interruptBtn = document.getElementById('interruptBtn');
         if (interruptBtn) {
           interruptBtn.style.display = 'inline-block';
@@ -262,6 +362,49 @@ class V4Session {
         syncMobileButtonStates();
         updateStatus('aiStatus', 'Speaking', 'speaking');
         setOrbState('speaking');
+        break;
+      }
+
+      case 'ai_response_start': {
+        // Streaming response begins — pause mic, show interrupt, set orb
+        this.audioStreamer.setAISpeaking(true);
+        this._streamedFullText = '';
+        const startInterruptBtn = document.getElementById('interruptBtn');
+        if (startInterruptBtn) {
+          startInterruptBtn.style.display = 'inline-block';
+          startInterruptBtn.disabled = false;
+          startInterruptBtn.classList.add('active');
+        }
+        const startMobileBtn = document.getElementById('mobileInterruptBtn');
+        if (startMobileBtn) {
+          startMobileBtn.classList.add('active');
+        }
+        syncMobileButtonStates();
+        updateStatus('aiStatus', 'Speaking', 'speaking');
+        setOrbState('speaking');
+        break;
+      }
+
+      case 'ai_response_chunk': {
+        // One sentence + its TTS audio — queue for sequential playback
+        const chunkRoundTrip = this._speechStartAt ? Math.round(performance.now() - this._speechStartAt) : '?';
+        if (msg.chunkIndex === 0) {
+          console.log(`[TIMING] First audio chunk, round-trip from speech start: ${chunkRoundTrip}ms`);
+          if (this.audioPlayer.onStart) this.audioPlayer.onStart();
+        }
+        this._streamedFullText = (this._streamedFullText || '') + ' ' + msg.text;
+        log('AI: ' + msg.text, 'info');
+        this.audioPlayer.queueBase64Audio(msg.audio);
+        break;
+      }
+
+      case 'ai_response_end': {
+        // Streaming done — add full text to transcript
+        const fullText = msg.fullText || (this._streamedFullText || '').trim();
+        if (window.transcript && fullText) {
+          window.transcript.addAIMessage(fullText);
+        }
+        console.log(`[TIMING] Streaming response complete`);
         break;
       }
 

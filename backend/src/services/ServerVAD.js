@@ -47,7 +47,7 @@ class ServerVAD {
     // Detection thresholds — match @ricky0123/vad-web@0.0.19 defaults
     this.posThreshold = options.posThreshold || 0.3;
     this.negThreshold = options.negThreshold || 0.2;
-    this.redemptionFrames = options.redemptionFrames || 12;
+    this.redemptionFrames = options.redemptionFrames || 8;
     this.minSpeechFrames = options.minSpeechFrames || 2;
 
     // State tracking
@@ -68,6 +68,12 @@ class ServerVAD {
     // Callbacks
     this.onSpeechStart = null;
     this.onSpeechEnd = null; // Called with Float32Array of speech audio
+    this.onIncrementalAudio = null; // Called with cumulative Float32Array every ~15s of speech
+
+    // Incremental export tracking (for background Whisper during long speech)
+    this._incrementalIntervalFrames = Math.round((15 * 16000) / FRAME_SIZE); // ~156 frames = ~15s
+    this._framesSinceLastExport = 0;
+    this._lastExportIndex = 0; // audioBuffer index at last export
 
     // Timing
     this.speechStartTime = null;
@@ -229,23 +235,53 @@ class ServerVAD {
     } else {
       // Currently in speech — buffer audio
       this.audioBuffer.push(new Float32Array(frame));
+      this._framesSinceLastExport++;
+
+      // Fire incremental export every ~15s of continuous speech
+      if (this.onIncrementalAudio && this._framesSinceLastExport >= this._incrementalIntervalFrames) {
+        const snapshot = this._concatenateBuffers();
+        this._lastExportIndex = this.audioBuffer.length;
+        this._framesSinceLastExport = 0;
+        this.onIncrementalAudio(snapshot, this._frameCount);
+      }
 
       if (prob < this.negThreshold) {
         this.silenceFrameCount++;
         if (this.silenceFrameCount >= this.redemptionFrames) {
           // Speech ended
           const audio = this._concatenateBuffers();
+          const hadIncrementalExports = this._lastExportIndex > 0;
           this.isSpeaking = false;
           this.speechFrameCount = 0;
           this.silenceFrameCount = 0;
           this.audioBuffer = [];
+          this._framesSinceLastExport = 0;
+          this._lastExportIndex = 0;
 
-          if (this.onSpeechEnd) this.onSpeechEnd(audio);
+          if (this.onSpeechEnd) this.onSpeechEnd(audio, hadIncrementalExports);
         }
       } else {
         this.silenceFrameCount = 0;
       }
     }
+  }
+
+  /**
+   * Get only the audio frames accumulated since the last incremental export.
+   * Used to transcribe just the final segment when incremental Whisper is active.
+   * @returns {Float32Array}
+   */
+  getAudioSinceLastExport() {
+    if (this._lastExportIndex === 0) return this._concatenateBuffers();
+    const sliced = this.audioBuffer.slice(this._lastExportIndex);
+    const totalLength = sliced.reduce((sum, buf) => sum + buf.length, 0);
+    const result = new Float32Array(totalLength);
+    let offset = 0;
+    for (const buf of sliced) {
+      result.set(buf, offset);
+      offset += buf.length;
+    }
+    return result;
   }
 
   /**
@@ -306,6 +342,7 @@ class ServerVAD {
     this._residualBuffer = null;
     this.onSpeechStart = null;
     this.onSpeechEnd = null;
+    this.onIncrementalAudio = null;
   }
 }
 

@@ -17,6 +17,7 @@ const ttsService = require('./src/services/TTSService');
 const { ServerVAD, float32ToWavBuffer } = require('./src/services/ServerVAD');
 const { isNoiseTranscript, buildNaturalSSML } = require('./src/utils/audioHelpers');
 const { loadScenarioPrompt } = require('./src/utils/scenarioLoader');
+const SentenceBuffer = require('./src/utils/sentenceBuffer');
 
 // Import security middleware
 const {
@@ -124,6 +125,79 @@ function serializeTranscript(history) {
 
 async function googleTTS(text, voiceName) {
   return ttsService.synthesize(text, voiceName);
+}
+
+/**
+ * Stream GPT response with sentence-level TTS to client.
+ * Sends ai_response_start, then ai_response_chunk per sentence, then ai_response_end.
+ * @param {Object} session - Session object from sessions Map
+ * @param {WebSocket} ws - WebSocket connection
+ * @param {Array} history - Conversation history (user message already pushed)
+ * @param {Object} options - GPT options (optional)
+ */
+async function streamResponseToClient(session, ws, history, options = {}) {
+  const sentenceBuffer = new SentenceBuffer();
+  let fullText = '';
+  let chunkIndex = 0;
+  const t0 = Date.now();
+
+  session.isAISpeaking = true;
+  ws.send(JSON.stringify({ type: 'ai_response_start' }));
+
+  try {
+    for await (const token of openaiService.generateResponseStream(history, options)) {
+      // Abort if user interrupted
+      if (!session.isAISpeaking) {
+        console.log('[STREAM] Aborted — user interrupted');
+        break;
+      }
+
+      fullText += token;
+      const sentences = sentenceBuffer.addToken(token);
+
+      for (const sentence of sentences) {
+        if (!session.isAISpeaking) break;
+        const ssml = buildNaturalSSML(sentence);
+        const audio = await googleTTS(ssml, session.voice);
+        ws.send(JSON.stringify({
+          type: 'ai_response_chunk',
+          text: sentence,
+          audio: audio.toString('base64'),
+          chunkIndex: chunkIndex++
+        }));
+      }
+    }
+
+    // Flush remaining text
+    const remaining = sentenceBuffer.flush();
+    if (remaining && session.isAISpeaking) {
+      const ssml = buildNaturalSSML(remaining);
+      const audio = await googleTTS(ssml, session.voice);
+      ws.send(JSON.stringify({
+        type: 'ai_response_chunk',
+        text: remaining,
+        audio: audio.toString('base64'),
+        chunkIndex: chunkIndex++
+      }));
+    }
+
+    const tEnd = Date.now();
+    console.log(`[TIMING] Streaming pipeline: ${tEnd - t0}ms, ${chunkIndex} chunks`);
+    console.log('[AI] ' + fullText);
+
+    // Push full response to history
+    history.push({ role: 'assistant', content: fullText });
+
+    ws.send(JSON.stringify({ type: 'ai_response_end', fullText }));
+  } catch (error) {
+    console.error('[STREAM] Error:', error.message);
+    // If we got partial text, still save it
+    if (fullText) {
+      history.push({ role: 'assistant', content: fullText });
+    }
+    ws.send(JSON.stringify({ type: 'error', message: 'Streaming response failed' }));
+    session.isAISpeaking = false;
+  }
 }
 
 const wss = new WebSocket.Server({
@@ -249,27 +323,59 @@ wss.on('connection', (ws, req) => {
       return;
     }
 
+    // Per-session incremental Whisper state
+    const incrementalState = {
+      latestTranscript: '',     // Most recent cumulative transcript
+      pendingTranscription: null, // Promise for in-flight Whisper call
+      exportCount: 0
+    };
+
     sessions.set(sessionId, {
       history: [{ role: 'system', content: scenarioPrompt }],
       ws: ws,
       scenario: scenarioFile,
       voice: voice,
-      userId: userId, // Track which user is in this session
+      userId: userId,
       isAISpeaking: false,
       inFeedbackMode: false,
       feedbackCount: 0,
-      vad: vadInstance
+      vad: vadInstance,
+      incrementalState
     });
 
     // Wire up VAD callbacks
     vadInstance.onSpeechStart = () => {
       console.log(`[VAD] Speech started for ${sessionId}`);
+      // Reset incremental state for new utterance
+      incrementalState.latestTranscript = '';
+      incrementalState.pendingTranscription = null;
+      incrementalState.exportCount = 0;
       if (ws.readyState === WebSocket.OPEN) {
         ws.send(JSON.stringify({ type: 'vad_speech_start' }));
       }
     };
 
-    vadInstance.onSpeechEnd = async (audioFloat32) => {
+    // Incremental Whisper: transcribe cumulative audio every ~15s during long speech
+    vadInstance.onIncrementalAudio = async (audioSnapshot, frameIndex) => {
+      if (incrementalState.pendingTranscription) {
+        await incrementalState.pendingTranscription;
+      }
+      incrementalState.exportCount++;
+      console.log(`[INCREMENTAL] Export #${incrementalState.exportCount} at frame ${frameIndex}, ${Math.round(audioSnapshot.length / 16000)}s audio`);
+
+      incrementalState.pendingTranscription = (async () => {
+        try {
+          const wavBuffer = float32ToWavBuffer(audioSnapshot, 16000);
+          const transcript = await openaiService.transcribeAudio(wavBuffer, sessionId, 'wav');
+          incrementalState.latestTranscript = transcript;
+          console.log(`[INCREMENTAL] Transcript: "${transcript.substring(0, 80)}..."`);
+        } catch (err) {
+          console.error('[INCREMENTAL] Whisper error:', err.message);
+        }
+      })();
+    };
+
+    vadInstance.onSpeechEnd = async (audioFloat32, hadIncrementalExports) => {
       const session = sessions.get(sessionId);
       if (!session || ws.readyState !== WebSocket.OPEN) return;
 
@@ -285,15 +391,33 @@ wss.on('connection', (ws, req) => {
       }
 
       try {
-        // Convert to WAV for Whisper
-        const wavBuffer = float32ToWavBuffer(audioFloat32, 16000);
+        let transcript;
         const tWav = Date.now();
-        console.log(`[TIMING] WAV encode: ${tWav - t0}ms (${wavBuffer.length} bytes)`);
 
-        // Transcribe with Whisper
-        const transcript = await openaiService.transcribeAudio(wavBuffer, sessionId, 'wav');
-        const tWhisper = Date.now();
-        console.log(`[TIMING] Whisper STT: ${tWhisper - tWav}ms → "${transcript}"`);
+        if (hadIncrementalExports && incrementalState.exportCount > 0) {
+          // Long utterance: use incremental transcript + transcribe only final segment
+          if (incrementalState.pendingTranscription) {
+            await incrementalState.pendingTranscription;
+          }
+
+          const finalSegment = vadInstance.getAudioSinceLastExport();
+          const finalWav = float32ToWavBuffer(finalSegment, 16000);
+          console.log(`[TIMING] Incremental: ${incrementalState.exportCount} exports, final segment ${Math.round(finalSegment.length / 16000)}s (${finalWav.length} bytes)`);
+
+          const finalTranscript = await openaiService.transcribeAudio(finalWav, sessionId, 'wav');
+          transcript = (incrementalState.latestTranscript + ' ' + finalTranscript).trim();
+
+          const tWhisper = Date.now();
+          console.log(`[TIMING] Whisper STT (incremental): ${tWhisper - tWav}ms → "${transcript.substring(0, 100)}..."`);
+        } else {
+          // Short utterance: standard full transcription
+          const wavBuffer = float32ToWavBuffer(audioFloat32, 16000);
+          console.log(`[TIMING] WAV encode: ${Date.now() - t0}ms (${wavBuffer.length} bytes)`);
+
+          transcript = await openaiService.transcribeAudio(wavBuffer, sessionId, 'wav');
+          const tWhisper = Date.now();
+          console.log(`[TIMING] Whisper STT: ${tWhisper - tWav}ms → "${transcript}"`);
+        }
 
         // Filter noise transcripts
         if (isNoiseTranscript(transcript)) {
@@ -304,27 +428,9 @@ wss.on('connection', (ws, req) => {
         // Send transcript to client for display
         ws.send(JSON.stringify({ type: 'user_transcript_display', text: transcript }));
 
-        // Process with GPT (same pipeline as user_transcript)
+        // Process with streaming GPT → sentence-level TTS
         session.history.push({ role: 'user', content: transcript });
-
-        const responseText = await callGPT4oMini(session.history);
-        const tGPT = Date.now();
-        console.log(`[TIMING] GPT: ${tGPT - tWhisper}ms`);
-        console.log('[AI] ' + responseText);
-        session.history.push({ role: 'assistant', content: responseText });
-
-        const ssmlText = buildNaturalSSML(responseText);
-        const audioBuffer = await googleTTS(ssmlText, session.voice);
-        const tTTS = Date.now();
-        console.log(`[TIMING] TTS: ${tTTS - tGPT}ms`);
-        console.log(`[TIMING] Pipeline total: ${tTTS - t0}ms (WAV:${tWav - t0} + Whisper:${tWhisper - tWav} + GPT:${tGPT - tWhisper} + TTS:${tTTS - tGPT})`);
-
-        session.isAISpeaking = true;
-        ws.send(JSON.stringify({
-          type: 'ai_response',
-          text: responseText,
-          audio: audioBuffer.toString('base64')
-        }));
+        await streamResponseToClient(session, ws, session.history);
       } catch (error) {
         console.error('[VAD] Pipeline error:', error.message);
         ws.send(JSON.stringify({ type: 'error', message: 'Processing failed' }));
@@ -436,26 +542,7 @@ wss.on('connection', (ws, req) => {
           case 'user_transcript':
             console.log('[USER] ' + sanitizeForLog(msg.text));
             session.history.push({ role: 'user', content: msg.text });
-
-            const t1 = Date.now();
-            const responseText = await callGPT4oMini(session.history);
-            const t2 = Date.now();
-            console.log('[AI] ' + responseText);
-            console.log(`[TIMING] GPT: ${t2 - t1}ms`);
-            session.history.push({ role: 'assistant', content: responseText });
-
-            const ssmlText = buildNaturalSSML(responseText);
-            const t3 = Date.now();
-            const audioBuffer = await googleTTS(ssmlText, session.voice);
-            const t4 = Date.now();
-            console.log(`[TIMING] TTS: ${t4 - t3}ms, Total: ${t4 - t1}ms`);
-
-            session.isAISpeaking = true;
-            ws.send(JSON.stringify({
-              type: 'ai_response',
-              text: responseText,
-              audio: audioBuffer.toString('base64')
-            }));
+            await streamResponseToClient(session, ws, session.history);
             break;
 
           case 'user_speaking':

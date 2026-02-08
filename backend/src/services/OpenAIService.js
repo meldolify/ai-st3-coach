@@ -4,8 +4,7 @@
  */
 
 const OpenAI = require('openai');
-const fs = require('fs');
-const path = require('path');
+const { toFile } = require('openai');
 const config = require('../config');
 
 class OpenAIService {
@@ -51,29 +50,25 @@ class OpenAIService {
   }
 
   /**
-   * Transcribe audio using Whisper API
+   * Transcribe audio using Whisper API (in-memory, no temp files)
    * @param {Buffer} audioBuffer - Audio data as Buffer
-   * @param {string} sessionId - Session ID for temp file naming
+   * @param {string} sessionId - Session ID (unused, kept for API compat)
    * @param {string} format - Audio format: 'wav' or 'webm' (default: 'webm')
    * @returns {Promise<string>} - The transcribed text
    */
   async transcribeAudio(audioBuffer, sessionId, format = 'webm') {
     const client = this._ensureClient();
 
-    // Detect format from buffer header if not specified
     const isWav = audioBuffer.length >= 4 &&
       audioBuffer.slice(0, 4).toString() === 'RIFF';
     const extension = isWav || format === 'wav' ? 'wav' : 'webm';
 
-    const tempFilePath = path.join(__dirname, '../../', `temp_audio_${sessionId}_${Date.now()}.${extension}`);
-
     try {
-      // Write audio to temporary file for Whisper API
-      fs.writeFileSync(tempFilePath, audioBuffer);
       console.log(`[WHISPER] Processing ${extension} audio, size: ${audioBuffer.length} bytes`);
 
+      const file = await toFile(audioBuffer, `audio.${extension}`);
       const transcription = await client.audio.transcriptions.create({
-        file: fs.createReadStream(tempFilePath),
+        file,
         model: 'whisper-1',
         language: 'en'
       });
@@ -82,11 +77,30 @@ class OpenAIService {
     } catch (error) {
       console.error('[WHISPER] Error:', error.message);
       throw error;
-    } finally {
-      // Clean up temp file
-      if (fs.existsSync(tempFilePath)) {
-        fs.unlinkSync(tempFilePath);
-      }
+    }
+  }
+
+  /**
+   * Stream a response using GPT-4o-mini (async generator)
+   * Yields token strings as they arrive.
+   * @param {Array} history - Conversation history array of {role, content}
+   * @param {Object} options - Optional parameters (same as generateResponse)
+   * @yields {string} - Individual token strings
+   */
+  async *generateResponseStream(history, options = {}) {
+    const client = this._ensureClient();
+
+    const stream = await client.chat.completions.create({
+      model: options.model || 'gpt-4o-mini',
+      messages: history,
+      temperature: options.temperature ?? 0.7,
+      max_tokens: options.max_tokens || 150,
+      stream: true
+    });
+
+    for await (const chunk of stream) {
+      const content = chunk.choices[0]?.delta?.content;
+      if (content) yield content;
     }
   }
 }
