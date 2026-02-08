@@ -595,9 +595,9 @@ if (interruptBtn) {
     if (session && session.audioPlayer.isPlaying) {
       session.audioPlayer.interrupt();
 
-      // Resume VAD listening
-      if (session.speechRecognition && session.speechRecognition.setAISpeaking) {
-        session.speechRecognition.setAISpeaking(false);
+      // Resume audio streaming after interrupt
+      if (session.audioStreamer) {
+        session.audioStreamer.setAISpeaking(false);
       }
 
       // Notify backend
@@ -830,16 +830,8 @@ window.addEventListener('DOMContentLoaded', async () => {
     const detection = BrowserDetect.detect();
     console.log(`[BROWSER] Detected: ${detection.browser.name}`);
     console.log(`[BROWSER] Platform: ${detection.platform.isMobile ? 'Mobile' : 'Desktop'}`);
-    console.log(`[BROWSER] VAD Support: ${detection.vad.recommended || 'none'} (${detection.vad.reason})`);
-    console.log(`[BROWSER] MediaRecorder codecs:`, detection.mediaRecorderCodecs.supported);
-  }
-
-  // Browser speech recognition check (legacy log)
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SpeechRecognition) {
-    console.log('[SPEECH] Web Speech API not available - will use Whisper via VAD/SimpleVAD');
-  } else {
-    console.log('[SPEECH] Web Speech API available (but using VAD/Whisper for better accuracy)');
+    console.log(`[BROWSER] VAD: ${detection.vad.recommended} (${detection.vad.reason})`);
+    console.log(`[BROWSER] Supported: ${detection.isSupported}`);
   }
 
   // ============================================================================
