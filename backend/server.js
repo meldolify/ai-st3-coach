@@ -27,11 +27,11 @@ const {
 } = require('./src/middleware/websocketSecurity');
 
 // Initialize WebSocket rate limiter
-// Audio streaming sends ~4 chunks/sec (240/min) so limits must accommodate continuous streaming
+// Audio streaming: ScriptProcessorNode(4096) at 48kHz = 85ms/callback = ~12 chunks/sec = ~720/min
 const wsRateLimiter = new WebSocketRateLimiter({
   windowMs: 60000,       // 1 minute window
-  maxMessages: 360,      // 360 messages per minute (audio chunks + control messages)
-  maxAudioPerMinute: 300 // 300 audio messages per minute (~5/sec max)
+  maxMessages: 1200,     // ~720 audio + control messages, with headroom
+  maxAudioPerMinute: 900 // ~12 chunks/sec = 720/min, with 25% headroom
 });
 
 // Cleanup stale rate limit entries every 5 minutes
@@ -380,11 +380,22 @@ wss.on('connection', (ws, req) => {
               if (session.isAISpeaking || session.inFeedbackMode) break; // Ignore audio during AI speech/feedback
 
               const pcmData = Buffer.from(msg.audio, 'base64');
-              const int16Array = new Int16Array(
-                pcmData.buffer,
+              // Copy to aligned ArrayBuffer — Buffer pool can give odd byteOffset
+              // which causes Int16Array to throw RangeError
+              const alignedBuffer = pcmData.buffer.slice(
                 pcmData.byteOffset,
-                pcmData.byteLength / 2
+                pcmData.byteOffset + pcmData.byteLength
               );
+              const int16Array = new Int16Array(alignedBuffer);
+
+              // Diagnostic: log first chunk details
+              if (!session._chunkCount) {
+                session._chunkCount = 0;
+                const samples = int16Array.slice(0, 10);
+                console.log(`[VAD] First chunk: ${int16Array.length} samples, first 10: [${Array.from(samples)}]`);
+              }
+              session._chunkCount++;
+
               await session.vad.processChunk(int16Array);
             } catch (error) {
               console.error('[VAD] Chunk processing error:', error.message);

@@ -104,6 +104,13 @@ class ServerVAD {
    * Update speech/silence state based on probability.
    */
   _updateState(prob, frame) {
+    // Diagnostic: log probability periodically (~every 1.6 seconds)
+    if (!this._frameCount) this._frameCount = 0;
+    this._frameCount++;
+    if (this._frameCount % 50 === 1) {
+      console.log(`[VAD] Frame ${this._frameCount}: prob=${prob.toFixed(3)}, speaking=${this.isSpeaking}, speechFrames=${this.speechFrameCount}`);
+    }
+
     if (!this.isSpeaking) {
       // Maintain rolling pre-speech buffer
       this.preSpeechBuffer.push(new Float32Array(frame));
