@@ -375,7 +375,7 @@ wss.on('connection', (ws, req) => {
       })();
     };
 
-    vadInstance.onSpeechEnd = async (audioFloat32, hadIncrementalExports) => {
+    vadInstance.onSpeechEnd = async (audioFloat32, hadIncrementalExports, audioSinceExport) => {
       const session = sessions.get(sessionId);
       if (!session || ws.readyState !== WebSocket.OPEN) return;
 
@@ -400,12 +400,17 @@ wss.on('connection', (ws, req) => {
             await incrementalState.pendingTranscription;
           }
 
-          const finalSegment = vadInstance.getAudioSinceLastExport();
-          const finalWav = float32ToWavBuffer(finalSegment, 16000);
-          console.log(`[TIMING] Incremental: ${incrementalState.exportCount} exports, final segment ${Math.round(finalSegment.length / 16000)}s (${finalWav.length} bytes)`);
-
-          const finalTranscript = await openaiService.transcribeAudio(finalWav, sessionId, 'wav');
-          transcript = (incrementalState.latestTranscript + ' ' + finalTranscript).trim();
+          // audioSinceExport is pre-computed by ServerVAD before clearing buffers.
+          // If final segment is too short (< 0.1s = 1600 samples), skip Whisper and use incremental transcript as-is.
+          if (audioSinceExport && audioSinceExport.length >= 1600) {
+            const finalWav = float32ToWavBuffer(audioSinceExport, 16000);
+            console.log(`[TIMING] Incremental: ${incrementalState.exportCount} exports, final segment ${Math.round(audioSinceExport.length / 16000)}s (${finalWav.length} bytes)`);
+            const finalTranscript = await openaiService.transcribeAudio(finalWav, sessionId, 'wav');
+            transcript = (incrementalState.latestTranscript + ' ' + finalTranscript).trim();
+          } else {
+            console.log(`[TIMING] Incremental: ${incrementalState.exportCount} exports, final segment too short (${audioSinceExport?.length || 0} samples) — using incremental transcript`);
+            transcript = incrementalState.latestTranscript;
+          }
 
           const tWhisper = Date.now();
           console.log(`[TIMING] Whisper STT (incremental): ${tWhisper - tWav}ms → "${transcript.substring(0, 100)}..."`);
