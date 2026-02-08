@@ -14,6 +14,7 @@ const url = require('url');
 // Import services
 const openaiService = require('./src/services/OpenAIService');
 const ttsService = require('./src/services/TTSService');
+const { ServerVAD, float32ToWavBuffer } = require('./src/services/ServerVAD');
 const { isNoiseTranscript, buildNaturalSSML } = require('./src/utils/audioHelpers');
 const { loadScenarioPrompt } = require('./src/utils/scenarioLoader');
 
@@ -26,10 +27,11 @@ const {
 } = require('./src/middleware/websocketSecurity');
 
 // Initialize WebSocket rate limiter
+// Audio streaming sends ~4 chunks/sec (240/min) so limits must accommodate continuous streaming
 const wsRateLimiter = new WebSocketRateLimiter({
   windowMs: 60000,       // 1 minute window
-  maxMessages: 60,       // 60 messages per minute
-  maxAudioPerMinute: 10  // 10 audio uploads per minute
+  maxMessages: 360,      // 360 messages per minute (audio chunks + control messages)
+  maxAudioPerMinute: 300 // 300 audio messages per minute (~5/sec max)
 });
 
 // Cleanup stale rate limit entries every 5 minutes
@@ -236,6 +238,17 @@ wss.on('connection', (ws, req) => {
     const scenarioPrompt = loadScenarioPrompt(scenarioFile, difficulty);
     const sessionId = generateSecureSessionId();
 
+    // Create server-side VAD instance for this session
+    const vadInstance = new ServerVAD();
+    try {
+      await vadInstance.initialize();
+    } catch (vadError) {
+      console.error('[VAD] Failed to initialize:', vadError.message);
+      ws.send(JSON.stringify({ type: 'error', message: 'Server VAD initialization failed' }));
+      ws.close(1011, 'VAD initialization failed');
+      return;
+    }
+
     sessions.set(sessionId, {
       history: [{ role: 'system', content: scenarioPrompt }],
       ws: ws,
@@ -244,8 +257,79 @@ wss.on('connection', (ws, req) => {
       userId: userId, // Track which user is in this session
       isAISpeaking: false,
       inFeedbackMode: false,
-      feedbackCount: 0
+      feedbackCount: 0,
+      vad: vadInstance
     });
+
+    // Wire up VAD callbacks
+    vadInstance.onSpeechStart = () => {
+      console.log(`[VAD] Speech started for ${sessionId}`);
+      if (ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({ type: 'vad_speech_start' }));
+      }
+    };
+
+    vadInstance.onSpeechEnd = async (audioFloat32) => {
+      const session = sessions.get(sessionId);
+      if (!session || ws.readyState !== WebSocket.OPEN) return;
+
+      const t0 = Date.now();
+      const durationMs = (audioFloat32.length / 16000) * 1000;
+      const vadLatency = vadInstance.speechStartTime ? t0 - vadInstance.speechStartTime : 0;
+      console.log(`[VAD] Speech ended for ${sessionId}, ${Math.round(durationMs)}ms audio, VAD held ${vadLatency}ms`);
+
+      // Skip very short utterances (< 300ms) — likely noise
+      if (audioFloat32.length < 4800) {
+        console.log('[VAD] Too short, skipping');
+        return;
+      }
+
+      try {
+        // Convert to WAV for Whisper
+        const wavBuffer = float32ToWavBuffer(audioFloat32, 16000);
+        const tWav = Date.now();
+        console.log(`[TIMING] WAV encode: ${tWav - t0}ms (${wavBuffer.length} bytes)`);
+
+        // Transcribe with Whisper
+        const transcript = await openaiService.transcribeAudio(wavBuffer, sessionId, 'wav');
+        const tWhisper = Date.now();
+        console.log(`[TIMING] Whisper STT: ${tWhisper - tWav}ms → "${transcript}"`);
+
+        // Filter noise transcripts
+        if (isNoiseTranscript(transcript)) {
+          console.log('[VAD] Filtered as noise');
+          return;
+        }
+
+        // Send transcript to client for display
+        ws.send(JSON.stringify({ type: 'user_transcript_display', text: transcript }));
+
+        // Process with GPT (same pipeline as user_transcript)
+        session.history.push({ role: 'user', content: transcript });
+
+        const responseText = await callGPT4oMini(session.history);
+        const tGPT = Date.now();
+        console.log(`[TIMING] GPT: ${tGPT - tWhisper}ms`);
+        console.log('[AI] ' + responseText);
+        session.history.push({ role: 'assistant', content: responseText });
+
+        const ssmlText = buildNaturalSSML(responseText);
+        const audioBuffer = await googleTTS(ssmlText, session.voice);
+        const tTTS = Date.now();
+        console.log(`[TIMING] TTS: ${tTTS - tGPT}ms`);
+        console.log(`[TIMING] Pipeline total: ${tTTS - t0}ms (WAV:${tWav - t0} + Whisper:${tWhisper - tWav} + GPT:${tGPT - tWhisper} + TTS:${tTTS - tGPT})`);
+
+        session.isAISpeaking = true;
+        ws.send(JSON.stringify({
+          type: 'ai_response',
+          text: responseText,
+          audio: audioBuffer.toString('base64')
+        }));
+      } catch (error) {
+        console.error('[VAD] Pipeline error:', error.message);
+        ws.send(JSON.stringify({ type: 'error', message: 'Processing failed' }));
+      }
+    };
 
     ws.send(JSON.stringify({
       type: 'scenario_loaded',
@@ -274,7 +358,7 @@ wss.on('connection', (ws, req) => {
         }
 
         // Check rate limits
-        const messageType = msg.type === 'whisper_audio' ? 'audio' : 'other';
+        const messageType = (msg.type === 'whisper_audio' || msg.type === 'audio_chunk') ? 'audio' : 'other';
         const rateCheck = wsRateLimiter.checkLimit(msg.sessionId, messageType);
         if (!rateCheck.allowed) {
           console.warn(`[SECURITY] Rate limit exceeded for session ${msg.sessionId}: ${rateCheck.reason}`);
@@ -290,6 +374,23 @@ wss.on('connection', (ws, req) => {
         }
 
         switch (msg.type) {
+          case 'audio_chunk':
+          // Server-side VAD: receive PCM audio, run through Silero VAD
+            try {
+              if (session.isAISpeaking || session.inFeedbackMode) break; // Ignore audio during AI speech/feedback
+
+              const pcmData = Buffer.from(msg.audio, 'base64');
+              const int16Array = new Int16Array(
+                pcmData.buffer,
+                pcmData.byteOffset,
+                pcmData.byteLength / 2
+              );
+              await session.vad.processChunk(int16Array);
+            } catch (error) {
+              console.error('[VAD] Chunk processing error:', error.message);
+            }
+            break;
+
           case 'whisper_audio':
           // Handle Whisper API transcription for browsers without Web Speech API
             try {
@@ -534,6 +635,10 @@ wss.on('connection', (ws, req) => {
     });
 
     ws.on('close', () => {
+      const session = sessions.get(sessionId);
+      if (session?.vad) {
+        session.vad.destroy();
+      }
       sessions.delete(sessionId);
       wsRateLimiter.removeClient(sessionId);
       console.log(`[CLIENT] Disconnected: ${sessionId}`);

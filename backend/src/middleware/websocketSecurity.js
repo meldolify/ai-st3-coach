@@ -109,6 +109,11 @@ class WebSocketRateLimiter {
 // ============================================================================
 
 const MESSAGE_SCHEMAS = {
+  audio_chunk: {
+    required: ['sessionId', 'audio'],
+    sessionId: { type: 'string', maxLength: 100 },
+    audio: { type: 'string', maxLength: 32 * 1024 } // ~16KB base64 per 250ms chunk at 16kHz mono
+  },
   user_transcript: {
     required: ['sessionId', 'text'],
     sessionId: { type: 'string', maxLength: 100 },

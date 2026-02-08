@@ -1,9 +1,10 @@
 // ============================================================================
 // SESSION.JS - WebSocket Session and Audio Playback
 // ============================================================================
-// Dependencies: state.js, config.js, speech.js, vad/VADManager.js, ui-helpers.js
+// Dependencies: state.js, config.js, audio-streamer.js, ui-helpers.js
 // Classes: AudioPlayer, V4Session
 // Handles: WebSocket connection, message handling, AI audio playback
+// Audio capture & VAD are handled server-side — browser just streams PCM.
 // ============================================================================
 
 class AudioPlayer {
@@ -139,11 +140,8 @@ class V4Session {
     this.ws = null;
     this.sessionId = null;
 
-    // STT: Auto-detect best mode based on browser capabilities
-    // 1. Silero VAD (Chrome/Edge/Firefox with WASM) - best accuracy
-    // 2. SimpleVAD (Safari/iOS) - volume-based fallback
-    // 3. Push-to-Talk (last resort)
-    this._initializeSpeechRecognition();
+    // Server-side VAD — browser only streams raw audio
+    this.audioStreamer = new AudioStreamer();
 
     this.audioPlayer = new AudioPlayer();
     this.backendUrl = backendUrl;
@@ -159,185 +157,8 @@ class V4Session {
       'strict': 'en-GB-Chirp3-HD-Charon'     // Perry: Male voice
     };
     this.voice = this.voiceMap[difficulty] || 'en-GB-Chirp3-HD-Fenrir';
-  }
 
-  /**
-   * Initialize speech recognition based on browser capabilities
-   * Automatically selects the best available method with fallback chain:
-   * Silero VAD -> SimpleVAD -> PushToTalk
-   */
-  _initializeSpeechRecognition() {
-    // Use BrowserDetect to determine best VAD method
-    const browserInfo = window.BrowserDetect ? window.BrowserDetect.detect() : null;
-    const recommendedVAD = browserInfo?.vad?.recommended;
-
-    console.log('[V4Session] Browser detection:', browserInfo?.browser?.name, '- Recommended VAD:', recommendedVAD);
-
-    // Build ordered fallback chain based on recommendation
-    this._fallbackChain = [];
-
-    if (recommendedVAD === 'silero' && CONFIG.SPEECH_RECOGNITION.USE_VAD && typeof VADManager !== 'undefined') {
-      this._fallbackChain.push('silero');
-    }
-    if (typeof SimpleVAD !== 'undefined') {
-      this._fallbackChain.push('simple');
-    }
-    if (typeof PushToTalkManager !== 'undefined') {
-      this._fallbackChain.push('ptt');
-    }
-
-    // Select the first available method
-    this._selectSpeechMethod(this._fallbackChain[0] || null);
-
-    // Mark fallback available if there are alternatives in the chain
-    this.fallbackAvailable = this._fallbackChain.length > 1;
-  }
-
-  /**
-   * Select and instantiate a specific speech recognition method
-   */
-  _selectSpeechMethod(method) {
-    this.usingWhisper = false;
-    this.usingVAD = false;
-    this.usingSimpleVAD = false;
-    this.usingPTT = false;
-
-    switch (method) {
-      case 'silero':
-        this.speechRecognition = new VADManager(null);
-        this.usingWhisper = true;
-        this.usingVAD = true;
-        log('Using Silero VAD for continuous voice input', 'success');
-        break;
-
-      case 'simple':
-        this.speechRecognition = new SimpleVAD(null);
-        this.usingWhisper = true;
-        this.usingSimpleVAD = true;
-        log('Using SimpleVAD for voice input (Safari/iOS mode)', 'success');
-        break;
-
-      case 'ptt':
-        this.speechRecognition = new PushToTalkManager(null);
-        this.usingWhisper = true;
-        this.usingPTT = true;
-        log('Using Push-to-Talk for voice input', 'warning');
-        break;
-
-      default:
-        console.error('[V4Session] No speech recognition method available');
-        this.speechRecognition = null;
-        break;
-    }
-  }
-
-  /**
-   * Attempt to fall back to the next available speech method
-   * Returns true if a fallback was successfully initialized
-   */
-  async _attemptFallback() {
-    if (!this._fallbackChain || this._fallbackChain.length <= 1) {
-      return false;
-    }
-
-    // Remove the current (failed) method from the chain
-    this._fallbackChain.shift();
-    const nextMethod = this._fallbackChain[0];
-
-    if (!nextMethod) return false;
-
-    console.log(`[V4Session] Attempting fallback to: ${nextMethod}`);
-    log(`Falling back to ${nextMethod} speech recognition...`, 'warning');
-
-    // Clean up current speech recognition
-    if (this.speechRecognition) {
-      try { this.speechRecognition.stop(); } catch (e) { /* ignore */ }
-    }
-
-    this._selectSpeechMethod(nextMethod);
-    this.fallbackAvailable = this._fallbackChain.length > 1;
-
-    if (!this.speechRecognition) return false;
-
-    // Set websocket reference
-    if (this.usingWhisper && this.ws) {
-      this.speechRecognition.websocket = this.ws;
-    }
-
-    try {
-      await this.speechRecognition.initialize();
-      this.speechRecognition.start();
-      return true;
-    } catch (error) {
-      console.error(`[V4Session] Fallback to ${nextMethod} failed:`, error);
-      return this._attemptFallback(); // Try the next one
-    }
-  }
-
-  /**
-   * Re-attach all speech recognition callbacks after a fallback switch
-   */
-  _reattachCallbacks() {
-    if (!this.speechRecognition) return;
-
-    this.speechRecognition.onTranscript = (text) => {
-      log('You: ' + text, 'info');
-      if (window.transcript) {
-        window.transcript.addUserMessage(text);
-      }
-      if (this.isConnected && this.sessionId) {
-        this.ws.send(JSON.stringify({
-          type: 'user_transcript',
-          sessionId: this.sessionId,
-          text: text
-        }));
-        updateStatus('micStatus', 'Paused', 'active');
-        updateStatus('aiStatus', getRandomProcessingMessage(), 'processing');
-        setOrbState('thinking');
-      }
-    };
-
-    this.speechRecognition.onStart = () => {
-      updateStatus('micStatus', 'Listening', 'connected');
-      updateStatus('aiStatus', 'Listening', 'connected');
-      setOrbState('listening');
-    };
-
-    this.speechRecognition.onEnd = () => {
-      if (this.speechRecognition.shouldBeListening) {
-        updateStatus('micStatus', 'Restarting', 'processing');
-      }
-    };
-
-    this.speechRecognition.onRecordingStart = () => {
-      updateStatus('micStatus', 'Recording', 'connected');
-      setOrbState('listening');
-    };
-
-    this.speechRecognition.onRecordingEnd = () => {
-      updateStatus('micStatus', 'Processing...', 'processing');
-      setOrbState('processing');
-    };
-
-    this.speechRecognition.onError = (message) => {
-      log(message, 'error');
-      setOrbState('idle');
-    };
-
-    if (this.usingWhisper && this.speechRecognition.onInterruptRequest !== undefined) {
-      this.speechRecognition.onInterruptRequest = () => {
-        log('Voice-triggered interrupt', 'info');
-        this.audioPlayer.interrupt();
-        if (this.isConnected && this.sessionId) {
-          this.ws.send(JSON.stringify({
-            type: 'user_speaking',
-            sessionId: this.sessionId
-          }));
-        }
-        syncMobileButtonStates();
-        setOrbState('listening');
-      };
-    }
+    console.log('[V4Session] Using server-side VAD (audio streaming)');
   }
 
   async connect() {
@@ -378,10 +199,8 @@ class V4Session {
       this.ws.onopen = () => {
         this.isConnected = true;
 
-        // If using Whisper, set the WebSocket reference
-        if (this.usingWhisper) {
-          this.speechRecognition.websocket = this.ws;
-        }
+        // Set the WebSocket reference for audio streaming
+        this.audioStreamer.websocket = this.ws;
 
         updateStatus('connectionStatus', 'Connected', 'connected');
         log('Connected to backend', 'success');
@@ -411,21 +230,18 @@ class V4Session {
     switch (msg.type) {
       case 'scenario_loaded':
         this.sessionId = msg.sessionId;
-        // Store session ID globally for SileroVADManager
         window.currentSessionId = msg.sessionId;
         updateStatus('sessionStatus', 'Ready', 'connected');
         setOrbState('idle');
         log('Scenario loaded: ' + msg.scenario, 'success');
         break;
 
-      case 'ai_response':
-        // Set AI speaking state IMMEDIATELY when response arrives (before audio decode)
-        // This eliminates the 100-200ms timing gap that caused incorrect contamination
-        if ((this.usingVAD || this.usingSimpleVAD) && this.speechRecognition?.setAISpeaking) {
-          this.speechRecognition.setAISpeaking(true);
-        }
+      case 'ai_response': {
+        // Pause audio streaming during AI speech
+        this.audioStreamer.setAISpeaking(true);
+        const aiRoundTrip = this._speechStartAt ? Math.round(performance.now() - this._speechStartAt) : '?';
+        console.log(`[TIMING] AI response received, round-trip from speech start: ${aiRoundTrip}ms`);
         log('AI: ' + msg.text, 'info');
-        // Add AI message to transcript
         if (window.transcript) {
           window.transcript.addAIMessage(msg.text);
         }
@@ -441,35 +257,48 @@ class V4Session {
         if (mobileInterruptBtn) {
           mobileInterruptBtn.classList.add('active');
         }
-        syncMobileButtonStates(); // Sync mobile buttons
-        updateStatus('aiStatus', 'Speaking', 'speaking'); // Hide bubble when speaking
+        syncMobileButtonStates();
+        updateStatus('aiStatus', 'Speaking', 'speaking');
         setOrbState('speaking');
+        break;
+      }
+
+      case 'user_transcript_display':
+        // Server transcribed user's speech via Whisper — display it
+        this._transcriptReceivedAt = performance.now();
+        console.log(`[TIMING] Transcript received (${msg.text.length} chars)`);
+        log('You: ' + msg.text, 'info');
+        if (window.transcript) {
+          window.transcript.addUserMessage(msg.text);
+        }
+        updateStatus('aiStatus', getRandomProcessingMessage(), 'processing');
+        setOrbState('thinking');
+        break;
+
+      case 'vad_speech_start':
+        // Server detected speech start — update UI
+        this._speechStartAt = performance.now();
+        console.log('[TIMING] Server VAD: speech start');
+        updateStatus('micStatus', 'Recording', 'connected');
+        setOrbState('listening');
         break;
 
       case 'whisper_transcript':
-        // Handle Whisper API transcript (same as Web Speech API onTranscript)
-        console.log('[WHISPER TIMING] Transcript received from backend');
-        if (this.speechRecognition.onTranscript && msg.text) {
-          this.speechRecognition.onTranscript(msg.text);
-        }
+        // Legacy: Handle Whisper API transcript from old client-side VAD flow
+        console.log('[WHISPER] Transcript received from backend:', msg.text);
         break;
 
       case 'feedback_processing':
-        // Show random processing message during feedback transitions
-        this.inFeedbackMode = true; // Set feedback mode flag
+        this.inFeedbackMode = true;
         updateStatus('micStatus', 'Paused', 'active');
         updateStatus('aiStatus', getRandomProcessingMessage(), 'processing');
         setOrbState('thinking');
         break;
 
       case 'feedback_response':
-        // Feedback section audio - same as ai_response but for feedback delivery
         this.inFeedbackMode = true;
-        if ((this.usingVAD || this.usingSimpleVAD) && this.speechRecognition?.setAISpeaking) {
-          this.speechRecognition.setAISpeaking(true);
-        }
+        this.audioStreamer.setAISpeaking(true);
         log('Feedback (' + msg.section + '/' + msg.totalSections + '): ' + msg.text, 'info');
-        // Add feedback message to transcript with section info
         if (window.transcript) {
           window.transcript.addAIMessage('Feedback: ' + msg.text);
         }
@@ -480,7 +309,6 @@ class V4Session {
 
       case 'interrupt':
         this.audioPlayer.interrupt();
-        // Hide interrupt button and remove active styling
         const interruptBtnOnInterrupt = document.getElementById('interruptBtn');
         if (interruptBtnOnInterrupt) {
           interruptBtnOnInterrupt.style.display = 'none';
@@ -491,7 +319,7 @@ class V4Session {
         if (mobileInterruptBtnOnInterrupt) {
           mobileInterruptBtnOnInterrupt.classList.remove('active');
         }
-        syncMobileButtonStates(); // Sync mobile buttons
+        syncMobileButtonStates();
         setOrbState('listening');
         break;
 
@@ -503,89 +331,14 @@ class V4Session {
   }
 
   async startListening() {
-    // Set up callbacks before initialization
-    this.speechRecognition.onTranscript = (text) => {
-      log('You: ' + text, 'info');
-      // Add user message to transcript
-      if (window.transcript) {
-        window.transcript.addUserMessage(text);
-      }
-
-      if (this.isConnected && this.sessionId) {
-        this.ws.send(JSON.stringify({
-          type: 'user_transcript',
-          sessionId: this.sessionId,
-          text: text
-        }));
-        updateStatus('micStatus', 'Paused', 'active');
-        updateStatus('aiStatus', getRandomProcessingMessage(), 'processing');
-        setOrbState('thinking'); // Show thinking animation while AI processes
-      }
-    };
-
-    this.speechRecognition.onStart = () => {
-      updateStatus('micStatus', 'Listening', 'connected');
-      updateStatus('aiStatus', 'Listening', 'connected'); // Hide bubble when listening
-      setOrbState('listening'); // Show listening animation when mic starts
-    };
-
-    this.speechRecognition.onEnd = () => {
-      if (this.speechRecognition.shouldBeListening) {
-        updateStatus('micStatus', 'Restarting', 'processing');
-      }
-    };
-
-    // Set up PTT recording callbacks (centralized UI state management)
-    this.speechRecognition.onRecordingStart = () => {
-      updateStatus('micStatus', 'Recording', 'connected');
-      setOrbState('listening');
-    };
-
-    this.speechRecognition.onRecordingEnd = () => {
-      updateStatus('micStatus', 'Processing...', 'processing');
-      setOrbState('processing');
-    };
-
-    // Set up error callback for PTT failures
-    this.speechRecognition.onError = (message) => {
-      log(message, 'error');
-      setOrbState('idle');
-    };
-
-    // Set up voice-triggered interrupt callback (Whisper only)
-    if (this.usingWhisper && this.speechRecognition.onInterruptRequest !== undefined) {
-      this.speechRecognition.onInterruptRequest = () => {
-        log('Voice-triggered interrupt', 'info');
-        this.audioPlayer.interrupt();
-        // Notify backend of interrupt
-        if (this.isConnected && this.sessionId) {
-          this.ws.send(JSON.stringify({
-            type: 'user_speaking',
-            sessionId: this.sessionId
-          }));
-        }
-        // Hide interrupt button since we've already interrupted
-        syncMobileButtonStates();
-        setOrbState('listening');
-      };
-    }
-
+    // Set up audio playback callbacks
     this.audioPlayer.onStart = () => {
-      // For VAD/SimpleVAD: AI speaking flag already set in handleMessage() on ai_response
-      // For Web Speech API/PTT: must stop mic to prevent browser issues
-      if ((this.usingVAD || this.usingSimpleVAD)) {
-        updateStatus('micStatus', 'Listening (AI speaking)', 'active');
-      } else if (this.speechRecognition) {
-        // Web Speech API or PTT - stop mic to prevent feedback
-        this.speechRecognition.stop();
-        updateStatus('micStatus', 'Paused', 'active');
-      }
-      updateStatus('aiStatus', 'Speaking', 'speaking'); // Hide bubble when speaking
-      // Orb state already set to 'speaking' in handleMessage
+      updateStatus('micStatus', 'Paused (AI speaking)', 'active');
+      updateStatus('aiStatus', 'Speaking', 'speaking');
     };
 
     this.audioPlayer.onEnd = () => {
-      // Hide interrupt button and remove active styling
+      // Hide interrupt button
       const interruptBtnOnEnd = document.getElementById('interruptBtn');
       if (interruptBtnOnEnd) {
         interruptBtnOnEnd.style.display = 'none';
@@ -596,14 +349,12 @@ class V4Session {
       if (mobileInterruptBtnOnEnd) {
         mobileInterruptBtnOnEnd.classList.remove('active');
       }
-      syncMobileButtonStates(); // Sync mobile buttons
+      syncMobileButtonStates();
 
-      // For VAD/SimpleVAD: clear AI speaking flag
-      if ((this.usingVAD || this.usingSimpleVAD) && this.speechRecognition?.setAISpeaking) {
-        this.speechRecognition.setAISpeaking(false);
-      }
+      // Resume audio streaming
+      this.audioStreamer.setAISpeaking(false);
 
-      // Send WebSocket message to notify backend
+      // Notify backend AI finished speaking
       if (this.isConnected && this.sessionId) {
         this.ws.send(JSON.stringify({
           type: 'ai_finished',
@@ -611,104 +362,30 @@ class V4Session {
         }));
       }
 
-      // Wait to see if we're in feedback mode
+      // Update status after short delay (wait for feedback mode check)
       setTimeout(() => {
-        // Only restart mic if NOT in feedback mode
-        // VAD/SimpleVAD handle continuous listening internally
-        // Note: inFeedbackMode stays true throughout the entire feedback flow
-        // (set by feedback_processing/feedback_response, cleared on disconnect)
         if (!this.inFeedbackMode && !this.audioPlayer.isPlaying) {
-          if (!this.usingVAD && !this.usingSimpleVAD && this.speechRecognition) {
-            // Web Speech API or PTT needs manual restart
-            this.speechRecognition.start();
-          }
-          updateStatus('micStatus', '🎤 Listening', 'connected');
+          updateStatus('micStatus', 'Listening', 'connected');
+          setOrbState('listening');
         }
-      }, 500); // Reduced delay since VAD/SimpleVAD handle continuous listening
+      }, 500);
     };
 
-    // Initialize (async for Whisper, sync for Web Speech API)
-    // With auto-fallback chain if primary fails
+    // Initialize and start audio streaming to server
     try {
-      await this.speechRecognition.initialize();
-      this.speechRecognition.start();
+      await this.audioStreamer.initialize();
+      this.audioStreamer.start();
+      log('Audio streaming active', 'success');
+      updateStatus('micStatus', 'Listening', 'connected');
+      setOrbState('listening');
     } catch (error) {
-      log('Speech recognition initialization failed: ' + error.message, 'error');
-
-      // Attempt fallback chain: Silero -> SimpleVAD -> PTT
-      if (this.fallbackAvailable) {
-        log('Attempting fallback speech recognition...', 'warning');
-        // Re-attach callbacks to the new speech recognition instance
-        const fallbackSuccess = await this._attemptFallback();
-        if (fallbackSuccess) {
-          // Re-attach all callbacks for the new instance
-          this._reattachCallbacks();
-        } else {
-          throw new Error('All speech recognition methods failed to initialize');
-        }
-      } else {
-        throw error;
-      }
-    }
-  }
-
-  // Fallback to Web Speech API if Whisper fails
-  async switchToFallback() {
-    if (!this.fallbackAvailable || !this.usingWhisper) {
-      log('No fallback available', 'warning');
-      return false;
-    }
-
-    try {
-      log('Switching to Web Speech API fallback...', 'warning');
-
-      // Stop current Whisper recognition
-      this.speechRecognition.stop();
-
-      // Create Web Speech API manager
-      this.speechRecognition = new SpeechRecognitionManager();
-      this.usingWhisper = false;
-
-      // Re-attach callbacks
-      this.speechRecognition.onTranscript = (text) => {
-        log('You: ' + text, 'info');
-        if (this.isConnected && this.sessionId) {
-          this.ws.send(JSON.stringify({
-            type: 'user_transcript',
-            sessionId: this.sessionId,
-            text: text
-          }));
-          updateStatus('micStatus', 'Paused', 'active');
-          updateStatus('aiStatus', getRandomProcessingMessage(), 'processing');
-          setOrbState('thinking');
-        }
-      };
-
-      this.speechRecognition.onStart = () => {
-        updateStatus('micStatus', '🎤 Listening (Fallback)', 'connected');
-        setOrbState('listening');
-      };
-
-      this.speechRecognition.onEnd = () => {
-        if (this.speechRecognition.shouldBeListening) {
-          updateStatus('micStatus', 'Restarting', 'processing');
-        }
-      };
-
-      // Initialize and start
-      this.speechRecognition.initialize();
-      this.speechRecognition.start();
-
-      log('Switched to Web Speech API fallback', 'success');
-      return true;
-    } catch (error) {
-      log('Fallback failed: ' + error.message, 'error');
-      return false;
+      log('Microphone access failed: ' + error.message, 'error');
+      throw error;
     }
   }
 
   disconnect() {
-    this.speechRecognition.stop();
+    this.audioStreamer.destroy();
     this.audioPlayer.interrupt();
     if (this.ws) {
       this.ws.close();
@@ -716,14 +393,13 @@ class V4Session {
     }
     this.isConnected = false;
     this.sessionId = null;
-    window.currentSessionId = null; // Clear global session ID
-    setOrbState('idle'); // Reset orb to idle when disconnected
+    window.currentSessionId = null;
+    setOrbState('idle');
   }
 
   /**
    * Request feedback from AI before disconnecting.
    * The server delivers 6 spoken feedback sections (feedback_response) then a final JSON summary (feedback_summary).
-   * This method waits for the complete flow and resolves with the JSON feedback data.
    * Returns a promise that resolves with feedback data or null on timeout.
    */
   async requestFeedbackAndDisconnect() {
@@ -735,13 +411,10 @@ class V4Session {
     return new Promise((resolve) => {
       let timeoutId;
 
-      // Handler that processes all feedback messages during the flow
       const feedbackHandler = (event) => {
         try {
           const msg = JSON.parse(event.data);
 
-          // feedback_response messages are handled by handleMessage (audio playback)
-          // We only need to wait for the final feedback_summary
           if (msg.type === 'feedback_summary') {
             console.log('[V4Session] Received feedback summary (final)');
             clearTimeout(timeoutId);
@@ -773,4 +446,3 @@ class V4Session {
     });
   }
 }
-
