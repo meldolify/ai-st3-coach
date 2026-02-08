@@ -689,6 +689,34 @@ function initScrollAnimations() {
 }
 
 // ============================================================================
+// SHOW PAGE HELPER (for hash-based navigation on return from simulation.html)
+// ============================================================================
+
+function showPage(pageId) {
+  const allPages = ['landingPage', 'authPage', 'profilePage', 'specialtySelection',
+    'difficultySelection', 'modeSelection', 'mockTypeSelection',
+    'stationTypeSelection', 'scenarioSelection', 'simulationRoom',
+    'sessionSummary'];
+  allPages.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.style.display = 'none';
+      el.classList.remove('active');
+      el.classList.add('hidden');
+    }
+  });
+  const target = document.getElementById(pageId);
+  if (target) {
+    target.style.display = '';
+    target.classList.remove('hidden');
+    target.classList.add('active');
+  }
+  const header = document.getElementById('appHeader');
+  if (header) header.style.display = 'flex';
+  document.body.classList.add('has-header');
+}
+
+// ============================================================================
 // BROWSER COMPATIBILITY CHECK
 // ============================================================================
 

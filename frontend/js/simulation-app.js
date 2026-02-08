@@ -148,9 +148,9 @@ function initializeSimulationRoom() {
   // Setup button handlers
   setupSimulationButtons();
 
-  // Initialize mock exam timer if in mock mode
-  if (params.mode === 'mock-exam' && typeof initMockExamTimer === 'function') {
-    initMockExamTimer();
+  // Initialize unified timer
+  if (typeof ScenarioTimer !== 'undefined') {
+    ScenarioTimer.init(params.mode || 'practice');
   }
 
   // Show the header
@@ -283,12 +283,21 @@ async function handleConnect() {
     session.startListening();
 
     // Update button states
-    if (connectBtn) connectBtn.disabled = true;
+    if (connectBtn) {
+      connectBtn.disabled = true;
+      connectBtn.classList.add('connected');
+      const textEl = connectBtn.querySelector('.sim-ctrl-btn__text');
+      if (textEl) textEl.textContent = 'Connected';
+    }
     if (disconnectBtn) disconnectBtn.disabled = false;
     if (interruptBtn) {
       interruptBtn.classList.remove('initially-hidden');
       interruptBtn.disabled = false;
     }
+
+    // Add session-active class to voice orb
+    const voiceOrb = document.getElementById('voiceOrb');
+    if (voiceOrb) voiceOrb.classList.add('session-active');
 
     // Sync mobile buttons
     if (typeof syncMobileButtonStates === 'function') {
@@ -338,7 +347,12 @@ async function endSessionWithFeedback() {
     if (textEl) textEl.textContent = 'Ending...';
   }
 
-  // Request feedback
+  // Show feedback status while waiting for multi-section delivery
+  if (typeof updateStatus === 'function') {
+    updateStatus('aiStatus', 'Receiving Feedback...', 'processing');
+  }
+
+  // Request feedback - waits for all 6 spoken sections + final JSON summary
   let feedback = null;
   try {
     feedback = await window.session.requestFeedbackAndDisconnect();
@@ -371,9 +385,18 @@ async function endSessionWithFeedback() {
     if (textEl) textEl.textContent = 'End';
   }
 
-  // Enable connect button
+  // Enable connect button and reset state
   const connectBtn = document.getElementById('connectBtn');
-  if (connectBtn) connectBtn.disabled = false;
+  if (connectBtn) {
+    connectBtn.disabled = false;
+    connectBtn.classList.remove('connected');
+    const textEl = connectBtn.querySelector('.sim-ctrl-btn__text');
+    if (textEl) textEl.textContent = 'Start';
+  }
+
+  // Remove session-active from voice orb
+  const voiceOrb = document.getElementById('voiceOrb');
+  if (voiceOrb) voiceOrb.classList.remove('session-active');
 
   if (typeof syncMobileButtonStates === 'function') {
     syncMobileButtonStates();
@@ -440,6 +463,30 @@ function showSimulationSummary(feedback) {
       sessionStorage.removeItem('simulationParams');
       window.location.href = '/';
     };
+  }
+
+  // If there was a pending scenario switch from sidebar, switch to that scenario
+  if (window.pendingScenarioSwitch) {
+    const pending = window.pendingScenarioSwitch;
+    window.pendingScenarioSwitch = null;
+    if (newScenarioBtn && typeof performScenarioSwitch === 'function') {
+      newScenarioBtn.textContent = 'Continue to ' + (pending.title || 'New Scenario');
+      newScenarioBtn.onclick = () => {
+        performScenarioSwitch(pending.title, pending.imageFile, pending.promptFile);
+      };
+    }
+  }
+  // If there was a pending navigation (e.g. user clicked header nav during session),
+  // update the "New Scenario" button to go to that destination instead
+  else if (window.pendingNavigation) {
+    const dest = window.pendingNavigation;
+    window.pendingNavigation = null;
+    if (newScenarioBtn) {
+      newScenarioBtn.onclick = () => {
+        sessionStorage.removeItem('simulationParams');
+        window.location.href = '/#' + dest;
+      };
+    }
   }
 }
 
@@ -538,6 +585,14 @@ function createTranscriptEmpty() {
 
 document.addEventListener('DOMContentLoaded', async () => {
   console.log('[SimulationApp] Initializing...');
+
+  // Warn before leaving if session is active
+  window.addEventListener('beforeunload', (e) => {
+    if (session && session.isConnected) {
+      e.preventDefault();
+      e.returnValue = '';
+    }
+  });
 
   // Check for simulation params
   const params = loadSimulationParams();

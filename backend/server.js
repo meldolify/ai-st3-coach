@@ -63,8 +63,61 @@ const sessions = new Map();
 // (keeping function name for backwards compatibility)
 
 // Wrapper functions that use the services (for backwards compatibility with existing code flow)
-async function callGPT4oMini(history) {
-  return openaiService.generateResponse(history);
+async function callGPT4oMini(history, options) {
+  return openaiService.generateResponse(history, options);
+}
+
+/**
+ * Map a scenario file path to its dedicated feedback prompt path.
+ * Falls back to generic feedback prompt if no dedicated file exists.
+ * @param {string} scenarioFile - e.g. "prompts/clinical/emergencies/necrotising_fasciitis/easy_clinical_necrotising_fasciitis_1.txt"
+ * @returns {string} - The feedback prompt text
+ */
+function loadFeedbackPrompt(scenarioFile) {
+  // Extract the scenario name from the path
+  // e.g. "prompts/clinical/emergencies/necrotising_fasciitis/easy_clinical_necrotising_fasciitis_1.txt"
+  // -> directory name "necrotising_fasciitis" -> feedback file "clinical_necrotising_fasciitis_feedback.txt"
+  try {
+    const parts = scenarioFile.replace(/\\/g, '/').split('/');
+    // The scenario directory is the second-to-last part
+    const scenarioDir = parts.length >= 2 ? parts[parts.length - 2] : '';
+    const feedbackFileName = `clinical_${scenarioDir}_feedback.txt`;
+    const feedbackPath = path.join(__dirname, 'prompts/feedback', feedbackFileName);
+
+    if (fs.existsSync(feedbackPath)) {
+      console.log('[FEEDBACK] Loading dedicated feedback prompt:', feedbackFileName);
+      return fs.readFileSync(feedbackPath, 'utf8');
+    }
+  } catch (err) {
+    console.warn('[FEEDBACK] Error resolving dedicated feedback prompt:', err.message);
+  }
+
+  // Fallback to generic feedback prompt
+  const genericPath = path.join(__dirname, 'prompts/feedback/generic_feedback.txt');
+  if (fs.existsSync(genericPath)) {
+    console.log('[FEEDBACK] Using generic feedback prompt');
+    return fs.readFileSync(genericPath, 'utf8');
+  }
+
+  // Last resort fallback
+  console.warn('[FEEDBACK] No feedback prompt files found, using inline fallback');
+  return 'You are an expert plastic surgery examiner. Review the following interview transcript and provide feedback in 6 sections: (1) Overall Impression with score 0-5, (2) Diagnosis & Assessment, (3) Management & Treatment, (4) Strengths, (5) Areas for Improvement, (6) Closing Summary. Deliver one section at a time. When the user sends "continue", move to the next section. Begin with Section 1 now.';
+}
+
+/**
+ * Serialize conversation history into a readable transcript string.
+ * Skips the system message. Maps roles to [Examiner] and [Candidate].
+ * @param {Array} history - Conversation history array of {role, content}
+ * @returns {string} - Formatted transcript
+ */
+function serializeTranscript(history) {
+  return history
+    .filter(msg => msg.role !== 'system')
+    .map(msg => {
+      const label = msg.role === 'assistant' ? '[Examiner]' : '[Candidate]';
+      return `${label}: ${msg.content}`;
+    })
+    .join('\n');
 }
 
 async function googleTTS(text, voiceName) {
@@ -279,14 +332,6 @@ wss.on('connection', (ws, req) => {
             console.log(`[TIMING] GPT: ${t2 - t1}ms`);
             session.history.push({ role: 'assistant', content: responseText });
 
-            // Detect if we've entered feedback mode
-            if (responseText.toLowerCase().includes('feedback') ||
-            responseText.toLowerCase().includes('concludes the scenario')) {
-              session.inFeedbackMode = true;
-              session.feedbackCount = 0;
-              console.log('[FEEDBACK] Feedback mode activated');
-            }
-
             const ssmlText = buildNaturalSSML(responseText);
             const t3 = Date.now();
             const audioBuffer = await googleTTS(ssmlText, session.voice);
@@ -311,99 +356,169 @@ wss.on('connection', (ws, req) => {
           case 'ai_finished':
             session.isAISpeaking = false;
 
-            // Auto-continue feedback if we're in feedback mode
-            if (session.inFeedbackMode && session.feedbackCount < 6) {
-              session.feedbackCount++;
-              console.log(`[FEEDBACK] Auto-continuing feedback (${session.feedbackCount}/6)`);
+            // Auto-continue feedback if we're in feedback mode (using separate feedbackHistory)
+            if (session.inFeedbackMode && session.feedbackHistory) {
+              if (session.feedbackCount < 6) {
+                // Continue to next feedback section
+                session.feedbackCount++;
+                console.log(`[FEEDBACK] Auto-continuing feedback section (${session.feedbackCount}/6)`);
 
-              // Notify frontend that we're preparing next chunk
-              ws.send(JSON.stringify({
-                type: 'feedback_processing'
-              }));
+                // Notify frontend that we're preparing next chunk
+                ws.send(JSON.stringify({
+                  type: 'feedback_processing'
+                }));
 
-              // Wait a brief moment, then trigger next feedback chunk
-              setTimeout(async () => {
-                if (ws.readyState !== WebSocket.OPEN || !sessions.has(sessionId)) {
-                  return;
-                }
+                setTimeout(async () => {
+                  if (ws.readyState !== WebSocket.OPEN || !sessions.has(sessionId)) {
+                    return;
+                  }
+                  try {
+                    session.feedbackHistory.push({ role: 'user', content: 'continue' });
+
+                    const t1 = Date.now();
+                    const responseText = await callGPT4oMini(session.feedbackHistory, { max_tokens: 200 });
+                    const t2 = Date.now();
+                    console.log('[FEEDBACK] ' + responseText);
+                    console.log(`[TIMING] Feedback GPT: ${t2 - t1}ms`);
+                    session.feedbackHistory.push({ role: 'assistant', content: responseText });
+
+                    const ssmlText = buildNaturalSSML(responseText);
+                    const t3 = Date.now();
+                    const audioBuffer = await googleTTS(ssmlText, session.voice);
+                    const t4 = Date.now();
+                    console.log(`[TIMING] Feedback TTS: ${t4 - t3}ms, Total: ${t4 - t1}ms`);
+
+                    session.isAISpeaking = true;
+                    ws.send(JSON.stringify({
+                      type: 'feedback_response',
+                      text: responseText,
+                      audio: audioBuffer.toString('base64'),
+                      section: session.feedbackCount,
+                      totalSections: 6
+                    }));
+                  } catch (error) {
+                    console.error('[FEEDBACK AUTO-CONTINUE ERROR]', error.message);
+                    try {
+                      ws.send(JSON.stringify({ type: 'error', message: 'Feedback generation failed. Please try again.' }));
+                    } catch (sendErr) { /* ws may be closed */ }
+                    session.inFeedbackMode = false;
+                    session.feedbackCount = 0;
+                  }
+                }, 300);
+              } else if (session.feedbackCount === 6) {
+                // All 6 spoken sections delivered - now generate JSON summary
+                console.log('[FEEDBACK] All sections delivered, generating JSON summary');
                 try {
-                  session.history.push({ role: 'user', content: 'continue' });
+                  const jsonTemplatePath = path.join(__dirname, 'prompts/system/feedback_json_template.txt');
+                  const jsonTemplatePrompt = fs.readFileSync(jsonTemplatePath, 'utf8');
+
+                  session.feedbackHistory.push({ role: 'user', content: jsonTemplatePrompt });
 
                   const t1 = Date.now();
-                  const responseText = await callGPT4oMini(session.history);
+                  const feedbackText = await callGPT4oMini(session.feedbackHistory, { max_tokens: 500 });
                   const t2 = Date.now();
-                  console.log('[AI] ' + responseText);
-                  console.log(`[TIMING] GPT: ${t2 - t1}ms`);
-                  session.history.push({ role: 'assistant', content: responseText });
+                  console.log('[FEEDBACK] JSON response:', feedbackText);
+                  console.log(`[TIMING] Feedback JSON GPT: ${t2 - t1}ms`);
 
-                  const ssmlText = buildNaturalSSML(responseText);
-                  const t3 = Date.now();
-                  const audioBuffer = await googleTTS(ssmlText, session.voice);
-                  const t4 = Date.now();
-                  console.log(`[TIMING] TTS: ${t4 - t3}ms, Total: ${t4 - t1}ms`);
-
-                  session.isAISpeaking = true;
-                  ws.send(JSON.stringify({
-                    type: 'ai_response',
-                    text: responseText,
-                    audio: audioBuffer.toString('base64')
-                  }));
-                } catch (error) {
-                  console.error('[FEEDBACK AUTO-CONTINUE ERROR]', error.message);
+                  // Parse JSON from response (with fallback)
+                  let feedback;
                   try {
-                    ws.send(JSON.stringify({ type: 'error', message: 'Feedback generation failed. Please try again.' }));
-                  } catch (sendErr) { /* ws may be closed */ }
+                    const jsonMatch = feedbackText.match(/\{[\s\S]*\}/);
+                    if (jsonMatch) {
+                      feedback = JSON.parse(jsonMatch[0]);
+                    } else {
+                      throw new Error('No JSON found in response');
+                    }
+                  } catch (parseError) {
+                    console.warn('[FEEDBACK] JSON parse failed, using fallback:', parseError.message);
+                    feedback = {
+                      score: 3,
+                      overallImpression: 'Unable to parse detailed feedback',
+                      clinicalKnowledge: { diagnosis: 'See spoken feedback', management: 'See spoken feedback' },
+                      strengths: ['See spoken feedback above'],
+                      improvements: ['Please try again for detailed report'],
+                      summary: feedbackText.substring(0, 500)
+                    };
+                  }
+
+                  ws.send(JSON.stringify({
+                    type: 'feedback_summary',
+                    feedback: feedback
+                  }));
+                  console.log('[FEEDBACK] Summary sent');
                   session.inFeedbackMode = false;
-                  session.feedbackCount = 0;
+                } catch (error) {
+                  console.error('[FEEDBACK JSON ERROR]', error.message);
+                  ws.send(JSON.stringify({
+                    type: 'feedback_summary',
+                    feedback: {
+                      score: 3,
+                      overallImpression: 'Session completed',
+                      clinicalKnowledge: { diagnosis: 'Feedback generation error', management: 'Feedback generation error' },
+                      strengths: ['Session completed'],
+                      improvements: ['Feedback generation encountered an error'],
+                      summary: 'Unable to generate detailed feedback. Please try again.'
+                    }
+                  }));
+                  session.inFeedbackMode = false;
                 }
-              }, 300); // Reduced from 500ms to 300ms for faster transitions
-            } else if (session.inFeedbackMode && session.feedbackCount >= 6) {
-              console.log('[FEEDBACK] Feedback complete');
-              session.inFeedbackMode = false;
+              }
             }
             break;
 
           case 'request_feedback':
-          // Generate structured feedback summary at end of session
-            console.log('[FEEDBACK] Generating structured feedback summary');
+          // Spawn NEW GPT session with dedicated feedback prompt + full transcript
+            console.log('[FEEDBACK] Starting hybrid feedback flow');
             try {
-              const feedbackPromptPath = path.join(__dirname, 'prompts/system/feedback_summary.txt');
-              const feedbackPrompt = fs.readFileSync(feedbackPromptPath, 'utf8');
-              session.history.push({ role: 'user', content: feedbackPrompt });
+              // 1. Serialize full conversation into transcript
+              const transcript = serializeTranscript(session.history);
+              console.log('[FEEDBACK] Transcript length:', transcript.length, 'chars');
 
-              const feedbackText = await callGPT4oMini(session.history);
-              console.log('[FEEDBACK] Raw response:', feedbackText);
+              // 2. Load the appropriate feedback prompt
+              const feedbackPrompt = loadFeedbackPrompt(session.scenario);
 
-              // Parse JSON from response (with fallback)
-              let feedback;
-              try {
-                const jsonMatch = feedbackText.match(/\{[\s\S]*\}/);
-                if (jsonMatch) {
-                  feedback = JSON.parse(jsonMatch[0]);
-                } else {
-                  throw new Error('No JSON found in response');
-                }
-              } catch (parseError) {
-                console.warn('[FEEDBACK] JSON parse failed, using fallback:', parseError.message);
-                feedback = {
-                  score: 3,
-                  strengths: ['Unable to parse detailed feedback'],
-                  improvements: ['Please try again'],
-                  summary: feedbackText.substring(0, 500)
-                };
-              }
+              // 3. Create a NEW conversation history for feedback (separate from interview)
+              session.feedbackHistory = [
+                { role: 'system', content: feedbackPrompt },
+                { role: 'user', content: 'Here is the interview transcript:\n\n' + transcript }
+              ];
+
+              // 4. Call GPT for first feedback section
+              const t1 = Date.now();
+              const responseText = await callGPT4oMini(session.feedbackHistory, { max_tokens: 200 });
+              const t2 = Date.now();
+              console.log('[FEEDBACK] Section 1: ' + responseText);
+              console.log(`[TIMING] Feedback GPT: ${t2 - t1}ms`);
+              session.feedbackHistory.push({ role: 'assistant', content: responseText });
+
+              // 5. Generate TTS audio
+              const ssmlText = buildNaturalSSML(responseText);
+              const t3 = Date.now();
+              const audioBuffer = await googleTTS(ssmlText, session.voice);
+              const t4 = Date.now();
+              console.log(`[TIMING] Feedback TTS: ${t4 - t3}ms, Total: ${t4 - t1}ms`);
+
+              // 6. Send as feedback_response (new message type)
+              session.isAISpeaking = true;
+              session.inFeedbackMode = true;
+              session.feedbackCount = 1;
 
               ws.send(JSON.stringify({
-                type: 'feedback_summary',
-                feedback: feedback
+                type: 'feedback_response',
+                text: responseText,
+                audio: audioBuffer.toString('base64'),
+                section: 1,
+                totalSections: 6
               }));
-              console.log('[FEEDBACK] Summary sent:', JSON.stringify(feedback));
+              console.log('[FEEDBACK] Section 1 sent');
             } catch (error) {
               console.error('[FEEDBACK ERROR]', error.message);
               ws.send(JSON.stringify({
                 type: 'feedback_summary',
                 feedback: {
                   score: 3,
+                  overallImpression: 'Session completed',
+                  clinicalKnowledge: { diagnosis: 'Feedback generation error', management: 'Feedback generation error' },
                   strengths: ['Session completed'],
                   improvements: ['Feedback generation encountered an error'],
                   summary: 'Unable to generate detailed feedback. Please try again.'

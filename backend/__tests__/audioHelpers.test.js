@@ -37,21 +37,25 @@ describe('isNoiseTranscript', () => {
     expect(isNoiseTranscript('ah')).toBe(true);
   });
 
-  test('returns true for just okay', () => {
-    expect(isNoiseTranscript('okay')).toBe(true);
-    expect(isNoiseTranscript('ok')).toBe(true);
-    expect(isNoiseTranscript('OK.')).toBe(true);
+  test('returns false for short valid responses (okay, ok)', () => {
+    expect(isNoiseTranscript('okay')).toBe(false);
+    expect(isNoiseTranscript('ok')).toBe(false);
+    expect(isNoiseTranscript('OK.')).toBe(false);
   });
 
-  test('returns true for single word responses', () => {
-    expect(isNoiseTranscript('yes')).toBe(true);
-    expect(isNoiseTranscript('no')).toBe(true);
-    expect(isNoiseTranscript('yeah')).toBe(true);
+  test('returns false for single word confirmations (yes, no, yeah, nope)', () => {
+    expect(isNoiseTranscript('yes')).toBe(false);
+    expect(isNoiseTranscript('no')).toBe(false);
+    expect(isNoiseTranscript('yeah')).toBe(false);
+    expect(isNoiseTranscript('nope')).toBe(false);
   });
 
-  test('returns true for common AI echo patterns', () => {
-    expect(isNoiseTranscript('thank you')).toBe(true);
-    expect(isNoiseTranscript("that's fine")).toBe(true);
+  test('returns false for thank you and common short phrases', () => {
+    expect(isNoiseTranscript('thank you')).toBe(false);
+    expect(isNoiseTranscript('thanks')).toBe(false);
+    expect(isNoiseTranscript("that's fine")).toBe(false);
+    expect(isNoiseTranscript("that's great")).toBe(false);
+    expect(isNoiseTranscript('alright')).toBe(false);
   });
 
   test('returns true for punctuation only', () => {

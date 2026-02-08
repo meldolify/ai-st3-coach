@@ -2116,55 +2116,58 @@ body.has-header .simulation-room.active {
   gap: 16px;
 }
 
-/* Base button - outer shell */
+/* Base button - dark glass shell */
 .sim-ctrl-btn {
   position: relative;
   padding: 0;
   width: 72px;
   height: 72px;
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   outline: none;
-  background: #e8ecf0;
+  background: rgba(42, 56, 44, 0.85);
   border-radius: 18px;
-  box-shadow:
-    8px 8px 16px rgba(163, 177, 198, 0.6),
-    -8px -8px 16px rgba(255, 255, 255, 0.8);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
   transition: all 0.2s ease;
   cursor: pointer;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
 }
 
-/* Hover: subtle shadow enhancement */
+/* Hover: brighten + border glow */
 .sim-ctrl-btn:hover:not(:disabled) {
-  box-shadow:
-    10px 10px 20px rgba(163, 177, 198, 0.7),
-    -10px -10px 20px rgba(255, 255, 255, 0.9);
+  background: rgba(52, 68, 54, 0.9);
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  transform: translateY(-1px);
 }
 
-/* Active: press in with inset shadows */
+/* Active: press in */
 .sim-ctrl-btn:active:not(:disabled) {
-  box-shadow:
-    inset 4px 4px 8px rgba(163, 177, 198, 0.5),
-    inset -4px -4px 8px rgba(255, 255, 255, 0.6);
+  background: rgba(35, 48, 37, 0.9);
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.3);
+  transform: translateY(0);
 }
 
-/* Inner content wrapper - centered, no shadow */
+/* Inner content wrapper */
 .sim-ctrl-btn__content {
   position: relative;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 4px;
   width: 100%;
   height: 100%;
   border-radius: 16px;
   transition: all 0.2s ease;
 }
 
-/* Icon - centered, no background */
+/* Icon */
 .sim-ctrl-btn__icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #888888;
+  color: rgba(255, 255, 255, 0.85);
   transition: all 0.25s ease;
 }
 
@@ -2173,53 +2176,105 @@ body.has-header .simulation-room.active {
 }
 
 .sim-ctrl-btn__icon svg {
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
   fill: currentColor;
 }
 
-/* Text label - hidden */
+/* Text label - visible below icon */
 .sim-ctrl-btn__text {
-  display: none;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
 }
 
 /* ===== COLOR VARIANTS ===== */
 
-/* Primary (Start) - Sage green icon */
+/* Primary (Start) - Green accent */
 .sim-ctrl-btn--primary .sim-ctrl-btn__icon {
-  color: var(--brand-primary);
+  color: #6EE7B7;
+}
+
+.sim-ctrl-btn--primary:hover:not(:disabled) {
+  border-color: rgba(110, 231, 183, 0.3);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25), 0 0 12px rgba(110, 231, 183, 0.15);
 }
 
 .sim-ctrl-btn--primary:hover:not(:disabled) .sim-ctrl-btn__icon {
-  color: var(--brand-dark);
+  color: #A7F3D0;
 }
 
-/* Warning (Pause) - Copper icon */
+/* Connected state for start button */
+.sim-ctrl-btn--primary.connected {
+  border-color: rgba(110, 231, 183, 0.3);
+}
+
+.sim-ctrl-btn--primary.connected .sim-ctrl-btn__icon {
+  color: #10B981;
+}
+
+/* Warning (Interrupt) - Amber accent */
 .sim-ctrl-btn--warning .sim-ctrl-btn__icon {
-  color: var(--accent-copper);
+  color: #FBBF24;
+}
+
+.sim-ctrl-btn--warning:hover:not(:disabled) {
+  border-color: rgba(251, 191, 36, 0.3);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25), 0 0 12px rgba(251, 191, 36, 0.15);
 }
 
 .sim-ctrl-btn--warning:hover:not(:disabled) .sim-ctrl-btn__icon {
-  color: var(--accent-copper-light);
+  color: #FCD34D;
 }
 
-/* Danger (End) - Warm red icon */
+/* Warning active state - smooth amber glow (not jarring red) */
+.sim-ctrl-btn--warning.active {
+  background: rgba(120, 80, 10, 0.85);
+  border-color: rgba(251, 191, 36, 0.4);
+  box-shadow: 0 0 16px rgba(251, 191, 36, 0.25);
+  animation: interrupt-amber-pulse 1.5s ease-in-out infinite;
+}
+
+.sim-ctrl-btn--warning.active .sim-ctrl-btn__icon {
+  color: #FDE68A;
+}
+
+@keyframes interrupt-amber-pulse {
+  0%, 100% { box-shadow: 0 0 12px rgba(251, 191, 36, 0.2); }
+  50% { box-shadow: 0 0 20px rgba(251, 191, 36, 0.35); }
+}
+
+/* Danger (End) - Red accent */
 .sim-ctrl-btn--danger .sim-ctrl-btn__icon {
-  color: var(--error);
+  color: #FCA5A5;
+}
+
+.sim-ctrl-btn--danger:hover:not(:disabled) {
+  border-color: rgba(239, 68, 68, 0.3);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25), 0 0 12px rgba(239, 68, 68, 0.15);
 }
 
 .sim-ctrl-btn--danger:hover:not(:disabled) .sim-ctrl-btn__icon {
-  color: #a03d30;
+  color: #FCA5A5;
 }
 
 /* ===== DISABLED STATE ===== */
 .sim-ctrl-btn:disabled {
   cursor: not-allowed;
-  opacity: 0.4;
+  opacity: 0.3;
+  filter: grayscale(50%);
 }
 
 .sim-ctrl-btn:disabled .sim-ctrl-btn__icon {
-  color: #aaaaaa;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.sim-ctrl-btn:disabled .sim-ctrl-btn__text {
+  color: rgba(255, 255, 255, 0.2);
 }
 
 /* Adjust new simulation layout when header is visible */
@@ -2719,8 +2774,8 @@ body.has-header .sim-main {
   filter: drop-shadow(0 0 8px rgba(245, 192, 139, 0.9));
 }
 
-/* Hover 3D Effect - Desktop only */
-.voice-orb.svg-frame:hover svg {
+/* Hover 3D Effect - Desktop only, disabled during active session */
+.voice-orb.svg-frame:not(.session-active):hover svg {
   transform: rotate(-80deg) skew(30deg)
              translateX(calc(45px * var(--i, 0)))
              translateY(calc(-35px * var(--i, 0)));
@@ -2731,7 +2786,7 @@ body.has-header .sim-main {
   transition: transform 0.5s ease;
 }
 
-.voice-orb.svg-frame:hover svg [id$="center"]:not([id$="center1"]) {
+.voice-orb.svg-frame:not(.session-active):hover svg [id$="center"]:not([id$="center1"]) {
   transform: rotate(-30deg) translateX(45px) translateY(-3px);
 }
 
@@ -2775,10 +2830,10 @@ body.has-header .sim-main {
 }
 
 /* ============================================
-   STATE: Listening - Pulsing glow effect
+   STATE: Listening - Pulsing glow effect (Teal/Green)
    ============================================ */
 .voice-orb.svg-frame.listening svg {
-  filter: drop-shadow(0 0 16px rgba(184, 115, 51, 0.6)) drop-shadow(0 0 8px rgba(212, 145, 90, 0.4));
+  filter: drop-shadow(0 0 16px rgba(16, 185, 129, 0.6)) drop-shadow(0 0 8px rgba(16, 185, 129, 0.4));
 }
 
 .voice-orb.svg-frame.listening [id$="out2"] {
@@ -2800,33 +2855,33 @@ body.has-header .sim-main {
 
 @keyframes svg-listening-glow {
   0%, 100% {
-    filter: drop-shadow(0 0 4px #B87333);
+    filter: drop-shadow(0 0 4px #10B981);
   }
   50% {
-    filter: drop-shadow(0 0 14px #B87333);
+    filter: drop-shadow(0 0 14px #10B981);
   }
 }
 
-/* Listening: intensified copper backdrop with pulse */
+/* Listening: teal/green backdrop with pulse */
 .voice-orb.svg-frame.listening::before {
   opacity: 1;
   background: radial-gradient(
     circle,
-    rgba(184, 115, 51, 0.35) 0%,
-    rgba(184, 115, 51, 0.2) 35%,
-    rgba(184, 115, 51, 0.08) 60%,
+    rgba(16, 185, 129, 0.35) 0%,
+    rgba(16, 185, 129, 0.2) 35%,
+    rgba(16, 185, 129, 0.08) 60%,
     transparent 75%
   );
   animation: copper-pulse 1.5s ease-in-out infinite;
 }
 
-/* Listening: brighter copper colors for active feedback */
-.voice-orb.svg-frame.listening svg [id$="out1"] path { stroke: #9B6A3B; }
-.voice-orb.svg-frame.listening svg [id$="out2"] path { fill: #B0623D; }
-.voice-orb.svg-frame.listening svg [id$="inner1"] path { fill: #DD954F; }
-.voice-orb.svg-frame.listening svg [id$="inner3"] path { fill: #E4A16A; }
-.voice-orb.svg-frame.listening svg [id$="center1"] { fill: #F8B97A; }
-.voice-orb.svg-frame.listening svg [id$="center"]:not([id$="center1"]) { fill: #FFD09B; }
+/* Listening: teal/green SVG colors */
+.voice-orb.svg-frame.listening svg [id$="out1"] path { stroke: #047857; }
+.voice-orb.svg-frame.listening svg [id$="out2"] path { fill: #059669; }
+.voice-orb.svg-frame.listening svg [id$="inner1"] path { fill: #10B981; }
+.voice-orb.svg-frame.listening svg [id$="inner3"] path { fill: #34D399; }
+.voice-orb.svg-frame.listening svg [id$="center1"] { fill: #6EE7B7; }
+.voice-orb.svg-frame.listening svg [id$="center"]:not([id$="center1"]) { fill: #A7F3D0; }
 
 @keyframes copper-pulse {
   0%, 100% { transform: scale(1); opacity: 0.8; }
@@ -2875,29 +2930,36 @@ body.has-header .sim-main {
   }
 }
 
-/* Thinking: copper glow with energetic pulse */
+/* Thinking: indigo glow with energetic pulse */
 .voice-orb.svg-frame.thinking svg {
-  filter: drop-shadow(0 0 14px rgba(184, 115, 51, 0.5));
+  filter: drop-shadow(0 0 14px rgba(99, 102, 241, 0.5));
 }
 
 .voice-orb.svg-frame.thinking::before {
   opacity: 0.9;
+  background: radial-gradient(
+    circle,
+    rgba(99, 102, 241, 0.35) 0%,
+    rgba(99, 102, 241, 0.2) 35%,
+    rgba(99, 102, 241, 0.08) 60%,
+    transparent 75%
+  );
   animation: copper-pulse 0.8s ease-in-out infinite;
 }
 
-/* Thinking: energetic brightness for processing state */
-.voice-orb.svg-frame.thinking svg [id$="out1"] path { stroke: #A57A4B; }
-.voice-orb.svg-frame.thinking svg [id$="out2"] path { fill: #BA724D; }
-.voice-orb.svg-frame.thinking svg [id$="inner1"] path { fill: #E7A55F; }
-.voice-orb.svg-frame.thinking svg [id$="inner3"] path { fill: #EEB17A; }
-.voice-orb.svg-frame.thinking svg [id$="center1"] { fill: #FFC98A; }
-.voice-orb.svg-frame.thinking svg [id$="center"]:not([id$="center1"]) { fill: #FFE0AB; }
+/* Thinking: indigo/violet SVG colors */
+.voice-orb.svg-frame.thinking svg [id$="out1"] path { stroke: #4338CA; }
+.voice-orb.svg-frame.thinking svg [id$="out2"] path { fill: #4F46E5; }
+.voice-orb.svg-frame.thinking svg [id$="inner1"] path { fill: #6366F1; }
+.voice-orb.svg-frame.thinking svg [id$="inner3"] path { fill: #818CF8; }
+.voice-orb.svg-frame.thinking svg [id$="center1"] { fill: #A5B4FC; }
+.voice-orb.svg-frame.thinking svg [id$="center"]:not([id$="center1"]) { fill: #C7D2FE; }
 
 /* ============================================
-   STATE: Speaking - Rhythmic scale pulses
+   STATE: Speaking - Rhythmic scale pulses (Warm Amber)
    ============================================ */
 .voice-orb.svg-frame.speaking svg {
-  filter: drop-shadow(0 0 20px rgba(212, 145, 90, 0.7)) drop-shadow(0 0 10px rgba(255, 200, 150, 0.3));
+  filter: drop-shadow(0 0 20px rgba(245, 158, 11, 0.7)) drop-shadow(0 0 10px rgba(251, 191, 36, 0.3));
 }
 
 .voice-orb.svg-frame.speaking [id$="out1"] {
@@ -2933,33 +2995,33 @@ body.has-header .sim-main {
   }
 }
 
-/* Speaking: bright steady warm glow backdrop */
+/* Speaking: warm amber backdrop glow */
 .voice-orb.svg-frame.speaking::before {
   opacity: 1;
   background: radial-gradient(
     circle,
-    rgba(212, 145, 90, 0.4) 0%,
-    rgba(255, 200, 150, 0.2) 30%,
-    rgba(184, 115, 51, 0.1) 55%,
+    rgba(245, 158, 11, 0.4) 0%,
+    rgba(251, 191, 36, 0.2) 30%,
+    rgba(245, 158, 11, 0.1) 55%,
     transparent 75%
   );
 }
 
-/* Speaking: maximum brightness for active output */
+/* Speaking: warm amber SVG colors */
 .voice-orb.svg-frame.speaking svg [id$="out1"] path {
-  stroke: #B08A5B;
-  filter: drop-shadow(0 0 8px rgba(176, 138, 91, 0.9));
+  stroke: #B45309;
+  filter: drop-shadow(0 0 8px rgba(180, 83, 9, 0.9));
 }
 .voice-orb.svg-frame.speaking svg [id$="out2"] path {
-  fill: #C4825D;
-  filter: drop-shadow(0 0 10px rgba(196, 130, 93, 0.8));
+  fill: #D97706;
+  filter: drop-shadow(0 0 10px rgba(217, 119, 6, 0.8));
 }
-.voice-orb.svg-frame.speaking svg [id$="inner1"] path { fill: #F1B56F; }
-.voice-orb.svg-frame.speaking svg [id$="inner3"] path { fill: #F8C18A; }
-.voice-orb.svg-frame.speaking svg [id$="center1"] { fill: #FFD99A; }
+.voice-orb.svg-frame.speaking svg [id$="inner1"] path { fill: #F59E0B; }
+.voice-orb.svg-frame.speaking svg [id$="inner3"] path { fill: #FBBF24; }
+.voice-orb.svg-frame.speaking svg [id$="center1"] { fill: #FCD34D; }
 .voice-orb.svg-frame.speaking svg [id$="center"]:not([id$="center1"]) {
-  fill: #FFF0BB;
-  filter: drop-shadow(0 0 12px rgba(255, 240, 187, 1));
+  fill: #FDE68A;
+  filter: drop-shadow(0 0 12px rgba(253, 230, 138, 1));
 }
 
 /* ============================================
@@ -4350,61 +4412,125 @@ button.top-back-button:active {
    MOCK EXAM TIMER
    ======================================== */
 
-.mock-exam-timer {
+/* ========================================
+   UNIFIED SCENARIO TIMER
+   ======================================== */
+.scenario-timer {
   position: fixed;
   top: 80px;
   right: 24px;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  padding: 16px 24px;
-  background: rgba(255, 255, 255, 0.95);
+  gap: 8px;
+  padding: 10px 16px;
+  background: rgba(42, 56, 44, 0.85);
   -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
-  border-radius: 16px;
-  border: 1px solid var(--border-light);
-  box-shadow: var(--shadow-light);
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
   z-index: 100;
   transition: all 0.3s ease;
 }
 
-.mock-exam-timer.warning {
-  background: rgba(254, 226, 226, 0.95);
+/* Warning state: red tint */
+.scenario-timer.warning {
+  background: rgba(127, 29, 29, 0.85);
   border-color: rgba(239, 68, 68, 0.4);
   animation: timerPulse 1s ease-in-out infinite;
 }
 
+/* Finished state: flashing red */
+.scenario-timer.finished {
+  background: rgba(153, 27, 27, 0.9);
+  border-color: rgba(239, 68, 68, 0.6);
+  animation: timerFlash 0.6s ease-in-out infinite;
+}
+
 @keyframes timerPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
 
-  0%,
-  100% {
-    transform: scale(1);
-  }
-
-  50% {
-    transform: scale(1.02);
-  }
+@keyframes timerFlash {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
 }
 
 .timer-display {
   font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
-  font-size: 36px;
+  font-size: 28px;
   font-weight: 600;
-  color: var(--text-light-primary);
+  color: rgba(255, 255, 255, 0.9);
   letter-spacing: 2px;
 }
 
-.mock-exam-timer.warning .timer-display {
-  color: #dc2626;
+.scenario-timer.warning .timer-display {
+  color: #fca5a5;
 }
 
-.timer-warning {
-  font-size: 12px;
-  color: #dc2626;
-  font-weight: 500;
-  margin-top: 8px;
-  text-transform: uppercase;
+.scenario-timer.finished .timer-display::after {
+  content: " TIME'S UP";
+  font-size: 11px;
+  font-family: 'DM Sans', sans-serif;
   letter-spacing: 1px;
+  vertical-align: middle;
+}
+
+/* Adjust buttons (+ / -) */
+.timer-adjust-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 18px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  line-height: 1;
+}
+
+.timer-adjust-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #fff;
+}
+
+/* Start button */
+.timer-start-btn {
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(74, 93, 76, 0.4);
+  background: rgba(74, 93, 76, 0.5);
+  color: rgba(255, 255, 255, 0.9);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.3px;
+}
+
+.timer-start-btn:hover {
+  background: rgba(74, 93, 76, 0.7);
+  border-color: rgba(74, 93, 76, 0.6);
+}
+
+/* Running state: hide adjust/start buttons */
+.scenario-timer.running .timer-adjust-btn,
+.scenario-timer.running .timer-start-btn {
+  display: none;
+}
+
+/* Mock mode: always hide adjust/start buttons */
+.scenario-timer.mock-mode .timer-adjust-btn,
+.scenario-timer.mock-mode .timer-start-btn {
+  display: none;
 }
 
 /* ========================================
@@ -4553,14 +4679,20 @@ button.top-back-button:active {
   }
 
   /* Mock Exam Timer - Mobile positioning */
-  .mock-exam-timer {
+  .scenario-timer {
     top: 16px !important;
     right: 16px !important;
-    padding: 12px 16px !important;
+    padding: 8px 12px !important;
   }
 
-  .timer-display {
-    font-size: 28px !important;
+  .scenario-timer .timer-display {
+    font-size: 22px !important;
+  }
+
+  .scenario-timer .timer-adjust-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 16px;
   }
 
   /* Mock Exam Progress - Mobile positioning */
@@ -5216,59 +5348,25 @@ button.top-back-button:active {
   }
 
   .mobile-simulation-layout .sim-ctrl-btn {
-    width: 64px;
-    height: 64px;
-    background: #1e2328;
-    box-shadow:
-      6px 6px 12px rgba(0, 0, 0, 0.5),
-      -6px -6px 12px rgba(60, 70, 80, 0.3);
+    width: 60px;
+    height: 60px;
+    background: rgba(30, 40, 32, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   }
 
   .mobile-simulation-layout .sim-ctrl-btn:hover:not(:disabled) {
-    box-shadow:
-      8px 8px 16px rgba(0, 0, 0, 0.6),
-      -8px -8px 16px rgba(60, 70, 80, 0.35);
+    background: rgba(40, 52, 42, 0.95);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
   }
 
   .mobile-simulation-layout .sim-ctrl-btn:active:not(:disabled) {
-    box-shadow:
-      inset 4px 4px 8px rgba(0, 0, 0, 0.4),
-      inset -4px -4px 8px rgba(60, 70, 80, 0.2);
+    background: rgba(25, 35, 27, 0.95);
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.3);
   }
 
-  .mobile-simulation-layout .sim-ctrl-btn__content {
-    /* No inner shadow - clean neumorphic look */
-  }
-
-  .mobile-simulation-layout .sim-ctrl-btn__icon {
-    color: rgba(255, 255, 255, 0.5);
-  }
-
-  /* Primary on dark - Sage */
-  .mobile-simulation-layout .sim-ctrl-btn--primary .sim-ctrl-btn__icon {
-    color: var(--brand-secondary);
-  }
-
-  .mobile-simulation-layout .sim-ctrl-btn--primary:hover:not(:disabled) .sim-ctrl-btn__icon {
-    color: var(--brand-primary);
-  }
-
-  /* Warning on dark - Copper */
-  .mobile-simulation-layout .sim-ctrl-btn--warning .sim-ctrl-btn__icon {
-    color: var(--accent-copper-light);
-  }
-
-  .mobile-simulation-layout .sim-ctrl-btn--warning:hover:not(:disabled) .sim-ctrl-btn__icon {
-    color: var(--accent-copper);
-  }
-
-  /* Danger on dark - Warm red */
-  .mobile-simulation-layout .sim-ctrl-btn--danger .sim-ctrl-btn__icon {
-    color: #fca5a5;
-  }
-
-  .mobile-simulation-layout .sim-ctrl-btn--danger:hover:not(:disabled) .sim-ctrl-btn__icon {
-    color: var(--error);
+  .mobile-simulation-layout .sim-ctrl-btn__text {
+    font-size: 9px;
   }
 
   /* Status Row */
@@ -10922,4 +11020,156 @@ body.has-header {
   .session-exit-modal__btn {
     width: 100%;
   }
+}
+
+/* ============================================
+   SIMULATION ROOM - Page-specific overrides
+   These styles apply only to simulation.html
+   ============================================ */
+
+/* AI Status Bubble - Light glass variant for simulation room */
+.simulation-room .ai-status-bubble {
+  background: rgba(255, 255, 255, 0.92);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  padding: 10px 24px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.06),
+    0 1px 3px rgba(0, 0, 0, 0.04);
+  min-width: auto;
+  min-height: 40px;
+  position: relative;
+  overflow: visible;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.simulation-room .status-accent-line {
+  position: absolute;
+  bottom: 4px;
+  left: 25%;
+  right: 25%;
+  height: 2px;
+  background: rgba(196, 196, 196, 0.5);
+  border-radius: 1px;
+  transition: background 0.3s ease;
+}
+
+.simulation-room .ai-status-bubble.processing .status-accent-line {
+  background: rgba(108, 92, 231, 0.7);
+}
+
+.simulation-room .ai-status-bubble.state-listening .status-accent-line {
+  background: rgba(16, 185, 129, 0.7);
+}
+
+.simulation-room .ai-status-bubble.state-thinking .status-accent-line {
+  background: rgba(99, 102, 241, 0.7);
+}
+
+.simulation-room .ai-status-bubble.state-speaking .status-accent-line {
+  background: rgba(245, 158, 11, 0.7);
+}
+
+.simulation-room .ai-status-bubble span {
+  color: #2d3436;
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+}
+
+/* Header navigation buttons */
+.sim-header-nav {
+  display: flex;
+  gap: 8px;
+  margin-left: 16px;
+}
+
+.sim-header-nav__btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: rgba(74, 93, 76, 0.08);
+  border: 1px solid rgba(74, 93, 76, 0.15);
+  border-radius: 8px;
+  color: #4A5D4C;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sim-header-nav__btn:hover {
+  background: rgba(74, 93, 76, 0.15);
+  border-color: rgba(74, 93, 76, 0.25);
+  transform: translateX(-2px);
+}
+
+.sim-header-nav__btn:active {
+  transform: translateX(0);
+}
+
+.sim-header-nav__btn svg {
+  opacity: 0.7;
+  transition: transform 0.2s ease;
+}
+
+.sim-header-nav__btn:hover svg {
+  transform: translateX(-2px);
+}
+
+@media (max-width: 768px) {
+  .sim-header-nav {
+    display: none;
+  }
+}
+
+/* Mobile sidebar navigation buttons */
+.mobile-nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(74, 93, 76, 0.06);
+  border: 1px solid rgba(74, 93, 76, 0.12);
+  border-radius: 10px;
+  color: #4A5D4C;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 8px;
+}
+
+.mobile-nav-btn:hover {
+  background: rgba(74, 93, 76, 0.12);
+  border-color: rgba(74, 93, 76, 0.2);
+}
+
+.mobile-nav-btn:active {
+  transform: scale(0.98);
+}
+
+.mobile-nav-btn svg {
+  opacity: 0.6;
+}
+
+.mobile-sidebar-footer {
+  padding: 16px;
+  border-top: 1px solid rgba(74, 93, 76, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.mobile-exit-btn {
+  margin-top: 4px;
 }

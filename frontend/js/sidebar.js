@@ -237,11 +237,12 @@ function selectScenarioFromSidebar(title, imageFile, promptFile) {
   if (window.session && window.session.isConnected) {
     console.log('[Sidebar] Active session detected, showing exit modal');
 
+    // Store pending scenario switch so it can be used after session ends
+    window.pendingScenarioSwitch = { title, imageFile, promptFile };
+
     // Show exit confirmation modal
     if (typeof showSessionExitModal === 'function') {
       showSessionExitModal();
-      // Note: After user gets feedback and dismisses summary screen,
-      // they'll need to click the new scenario again
       return;
     }
     // Fallback: disconnect and continue if modal not available

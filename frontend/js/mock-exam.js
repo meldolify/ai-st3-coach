@@ -385,21 +385,26 @@ function startMockScenario(scenario, hideTitle) {
  * Show and start the scenario timer
  */
 function showScenarioTimer() {
-  const timerContainer = document.getElementById('mockExamTimer');
+  // Use the unified ScenarioTimer if available
+  if (typeof ScenarioTimer !== 'undefined') {
+    ScenarioTimer.init('mock-exam');
+    ScenarioTimer.start();
+    return;
+  }
+
+  // Legacy fallback
+  const timerContainer = document.getElementById('scenarioTimer') || document.getElementById('mockExamTimer');
   if (timerContainer) {
     timerContainer.style.display = 'flex';
   }
 
-  // Start countdown
   scenarioStartTime = Date.now();
   updateTimerDisplay();
 
-  // Clear any existing interval
   if (scenarioTimerInterval) {
     clearInterval(scenarioTimerInterval);
   }
 
-  // Update every second
   scenarioTimerInterval = setInterval(updateTimerDisplay, 1000);
 }
 
@@ -422,7 +427,7 @@ function updateTimerDisplay() {
 
   const minutesElement = document.getElementById('timerMinutes');
   const secondsElement = document.getElementById('timerSeconds');
-  const timerContainer = document.getElementById('mockExamTimer');
+  const timerContainer = document.getElementById('scenarioTimer') || document.getElementById('mockExamTimer');
   const timerWarning = document.getElementById('timerWarning');
 
   if (minutesElement && secondsElement) {
@@ -446,6 +451,10 @@ function updateTimerDisplay() {
     stopScenarioTimer();
 
     if (mockExamType === 'full-mock') {
+      // Disconnect current session before advancing
+      if (window.session && window.session.isConnected) {
+        window.session.disconnect();
+      }
       // Auto-advance to next station
       advanceToNextStation();
     } else {
@@ -477,15 +486,14 @@ function stopScenarioTimer() {
  * Hide the timer
  */
 function hideScenarioTimer() {
-  const timerContainer = document.getElementById('mockExamTimer');
-  if (timerContainer) {
-    timerContainer.style.display = 'none';
-    timerContainer.classList.remove('warning');
+  // Use unified timer if available
+  if (typeof ScenarioTimer !== 'undefined') {
+    ScenarioTimer.reset();
   }
 
-  const timerWarning = document.getElementById('timerWarning');
-  if (timerWarning) {
-    timerWarning.style.display = 'none';
+  const timerContainer = document.getElementById('scenarioTimer') || document.getElementById('mockExamTimer');
+  if (timerContainer) {
+    timerContainer.classList.remove('warning', 'finished', 'running');
   }
 
   stopScenarioTimer();
@@ -565,24 +573,3 @@ function hideMockExamProgress() {
 // CLEANUP ON EXIT
 // ============================================================================
 
-// Override exitSimulation to handle mock exam state
-const originalExitSimulation = typeof exitSimulation === 'function' ? exitSimulation : null;
-
-function exitMockExamSimulation() {
-  // Clean up mock exam state
-  if (isMockExamActive) {
-    stopScenarioTimer();
-    hideScenarioTimer();
-    hideMockExamProgress();
-    isMockExamActive = false;
-    mockExamType = null;
-    mockExamStations = [];
-    currentStationIndex = 0;
-    mockExamResults = [];
-  }
-
-  // Call original exit if exists
-  if (originalExitSimulation) {
-    originalExitSimulation();
-  }
-}

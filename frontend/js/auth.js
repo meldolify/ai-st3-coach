@@ -609,7 +609,8 @@ function hideAllPages() {
     'mockTypeSelection',
     'stationTypeSelection',
     'scenarioSelection',
-    'simulationRoom'
+    'simulationRoom',
+    'sessionSummary'
   ];
   pages.forEach(id => {
     const el = document.getElementById(id);

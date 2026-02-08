@@ -1,0 +1,20 @@
+Based on the feedback you just provided, generate a structured JSON summary. Output ONLY valid JSON, no other text. No markdown code fences. No explanation.
+
+The JSON must follow this exact format:
+{
+  "score": 0,
+  "overallImpression": "Brief overall impression statement",
+  "clinicalKnowledge": {
+    "diagnosis": "Assessment of diagnosis and clinical assessment performance",
+    "management": "Assessment of management and treatment performance"
+  },
+  "strengths": ["strength 1", "strength 2", "strength 3"],
+  "improvements": ["area 1", "area 2", "area 3"],
+  "summary": "2-3 sentence overall assessment combining key points"
+}
+
+Rules:
+- "score" must be an integer from 0 to 5
+- "strengths" and "improvements" arrays should each contain 2 to 4 items
+- All text values should be concise (one sentence each)
+- Output ONLY the JSON object, nothing else

@@ -468,20 +468,21 @@ function setOrbState(state) {
 // ============================================================================
 
 /**
- * Score labels for each score value
+ * Score labels for each score value (0-5 scale)
  */
 const SCORE_LABELS = {
-  1: 'Needs Improvement',
-  2: 'Below Expected',
-  3: 'Meets Standard',
-  4: 'Above Expected',
-  5: 'Exceptional'
+  0: 'Unsafe',
+  1: 'Poor',
+  2: 'Below Average',
+  3: 'Average',
+  4: 'Good',
+  5: 'Outstanding'
 };
 
 /**
  * Show the session summary screen with feedback data
  * @param {Object} feedback - Feedback object from backend
- * @param {number} feedback.score - Score from 1-5
+ * @param {number} feedback.score - Score from 0-5
  * @param {string[]} feedback.strengths - Array of strength points
  * @param {string[]} feedback.improvements - Array of improvement points
  * @param {string} feedback.summary - Summary text
@@ -524,17 +525,17 @@ function showSummaryScreen(feedback, scenarioInfo) {
     };
   }
 
-  // Set score with color coding
-  const score = Math.min(5, Math.max(1, feedback.score || 3));
+  // Set score with color coding (0-5 scale)
+  const score = Math.min(5, Math.max(0, feedback.score != null ? feedback.score : 3));
   if (scoreValue) scoreValue.textContent = score;
-  if (scoreLabel) scoreLabel.textContent = SCORE_LABELS[score] || 'Meets Standard';
+  if (scoreLabel) scoreLabel.textContent = SCORE_LABELS[score] || 'Average';
 
   // Set score circle color class
   if (scoreCircle) {
     scoreCircle.classList.remove('summary-score-circle--low', 'summary-score-circle--medium', 'summary-score-circle--high');
-    if (score <= 2) {
+    if (score <= 1) {
       scoreCircle.classList.add('summary-score-circle--low');
-    } else if (score === 3) {
+    } else if (score <= 3) {
       scoreCircle.classList.add('summary-score-circle--medium');
     } else {
       scoreCircle.classList.add('summary-score-circle--high');
