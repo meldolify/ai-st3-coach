@@ -1,13 +1,20 @@
 /**
- * Server-Side Voice Activity Detection using Silero VAD
- * Runs the Silero ONNX model via onnxruntime-node (native C++).
- * No browser WASM/SIMD requirements — works for ALL clients.
+ * Server-Side Voice Activity Detection using Silero VAD v4
+ * Uses the same model as @ricky0123/vad-web@0.0.19 (proven working config).
+ * Runs via onnxruntime-node (native C++) — no browser WASM/SIMD requirements.
+ *
+ * Key differences from v5: separate h/c LSTM states, 1536-sample frames,
+ * state shape [2, 1, 64] instead of [2, 1, 128].
  */
 
 const ort = require('onnxruntime-node');
 const path = require('path');
 
-const MODEL_PATH = path.join(__dirname, '../../models/silero_vad.onnx');
+// Use Silero VAD v4 model (same as @ricky0123/vad-web@0.0.19)
+const MODEL_PATH = path.join(__dirname, '../../models/silero_vad_v4.onnx');
+
+// Frame size: 1536 samples at 16kHz (~96ms) — matches vad-web default
+const FRAME_SIZE = 1536;
 
 // Shared model session — loaded once, reused across all VAD instances
 let sharedSession = null;
@@ -15,7 +22,7 @@ let sharedSession = null;
 async function loadModel() {
   if (!sharedSession) {
     sharedSession = await ort.InferenceSession.create(MODEL_PATH);
-    console.log('[ServerVAD] Silero model loaded');
+    console.log('[ServerVAD] Silero VAD v4 model loaded');
     console.log('[ServerVAD] Model inputs:', sharedSession.inputNames);
     console.log('[ServerVAD] Model outputs:', sharedSession.outputNames);
   }
@@ -25,22 +32,23 @@ async function loadModel() {
 class ServerVAD {
   /**
    * @param {Object} options
-   * @param {number} options.posThreshold - Speech start threshold (default 0.5)
-   * @param {number} options.negThreshold - Speech end threshold (default 0.35)
+   * @param {number} options.posThreshold - Speech start threshold (default 0.3, matches vad-web)
+   * @param {number} options.negThreshold - Speech end threshold (default 0.2, matches vad-web)
    * @param {number} options.redemptionFrames - Silence frames before speech end (default 12)
-   * @param {number} options.minSpeechFrames - Min speech frames to trigger start (default 6)
+   * @param {number} options.minSpeechFrames - Min speech frames to trigger start (default 2)
    */
   constructor(options = {}) {
     this.session = null;
 
-    // Combined LSTM state tensor [2, 1, 128]
-    this.state = null;
+    // Silero v4: separate LSTM h and c state tensors [2, 1, 64]
+    this.h = null;
+    this.c = null;
 
-    // Detection thresholds
-    this.posThreshold = options.posThreshold || 0.5;
-    this.negThreshold = options.negThreshold || 0.35;
+    // Detection thresholds — match @ricky0123/vad-web@0.0.19 defaults
+    this.posThreshold = options.posThreshold || 0.3;
+    this.negThreshold = options.negThreshold || 0.2;
     this.redemptionFrames = options.redemptionFrames || 12;
-    this.minSpeechFrames = options.minSpeechFrames || 6;
+    this.minSpeechFrames = options.minSpeechFrames || 2;
 
     // State tracking
     this.isSpeaking = false;
@@ -49,19 +57,22 @@ class ServerVAD {
     this.audioBuffer = []; // Buffered speech audio (Float32 frames)
 
     // Pre-speech buffer: keep last N frames before speech detected
-    // so we don't clip the beginning of the utterance
-    this.preSpeechBufferSize = 6; // ~192ms at 32ms/frame
+    // 10 frames × 96ms = ~960ms pre-roll (matches vad-web preSpeechPadFrames: 10)
+    this.preSpeechBufferSize = 10;
     this.preSpeechBuffer = [];
+
+    // Residual buffer for cross-chunk frame assembly
+    // (chunks are ~1365 samples but frames need 1536 samples)
+    this._residualBuffer = null;
 
     // Callbacks
     this.onSpeechStart = null;
     this.onSpeechEnd = null; // Called with Float32Array of speech audio
 
     // Timing
-    this.speechStartTime = null; // When speech was first detected
+    this.speechStartTime = null;
 
     // Processing queue — ensures chunks are processed sequentially
-    // (prevents LSTM state corruption from concurrent async processChunk calls)
     this._processQueue = Promise.resolve();
   }
 
@@ -70,19 +81,19 @@ class ServerVAD {
     this._resetState();
 
     // Self-test: verify model produces varying output for different inputs
-    const silenceFrame = new Float32Array(512);
+    const silenceFrame = new Float32Array(FRAME_SIZE);
     const silenceProb = await this._runModel(silenceFrame);
 
     this._resetState();
-    const noiseFrame = new Float32Array(512);
-    for (let i = 0; i < 512; i++) {
+    const noiseFrame = new Float32Array(FRAME_SIZE);
+    for (let i = 0; i < FRAME_SIZE; i++) {
       noiseFrame[i] = (Math.random() * 2 - 1) * 0.3;
     }
     const noiseProb = await this._runModel(noiseFrame);
 
     console.log(`[ServerVAD] Self-test: silence=${silenceProb.toFixed(6)}, noise=${noiseProb.toFixed(6)}`);
     if (silenceProb === noiseProb) {
-      console.warn('[ServerVAD] WARNING: Model returns identical output for different inputs — may be broken');
+      console.warn('[ServerVAD] WARNING: Model returns identical output for different inputs');
     }
 
     this._resetState(); // Clean state for real audio
@@ -90,34 +101,49 @@ class ServerVAD {
 
   /**
    * Process a chunk of 16kHz Int16 PCM audio from the client.
-   * Internally converts to Float32 and runs through 512-sample frames.
+   * Buffers samples across chunks to assemble 1536-sample frames.
    * @param {Int16Array} int16Audio
    */
   async processChunk(int16Audio) {
-    // Queue ensures sequential processing (prevents LSTM state corruption
-    // if multiple WebSocket messages call processChunk concurrently)
     const task = this._processQueue.then(() => this._processChunkInternal(int16Audio));
-    this._processQueue = task.catch(() => {}); // Don't break chain on errors
+    this._processQueue = task.catch(() => {});
     return task;
   }
 
   async _processChunkInternal(int16Audio) {
     const float32 = this._int16ToFloat32(int16Audio);
 
-    // Process in 512-sample frames (32ms at 16kHz)
-    for (let i = 0; i + 512 <= float32.length; i += 512) {
-      const frame = float32.slice(i, i + 512);
-      const gainedFrame = this._applyGain(frame); // Boost quiet audio for VAD detection
+    // Append to residual buffer from previous chunk
+    if (this._residualBuffer) {
+      const combined = new Float32Array(this._residualBuffer.length + float32.length);
+      combined.set(this._residualBuffer);
+      combined.set(float32, this._residualBuffer.length);
+      this._residualBuffer = combined;
+    } else {
+      this._residualBuffer = float32;
+    }
+
+    // Process complete 1536-sample frames
+    let offset = 0;
+    while (offset + FRAME_SIZE <= this._residualBuffer.length) {
+      const frame = this._residualBuffer.slice(offset, offset + FRAME_SIZE);
+      const gainedFrame = this._applyGain(frame);
       const prob = await this._runModel(gainedFrame);
       this._updateState(prob, frame); // Buffer ORIGINAL audio for Whisper
+      offset += FRAME_SIZE;
+    }
+
+    // Keep leftover samples for next chunk
+    if (offset < this._residualBuffer.length) {
+      this._residualBuffer = this._residualBuffer.slice(offset);
+    } else {
+      this._residualBuffer = null;
     }
   }
 
   /**
    * Apply gain to quiet audio for VAD detection.
-   * Raw getUserMedia output can be much quieter than Web Speech API's
-   * internal processing. This normalizes quiet audio to detectable levels.
-   * @param {Float32Array} frame - 512 audio samples
+   * @param {Float32Array} frame
    * @returns {Float32Array} Gained frame (or original if already loud enough)
    */
   _applyGain(frame) {
@@ -127,10 +153,9 @@ class ServerVAD {
       if (abs > peak) peak = abs;
     }
 
-    // Skip if digital silence or already loud enough
     if (peak < 0.001 || peak >= 0.1) return frame;
 
-    const gain = Math.min(0.3 / peak, 50); // Target peak ~0.3, max 50x
+    const gain = Math.min(0.3 / peak, 50);
     const result = new Float32Array(frame.length);
     for (let i = 0; i < frame.length; i++) {
       result[i] = Math.max(-1, Math.min(1, frame[i] * gain));
@@ -139,21 +164,24 @@ class ServerVAD {
   }
 
   /**
-   * Run the Silero VAD model on a single 512-sample frame.
-   * @param {Float32Array} frame - 512 audio samples
+   * Run the Silero VAD v4 model on a single 1536-sample frame.
+   * v4 uses separate h/c LSTM states with shape [2, 1, 64].
+   * @param {Float32Array} frame - 1536 audio samples at 16kHz
    * @returns {number} Speech probability 0-1
    */
   async _runModel(frame) {
     const feeds = {
-      input: new ort.Tensor('float32', frame, [1, 512]),
-      state: new ort.Tensor('float32', this.state, [2, 1, 128]),
+      input: new ort.Tensor('float32', frame, [1, FRAME_SIZE]),
+      h: new ort.Tensor('float32', this.h, [2, 1, 64]),
+      c: new ort.Tensor('float32', this.c, [2, 1, 64]),
       sr: new ort.Tensor('int64', BigInt64Array.from([16000n]), [1])
     };
 
     const results = await this.session.run(feeds);
 
-    // Update state for next frame
-    this.state = Float32Array.from(results.stateN.data);
+    // Update LSTM states for next frame
+    this.h = Float32Array.from(results.hn.data);
+    this.c = Float32Array.from(results.cn.data);
 
     return results.output.data[0];
   }
@@ -162,10 +190,11 @@ class ServerVAD {
    * Update speech/silence state based on probability.
    */
   _updateState(prob, frame) {
-    // Diagnostic: log probability periodically (~every 1.6 seconds)
     if (!this._frameCount) this._frameCount = 0;
     this._frameCount++;
-    if (this._frameCount % 50 === 1) {
+
+    // Diagnostic: log every ~10 frames (~960ms at 96ms/frame)
+    if (this._frameCount % 10 === 1) {
       let peak = 0;
       for (let j = 0; j < frame.length; j++) {
         const abs = Math.abs(frame[j]);
@@ -246,15 +275,17 @@ class ServerVAD {
   }
 
   /**
-   * Reset LSTM state (call when starting a new session or after long silence).
+   * Reset LSTM state.
    */
   _resetState() {
-    this.state = new Float32Array(2 * 1 * 128).fill(0);
+    this.h = new Float32Array(2 * 1 * 64).fill(0);
+    this.c = new Float32Array(2 * 1 * 64).fill(0);
     this.isSpeaking = false;
     this.speechFrameCount = 0;
     this.silenceFrameCount = 0;
     this.audioBuffer = [];
     this.preSpeechBuffer = [];
+    this._residualBuffer = null;
   }
 
   /**
@@ -268,9 +299,11 @@ class ServerVAD {
    * Clean up resources.
    */
   destroy() {
-    this.state = null;
+    this.h = null;
+    this.c = null;
     this.audioBuffer = [];
     this.preSpeechBuffer = [];
+    this._residualBuffer = null;
     this.onSpeechStart = null;
     this.onSpeechEnd = null;
   }
