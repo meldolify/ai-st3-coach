@@ -24,13 +24,10 @@ function isNoiseTranscript(text) {
   }
 
   // Common noise patterns that Whisper produces for ambient sounds
+  // NOTE: Only filter genuine noise, NOT valid short responses (yes, no, okay, thank you, etc.)
   const noisePatterns = [
     /^(um+|uh+|er+|ah+|oh+|hm+|mm+)\.?$/i,       // Filler sounds
     /^\.+$/,                                       // Just dots
-    /^(thanks?|thank you)\.?$/i,                  // Echo pickup from TTS
-    /^(okay|ok)\.?$/i,                            // Common false positive
-    /^(yes|no|yeah|nope)\.?$/i,                   // Single word confirmations
-    /^(that's fine|that's great|alright)\.?$/i,  // TTS echo phrases
     /^[\s\.\,\!\?]+$/,                            // Just punctuation/whitespace
     /^[^a-zA-Z]*$/,                               // No letters at all
     /^([a-z])\1+$/i,                              // Repeated single letter (sss, aaaa)

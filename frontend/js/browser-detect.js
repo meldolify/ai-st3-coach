@@ -185,9 +185,8 @@ const BrowserDetect = {
       };
     }
 
-    // Silero VAD requires WASM
-    // Note: SharedArrayBuffer is ideal but not strictly required for all WASM features
-    const canUseSileroVAD = hasWASM && !isIOS && !isSafari;
+    // Silero VAD requires WASM and SharedArrayBuffer (needs COOP/COEP headers)
+    const canUseSileroVAD = hasWASM && hasSharedArrayBuffer && !isIOS && !isSafari;
 
     // Simple VAD (volume-based) works on all browsers with basic audio support
     const canUseSimpleVAD = hasAudioContext && hasMediaRecorder;

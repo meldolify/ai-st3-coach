@@ -28,7 +28,7 @@ class OrbVisualizer {
       baseRadius: 25,         // Starting radius from center
       maxExpansion: 35,       // Maximum expansion per ring when audio peaks
       spacing: 10,            // Base space between rings
-      canvasSize: 140         // Canvas dimensions (matches orb size)
+      canvasSize: 280         // Canvas dimensions (larger than orb for glow)
     };
 
     // Callbacks (mirror AudioPlayer interface)
@@ -111,9 +111,11 @@ class OrbVisualizer {
     canvas.height = canvasSize;
     canvas.style.cssText = `
       position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: ${canvasSize}px;
+      height: ${canvasSize}px;
       pointer-events: none;
       z-index: 10;
       border-radius: 0;
@@ -154,16 +156,16 @@ class OrbVisualizer {
    * Brighter colors provide better contrast against dark sage background
    */
   getStateColor() {
-    if (!this.orb) return { r: 184, g: 140, b: 90 }; // Soft warm copper (idle)
+    if (!this.orb) return { r: 184, g: 140, b: 90 }; // Warm copper (idle)
 
     if (this.orb.classList.contains('speaking')) {
-      return { r: 242, g: 185, b: 130 };  // Bright warm copper
+      return { r: 245, g: 158, b: 11 };   // Warm amber
     } else if (this.orb.classList.contains('listening')) {
-      return { r: 224, g: 165, b: 101 };  // Warm copper
+      return { r: 16, g: 185, b: 129 };   // Teal/green
     } else if (this.orb.classList.contains('thinking')) {
-      return { r: 200, g: 155, b: 100 };  // Warm muted copper
+      return { r: 99, g: 102, b: 241 };   // Indigo/violet
     } else {
-      return { r: 184, g: 140, b: 90 };   // Soft warm copper (idle)
+      return { r: 184, g: 140, b: 90 };   // Warm copper (idle)
     }
   }
 

@@ -70,13 +70,13 @@ const CONFIG = {
 
     // VAD Configuration (used by VADManager.js)
     VAD: {
-      POSITIVE_THRESHOLD: 0.5,     // Speech detection start threshold
-      NEGATIVE_THRESHOLD: 0.35,    // Speech detection end threshold
+      POSITIVE_THRESHOLD: 0.3,     // Speech detection start threshold (sensitive)
+      NEGATIVE_THRESHOLD: 0.2,     // Speech detection end threshold (sensitive)
       PRE_SPEECH_FRAMES: 10,       // ~300ms pre-roll buffer
-      REDEMPTION_FRAMES: 8,        // ~240ms hangover delay
-      MIN_SPEECH_FRAMES: 3,        // ~90ms minimum speech duration
+      REDEMPTION_FRAMES: 12,       // ~360ms hangover delay (allow natural pauses)
+      MIN_SPEECH_FRAMES: 2,        // ~60ms minimum speech duration
       INTERRUPT_MIN_MS: 200,       // Minimum duration for interrupt during TTS
-      POST_TTS_COOLDOWN_MS: 100    // Cooldown after TTS ends
+      POST_TTS_COOLDOWN_MS: 250    // Cooldown after TTS ends (prevent echo with speakers)
     }
   }
 };

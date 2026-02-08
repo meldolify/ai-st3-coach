@@ -1,15 +1,21 @@
 Based on the interview conversation above, provide a performance summary for this ST3 Plastic Surgery interview candidate.
 
-SCORE (1-5):
-- 1 = Significant gaps in knowledge or communication
-- 2 = Below expected standard for ST3 level
-- 3 = Meets expected standard
-- 4 = Above expected standard
-- 5 = Exceptional performance
+SCORE (0-5):
+- 0 = Unsafe, not appointable
+- 1 = Poor, significant gaps in knowledge
+- 2 = Below average, not yet at ST3 standard
+- 3 = Average, meets expected ST3 standard
+- 4 = Good, above average ability
+- 5 = Outstanding, exceptional performance
 
 Respond ONLY with this JSON format (no other text):
 {
-  "score": <number 1-5>,
+  "score": <number 0-5>,
+  "overallImpression": "Brief overall impression",
+  "clinicalKnowledge": {
+    "diagnosis": "Assessment of diagnosis performance",
+    "management": "Assessment of management performance"
+  },
   "strengths": ["strength 1", "strength 2"],
   "improvements": ["area 1", "area 2"],
   "summary": "2-3 sentence overall assessment"

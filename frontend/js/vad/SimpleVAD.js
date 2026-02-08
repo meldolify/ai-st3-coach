@@ -20,6 +20,12 @@ class SimpleVAD {
     this.mediaStream = null;
     this.mediaRecorder = null;
     this.sourceNode = null;
+    this.scriptProcessor = null;
+
+    // Pre-roll circular buffer (~300ms at 48kHz mono = 14400 samples)
+    this.preRollBuffer = null;
+    this.preRollWriteIndex = 0;
+    this.preRollBufferSize = 0; // Set in initialize() based on actual sample rate
 
     // Recording state
     this.isRecording = false;
@@ -96,6 +102,25 @@ class SimpleVAD {
       // Connect microphone to analyser
       this.sourceNode = this.audioContext.createMediaStreamSource(this.mediaStream);
       this.sourceNode.connect(this.analyser);
+
+      // Set up pre-roll circular buffer (~300ms of audio)
+      const sampleRate = this.audioContext.sampleRate;
+      this.preRollBufferSize = Math.ceil(sampleRate * 0.3); // 300ms
+      this.preRollBuffer = new Float32Array(this.preRollBufferSize);
+      this.preRollWriteIndex = 0;
+
+      // ScriptProcessorNode to continuously capture audio into circular buffer
+      this.scriptProcessor = this.audioContext.createScriptProcessor(4096, 1, 1);
+      this.scriptProcessor.onaudioprocess = (event) => {
+        const inputData = event.inputBuffer.getChannelData(0);
+        for (let i = 0; i < inputData.length; i++) {
+          this.preRollBuffer[this.preRollWriteIndex] = inputData[i];
+          this.preRollWriteIndex = (this.preRollWriteIndex + 1) % this.preRollBufferSize;
+        }
+      };
+      // Connect: source -> scriptProcessor -> destination (required for processing to run)
+      this.sourceNode.connect(this.scriptProcessor);
+      this.scriptProcessor.connect(this.audioContext.destination);
 
       this.isInitialized = true;
       console.log('[SimpleVAD] Initialized successfully');
@@ -254,6 +279,9 @@ class SimpleVAD {
       this.audioChunks = [];
       this.recordingStartTime = Date.now();
 
+      // Snapshot the pre-roll buffer (ordered correctly from oldest to newest)
+      this.preRollSnapshot = this._getPreRollSnapshot();
+
       // Detect supported MIME type (Safari needs MP4/AAC)
       const mimeType = this._getPreferredMimeType();
       console.log(`[SimpleVAD] Using MIME type: ${mimeType}`);
@@ -321,6 +349,55 @@ class SimpleVAD {
   }
 
   /**
+   * Get a linearized snapshot of the circular pre-roll buffer
+   * Returns a Float32Array ordered from oldest to newest sample
+   */
+  _getPreRollSnapshot() {
+    if (!this.preRollBuffer) return new Float32Array(0);
+    const snapshot = new Float32Array(this.preRollBufferSize);
+    // Copy from write index to end (oldest data), then from 0 to write index (newest data)
+    const firstPart = this.preRollBuffer.subarray(this.preRollWriteIndex);
+    const secondPart = this.preRollBuffer.subarray(0, this.preRollWriteIndex);
+    snapshot.set(firstPart, 0);
+    snapshot.set(secondPart, firstPart.length);
+    return snapshot;
+  }
+
+  /**
+   * Prepend pre-roll PCM data to a WAV blob
+   * Decodes the WAV, concatenates pre-roll + recording, re-encodes as WAV
+   */
+  async _prependPreRoll(wavBlob, preRollData) {
+    try {
+      if (!this.audioContext || this.audioContext.state === 'closed') {
+        return wavBlob;
+      }
+
+      const arrayBuffer = await wavBlob.arrayBuffer();
+      const audioBuffer = await this.audioContext.decodeAudioData(arrayBuffer);
+      const recordedData = audioBuffer.getChannelData(0);
+      const sampleRate = audioBuffer.sampleRate;
+
+      // Resample pre-roll if sample rates differ
+      let preRoll = preRollData;
+      if (this.audioContext.sampleRate !== sampleRate) {
+        // Simple case: use as-is (sample rates should match since same AudioContext)
+        preRoll = preRollData;
+      }
+
+      // Concatenate pre-roll + recorded audio
+      const combined = new Float32Array(preRoll.length + recordedData.length);
+      combined.set(preRoll, 0);
+      combined.set(recordedData, preRoll.length);
+
+      return window.AudioUtils.float32ToWav(combined, sampleRate);
+    } catch (error) {
+      console.warn('[SimpleVAD] Pre-roll prepend failed, using original:', error);
+      return wavBlob;
+    }
+  }
+
+  /**
    * Send recorded audio to Whisper via WebSocket
    */
   async sendAudioToWhisper() {
@@ -343,8 +420,14 @@ class SimpleVAD {
       console.log(`[SimpleVAD] Audio blob: ${audioBlob.size} bytes, type: ${mimeType}`);
 
       // Convert to WAV for Whisper (ensures compatibility)
-      const wavBlob = await this.convertToWav(audioBlob);
-      console.log(`[SimpleVAD] WAV blob: ${wavBlob.size} bytes`);
+      let wavBlob = await this.convertToWav(audioBlob);
+
+      // Prepend the pre-roll buffer to capture the first syllable
+      if (this.preRollSnapshot && this.preRollSnapshot.length > 0) {
+        wavBlob = await this._prependPreRoll(wavBlob, this.preRollSnapshot);
+        this.preRollSnapshot = null;
+      }
+      console.log(`[SimpleVAD] WAV blob (with pre-roll): ${wavBlob.size} bytes`);
 
       // Convert to base64 using shared utility
       const base64 = await window.AudioUtils.blobToBase64(wavBlob);
@@ -429,10 +512,18 @@ class SimpleVAD {
   destroy() {
     this.stop();
 
+    if (this.scriptProcessor) {
+      this.scriptProcessor.disconnect();
+      this.scriptProcessor = null;
+    }
+
     if (this.sourceNode) {
       this.sourceNode.disconnect();
       this.sourceNode = null;
     }
+
+    this.preRollBuffer = null;
+    this.preRollSnapshot = null;
 
     if (this.mediaStream) {
       this.mediaStream.getTracks().forEach(track => track.stop());
