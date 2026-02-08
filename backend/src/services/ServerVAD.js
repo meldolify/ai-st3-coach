@@ -248,9 +248,12 @@ class ServerVAD {
       if (prob < this.negThreshold) {
         this.silenceFrameCount++;
         if (this.silenceFrameCount >= this.redemptionFrames) {
-          // Speech ended
+          // Speech ended — compute all data BEFORE clearing state
           const audio = this._concatenateBuffers();
           const hadIncrementalExports = this._lastExportIndex > 0;
+          const audioSinceExport = hadIncrementalExports ? this.getAudioSinceLastExport() : null;
+
+          // Now clear state
           this.isSpeaking = false;
           this.speechFrameCount = 0;
           this.silenceFrameCount = 0;
@@ -258,7 +261,7 @@ class ServerVAD {
           this._framesSinceLastExport = 0;
           this._lastExportIndex = 0;
 
-          if (this.onSpeechEnd) this.onSpeechEnd(audio, hadIncrementalExports);
+          if (this.onSpeechEnd) this.onSpeechEnd(audio, hadIncrementalExports, audioSinceExport);
         }
       } else {
         this.silenceFrameCount = 0;
