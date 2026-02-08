@@ -54,7 +54,7 @@ class SimpleVAD {
       speechDebounceMs: 150,      // Ignore brief spikes
       silenceDebounceMs: 800,     // Wait before ending recording (allow pauses)
       minRecordingMs: 500,        // Minimum recording duration
-      maxRecordingMs: 30000,      // Maximum recording duration (30s)
+      maxRecordingMs: 15000,      // Maximum recording duration (15s) - chunks long speech
 
       // Analysis
       analyserFftSize: 256,       // FFT size for frequency analysis
@@ -169,9 +169,11 @@ class SimpleVAD {
     this.isListening = false;
     this.stopVolumeMonitoring();
 
-    // Stop any active recording
+    // Stop any active recording - send audio if we have enough data
     if (this.isRecording) {
-      this.stopRecording(false); // Don't send partial recording
+      const duration = Date.now() - this.recordingStartTime;
+      const hasEnoughData = duration >= this.config.minRecordingMs;
+      this.stopRecording(hasEnoughData);
     }
 
     console.log('[SimpleVAD] Stopped listening');

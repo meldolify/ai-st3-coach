@@ -615,15 +615,14 @@ class V4Session {
       setTimeout(() => {
         // Only restart mic if NOT in feedback mode
         // VAD/SimpleVAD handle continuous listening internally
+        // Note: inFeedbackMode stays true throughout the entire feedback flow
+        // (set by feedback_processing/feedback_response, cleared on disconnect)
         if (!this.inFeedbackMode && !this.audioPlayer.isPlaying) {
           if (!this.usingVAD && !this.usingSimpleVAD && this.speechRecognition) {
             // Web Speech API or PTT needs manual restart
             this.speechRecognition.start();
           }
           updateStatus('micStatus', '🎤 Listening', 'connected');
-        } else {
-          // Reset feedback mode flag after processing
-          this.inFeedbackMode = false;
         }
       }, 500); // Reduced delay since VAD/SimpleVAD handle continuous listening
     };
