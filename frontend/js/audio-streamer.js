@@ -13,7 +13,6 @@ class AudioStreamer {
     this.mediaStream = null;
     this.sourceNode = null;
     this.websocket = null;
-    this.sessionId = null;
     this.isStreaming = false;
     this.isPaused = false; // Paused during AI speech
     this._initialized = false;
@@ -55,10 +54,11 @@ class AudioStreamer {
       const int16 = this._floatToInt16(pcm16k);
       const base64 = this._toBase64(int16.buffer);
 
-      if (this.websocket?.readyState === WebSocket.OPEN && this.sessionId) {
+      const sessionId = window.currentSessionId;
+      if (this.websocket?.readyState === WebSocket.OPEN && sessionId) {
         this.websocket.send(JSON.stringify({
           type: 'audio_chunk',
-          sessionId: this.sessionId,
+          sessionId: sessionId,
           audio: base64
         }));
       }
@@ -75,7 +75,6 @@ class AudioStreamer {
   /** Start streaming audio to server. */
   start() {
     this.isStreaming = true;
-    this.sessionId = window.currentSessionId;
     console.log('[AudioStreamer] Streaming started');
   }
 
