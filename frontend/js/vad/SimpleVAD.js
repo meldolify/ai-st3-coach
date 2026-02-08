@@ -54,7 +54,9 @@ class SimpleVAD {
       speechDebounceMs: 150,      // Ignore brief spikes
       silenceDebounceMs: 800,     // Wait before ending recording (allow pauses)
       minRecordingMs: 500,        // Minimum recording duration
-      maxRecordingMs: 15000,      // Maximum recording duration (15s) - chunks long speech
+      // No max recording duration - interview answers can be several minutes long.
+      // Turn-taking is handled by silence detection (silenceDebounceMs).
+      // If silence detection fails, audio is sent when the session ends (stop() method).
 
       // Analysis
       analyserFftSize: 256,       // FFT size for frequency analysis
@@ -260,13 +262,6 @@ class SimpleVAD {
       } else {
         // Still speaking, reset silence detection
         this.silenceStartTime = null;
-      }
-
-      // Check for max recording duration
-      const recordingDuration = now - this.recordingStartTime;
-      if (recordingDuration >= this.config.maxRecordingMs) {
-        console.log('[SimpleVAD] Max recording duration reached');
-        this.stopRecording(true);
       }
     }
   }
