@@ -16,6 +16,8 @@ async function loadModel() {
   if (!sharedSession) {
     sharedSession = await ort.InferenceSession.create(MODEL_PATH);
     console.log('[ServerVAD] Silero model loaded');
+    console.log('[ServerVAD] Model inputs:', sharedSession.inputNames);
+    console.log('[ServerVAD] Model outputs:', sharedSession.outputNames);
   }
   return sharedSession;
 }
@@ -57,11 +59,33 @@ class ServerVAD {
 
     // Timing
     this.speechStartTime = null; // When speech was first detected
+
+    // Processing queue — ensures chunks are processed sequentially
+    // (prevents LSTM state corruption from concurrent async processChunk calls)
+    this._processQueue = Promise.resolve();
   }
 
   async initialize() {
     this.session = await loadModel();
     this._resetState();
+
+    // Self-test: verify model produces varying output for different inputs
+    const silenceFrame = new Float32Array(512);
+    const silenceProb = await this._runModel(silenceFrame);
+
+    this._resetState();
+    const noiseFrame = new Float32Array(512);
+    for (let i = 0; i < 512; i++) {
+      noiseFrame[i] = (Math.random() * 2 - 1) * 0.3;
+    }
+    const noiseProb = await this._runModel(noiseFrame);
+
+    console.log(`[ServerVAD] Self-test: silence=${silenceProb.toFixed(6)}, noise=${noiseProb.toFixed(6)}`);
+    if (silenceProb === noiseProb) {
+      console.warn('[ServerVAD] WARNING: Model returns identical output for different inputs — may be broken');
+    }
+
+    this._resetState(); // Clean state for real audio
   }
 
   /**
@@ -70,14 +94,48 @@ class ServerVAD {
    * @param {Int16Array} int16Audio
    */
   async processChunk(int16Audio) {
+    // Queue ensures sequential processing (prevents LSTM state corruption
+    // if multiple WebSocket messages call processChunk concurrently)
+    const task = this._processQueue.then(() => this._processChunkInternal(int16Audio));
+    this._processQueue = task.catch(() => {}); // Don't break chain on errors
+    return task;
+  }
+
+  async _processChunkInternal(int16Audio) {
     const float32 = this._int16ToFloat32(int16Audio);
 
     // Process in 512-sample frames (32ms at 16kHz)
     for (let i = 0; i + 512 <= float32.length; i += 512) {
       const frame = float32.slice(i, i + 512);
-      const prob = await this._runModel(frame);
-      this._updateState(prob, frame);
+      const gainedFrame = this._applyGain(frame); // Boost quiet audio for VAD detection
+      const prob = await this._runModel(gainedFrame);
+      this._updateState(prob, frame); // Buffer ORIGINAL audio for Whisper
     }
+  }
+
+  /**
+   * Apply gain to quiet audio for VAD detection.
+   * Raw getUserMedia output can be much quieter than Web Speech API's
+   * internal processing. This normalizes quiet audio to detectable levels.
+   * @param {Float32Array} frame - 512 audio samples
+   * @returns {Float32Array} Gained frame (or original if already loud enough)
+   */
+  _applyGain(frame) {
+    let peak = 0;
+    for (let i = 0; i < frame.length; i++) {
+      const abs = Math.abs(frame[i]);
+      if (abs > peak) peak = abs;
+    }
+
+    // Skip if digital silence or already loud enough
+    if (peak < 0.001 || peak >= 0.1) return frame;
+
+    const gain = Math.min(0.3 / peak, 50); // Target peak ~0.3, max 50x
+    const result = new Float32Array(frame.length);
+    for (let i = 0; i < frame.length; i++) {
+      result[i] = Math.max(-1, Math.min(1, frame[i] * gain));
+    }
+    return result;
   }
 
   /**
@@ -108,7 +166,12 @@ class ServerVAD {
     if (!this._frameCount) this._frameCount = 0;
     this._frameCount++;
     if (this._frameCount % 50 === 1) {
-      console.log(`[VAD] Frame ${this._frameCount}: prob=${prob.toFixed(3)}, speaking=${this.isSpeaking}, speechFrames=${this.speechFrameCount}`);
+      let peak = 0;
+      for (let j = 0; j < frame.length; j++) {
+        const abs = Math.abs(frame[j]);
+        if (abs > peak) peak = abs;
+      }
+      console.log(`[VAD] Frame ${this._frameCount}: prob=${prob.toFixed(3)}, peak=${peak.toFixed(4)}, speaking=${this.isSpeaking}`);
     }
 
     if (!this.isSpeaking) {
