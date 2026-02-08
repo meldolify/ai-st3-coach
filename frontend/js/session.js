@@ -232,7 +232,9 @@ class V4Session {
         this.sessionId = msg.sessionId;
         window.currentSessionId = msg.sessionId;
         updateStatus('sessionStatus', 'Ready', 'connected');
-        setOrbState('idle');
+        // Note: don't set orb to idle here — startListening() already manages orb state
+        // and scenario_loaded arrives ~500ms later (after server VAD model load),
+        // which would overwrite the 'listening' state
         log('Scenario loaded: ' + msg.scenario, 'success');
         break;
 
