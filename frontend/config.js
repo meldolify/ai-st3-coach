@@ -27,7 +27,7 @@ const CONFIG = {
     const hostname = window.location.hostname;
 
     if (hostname === 'localhost' || hostname === '127.0.0.1') {
-      return 'http://localhost:3000';
+      return 'http://localhost:8080';
     }
 
     return 'https://api.reviva.live';

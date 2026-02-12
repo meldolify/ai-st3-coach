@@ -135,7 +135,11 @@
 const API_BASE = (() => {
   const hostname = window.location.hostname;
   if (hostname === 'localhost' || hostname === '127.0.0.1') {
-    return 'http://localhost:3000/prompt-lab/api';
+    return `http://${hostname}:8080/prompt-lab/api`;
+  }
+  // Production: use same origin if served from backend, otherwise explicit API domain
+  if (hostname === 'api.reviva.live') {
+    return '/prompt-lab/api'; // Same-origin — no CORS needed
   }
   return 'https://api.reviva.live/prompt-lab/api';
 })();
