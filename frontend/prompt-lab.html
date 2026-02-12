@@ -43,6 +43,7 @@
       <span id="charCount">0 chars</span>
       <div style="display: flex; gap: 6px;">
         <button id="revertBtn" class="pl-btn pl-btn-sm">Revert</button>
+        <button id="downloadBtn" class="pl-btn pl-btn-sm">Download</button>
       </div>
     </div>
   </section>
@@ -312,30 +313,88 @@ function syncStateToEditor() {
   charCountEl.textContent = promptEditor.value.length + ' chars';
 }
 
+// ── localStorage persistence ──
+// Keys: pl_sections_{difficulty}, pl_feedback_{difficulty}
+
+function localStorageKey(type, difficulty) {
+  return 'pl_' + type + '_' + difficulty;
+}
+
+function saveToLocalStorage() {
+  const d = state.difficulty;
+  localStorage.setItem(localStorageKey('sections', d), JSON.stringify(state.promptSections));
+  localStorage.setItem(localStorageKey('feedback', d), state.feedbackPrompt);
+}
+
+function loadFromLocalStorage(difficulty) {
+  const sectionsStr = localStorage.getItem(localStorageKey('sections', difficulty));
+  const feedback = localStorage.getItem(localStorageKey('feedback', difficulty));
+  if (!sectionsStr) return null;
+  try {
+    return { sections: JSON.parse(sectionsStr), feedback: feedback || '' };
+  } catch { return null; }
+}
+
+function clearLocalStorage(difficulty) {
+  localStorage.removeItem(localStorageKey('sections', difficulty));
+  localStorage.removeItem(localStorageKey('feedback', difficulty));
+}
+
 async function loadPrompt() {
   try {
+    // Load from server (git baseline)
     const data = await api.loadPrompt(state.difficulty);
-    state.promptSections = { ...data.sections };
     state.savedSections = { ...data.sections };
 
     try {
       const fb = await api.loadFeedbackPrompt(state.difficulty);
-      state.feedbackPrompt = fb.content;
       state.savedFeedback = fb.content;
     } catch (e) {
-      state.feedbackPrompt = '';
       state.savedFeedback = '';
     }
 
+    // Check localStorage for unsaved edits
+    const local = loadFromLocalStorage(state.difficulty);
+    if (local) {
+      const serverJson = JSON.stringify(data.sections);
+      const localJson = JSON.stringify(local.sections);
+      if (localJson !== serverJson || local.feedback !== state.savedFeedback) {
+        // Local edits differ from server — use local version
+        state.promptSections = local.sections;
+        state.feedbackPrompt = local.feedback;
+        syncStateToEditor();
+        setStatus('Restored local edits (unsaved)');
+        return;
+      }
+    }
+
+    // No local edits — use server version
+    state.promptSections = { ...data.sections };
+    state.feedbackPrompt = state.savedFeedback;
     syncStateToEditor();
     setStatus('Prompt loaded');
   } catch (err) {
-    setStatus('Error: ' + err.message, true);
+    // Server unreachable — try localStorage
+    const local = loadFromLocalStorage(state.difficulty);
+    if (local) {
+      state.promptSections = local.sections;
+      state.feedbackPrompt = local.feedback;
+      state.savedSections = { ...local.sections };
+      state.savedFeedback = local.feedback;
+      syncStateToEditor();
+      setStatus('Loaded from local cache (server error)', true);
+    } else {
+      setStatus('Error: ' + err.message, true);
+    }
   }
 }
 
 async function savePrompt() {
   syncEditorToState();
+
+  // Always save to localStorage first (survives server redeploys)
+  saveToLocalStorage();
+
   try {
     await api.savePrompt(state.difficulty, state.promptSections);
     state.savedSections = { ...state.promptSections };
@@ -345,9 +404,9 @@ async function savePrompt() {
       state.savedFeedback = state.feedbackPrompt;
     }
 
-    setStatus('Prompt saved');
+    setStatus('Saved (server + local)');
   } catch (err) {
-    setStatus('Save error: ' + err.message, true);
+    setStatus('Saved locally (server error: ' + err.message + ')', true);
   }
 }
 
@@ -357,8 +416,35 @@ function revertPrompt() {
   } else if (state.savedSections) {
     state.promptSections[state.activeTab] = state.savedSections[state.activeTab] || '';
   }
+  // Update localStorage to match reverted state
+  saveToLocalStorage();
   syncStateToEditor();
-  setStatus('Reverted');
+  setStatus('Reverted to server version');
+}
+
+function downloadPrompt() {
+  syncEditorToState();
+  const tab = state.activeTab;
+  let content, filename;
+
+  if (tab === 'feedback') {
+    content = state.feedbackPrompt;
+    filename = state.difficulty + '_clinical_necrotising_fasciitis_feedback.txt';
+  } else {
+    // Download the full combined prompt (all 3 sections)
+    content = 'SECTION 1\nREALTIME CORE BEHAVIOURS\n\n' + (state.promptSections.core || '') +
+      '\n\nSECTION 2\nDIFFICULTY AND PERSONALITY LAYER\n\n' + (state.promptSections.difficulty || '') +
+      '\n\nSECTION 3\nCLINICAL SCENARIO BLOCK\n\n' + (state.promptSections.clinical || '');
+    filename = state.difficulty + '_clinical_necrotising_fasciitis_1.txt';
+  }
+
+  const blob = new Blob([content], { type: 'text/plain' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(a.href);
+  setStatus('Downloaded: ' + filename);
 }
 
 // Tab switching
@@ -372,8 +458,15 @@ document.querySelectorAll('.pl-tab').forEach(tab => {
   });
 });
 
+let _autoSaveTimer = null;
 promptEditor.addEventListener('input', () => {
   charCountEl.textContent = promptEditor.value.length + ' chars';
+  // Auto-save to localStorage (debounced 1s)
+  clearTimeout(_autoSaveTimer);
+  _autoSaveTimer = setTimeout(() => {
+    syncEditorToState();
+    saveToLocalStorage();
+  }, 1000);
 });
 
 // ================================================================
@@ -821,6 +914,9 @@ async function viewTranscript(id) {
 // ================================================================
 
 difficultySelect.addEventListener('change', () => {
+  // Save current edits before switching difficulty
+  syncEditorToState();
+  saveToLocalStorage();
   state.difficulty = difficultySelect.value;
   loadPrompt();
 });
@@ -828,6 +924,7 @@ difficultySelect.addEventListener('change', () => {
 newSessionBtn.addEventListener('click', createSession);
 savePromptBtn.addEventListener('click', savePrompt);
 revertBtn.addEventListener('click', revertPrompt);
+$('downloadBtn').addEventListener('click', downloadPrompt);
 sendBtn.addEventListener('click', sendMessage);
 feedbackBtn.addEventListener('click', requestFeedback);
 saveManualBtn.addEventListener('click', saveManualTranscript);
