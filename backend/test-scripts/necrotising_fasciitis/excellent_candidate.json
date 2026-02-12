@@ -1,0 +1,84 @@
+{
+  "name": "Excellent Candidate - Necrotising Fasciitis",
+  "description": "Tests an outstanding candidate who covers ALL essential points plus most bonus points including sepsis six, LRINEC score, triple antibiotics by name, finger sweep test, dishwater fluid, VAC therapy, consent form 4, and ITU second look. Expects a score of 4-5 and feedback that acknowledges the advanced knowledge.",
+  "difficulty": "easy",
+  "inputs": [
+    "Good morning. Yes, I'm ready to go.",
+    "Thank you. Given the clinical picture of a rapidly spreading rash over four hours in a patient with poorly controlled diabetes, my primary concern would be necrotising fasciitis, which is a life-threatening surgical emergency. I would also consider cellulitis as a differential, but I would treat this as necrotising fasciitis until proven otherwise. I would begin with a systematic A B C D E assessment. Airway, check patency and phonation. Breathing, respiratory rate, oxygen saturations, auscultation. Circulation, heart rate, blood pressure, capillary refill time, and I would get intravenous access with two large-bore cannulae. Disability, check G C S and blood glucose. Exposure, full examination of the affected area. I would also initiate Sepsis Six within the first hour: take blood cultures, measure serum lactate, give high-flow oxygen, start IV fluids, give IV antibiotics, and monitor urine output.",
+    "For investigations I would request bloods including full blood count, U and Es, CRP, ESR, lactate, blood glucose, H B A one C, liver function tests, clotting screen, blood cultures, and a group and save with crossmatch in case he needs theatre. I would also calculate the L R I N E C score using white cell count, haemoglobin, sodium, glucose, serum creatinine, and CRP to risk-stratify the necrotising fasciitis. I'd request an arterial blood gas as well for acid-base status.",
+    "For initial management, I would start aggressive intravenous fluid resuscitation with crystalloid, aiming for a urine output of at least naught point five mils per kilo per hour. I would commence triple intravenous antibiotics: Benzylpenicillin for streptococcal cover, Metronidazole for anaerobic cover, and Vancomycin for M R S A cover, or alternatively follow the trust's local microbiology guidelines. I would catheterise the patient and start a fluid balance chart. I'd also contact the on-call microbiologist to arrange for urgent gram stain analysis of any surgical samples.",
+    "For definitive management, this patient needs urgent surgical debridement and I would arrange this immediately. I would contact my consultant plastic surgeon on call to discuss and attend. I would inform the on-call anaesthetist and book the case through C E P O D as an emergency. I would consent the patient, but given his diabetes and potential sepsis affecting capacity, if he lacks capacity I would complete a consent form four documenting the indication and that the procedure is in his best interest. I would also inform his next of kin.",
+    "In theatre, under general anaesthetic, I would position the patient supine. If there is clinical uncertainty, I would perform a finger sweep test at the edge of the spreading erythema. Intraoperatively, I would look for dishwater-coloured fluid which is pathognomonic for necrotising fasciitis. I would perform aggressive circumferential excision of all skin and fascial layers that appear unhealthy, maintaining a low threshold for excision and debriding back to healthy bleeding tissue. I would maintain continuous haemostasis throughout. I would take tissue samples for microbiology including gram stain and for histology. Then I would perform copious irrigation with warm saline and dress the wounds with a V A C therapy dressing to manage the open wounds.",
+    "Post-operatively, this patient must go to I T U for close monitoring, ongoing resuscitation, and organ support if needed. I would ensure a comprehensive handover to the I T U team including the surgical findings and ongoing antibiotic plan. I would continue the intravenous antibiotics and tailor them once the gram stain and microbiology culture results are available. I would plan for a second look in theatre within forty-eight hours, or earlier if there is any clinical deterioration, as there may be residual infected foci. I would also ensure ongoing monitoring of his diabetes management given this is a significant physiological insult."
+  ],
+  "assertions": [
+    {
+      "turn": 1,
+      "type": "contains_any",
+      "values": ["hello", "good morning", "good afternoon", "welcome"],
+      "desc": "AI greets the candidate"
+    },
+    {
+      "turn": 2,
+      "type": "contains_any",
+      "values": ["64", "sixty-four", "medical ward", "diabetes", "rash", "spreading"],
+      "desc": "AI reads the case scenario"
+    },
+    {
+      "turn": 2,
+      "type": "contains_any",
+      "values": ["approach", "manage", "describe", "how would you"],
+      "desc": "AI asks an opening question"
+    },
+    {
+      "type": "never_contains",
+      "value": "correct",
+      "desc": "AI never confirms correctness even with an excellent candidate"
+    },
+    {
+      "type": "never_contains",
+      "value": "exactly right",
+      "desc": "AI does not validate answers during scenario"
+    },
+    {
+      "type": "never_contains",
+      "value": "I'm an AI",
+      "desc": "AI never breaks character"
+    },
+    {
+      "type": "avg_word_count",
+      "min": 5,
+      "max": 60,
+      "desc": "AI remains concise even when candidate gives detailed answers"
+    }
+  ],
+  "triggerFeedback": true,
+  "feedbackAssertions": [
+    {
+      "type": "score_range",
+      "min": 4,
+      "max": 5,
+      "desc": "Excellent candidate scores 4 (Good/Above average) to 5 (Outstanding)"
+    },
+    {
+      "type": "section_count",
+      "expected": 6,
+      "desc": "All 6 feedback sections are generated"
+    },
+    {
+      "type": "feedback_contains",
+      "value": "L R I N E C",
+      "desc": "Feedback acknowledges the bonus point of LRINEC score"
+    },
+    {
+      "type": "feedback_contains",
+      "value": "Sepsis",
+      "desc": "Feedback acknowledges the bonus point of Sepsis Six"
+    },
+    {
+      "type": "feedback_contains",
+      "value": "strength",
+      "desc": "Feedback highlights the candidate's strengths"
+    }
+  ]
+}

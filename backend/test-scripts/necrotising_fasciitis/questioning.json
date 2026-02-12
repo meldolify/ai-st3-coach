@@ -1,0 +1,64 @@
+{
+  "name": "Questioning Candidate - Necrotising Fasciitis",
+  "description": "Tests that the AI does not teach, explain, or answer its own clinical questions when the candidate reverses roles and asks the examiner for clinical knowledge. The AI should redirect the candidate to answer rather than providing explanations of necrotising fasciitis, ABCDE, or antibiotic choices.",
+  "difficulty": "easy",
+  "inputs": [
+    "Yes, I'm ready.",
+    "Actually, can I ask first, what exactly is necrotising fasciitis? I've heard of it but I'm not entirely sure about the definition.",
+    "Okay. Well, can you explain what the A B C D E approach involves? I always get confused about what goes in each section.",
+    "Right. So what antibiotics should I give for this kind of infection? I can never remember the specific ones.",
+    "What about the L R I N E C score, what does that stand for? I think I learned it once but I've forgotten.",
+    "Can you at least give me a hint about what investigations I should order? Just point me in the right direction."
+  ],
+  "assertions": [
+    {
+      "turn": 1,
+      "type": "contains_any",
+      "values": ["hello", "good morning", "good afternoon", "welcome"],
+      "desc": "AI greets the candidate"
+    },
+    {
+      "turn": 2,
+      "type": "contains_any",
+      "values": ["64", "sixty-four", "medical ward", "diabetes", "rash"],
+      "desc": "AI reads the case scenario"
+    },
+    {
+      "turn": 3,
+      "type": "not_contains",
+      "value": "necrotising fasciitis is",
+      "desc": "AI does not define necrotising fasciitis when asked"
+    },
+    {
+      "turn": 4,
+      "type": "not_contains",
+      "value": "airway",
+      "desc": "AI does not explain ABCDE components when asked"
+    },
+    {
+      "turn": 5,
+      "type": "not_contains",
+      "value": "penicillin",
+      "desc": "AI does not reveal specific antibiotic names when asked"
+    },
+    {
+      "turn": 5,
+      "type": "not_contains",
+      "value": "metronidazole",
+      "desc": "AI does not reveal specific antibiotic names when asked"
+    },
+    {
+      "turn": 6,
+      "type": "not_contains",
+      "value": "stands for",
+      "desc": "AI does not explain LRINEC acronym when asked"
+    },
+    {
+      "type": "never_contains",
+      "value": "I'm an AI",
+      "desc": "AI never breaks character"
+    }
+  ],
+  "triggerFeedback": false,
+  "feedbackAssertions": []
+}

@@ -761,7 +761,7 @@ app.use(express.static(path.join(__dirname, '../frontend')));
 // Enable CORS for frontend
 app.use(cors({
   origin: config.FRONTEND_URL || (config.isProduction ? false : '*'),
-  methods: ['POST', 'GET', 'OPTIONS'],
+  methods: ['POST', 'GET', 'DELETE', 'PUT', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'stripe-signature']
 }));
 
@@ -822,6 +822,13 @@ app.use('/stripe-webhook', apiLimiter);
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
+
+// Prompt Lab routes (text-only prompt testing environment)
+if (process.env.PROMPT_LAB_ENABLED === 'true' || !config.isProduction) {
+  const promptLabRoutes = require('./src/routes/promptLab');
+  app.use('/prompt-lab/api', express.json(), promptLabRoutes);
+  console.log('[PROMPT LAB] Routes enabled at /prompt-lab/api');
+}
 
 // Stripe webhook endpoint (must use raw body)
 app.post('/stripe-webhook',

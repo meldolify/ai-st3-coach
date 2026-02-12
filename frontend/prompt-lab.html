@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Prompt Lab</title>
+  <link rel="stylesheet" href="css/prompt-lab.css">
+</head>
+<body>
+
+<!-- Header -->
+<header class="pl-header">
+  <h1>Prompt Lab</h1>
+  <span style="color: var(--pl-text-dim); font-size: 13px;">Necrotising Fasciitis</span>
+  <div class="pl-header-controls">
+    <select id="difficultySelect" class="pl-select">
+      <option value="easy">Easy (John)</option>
+      <option value="medium">Medium (Elliot)</option>
+      <option value="strict">Strict (Perry)</option>
+    </select>
+    <button id="newSessionBtn" class="pl-btn pl-btn-primary">New Session</button>
+    <button id="savePromptBtn" class="pl-btn">Save Prompt</button>
+    <span id="statusIndicator" style="font-size: 12px; color: var(--pl-text-dim);">No session</span>
+  </div>
+</header>
+
+<!-- Main 3-Panel Layout -->
+<main class="pl-main">
+
+  <!-- LEFT PANEL: Prompt Editor -->
+  <section class="pl-panel">
+    <div class="pl-tabs">
+      <button class="pl-tab active" data-tab="core">Core</button>
+      <button class="pl-tab" data-tab="difficulty">Difficulty</button>
+      <button class="pl-tab" data-tab="clinical">Clinical</button>
+      <button class="pl-tab" data-tab="feedback">Feedback</button>
+    </div>
+    <div class="pl-editor-wrap">
+      <textarea id="promptEditor" class="pl-editor" placeholder="Loading prompt..."></textarea>
+    </div>
+    <div class="pl-editor-footer">
+      <span id="charCount">0 chars</span>
+      <div style="display: flex; gap: 6px;">
+        <button id="revertBtn" class="pl-btn pl-btn-sm">Revert</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CENTER PANEL: Chat / Test Runner -->
+  <section class="pl-panel">
+    <div class="pl-panel-header">
+      <div class="pl-mode-toggle">
+        <button class="pl-mode-btn active" data-mode="manual">Manual</button>
+        <button class="pl-mode-btn" data-mode="auto">Auto Test</button>
+      </div>
+      <div style="display: flex; gap: 6px;">
+        <button id="clearChatBtn" class="pl-btn pl-btn-sm">Clear</button>
+      </div>
+    </div>
+
+    <!-- Manual Chat Mode -->
+    <div id="manualMode" class="pl-panel-body" style="display: flex; flex-direction: column;">
+      <div id="chatMessages" class="pl-chat-messages">
+        <div class="pl-empty">
+          <span>Start a session to begin chatting</span>
+          <span style="font-size: 11px;">Select difficulty, then click "New Session"</span>
+        </div>
+      </div>
+      <div class="pl-chat-actions">
+        <button id="feedbackBtn" class="pl-btn pl-btn-sm" disabled>Request Feedback</button>
+        <button id="saveManualBtn" class="pl-btn pl-btn-sm" disabled>Save Transcript</button>
+      </div>
+      <div class="pl-chat-input-wrap">
+        <input id="chatInput" class="pl-chat-input" type="text" placeholder="Type a message..." disabled>
+        <button id="sendBtn" class="pl-btn pl-btn-primary" disabled>Send</button>
+      </div>
+    </div>
+
+    <!-- Auto Test Mode -->
+    <div id="autoMode" class="pl-panel-body" style="display: none; flex-direction: column;">
+      <div id="autoTestContent" class="pl-chat-messages">
+        <div class="pl-empty">
+          <span>Select test scripts from the right panel</span>
+          <span style="font-size: 11px;">Then click "Run Selected" to execute</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RIGHT PANEL: Tests & Results -->
+  <section class="pl-panel">
+    <div class="pl-panel-header">
+      <span class="pl-panel-title">Tests & Results</span>
+    </div>
+    <div class="pl-panel-body">
+      <div class="pl-section-divider">Test Scripts</div>
+      <div id="testList" class="pl-test-list">
+        <div class="pl-loading"><div class="pl-spinner"></div> Loading tests...</div>
+      </div>
+      <div style="padding: 8px 14px;">
+        <button id="runTestsBtn" class="pl-btn pl-btn-primary" style="width: 100%;" disabled>Run Selected</button>
+      </div>
+
+      <div class="pl-section-divider">Assertions</div>
+      <div id="assertionResults" class="pl-assertions">
+        <div class="pl-empty" style="padding: 16px;">No test results yet</div>
+      </div>
+
+      <div class="pl-section-divider">Saved Transcripts</div>
+      <div id="transcriptList" class="pl-transcript-list">
+        <div class="pl-empty" style="padding: 16px;">No transcripts saved</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Transcript Viewer Modal -->
+<div id="transcriptModal" class="pl-modal-overlay hidden">
+  <div class="pl-modal">
+    <div class="pl-modal-header">
+      <h2 id="modalTitle">Transcript</h2>
+      <button id="modalCloseBtn" class="pl-modal-close">&times;</button>
+    </div>
+    <div id="modalBody" class="pl-modal-body"></div>
+  </div>
+</div>
+
+<script>
+// ================================================================
+// API CLIENT
+// ================================================================
+
+const API_BASE = (() => {
+  const hostname = window.location.hostname;
+  if (hostname === 'localhost' || hostname === '127.0.0.1') {
+    return 'http://localhost:3000/prompt-lab/api';
+  }
+  return 'https://api.reviva.live/prompt-lab/api';
+})();
+
+const api = {
+  async _fetch(path, options = {}) {
+    const res = await fetch(API_BASE + path, {
+      headers: { 'Content-Type': 'application/json' },
+      ...options,
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ error: res.statusText }));
+      throw new Error(err.error || 'HTTP ' + res.status);
+    }
+    return res.json();
+  },
+
+  createSession(promptSections, metadata) {
+    return this._fetch('/session', {
+      method: 'POST',
+      body: JSON.stringify({ promptSections, metadata }),
+    });
+  },
+
+  chat(sessionId, message) {
+    return this._fetch('/chat', {
+      method: 'POST',
+      body: JSON.stringify({ sessionId, message }),
+    });
+  },
+
+  feedback(sessionId, feedbackPrompt) {
+    return this._fetch('/feedback', {
+      method: 'POST',
+      body: JSON.stringify({ sessionId, feedbackPrompt: feedbackPrompt || undefined }),
+    });
+  },
+
+  saveManual(sessionId) {
+    return this._fetch('/save-manual', {
+      method: 'POST',
+      body: JSON.stringify({ sessionId }),
+    });
+  },
+
+  loadPrompt(difficulty) {
+    return this._fetch('/prompts/' + difficulty);
+  },
+
+  savePrompt(difficulty, sections) {
+    return this._fetch('/prompts/' + difficulty, {
+      method: 'PUT',
+      body: JSON.stringify({ sections }),
+    });
+  },
+
+  loadFeedbackPrompt(difficulty) {
+    return this._fetch('/feedback-prompt/' + difficulty);
+  },
+
+  saveFeedbackPrompt(difficulty, content) {
+    return this._fetch('/feedback-prompt/' + difficulty, {
+      method: 'PUT',
+      body: JSON.stringify({ content }),
+    });
+  },
+
+  listTests() { return this._fetch('/tests'); },
+
+  runTest(testId, promptSections, feedbackPrompt) {
+    return this._fetch('/run-test', {
+      method: 'POST',
+      body: JSON.stringify({ testId, promptSections: promptSections || undefined, feedbackPrompt: feedbackPrompt || undefined }),
+    });
+  },
+
+  listTranscripts() { return this._fetch('/transcripts'); },
+  loadTranscript(id) { return this._fetch('/transcripts/' + id); },
+  deleteTranscript(id) { return this._fetch('/transcripts/' + id, { method: 'DELETE' }); },
+};
+
+// ================================================================
+// STATE
+// ================================================================
+
+let state = {
+  sessionId: null,
+  difficulty: 'easy',
+  activeTab: 'core',
+  mode: 'manual',
+  loading: false,
+  promptSections: { core: '', difficulty: '', clinical: '' },
+  feedbackPrompt: '',
+  savedSections: null,
+  savedFeedback: null,
+};
+
+// ================================================================
+// DOM REFS
+// ================================================================
+
+const $ = (id) => document.getElementById(id);
+const difficultySelect = $('difficultySelect');
+const newSessionBtn = $('newSessionBtn');
+const savePromptBtn = $('savePromptBtn');
+const statusIndicator = $('statusIndicator');
+const promptEditor = $('promptEditor');
+const charCountEl = $('charCount');
+const revertBtn = $('revertBtn');
+const chatMessages = $('chatMessages');
+const chatInput = $('chatInput');
+const sendBtn = $('sendBtn');
+const feedbackBtn = $('feedbackBtn');
+const saveManualBtn = $('saveManualBtn');
+const clearChatBtn = $('clearChatBtn');
+const testListEl = $('testList');
+const runTestsBtn = $('runTestsBtn');
+const assertionResultsEl = $('assertionResults');
+const transcriptListEl = $('transcriptList');
+const manualModeEl = $('manualMode');
+const autoModeEl = $('autoMode');
+const autoTestContent = $('autoTestContent');
+
+// ================================================================
+// SAFE DOM HELPERS
+// ================================================================
+
+function escapeHtml(str) {
+  if (!str) return '';
+  const div = document.createElement('div');
+  div.textContent = String(str);
+  return div.innerHTML;
+}
+
+function createEl(tag, className, textContent) {
+  const el = document.createElement(tag);
+  if (className) el.className = className;
+  if (textContent) el.textContent = textContent;
+  return el;
+}
+
+function setStatus(text, isError) {
+  statusIndicator.textContent = text;
+  statusIndicator.style.color = isError ? 'var(--pl-red)' : 'var(--pl-text-dim)';
+}
+
+// ================================================================
+// PROMPT EDITOR
+// ================================================================
+
+function getEditorContent() {
+  if (state.activeTab === 'feedback') return state.feedbackPrompt;
+  return state.promptSections[state.activeTab] || '';
+}
+
+function setEditorContent(text) {
+  if (state.activeTab === 'feedback') {
+    state.feedbackPrompt = text;
+  } else {
+    state.promptSections[state.activeTab] = text;
+  }
+}
+
+function syncEditorToState() {
+  setEditorContent(promptEditor.value);
+}
+
+function syncStateToEditor() {
+  promptEditor.value = getEditorContent();
+  charCountEl.textContent = promptEditor.value.length + ' chars';
+}
+
+async function loadPrompt() {
+  try {
+    const data = await api.loadPrompt(state.difficulty);
+    state.promptSections = { ...data.sections };
+    state.savedSections = { ...data.sections };
+
+    try {
+      const fb = await api.loadFeedbackPrompt(state.difficulty);
+      state.feedbackPrompt = fb.content;
+      state.savedFeedback = fb.content;
+    } catch (e) {
+      state.feedbackPrompt = '';
+      state.savedFeedback = '';
+    }
+
+    syncStateToEditor();
+    setStatus('Prompt loaded');
+  } catch (err) {
+    setStatus('Error: ' + err.message, true);
+  }
+}
+
+async function savePrompt() {
+  syncEditorToState();
+  try {
+    await api.savePrompt(state.difficulty, state.promptSections);
+    state.savedSections = { ...state.promptSections };
+
+    if (state.feedbackPrompt !== state.savedFeedback) {
+      await api.saveFeedbackPrompt(state.difficulty, state.feedbackPrompt);
+      state.savedFeedback = state.feedbackPrompt;
+    }
+
+    setStatus('Prompt saved');
+  } catch (err) {
+    setStatus('Save error: ' + err.message, true);
+  }
+}
+
+function revertPrompt() {
+  if (state.activeTab === 'feedback') {
+    state.feedbackPrompt = state.savedFeedback || '';
+  } else if (state.savedSections) {
+    state.promptSections[state.activeTab] = state.savedSections[state.activeTab] || '';
+  }
+  syncStateToEditor();
+  setStatus('Reverted');
+}
+
+// Tab switching
+document.querySelectorAll('.pl-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    syncEditorToState();
+    document.querySelectorAll('.pl-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    state.activeTab = tab.dataset.tab;
+    syncStateToEditor();
+  });
+});
+
+promptEditor.addEventListener('input', () => {
+  charCountEl.textContent = promptEditor.value.length + ' chars';
+});
+
+// ================================================================
+// CHAT INTERFACE
+// ================================================================
+
+function addMessage(role, text, extraClass) {
+  const div = createEl('div', '', '');
+  const cls = extraClass || (role === 'user' ? 'pl-msg-user' : role === 'system' ? 'pl-msg-system' : 'pl-msg-assistant');
+  div.className = 'pl-msg ' + cls;
+  div.textContent = text;
+  chatMessages.appendChild(div);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function addFeedbackSection(sectionNum, text) {
+  const div = createEl('div', 'pl-msg pl-msg-feedback');
+  const label = createEl('div', 'pl-feedback-label', 'Feedback Section ' + sectionNum + '/6');
+  const content = createEl('div', '', text);
+  div.appendChild(label);
+  div.appendChild(content);
+  chatMessages.appendChild(div);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function addFeedbackSummary(summary) {
+  const container = createEl('div', 'pl-feedback-summary');
+
+  const scoreClass = summary.score >= 4 ? 'pl-score-high' : summary.score >= 2 ? 'pl-score-mid' : 'pl-score-low';
+  const scoreEl = createEl('div', 'pl-feedback-score ' + scoreClass, summary.score + '/5');
+  container.appendChild(scoreEl);
+
+  if (summary.overallImpression) {
+    const imp = createEl('div', 'pl-feedback-detail');
+    const strong = createEl('strong', '', 'Impression: ');
+    imp.appendChild(strong);
+    imp.appendChild(document.createTextNode(summary.overallImpression));
+    container.appendChild(imp);
+  }
+
+  if (summary.strengths && summary.strengths.length) {
+    const str = createEl('div', 'pl-feedback-detail');
+    const strong = createEl('strong', '', 'Strengths: ');
+    str.appendChild(strong);
+    str.appendChild(document.createTextNode(summary.strengths.join('; ')));
+    container.appendChild(str);
+  }
+
+  if (summary.improvements && summary.improvements.length) {
+    const imp = createEl('div', 'pl-feedback-detail');
+    const strong = createEl('strong', '', 'Improvements: ');
+    imp.appendChild(strong);
+    imp.appendChild(document.createTextNode(summary.improvements.join('; ')));
+    container.appendChild(imp);
+  }
+
+  chatMessages.appendChild(container);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function clearChat() {
+  chatMessages.textContent = '';
+  if (!state.sessionId) {
+    const empty = createEl('div', 'pl-empty');
+    empty.appendChild(createEl('span', '', 'Start a session to begin chatting'));
+    chatMessages.appendChild(empty);
+  }
+}
+
+async function createSession() {
+  syncEditorToState();
+  try {
+    setStatus('Creating session...');
+    const { sessionId } = await api.createSession(state.promptSections, { difficulty: state.difficulty });
+    state.sessionId = sessionId;
+
+    chatInput.disabled = false;
+    sendBtn.disabled = false;
+    feedbackBtn.disabled = false;
+    saveManualBtn.disabled = false;
+
+    clearChat();
+    addMessage('system', 'Session created (' + state.difficulty + ')');
+    setStatus('Session: ' + sessionId.substring(0, 12) + '...');
+    chatInput.focus();
+  } catch (err) {
+    setStatus('Error: ' + err.message, true);
+  }
+}
+
+async function sendMessage() {
+  const text = chatInput.value.trim();
+  if (!text || !state.sessionId || state.loading) return;
+
+  state.loading = true;
+  chatInput.value = '';
+  sendBtn.disabled = true;
+
+  addMessage('user', text);
+
+  try {
+    const { response } = await api.chat(state.sessionId, text);
+    addMessage('assistant', response);
+  } catch (err) {
+    addMessage('system', 'Error: ' + err.message);
+  }
+
+  state.loading = false;
+  sendBtn.disabled = false;
+  chatInput.focus();
+}
+
+async function requestFeedback() {
+  if (!state.sessionId || state.loading) return;
+
+  state.loading = true;
+  feedbackBtn.disabled = true;
+  chatInput.disabled = true;
+  sendBtn.disabled = true;
+  addMessage('system', 'Generating feedback (6 sections + summary)...');
+
+  try {
+    syncEditorToState();
+    const fbPrompt = state.feedbackPrompt || undefined;
+    const { sections, summary } = await api.feedback(state.sessionId, fbPrompt);
+
+    sections.forEach((text, i) => addFeedbackSection(i + 1, text));
+    addFeedbackSummary(summary);
+    addMessage('system', 'Feedback complete. Start a new session to continue testing.');
+  } catch (err) {
+    addMessage('system', 'Feedback error: ' + err.message);
+    feedbackBtn.disabled = false;
+    chatInput.disabled = false;
+    sendBtn.disabled = false;
+  }
+
+  state.loading = false;
+}
+
+async function saveManualTranscript() {
+  if (!state.sessionId) return;
+  try {
+    const { transcriptId } = await api.saveManual(state.sessionId);
+    addMessage('system', 'Transcript saved: ' + transcriptId);
+    loadTranscripts();
+  } catch (err) {
+    addMessage('system', 'Save error: ' + err.message);
+  }
+}
+
+// ================================================================
+// MODE SWITCHING
+// ================================================================
+
+document.querySelectorAll('.pl-mode-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.pl-mode-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    state.mode = btn.dataset.mode;
+    manualModeEl.style.display = state.mode === 'manual' ? 'flex' : 'none';
+    autoModeEl.style.display = state.mode === 'auto' ? 'flex' : 'none';
+  });
+});
+
+// ================================================================
+// TEST RUNNER
+// ================================================================
+
+let availableTests = [];
+let selectedTests = new Set();
+
+async function loadTests() {
+  try {
+    const { tests } = await api.listTests();
+    availableTests = tests;
+    renderTestList();
+  } catch (err) {
+    testListEl.textContent = '';
+    testListEl.appendChild(createEl('div', 'pl-empty', err.message));
+  }
+}
+
+function renderTestList() {
+  testListEl.textContent = '';
+
+  if (availableTests.length === 0) {
+    testListEl.appendChild(createEl('div', 'pl-empty', 'No test scripts found'));
+    return;
+  }
+
+  availableTests.forEach(t => {
+    const label = createEl('label', 'pl-test-item' + (selectedTests.has(t.id) ? ' selected' : ''));
+
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.checked = selectedTests.has(t.id);
+    checkbox.dataset.testId = t.id;
+    checkbox.addEventListener('change', () => {
+      if (checkbox.checked) selectedTests.add(t.id);
+      else selectedTests.delete(t.id);
+      renderTestList();
+      runTestsBtn.disabled = selectedTests.size === 0;
+    });
+
+    const info = createEl('div', 'pl-test-item-info');
+    info.appendChild(createEl('div', 'pl-test-item-name', t.name));
+    info.appendChild(createEl('div', 'pl-test-item-desc', t.inputCount + ' inputs' + (t.triggerFeedback ? ' + feedback' : '')));
+
+    label.appendChild(checkbox);
+    label.appendChild(info);
+    testListEl.appendChild(label);
+  });
+}
+
+async function runSelectedTests() {
+  if (selectedTests.size === 0 || state.loading) return;
+
+  state.loading = true;
+  runTestsBtn.disabled = true;
+
+  // Switch to auto mode
+  document.querySelectorAll('.pl-mode-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('[data-mode="auto"]').classList.add('active');
+  manualModeEl.style.display = 'none';
+  autoModeEl.style.display = 'flex';
+  state.mode = 'auto';
+
+  syncEditorToState();
+  const promptSections = { ...state.promptSections };
+  const feedbackPrompt = state.feedbackPrompt || undefined;
+
+  let allAssertions = [];
+  autoTestContent.textContent = '';
+
+  for (const testId of selectedTests) {
+    const testInfo = availableTests.find(t => t.id === testId);
+    const name = testInfo ? testInfo.name : testId;
+
+    const statusEl = createEl('div', 'pl-msg pl-msg-system', 'Running: ' + name + '...');
+    autoTestContent.appendChild(statusEl);
+    autoTestContent.scrollTop = autoTestContent.scrollHeight;
+
+    try {
+      const result = await api.runTest(testId, promptSections, feedbackPrompt);
+
+      // Show conversation
+      for (const msg of result.history) {
+        if (msg.role === 'system') continue;
+        const div = createEl('div', 'pl-msg ' + (msg.role === 'user' ? 'pl-msg-user' : 'pl-msg-assistant'), msg.content);
+        autoTestContent.appendChild(div);
+      }
+
+      // Show feedback score if present
+      if (result.feedback && result.feedback.summary) {
+        const s = result.feedback.summary;
+        const scoreClass = s.score >= 4 ? 'pl-score-high' : s.score >= 2 ? 'pl-score-mid' : 'pl-score-low';
+        const fbDiv = createEl('div', 'pl-feedback-summary');
+        fbDiv.appendChild(createEl('div', 'pl-feedback-score ' + scoreClass, s.score + '/5'));
+        autoTestContent.appendChild(fbDiv);
+      }
+
+      // Show result summary
+      const a = result.assertions;
+      const resultEl = createEl('div', 'pl-msg pl-msg-system', name + ': ' + a.passed + '/' + a.total + ' assertions passed');
+      resultEl.style.color = a.failed === 0 ? 'var(--pl-green)' : 'var(--pl-red)';
+      autoTestContent.appendChild(resultEl);
+
+      allAssertions = allAssertions.concat(
+        result.assertions.details.map(d => Object.assign({}, d, { testName: name }))
+      );
+    } catch (err) {
+      const errEl = createEl('div', 'pl-msg pl-msg-system', name + ': Error - ' + err.message);
+      errEl.style.color = 'var(--pl-red)';
+      autoTestContent.appendChild(errEl);
+    }
+
+    autoTestContent.scrollTop = autoTestContent.scrollHeight;
+  }
+
+  renderAssertions(allAssertions);
+  loadTranscripts();
+
+  state.loading = false;
+  runTestsBtn.disabled = selectedTests.size === 0;
+  setStatus('Tests complete');
+}
+
+function renderAssertions(details) {
+  assertionResultsEl.textContent = '';
+
+  if (!details || details.length === 0) {
+    assertionResultsEl.appendChild(createEl('div', 'pl-empty', 'No assertions'));
+    return;
+  }
+
+  const passed = details.filter(d => d.passed).length;
+  assertionResultsEl.appendChild(createEl('div', 'pl-assertion-title', passed + '/' + details.length + ' passed'));
+
+  details.forEach(d => {
+    const item = createEl('div', 'pl-assertion-item ' + (d.passed ? 'pl-assertion-pass' : 'pl-assertion-fail'));
+    item.appendChild(createEl('span', 'pl-assertion-icon', d.passed ? '\u2713' : '\u2717'));
+
+    const text = d.desc || d.type;
+    const label = createEl('span', '', text);
+    if (d.testName) {
+      const sub = createEl('span', '', ' (' + d.testName + ')');
+      sub.style.color = 'var(--pl-text-dim)';
+      label.appendChild(sub);
+    }
+    item.appendChild(label);
+    assertionResultsEl.appendChild(item);
+  });
+}
+
+// ================================================================
+// TRANSCRIPTS
+// ================================================================
+
+async function loadTranscripts() {
+  try {
+    const { transcripts } = await api.listTranscripts();
+    transcriptListEl.textContent = '';
+
+    if (transcripts.length === 0) {
+      transcriptListEl.appendChild(createEl('div', 'pl-empty', 'No transcripts saved'));
+      return;
+    }
+
+    transcripts.slice(0, 20).forEach(t => {
+      const time = t.timestamp ? new Date(t.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
+      const date = t.timestamp ? new Date(t.timestamp).toLocaleDateString([], { month: 'short', day: 'numeric' }) : '';
+
+      const item = createEl('div', 'pl-transcript-item');
+      item.dataset.id = t.id;
+
+      const left = createEl('div');
+      left.appendChild(createEl('div', '', t.testName || t.id));
+      left.firstChild.style.fontWeight = '500';
+      left.appendChild(createEl('div', 'pl-transcript-meta', date + ' ' + time + ' \u00b7 ' + (t.difficulty || '')));
+
+      const right = createEl('div');
+      right.style.cssText = 'display: flex; align-items: center; gap: 8px;';
+
+      if (t.assertionsPassed != null) {
+        const assertSpan = createEl('span', '', t.assertionsPassed + '/' + (t.assertionsPassed + t.assertionsFailed));
+        assertSpan.style.color = t.assertionsFailed === 0 ? 'var(--pl-green)' : 'var(--pl-red)';
+        right.appendChild(assertSpan);
+      }
+
+      if (t.feedbackScore != null) {
+        const scoreClass = t.feedbackScore >= 4 ? 'pl-score-high' : t.feedbackScore >= 2 ? 'pl-score-mid' : 'pl-score-low';
+        right.appendChild(createEl('span', 'pl-transcript-score ' + scoreClass, t.feedbackScore + '/5'));
+      }
+
+      const deleteBtn = createEl('button', 'pl-btn pl-btn-sm pl-btn-danger', '\u2717');
+      deleteBtn.title = 'Delete';
+      deleteBtn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        if (confirm('Delete this transcript?')) {
+          await api.deleteTranscript(t.id);
+          loadTranscripts();
+        }
+      });
+      right.appendChild(deleteBtn);
+
+      item.appendChild(left);
+      item.appendChild(right);
+
+      item.addEventListener('click', () => viewTranscript(t.id));
+      transcriptListEl.appendChild(item);
+    });
+  } catch (err) {
+    transcriptListEl.textContent = '';
+    transcriptListEl.appendChild(createEl('div', 'pl-empty', err.message));
+  }
+}
+
+async function viewTranscript(id) {
+  try {
+    const t = await api.loadTranscript(id);
+    const modal = $('transcriptModal');
+    $('modalTitle').textContent = t.metadata ? t.metadata.testName || id : id;
+
+    const body = $('modalBody');
+    body.textContent = '';
+
+    // Metadata
+    const meta = createEl('div', '', '');
+    meta.style.cssText = 'margin-bottom: 16px; font-size: 12px; color: var(--pl-text-dim);';
+    const parts = [];
+    if (t.metadata && t.metadata.timestamp) parts.push(new Date(t.metadata.timestamp).toLocaleString());
+    if (t.metadata && t.metadata.difficulty) parts.push('Difficulty: ' + t.metadata.difficulty);
+    if (t.metadata && t.metadata.duration) parts.push('Duration: ' + t.metadata.duration.toFixed(1) + 's');
+    if (t.metadata && t.metadata.promptHash) parts.push('Hash: ' + t.metadata.promptHash);
+    meta.textContent = parts.join(' \u00b7 ');
+    body.appendChild(meta);
+
+    // Assertions
+    if (t.assertions && t.assertions.details) {
+      body.appendChild(createEl('div', 'pl-section-divider', 'Assertions: ' + t.assertions.passed + '/' + t.assertions.total));
+      t.assertions.details.forEach(d => {
+        const item = createEl('div', 'pl-assertion-item ' + (d.passed ? 'pl-assertion-pass' : 'pl-assertion-fail'));
+        item.appendChild(createEl('span', 'pl-assertion-icon', d.passed ? '\u2713' : '\u2717'));
+        const label = createEl('span', '', (d.desc || d.type) + ': ');
+        const actual = createEl('em', '', d.actual || '');
+        actual.style.color = 'var(--pl-text-dim)';
+        label.appendChild(actual);
+        item.appendChild(label);
+        body.appendChild(item);
+      });
+    }
+
+    // Conversation
+    body.appendChild(createEl('div', 'pl-section-divider', 'Conversation'));
+    if (t.history) {
+      t.history.forEach(msg => {
+        if (msg.role === 'system') return;
+        const div = createEl('div', 'pl-msg ' + (msg.role === 'user' ? 'pl-msg-user' : 'pl-msg-assistant'), msg.content);
+        div.style.margin = '6px 0';
+        body.appendChild(div);
+      });
+    }
+
+    // Feedback
+    if (t.feedback && t.feedback.sections) {
+      const score = t.feedback.summary ? t.feedback.summary.score : '?';
+      body.appendChild(createEl('div', 'pl-section-divider', 'Feedback (Score: ' + score + '/5)'));
+      t.feedback.sections.forEach((s, i) => {
+        const fbDiv = createEl('div', 'pl-msg pl-msg-feedback');
+        fbDiv.style.margin = '6px 0';
+        fbDiv.appendChild(createEl('div', 'pl-feedback-label', 'Section ' + (i + 1) + '/6'));
+        fbDiv.appendChild(createEl('div', '', s));
+        body.appendChild(fbDiv);
+      });
+    }
+
+    modal.classList.remove('hidden');
+  } catch (err) {
+    alert('Error loading transcript: ' + err.message);
+  }
+}
+
+// ================================================================
+// EVENT LISTENERS
+// ================================================================
+
+difficultySelect.addEventListener('change', () => {
+  state.difficulty = difficultySelect.value;
+  loadPrompt();
+});
+
+newSessionBtn.addEventListener('click', createSession);
+savePromptBtn.addEventListener('click', savePrompt);
+revertBtn.addEventListener('click', revertPrompt);
+sendBtn.addEventListener('click', sendMessage);
+feedbackBtn.addEventListener('click', requestFeedback);
+saveManualBtn.addEventListener('click', saveManualTranscript);
+clearChatBtn.addEventListener('click', clearChat);
+runTestsBtn.addEventListener('click', runSelectedTests);
+
+chatInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+});
+
+$('modalCloseBtn').addEventListener('click', () => {
+  $('transcriptModal').classList.add('hidden');
+});
+
+$('transcriptModal').addEventListener('click', (e) => {
+  if (e.target === $('transcriptModal')) {
+    $('transcriptModal').classList.add('hidden');
+  }
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') $('transcriptModal').classList.add('hidden');
+});
+
+// ================================================================
+// INIT
+// ================================================================
+
+async function init() {
+  setStatus('Loading...');
+  await loadPrompt();
+  loadTests();
+  loadTranscripts();
+}
+
+init();
+</script>
+
+</body>
+</html>
