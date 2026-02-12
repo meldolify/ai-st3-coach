@@ -73,6 +73,24 @@ AudioStreamer (ScriptProcessorNode, 4096 buffer) → 16kHz mono Int16 PCM → ba
 
 On End → NEW GPT session with dedicated feedback prompt + transcript → 6 spoken sections with TTS → JSON summary (max_tokens: 500). Score 0-5. Prompts in `backend/prompts/feedback/`. `feedbackHistory[]` separate from interview history.
 
+### Prompt Lab (Text-Only Prompt Testing)
+
+Text-in/text-out environment for rapid prompt iteration without STT/TTS overhead. REST API (no WebSocket). Accessible at `/prompt-lab` (Vercel clean URLs).
+
+**Architecture:** Browser → REST `/prompt-lab/api/*` → GPT-4o-mini (no TTS) → JSON responses. Sessions use in-memory Map with `pl_` prefixed IDs, separate from production sessions.
+
+**Features:**
+- 4-tab inline prompt editor (Core Behaviours, Difficulty/Personality, Clinical Scenario, Feedback Prompt)
+- Manual chat interface with feedback trigger (returns all 6 sections + JSON summary at once)
+- 7 automated test scripts with assertion system (good/poor/excellent/derailing/questioning/feedback_interrupt/disruptive candidates)
+- Transcript saving and viewer
+
+**Test prompts isolated** in `backend/prompts/test/` (copied from production). Currently nec fasc only, all 3 difficulties. 3 difficulty-specific feedback prompts with different examiner personalities (easy=John/supportive, medium=Elliot/balanced, strict=Perry/rigorous).
+
+**Gating:** `PROMPT_LAB_ENABLED=true` env var in production (Render). Auto-enabled in dev (`!config.isProduction`). No auth — hidden URL only.
+
+**Key files:** `backend/src/routes/promptLab.js` (12 REST endpoints), `backend/src/services/PromptLabService.js` (session/chat/feedback/tests/transcripts), `backend/src/utils/promptParser.js` (3-section parse/combine), `frontend/prompt-lab.html` (single-page UI with embedded JS), `frontend/css/prompt-lab.css`
+
 ### Critical File Structure
 
 ```
@@ -88,7 +106,14 @@ backend/
 │   ├── Lines 210-340: WebSocket message handlers
 │   └── Lines 340+: HTTP endpoints (Stripe, Supabase integration)
 ├── src/services/ServerVAD.js      # Silero VAD + float32ToWavBuffer
+├── src/services/PromptLabService.js # Prompt Lab: sessions, chat, feedback, tests, transcripts
+├── src/routes/promptLab.js        # Prompt Lab REST API (12 endpoints at /prompt-lab/api)
+├── src/utils/promptParser.js      # Parse/combine 3-section prompt format
 ├── prompts/                       # 231 scenario files (hierarchical)
+├── prompts/test/                  # Isolated test prompts for Prompt Lab (nec fasc)
+├── prompts/test/feedback/         # Difficulty-specific feedback prompts (easy/medium/strict)
+├── test-scripts/                  # Automated test definitions (7 JSON files)
+├── test-results/                  # Saved transcripts (git-ignored)
 ├── __tests__/                     # 51 unit tests
 │   ├── scenario-loader.test.js
 │   ├── server.test.js
@@ -123,6 +148,8 @@ frontend/
 │   │   └── SimpleVAD.js           # Volume-based VAD fallback (~470 lines)
 │   └── utils/
 │       └── audio-utils.js         # Shared audio utilities (~100 lines)
+├── prompt-lab.html                # Prompt Lab: text-only prompt testing UI (single-page, embedded JS)
+├── css/prompt-lab.css             # Prompt Lab styles (dark theme)
 ├── config.js                      # Environment config (Supabase, Stripe, FREE_TIER_SCENARIOS)
 └── serve.js                       # Static file server (port 3001, CWD-relative paths)
 
@@ -196,7 +223,7 @@ npm run format        # Prettier
 
 ### Render Environment Variables
 
-`OPENAI_API_KEY`, `GOOGLE_APPLICATION_CREDENTIALS_JSON` (JSON string not file path), `SUPABASE_URL`, `SUPABASE_SERVICE_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_ID_MONTHLY`, `STRIPE_PRICE_ID_ANNUAL`, `FRONTEND_URL=https://www.reviva.live`
+`OPENAI_API_KEY`, `GOOGLE_APPLICATION_CREDENTIALS_JSON` (JSON string not file path), `SUPABASE_URL`, `SUPABASE_SERVICE_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_ID_MONTHLY`, `STRIPE_PRICE_ID_ANNUAL`, `FRONTEND_URL=https://www.reviva.live`, `PROMPT_LAB_ENABLED=true`
 
 ### Local Environment (`backend/.env`)
 
@@ -312,6 +339,13 @@ Main branch: `main` (stable, production-ready). Backup tag: `pre-dev-environment
 - `frontend/js/vad/` files still exist but not loaded
 
 ### Dev Tools
+
+**Prompt Lab** at `frontend/prompt-lab.html`:
+- Local: `http://localhost:3000/prompt-lab.html` (backend serves frontend static files)
+- Production: `https://www.reviva.live/prompt-lab` (Vercel clean URLs strip `.html`)
+- REST API: 12 endpoints at `/prompt-lab/api/` (session, chat, feedback, prompts CRUD, tests, transcripts)
+- Test scripts in `backend/test-scripts/necrotising_fasciitis/` (7 JSON files)
+- Transcripts saved to `backend/test-results/` (git-ignored)
 
 UI Annotator at `frontend/tools/ui-annotator.html`:
 1. Start frontend server: `cd frontend && npx serve . -l 5500` (no `-s` flag)

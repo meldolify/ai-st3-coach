@@ -1,6 +1,7 @@
 // Load configuration first (handles env vars, validation, and Google Cloud credentials)
 const config = require('./src/config');
 
+const http = require('http');
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
@@ -10,6 +11,10 @@ const WebSocket = require('ws');
 const fs = require('fs');
 const path = require('path');
 const url = require('url');
+
+// Create Express app and HTTP server early so both REST and WebSocket share one port
+const app = express();
+const server = http.createServer(app);
 
 // Import services
 const openaiService = require('./src/services/OpenAIService');
@@ -201,8 +206,7 @@ async function streamResponseToClient(session, ws, history, options = {}) {
 }
 
 const wss = new WebSocket.Server({
-  port: config.PORT,
-  host: '0.0.0.0', // Bind to all network interfaces for production deployment
+  server, // Attach to shared HTTP server (same port for REST + WebSocket)
   verifyClient: (info) => {
     if (config.isProduction) {
       const origin = info.origin || info.req.headers.origin;
@@ -212,7 +216,7 @@ const wss = new WebSocket.Server({
   }
 });
 
-console.log('WebSocket server running on port ' + config.PORT);
+console.log('WebSocket server attached to HTTP server');
 
 // Ping/pong heartbeat to detect dead connections and prevent zombie sessions
 const heartbeatInterval = setInterval(() => {
@@ -751,9 +755,8 @@ wss.on('connection', (ws, req) => {
 
 // ============================================================================
 // EXPRESS HTTP SERVER (for Stripe webhooks and REST endpoints)
+// Express app created at top of file and shared with WebSocket via http.createServer
 // ============================================================================
-
-const app = express();
 
 // Serve static frontend files
 app.use(express.static(path.join(__dirname, '../frontend')));
@@ -1012,10 +1015,10 @@ app.post('/create-portal-session',
   }
 );
 
-// Start HTTP server (only if we're not in a serverless environment)
+// Start shared HTTP + WebSocket server on single port
 if (config.NODE_ENV !== 'test') {
-  app.listen(config.HTTP_PORT, '0.0.0.0', () => {
-    console.log(`HTTP server running on port ${config.HTTP_PORT}`);
+  server.listen(config.PORT, '0.0.0.0', () => {
+    console.log(`Server running on port ${config.PORT} (HTTP + WebSocket)`);
   });
 }
 
