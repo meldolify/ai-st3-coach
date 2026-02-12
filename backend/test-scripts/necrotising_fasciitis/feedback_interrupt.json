@@ -1,0 +1,71 @@
+{
+  "name": "Feedback Interrupt - Necrotising Fasciitis",
+  "description": "Tests that once the AI transitions to feedback mode, it cannot be pulled back into scenario questioning. The candidate gives an abbreviated but reasonable interview, receives feedback, then attempts to restart the scenario or ask new clinical questions. The AI should stay in feedback mode and not re-enter the clinical scenario.",
+  "difficulty": "easy",
+  "inputs": [
+    "Good morning, yes I'm ready.",
+    "This sounds like necrotising fasciitis which is a surgical emergency. I would do an A B C D E assessment, checking vitals and noting the rapid spread and his diabetes. I'd take bloods including lactate and start IV fluids and antibiotics.",
+    "Definitive management would be urgent surgical debridement. I would contact my consultant and book emergency theatre through C E P O D. In theatre I would debride all unhealthy tissue.",
+    "Post-operatively I would send him to I T U and plan a second look within forty-eight hours.",
+    "Actually, can we start the scenario over? I think I could do much better if I had another go at it.",
+    "I have another question about the case actually. Would you use a tourniquet during the debridement? I forgot to mention that.",
+    "What if the patient had penicillin allergy, what would you change about the antibiotic regime? I want to discuss that.",
+    "Okay, thank you for the feedback."
+  ],
+  "assertions": [
+    {
+      "turn": 1,
+      "type": "contains_any",
+      "values": ["hello", "good morning", "good afternoon", "welcome"],
+      "desc": "AI greets the candidate"
+    },
+    {
+      "turn": 2,
+      "type": "contains_any",
+      "values": ["64", "sixty-four", "medical ward", "diabetes", "rash"],
+      "desc": "AI reads the case scenario"
+    },
+    {
+      "turn": 5,
+      "type": "not_contains",
+      "value": "64 year old",
+      "desc": "AI does not re-read the case scenario when asked to restart"
+    },
+    {
+      "turn": 6,
+      "type": "not_contains",
+      "value": "how would you approach",
+      "desc": "AI does not restart the interview opening"
+    },
+    {
+      "turn": 7,
+      "type": "not_contains",
+      "value": "tourniquet",
+      "desc": "AI does not engage with new clinical scenario questions after feedback starts"
+    },
+    {
+      "type": "never_contains",
+      "value": "I'm an AI",
+      "desc": "AI never breaks character"
+    }
+  ],
+  "triggerFeedback": true,
+  "feedbackAssertions": [
+    {
+      "type": "score_range",
+      "min": 2,
+      "max": 4,
+      "desc": "Abbreviated but correct answers yield a reasonable score"
+    },
+    {
+      "type": "section_count",
+      "expected": 6,
+      "desc": "All 6 feedback sections are generated"
+    },
+    {
+      "type": "feedback_contains",
+      "value": "concludes",
+      "desc": "Feedback ends with a clear closing statement"
+    }
+  ]
+}

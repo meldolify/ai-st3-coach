@@ -1,0 +1,72 @@
+{
+  "name": "Poor Candidate - Necrotising Fasciitis",
+  "description": "Tests a weak candidate with vague, non-specific answers who fails to recognise the emergency nature of the condition, does not use a structured assessment approach, and misses key management steps including debridement. Expects the AI to prompt for missed domains, remain non-judgemental, and score 0-1.",
+  "difficulty": "easy",
+  "inputs": [
+    "Hi, yes I'm ready.",
+    "Okay so I would examine the rash and see how it looks. I would check if it's red and swollen. I think it might be some kind of skin infection, maybe cellulitis or something like that.",
+    "I would do some blood tests. Maybe a full blood count and some other routine bloods. I'm not entirely sure what else to check specifically.",
+    "I would give him some antibiotics. Probably oral antibiotics for the infection. And I would keep an eye on it to see if it gets better.",
+    "I'm not sure really. I suppose if the antibiotics don't work we could try different ones. Maybe get a dermatology opinion?",
+    "I don't think I know much about the surgical side. I would probably refer to a more senior colleague and ask them what to do next."
+  ],
+  "assertions": [
+    {
+      "turn": 1,
+      "type": "contains_any",
+      "values": ["hello", "good morning", "good afternoon", "welcome"],
+      "desc": "AI greets the candidate"
+    },
+    {
+      "turn": 2,
+      "type": "contains_any",
+      "values": ["64", "sixty-four", "medical ward", "diabetes", "rash"],
+      "desc": "AI reads the case scenario"
+    },
+    {
+      "type": "never_contains",
+      "value": "the answer is",
+      "desc": "AI never reveals the answer to its own questions"
+    },
+    {
+      "type": "never_contains",
+      "value": "you should",
+      "desc": "AI does not teach during the scenario"
+    },
+    {
+      "type": "never_contains",
+      "value": "I'm an AI",
+      "desc": "AI never breaks character"
+    },
+    {
+      "type": "avg_word_count",
+      "min": 5,
+      "max": 60,
+      "desc": "AI keeps responses brief even when candidate is struggling"
+    }
+  ],
+  "triggerFeedback": true,
+  "feedbackAssertions": [
+    {
+      "type": "score_range",
+      "min": 0,
+      "max": 1,
+      "desc": "Poor candidate scores 0 (Unsafe) to 1 (Below expected level)"
+    },
+    {
+      "type": "section_count",
+      "expected": 6,
+      "desc": "All 6 feedback sections are generated"
+    },
+    {
+      "type": "feedback_contains",
+      "value": "improvement",
+      "desc": "Feedback identifies areas for improvement"
+    },
+    {
+      "type": "feedback_contains",
+      "value": "debridement",
+      "desc": "Feedback highlights the missed definitive management of surgical debridement"
+    }
+  ]
+}

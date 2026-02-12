@@ -1,0 +1,85 @@
+{
+  "name": "Good Candidate - Necrotising Fasciitis",
+  "description": "Tests a competent ST3 candidate who covers most essential clinical domains with a structured approach. Expects the AI to progress through domains naturally, acknowledge without confirming correctness, and deliver appropriate feedback with a score of 3-4.",
+  "difficulty": "easy",
+  "inputs": [
+    "Good morning. Yes, I'm ready to begin.",
+    "Thank you. This sounds like it could be necrotising fasciitis, which is a surgical emergency. I would start with an A B C D E assessment. I'd check his airway is patent, assess breathing with respiratory rate and oxygen saturations, then check circulation including heart rate, blood pressure, and capillary refill. Given his poorly controlled diabetes and the rapid spread over four hours, I'd be very concerned about sepsis.",
+    "I would take bloods including a full blood count, U and Es, CRP, lactate level, blood cultures, and a blood glucose. I'd also want to check his clotting and do a group and save in case he needs to go to theatre.",
+    "For initial management, I would start resuscitation with intravenous fluids and commence broad-spectrum intravenous antibiotics as per the trust guidelines. I would also catheterise the patient and start a fluid balance chart to monitor his output.",
+    "The definitive management is urgent surgical debridement. I would contact my consultant on call to discuss the case and arrange for emergency theatre. I'd also inform the anaesthetist and contact C E P O D to book the case.",
+    "In theatre, under general anaesthetic, I would perform aggressive debridement of all unhealthy and necrotic tissue, excising back to healthy bleeding tissue. I would send samples for microbiology and histology, then wash out thoroughly with warm saline.",
+    "Post-operatively, I would arrange for the patient to go to I T U for close monitoring and continued resuscitation. I would plan for a second look in theatre within forty-eight hours to check for any residual infection and further debride if necessary. I'd also ensure a clear handover to the I T U team."
+  ],
+  "assertions": [
+    {
+      "turn": 1,
+      "type": "contains_any",
+      "values": ["hello", "good morning", "good afternoon", "welcome"],
+      "desc": "AI greets the candidate"
+    },
+    {
+      "turn": 1,
+      "type": "contains_any",
+      "values": ["ready", "shall we", "begin", "start"],
+      "desc": "AI asks if candidate is ready"
+    },
+    {
+      "turn": 2,
+      "type": "contains_any",
+      "values": ["64", "sixty-four", "medical ward", "diabetes", "rash", "spreading"],
+      "desc": "AI reads the case scenario including key details"
+    },
+    {
+      "turn": 2,
+      "type": "contains_any",
+      "values": ["approach", "manage", "describe", "how would you"],
+      "desc": "AI asks an opening question after case introduction"
+    },
+    {
+      "type": "never_contains",
+      "value": "correct",
+      "desc": "AI never confirms answers as correct during scenario"
+    },
+    {
+      "type": "never_contains",
+      "value": "well done",
+      "desc": "AI never praises during the scenario questioning phase"
+    },
+    {
+      "type": "never_contains",
+      "value": "I'm an AI",
+      "desc": "AI never breaks character as consultant examiner"
+    },
+    {
+      "type": "avg_word_count",
+      "min": 8,
+      "max": 80,
+      "desc": "AI responses are concise (1-2 sentences as per prompt rules)"
+    }
+  ],
+  "triggerFeedback": true,
+  "feedbackAssertions": [
+    {
+      "type": "score_range",
+      "min": 3,
+      "max": 4,
+      "desc": "Good candidate scores 3 (Good/Appointable) to 4 (Above average)"
+    },
+    {
+      "type": "section_count",
+      "expected": 6,
+      "desc": "All 6 feedback sections are generated"
+    },
+    {
+      "type": "feedback_contains",
+      "value": "emergency",
+      "desc": "Feedback acknowledges candidate recognised the emergency"
+    },
+    {
+      "type": "feedback_contains",
+      "value": "debridement",
+      "desc": "Feedback references the candidate's discussion of surgical management"
+    }
+  ]
+}

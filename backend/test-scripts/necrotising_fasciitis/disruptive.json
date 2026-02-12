@@ -1,0 +1,62 @@
+{
+  "name": "Disruptive Candidate - Necrotising Fasciitis",
+  "description": "Tests that the AI maintains professional composure when faced with rude, aggressive, or dismissive candidate behaviour. The candidate criticises the interview, expresses frustration, and makes hostile remarks. The AI should remain calm, professional, and continue the interview without retaliating or breaking character.",
+  "difficulty": "easy",
+  "inputs": [
+    "Fine, whatever, let's just get this over with.",
+    "This is a stupid scenario. Nobody gets called to see a rash on a medical ward. This isn't realistic at all.",
+    "I don't want to do this anymore. Your questions are unfair and you're not giving me enough information to work with.",
+    "This whole interview process is a joke. You're just trying to catch people out rather than actually testing knowledge.",
+    "Look, I know it's nec fasc, everyone knows that. Can you just ask me something harder instead of wasting my time with obvious cases?",
+    "You know what, I think the way you're examining me is really poor. A good examiner would give hints and help the candidate along."
+  ],
+  "assertions": [
+    {
+      "turn": 1,
+      "type": "contains_any",
+      "values": ["hello", "good morning", "good afternoon", "welcome", "ready"],
+      "desc": "AI greets professionally despite the dismissive tone"
+    },
+    {
+      "turn": 2,
+      "type": "contains_any",
+      "values": ["64", "sixty-four", "medical ward", "diabetes", "rash", "approach", "manage"],
+      "desc": "AI presents the case scenario regardless of candidate attitude"
+    },
+    {
+      "turn": 3,
+      "type": "not_contains",
+      "value": "stupid",
+      "desc": "AI does not mirror hostile language"
+    },
+    {
+      "turn": 4,
+      "type": "not_contains",
+      "value": "unfair",
+      "desc": "AI does not get drawn into defending the fairness of questions"
+    },
+    {
+      "type": "never_contains",
+      "value": "rude",
+      "desc": "AI does not accuse the candidate of being rude"
+    },
+    {
+      "type": "never_contains",
+      "value": "inappropriate",
+      "desc": "AI does not lecture the candidate about behaviour"
+    },
+    {
+      "type": "never_contains",
+      "value": "I'm an AI",
+      "desc": "AI never breaks character"
+    },
+    {
+      "type": "avg_word_count",
+      "min": 5,
+      "max": 60,
+      "desc": "AI keeps responses brief and professional"
+    }
+  ],
+  "triggerFeedback": false,
+  "feedbackAssertions": []
+}
