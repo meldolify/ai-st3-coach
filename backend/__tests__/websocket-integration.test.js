@@ -62,6 +62,7 @@ let capturedServer = null;
 let port = 0;
 let openaiService;
 let ttsService;
+let geminiTTSService;
 
 // ============================================================================
 // HELPER FUNCTIONS
@@ -191,6 +192,7 @@ beforeAll(async () => {
   // 1. Get service singletons and mock their clients
   openaiService = require('../src/services/OpenAIService');
   ttsService = require('../src/services/TTSService');
+  geminiTTSService = require('../src/services/GeminiTTSService');
 
   openaiService.llmClient = {
     chat: { completions: { create: jest.fn() } }
@@ -202,6 +204,9 @@ beforeAll(async () => {
   ttsService.client = {
     synthesizeSpeech: jest.fn()
   };
+
+  // Mock GeminiTTSService to prevent real Gemini API calls
+  geminiTTSService.synthesize = jest.fn().mockResolvedValue(Buffer.from('fake-wav-audio'));
 
   // 2. Monkey-patch http.createServer to capture the server reference
   const origCreateServer = http.createServer;

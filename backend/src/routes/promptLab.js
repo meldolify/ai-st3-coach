@@ -9,6 +9,7 @@ const fs = require('fs');
 const path = require('path');
 const promptLabService = require('../services/PromptLabService');
 const testScriptGenerator = require('../services/TestScriptGenerator');
+const { RateLimitError } = require('openai');
 
 const DEFAULT_TOPIC = 'clinical/emergencies/necrotising_fasciitis';
 
@@ -67,6 +68,12 @@ router.post('/chat', async (req, res) => {
     res.json(result);
   } catch (err) {
     console.error('[PROMPT LAB] Chat error:', err.message);
+    if (err instanceof RateLimitError || err.isRateLimit) {
+      return res.status(429).json({
+        error: 'API rate limit reached. Please wait a moment and try again.',
+        code: 'RATE_LIMITED'
+      });
+    }
     const status = err.message.includes('not found') ? 404 : 500;
     res.status(status).json({ error: err.message });
   }
@@ -90,6 +97,13 @@ router.post('/feedback', async (req, res) => {
     res.json(result);
   } catch (err) {
     console.error('[PROMPT LAB] Feedback error:', err.message);
+    if (err instanceof RateLimitError || err.isRateLimit) {
+      return res.status(429).json({
+        error:
+          'API rate limit reached. Feedback requires multiple API calls — please wait 30 seconds and try again.',
+        code: 'RATE_LIMITED'
+      });
+    }
     const status = err.message.includes('not found') ? 404 : 500;
     res.status(status).json({ error: err.message });
   }
@@ -281,6 +295,13 @@ router.post('/run-test', async (req, res) => {
     res.json(result);
   } catch (err) {
     console.error('[PROMPT LAB] Run test error:', err.message);
+    if (err instanceof RateLimitError || err.isRateLimit) {
+      return res.status(429).json({
+        error:
+          'API rate limit reached. Tests require multiple API calls — please wait and try again.',
+        code: 'RATE_LIMITED'
+      });
+    }
     const status = err.message.includes('not found') ? 404 : 500;
     res.status(status).json({ error: err.message });
   }

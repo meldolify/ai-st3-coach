@@ -251,13 +251,13 @@ class V4Session {
     this.isConnected = false;
     this.inFeedbackMode = false; // Track if we're in feedback mode
 
-    // Voice mapping for each difficulty level using Chirp 3 HD voices
+    // Voice mapping for each difficulty level (Gemini TTS voice names)
     this.voiceMap = {
-      'easy': 'en-GB-Chirp3-HD-Fenrir',      // John: Male voice
-      'medium': 'en-GB-Chirp3-HD-Kore',      // Elliot: Female voice
-      'strict': 'en-GB-Chirp3-HD-Charon'     // Perry: Male voice
+      'easy': 'Fenrir',      // John: Male voice
+      'medium': 'Kore',      // Elliot: Female voice
+      'strict': 'Charon'     // Perry: Male voice
     };
-    this.voice = this.voiceMap[difficulty] || 'en-GB-Chirp3-HD-Fenrir';
+    this.voice = this.voiceMap[difficulty] || 'Fenrir';
 
     console.log('[V4Session] Using server-side VAD (audio streaming)');
   }

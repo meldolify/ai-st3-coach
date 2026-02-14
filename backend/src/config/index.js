@@ -30,8 +30,8 @@ const config = {
   HTTP_PORT: parseInt(process.env.HTTP_PORT, 10) || 3000,
 
   // TTS Configuration
-  TTS_VOICE: process.env.TTS_VOICE || 'en-GB-Neural2-D',
-  TTS_MODEL_NAME: process.env.TTS_MODEL_NAME || 'gemini-2.5-flash-tts',
+  TTS_VOICE: process.env.TTS_VOICE || 'Fenrir',
+  TTS_MODEL_NAME: process.env.TTS_MODEL_NAME || 'gemini-2.5-flash-preview-tts',
 
   // Gemini TTS style prompts — keyed by difficulty level
   // Controls tone, pace, and emotion for each persona

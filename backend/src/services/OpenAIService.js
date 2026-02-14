@@ -6,7 +6,14 @@
 
 const OpenAI = require('openai');
 const { toFile } = require('openai');
+const { RateLimitError } = require('openai');
 const config = require('../config');
+
+const RETRY_DEFAULTS = {
+  maxRetries: 3,
+  initialDelayMs: 1000,
+  maxDelayMs: 15000
+};
 
 class OpenAIService {
   constructor() {
@@ -37,6 +44,47 @@ class OpenAIService {
     return this.whisperClient;
   }
 
+  _isRetryableError(error) {
+    if (error instanceof RateLimitError) {
+      return true;
+    }
+    if (error.status === 429 || error.status === 503) {
+      return true;
+    }
+    return false;
+  }
+
+  _sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  async _retryWithBackoff(fn, label = 'LLM') {
+    const { maxRetries, initialDelayMs, maxDelayMs } = RETRY_DEFAULTS;
+
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      try {
+        return await fn();
+      } catch (error) {
+        if (!this._isRetryableError(error) || attempt === maxRetries) {
+          if (this._isRetryableError(error)) {
+            error.isRateLimit = true;
+            error.message = `API rate limit exceeded after ${maxRetries + 1} attempts. ${error.message}`;
+          }
+          throw error;
+        }
+
+        const delay = Math.min(initialDelayMs * Math.pow(2, attempt), maxDelayMs);
+        const jitter = Math.round(delay * 0.2 * Math.random());
+        const totalDelay = delay + jitter;
+        console.warn(
+          `[${label}] Rate limited (attempt ${attempt + 1}/${maxRetries + 1}), ` +
+            `retrying in ${totalDelay}ms...`
+        );
+        await this._sleep(totalDelay);
+      }
+    }
+  }
+
   /**
    * Generate a response using Gemini 2.5 Flash
    * @param {Array} history - Conversation history array of {role, content}
@@ -50,13 +98,15 @@ class OpenAIService {
     const client = this._ensureLLMClient();
 
     try {
-      const completion = await client.chat.completions.create({
-        model: options.model || config.LLM_MODEL,
-        messages: history,
-        temperature: options.temperature ?? 0.7,
-        max_tokens: options.max_tokens || 150
-      });
-      return completion.choices[0].message.content;
+      return await this._retryWithBackoff(async () => {
+        const completion = await client.chat.completions.create({
+          model: options.model || config.LLM_MODEL,
+          messages: history,
+          temperature: options.temperature ?? 0.7,
+          max_tokens: options.max_tokens || 150
+        });
+        return completion.choices[0].message.content;
+      }, config.LLM_MODEL);
     } catch (error) {
       console.error(`[${config.LLM_MODEL}] Error:`, error.message);
       throw error;
@@ -103,13 +153,15 @@ class OpenAIService {
   async *generateResponseStream(history, options = {}) {
     const client = this._ensureLLMClient();
 
-    const stream = await client.chat.completions.create({
-      model: options.model || config.LLM_MODEL,
-      messages: history,
-      temperature: options.temperature ?? 0.7,
-      max_tokens: options.max_tokens || 150,
-      stream: true
-    });
+    const stream = await this._retryWithBackoff(async () => {
+      return client.chat.completions.create({
+        model: options.model || config.LLM_MODEL,
+        messages: history,
+        temperature: options.temperature ?? 0.7,
+        max_tokens: options.max_tokens || 150,
+        stream: true
+      });
+    }, `${config.LLM_MODEL}-stream`);
 
     for await (const chunk of stream) {
       const content = chunk.choices[0]?.delta?.content;

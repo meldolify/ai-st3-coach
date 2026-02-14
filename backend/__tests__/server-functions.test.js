@@ -23,6 +23,7 @@ const fs = require('fs');
 // We need references to mock the services BEFORE requiring server.js
 let openaiService;
 let ttsService;
+let geminiTTSService;
 let serverVadMock;
 
 // Mock ServerVAD to avoid loading the ONNX model
@@ -73,6 +74,7 @@ beforeAll(() => {
   // Require services before server so we can mock their methods
   openaiService = require('../src/services/OpenAIService');
   ttsService = require('../src/services/TTSService');
+  geminiTTSService = require('../src/services/GeminiTTSService');
 
   // Mock the OpenAI client methods (dual-client structure)
   openaiService.llmClient = {
@@ -94,6 +96,9 @@ beforeAll(() => {
   ttsService.client = {
     synthesizeSpeech: jest.fn()
   };
+
+  // Mock GeminiTTSService to prevent real Gemini API calls
+  geminiTTSService.synthesize = jest.fn().mockResolvedValue(Buffer.from('fake-wav-audio'));
 
   // Now require server.js — it will set up Express + WSS on the shared http.Server
   // NODE_ENV=test prevents it from auto-listening
@@ -831,7 +836,7 @@ describe('Session data structure', () => {
       history: [{ role: 'system', content: 'Test prompt' }],
       ws: {},
       scenario: 'prompts/clinical/test.txt',
-      voice: 'en-GB-Neural2-D',
+      voice: 'Fenrir',
       userId: null,
       isAISpeaking: false,
       inFeedbackMode: false,
@@ -971,7 +976,7 @@ describe('Server configuration for test environment', () => {
   test('TTS_VOICE has a default value', () => {
     expect(config.TTS_VOICE).toBeDefined();
     expect(typeof config.TTS_VOICE).toBe('string');
-    expect(config.TTS_VOICE).toContain('en-GB');
+    expect(config.TTS_VOICE).toBe('Fenrir');
   });
 });
 

@@ -43,7 +43,7 @@ describe('Config Module', () => {
 
   test('has correct default TTS_VOICE', () => {
     const config = require('../src/config');
-    expect(config.TTS_VOICE).toBe('en-GB-Neural2-D');
+    expect(config.TTS_VOICE).toBe('Fenrir');
   });
 
   test('has correct default FRONTEND_URL', () => {

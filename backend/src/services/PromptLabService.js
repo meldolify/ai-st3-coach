@@ -17,6 +17,12 @@ const TEST_SCRIPTS_DIR = path.join(BACKEND_DIR, 'test-scripts');
 const TEST_RESULTS_DIR = path.join(BACKEND_DIR, 'test-results');
 const FEEDBACK_JSON_TEMPLATE_PATH = path.join(PROMPTS_DIR, 'system', 'feedback_json_template.txt');
 
+const FEEDBACK_DELAY_MS = 1500;
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 // Folders to exclude when scanning for topics
 const EXCLUDED_DIRS = new Set(['feedback', 'system', 'test']);
 
@@ -257,6 +263,7 @@ async function generateFeedback(sessionId, feedbackPromptOverride, topicPath) {
 
   for (let i = 0; i < 6; i++) {
     if (i > 0) {
+      await sleep(FEEDBACK_DELAY_MS);
       feedbackHistory.push({ role: 'user', content: 'continue' });
     }
 
@@ -271,6 +278,7 @@ async function generateFeedback(sessionId, feedbackPromptOverride, topicPath) {
 
   let summary;
   try {
+    await sleep(FEEDBACK_DELAY_MS);
     const jsonTemplate = fs.readFileSync(FEEDBACK_JSON_TEMPLATE_PATH, 'utf8');
     feedbackHistory.push({ role: 'user', content: jsonTemplate });
 
