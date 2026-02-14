@@ -1,7 +1,7 @@
 /**
  * Server.js Integration Tests
  * Tests the core server functions: loadFeedbackPrompt, serializeTranscript,
- * callGPT4oMini/googleTTS wrappers, streamResponseToClient, WebSocket
+ * callLLM/googleTTS wrappers, streamResponseToClient, WebSocket
  * message handlers, and session management.
  *
  * These functions are internal to server.js (not exported), so they are tested
@@ -294,11 +294,11 @@ describe('serializeTranscript (logic verification)', () => {
 });
 
 // ============================================================================
-// PART 3: Test callGPT4oMini and googleTTS wrappers
+// PART 3: Test callLLM and googleTTS wrappers
 // These are thin wrappers in server.js:74-133 that delegate to services.
 // ============================================================================
 
-describe('callGPT4oMini wrapper', () => {
+describe('callLLM wrapper', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -763,14 +763,14 @@ describe('OpenAI streaming (generateResponseStream)', () => {
 
     for await (const _token of openaiService.generateResponseStream(
       [{ role: 'user', content: 'test' }],
-      { model: 'gpt-4', temperature: 0.3, max_tokens: 500 }
+      { model: 'gemini-2.5-flash', temperature: 0.3, max_tokens: 500 }
     )) {
       // no-op
     }
 
     expect(openaiService.llmClient.chat.completions.create).toHaveBeenCalledWith(
       expect.objectContaining({
-        model: 'gpt-4',
+        model: 'gemini-2.5-flash',
         temperature: 0.3,
         max_tokens: 500,
         stream: true

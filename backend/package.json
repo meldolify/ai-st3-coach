@@ -1,7 +1,7 @@
 {
   "name": "st3-coach-v4-backend",
   "version": "1.0.0",
-  "description": "ST3 Plastic Surgery Interview Trainer - V4 Backend (Web Speech API + GPT-4o-mini + Google TTS)",
+  "description": "ST3 Plastic Surgery Interview Trainer - V4 Backend (Web Speech API + Gemini 2.5 Flash + Google TTS)",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

@@ -1,5 +1,5 @@
 /**
- * GPT-4o-mini Integration Tests
+ * LLM Integration Tests
  * Tests the OpenAIService generateResponse and transcribeAudio methods
  */
 
@@ -45,14 +45,14 @@ describe('OpenAIService - generateResponse', () => {
     openaiService.llmClient = { chat: { completions: { create: mockCreate } } };
 
     await openaiService.generateResponse([{ role: 'user', content: 'test' }], {
-      model: 'gpt-4',
+      model: 'gemini-2.5-flash',
       temperature: 0.3,
       max_tokens: 500
     });
 
     expect(mockCreate).toHaveBeenCalledWith(
       expect.objectContaining({
-        model: 'gpt-4',
+        model: 'gemini-2.5-flash',
         temperature: 0.3,
         max_tokens: 500
       })
