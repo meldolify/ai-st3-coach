@@ -49,6 +49,7 @@ build/
 # Testing
 coverage/
 backend/test-results/
+backend/test-scripts/_generated/
 .nyc_output/
 *.test.js.snap
 backend/__tests__/temp_*

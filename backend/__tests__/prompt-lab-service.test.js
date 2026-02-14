@@ -361,6 +361,7 @@ describe('PromptLabService - Test Scripts', () => {
     expect(firstTest).toHaveProperty('difficulty');
     expect(firstTest).toHaveProperty('inputCount');
     expect(firstTest).toHaveProperty('triggerFeedback');
+    expect(firstTest).toHaveProperty('source');
     expect(firstTest.inputCount).toBeGreaterThan(0);
   });
 
@@ -370,20 +371,23 @@ describe('PromptLabService - Test Scripts', () => {
     expect(goodTest).toBeDefined();
   });
 
-  test('returns empty array for unknown topic', () => {
+  test('returns only generic tests for unknown topic', () => {
     const tests = promptLabService.listTestScripts('fake_nonexistent_topic');
     expect(Array.isArray(tests)).toBe(true);
-    expect(tests.length).toBe(0);
+    // Should only contain generic behavioral templates (no premade, no generatable)
+    tests.forEach(t => expect(t.source).toBe('generic'));
   });
 
-  test('returns empty array for null input', () => {
+  test('returns only generic tests for null input', () => {
     const tests = promptLabService.listTestScripts(null);
-    expect(tests).toEqual([]);
+    expect(Array.isArray(tests)).toBe(true);
+    tests.forEach(t => expect(t.source).toBe('generic'));
   });
 
-  test('returns empty array for empty string', () => {
+  test('returns only generic tests for empty string', () => {
     const tests = promptLabService.listTestScripts('');
-    expect(tests).toEqual([]);
+    expect(Array.isArray(tests)).toBe(true);
+    tests.forEach(t => expect(t.source).toBe('generic'));
   });
 });
 

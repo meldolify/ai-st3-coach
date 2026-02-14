@@ -231,6 +231,17 @@ const api = {
 
   getChanges() { return this._fetch('/changes'); },
   createPR() { return this._fetch('/create-pr', { method: 'POST' }); },
+
+  generateTest(testType, topic) {
+    return this._fetch('/generate-test', {
+      method: 'POST',
+      body: JSON.stringify({ testType, topic }),
+    });
+  },
+
+  clearGeneratedTests(topic) {
+    return this._fetch('/generated-tests?topic=' + encodeURIComponent(topic), { method: 'DELETE' });
+  },
 };
 
 // ================================================================
@@ -297,6 +308,19 @@ function createEl(tag, className, textContent) {
   if (className) el.className = className;
   if (textContent) el.textContent = textContent;
   return el;
+}
+
+function showToast(message, type, duration) {
+  type = type || 'success';
+  duration = duration || 2500;
+  var container = document.getElementById('toastContainer');
+  var toast = createEl('div', 'pl-toast pl-toast-' + type, message);
+  container.appendChild(toast);
+  requestAnimationFrame(function() { toast.classList.add('show'); });
+  setTimeout(function() {
+    toast.classList.remove('show');
+    setTimeout(function() { toast.remove(); }, 300);
+  }, duration);
 }
 
 function setStatus(text, isError) {
@@ -436,9 +460,11 @@ async function savePrompt() {
     }
 
     setStatus('Saved (server + local)');
+    showToast('Prompt saved successfully', 'success');
     refreshChangeCount();
   } catch (err) {
     setStatus('Saved locally (server error: ' + err.message + ')', true);
+    showToast('Server error — saved locally only', 'error', 3500);
   }
 }
 
@@ -705,7 +731,15 @@ function renderTestList() {
 
     const info = createEl('div', 'pl-test-item-info');
     info.appendChild(createEl('div', 'pl-test-item-name', t.name));
-    info.appendChild(createEl('div', 'pl-test-item-desc', t.inputCount + ' inputs' + (t.triggerFeedback ? ' + feedback' : '')));
+
+    var sourceLabel = '';
+    if (t.source === 'generic') sourceLabel = ' (generic)';
+    else if (t.source === 'generated') sourceLabel = ' (GPT-generated)';
+    else if (t.source === 'generatable') sourceLabel = ' (auto-generate on run)';
+
+    var descText = (t.inputCount > 0 ? t.inputCount + ' inputs' : 'auto-generated') +
+                   (t.triggerFeedback ? ' + feedback' : '') + sourceLabel;
+    info.appendChild(createEl('div', 'pl-test-item-desc', descText));
 
     label.appendChild(checkbox);
     label.appendChild(info);
@@ -736,8 +770,10 @@ async function runSelectedTests() {
   for (const testId of selectedTests) {
     const testInfo = availableTests.find(t => t.id === testId);
     const name = testInfo ? testInfo.name : testId;
+    const isGeneratable = testInfo && (testInfo.source === 'generatable' || testInfo.source === 'generated');
 
-    const statusEl = createEl('div', 'pl-msg pl-msg-system', 'Running: ' + name + '...');
+    const statusText = isGeneratable ? 'Generating & running: ' + name + '...' : 'Running: ' + name + '...';
+    const statusEl = createEl('div', 'pl-msg pl-msg-system', statusText);
     autoTestContent.appendChild(statusEl);
     autoTestContent.scrollTop = autoTestContent.scrollHeight;
 
@@ -1085,5 +1121,6 @@ async function init() {
 init();
 </script>
 
+<div id="toastContainer" class="pl-toast-container"></div>
 </body>
 </html>

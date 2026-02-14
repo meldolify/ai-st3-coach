@@ -8,6 +8,7 @@ const router = express.Router();
 const fs = require('fs');
 const path = require('path');
 const promptLabService = require('../services/PromptLabService');
+const testScriptGenerator = require('../services/TestScriptGenerator');
 
 const DEFAULT_TOPIC = 'clinical/emergencies/necrotising_fasciitis';
 
@@ -216,10 +217,47 @@ router.get('/tests', (req, res) => {
   try {
     const topic = req.query.topic || DEFAULT_TOPIC;
     const topicFolderName = topic.split('/').pop();
-    const tests = promptLabService.listTestScripts(topicFolderName);
+    const tests = promptLabService.listTestScripts(topicFolderName, topic);
     res.json({ tests });
   } catch (err) {
     console.error('[PROMPT LAB] List tests error:', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/**
+ * POST /generate-test — Pre-generate a test script for a topic
+ * Body: { testType, topic }
+ */
+router.post('/generate-test', async (req, res) => {
+  try {
+    const { testType, topic } = req.body;
+    if (!testType || !topic) {
+      return res.status(400).json({ error: 'testType and topic required' });
+    }
+    const script = await testScriptGenerator.generateTestScript(testType, topic);
+    testScriptGenerator.cacheScript(topic, testType, script);
+    res.json({ script, cached: true });
+  } catch (err) {
+    console.error('[PROMPT LAB] Generate test error:', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/**
+ * DELETE /generated-tests — Clear cached generated test scripts for a topic
+ * Query: ?topic=...
+ */
+router.delete('/generated-tests', (req, res) => {
+  try {
+    const topic = req.query.topic;
+    if (!topic) {
+      return res.status(400).json({ error: 'topic query param required' });
+    }
+    testScriptGenerator.clearCache(topic);
+    res.json({ success: true });
+  } catch (err) {
+    console.error('[PROMPT LAB] Clear generated tests error:', err.message);
     res.status(500).json({ error: err.message });
   }
 });

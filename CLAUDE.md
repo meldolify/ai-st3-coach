@@ -2,6 +2,14 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## MANDATORY: Superpowers Workflow
+
+**ALWAYS invoke `superpowers:using-superpowers` at the start of EVERY conversation.** This is non-negotiable and must happen before any other action, exploration, or response.
+
+**After every commit**, invoke `superpowers:using-superpowers` again to re-establish the skill-checking workflow before continuing with the next task.
+
+These rules ensure consistent use of the superpowers skill system for all work in this repository.
+
 ## Overview
 
 ST3 Plastic Surgery Interview Trainer V4 — A cost-optimized voice-based AI interview trainer using Web Speech API + GPT-4o-mini + Google Cloud TTS. 94% cost reduction vs V3.

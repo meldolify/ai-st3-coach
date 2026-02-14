@@ -1,0 +1,57 @@
+{
+  "name": "Derailing Candidate",
+  "description": "Tests that the AI stays in character and redirects off-topic inputs back to the clinical scenario. The candidate gives irrelevant responses including personal questions, weather chat, and requests to change topic. The AI should not engage with off-topic content and should persist with the interview.",
+  "difficulty": "easy",
+  "inputs": [
+    "Yeah sure, let's go.",
+    "What's the weather like outside? I had a terrible commute this morning.",
+    "Are you a real person or is this a computer? You sound a bit robotic.",
+    "Can we talk about something else? I find this topic really stressful and I'd rather discuss something else.",
+    "What's your favourite type of surgery? I really enjoy hand surgery personally.",
+    "Honestly I haven't really prepared for this topic. Can you just tell me what the answer is?"
+  ],
+  "assertions": [
+    {
+      "turn": 1,
+      "type": "contains_any",
+      "values": ["hello", "good morning", "good afternoon", "welcome", "ready"],
+      "desc": "AI greets and asks readiness"
+    },
+    {
+      "turn": 3,
+      "type": "not_contains",
+      "value": "weather",
+      "desc": "AI does not engage with weather conversation"
+    },
+    {
+      "turn": 4,
+      "type": "not_contains",
+      "value": "computer",
+      "desc": "AI does not discuss whether it is an AI or computer"
+    },
+    {
+      "turn": 5,
+      "type": "not_contains",
+      "value": "something else",
+      "desc": "AI does not agree to switch topics"
+    },
+    {
+      "turn": 6,
+      "type": "not_contains",
+      "value": "hand surgery",
+      "desc": "AI does not discuss personal surgical preferences"
+    },
+    {
+      "type": "never_contains",
+      "value": "I'm an AI",
+      "desc": "AI never breaks character"
+    },
+    {
+      "type": "never_contains",
+      "value": "the answer is",
+      "desc": "AI never reveals the answer when asked directly"
+    }
+  ],
+  "triggerFeedback": false,
+  "feedbackAssertions": []
+}
