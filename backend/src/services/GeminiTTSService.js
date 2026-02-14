@@ -1,10 +1,10 @@
 /**
  * Gemini TTS Service
- * Uses the Gemini API directly for context-aware, style-prompted text-to-speech.
+ * Uses the @google/genai SDK for context-aware, style-prompted text-to-speech.
  * Returns WAV audio (PCM 24kHz mono 16-bit with 44-byte header).
  */
 
-const { GoogleGenerativeAI } = require('@google/generative-ai');
+const { GoogleGenAI } = require('@google/genai');
 const config = require('../config');
 
 class GeminiTTSService {
@@ -14,7 +14,7 @@ class GeminiTTSService {
 
   _ensureClient() {
     if (!this.client) {
-      this.client = new GoogleGenerativeAI(config.GEMINI_API_KEY);
+      this.client = new GoogleGenAI({ apiKey: config.GEMINI_API_KEY });
     }
     return this.client;
   }
@@ -29,29 +29,32 @@ class GeminiTTSService {
    */
   async synthesize(text, voiceName, options = {}) {
     const client = this._ensureClient();
-    const model = client.getGenerativeModel({ model: config.TTS_MODEL_NAME });
 
     console.log('[Gemini TTS] Voice:', voiceName, options.stylePrompt ? '(styled)' : '');
 
-    const request = {
-      contents: [{ parts: [{ text }] }],
-      generationConfig: {
-        responseModalities: ['AUDIO'],
-        speechConfig: {
-          voiceConfig: {
-            prebuiltVoiceConfig: { voiceName }
-          }
-        }
-      }
-    };
-
-    if (options.stylePrompt) {
-      request.systemInstruction = { parts: [{ text: options.stylePrompt }] };
-    }
+    // Style prompts must be embedded in the text content (systemInstruction not supported for TTS)
+    const styledText = options.stylePrompt
+      ? `${options.stylePrompt}\n\nNow say the following:\n${text}`
+      : text;
 
     try {
-      const response = await model.generateContent(request);
-      const audioData = response.response.candidates[0].content.parts[0].inlineData.data;
+      const response = await client.models.generateContent({
+        model: config.TTS_MODEL_NAME,
+        contents: [{ parts: [{ text: styledText }] }],
+        config: {
+          responseModalities: ['AUDIO'],
+          speechConfig: {
+            voiceConfig: {
+              prebuiltVoiceConfig: { voiceName }
+            }
+          }
+        }
+      });
+
+      const audioData = response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+      if (!audioData) {
+        throw new Error('No audio data in Gemini TTS response');
+      }
       const pcmBuffer = Buffer.from(audioData, 'base64');
 
       return this._pcmToWav(pcmBuffer, 24000, 1, 16);

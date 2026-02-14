@@ -1,16 +1,16 @@
 /**
  * GeminiTTSService Unit Tests
- * Tests the Gemini TTS service by mocking the client directly on the singleton.
+ * Tests the Gemini TTS service using the @google/genai SDK.
  */
 
 process.env.NODE_ENV = 'test';
 process.env.GEMINI_API_KEY = 'test-gemini-key';
 process.env.OPENAI_API_KEY = 'test-api-key';
 
-// Mock @google/generative-ai to prevent real API calls
-jest.mock('@google/generative-ai', () => ({
-  GoogleGenerativeAI: jest.fn(() => ({
-    getGenerativeModel: jest.fn()
+// Mock @google/genai to prevent real API calls
+jest.mock('@google/genai', () => ({
+  GoogleGenAI: jest.fn(() => ({
+    models: { generateContent: jest.fn() }
   }))
 }));
 
@@ -24,30 +24,26 @@ describe('GeminiTTSService', () => {
     // Create a fresh mock for generateContent each test
     mockGenerateContent = jest.fn();
 
-    // Inject a mock client with getGenerativeModel that returns our mock
+    // Inject a mock client with models.generateContent
     geminiTTSService.client = {
-      getGenerativeModel: jest.fn(() => ({
-        generateContent: mockGenerateContent
-      }))
+      models: { generateContent: mockGenerateContent }
     };
   });
 
   // Helper: create a mock Gemini API response with base64 PCM audio
   function mockAudioResponse(pcmBase64) {
     return {
-      response: {
-        candidates: [
-          {
-            content: {
-              parts: [
-                {
-                  inlineData: { data: pcmBase64 }
-                }
-              ]
-            }
+      candidates: [
+        {
+          content: {
+            parts: [
+              {
+                inlineData: { data: pcmBase64 }
+              }
+            ]
           }
-        ]
-      }
+        }
+      ]
     };
   }
 
@@ -58,12 +54,10 @@ describe('GeminiTTSService', () => {
 
       await geminiTTSService.synthesize('Hello world', 'Fenrir');
 
-      expect(geminiTTSService.client.getGenerativeModel).toHaveBeenCalledWith({
-        model: expect.any(String)
-      });
       expect(mockGenerateContent).toHaveBeenCalledWith({
+        model: expect.any(String),
         contents: [{ parts: [{ text: 'Hello world' }] }],
-        generationConfig: {
+        config: {
           responseModalities: ['AUDIO'],
           speechConfig: {
             voiceConfig: {
@@ -74,7 +68,7 @@ describe('GeminiTTSService', () => {
       });
     });
 
-    test('includes systemInstruction when stylePrompt is provided', async () => {
+    test('embeds stylePrompt in text content when provided', async () => {
       const fakePCM = Buffer.from([0, 0]).toString('base64');
       mockGenerateContent.mockResolvedValue(mockAudioResponse(fakePCM));
 
@@ -82,21 +76,19 @@ describe('GeminiTTSService', () => {
         stylePrompt: 'Speak warmly'
       });
 
-      expect(mockGenerateContent).toHaveBeenCalledWith(
-        expect.objectContaining({
-          systemInstruction: { parts: [{ text: 'Speak warmly' }] }
-        })
-      );
+      const call = mockGenerateContent.mock.calls[0][0];
+      expect(call.contents[0].parts[0].text).toContain('Speak warmly');
+      expect(call.contents[0].parts[0].text).toContain('Test');
     });
 
-    test('does not include systemInstruction when no stylePrompt', async () => {
+    test('does not embed style when no stylePrompt', async () => {
       const fakePCM = Buffer.from([0, 0]).toString('base64');
       mockGenerateContent.mockResolvedValue(mockAudioResponse(fakePCM));
 
       await geminiTTSService.synthesize('Test', 'Charon');
 
       const call = mockGenerateContent.mock.calls[0][0];
-      expect(call.systemInstruction).toBeUndefined();
+      expect(call.contents[0].parts[0].text).toBe('Test');
     });
 
     test('returns a valid WAV buffer', async () => {
@@ -112,6 +104,16 @@ describe('GeminiTTSService', () => {
       expect(result.toString('ascii', 8, 12)).toBe('WAVE');
       expect(result.toString('ascii', 12, 16)).toBe('fmt ');
       expect(result.toString('ascii', 36, 40)).toBe('data');
+    });
+
+    test('throws when response has no audio data', async () => {
+      mockGenerateContent.mockResolvedValue({
+        candidates: [{ content: { parts: [{}] } }]
+      });
+
+      await expect(geminiTTSService.synthesize('Test', 'Fenrir')).rejects.toThrow(
+        'No audio data in Gemini TTS response'
+      );
     });
 
     test('propagates errors from Gemini API', async () => {
@@ -130,7 +132,7 @@ describe('GeminiTTSService', () => {
 
       expect(mockGenerateContent).toHaveBeenCalledWith(
         expect.objectContaining({
-          generationConfig: expect.objectContaining({
+          config: expect.objectContaining({
             speechConfig: {
               voiceConfig: {
                 prebuiltVoiceConfig: { voiceName: 'Charon' }
@@ -176,17 +178,17 @@ describe('GeminiTTSService', () => {
 
   describe('_ensureClient', () => {
     test('creates client on first call', () => {
-      const { GoogleGenerativeAI } = require('@google/generative-ai');
+      const { GoogleGenAI } = require('@google/genai');
       geminiTTSService.client = null;
 
       geminiTTSService._ensureClient();
 
-      expect(GoogleGenerativeAI).toHaveBeenCalledWith('test-gemini-key');
+      expect(GoogleGenAI).toHaveBeenCalledWith({ apiKey: 'test-gemini-key' });
       expect(geminiTTSService.client).toBeTruthy();
     });
 
     test('reuses existing client on subsequent calls', () => {
-      const existingClient = { getGenerativeModel: jest.fn() };
+      const existingClient = { models: { generateContent: jest.fn() } };
       geminiTTSService.client = existingClient;
 
       const result = geminiTTSService._ensureClient();
