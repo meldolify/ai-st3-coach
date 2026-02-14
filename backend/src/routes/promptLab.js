@@ -40,7 +40,9 @@ router.post('/session', (req, res) => {
   try {
     const { promptSections, metadata } = req.body;
     if (!promptSections?.core && !promptSections?.difficulty && !promptSections?.clinical) {
-      return res.status(400).json({ error: 'promptSections required (core, difficulty, clinical)' });
+      return res
+        .status(400)
+        .json({ error: 'promptSections required (core, difficulty, clinical)' });
     }
     const result = promptLabService.createSession(promptSections, metadata);
     res.json(result);
@@ -313,7 +315,11 @@ router.get('/changes', (req, res) => {
  */
 router.get('/config', (req, res) => {
   res.json({
-    githubEnabled: !!(process.env.GITHUB_TOKEN && process.env.GITHUB_OWNER && process.env.GITHUB_REPO),
+    githubEnabled: !!(
+      process.env.GITHUB_TOKEN &&
+      process.env.GITHUB_OWNER &&
+      process.env.GITHUB_REPO
+    )
   });
 });
 
@@ -338,7 +344,7 @@ router.post('/create-pr', async (req, res) => {
     const BACKEND_DIR = path.join(__dirname, '..', '..');
     const fileContents = files.map(relPath => ({
       path: relPath,
-      content: fs.readFileSync(path.join(BACKEND_DIR, relPath), 'utf8'),
+      content: fs.readFileSync(path.join(BACKEND_DIR, relPath), 'utf8')
     }));
 
     const result = await gitHubService.createPR(fileContents);

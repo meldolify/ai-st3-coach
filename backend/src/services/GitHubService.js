@@ -20,9 +20,9 @@ async function githubFetch(endpoint, options = {}) {
       Accept: 'application/vnd.github+json',
       'Content-Type': 'application/json',
       'X-GitHub-Api-Version': '2022-11-28',
-      ...options.headers,
+      ...options.headers
     },
-    ...options,
+    ...options
   });
 
   const data = await res.json().catch(() => ({}));
@@ -45,7 +45,9 @@ async function githubFetch(endpoint, options = {}) {
  */
 async function createPR(files) {
   if (!GITHUB_TOKEN || !GITHUB_OWNER || !GITHUB_REPO) {
-    throw new Error('GitHub integration not configured (GITHUB_TOKEN, GITHUB_OWNER, GITHUB_REPO required)');
+    throw new Error(
+      'GitHub integration not configured (GITHUB_TOKEN, GITHUB_OWNER, GITHUB_REPO required)'
+    );
   }
 
   if (!files || files.length === 0) {
@@ -69,14 +71,14 @@ async function createPR(files) {
       method: 'POST',
       body: JSON.stringify({
         content: file.content,
-        encoding: 'utf-8',
-      }),
+        encoding: 'utf-8'
+      })
     });
     treeItems.push({
       path: file.path,
       mode: '100644',
       type: 'blob',
-      sha: blob.sha,
+      sha: blob.sha
     });
   }
 
@@ -85,8 +87,8 @@ async function createPR(files) {
     method: 'POST',
     body: JSON.stringify({
       base_tree: baseTreeSha,
-      tree: treeItems,
-    }),
+      tree: treeItems
+    })
   });
 
   // 5. Create the commit
@@ -99,8 +101,8 @@ async function createPR(files) {
     body: JSON.stringify({
       message: commitMessage,
       tree: newTree.sha,
-      parents: [mainCommitSha],
-    }),
+      parents: [mainCommitSha]
+    })
   });
 
   // 6. Create a new branch
@@ -109,8 +111,8 @@ async function createPR(files) {
     method: 'POST',
     body: JSON.stringify({
       ref: `refs/heads/${branchName}`,
-      sha: newCommit.sha,
-    }),
+      sha: newCommit.sha
+    })
   });
 
   // 7. Create the Pull Request
@@ -121,8 +123,8 @@ async function createPR(files) {
       title: `Prompt Lab: Update ${files.length} prompt file${files.length > 1 ? 's' : ''}`,
       body: `## Prompt Lab Updates\n\nAutomatically generated from the Prompt Lab editor.\n\n### Files changed (${files.length})\n${fileList}`,
       head: branchName,
-      base: 'main',
-    }),
+      base: 'main'
+    })
   });
 
   console.log(`[GITHUB] PR created: ${pr.html_url}`);
@@ -130,7 +132,7 @@ async function createPR(files) {
   return {
     prUrl: pr.html_url,
     branchName,
-    filesChanged: files.length,
+    filesChanged: files.length
   };
 }
 

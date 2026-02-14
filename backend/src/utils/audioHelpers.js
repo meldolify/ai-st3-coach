@@ -26,12 +26,12 @@ function isNoiseTranscript(text) {
   // Common noise patterns that Whisper produces for ambient sounds
   // NOTE: Only filter genuine noise, NOT valid short responses (yes, no, okay, thank you, etc.)
   const noisePatterns = [
-    /^(um+|uh+|er+|ah+|oh+|hm+|mm+)\.?$/i,       // Filler sounds
-    /^\.+$/,                                       // Just dots
-    /^[\s\.\,\!\?]+$/,                            // Just punctuation/whitespace
-    /^[^a-zA-Z]*$/,                               // No letters at all
-    /^([a-z])\1+$/i,                              // Repeated single letter (sss, aaaa)
-    /^([a-z]\s)+[a-z]?$/i                        // Repeated letters with spaces (s s s)
+    /^(um+|uh+|er+|ah+|oh+|hm+|mm+)\.?$/i, // Filler sounds
+    /^\.+$/, // Just dots
+    /^[\s.,!?]+$/, // Just punctuation/whitespace
+    /^[^a-zA-Z]*$/, // No letters at all
+    /^([a-z])\1+$/i, // Repeated single letter (sss, aaaa)
+    /^([a-z]\s)+[a-z]?$/i // Repeated letters with spaces (s s s)
   ];
 
   // Check against noise patterns

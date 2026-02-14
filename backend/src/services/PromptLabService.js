@@ -34,7 +34,12 @@ const modifiedFiles = new Set();
  * @param {string} topicPath - e.g., "clinical/emergencies/necrotising_fasciitis"
  */
 function validateTopicPath(topicPath) {
-  if (!topicPath || topicPath.includes('..') || topicPath.startsWith('/') || !/^[a-z0-9_/]+$/.test(topicPath)) {
+  if (
+    !topicPath ||
+    topicPath.includes('..') ||
+    topicPath.startsWith('/') ||
+    !/^[a-z0-9_/]+$/.test(topicPath)
+  ) {
     throw new Error('Invalid topic path: ' + topicPath);
   }
 }
@@ -85,32 +90,36 @@ function listTopics() {
 
   // Read top-level categories
   const categories = fs.readdirSync(PROMPTS_DIR).filter(d => {
-    if (EXCLUDED_DIRS.has(d)) return false;
+    if (EXCLUDED_DIRS.has(d)) {
+      return false;
+    }
     return fs.statSync(path.join(PROMPTS_DIR, d)).isDirectory();
   });
 
   for (const category of categories) {
     const categoryPath = path.join(PROMPTS_DIR, category);
-    const subcategories = fs.readdirSync(categoryPath).filter(d =>
-      fs.statSync(path.join(categoryPath, d)).isDirectory()
-    );
+    const subcategories = fs
+      .readdirSync(categoryPath)
+      .filter(d => fs.statSync(path.join(categoryPath, d)).isDirectory());
 
     for (const subcategory of subcategories) {
       const subcategoryPath = path.join(categoryPath, subcategory);
-      const topicDirs = fs.readdirSync(subcategoryPath).filter(d =>
-        fs.statSync(path.join(subcategoryPath, d)).isDirectory()
-      );
+      const topicDirs = fs
+        .readdirSync(subcategoryPath)
+        .filter(d => fs.statSync(path.join(subcategoryPath, d)).isDirectory());
 
       for (const topicDir of topicDirs) {
         const topicFullPath = path.join(subcategoryPath, topicDir);
         // Only include directories that contain .txt files
         const hasPrompts = fs.readdirSync(topicFullPath).some(f => f.endsWith('.txt'));
-        if (!hasPrompts) continue;
+        if (!hasPrompts) {
+          continue;
+        }
 
         topics.push({
           path: `${category}/${subcategory}/${topicDir}`,
           label: toTitleCase(topicDir),
-          group: `${toTitleCase(category)} > ${toTitleCase(subcategory)}`,
+          group: `${toTitleCase(category)} > ${toTitleCase(subcategory)}`
         });
       }
     }
@@ -140,7 +149,7 @@ function createSession(promptSections, metadata = {}) {
     promptSections,
     difficulty: metadata.difficulty || 'easy',
     createdAt: new Date().toISOString(),
-    turnNumber: 0,
+    turnNumber: 0
   });
 
   return { sessionId };
@@ -151,14 +160,16 @@ function createSession(promptSections, metadata = {}) {
  */
 async function chat(sessionId, message) {
   const session = sessions.get(sessionId);
-  if (!session) throw new Error(`Session not found: ${sessionId}`);
+  if (!session) {
+    throw new Error(`Session not found: ${sessionId}`);
+  }
 
   session.turnNumber++;
   session.history.push({ role: 'user', content: message });
 
   const response = await openaiService.generateResponse(session.history, {
     max_tokens: 150,
-    temperature: 0.7,
+    temperature: 0.7
   });
 
   session.history.push({ role: 'assistant', content: response });
@@ -196,7 +207,10 @@ function loadFeedbackPrompt(topicPath, difficulty) {
   const { category, folderName } = getFeedbackParts(topicPath);
 
   // Try difficulty-specific feedback prompt
-  const difficultyFile = path.join(FEEDBACK_DIR, `${difficulty}_${category}_${folderName}_feedback.txt`);
+  const difficultyFile = path.join(
+    FEEDBACK_DIR,
+    `${difficulty}_${category}_${folderName}_feedback.txt`
+  );
   if (fs.existsSync(difficultyFile)) {
     return fs.readFileSync(difficultyFile, 'utf8');
   }
@@ -221,17 +235,21 @@ function loadFeedbackPrompt(topicPath, difficulty) {
  */
 async function generateFeedback(sessionId, feedbackPromptOverride, topicPath) {
   const session = sessions.get(sessionId);
-  if (!session) throw new Error(`Session not found: ${sessionId}`);
+  if (!session) {
+    throw new Error(`Session not found: ${sessionId}`);
+  }
 
   const transcript = serializeTranscript(session.history);
-  const feedbackPrompt = feedbackPromptOverride || loadFeedbackPrompt(
-    topicPath || 'clinical/emergencies/necrotising_fasciitis',
-    session.difficulty
-  );
+  const feedbackPrompt =
+    feedbackPromptOverride ||
+    loadFeedbackPrompt(
+      topicPath || 'clinical/emergencies/necrotising_fasciitis',
+      session.difficulty
+    );
 
   const feedbackHistory = [
     { role: 'system', content: feedbackPrompt },
-    { role: 'user', content: 'Here is the interview transcript:\n\n' + transcript },
+    { role: 'user', content: 'Here is the interview transcript:\n\n' + transcript }
   ];
 
   const sections = [];
@@ -243,7 +261,7 @@ async function generateFeedback(sessionId, feedbackPromptOverride, topicPath) {
 
     const sectionText = await openaiService.generateResponse(feedbackHistory, {
       max_tokens: 200,
-      temperature: 0.7,
+      temperature: 0.7
     });
 
     feedbackHistory.push({ role: 'assistant', content: sectionText });
@@ -257,7 +275,7 @@ async function generateFeedback(sessionId, feedbackPromptOverride, topicPath) {
 
     const jsonText = await openaiService.generateResponse(feedbackHistory, {
       max_tokens: 500,
-      temperature: 0.3,
+      temperature: 0.3
     });
 
     const jsonMatch = jsonText.match(/\{[\s\S]*\}/);
@@ -274,7 +292,7 @@ async function generateFeedback(sessionId, feedbackPromptOverride, topicPath) {
       clinicalKnowledge: { diagnosis: 'See spoken feedback', management: 'See spoken feedback' },
       strengths: ['See spoken feedback above'],
       improvements: ['JSON parsing failed'],
-      summary: sections[0] || 'Feedback generation issue',
+      summary: sections[0] || 'Feedback generation issue'
     };
   }
 
@@ -297,7 +315,7 @@ function loadPrompt(topicPath, difficulty) {
   return {
     raw,
     sections: parsePromptSections(raw),
-    path: path.relative(BACKEND_DIR, filePath),
+    path: path.relative(BACKEND_DIR, filePath)
   };
 }
 
@@ -328,17 +346,26 @@ function loadFeedbackPromptFile(topicPath, difficulty) {
 
   const diffFile = path.join(FEEDBACK_DIR, `${difficulty}_${category}_${folderName}_feedback.txt`);
   if (fs.existsSync(diffFile)) {
-    return { content: fs.readFileSync(diffFile, 'utf8'), path: path.relative(BACKEND_DIR, diffFile) };
+    return {
+      content: fs.readFileSync(diffFile, 'utf8'),
+      path: path.relative(BACKEND_DIR, diffFile)
+    };
   }
 
   const genericFile = path.join(FEEDBACK_DIR, `${category}_${folderName}_feedback.txt`);
   if (fs.existsSync(genericFile)) {
-    return { content: fs.readFileSync(genericFile, 'utf8'), path: path.relative(BACKEND_DIR, genericFile) };
+    return {
+      content: fs.readFileSync(genericFile, 'utf8'),
+      path: path.relative(BACKEND_DIR, genericFile)
+    };
   }
 
   const fallbackFile = path.join(FEEDBACK_DIR, 'generic_feedback.txt');
   if (fs.existsSync(fallbackFile)) {
-    return { content: fs.readFileSync(fallbackFile, 'utf8'), path: path.relative(BACKEND_DIR, fallbackFile) };
+    return {
+      content: fs.readFileSync(fallbackFile, 'utf8'),
+      path: path.relative(BACKEND_DIR, fallbackFile)
+    };
   }
 
   throw new Error('No feedback prompt found for ' + topicPath);
@@ -380,9 +407,12 @@ function clearModifiedFiles() {
 
 function listTestScripts(topicFolderName) {
   const dir = path.join(TEST_SCRIPTS_DIR, topicFolderName || '');
-  if (!topicFolderName || !fs.existsSync(dir)) return [];
+  if (!topicFolderName || !fs.existsSync(dir)) {
+    return [];
+  }
 
-  return fs.readdirSync(dir)
+  return fs
+    .readdirSync(dir)
     .filter(f => f.endsWith('.json'))
     .map(f => {
       const data = JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8'));
@@ -392,25 +422,33 @@ function listTestScripts(topicFolderName) {
         description: data.description,
         difficulty: data.difficulty,
         inputCount: data.inputs?.length || 0,
-        triggerFeedback: data.triggerFeedback || false,
+        triggerFeedback: data.triggerFeedback || false
       };
     });
 }
 
 function loadTestScript(topicFolderName, testId) {
   const filePath = path.join(TEST_SCRIPTS_DIR, topicFolderName, `${testId}.json`);
-  if (!fs.existsSync(filePath)) throw new Error(`Test script not found: ${testId}`);
+  if (!fs.existsSync(filePath)) {
+    throw new Error(`Test script not found: ${testId}`);
+  }
   return JSON.parse(fs.readFileSync(filePath, 'utf8'));
 }
 
 function evaluateAssertions(assertions, history, feedback) {
-  if (!assertions || assertions.length === 0) return { passed: 0, failed: 0, total: 0, details: [] };
+  if (!assertions || assertions.length === 0) {
+    return { passed: 0, failed: 0, total: 0, details: [] };
+  }
 
   const assistantTurns = [];
   let turn = 0;
   for (const msg of history) {
-    if (msg.role === 'system') continue;
-    if (msg.role === 'user') turn++;
+    if (msg.role === 'system') {
+      continue;
+    }
+    if (msg.role === 'user') {
+      turn++;
+    }
     if (msg.role === 'assistant') {
       assistantTurns.push({ turn, content: msg.content });
     }
@@ -426,54 +464,75 @@ function evaluateAssertions(assertions, history, feedback) {
 }
 
 function evaluateSingleAssertion(assertion, assistantTurns, feedback) {
-  const base = { desc: assertion.desc || assertion.description || '', type: assertion.type, passed: false };
+  const base = {
+    desc: assertion.desc || assertion.description || '',
+    type: assertion.type,
+    passed: false
+  };
 
   switch (assertion.type) {
     case 'contains': {
       const turnResp = assistantTurns.find(t => t.turn === assertion.turn);
-      if (!turnResp) return { ...base, actual: '[no response at turn]' };
+      if (!turnResp) {
+        return { ...base, actual: '[no response at turn]' };
+      }
       const passed = turnResp.content.toLowerCase().includes(assertion.value.toLowerCase());
       return { ...base, passed, actual: turnResp.content.substring(0, 200) };
     }
     case 'contains_any': {
       const turnResp = assistantTurns.find(t => t.turn === assertion.turn);
-      if (!turnResp) return { ...base, actual: '[no response at turn]' };
+      if (!turnResp) {
+        return { ...base, actual: '[no response at turn]' };
+      }
       const lower = turnResp.content.toLowerCase();
       const passed = assertion.values.some(v => lower.includes(v.toLowerCase()));
       return { ...base, passed, actual: turnResp.content.substring(0, 200) };
     }
     case 'not_contains': {
       const turnResp = assistantTurns.find(t => t.turn === assertion.turn);
-      if (!turnResp) return { ...base, passed: true, actual: '[no response at turn]' };
+      if (!turnResp) {
+        return { ...base, passed: true, actual: '[no response at turn]' };
+      }
       const passed = !turnResp.content.toLowerCase().includes(assertion.value.toLowerCase());
       return { ...base, passed, actual: turnResp.content.substring(0, 200) };
     }
     case 'never_contains': {
-      const allContent = assistantTurns.map(t => t.content).join(' ').toLowerCase();
+      const allContent = assistantTurns
+        .map(t => t.content)
+        .join(' ')
+        .toLowerCase();
       const passed = !allContent.includes(assertion.value.toLowerCase());
       return { ...base, passed, actual: passed ? '[clean]' : `Found: "${assertion.value}"` };
     }
     case 'regex': {
       const turnResp = assistantTurns.find(t => t.turn === assertion.turn);
-      if (!turnResp) return { ...base, actual: '[no response at turn]' };
+      if (!turnResp) {
+        return { ...base, actual: '[no response at turn]' };
+      }
       const re = new RegExp(assertion.pattern, 'i');
       const passed = re.test(turnResp.content);
       return { ...base, passed, actual: turnResp.content.substring(0, 200) };
     }
     case 'avg_word_count': {
-      if (assistantTurns.length === 0) return { ...base, actual: '0 turns' };
+      if (assistantTurns.length === 0) {
+        return { ...base, actual: '0 turns' };
+      }
       const totalWords = assistantTurns.reduce((sum, t) => sum + t.content.split(/\s+/).length, 0);
       const avg = Math.round(totalWords / assistantTurns.length);
-      const passed = (!assertion.min || avg >= assertion.min) && (!assertion.max || avg <= assertion.max);
+      const passed =
+        (!assertion.min || avg >= assertion.min) && (!assertion.max || avg <= assertion.max);
       return { ...base, passed, actual: `avg ${avg} words/response` };
     }
     case 'turn_count': {
       const count = assistantTurns.length;
-      const passed = (!assertion.min || count >= assertion.min) && (!assertion.max || count <= assertion.max);
+      const passed =
+        (!assertion.min || count >= assertion.min) && (!assertion.max || count <= assertion.max);
       return { ...base, passed, actual: `${count} turns` };
     }
     case 'score_range': {
-      if (!feedback?.summary?.score && feedback?.summary?.score !== 0) return { ...base, actual: '[no score]' };
+      if (!feedback?.summary?.score && feedback?.summary?.score !== 0) {
+        return { ...base, actual: '[no score]' };
+      }
       const score = feedback.summary.score;
       const passed = score >= assertion.min && score <= assertion.max;
       return { ...base, passed, actual: `score: ${score}` };
@@ -502,7 +561,10 @@ async function runTest(testId, topicPath, promptOverride, feedbackPromptOverride
   if (promptOverride) {
     promptSections = promptOverride;
   } else {
-    const loaded = loadPrompt(topicPath || 'clinical/emergencies/necrotising_fasciitis', difficulty);
+    const loaded = loadPrompt(
+      topicPath || 'clinical/emergencies/necrotising_fasciitis',
+      difficulty
+    );
     promptSections = loaded.sections;
   }
 
@@ -533,15 +595,15 @@ async function runTest(testId, topicPath, promptOverride, feedbackPromptOverride
       difficulty,
       timestamp: new Date().toISOString(),
       duration,
-      promptHash: hashPrompt(promptSections),
+      promptHash: hashPrompt(promptSections)
     },
     promptContent: promptSections,
     history: session.history.map((msg, i) => ({
       ...msg,
-      turn: msg.role === 'system' ? 0 : Math.ceil(i / 2),
+      turn: msg.role === 'system' ? 0 : Math.ceil(i / 2)
     })),
     assertions: assertionResults,
-    feedback,
+    feedback
   };
 
   saveTranscript(result);
@@ -580,7 +642,9 @@ function saveTranscript(result) {
 
 function saveManualTranscript(sessionId) {
   const session = sessions.get(sessionId);
-  if (!session) throw new Error(`Session not found: ${sessionId}`);
+  if (!session) {
+    throw new Error(`Session not found: ${sessionId}`);
+  }
 
   const result = {
     id: generateTranscriptId('manual'),
@@ -589,12 +653,12 @@ function saveManualTranscript(sessionId) {
       testName: 'Manual Chat',
       difficulty: session.difficulty,
       timestamp: new Date().toISOString(),
-      promptHash: hashPrompt(session.promptSections),
+      promptHash: hashPrompt(session.promptSections)
     },
     promptContent: session.promptSections,
     history: session.history,
     assertions: null,
-    feedback: null,
+    feedback: null
   };
 
   saveTranscript(result);
@@ -603,7 +667,8 @@ function saveManualTranscript(sessionId) {
 
 function listTranscripts() {
   ensureTestResultsDir();
-  const files = fs.readdirSync(TEST_RESULTS_DIR)
+  const files = fs
+    .readdirSync(TEST_RESULTS_DIR)
     .filter(f => f.endsWith('.json'))
     .sort()
     .reverse();
@@ -619,7 +684,7 @@ function listTranscripts() {
         timestamp: data.metadata?.timestamp,
         assertionsPassed: data.assertions?.passed,
         assertionsFailed: data.assertions?.failed,
-        feedbackScore: data.feedback?.summary?.score,
+        feedbackScore: data.feedback?.summary?.score
       };
     } catch {
       return { id: f.replace('.json', ''), type: 'unknown', error: 'parse error' };
@@ -629,13 +694,17 @@ function listTranscripts() {
 
 function loadTranscript(id) {
   const filePath = path.join(TEST_RESULTS_DIR, `${id}.json`);
-  if (!fs.existsSync(filePath)) throw new Error(`Transcript not found: ${id}`);
+  if (!fs.existsSync(filePath)) {
+    throw new Error(`Transcript not found: ${id}`);
+  }
   return JSON.parse(fs.readFileSync(filePath, 'utf8'));
 }
 
 function deleteTranscript(id) {
   const filePath = path.join(TEST_RESULTS_DIR, `${id}.json`);
-  if (!fs.existsSync(filePath)) throw new Error(`Transcript not found: ${id}`);
+  if (!fs.existsSync(filePath)) {
+    throw new Error(`Transcript not found: ${id}`);
+  }
   fs.unlinkSync(filePath);
 }
 
@@ -658,5 +727,5 @@ module.exports = {
   deleteTranscript,
   serializeTranscript,
   getModifiedFiles,
-  clearModifiedFiles,
+  clearModifiedFiles
 };

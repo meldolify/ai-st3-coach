@@ -3,18 +3,24 @@
  */
 
 describe('Config Module', () => {
-  const originalEnv = process.env;
+  let savedEnv;
 
   beforeEach(() => {
-    // Reset modules to ensure fresh config load
+    savedEnv = { ...process.env };
     jest.resetModules();
-    process.env = { ...originalEnv };
-    process.env.NODE_ENV = 'test';
-    process.env.OPENAI_API_KEY = 'test-api-key';
+    // Prevent dotenv from loading .env file into process.env
+    jest.mock('dotenv', () => ({ config: jest.fn() }));
+    // Start with a minimal env so config defaults are exercised
+    process.env = {
+      PATH: savedEnv.PATH,
+      SystemRoot: savedEnv.SystemRoot,
+      NODE_ENV: 'test',
+      OPENAI_API_KEY: 'test-api-key'
+    };
   });
 
-  afterAll(() => {
-    process.env = originalEnv;
+  afterEach(() => {
+    process.env = savedEnv;
   });
 
   test('loads with required OPENAI_API_KEY', () => {

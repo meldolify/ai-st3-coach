@@ -183,7 +183,11 @@ function validateMessage(message) {
     }
 
     // Length check
-    if (constraints.maxLength && typeof value === 'string' && value.length > constraints.maxLength) {
+    if (
+      constraints.maxLength &&
+      typeof value === 'string' &&
+      value.length > constraints.maxLength
+    ) {
       return {
         valid: false,
         error: `Field ${field} exceeds maximum length (${value.length} > ${constraints.maxLength})`
@@ -206,6 +210,7 @@ function sanitizeForLog(text, maxLength = 200) {
   }
 
   // Remove control characters first
+  // eslint-disable-next-line no-control-regex
   const cleaned = text.replace(/[\x00-\x1F\x7F]/g, '');
 
   // Then truncate if needed

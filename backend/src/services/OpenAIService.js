@@ -59,8 +59,7 @@ class OpenAIService {
   async transcribeAudio(audioBuffer, sessionId, format = 'webm') {
     const client = this._ensureClient();
 
-    const isWav = audioBuffer.length >= 4 &&
-      audioBuffer.slice(0, 4).toString() === 'RIFF';
+    const isWav = audioBuffer.length >= 4 && audioBuffer.slice(0, 4).toString() === 'RIFF';
     const extension = isWav || format === 'wav' ? 'wav' : 'webm';
 
     try {
@@ -100,7 +99,9 @@ class OpenAIService {
 
     for await (const chunk of stream) {
       const content = chunk.choices[0]?.delta?.content;
-      if (content) yield content;
+      if (content) {
+        yield content;
+      }
     }
   }
 }

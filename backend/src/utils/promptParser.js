@@ -11,7 +11,7 @@
 const SECTION_HEADERS = {
   core: 'SECTION 1\nREALTIME CORE BEHAVIOURS',
   difficulty: 'SECTION 2\nDIFFICULTY AND PERSONALITY LAYER',
-  clinical: 'SECTION 3\nCLINICAL SCENARIO BLOCK',
+  clinical: 'SECTION 3\nCLINICAL SCENARIO BLOCK'
 };
 
 /**
@@ -21,14 +21,18 @@ const SECTION_HEADERS = {
  */
 function parsePromptSections(text) {
   const sections = { core: '', difficulty: '', clinical: '' };
-  if (!text || typeof text !== 'string') return sections;
+  if (!text || typeof text !== 'string') {
+    return sections;
+  }
 
   // Split on "SECTION N" at the start of a line
   const parts = text.split(/^(?=SECTION\s+\d)/m);
 
   for (const part of parts) {
     const trimmed = part.trim();
-    if (!trimmed) continue;
+    if (!trimmed) {
+      continue;
+    }
 
     if (/^SECTION\s+1\b/i.test(trimmed)) {
       // Strip the "SECTION 1\nREALTIME CORE BEHAVIOURS" header
@@ -68,7 +72,7 @@ function combinePromptSections(sections) {
     '',
     SECTION_HEADERS.clinical,
     '',
-    clinical,
+    clinical
   ].join('\n');
 }
 
