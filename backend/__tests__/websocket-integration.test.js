@@ -10,6 +10,7 @@
 /* eslint-disable no-console */
 
 process.env.NODE_ENV = 'test';
+process.env.GEMINI_API_KEY = 'test-gemini-key';
 process.env.OPENAI_API_KEY = 'test-api-key';
 // Ensure DEV_BYPASS_AUTH is set so we don't need Supabase
 process.env.DEV_BYPASS_AUTH = 'true';
@@ -176,7 +177,7 @@ function mockStreamingResponse(tokens) {
     }
   };
 
-  openaiService.client.chat.completions.create.mockResolvedValue(asyncIterable);
+  openaiService.llmClient.chat.completions.create.mockResolvedValue(asyncIterable);
 }
 
 // ============================================================================
@@ -191,8 +192,10 @@ beforeAll(async () => {
   openaiService = require('../src/services/OpenAIService');
   ttsService = require('../src/services/TTSService');
 
-  openaiService.client = {
-    chat: { completions: { create: jest.fn() } },
+  openaiService.llmClient = {
+    chat: { completions: { create: jest.fn() } }
+  };
+  openaiService.whisperClient = {
     audio: { transcriptions: { create: jest.fn() } }
   };
 
@@ -410,7 +413,7 @@ describe('Message flow - user_transcript', () => {
       await collectMessages(ws, 3);
 
       // GPT was called twice (once per user_transcript)
-      const calls = openaiService.client.chat.completions.create.mock.calls;
+      const calls = openaiService.llmClient.chat.completions.create.mock.calls;
       expect(calls.length).toBe(2);
 
       // Both calls reference the same session.history array, which now contains
@@ -753,7 +756,7 @@ describe('Error handling', () => {
   });
 
   test('GPT streaming error returns error message', async () => {
-    openaiService.client.chat.completions.create.mockRejectedValue(
+    openaiService.llmClient.chat.completions.create.mockRejectedValue(
       new Error('OpenAI API rate limited')
     );
 
@@ -852,7 +855,7 @@ describe('Session management', () => {
       );
       await collectMessages(ws, 3);
 
-      const call = openaiService.client.chat.completions.create.mock.calls[0][0];
+      const call = openaiService.llmClient.chat.completions.create.mock.calls[0][0];
       expect(call.messages[0].role).toBe('system');
       expect(call.messages[0].content.length).toBeGreaterThan(50);
       expect(call.messages[1].role).toBe('user');
@@ -889,7 +892,7 @@ describe('Request feedback flow', () => {
       await collectMessages(ws, 3);
 
       // Reset for feedback (non-streaming callGPT4oMini)
-      openaiService.client.chat.completions.create.mockResolvedValue({
+      openaiService.llmClient.chat.completions.create.mockResolvedValue({
         choices: [{ message: { content: 'Section 1: Overall Impression. Score: 4/5.' } }]
       });
 

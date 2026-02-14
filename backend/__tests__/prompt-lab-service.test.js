@@ -10,6 +10,7 @@ const path = require('path');
 const os = require('os');
 
 process.env.NODE_ENV = 'test';
+process.env.GEMINI_API_KEY = 'test-gemini-key';
 process.env.OPENAI_API_KEY = 'test-key';
 
 const openaiService = require('../src/services/OpenAIService');

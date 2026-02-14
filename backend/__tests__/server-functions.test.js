@@ -12,6 +12,7 @@
  */
 
 process.env.NODE_ENV = 'test';
+process.env.GEMINI_API_KEY = 'test-gemini-key';
 process.env.OPENAI_API_KEY = 'test-api-key';
 
 const WebSocket = require('ws');
@@ -73,13 +74,15 @@ beforeAll(() => {
   openaiService = require('../src/services/OpenAIService');
   ttsService = require('../src/services/TTSService');
 
-  // Mock the OpenAI client methods
-  openaiService.client = {
+  // Mock the OpenAI client methods (dual-client structure)
+  openaiService.llmClient = {
     chat: {
       completions: {
         create: jest.fn()
       }
-    },
+    }
+  };
+  openaiService.whisperClient = {
     audio: {
       transcriptions: {
         create: jest.fn()
@@ -297,7 +300,7 @@ describe('callGPT4oMini wrapper', () => {
 
   test('delegates to openaiService.generateResponse', async () => {
     const mockResponse = 'Hello, I am the examiner.';
-    openaiService.client.chat.completions.create.mockResolvedValue({
+    openaiService.llmClient.chat.completions.create.mockResolvedValue({
       choices: [{ message: { content: mockResponse } }]
     });
 
@@ -305,9 +308,9 @@ describe('callGPT4oMini wrapper', () => {
     const result = await openaiService.generateResponse(history);
 
     expect(result).toBe(mockResponse);
-    expect(openaiService.client.chat.completions.create).toHaveBeenCalledWith(
+    expect(openaiService.llmClient.chat.completions.create).toHaveBeenCalledWith(
       expect.objectContaining({
-        model: 'gpt-4o-mini',
+        model: expect.any(String),
         messages: history,
         temperature: 0.7,
         max_tokens: 150
@@ -316,7 +319,7 @@ describe('callGPT4oMini wrapper', () => {
   });
 
   test('passes custom options through to OpenAI', async () => {
-    openaiService.client.chat.completions.create.mockResolvedValue({
+    openaiService.llmClient.chat.completions.create.mockResolvedValue({
       choices: [{ message: { content: 'response' } }]
     });
 
@@ -325,7 +328,7 @@ describe('callGPT4oMini wrapper', () => {
       temperature: 0.5
     });
 
-    expect(openaiService.client.chat.completions.create).toHaveBeenCalledWith(
+    expect(openaiService.llmClient.chat.completions.create).toHaveBeenCalledWith(
       expect.objectContaining({
         max_tokens: 200,
         temperature: 0.5
@@ -334,7 +337,9 @@ describe('callGPT4oMini wrapper', () => {
   });
 
   test('propagates errors from OpenAI', async () => {
-    openaiService.client.chat.completions.create.mockRejectedValue(new Error('API quota exceeded'));
+    openaiService.llmClient.chat.completions.create.mockRejectedValue(
+      new Error('API quota exceeded')
+    );
 
     await expect(
       openaiService.generateResponse([{ role: 'user', content: 'test' }])
@@ -395,7 +400,7 @@ describe('WebSocket integration', () => {
   // The actual WebSocket routing is tested through the service integration.
 
   test('OpenAI service is callable with conversation history', async () => {
-    openaiService.client.chat.completions.create.mockResolvedValue({
+    openaiService.llmClient.chat.completions.create.mockResolvedValue({
       choices: [{ message: { content: 'Please describe the clinical findings.' } }]
     });
 
@@ -406,7 +411,7 @@ describe('WebSocket integration', () => {
 
     const result = await openaiService.generateResponse(history);
     expect(result).toBe('Please describe the clinical findings.');
-    expect(openaiService.client.chat.completions.create).toHaveBeenCalledTimes(1);
+    expect(openaiService.llmClient.chat.completions.create).toHaveBeenCalledTimes(1);
   });
 
   test('TTS service produces audio buffer from SSML', async () => {
@@ -699,7 +704,7 @@ describe('OpenAI streaming (generateResponseStream)', () => {
       }
     };
 
-    openaiService.client.chat.completions.create.mockResolvedValue(asyncIterable);
+    openaiService.llmClient.chat.completions.create.mockResolvedValue(asyncIterable);
 
     const tokens = [];
     for await (const token of openaiService.generateResponseStream([
@@ -709,10 +714,10 @@ describe('OpenAI streaming (generateResponseStream)', () => {
     }
 
     expect(tokens).toEqual(['Hello', ' world', '.']);
-    expect(openaiService.client.chat.completions.create).toHaveBeenCalledWith(
+    expect(openaiService.llmClient.chat.completions.create).toHaveBeenCalledWith(
       expect.objectContaining({
         stream: true,
-        model: 'gpt-4o-mini'
+        model: expect.any(String)
       })
     );
   });
@@ -723,7 +728,7 @@ describe('OpenAI streaming (generateResponseStream)', () => {
         return { next: () => Promise.resolve({ done: true }) };
       }
     };
-    openaiService.client.chat.completions.create.mockResolvedValue(emptyStream);
+    openaiService.llmClient.chat.completions.create.mockResolvedValue(emptyStream);
 
     // Consume the generator
     for await (const _token of openaiService.generateResponseStream([
@@ -732,13 +737,15 @@ describe('OpenAI streaming (generateResponseStream)', () => {
       // no-op
     }
 
-    expect(openaiService.client.chat.completions.create).toHaveBeenCalledWith({
-      model: 'gpt-4o-mini',
-      messages: [{ role: 'user', content: 'test' }],
-      temperature: 0.7,
-      max_tokens: 150,
-      stream: true
-    });
+    expect(openaiService.llmClient.chat.completions.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        model: expect.any(String),
+        messages: [{ role: 'user', content: 'test' }],
+        temperature: 0.7,
+        max_tokens: 150,
+        stream: true
+      })
+    );
   });
 
   test('custom options override defaults in streaming', async () => {
@@ -747,7 +754,7 @@ describe('OpenAI streaming (generateResponseStream)', () => {
         return { next: () => Promise.resolve({ done: true }) };
       }
     };
-    openaiService.client.chat.completions.create.mockResolvedValue(emptyStream);
+    openaiService.llmClient.chat.completions.create.mockResolvedValue(emptyStream);
 
     for await (const _token of openaiService.generateResponseStream(
       [{ role: 'user', content: 'test' }],
@@ -756,7 +763,7 @@ describe('OpenAI streaming (generateResponseStream)', () => {
       // no-op
     }
 
-    expect(openaiService.client.chat.completions.create).toHaveBeenCalledWith(
+    expect(openaiService.llmClient.chat.completions.create).toHaveBeenCalledWith(
       expect.objectContaining({
         model: 'gpt-4',
         temperature: 0.3,
@@ -1018,7 +1025,7 @@ describe('Whisper transcription via OpenAI service', () => {
 
     // Mock toFile and transcription
     const mockTranscription = { text: 'Hello from Whisper' };
-    openaiService.client.audio.transcriptions.create.mockResolvedValue(mockTranscription);
+    openaiService.whisperClient.audio.transcriptions.create.mockResolvedValue(mockTranscription);
 
     // We can't easily mock toFile since it's imported from 'openai'
     // But we can test the service method handles it

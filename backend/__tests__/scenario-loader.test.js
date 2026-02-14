@@ -8,6 +8,7 @@ const fs = require('fs');
 const path = require('path');
 
 process.env.NODE_ENV = 'test';
+process.env.GEMINI_API_KEY = 'test-gemini-key';
 process.env.OPENAI_API_KEY = 'test-key';
 
 const { loadScenarioPrompt } = require('../src/utils/scenarioLoader');

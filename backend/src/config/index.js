@@ -17,9 +17,13 @@ if (process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON) {
 }
 
 const config = {
-  // Required
+  // Required — Gemini for LLM, OpenAI for Whisper STT
+  GEMINI_API_KEY: process.env.GEMINI_API_KEY,
   OPENAI_API_KEY: process.env.OPENAI_API_KEY,
   GOOGLE_APPLICATION_CREDENTIALS: process.env.GOOGLE_APPLICATION_CREDENTIALS,
+
+  // LLM Configuration
+  LLM_MODEL: process.env.LLM_MODEL || 'gemini-2.5-flash',
 
   // Server ports with defaults
   PORT: parseInt(process.env.PORT, 10) || 8080,
@@ -27,6 +31,17 @@ const config = {
 
   // TTS Configuration
   TTS_VOICE: process.env.TTS_VOICE || 'en-GB-Neural2-D',
+  TTS_MODEL_NAME: process.env.TTS_MODEL_NAME || 'gemini-2.5-flash-tts',
+
+  // Gemini TTS style prompts — keyed by difficulty level
+  // Controls tone, pace, and emotion for each persona
+  TTS_STYLE_PROMPTS: {
+    easy: 'Speak in a warm, supportive, encouraging tone. British accent. Gentle pacing with natural pauses.',
+    medium:
+      'Speak in a professional, measured, balanced tone. British accent. Clear and steady delivery.',
+    strict:
+      'Speak in a direct, rigorous, no-nonsense tone. British accent. Crisp and authoritative.'
+  },
 
   // Paths
   PROMPTS_DIR: path.join(__dirname, '../../prompts'),
@@ -89,10 +104,15 @@ const config = {
 
 // Validation - exit if required variables are missing
 function validateConfig() {
-  if (!config.OPENAI_API_KEY) {
-    console.error('ERROR: OPENAI_API_KEY not found in .env file');
+  if (!config.GEMINI_API_KEY) {
+    console.error('ERROR: GEMINI_API_KEY not found in .env file');
     process.exit(1);
   }
+  if (!config.OPENAI_API_KEY) {
+    console.warn('WARNING: OPENAI_API_KEY not found — Whisper STT will not work');
+  }
+
+  console.log(`[CONFIG] LLM model: ${config.LLM_MODEL}`);
 
   // Log optional service status
   if (config.isStripeEnabled) {

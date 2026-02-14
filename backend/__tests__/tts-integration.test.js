@@ -4,6 +4,7 @@
  */
 
 process.env.NODE_ENV = 'test';
+process.env.GEMINI_API_KEY = 'test-gemini-key';
 process.env.OPENAI_API_KEY = 'test-api-key';
 
 describe('TTSService - synthesize', () => {
@@ -116,9 +117,9 @@ describe('TTSService - synthesize', () => {
       synthesizeSpeech: jest.fn().mockRejectedValue(new Error('TTS quota exceeded'))
     };
 
-    await expect(
-      ttsService.synthesize('<speak>Test</speak>', 'en-GB-Neural2-D')
-    ).rejects.toThrow('TTS quota exceeded');
+    await expect(ttsService.synthesize('<speak>Test</speak>', 'en-GB-Neural2-D')).rejects.toThrow(
+      'TTS quota exceeded'
+    );
   });
 
   test('uses default voice from config when voiceName is null', async () => {

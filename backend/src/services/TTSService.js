@@ -23,19 +23,21 @@ class TTSService {
   }
 
   /**
-   * Synthesize speech from SSML text
-   * @param {string} ssmlText - SSML-formatted text to synthesize
+   * Synthesize speech from text
+   * @param {string} text - Text to synthesize (plain text if stylePrompt provided, SSML otherwise)
    * @param {string} voiceName - Voice name (default: from config)
    * @param {Object} options - Optional parameters
+   * @param {string} options.stylePrompt - Style prompt for Gemini TTS (enables context-aware delivery)
    * @param {number} options.speakingRate - Speaking rate (default: 1.0)
    * @param {number} options.volumeGainDb - Volume gain in dB (default: 0.0)
    * @returns {Promise<Buffer>} - MP3 audio data as Buffer
    */
-  async synthesize(ssmlText, voiceName = null, options = {}) {
+  async synthesize(text, voiceName = null, options = {}) {
     const client = this._ensureClient();
     voiceName = voiceName || config.TTS_VOICE;
+    const stylePrompt = options.stylePrompt || null;
 
-    console.log('[TTS] Using voice:', voiceName);
+    console.log('[TTS] Using voice:', voiceName, stylePrompt ? '(styled)' : '(ssml)');
 
     // Determine gender based on voice name
     // Female voices: Aoede, Kore, Leda, Zephyr, or names ending with -F
@@ -44,7 +46,6 @@ class TTSService {
 
     try {
       const request = {
-        input: { ssml: ssmlText },
         voice: {
           languageCode: 'en-GB',
           name: voiceName,
@@ -56,6 +57,15 @@ class TTSService {
           volumeGainDb: options.volumeGainDb ?? 0.0
         }
       };
+
+      if (stylePrompt) {
+        // Gemini TTS: plain text + style prompt for context-aware delivery
+        request.input = { text: text, prompt: stylePrompt };
+        request.voice.modelName = config.TTS_MODEL_NAME;
+      } else {
+        // Legacy: SSML input
+        request.input = { ssml: text };
+      }
 
       const [response] = await client.synthesizeSpeech(request);
       return response.audioContent;

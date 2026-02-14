@@ -1,6 +1,7 @@
 /**
- * OpenAI Service
- * Handles GPT-4o-mini chat completions and Whisper transcription
+ * AI Service
+ * Handles Gemini 2.5 Flash chat completions (via OpenAI-compatible API)
+ * and OpenAI Whisper transcription
  */
 
 const OpenAI = require('openai');
@@ -9,42 +10,55 @@ const config = require('../config');
 
 class OpenAIService {
   constructor() {
-    this.client = null;
+    this.llmClient = null;
+    this.whisperClient = null;
   }
 
   /**
-   * Initialize the OpenAI client
-   * Called lazily to allow for test mocking
+   * Initialize the LLM client (Gemini via OpenAI-compatible endpoint)
    */
-  _ensureClient() {
-    if (!this.client) {
-      this.client = new OpenAI({ apiKey: config.OPENAI_API_KEY });
+  _ensureLLMClient() {
+    if (!this.llmClient) {
+      this.llmClient = new OpenAI({
+        apiKey: config.GEMINI_API_KEY,
+        baseURL: 'https://generativelanguage.googleapis.com/v1beta/openai/'
+      });
     }
-    return this.client;
+    return this.llmClient;
   }
 
   /**
-   * Generate a response using GPT-4o-mini
+   * Initialize the Whisper client (OpenAI)
+   */
+  _ensureWhisperClient() {
+    if (!this.whisperClient) {
+      this.whisperClient = new OpenAI({ apiKey: config.OPENAI_API_KEY });
+    }
+    return this.whisperClient;
+  }
+
+  /**
+   * Generate a response using Gemini 2.5 Flash
    * @param {Array} history - Conversation history array of {role, content}
    * @param {Object} options - Optional parameters
-   * @param {string} options.model - Model to use (default: gpt-4o-mini)
+   * @param {string} options.model - Model to use (default: gemini-2.5-flash)
    * @param {number} options.temperature - Temperature (default: 0.7)
    * @param {number} options.max_tokens - Max tokens (default: 150)
    * @returns {Promise<string>} - The generated response text
    */
   async generateResponse(history, options = {}) {
-    const client = this._ensureClient();
+    const client = this._ensureLLMClient();
 
     try {
       const completion = await client.chat.completions.create({
-        model: options.model || 'gpt-4o-mini',
+        model: options.model || config.LLM_MODEL,
         messages: history,
         temperature: options.temperature ?? 0.7,
         max_tokens: options.max_tokens || 150
       });
       return completion.choices[0].message.content;
     } catch (error) {
-      console.error('[GPT-4o-mini] Error:', error.message);
+      console.error(`[${config.LLM_MODEL}] Error:`, error.message);
       throw error;
     }
   }
@@ -57,7 +71,7 @@ class OpenAIService {
    * @returns {Promise<string>} - The transcribed text
    */
   async transcribeAudio(audioBuffer, sessionId, format = 'webm') {
-    const client = this._ensureClient();
+    const client = this._ensureWhisperClient();
 
     const isWav = audioBuffer.length >= 4 && audioBuffer.slice(0, 4).toString() === 'RIFF';
     const extension = isWav || format === 'wav' ? 'wav' : 'webm';
@@ -80,17 +94,17 @@ class OpenAIService {
   }
 
   /**
-   * Stream a response using GPT-4o-mini (async generator)
+   * Stream a response using Gemini 2.5 Flash (async generator)
    * Yields token strings as they arrive.
    * @param {Array} history - Conversation history array of {role, content}
    * @param {Object} options - Optional parameters (same as generateResponse)
    * @yields {string} - Individual token strings
    */
   async *generateResponseStream(history, options = {}) {
-    const client = this._ensureClient();
+    const client = this._ensureLLMClient();
 
     const stream = await client.chat.completions.create({
-      model: options.model || 'gpt-4o-mini',
+      model: options.model || config.LLM_MODEL,
       messages: history,
       temperature: options.temperature ?? 0.7,
       max_tokens: options.max_tokens || 150,

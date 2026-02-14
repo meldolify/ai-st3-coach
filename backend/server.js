@@ -128,8 +128,23 @@ function serializeTranscript(history) {
     .join('\n');
 }
 
-async function googleTTS(text, voiceName) {
-  return ttsService.synthesize(text, voiceName);
+async function googleTTS(text, voiceName, options = {}) {
+  return ttsService.synthesize(text, voiceName, options);
+}
+
+/**
+ * Synthesize TTS for a session — uses style prompt if available for the difficulty.
+ * Passes plain text when styled (Gemini TTS handles pacing), SSML when not.
+ * @param {string} plainText - Plain text to speak
+ * @param {Object} session - Session object (needs session.voice, session.difficulty)
+ * @returns {Promise<Buffer>} - MP3 audio data
+ */
+function ttsForSession(plainText, session) {
+  const stylePrompt = config.TTS_STYLE_PROMPTS?.[session.difficulty];
+  if (stylePrompt) {
+    return googleTTS(plainText, session.voice, { stylePrompt });
+  }
+  return googleTTS(buildNaturalSSML(plainText), session.voice);
 }
 
 /**
@@ -164,8 +179,7 @@ async function streamResponseToClient(session, ws, history, options = {}) {
         if (!session.isAISpeaking) {
           break;
         }
-        const ssml = buildNaturalSSML(sentence);
-        const audio = await googleTTS(ssml, session.voice);
+        const audio = await ttsForSession(sentence, session);
         ws.send(
           JSON.stringify({
             type: 'ai_response_chunk',
@@ -180,8 +194,7 @@ async function streamResponseToClient(session, ws, history, options = {}) {
     // Flush remaining text
     const remaining = sentenceBuffer.flush();
     if (remaining && session.isAISpeaking) {
-      const ssml = buildNaturalSSML(remaining);
-      const audio = await googleTTS(ssml, session.voice);
+      const audio = await ttsForSession(remaining, session);
       ws.send(
         JSON.stringify({
           type: 'ai_response_chunk',
@@ -353,6 +366,7 @@ wss.on('connection', (ws, req) => {
       ws: ws,
       scenario: scenarioFile,
       voice: voice,
+      difficulty: difficulty,
       userId: userId,
       isAISpeaking: false,
       inFeedbackMode: false,
@@ -637,9 +651,8 @@ wss.on('connection', (ws, req) => {
                     console.log(`[TIMING] Feedback GPT: ${t2 - t1}ms`);
                     session.feedbackHistory.push({ role: 'assistant', content: responseText });
 
-                    const ssmlText = buildNaturalSSML(responseText);
                     const t3 = Date.now();
-                    const audioBuffer = await googleTTS(ssmlText, session.voice);
+                    const audioBuffer = await ttsForSession(responseText, session);
                     const t4 = Date.now();
                     console.log(`[TIMING] Feedback TTS: ${t4 - t3}ms, Total: ${t4 - t1}ms`);
 
@@ -776,9 +789,8 @@ wss.on('connection', (ws, req) => {
               session.feedbackHistory.push({ role: 'assistant', content: responseText });
 
               // 5. Generate TTS audio
-              const ssmlText = buildNaturalSSML(responseText);
               const t3 = Date.now();
-              const audioBuffer = await googleTTS(ssmlText, session.voice);
+              const audioBuffer = await ttsForSession(responseText, session);
               const t4 = Date.now();
               console.log(`[TIMING] Feedback TTS: ${t4 - t3}ms, Total: ${t4 - t1}ms`);
 
