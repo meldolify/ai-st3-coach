@@ -137,7 +137,7 @@ describe('TTSService', () => {
     expect(ttsService.client.synthesizeSpeech).toHaveBeenCalledWith(
       expect.objectContaining({
         voice: expect.objectContaining({
-          name: 'en-GB-Neural2-D' // Default from config
+          name: 'Fenrir' // Default from config
         })
       })
     );

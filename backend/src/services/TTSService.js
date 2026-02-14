@@ -1,6 +1,7 @@
 /**
- * Text-to-Speech Service
- * Handles Google Cloud TTS synthesis
+ * Text-to-Speech Service (Cloud TTS fallback)
+ * Handles Google Cloud TTS synthesis via SSML.
+ * Used as fallback when Gemini TTS style prompts are not configured.
  */
 
 const textToSpeech = require('@google-cloud/text-to-speech');
@@ -23,29 +24,27 @@ class TTSService {
   }
 
   /**
-   * Synthesize speech from text
-   * @param {string} text - Text to synthesize (plain text if stylePrompt provided, SSML otherwise)
+   * Synthesize speech from SSML text using Google Cloud TTS.
+   * @param {string} ssml - SSML text to synthesize
    * @param {string} voiceName - Voice name (default: from config)
    * @param {Object} options - Optional parameters
-   * @param {string} options.stylePrompt - Style prompt for Gemini TTS (enables context-aware delivery)
    * @param {number} options.speakingRate - Speaking rate (default: 1.0)
    * @param {number} options.volumeGainDb - Volume gain in dB (default: 0.0)
    * @returns {Promise<Buffer>} - MP3 audio data as Buffer
    */
-  async synthesize(text, voiceName = null, options = {}) {
+  async synthesize(ssml, voiceName = null, options = {}) {
     const client = this._ensureClient();
     voiceName = voiceName || config.TTS_VOICE;
-    const stylePrompt = options.stylePrompt || null;
 
-    console.log('[TTS] Using voice:', voiceName, stylePrompt ? '(styled)' : '(ssml)');
+    console.log('[Cloud TTS] Using voice:', voiceName);
 
     // Determine gender based on voice name
-    // Female voices: Aoede, Kore, Leda, Zephyr, or names ending with -F
     const femaleVoices = ['Aoede', 'Kore', 'Leda', 'Zephyr', '-F'];
     const gender = femaleVoices.some(v => voiceName.includes(v)) ? 'FEMALE' : 'MALE';
 
     try {
       const request = {
+        input: { ssml },
         voice: {
           languageCode: 'en-GB',
           name: voiceName,
@@ -58,19 +57,10 @@ class TTSService {
         }
       };
 
-      if (stylePrompt) {
-        // Gemini TTS: plain text + style prompt for context-aware delivery
-        request.input = { text: text, prompt: stylePrompt };
-        request.voice.modelName = config.TTS_MODEL_NAME;
-      } else {
-        // Legacy: SSML input
-        request.input = { ssml: text };
-      }
-
       const [response] = await client.synthesizeSpeech(request);
       return response.audioContent;
     } catch (error) {
-      console.error('[Google TTS] Error:', error.message);
+      console.error('[Cloud TTS] Error:', error.message);
       throw error;
     }
   }

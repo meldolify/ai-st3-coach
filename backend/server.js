@@ -19,10 +19,12 @@ const server = http.createServer(app);
 // Import services
 const openaiService = require('./src/services/OpenAIService');
 const ttsService = require('./src/services/TTSService');
+const geminiTTSService = require('./src/services/GeminiTTSService');
 const { ServerVAD, float32ToWavBuffer } = require('./src/services/ServerVAD');
 const { isNoiseTranscript, buildNaturalSSML } = require('./src/utils/audioHelpers');
 const { loadScenarioPrompt } = require('./src/utils/scenarioLoader');
 const SentenceBuffer = require('./src/utils/sentenceBuffer');
+const { RateLimitError } = require('openai');
 
 // Import security middleware
 const {
@@ -133,17 +135,19 @@ async function googleTTS(text, voiceName, options = {}) {
 }
 
 /**
- * Synthesize TTS for a session — uses style prompt if available for the difficulty.
- * Passes plain text when styled (Gemini TTS handles pacing), SSML when not.
+ * Synthesize TTS for a session — uses Gemini TTS with style prompt if available,
+ * falls back to Cloud TTS with SSML otherwise.
  * @param {string} plainText - Plain text to speak
  * @param {Object} session - Session object (needs session.voice, session.difficulty)
- * @returns {Promise<Buffer>} - MP3 audio data
+ * @returns {Promise<Buffer>} - Audio data (WAV from Gemini, MP3 from Cloud TTS)
  */
 function ttsForSession(plainText, session) {
   const stylePrompt = config.TTS_STYLE_PROMPTS?.[session.difficulty];
   if (stylePrompt) {
-    return googleTTS(plainText, session.voice, { stylePrompt });
+    // Gemini API: context-aware TTS with style prompt
+    return geminiTTSService.synthesize(plainText, session.voice, { stylePrompt });
   }
+  // Fallback: Cloud TTS with SSML
   return googleTTS(buildNaturalSSML(plainText), session.voice);
 }
 
@@ -219,7 +223,16 @@ async function streamResponseToClient(session, ws, history, options = {}) {
     if (fullText) {
       history.push({ role: 'assistant', content: fullText });
     }
-    ws.send(JSON.stringify({ type: 'error', message: 'Streaming response failed' }));
+    const isRateLimit = error instanceof RateLimitError || error.isRateLimit;
+    ws.send(
+      JSON.stringify({
+        type: 'error',
+        message: isRateLimit
+          ? 'API rate limit reached. Please wait a moment and try again.'
+          : 'Streaming response failed',
+        ...(isRateLimit && { code: 'RATE_LIMITED' })
+      })
+    );
     session.isAISpeaking = false;
   }
 }
@@ -668,11 +681,15 @@ wss.on('connection', (ws, req) => {
                     );
                   } catch (error) {
                     console.error('[FEEDBACK AUTO-CONTINUE ERROR]', error.message);
+                    const isRateLimit = error instanceof RateLimitError || error.isRateLimit;
                     try {
                       ws.send(
                         JSON.stringify({
                           type: 'error',
-                          message: 'Feedback generation failed. Please try again.'
+                          message: isRateLimit
+                            ? 'API rate limit reached during feedback. Please try ending the session again.'
+                            : 'Feedback generation failed. Please try again.',
+                          ...(isRateLimit && { code: 'RATE_LIMITED' })
                         })
                       );
                     } catch (sendErr) {
@@ -681,7 +698,7 @@ wss.on('connection', (ws, req) => {
                     session.inFeedbackMode = false;
                     session.feedbackCount = 0;
                   }
-                }, 300);
+                }, 1500);
               } else if (session.feedbackCount === 6) {
                 // All 6 spoken sections delivered - now generate JSON summary
                 console.log('[FEEDBACK] All sections delivered, generating JSON summary');
@@ -811,22 +828,33 @@ wss.on('connection', (ws, req) => {
               console.log('[FEEDBACK] Section 1 sent');
             } catch (error) {
               console.error('[FEEDBACK ERROR]', error.message);
-              ws.send(
-                JSON.stringify({
-                  type: 'feedback_summary',
-                  feedback: {
-                    score: 3,
-                    overallImpression: 'Session completed',
-                    clinicalKnowledge: {
-                      diagnosis: 'Feedback generation error',
-                      management: 'Feedback generation error'
-                    },
-                    strengths: ['Session completed'],
-                    improvements: ['Feedback generation encountered an error'],
-                    summary: 'Unable to generate detailed feedback. Please try again.'
-                  }
-                })
-              );
+              const isRateLimit = error instanceof RateLimitError || error.isRateLimit;
+              if (isRateLimit) {
+                ws.send(
+                  JSON.stringify({
+                    type: 'error',
+                    message: 'API rate limit reached. Please wait a moment and try again.',
+                    code: 'RATE_LIMITED'
+                  })
+                );
+              } else {
+                ws.send(
+                  JSON.stringify({
+                    type: 'feedback_summary',
+                    feedback: {
+                      score: 3,
+                      overallImpression: 'Session completed',
+                      clinicalKnowledge: {
+                        diagnosis: 'Feedback generation error',
+                        management: 'Feedback generation error'
+                      },
+                      strengths: ['Session completed'],
+                      improvements: ['Feedback generation encountered an error'],
+                      summary: 'Unable to generate detailed feedback. Please try again.'
+                    }
+                  })
+                );
+              }
             }
             break;
         }

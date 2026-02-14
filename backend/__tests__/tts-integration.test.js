@@ -132,7 +132,7 @@ describe('TTSService - synthesize', () => {
     expect(mockSynthesize).toHaveBeenCalledWith(
       expect.objectContaining({
         voice: expect.objectContaining({
-          name: 'en-GB-Neural2-D'
+          name: 'Fenrir'
         })
       })
     );
