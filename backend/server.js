@@ -134,21 +134,32 @@ async function googleTTS(text, voiceName, options = {}) {
   return ttsService.synthesize(text, voiceName, options);
 }
 
+// Gemini voice → Google Cloud voice fallback mapping
+const VOICE_FALLBACK_MAP = {
+  Fenrir: 'en-GB-Neural2-D', // Male
+  Kore: 'en-GB-Neural2-A', // Female
+  Charon: 'en-GB-Neural2-B' // Male
+};
+
 /**
- * Synthesize TTS for a session — uses Gemini TTS with style prompt if available,
- * falls back to Cloud TTS with SSML otherwise.
+ * Synthesize TTS for a session — tries Gemini TTS with style prompt first,
+ * falls back to Cloud TTS with SSML on error.
  * @param {string} plainText - Plain text to speak
  * @param {Object} session - Session object (needs session.voice, session.difficulty)
  * @returns {Promise<Buffer>} - Audio data (WAV from Gemini, MP3 from Cloud TTS)
  */
-function ttsForSession(plainText, session) {
+async function ttsForSession(plainText, session) {
   const stylePrompt = config.TTS_STYLE_PROMPTS?.[session.difficulty];
   if (stylePrompt) {
-    // Gemini API: context-aware TTS with style prompt
-    return geminiTTSService.synthesize(plainText, session.voice, { stylePrompt });
+    try {
+      return await geminiTTSService.synthesize(plainText, session.voice, { stylePrompt });
+    } catch (error) {
+      console.warn('[TTS] Gemini TTS failed, falling back to Cloud TTS:', error.message);
+    }
   }
-  // Fallback: Cloud TTS with SSML
-  return googleTTS(buildNaturalSSML(plainText), session.voice);
+  // Fallback: Cloud TTS with SSML (map Gemini voice names to Cloud equivalents, pass through others)
+  const cloudVoice = VOICE_FALLBACK_MAP[session.voice] || session.voice;
+  return googleTTS(buildNaturalSSML(plainText), cloudVoice);
 }
 
 /**
