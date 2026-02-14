@@ -581,3 +581,59 @@ body {
   margin-bottom: 4px;
   font-size: 11px;
 }
+
+/* ── Toast Notifications ── */
+.pl-toast-container {
+  position: fixed;
+  top: 68px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.pl-toast {
+  padding: 10px 20px;
+  border-radius: var(--pl-radius);
+  font-size: 13px;
+  font-weight: 500;
+  pointer-events: auto;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.pl-toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.pl-toast-success {
+  background: rgba(63, 185, 80, 0.15);
+  border: 1px solid rgba(63, 185, 80, 0.3);
+  color: var(--pl-green);
+}
+
+.pl-toast-error {
+  background: rgba(248, 81, 73, 0.15);
+  border: 1px solid rgba(248, 81, 73, 0.3);
+  color: var(--pl-red);
+}
+
+/* ── Test Source Labels ── */
+.pl-source-label {
+  font-size: 10px;
+  font-weight: 500;
+  margin-left: 4px;
+}
+
+.pl-source-generic { color: var(--pl-accent); }
+.pl-source-generated { color: var(--pl-purple); }
+.pl-source-generatable { color: var(--pl-yellow); }

@@ -8,6 +8,7 @@ const fs = require('fs');
 const path = require('path');
 const openaiService = require('./OpenAIService');
 const { parsePromptSections, combinePromptSections } = require('../utils/promptParser');
+const testScriptGenerator = require('./TestScriptGenerator');
 
 const BACKEND_DIR = path.join(__dirname, '..', '..');
 const PROMPTS_DIR = path.join(BACKEND_DIR, 'prompts');
@@ -405,34 +406,151 @@ function clearModifiedFiles() {
 // AUTOMATED TEST EXECUTION
 // ──────────────────────────────────────────
 
-function listTestScripts(topicFolderName) {
-  const dir = path.join(TEST_SCRIPTS_DIR, topicFolderName || '');
-  if (!topicFolderName || !fs.existsSync(dir)) {
-    return [];
+function listTestScripts(topicFolderName, topicPath) {
+  const results = [];
+  const existingIds = new Set();
+
+  // 1. Pre-made topic-specific scripts (gold standard)
+  const topicDir = path.join(TEST_SCRIPTS_DIR, topicFolderName || '');
+  if (topicFolderName && fs.existsSync(topicDir)) {
+    const files = fs.readdirSync(topicDir).filter(f => f.endsWith('.json'));
+    for (const f of files) {
+      try {
+        const data = JSON.parse(fs.readFileSync(path.join(topicDir, f), 'utf8'));
+        const id = f.replace('.json', '');
+        existingIds.add(id);
+        results.push({
+          id,
+          name: data.name,
+          description: data.description,
+          difficulty: data.difficulty,
+          inputCount: data.inputs?.length || 0,
+          triggerFeedback: data.triggerFeedback || false,
+          source: 'premade'
+        });
+      } catch {
+        /* skip malformed files */
+      }
+    }
   }
 
-  return fs
-    .readdirSync(dir)
-    .filter(f => f.endsWith('.json'))
-    .map(f => {
-      const data = JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8'));
-      return {
-        id: f.replace('.json', ''),
-        name: data.name,
-        description: data.description,
-        difficulty: data.difficulty,
-        inputCount: data.inputs?.length || 0,
-        triggerFeedback: data.triggerFeedback || false
-      };
-    });
+  // 2. Generic behavioral scripts
+  const genericDir = path.join(TEST_SCRIPTS_DIR, '_generic');
+  if (fs.existsSync(genericDir)) {
+    const files = fs.readdirSync(genericDir).filter(f => f.endsWith('.json'));
+    for (const f of files) {
+      const id = f.replace('.json', '');
+      if (existingIds.has(id)) {
+        continue;
+      }
+      try {
+        const data = JSON.parse(fs.readFileSync(path.join(genericDir, f), 'utf8'));
+        existingIds.add(id);
+        results.push({
+          id,
+          name: data.name,
+          description: data.description,
+          difficulty: data.difficulty,
+          inputCount: data.inputs?.length || 0,
+          triggerFeedback: data.triggerFeedback || false,
+          source: 'generic'
+        });
+      } catch {
+        /* skip malformed files */
+      }
+    }
+  }
+
+  // 3. Cached GPT-generated scripts
+  if (topicFolderName) {
+    const generatedDir = path.join(TEST_SCRIPTS_DIR, '_generated', topicFolderName);
+    if (fs.existsSync(generatedDir)) {
+      const files = fs.readdirSync(generatedDir).filter(f => f.endsWith('.json'));
+      for (const f of files) {
+        const id = f.replace('.json', '');
+        if (existingIds.has(id)) {
+          continue;
+        }
+        try {
+          const data = JSON.parse(fs.readFileSync(path.join(generatedDir, f), 'utf8'));
+          // Check cache TTL
+          if (data._cachedAt) {
+            const age = Date.now() - new Date(data._cachedAt).getTime();
+            if (age > 24 * 60 * 60 * 1000) {
+              continue;
+            } // Expired
+          }
+          existingIds.add(id);
+          results.push({
+            id,
+            name: data.name,
+            description: data.description,
+            difficulty: data.difficulty || 'easy',
+            inputCount: data.inputs?.length || 0,
+            triggerFeedback: data.triggerFeedback || false,
+            source: 'generated'
+          });
+        } catch {
+          /* skip malformed files */
+        }
+      }
+    }
+  }
+
+  // 4. Generatable placeholders (if Section 3 has real content)
+  if (topicPath && testScriptGenerator.hasRealContent(topicPath)) {
+    for (const testType of testScriptGenerator.GENERATABLE_TEST_TYPES) {
+      if (!existingIds.has(testType)) {
+        results.push({
+          id: testType,
+          name: toTitleCase(testType),
+          description: 'GPT-generated test (will be created on first run)',
+          difficulty: 'easy',
+          inputCount: 0,
+          triggerFeedback: [
+            'excellent_candidate',
+            'good_candidate',
+            'poor_candidate',
+            'feedback_interrupt'
+          ].includes(testType),
+          source: 'generatable'
+        });
+      }
+    }
+  }
+
+  return results;
 }
 
-function loadTestScript(topicFolderName, testId) {
-  const filePath = path.join(TEST_SCRIPTS_DIR, topicFolderName, `${testId}.json`);
-  if (!fs.existsSync(filePath)) {
-    throw new Error(`Test script not found: ${testId}`);
+async function loadTestScript(topicFolderName, testId, topicPath) {
+  // 1. Pre-made topic-specific
+  const premadePath = path.join(TEST_SCRIPTS_DIR, topicFolderName, `${testId}.json`);
+  if (fs.existsSync(premadePath)) {
+    return JSON.parse(fs.readFileSync(premadePath, 'utf8'));
   }
-  return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+
+  // 2. Generic behavioral
+  const genericPath = path.join(TEST_SCRIPTS_DIR, '_generic', `${testId}.json`);
+  if (fs.existsSync(genericPath)) {
+    return JSON.parse(fs.readFileSync(genericPath, 'utf8'));
+  }
+
+  // 3. Cached generated
+  if (topicPath) {
+    const cached = testScriptGenerator.getCachedScript(topicPath, testId);
+    if (cached) {
+      return cached;
+    }
+  }
+
+  // 4. Generate on-demand
+  if (topicPath && testScriptGenerator.GENERATABLE_TEST_TYPES.includes(testId)) {
+    const script = await testScriptGenerator.generateTestScript(testId, topicPath);
+    testScriptGenerator.cacheScript(topicPath, testId, script);
+    return script;
+  }
+
+  throw new Error(`Test script not found: ${testId}`);
 }
 
 function evaluateAssertions(assertions, history, feedback) {
@@ -554,7 +672,7 @@ function evaluateSingleAssertion(assertion, assistantTurns, feedback) {
 
 async function runTest(testId, topicPath, promptOverride, feedbackPromptOverride) {
   const topicFolderName = topicPath ? topicPath.split('/').pop() : 'necrotising_fasciitis';
-  const script = loadTestScript(topicFolderName, testId);
+  const script = await loadTestScript(topicFolderName, testId, topicPath);
   const difficulty = script.difficulty || 'easy';
 
   let promptSections;

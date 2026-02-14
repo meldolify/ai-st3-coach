@@ -491,12 +491,13 @@ describe('GET /prompt-lab/api/tests', () => {
     expect(t).toHaveProperty('triggerFeedback');
   });
 
-  test('returns empty array for unknown topic', async () => {
+  test('returns generic tests for unknown topic', async () => {
     const res = await request(app)
       .get('/prompt-lab/api/tests')
       .query({ topic: 'fake/unknown/topic' });
     expect(res.status).toBe(200);
-    expect(res.body.tests).toEqual([]);
+    // Generic behavioral templates are always available
+    res.body.tests.forEach(t => expect(t.source).toBe('generic'));
   });
 
   test('uses default topic when none specified', async () => {
