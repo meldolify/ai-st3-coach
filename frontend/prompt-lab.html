@@ -12,15 +12,18 @@
 <!-- Header -->
 <header class="pl-header">
   <h1>Prompt Lab</h1>
-  <span style="color: var(--pl-text-dim); font-size: 13px;">Necrotising Fasciitis</span>
+  <select id="topicSelect" class="pl-select" style="max-width: 280px;">
+    <option value="">Loading topics...</option>
+  </select>
   <div class="pl-header-controls">
     <select id="difficultySelect" class="pl-select">
-      <option value="easy">Easy (John)</option>
-      <option value="medium">Medium (Elliot)</option>
-      <option value="strict">Strict (Perry)</option>
+      <option value="easy">Easy</option>
+      <option value="medium">Medium</option>
+      <option value="strict">Strict</option>
     </select>
     <button id="newSessionBtn" class="pl-btn pl-btn-primary">New Session</button>
     <button id="savePromptBtn" class="pl-btn">Save Prompt</button>
+    <button id="createPrBtn" class="pl-btn" style="display: none;">Create PR <span id="changeCount"></span></button>
     <span id="statusIndicator" style="font-size: 12px; color: var(--pl-text-dim);">No session</span>
   </div>
 </header>
@@ -65,7 +68,7 @@
       <div id="chatMessages" class="pl-chat-messages">
         <div class="pl-empty">
           <span>Start a session to begin chatting</span>
-          <span style="font-size: 11px;">Select difficulty, then click "New Session"</span>
+          <span style="font-size: 11px;">Select a topic and difficulty, then click "New Session"</span>
         </div>
       </div>
       <div class="pl-chat-actions">
@@ -158,6 +161,9 @@ const api = {
     return res.json();
   },
 
+  loadTopics() { return this._fetch('/topics'); },
+  loadConfig() { return this._fetch('/config'); },
+
   createSession(promptSections, metadata) {
     return this._fetch('/session', {
       method: 'POST',
@@ -172,10 +178,10 @@ const api = {
     });
   },
 
-  feedback(sessionId, feedbackPrompt) {
+  feedback(sessionId, feedbackPrompt, topic) {
     return this._fetch('/feedback', {
       method: 'POST',
-      body: JSON.stringify({ sessionId, feedbackPrompt: feedbackPrompt || undefined }),
+      body: JSON.stringify({ sessionId, feedbackPrompt: feedbackPrompt || undefined, topic }),
     });
   },
 
@@ -186,40 +192,45 @@ const api = {
     });
   },
 
-  loadPrompt(difficulty) {
-    return this._fetch('/prompts/' + difficulty);
+  loadPrompt(difficulty, topic) {
+    return this._fetch('/prompts/' + difficulty + '?topic=' + encodeURIComponent(topic));
   },
 
-  savePrompt(difficulty, sections) {
-    return this._fetch('/prompts/' + difficulty, {
+  savePrompt(difficulty, sections, topic) {
+    return this._fetch('/prompts/' + difficulty + '?topic=' + encodeURIComponent(topic), {
       method: 'PUT',
       body: JSON.stringify({ sections }),
     });
   },
 
-  loadFeedbackPrompt(difficulty) {
-    return this._fetch('/feedback-prompt/' + difficulty);
+  loadFeedbackPrompt(difficulty, topic) {
+    return this._fetch('/feedback-prompt/' + difficulty + '?topic=' + encodeURIComponent(topic));
   },
 
-  saveFeedbackPrompt(difficulty, content) {
-    return this._fetch('/feedback-prompt/' + difficulty, {
+  saveFeedbackPrompt(difficulty, content, topic) {
+    return this._fetch('/feedback-prompt/' + difficulty + '?topic=' + encodeURIComponent(topic), {
       method: 'PUT',
       body: JSON.stringify({ content }),
     });
   },
 
-  listTests() { return this._fetch('/tests'); },
+  listTests(topic) {
+    return this._fetch('/tests?topic=' + encodeURIComponent(topic));
+  },
 
-  runTest(testId, promptSections, feedbackPrompt) {
+  runTest(testId, topic, promptSections, feedbackPrompt) {
     return this._fetch('/run-test', {
       method: 'POST',
-      body: JSON.stringify({ testId, promptSections: promptSections || undefined, feedbackPrompt: feedbackPrompt || undefined }),
+      body: JSON.stringify({ testId, topic, promptSections: promptSections || undefined, feedbackPrompt: feedbackPrompt || undefined }),
     });
   },
 
   listTranscripts() { return this._fetch('/transcripts'); },
   loadTranscript(id) { return this._fetch('/transcripts/' + id); },
   deleteTranscript(id) { return this._fetch('/transcripts/' + id, { method: 'DELETE' }); },
+
+  getChanges() { return this._fetch('/changes'); },
+  createPR() { return this._fetch('/create-pr', { method: 'POST' }); },
 };
 
 // ================================================================
@@ -228,6 +239,7 @@ const api = {
 
 let state = {
   sessionId: null,
+  topic: 'clinical/emergencies/necrotising_fasciitis',
   difficulty: 'easy',
   activeTab: 'core',
   mode: 'manual',
@@ -236,6 +248,8 @@ let state = {
   feedbackPrompt: '',
   savedSections: null,
   savedFeedback: null,
+  githubEnabled: false,
+  pendingChanges: 0,
 };
 
 // ================================================================
@@ -243,9 +257,12 @@ let state = {
 // ================================================================
 
 const $ = (id) => document.getElementById(id);
+const topicSelect = $('topicSelect');
 const difficultySelect = $('difficultySelect');
 const newSessionBtn = $('newSessionBtn');
 const savePromptBtn = $('savePromptBtn');
+const createPrBtn = $('createPrBtn');
+const changeCountEl = $('changeCount');
 const statusIndicator = $('statusIndicator');
 const promptEditor = $('promptEditor');
 const charCountEl = $('charCount');
@@ -288,6 +305,25 @@ function setStatus(text, isError) {
 }
 
 // ================================================================
+// TOPIC HELPERS
+// ================================================================
+
+function getTopicParts() {
+  const parts = state.topic.split('/');
+  return { category: parts[0], folderName: parts[parts.length - 1] };
+}
+
+function getPromptFilename() {
+  const { category, folderName } = getTopicParts();
+  return `${state.difficulty}_${category}_${folderName}_1.txt`;
+}
+
+function getFeedbackFilename() {
+  const { category, folderName } = getTopicParts();
+  return `${state.difficulty}_${category}_${folderName}_feedback.txt`;
+}
+
+// ================================================================
 // PROMPT EDITOR
 // ================================================================
 
@@ -314,10 +350,10 @@ function syncStateToEditor() {
 }
 
 // ── localStorage persistence ──
-// Keys: pl_sections_{difficulty}, pl_feedback_{difficulty}
+// Keys: pl_sections_{topic}_{difficulty}, pl_feedback_{topic}_{difficulty}
 
 function localStorageKey(type, difficulty) {
-  return 'pl_' + type + '_' + difficulty;
+  return 'pl_' + type + '_' + state.topic + '_' + difficulty;
 }
 
 function saveToLocalStorage() {
@@ -335,19 +371,14 @@ function loadFromLocalStorage(difficulty) {
   } catch { return null; }
 }
 
-function clearLocalStorage(difficulty) {
-  localStorage.removeItem(localStorageKey('sections', difficulty));
-  localStorage.removeItem(localStorageKey('feedback', difficulty));
-}
-
 async function loadPrompt() {
   try {
     // Load from server (git baseline)
-    const data = await api.loadPrompt(state.difficulty);
+    const data = await api.loadPrompt(state.difficulty, state.topic);
     state.savedSections = { ...data.sections };
 
     try {
-      const fb = await api.loadFeedbackPrompt(state.difficulty);
+      const fb = await api.loadFeedbackPrompt(state.difficulty, state.topic);
       state.savedFeedback = fb.content;
     } catch (e) {
       state.savedFeedback = '';
@@ -396,15 +427,16 @@ async function savePrompt() {
   saveToLocalStorage();
 
   try {
-    await api.savePrompt(state.difficulty, state.promptSections);
+    await api.savePrompt(state.difficulty, state.promptSections, state.topic);
     state.savedSections = { ...state.promptSections };
 
     if (state.feedbackPrompt !== state.savedFeedback) {
-      await api.saveFeedbackPrompt(state.difficulty, state.feedbackPrompt);
+      await api.saveFeedbackPrompt(state.difficulty, state.feedbackPrompt, state.topic);
       state.savedFeedback = state.feedbackPrompt;
     }
 
     setStatus('Saved (server + local)');
+    refreshChangeCount();
   } catch (err) {
     setStatus('Saved locally (server error: ' + err.message + ')', true);
   }
@@ -429,13 +461,13 @@ function downloadPrompt() {
 
   if (tab === 'feedback') {
     content = state.feedbackPrompt;
-    filename = state.difficulty + '_clinical_necrotising_fasciitis_feedback.txt';
+    filename = getFeedbackFilename();
   } else {
     // Download the full combined prompt (all 3 sections)
     content = 'SECTION 1\nREALTIME CORE BEHAVIOURS\n\n' + (state.promptSections.core || '') +
       '\n\nSECTION 2\nDIFFICULTY AND PERSONALITY LAYER\n\n' + (state.promptSections.difficulty || '') +
       '\n\nSECTION 3\nCLINICAL SCENARIO BLOCK\n\n' + (state.promptSections.clinical || '');
-    filename = state.difficulty + '_clinical_necrotising_fasciitis_1.txt';
+    filename = getPromptFilename();
   }
 
   const blob = new Blob([content], { type: 'text/plain' });
@@ -591,7 +623,7 @@ async function requestFeedback() {
   try {
     syncEditorToState();
     const fbPrompt = state.feedbackPrompt || undefined;
-    const { sections, summary } = await api.feedback(state.sessionId, fbPrompt);
+    const { sections, summary } = await api.feedback(state.sessionId, fbPrompt, state.topic);
 
     sections.forEach((text, i) => addFeedbackSection(i + 1, text));
     addFeedbackSummary(summary);
@@ -640,7 +672,7 @@ let selectedTests = new Set();
 
 async function loadTests() {
   try {
-    const { tests } = await api.listTests();
+    const { tests } = await api.listTests(state.topic);
     availableTests = tests;
     renderTestList();
   } catch (err) {
@@ -653,7 +685,7 @@ function renderTestList() {
   testListEl.textContent = '';
 
   if (availableTests.length === 0) {
-    testListEl.appendChild(createEl('div', 'pl-empty', 'No test scripts found'));
+    testListEl.appendChild(createEl('div', 'pl-empty', 'No test scripts for this topic'));
     return;
   }
 
@@ -710,7 +742,7 @@ async function runSelectedTests() {
     autoTestContent.scrollTop = autoTestContent.scrollHeight;
 
     try {
-      const result = await api.runTest(testId, promptSections, feedbackPrompt);
+      const result = await api.runTest(testId, state.topic, promptSections, feedbackPrompt);
 
       // Show conversation
       for (const msg of result.history) {
@@ -910,8 +942,54 @@ async function viewTranscript(id) {
 }
 
 // ================================================================
+// GITHUB PR
+// ================================================================
+
+async function refreshChangeCount() {
+  if (!state.githubEnabled) return;
+  try {
+    const { count } = await api.getChanges();
+    state.pendingChanges = count;
+    changeCountEl.textContent = count > 0 ? '(' + count + ')' : '';
+    createPrBtn.disabled = count === 0;
+  } catch { /* ignore */ }
+}
+
+async function handleCreatePR() {
+  if (state.loading) return;
+  state.loading = true;
+  createPrBtn.disabled = true;
+  setStatus('Creating PR...');
+
+  try {
+    const result = await api.createPR();
+    state.pendingChanges = 0;
+    changeCountEl.textContent = '';
+    setStatus('PR created!');
+    // Open PR in new tab
+    window.open(result.prUrl, '_blank');
+  } catch (err) {
+    setStatus('PR error: ' + err.message, true);
+    createPrBtn.disabled = false;
+  }
+
+  state.loading = false;
+}
+
+// ================================================================
 // EVENT LISTENERS
 // ================================================================
+
+topicSelect.addEventListener('change', () => {
+  // Save current edits before switching topic
+  syncEditorToState();
+  saveToLocalStorage();
+  state.topic = topicSelect.value;
+  state.sessionId = null;
+  selectedTests.clear();
+  loadPrompt();
+  loadTests();
+});
 
 difficultySelect.addEventListener('change', () => {
   // Save current edits before switching difficulty
@@ -923,6 +1001,7 @@ difficultySelect.addEventListener('change', () => {
 
 newSessionBtn.addEventListener('click', createSession);
 savePromptBtn.addEventListener('click', savePrompt);
+createPrBtn.addEventListener('click', handleCreatePR);
 revertBtn.addEventListener('click', revertPrompt);
 $('downloadBtn').addEventListener('click', downloadPrompt);
 sendBtn.addEventListener('click', sendMessage);
@@ -958,6 +1037,46 @@ document.addEventListener('keydown', (e) => {
 
 async function init() {
   setStatus('Loading...');
+
+  // Load topics for the dropdown
+  try {
+    const { topics } = await api.loadTopics();
+    topicSelect.textContent = '';
+    const groups = {};
+    topics.forEach(t => {
+      if (!groups[t.group]) groups[t.group] = [];
+      groups[t.group].push(t);
+    });
+    for (const [groupName, groupTopics] of Object.entries(groups)) {
+      const optgroup = document.createElement('optgroup');
+      optgroup.label = groupName;
+      groupTopics.forEach(t => {
+        const opt = document.createElement('option');
+        opt.value = t.path;
+        opt.textContent = t.label;
+        if (t.path === state.topic) opt.selected = true;
+        optgroup.appendChild(opt);
+      });
+      topicSelect.appendChild(optgroup);
+    }
+  } catch (err) {
+    topicSelect.textContent = '';
+    const opt = document.createElement('option');
+    opt.value = state.topic;
+    opt.textContent = 'Error loading topics';
+    topicSelect.appendChild(opt);
+  }
+
+  // Check GitHub integration
+  try {
+    const config = await api.loadConfig();
+    state.githubEnabled = config.githubEnabled;
+    if (state.githubEnabled) {
+      createPrBtn.style.display = '';
+      refreshChangeCount();
+    }
+  } catch { /* GitHub not available */ }
+
   await loadPrompt();
   loadTests();
   loadTranscripts();

@@ -5,7 +5,28 @@
 
 const express = require('express');
 const router = express.Router();
+const fs = require('fs');
+const path = require('path');
 const promptLabService = require('../services/PromptLabService');
+
+const DEFAULT_TOPIC = 'clinical/emergencies/necrotising_fasciitis';
+
+// ──────────────────────────────────────────
+// TOPIC ENDPOINTS
+// ──────────────────────────────────────────
+
+/**
+ * GET /topics — List all available topics
+ */
+router.get('/topics', (req, res) => {
+  try {
+    const topics = promptLabService.listTopics();
+    res.json({ topics });
+  } catch (err) {
+    console.error('[PROMPT LAB] List topics error:', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
 
 // ──────────────────────────────────────────
 // SESSION ENDPOINTS
@@ -50,15 +71,19 @@ router.post('/chat', async (req, res) => {
 
 /**
  * POST /feedback — Generate full feedback for a session
- * Body: { sessionId, feedbackPrompt? }
+ * Body: { sessionId, feedbackPrompt?, topic? }
  */
 router.post('/feedback', async (req, res) => {
   try {
-    const { sessionId, feedbackPrompt } = req.body;
+    const { sessionId, feedbackPrompt, topic } = req.body;
     if (!sessionId) {
       return res.status(400).json({ error: 'sessionId required' });
     }
-    const result = await promptLabService.generateFeedback(sessionId, feedbackPrompt || undefined);
+    const result = await promptLabService.generateFeedback(
+      sessionId,
+      feedbackPrompt || undefined,
+      topic || DEFAULT_TOPIC
+    );
     res.json(result);
   } catch (err) {
     console.error('[PROMPT LAB] Feedback error:', err.message);
@@ -90,7 +115,8 @@ router.post('/save-manual', (req, res) => {
 // ──────────────────────────────────────────
 
 /**
- * GET /prompts/:difficulty — Load test prompt parsed into sections
+ * GET /prompts/:difficulty — Load prompt parsed into sections
+ * Query: ?topic=clinical/emergencies/necrotising_fasciitis
  */
 router.get('/prompts/:difficulty', (req, res) => {
   try {
@@ -98,7 +124,8 @@ router.get('/prompts/:difficulty', (req, res) => {
     if (!['easy', 'medium', 'strict'].includes(difficulty)) {
       return res.status(400).json({ error: 'difficulty must be easy, medium, or strict' });
     }
-    const result = promptLabService.loadTestPrompt(difficulty);
+    const topic = req.query.topic || DEFAULT_TOPIC;
+    const result = promptLabService.loadPrompt(topic, difficulty);
     res.json(result);
   } catch (err) {
     console.error('[PROMPT LAB] Load prompt error:', err.message);
@@ -109,6 +136,7 @@ router.get('/prompts/:difficulty', (req, res) => {
 
 /**
  * PUT /prompts/:difficulty — Save edited prompt sections
+ * Query: ?topic=...
  * Body: { sections: { core, difficulty, clinical } }
  */
 router.put('/prompts/:difficulty', (req, res) => {
@@ -121,7 +149,8 @@ router.put('/prompts/:difficulty', (req, res) => {
     if (!sections) {
       return res.status(400).json({ error: 'sections object required' });
     }
-    const result = promptLabService.saveTestPrompt(difficulty, sections);
+    const topic = req.query.topic || DEFAULT_TOPIC;
+    const result = promptLabService.savePrompt(topic, difficulty, sections);
     res.json(result);
   } catch (err) {
     console.error('[PROMPT LAB] Save prompt error:', err.message);
@@ -131,6 +160,7 @@ router.put('/prompts/:difficulty', (req, res) => {
 
 /**
  * GET /feedback-prompt/:difficulty — Load feedback prompt for editing
+ * Query: ?topic=...
  */
 router.get('/feedback-prompt/:difficulty', (req, res) => {
   try {
@@ -138,7 +168,8 @@ router.get('/feedback-prompt/:difficulty', (req, res) => {
     if (!['easy', 'medium', 'strict'].includes(difficulty)) {
       return res.status(400).json({ error: 'difficulty must be easy, medium, or strict' });
     }
-    const result = promptLabService.loadTestFeedbackPromptFile(difficulty);
+    const topic = req.query.topic || DEFAULT_TOPIC;
+    const result = promptLabService.loadFeedbackPromptFile(topic, difficulty);
     res.json(result);
   } catch (err) {
     console.error('[PROMPT LAB] Load feedback prompt error:', err.message);
@@ -149,6 +180,7 @@ router.get('/feedback-prompt/:difficulty', (req, res) => {
 
 /**
  * PUT /feedback-prompt/:difficulty — Save edited feedback prompt
+ * Query: ?topic=...
  * Body: { content: "..." }
  */
 router.put('/feedback-prompt/:difficulty', (req, res) => {
@@ -161,7 +193,8 @@ router.put('/feedback-prompt/:difficulty', (req, res) => {
     if (!content) {
       return res.status(400).json({ error: 'content required' });
     }
-    const result = promptLabService.saveTestFeedbackPrompt(difficulty, content);
+    const topic = req.query.topic || DEFAULT_TOPIC;
+    const result = promptLabService.saveFeedbackPrompt(topic, difficulty, content);
     res.json(result);
   } catch (err) {
     console.error('[PROMPT LAB] Save feedback prompt error:', err.message);
@@ -175,10 +208,13 @@ router.put('/feedback-prompt/:difficulty', (req, res) => {
 
 /**
  * GET /tests — List available test scripts
+ * Query: ?topic=...
  */
 router.get('/tests', (req, res) => {
   try {
-    const tests = promptLabService.listTestScripts();
+    const topic = req.query.topic || DEFAULT_TOPIC;
+    const topicFolderName = topic.split('/').pop();
+    const tests = promptLabService.listTestScripts(topicFolderName);
     res.json({ tests });
   } catch (err) {
     console.error('[PROMPT LAB] List tests error:', err.message);
@@ -188,16 +224,17 @@ router.get('/tests', (req, res) => {
 
 /**
  * POST /run-test — Execute an automated test
- * Body: { testId, promptSections?, feedbackPrompt? }
+ * Body: { testId, topic?, promptSections?, feedbackPrompt? }
  */
 router.post('/run-test', async (req, res) => {
   try {
-    const { testId, promptSections, feedbackPrompt } = req.body;
+    const { testId, topic, promptSections, feedbackPrompt } = req.body;
     if (!testId) {
       return res.status(400).json({ error: 'testId required' });
     }
     const result = await promptLabService.runTest(
       testId,
+      topic || DEFAULT_TOPIC,
       promptSections || undefined,
       feedbackPrompt || undefined
     );
@@ -251,6 +288,65 @@ router.delete('/transcripts/:id', (req, res) => {
     console.error('[PROMPT LAB] Delete transcript error:', err.message);
     const status = err.message.includes('not found') ? 404 : 500;
     res.status(status).json({ error: err.message });
+  }
+});
+
+// ──────────────────────────────────────────
+// GITHUB PR ENDPOINTS
+// ──────────────────────────────────────────
+
+/**
+ * GET /changes — List files modified since server start
+ */
+router.get('/changes', (req, res) => {
+  try {
+    const files = promptLabService.getModifiedFiles();
+    res.json({ files, count: files.length });
+  } catch (err) {
+    console.error('[PROMPT LAB] List changes error:', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/**
+ * GET /config — Return feature flags for the frontend
+ */
+router.get('/config', (req, res) => {
+  res.json({
+    githubEnabled: !!(process.env.GITHUB_TOKEN && process.env.GITHUB_OWNER && process.env.GITHUB_REPO),
+  });
+});
+
+/**
+ * POST /create-pr — Create a GitHub PR with all modified prompt files
+ */
+router.post('/create-pr', async (req, res) => {
+  try {
+    const files = promptLabService.getModifiedFiles();
+    if (files.length === 0) {
+      return res.status(400).json({ error: 'No modified files to commit' });
+    }
+
+    let gitHubService;
+    try {
+      gitHubService = require('../services/GitHubService');
+    } catch (e) {
+      return res.status(500).json({ error: 'GitHub service not available' });
+    }
+
+    // Read current content of each modified file
+    const BACKEND_DIR = path.join(__dirname, '..', '..');
+    const fileContents = files.map(relPath => ({
+      path: relPath,
+      content: fs.readFileSync(path.join(BACKEND_DIR, relPath), 'utf8'),
+    }));
+
+    const result = await gitHubService.createPR(fileContents);
+    promptLabService.clearModifiedFiles();
+    res.json(result);
+  } catch (err) {
+    console.error('[PROMPT LAB] Create PR error:', err.message);
+    res.status(500).json({ error: err.message });
   }
 });
 

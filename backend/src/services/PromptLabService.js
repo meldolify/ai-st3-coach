@@ -10,13 +10,116 @@ const openaiService = require('./OpenAIService');
 const { parsePromptSections, combinePromptSections } = require('../utils/promptParser');
 
 const BACKEND_DIR = path.join(__dirname, '..', '..');
-const TEST_PROMPTS_DIR = path.join(BACKEND_DIR, 'prompts', 'test');
+const PROMPTS_DIR = path.join(BACKEND_DIR, 'prompts');
+const FEEDBACK_DIR = path.join(PROMPTS_DIR, 'feedback');
 const TEST_SCRIPTS_DIR = path.join(BACKEND_DIR, 'test-scripts');
 const TEST_RESULTS_DIR = path.join(BACKEND_DIR, 'test-results');
-const FEEDBACK_JSON_TEMPLATE_PATH = path.join(BACKEND_DIR, 'prompts', 'system', 'feedback_json_template.txt');
+const FEEDBACK_JSON_TEMPLATE_PATH = path.join(PROMPTS_DIR, 'system', 'feedback_json_template.txt');
+
+// Folders to exclude when scanning for topics
+const EXCLUDED_DIRS = new Set(['feedback', 'system', 'test']);
 
 // In-memory session store (separate from production sessions)
 const sessions = new Map();
+
+// Track files modified since server start (for GitHub PR creation)
+const modifiedFiles = new Set();
+
+// ──────────────────────────────────────────
+// PATH HELPERS
+// ──────────────────────────────────────────
+
+/**
+ * Validate a topic path to prevent path traversal.
+ * @param {string} topicPath - e.g., "clinical/emergencies/necrotising_fasciitis"
+ */
+function validateTopicPath(topicPath) {
+  if (!topicPath || topicPath.includes('..') || topicPath.startsWith('/') || !/^[a-z0-9_/]+$/.test(topicPath)) {
+    throw new Error('Invalid topic path: ' + topicPath);
+  }
+}
+
+/**
+ * Build the prompt file path for a given topic and difficulty.
+ * @param {string} topicPath - e.g., "clinical/emergencies/necrotising_fasciitis"
+ * @param {string} difficulty - easy|medium|strict
+ * @returns {string} absolute file path
+ */
+function getPromptPath(topicPath, difficulty) {
+  validateTopicPath(topicPath);
+  const parts = topicPath.split('/');
+  const category = parts[0];
+  const folderName = parts[parts.length - 1];
+  const filename = `${difficulty}_${category}_${folderName}_1.txt`;
+  return path.join(PROMPTS_DIR, topicPath, filename);
+}
+
+/**
+ * Build feedback prompt path components from topic path.
+ */
+function getFeedbackParts(topicPath) {
+  const parts = topicPath.split('/');
+  const category = parts[0];
+  const folderName = parts[parts.length - 1];
+  return { category, folderName };
+}
+
+// ──────────────────────────────────────────
+// TOPIC DISCOVERY
+// ──────────────────────────────────────────
+
+/**
+ * Convert a folder name to Title Case.
+ * e.g., "necrotising_fasciitis" → "Necrotising Fasciitis"
+ */
+function toTitleCase(str) {
+  return str.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+}
+
+/**
+ * List all available topics by scanning the prompts directory.
+ * Returns a flat list grouped by category > subcategory.
+ */
+function listTopics() {
+  const topics = [];
+
+  // Read top-level categories
+  const categories = fs.readdirSync(PROMPTS_DIR).filter(d => {
+    if (EXCLUDED_DIRS.has(d)) return false;
+    return fs.statSync(path.join(PROMPTS_DIR, d)).isDirectory();
+  });
+
+  for (const category of categories) {
+    const categoryPath = path.join(PROMPTS_DIR, category);
+    const subcategories = fs.readdirSync(categoryPath).filter(d =>
+      fs.statSync(path.join(categoryPath, d)).isDirectory()
+    );
+
+    for (const subcategory of subcategories) {
+      const subcategoryPath = path.join(categoryPath, subcategory);
+      const topicDirs = fs.readdirSync(subcategoryPath).filter(d =>
+        fs.statSync(path.join(subcategoryPath, d)).isDirectory()
+      );
+
+      for (const topicDir of topicDirs) {
+        const topicFullPath = path.join(subcategoryPath, topicDir);
+        // Only include directories that contain .txt files
+        const hasPrompts = fs.readdirSync(topicFullPath).some(f => f.endsWith('.txt'));
+        if (!hasPrompts) continue;
+
+        topics.push({
+          path: `${category}/${subcategory}/${topicDir}`,
+          label: toTitleCase(topicDir),
+          group: `${toTitleCase(category)} > ${toTitleCase(subcategory)}`,
+        });
+      }
+    }
+  }
+
+  // Sort by group then label
+  topics.sort((a, b) => a.group.localeCompare(b.group) || a.label.localeCompare(b.label));
+  return topics;
+}
 
 // ──────────────────────────────────────────
 // SESSION MANAGEMENT
@@ -45,9 +148,6 @@ function createSession(promptSections, metadata = {}) {
 
 /**
  * Send a user message and get GPT response.
- * @param {string} sessionId
- * @param {string} message
- * @returns {Promise<{ response: string, turnNumber: number }>}
  */
 async function chat(sessionId, message) {
   const session = sessions.get(sessionId);
@@ -66,16 +166,10 @@ async function chat(sessionId, message) {
   return { response, turnNumber: session.turnNumber };
 }
 
-/**
- * Get session info (for debugging / transcript).
- */
 function getSession(sessionId) {
   return sessions.get(sessionId) || null;
 }
 
-/**
- * Delete a session.
- */
 function deleteSession(sessionId) {
   sessions.delete(sessionId);
 }
@@ -84,9 +178,6 @@ function deleteSession(sessionId) {
 // FEEDBACK
 // ──────────────────────────────────────────
 
-/**
- * Serialize history into transcript (same format as server.js).
- */
 function serializeTranscript(history) {
   return history
     .filter(msg => msg.role !== 'system')
@@ -98,40 +189,28 @@ function serializeTranscript(history) {
 }
 
 /**
- * Load feedback prompt from test folder, with difficulty-specific variant.
- * Falls back to generic feedback prompt.
- * @param {string} difficulty - easy|medium|strict
- * @returns {string}
+ * Load feedback prompt for a topic, with difficulty-specific fallback chain.
  */
-function loadTestFeedbackPrompt(difficulty) {
-  // Try difficulty-specific feedback prompt in test folder
-  const difficultyFile = path.join(
-    TEST_PROMPTS_DIR, 'feedback',
-    `${difficulty}_clinical_necrotising_fasciitis_feedback.txt`
-  );
+function loadFeedbackPrompt(topicPath, difficulty) {
+  validateTopicPath(topicPath);
+  const { category, folderName } = getFeedbackParts(topicPath);
+
+  // Try difficulty-specific feedback prompt
+  const difficultyFile = path.join(FEEDBACK_DIR, `${difficulty}_${category}_${folderName}_feedback.txt`);
   if (fs.existsSync(difficultyFile)) {
     return fs.readFileSync(difficultyFile, 'utf8');
   }
 
-  // Try generic nec fasc feedback in test folder
-  const genericTestFile = path.join(
-    TEST_PROMPTS_DIR, 'feedback',
-    'clinical_necrotising_fasciitis_feedback.txt'
-  );
-  if (fs.existsSync(genericTestFile)) {
-    return fs.readFileSync(genericTestFile, 'utf8');
+  // Try generic topic feedback prompt (no difficulty prefix)
+  const genericTopicFile = path.join(FEEDBACK_DIR, `${category}_${folderName}_feedback.txt`);
+  if (fs.existsSync(genericTopicFile)) {
+    return fs.readFileSync(genericTopicFile, 'utf8');
   }
 
-  // Fall back to production feedback prompt
-  const prodFile = path.join(BACKEND_DIR, 'prompts', 'feedback', 'clinical_necrotising_fasciitis_feedback.txt');
-  if (fs.existsSync(prodFile)) {
-    return fs.readFileSync(prodFile, 'utf8');
-  }
-
-  // Last resort
-  const genericProd = path.join(BACKEND_DIR, 'prompts', 'feedback', 'generic_feedback.txt');
-  if (fs.existsSync(genericProd)) {
-    return fs.readFileSync(genericProd, 'utf8');
+  // Fall back to generic feedback
+  const genericFile = path.join(FEEDBACK_DIR, 'generic_feedback.txt');
+  if (fs.existsSync(genericFile)) {
+    return fs.readFileSync(genericFile, 'utf8');
   }
 
   return 'You are an expert plastic surgery examiner. Review the interview transcript and provide feedback in 6 sections. Begin with Section 1 now.';
@@ -139,19 +218,17 @@ function loadTestFeedbackPrompt(difficulty) {
 
 /**
  * Generate full feedback (all 6 sections + JSON summary) for a session.
- * Returns everything at once (no streaming/TTS).
- * @param {string} sessionId
- * @param {string} [feedbackPromptOverride] - Optional custom feedback prompt text
- * @returns {Promise<{ sections: string[], summary: object }>}
  */
-async function generateFeedback(sessionId, feedbackPromptOverride) {
+async function generateFeedback(sessionId, feedbackPromptOverride, topicPath) {
   const session = sessions.get(sessionId);
   if (!session) throw new Error(`Session not found: ${sessionId}`);
 
   const transcript = serializeTranscript(session.history);
-  const feedbackPrompt = feedbackPromptOverride || loadTestFeedbackPrompt(session.difficulty);
+  const feedbackPrompt = feedbackPromptOverride || loadFeedbackPrompt(
+    topicPath || 'clinical/emergencies/necrotising_fasciitis',
+    session.difficulty
+  );
 
-  // Create separate feedback conversation
   const feedbackHistory = [
     { role: 'system', content: feedbackPrompt },
     { role: 'user', content: 'Here is the interview transcript:\n\n' + transcript },
@@ -159,7 +236,6 @@ async function generateFeedback(sessionId, feedbackPromptOverride) {
 
   const sections = [];
 
-  // Generate 6 feedback sections
   for (let i = 0; i < 6; i++) {
     if (i > 0) {
       feedbackHistory.push({ role: 'user', content: 'continue' });
@@ -174,7 +250,6 @@ async function generateFeedback(sessionId, feedbackPromptOverride) {
     sections.push(sectionText);
   }
 
-  // Generate JSON summary
   let summary;
   try {
     const jsonTemplate = fs.readFileSync(FEEDBACK_JSON_TEMPLATE_PATH, 'utf8');
@@ -211,25 +286,12 @@ async function generateFeedback(sessionId, feedbackPromptOverride) {
 // ──────────────────────────────────────────
 
 /**
- * Build the test prompt file path for a given difficulty.
+ * Load a prompt file, parsed into sections.
  */
-function getTestPromptPath(difficulty) {
-  return path.join(
-    TEST_PROMPTS_DIR,
-    'clinical', 'emergencies', 'necrotising_fasciitis',
-    `${difficulty}_clinical_necrotising_fasciitis_1.txt`
-  );
-}
-
-/**
- * Load a test prompt file, parsed into sections.
- * @param {string} difficulty - easy|medium|strict
- * @returns {{ raw: string, sections: { core, difficulty, clinical }, path: string }}
- */
-function loadTestPrompt(difficulty) {
-  const filePath = getTestPromptPath(difficulty);
+function loadPrompt(topicPath, difficulty) {
+  const filePath = getPromptPath(topicPath, difficulty);
   if (!fs.existsSync(filePath)) {
-    throw new Error(`Test prompt not found: ${filePath}`);
+    throw new Error(`Prompt not found: ${path.relative(BACKEND_DIR, filePath)}`);
   }
   const raw = fs.readFileSync(filePath, 'utf8');
   return {
@@ -240,74 +302,85 @@ function loadTestPrompt(difficulty) {
 }
 
 /**
- * Save edited prompt sections to the test prompt file.
- * @param {string} difficulty
- * @param {{ core: string, difficulty: string, clinical: string }} sections
+ * Save edited prompt sections.
  */
-function saveTestPrompt(difficulty, sections) {
-  const filePath = getTestPromptPath(difficulty);
+function savePrompt(topicPath, difficulty, sections) {
+  const filePath = getPromptPath(topicPath, difficulty);
   const dir = path.dirname(filePath);
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true });
   }
   const combined = combinePromptSections(sections);
   fs.writeFileSync(filePath, combined, 'utf8');
+
+  // Track modification for GitHub PR
+  modifiedFiles.add(path.relative(BACKEND_DIR, filePath));
+
   return { path: path.relative(BACKEND_DIR, filePath), savedAt: new Date().toISOString() };
 }
 
 /**
- * Load feedback prompt for editing.
+ * Load feedback prompt file for editing (returns content + path).
  */
-function loadTestFeedbackPromptFile(difficulty) {
-  const filePath = path.join(
-    TEST_PROMPTS_DIR, 'feedback',
-    `${difficulty}_clinical_necrotising_fasciitis_feedback.txt`
-  );
-  if (!fs.existsSync(filePath)) {
-    // Fall back to the shared feedback file
-    const sharedPath = path.join(
-      TEST_PROMPTS_DIR, 'feedback',
-      'clinical_necrotising_fasciitis_feedback.txt'
-    );
-    if (fs.existsSync(sharedPath)) {
-      return { content: fs.readFileSync(sharedPath, 'utf8'), path: path.relative(BACKEND_DIR, sharedPath) };
-    }
-    // Fall back to production
-    const prodPath = path.join(BACKEND_DIR, 'prompts', 'feedback', 'clinical_necrotising_fasciitis_feedback.txt');
-    if (fs.existsSync(prodPath)) {
-      return { content: fs.readFileSync(prodPath, 'utf8'), path: path.relative(BACKEND_DIR, prodPath) };
-    }
-    throw new Error('No feedback prompt found');
+function loadFeedbackPromptFile(topicPath, difficulty) {
+  validateTopicPath(topicPath);
+  const { category, folderName } = getFeedbackParts(topicPath);
+
+  const diffFile = path.join(FEEDBACK_DIR, `${difficulty}_${category}_${folderName}_feedback.txt`);
+  if (fs.existsSync(diffFile)) {
+    return { content: fs.readFileSync(diffFile, 'utf8'), path: path.relative(BACKEND_DIR, diffFile) };
   }
-  return { content: fs.readFileSync(filePath, 'utf8'), path: path.relative(BACKEND_DIR, filePath) };
+
+  const genericFile = path.join(FEEDBACK_DIR, `${category}_${folderName}_feedback.txt`);
+  if (fs.existsSync(genericFile)) {
+    return { content: fs.readFileSync(genericFile, 'utf8'), path: path.relative(BACKEND_DIR, genericFile) };
+  }
+
+  const fallbackFile = path.join(FEEDBACK_DIR, 'generic_feedback.txt');
+  if (fs.existsSync(fallbackFile)) {
+    return { content: fs.readFileSync(fallbackFile, 'utf8'), path: path.relative(BACKEND_DIR, fallbackFile) };
+  }
+
+  throw new Error('No feedback prompt found for ' + topicPath);
 }
 
 /**
  * Save feedback prompt.
  */
-function saveTestFeedbackPrompt(difficulty, content) {
-  const filePath = path.join(
-    TEST_PROMPTS_DIR, 'feedback',
-    `${difficulty}_clinical_necrotising_fasciitis_feedback.txt`
-  );
-  const dir = path.dirname(filePath);
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
+function saveFeedbackPrompt(topicPath, difficulty, content) {
+  validateTopicPath(topicPath);
+  const { category, folderName } = getFeedbackParts(topicPath);
+  const filePath = path.join(FEEDBACK_DIR, `${difficulty}_${category}_${folderName}_feedback.txt`);
+
+  if (!fs.existsSync(FEEDBACK_DIR)) {
+    fs.mkdirSync(FEEDBACK_DIR, { recursive: true });
   }
   fs.writeFileSync(filePath, content, 'utf8');
+
+  modifiedFiles.add(path.relative(BACKEND_DIR, filePath));
+
   return { path: path.relative(BACKEND_DIR, filePath), savedAt: new Date().toISOString() };
+}
+
+// ──────────────────────────────────────────
+// MODIFIED FILES TRACKING
+// ──────────────────────────────────────────
+
+function getModifiedFiles() {
+  return [...modifiedFiles];
+}
+
+function clearModifiedFiles() {
+  modifiedFiles.clear();
 }
 
 // ──────────────────────────────────────────
 // AUTOMATED TEST EXECUTION
 // ──────────────────────────────────────────
 
-/**
- * List available test scripts.
- */
-function listTestScripts() {
-  const dir = path.join(TEST_SCRIPTS_DIR, 'necrotising_fasciitis');
-  if (!fs.existsSync(dir)) return [];
+function listTestScripts(topicFolderName) {
+  const dir = path.join(TEST_SCRIPTS_DIR, topicFolderName || '');
+  if (!topicFolderName || !fs.existsSync(dir)) return [];
 
   return fs.readdirSync(dir)
     .filter(f => f.endsWith('.json'))
@@ -324,22 +397,15 @@ function listTestScripts() {
     });
 }
 
-/**
- * Load a test script by ID.
- */
-function loadTestScript(testId) {
-  const filePath = path.join(TEST_SCRIPTS_DIR, 'necrotising_fasciitis', `${testId}.json`);
+function loadTestScript(topicFolderName, testId) {
+  const filePath = path.join(TEST_SCRIPTS_DIR, topicFolderName, `${testId}.json`);
   if (!fs.existsSync(filePath)) throw new Error(`Test script not found: ${testId}`);
   return JSON.parse(fs.readFileSync(filePath, 'utf8'));
 }
 
-/**
- * Evaluate assertions against conversation history and feedback.
- */
 function evaluateAssertions(assertions, history, feedback) {
   if (!assertions || assertions.length === 0) return { passed: 0, failed: 0, total: 0, details: [] };
 
-  // Extract assistant-only responses indexed by turn
   const assistantTurns = [];
   let turn = 0;
   for (const msg of history) {
@@ -351,10 +417,8 @@ function evaluateAssertions(assertions, history, feedback) {
   }
 
   const details = [];
-
   for (const assertion of assertions) {
-    const result = evaluateSingleAssertion(assertion, assistantTurns, feedback);
-    details.push(result);
+    details.push(evaluateSingleAssertion(assertion, assistantTurns, feedback));
   }
 
   const passed = details.filter(d => d.passed).length;
@@ -371,7 +435,6 @@ function evaluateSingleAssertion(assertion, assistantTurns, feedback) {
       const passed = turnResp.content.toLowerCase().includes(assertion.value.toLowerCase());
       return { ...base, passed, actual: turnResp.content.substring(0, 200) };
     }
-
     case 'contains_any': {
       const turnResp = assistantTurns.find(t => t.turn === assertion.turn);
       if (!turnResp) return { ...base, actual: '[no response at turn]' };
@@ -379,20 +442,17 @@ function evaluateSingleAssertion(assertion, assistantTurns, feedback) {
       const passed = assertion.values.some(v => lower.includes(v.toLowerCase()));
       return { ...base, passed, actual: turnResp.content.substring(0, 200) };
     }
-
     case 'not_contains': {
       const turnResp = assistantTurns.find(t => t.turn === assertion.turn);
       if (!turnResp) return { ...base, passed: true, actual: '[no response at turn]' };
       const passed = !turnResp.content.toLowerCase().includes(assertion.value.toLowerCase());
       return { ...base, passed, actual: turnResp.content.substring(0, 200) };
     }
-
     case 'never_contains': {
       const allContent = assistantTurns.map(t => t.content).join(' ').toLowerCase();
       const passed = !allContent.includes(assertion.value.toLowerCase());
       return { ...base, passed, actual: passed ? '[clean]' : `Found: "${assertion.value}"` };
     }
-
     case 'regex': {
       const turnResp = assistantTurns.find(t => t.turn === assertion.turn);
       if (!turnResp) return { ...base, actual: '[no response at turn]' };
@@ -400,7 +460,6 @@ function evaluateSingleAssertion(assertion, assistantTurns, feedback) {
       const passed = re.test(turnResp.content);
       return { ...base, passed, actual: turnResp.content.substring(0, 200) };
     }
-
     case 'avg_word_count': {
       if (assistantTurns.length === 0) return { ...base, actual: '0 turns' };
       const totalWords = assistantTurns.reduce((sum, t) => sum + t.content.split(/\s+/).length, 0);
@@ -408,86 +467,63 @@ function evaluateSingleAssertion(assertion, assistantTurns, feedback) {
       const passed = (!assertion.min || avg >= assertion.min) && (!assertion.max || avg <= assertion.max);
       return { ...base, passed, actual: `avg ${avg} words/response` };
     }
-
     case 'turn_count': {
       const count = assistantTurns.length;
       const passed = (!assertion.min || count >= assertion.min) && (!assertion.max || count <= assertion.max);
       return { ...base, passed, actual: `${count} turns` };
     }
-
     case 'score_range': {
-      if (!feedback?.summary?.score && feedback?.summary?.score !== 0) {
-        return { ...base, actual: '[no score]' };
-      }
+      if (!feedback?.summary?.score && feedback?.summary?.score !== 0) return { ...base, actual: '[no score]' };
       const score = feedback.summary.score;
       const passed = score >= assertion.min && score <= assertion.max;
       return { ...base, passed, actual: `score: ${score}` };
     }
-
     case 'section_count': {
       const count = feedback?.sections?.length || 0;
       const passed = count === assertion.expected;
       return { ...base, passed, actual: `${count} sections` };
     }
-
     case 'feedback_contains': {
       const allFeedback = (feedback?.sections || []).join(' ').toLowerCase();
       const passed = allFeedback.includes(assertion.value.toLowerCase());
       return { ...base, passed, actual: passed ? '[found]' : `[not found: "${assertion.value}"]` };
     }
-
     default:
       return { ...base, actual: `[unknown assertion type: ${assertion.type}]` };
   }
 }
 
-/**
- * Run an automated test script.
- * @param {string} testId
- * @param {{ core: string, difficulty: string, clinical: string }} [promptOverride] - Use custom prompt sections
- * @param {string} [feedbackPromptOverride] - Use custom feedback prompt text
- * @returns {Promise<object>} - Full test results
- */
-async function runTest(testId, promptOverride, feedbackPromptOverride) {
-  const script = loadTestScript(testId);
+async function runTest(testId, topicPath, promptOverride, feedbackPromptOverride) {
+  const topicFolderName = topicPath ? topicPath.split('/').pop() : 'necrotising_fasciitis';
+  const script = loadTestScript(topicFolderName, testId);
   const difficulty = script.difficulty || 'easy';
 
-  // Load prompt sections (use override or load from test files)
   let promptSections;
   if (promptOverride) {
     promptSections = promptOverride;
   } else {
-    const loaded = loadTestPrompt(difficulty);
+    const loaded = loadPrompt(topicPath || 'clinical/emergencies/necrotising_fasciitis', difficulty);
     promptSections = loaded.sections;
   }
 
-  // Create session
   const { sessionId } = createSession(promptSections, { difficulty });
   const session = sessions.get(sessionId);
   const startTime = Date.now();
 
-  // Run through all inputs
   for (const input of script.inputs) {
     const text = typeof input === 'string' ? input : input.text;
     await chat(sessionId, text);
   }
 
-  // Generate feedback if requested
   let feedback = null;
   if (script.triggerFeedback) {
-    feedback = await generateFeedback(sessionId, feedbackPromptOverride);
+    feedback = await generateFeedback(sessionId, feedbackPromptOverride, topicPath);
   }
 
-  // Evaluate assertions
-  const allAssertions = [
-    ...(script.assertions || []),
-    ...(script.feedbackAssertions || []),
-  ];
+  const allAssertions = [...(script.assertions || []), ...(script.feedbackAssertions || [])];
   const assertionResults = evaluateAssertions(allAssertions, session.history, feedback);
-
   const duration = (Date.now() - startTime) / 1000;
 
-  // Build transcript result
   const result = {
     id: generateTranscriptId(testId),
     type: 'automated',
@@ -508,12 +544,8 @@ async function runTest(testId, promptOverride, feedbackPromptOverride) {
     feedback,
   };
 
-  // Save transcript
   saveTranscript(result);
-
-  // Clean up session
   sessions.delete(sessionId);
-
   return result;
 }
 
@@ -546,9 +578,6 @@ function saveTranscript(result) {
   return result.id;
 }
 
-/**
- * Save a manual chat session as a transcript.
- */
 function saveManualTranscript(sessionId) {
   const session = sessions.get(sessionId);
   if (!session) throw new Error(`Session not found: ${sessionId}`);
@@ -572,15 +601,12 @@ function saveManualTranscript(sessionId) {
   return result.id;
 }
 
-/**
- * List saved transcripts.
- */
 function listTranscripts() {
   ensureTestResultsDir();
   const files = fs.readdirSync(TEST_RESULTS_DIR)
     .filter(f => f.endsWith('.json'))
     .sort()
-    .reverse(); // newest first
+    .reverse();
 
   return files.map(f => {
     try {
@@ -601,18 +627,12 @@ function listTranscripts() {
   });
 }
 
-/**
- * Load a specific transcript.
- */
 function loadTranscript(id) {
   const filePath = path.join(TEST_RESULTS_DIR, `${id}.json`);
   if (!fs.existsSync(filePath)) throw new Error(`Transcript not found: ${id}`);
   return JSON.parse(fs.readFileSync(filePath, 'utf8'));
 }
 
-/**
- * Delete a transcript.
- */
 function deleteTranscript(id) {
   const filePath = path.join(TEST_RESULTS_DIR, `${id}.json`);
   if (!fs.existsSync(filePath)) throw new Error(`Transcript not found: ${id}`);
@@ -625,10 +645,11 @@ module.exports = {
   getSession,
   deleteSession,
   generateFeedback,
-  loadTestPrompt,
-  saveTestPrompt,
-  loadTestFeedbackPromptFile,
-  saveTestFeedbackPrompt,
+  listTopics,
+  loadPrompt,
+  savePrompt,
+  loadFeedbackPromptFile,
+  saveFeedbackPrompt,
   listTestScripts,
   runTest,
   saveManualTranscript,
@@ -636,4 +657,6 @@ module.exports = {
   loadTranscript,
   deleteTranscript,
   serializeTranscript,
+  getModifiedFiles,
+  clearModifiedFiles,
 };
