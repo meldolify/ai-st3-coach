@@ -95,6 +95,11 @@ export default defineConfig({
       cwd: './backend',
       stdout: 'pipe',
       stderr: 'pipe',
+      env: {
+        ...process.env,
+        // Override FRONTEND_URL so CORS allows the test frontend origin
+        FRONTEND_URL: 'http://localhost:3001',
+      },
     },
   ],
 });
