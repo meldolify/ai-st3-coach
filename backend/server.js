@@ -849,24 +849,7 @@ app.use(express.static(path.join(__dirname, '../frontend')));
 // Enable CORS for frontend
 app.use(
   cors({
-    origin: config.isProduction
-      ? config.FRONTEND_URL
-      : function (origin, callback) {
-          // In development, allow configured FRONTEND_URL + common localhost origins
-          const allowedOrigins = [
-            config.FRONTEND_URL,
-            'http://localhost:3000',
-            'http://localhost:3001',
-            'http://localhost:5500',
-            'http://localhost:8080'
-          ];
-          // Allow requests with no origin (e.g. same-origin, curl, server-to-server)
-          if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-          } else {
-            callback(null, false);
-          }
-        },
+    origin: config.FRONTEND_URL || (config.isProduction ? false : '*'),
     methods: ['POST', 'GET', 'DELETE', 'PUT', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'stripe-signature']
   })
