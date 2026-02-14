@@ -73,7 +73,7 @@ const sessions = new Map();
 // (keeping function name for backwards compatibility)
 
 // Wrapper functions that use the services (for backwards compatibility with existing code flow)
-async function callGPT4oMini(history, options) {
+async function callLLM(history, options) {
   return openaiService.generateResponse(history, options);
 }
 
@@ -656,7 +656,7 @@ wss.on('connection', (ws, req) => {
                     session.feedbackHistory.push({ role: 'user', content: 'continue' });
 
                     const t1 = Date.now();
-                    const responseText = await callGPT4oMini(session.feedbackHistory, {
+                    const responseText = await callLLM(session.feedbackHistory, {
                       max_tokens: 200
                     });
                     const t2 = Date.now();
@@ -712,7 +712,7 @@ wss.on('connection', (ws, req) => {
                   session.feedbackHistory.push({ role: 'user', content: jsonTemplatePrompt });
 
                   const t1 = Date.now();
-                  const feedbackText = await callGPT4oMini(session.feedbackHistory, {
+                  const feedbackText = await callLLM(session.feedbackHistory, {
                     max_tokens: 500
                   });
                   const t2 = Date.now();
@@ -797,7 +797,7 @@ wss.on('connection', (ws, req) => {
 
               // 4. Call GPT for first feedback section
               const t1 = Date.now();
-              const responseText = await callGPT4oMini(session.feedbackHistory, {
+              const responseText = await callLLM(session.feedbackHistory, {
                 max_tokens: 200
               });
               const t2 = Date.now();

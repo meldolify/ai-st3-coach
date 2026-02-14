@@ -734,7 +734,7 @@ function renderTestList() {
 
     var sourceLabel = '';
     if (t.source === 'generic') sourceLabel = ' (generic)';
-    else if (t.source === 'generated') sourceLabel = ' (GPT-generated)';
+    else if (t.source === 'generated') sourceLabel = ' (AI-generated)';
     else if (t.source === 'generatable') sourceLabel = ' (auto-generate on run)';
 
     var descText = (t.inputCount > 0 ? t.inputCount + ' inputs' : 'auto-generated') +

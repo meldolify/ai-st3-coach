@@ -303,9 +303,8 @@ async function generateTestScript(testType, topicPath, difficulty) {
   // 3. Build the meta-prompt
   const metaPrompt = buildGenerationPrompt(testType, sections.clinical, scenarioTitle);
 
-  // 4. Call GPT
+  // 4. Call LLM
   const response = await openaiService.generateResponse([{ role: 'user', content: metaPrompt }], {
-    model: 'gpt-4o-mini',
     temperature: 0.7,
     max_tokens: 2500
   });

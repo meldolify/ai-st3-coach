@@ -896,7 +896,7 @@ describe('Request feedback flow', () => {
       );
       await collectMessages(ws, 3);
 
-      // Reset for feedback (non-streaming callGPT4oMini)
+      // Reset for feedback (non-streaming callLLM)
       openaiService.llmClient.chat.completions.create.mockResolvedValue({
         choices: [{ message: { content: 'Section 1: Overall Impression. Score: 4/5.' } }]
       });
