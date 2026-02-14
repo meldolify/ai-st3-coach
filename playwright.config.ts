@@ -47,6 +47,33 @@ export default defineConfig({
           ],
         },
       },
+      testIgnore: /responsive\.spec\.ts/,
+    },
+    {
+      name: 'mobile',
+      use: {
+        ...devices['Pixel 5'],
+        launchOptions: {
+          args: [
+            '--use-fake-ui-for-media-stream',
+            '--use-fake-device-for-media-stream',
+          ],
+        },
+      },
+      testMatch: /responsive\.spec\.ts/,
+    },
+    {
+      name: 'tablet',
+      use: {
+        ...devices['Galaxy Tab S4'],
+        launchOptions: {
+          args: [
+            '--use-fake-ui-for-media-stream',
+            '--use-fake-device-for-media-stream',
+          ],
+        },
+      },
+      testMatch: /responsive\.spec\.ts/,
     },
   ],
 

@@ -21,13 +21,18 @@ function createMockFetch(overrides = {}) {
     // 6. Create ref (branch)
     { ok: true, json: async () => ({ ref: 'refs/heads/prompt-lab-updates-test' }) },
     // 7. Create PR
-    { ok: true, json: async () => ({ html_url: 'https://github.com/owner/repo/pull/42', number: 42 }) },
+    {
+      ok: true,
+      json: async () => ({ html_url: 'https://github.com/owner/repo/pull/42', number: 42 })
+    }
   ];
 
   let callIndex = 0;
   return jest.fn(async () => {
     const idx = callIndex++;
-    if (overrides[idx]) return overrides[idx];
+    if (overrides[idx]) {
+      return overrides[idx];
+    }
     return responses[idx] || { ok: true, json: async () => ({}) };
   });
 }
@@ -93,7 +98,7 @@ describe('GitHubService - createPR', () => {
       { ok: true, json: async () => ({ sha: 'tree3' }) },
       { ok: true, json: async () => ({ sha: 'commit3' }) },
       { ok: true, json: async () => ({ ref: 'refs/heads/test' }) },
-      { ok: true, json: async () => ({ html_url: 'https://github.com/o/r/pull/1', number: 1 }) },
+      { ok: true, json: async () => ({ html_url: 'https://github.com/o/r/pull/1', number: 1 }) }
     ];
     let idx = 0;
     global.fetch = jest.fn(async () => responses[idx++]);
@@ -102,7 +107,7 @@ describe('GitHubService - createPR', () => {
     const files = [
       { path: 'file1.txt', content: 'Content 1' },
       { path: 'file2.txt', content: 'Content 2' },
-      { path: 'file3.txt', content: 'Content 3' },
+      { path: 'file3.txt', content: 'Content 3' }
     ];
     const result = await GitHubService.createPR(files);
 
@@ -171,7 +176,7 @@ describe('GitHubService - createPR', () => {
     global.fetch = jest.fn(async () => ({
       ok: false,
       status: 401,
-      json: async () => ({ message: 'Bad credentials' }),
+      json: async () => ({ message: 'Bad credentials' })
     }));
     const GitHubService = require('../src/services/GitHubService');
 

@@ -35,8 +35,8 @@ const {
 // Initialize WebSocket rate limiter
 // Audio streaming: ScriptProcessorNode(4096) at 48kHz = 85ms/callback = ~12 chunks/sec = ~720/min
 const wsRateLimiter = new WebSocketRateLimiter({
-  windowMs: 60000,       // 1 minute window
-  maxMessages: 1200,     // ~720 audio + control messages, with headroom
+  windowMs: 60000, // 1 minute window
+  maxMessages: 1200, // ~720 audio + control messages, with headroom
   maxAudioPerMinute: 900 // ~12 chunks/sec = 720/min, with 25% headroom
 });
 
@@ -59,7 +59,7 @@ if (config.isSupabaseEnabled) {
 process.on('unhandledRejection', (reason, _promise) => {
   console.error('[FATAL] Unhandled Rejection:', reason);
 });
-process.on('uncaughtException', (error) => {
+process.on('uncaughtException', error => {
   console.error('[FATAL] Uncaught Exception:', error);
 });
 
@@ -161,15 +161,19 @@ async function streamResponseToClient(session, ws, history, options = {}) {
       const sentences = sentenceBuffer.addToken(token);
 
       for (const sentence of sentences) {
-        if (!session.isAISpeaking) break;
+        if (!session.isAISpeaking) {
+          break;
+        }
         const ssml = buildNaturalSSML(sentence);
         const audio = await googleTTS(ssml, session.voice);
-        ws.send(JSON.stringify({
-          type: 'ai_response_chunk',
-          text: sentence,
-          audio: audio.toString('base64'),
-          chunkIndex: chunkIndex++
-        }));
+        ws.send(
+          JSON.stringify({
+            type: 'ai_response_chunk',
+            text: sentence,
+            audio: audio.toString('base64'),
+            chunkIndex: chunkIndex++
+          })
+        );
       }
     }
 
@@ -178,12 +182,14 @@ async function streamResponseToClient(session, ws, history, options = {}) {
     if (remaining && session.isAISpeaking) {
       const ssml = buildNaturalSSML(remaining);
       const audio = await googleTTS(ssml, session.voice);
-      ws.send(JSON.stringify({
-        type: 'ai_response_chunk',
-        text: remaining,
-        audio: audio.toString('base64'),
-        chunkIndex: chunkIndex++
-      }));
+      ws.send(
+        JSON.stringify({
+          type: 'ai_response_chunk',
+          text: remaining,
+          audio: audio.toString('base64'),
+          chunkIndex: chunkIndex++
+        })
+      );
     }
 
     const tEnd = Date.now();
@@ -207,7 +213,7 @@ async function streamResponseToClient(session, ws, history, options = {}) {
 
 const wss = new WebSocket.Server({
   server, // Attach to shared HTTP server (same port for REST + WebSocket)
-  verifyClient: (info) => {
+  verifyClient: info => {
     if (config.isProduction) {
       const origin = info.origin || info.req.headers.origin;
       return origin === config.FRONTEND_URL;
@@ -246,7 +252,12 @@ wss.on('connection', (ws, req) => {
   const userId = queryParams.userId || null;
   const authToken = queryParams.token || null;
 
-  console.log('[CLIENT] Requested scenario: ' + scenarioFile + (difficulty ? ' (difficulty: ' + difficulty + ')' : '') + (voice ? ' (voice: ' + voice + ')' : ''));
+  console.log(
+    '[CLIENT] Requested scenario: ' +
+      scenarioFile +
+      (difficulty ? ' (difficulty: ' + difficulty + ')' : '') +
+      (voice ? ' (voice: ' + voice + ')' : '')
+  );
 
   // Async IIFE for access validation
   (async () => {
@@ -268,7 +279,10 @@ wss.on('connection', (ws, req) => {
           }
 
           // Verify the auth token with Supabase
-          const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(authToken);
+          const {
+            data: { user },
+            error: authError
+          } = await supabaseAdmin.auth.getUser(authToken);
 
           if (authError || !user) {
             console.warn('[ACCESS] Rejected: Invalid auth token');
@@ -329,7 +343,7 @@ wss.on('connection', (ws, req) => {
 
     // Per-session incremental Whisper state
     const incrementalState = {
-      latestTranscript: '',     // Most recent cumulative transcript
+      latestTranscript: '', // Most recent cumulative transcript
       pendingTranscription: null, // Promise for in-flight Whisper call
       exportCount: 0
     };
@@ -365,7 +379,9 @@ wss.on('connection', (ws, req) => {
         await incrementalState.pendingTranscription;
       }
       incrementalState.exportCount++;
-      console.log(`[INCREMENTAL] Export #${incrementalState.exportCount} at frame ${frameIndex}, ${Math.round(audioSnapshot.length / 16000)}s audio`);
+      console.log(
+        `[INCREMENTAL] Export #${incrementalState.exportCount} at frame ${frameIndex}, ${Math.round(audioSnapshot.length / 16000)}s audio`
+      );
 
       incrementalState.pendingTranscription = (async () => {
         try {
@@ -381,12 +397,16 @@ wss.on('connection', (ws, req) => {
 
     vadInstance.onSpeechEnd = async (audioFloat32, hadIncrementalExports, audioSinceExport) => {
       const session = sessions.get(sessionId);
-      if (!session || ws.readyState !== WebSocket.OPEN) return;
+      if (!session || ws.readyState !== WebSocket.OPEN) {
+        return;
+      }
 
       const t0 = Date.now();
       const durationMs = (audioFloat32.length / 16000) * 1000;
       const vadLatency = vadInstance.speechStartTime ? t0 - vadInstance.speechStartTime : 0;
-      console.log(`[VAD] Speech ended for ${sessionId}, ${Math.round(durationMs)}ms audio, VAD held ${vadLatency}ms`);
+      console.log(
+        `[VAD] Speech ended for ${sessionId}, ${Math.round(durationMs)}ms audio, VAD held ${vadLatency}ms`
+      );
 
       // Skip very short utterances (< 300ms) — likely noise
       if (audioFloat32.length < 4800) {
@@ -408,16 +428,22 @@ wss.on('connection', (ws, req) => {
           // If final segment is too short (< 0.1s = 1600 samples), skip Whisper and use incremental transcript as-is.
           if (audioSinceExport && audioSinceExport.length >= 1600) {
             const finalWav = float32ToWavBuffer(audioSinceExport, 16000);
-            console.log(`[TIMING] Incremental: ${incrementalState.exportCount} exports, final segment ${Math.round(audioSinceExport.length / 16000)}s (${finalWav.length} bytes)`);
+            console.log(
+              `[TIMING] Incremental: ${incrementalState.exportCount} exports, final segment ${Math.round(audioSinceExport.length / 16000)}s (${finalWav.length} bytes)`
+            );
             const finalTranscript = await openaiService.transcribeAudio(finalWav, sessionId, 'wav');
             transcript = (incrementalState.latestTranscript + ' ' + finalTranscript).trim();
           } else {
-            console.log(`[TIMING] Incremental: ${incrementalState.exportCount} exports, final segment too short (${audioSinceExport?.length || 0} samples) — using incremental transcript`);
+            console.log(
+              `[TIMING] Incremental: ${incrementalState.exportCount} exports, final segment too short (${audioSinceExport?.length || 0} samples) — using incremental transcript`
+            );
             transcript = incrementalState.latestTranscript;
           }
 
           const tWhisper = Date.now();
-          console.log(`[TIMING] Whisper STT (incremental): ${tWhisper - tWav}ms → "${transcript.substring(0, 100)}..."`);
+          console.log(
+            `[TIMING] Whisper STT (incremental): ${tWhisper - tWav}ms → "${transcript.substring(0, 100)}..."`
+          );
         } else {
           // Short utterance: standard full transcription
           const wavBuffer = float32ToWavBuffer(audioFloat32, 16000);
@@ -446,16 +472,18 @@ wss.on('connection', (ws, req) => {
       }
     };
 
-    ws.send(JSON.stringify({
-      type: 'scenario_loaded',
-      sessionId: sessionId,
-      scenario: scenarioFile
-    }));
+    ws.send(
+      JSON.stringify({
+        type: 'scenario_loaded',
+        sessionId: sessionId,
+        scenario: scenarioFile
+      })
+    );
 
     // Set up message handler only after validation passes
-    ws.on('message', async (data) => {
+    ws.on('message', async data => {
       try {
-      // Parse and validate message
+        // Parse and validate message
         let msg;
         try {
           msg = JSON.parse(data);
@@ -473,10 +501,13 @@ wss.on('connection', (ws, req) => {
         }
 
         // Check rate limits
-        const messageType = (msg.type === 'whisper_audio' || msg.type === 'audio_chunk') ? 'audio' : 'other';
+        const messageType =
+          msg.type === 'whisper_audio' || msg.type === 'audio_chunk' ? 'audio' : 'other';
         const rateCheck = wsRateLimiter.checkLimit(msg.sessionId, messageType);
         if (!rateCheck.allowed) {
-          console.warn(`[SECURITY] Rate limit exceeded for session ${msg.sessionId}: ${rateCheck.reason}`);
+          console.warn(
+            `[SECURITY] Rate limit exceeded for session ${msg.sessionId}: ${rateCheck.reason}`
+          );
           ws.send(JSON.stringify({ type: 'error', message: rateCheck.reason }));
           return;
         }
@@ -490,9 +521,11 @@ wss.on('connection', (ws, req) => {
 
         switch (msg.type) {
           case 'audio_chunk':
-          // Server-side VAD: receive PCM audio, run through Silero VAD
+            // Server-side VAD: receive PCM audio, run through Silero VAD
             try {
-              if (session.isAISpeaking || session.inFeedbackMode) break; // Ignore audio during AI speech/feedback
+              if (session.isAISpeaking || session.inFeedbackMode) {
+                break;
+              } // Ignore audio during AI speech/feedback
 
               const pcmData = Buffer.from(msg.audio, 'base64');
               // Copy to aligned ArrayBuffer — Buffer pool can give odd byteOffset
@@ -507,7 +540,9 @@ wss.on('connection', (ws, req) => {
               if (!session._chunkCount) {
                 session._chunkCount = 0;
                 const samples = int16Array.slice(0, 10);
-                console.log(`[VAD] First chunk: ${int16Array.length} samples, first 10: [${Array.from(samples)}]`);
+                console.log(
+                  `[VAD] First chunk: ${int16Array.length} samples, first 10: [${Array.from(samples)}]`
+                );
               }
               session._chunkCount++;
 
@@ -518,14 +553,18 @@ wss.on('connection', (ws, req) => {
             break;
 
           case 'whisper_audio':
-          // Handle Whisper API transcription for browsers without Web Speech API
+            // Handle Whisper API transcription for browsers without Web Speech API
             try {
               const audioBuffer = Buffer.from(msg.audio, 'base64');
               const audioFormat = msg.format || 'webm'; // Support WAV from Silero VAD
               const t1 = Date.now();
 
               // Transcribe using OpenAI service
-              const transcriptionText = await openaiService.transcribeAudio(audioBuffer, msg.sessionId, audioFormat);
+              const transcriptionText = await openaiService.transcribeAudio(
+                audioBuffer,
+                msg.sessionId,
+                audioFormat
+              );
 
               const t2 = Date.now();
               console.log('[WHISPER STT] ' + transcriptionText);
@@ -538,10 +577,12 @@ wss.on('connection', (ws, req) => {
               }
 
               // Send transcript back to frontend
-              ws.send(JSON.stringify({
-                type: 'whisper_transcript',
-                text: transcriptionText
-              }));
+              ws.send(
+                JSON.stringify({
+                  type: 'whisper_transcript',
+                  text: transcriptionText
+                })
+              );
             } catch (error) {
               console.error('[WHISPER ERROR]', error.message);
               ws.send(JSON.stringify({ type: 'error', message: 'Transcription failed' }));
@@ -569,12 +610,16 @@ wss.on('connection', (ws, req) => {
               if (session.feedbackCount < 6) {
                 // Continue to next feedback section
                 session.feedbackCount++;
-                console.log(`[FEEDBACK] Auto-continuing feedback section (${session.feedbackCount}/6)`);
+                console.log(
+                  `[FEEDBACK] Auto-continuing feedback section (${session.feedbackCount}/6)`
+                );
 
                 // Notify frontend that we're preparing next chunk
-                ws.send(JSON.stringify({
-                  type: 'feedback_processing'
-                }));
+                ws.send(
+                  JSON.stringify({
+                    type: 'feedback_processing'
+                  })
+                );
 
                 setTimeout(async () => {
                   if (ws.readyState !== WebSocket.OPEN || !sessions.has(sessionId)) {
@@ -584,7 +629,9 @@ wss.on('connection', (ws, req) => {
                     session.feedbackHistory.push({ role: 'user', content: 'continue' });
 
                     const t1 = Date.now();
-                    const responseText = await callGPT4oMini(session.feedbackHistory, { max_tokens: 200 });
+                    const responseText = await callGPT4oMini(session.feedbackHistory, {
+                      max_tokens: 200
+                    });
                     const t2 = Date.now();
                     console.log('[FEEDBACK] ' + responseText);
                     console.log(`[TIMING] Feedback GPT: ${t2 - t1}ms`);
@@ -597,18 +644,27 @@ wss.on('connection', (ws, req) => {
                     console.log(`[TIMING] Feedback TTS: ${t4 - t3}ms, Total: ${t4 - t1}ms`);
 
                     session.isAISpeaking = true;
-                    ws.send(JSON.stringify({
-                      type: 'feedback_response',
-                      text: responseText,
-                      audio: audioBuffer.toString('base64'),
-                      section: session.feedbackCount,
-                      totalSections: 6
-                    }));
+                    ws.send(
+                      JSON.stringify({
+                        type: 'feedback_response',
+                        text: responseText,
+                        audio: audioBuffer.toString('base64'),
+                        section: session.feedbackCount,
+                        totalSections: 6
+                      })
+                    );
                   } catch (error) {
                     console.error('[FEEDBACK AUTO-CONTINUE ERROR]', error.message);
                     try {
-                      ws.send(JSON.stringify({ type: 'error', message: 'Feedback generation failed. Please try again.' }));
-                    } catch (sendErr) { /* ws may be closed */ }
+                      ws.send(
+                        JSON.stringify({
+                          type: 'error',
+                          message: 'Feedback generation failed. Please try again.'
+                        })
+                      );
+                    } catch (sendErr) {
+                      /* ws may be closed */
+                    }
                     session.inFeedbackMode = false;
                     session.feedbackCount = 0;
                   }
@@ -617,13 +673,18 @@ wss.on('connection', (ws, req) => {
                 // All 6 spoken sections delivered - now generate JSON summary
                 console.log('[FEEDBACK] All sections delivered, generating JSON summary');
                 try {
-                  const jsonTemplatePath = path.join(__dirname, 'prompts/system/feedback_json_template.txt');
+                  const jsonTemplatePath = path.join(
+                    __dirname,
+                    'prompts/system/feedback_json_template.txt'
+                  );
                   const jsonTemplatePrompt = fs.readFileSync(jsonTemplatePath, 'utf8');
 
                   session.feedbackHistory.push({ role: 'user', content: jsonTemplatePrompt });
 
                   const t1 = Date.now();
-                  const feedbackText = await callGPT4oMini(session.feedbackHistory, { max_tokens: 500 });
+                  const feedbackText = await callGPT4oMini(session.feedbackHistory, {
+                    max_tokens: 500
+                  });
                   const t2 = Date.now();
                   console.log('[FEEDBACK] JSON response:', feedbackText);
                   console.log(`[TIMING] Feedback JSON GPT: ${t2 - t1}ms`);
@@ -638,36 +699,49 @@ wss.on('connection', (ws, req) => {
                       throw new Error('No JSON found in response');
                     }
                   } catch (parseError) {
-                    console.warn('[FEEDBACK] JSON parse failed, using fallback:', parseError.message);
+                    console.warn(
+                      '[FEEDBACK] JSON parse failed, using fallback:',
+                      parseError.message
+                    );
                     feedback = {
                       score: 3,
                       overallImpression: 'Unable to parse detailed feedback',
-                      clinicalKnowledge: { diagnosis: 'See spoken feedback', management: 'See spoken feedback' },
+                      clinicalKnowledge: {
+                        diagnosis: 'See spoken feedback',
+                        management: 'See spoken feedback'
+                      },
                       strengths: ['See spoken feedback above'],
                       improvements: ['Please try again for detailed report'],
                       summary: feedbackText.substring(0, 500)
                     };
                   }
 
-                  ws.send(JSON.stringify({
-                    type: 'feedback_summary',
-                    feedback: feedback
-                  }));
+                  ws.send(
+                    JSON.stringify({
+                      type: 'feedback_summary',
+                      feedback: feedback
+                    })
+                  );
                   console.log('[FEEDBACK] Summary sent');
                   session.inFeedbackMode = false;
                 } catch (error) {
                   console.error('[FEEDBACK JSON ERROR]', error.message);
-                  ws.send(JSON.stringify({
-                    type: 'feedback_summary',
-                    feedback: {
-                      score: 3,
-                      overallImpression: 'Session completed',
-                      clinicalKnowledge: { diagnosis: 'Feedback generation error', management: 'Feedback generation error' },
-                      strengths: ['Session completed'],
-                      improvements: ['Feedback generation encountered an error'],
-                      summary: 'Unable to generate detailed feedback. Please try again.'
-                    }
-                  }));
+                  ws.send(
+                    JSON.stringify({
+                      type: 'feedback_summary',
+                      feedback: {
+                        score: 3,
+                        overallImpression: 'Session completed',
+                        clinicalKnowledge: {
+                          diagnosis: 'Feedback generation error',
+                          management: 'Feedback generation error'
+                        },
+                        strengths: ['Session completed'],
+                        improvements: ['Feedback generation encountered an error'],
+                        summary: 'Unable to generate detailed feedback. Please try again.'
+                      }
+                    })
+                  );
                   session.inFeedbackMode = false;
                 }
               }
@@ -675,7 +749,7 @@ wss.on('connection', (ws, req) => {
             break;
 
           case 'request_feedback':
-          // Spawn NEW GPT session with dedicated feedback prompt + full transcript
+            // Spawn NEW GPT session with dedicated feedback prompt + full transcript
             console.log('[FEEDBACK] Starting hybrid feedback flow');
             try {
               // 1. Serialize full conversation into transcript
@@ -693,7 +767,9 @@ wss.on('connection', (ws, req) => {
 
               // 4. Call GPT for first feedback section
               const t1 = Date.now();
-              const responseText = await callGPT4oMini(session.feedbackHistory, { max_tokens: 200 });
+              const responseText = await callGPT4oMini(session.feedbackHistory, {
+                max_tokens: 200
+              });
               const t2 = Date.now();
               console.log('[FEEDBACK] Section 1: ' + responseText);
               console.log(`[TIMING] Feedback GPT: ${t2 - t1}ms`);
@@ -711,33 +787,42 @@ wss.on('connection', (ws, req) => {
               session.inFeedbackMode = true;
               session.feedbackCount = 1;
 
-              ws.send(JSON.stringify({
-                type: 'feedback_response',
-                text: responseText,
-                audio: audioBuffer.toString('base64'),
-                section: 1,
-                totalSections: 6
-              }));
+              ws.send(
+                JSON.stringify({
+                  type: 'feedback_response',
+                  text: responseText,
+                  audio: audioBuffer.toString('base64'),
+                  section: 1,
+                  totalSections: 6
+                })
+              );
               console.log('[FEEDBACK] Section 1 sent');
             } catch (error) {
               console.error('[FEEDBACK ERROR]', error.message);
-              ws.send(JSON.stringify({
-                type: 'feedback_summary',
-                feedback: {
-                  score: 3,
-                  overallImpression: 'Session completed',
-                  clinicalKnowledge: { diagnosis: 'Feedback generation error', management: 'Feedback generation error' },
-                  strengths: ['Session completed'],
-                  improvements: ['Feedback generation encountered an error'],
-                  summary: 'Unable to generate detailed feedback. Please try again.'
-                }
-              }));
+              ws.send(
+                JSON.stringify({
+                  type: 'feedback_summary',
+                  feedback: {
+                    score: 3,
+                    overallImpression: 'Session completed',
+                    clinicalKnowledge: {
+                      diagnosis: 'Feedback generation error',
+                      management: 'Feedback generation error'
+                    },
+                    strengths: ['Session completed'],
+                    improvements: ['Feedback generation encountered an error'],
+                    summary: 'Unable to generate detailed feedback. Please try again.'
+                  }
+                })
+              );
             }
             break;
         }
       } catch (error) {
         console.error('[ERROR]', error.message);
-        ws.send(JSON.stringify({ type: 'error', message: 'An error occurred processing your request' }));
+        ws.send(
+          JSON.stringify({ type: 'error', message: 'An error occurred processing your request' })
+        );
       }
     });
 
@@ -762,34 +847,60 @@ wss.on('connection', (ws, req) => {
 app.use(express.static(path.join(__dirname, '../frontend')));
 
 // Enable CORS for frontend
-app.use(cors({
-  origin: config.FRONTEND_URL || (config.isProduction ? false : '*'),
-  methods: ['POST', 'GET', 'DELETE', 'PUT', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'stripe-signature']
-}));
+app.use(
+  cors({
+    origin: config.isProduction
+      ? config.FRONTEND_URL
+      : function (origin, callback) {
+          // In development, allow configured FRONTEND_URL + common localhost origins
+          const allowedOrigins = [
+            config.FRONTEND_URL,
+            'http://localhost:3000',
+            'http://localhost:3001',
+            'http://localhost:5500',
+            'http://localhost:8080'
+          ];
+          // Allow requests with no origin (e.g. same-origin, curl, server-to-server)
+          if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+          } else {
+            callback(null, false);
+          }
+        },
+    methods: ['POST', 'GET', 'DELETE', 'PUT', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'stripe-signature']
+  })
+);
 
 // Security headers (helmet)
-app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", 'https://cdn.jsdelivr.net', 'https://js.stripe.com'],
-      styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
-      fontSrc: ["'self'", 'https://fonts.gstatic.com'],
-      connectSrc: ["'self'", 'https://*.supabase.co', 'wss://*.onrender.com', 'https://api.stripe.com'],
-      frameSrc: ['https://js.stripe.com', 'https://hooks.stripe.com'],
-      imgSrc: ["'self'", 'data:', 'https:']
-    }
-  },
-  hsts: {
-    maxAge: 31536000,
-    includeSubDomains: true,
-    preload: true
-  },
-  frameguard: { action: 'deny' },
-  noSniff: true,
-  referrerPolicy: { policy: 'strict-origin-when-cross-origin' }
-}));
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", 'https://cdn.jsdelivr.net', 'https://js.stripe.com'],
+        styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
+        fontSrc: ["'self'", 'https://fonts.gstatic.com'],
+        connectSrc: [
+          "'self'",
+          'https://*.supabase.co',
+          'wss://*.onrender.com',
+          'https://api.stripe.com'
+        ],
+        frameSrc: ['https://js.stripe.com', 'https://hooks.stripe.com'],
+        imgSrc: ["'self'", 'data:', 'https:']
+      }
+    },
+    hsts: {
+      maxAge: 31536000,
+      includeSubDomains: true,
+      preload: true
+    },
+    frameguard: { action: 'deny' },
+    noSniff: true,
+    referrerPolicy: { policy: 'strict-origin-when-cross-origin' }
+  })
+);
 
 // HTTPS enforcement in production
 app.set('trust proxy', 1);
@@ -834,98 +945,93 @@ if (process.env.PROMPT_LAB_ENABLED === 'true' || !config.isProduction) {
 }
 
 // Stripe webhook endpoint (must use raw body)
-app.post('/stripe-webhook',
-  express.raw({ type: 'application/json' }),
-  async (req, res) => {
-    if (!stripe || !supabaseAdmin) {
-      return res.status(503).json({ error: 'Payment processing not configured' });
-    }
-
-    const sig = req.headers['stripe-signature'];
-    let event;
-
-    try {
-      event = stripe.webhooks.constructEvent(
-        req.body,
-        sig,
-        config.STRIPE_WEBHOOK_SECRET
-      );
-    } catch (err) {
-      console.error('[STRIPE WEBHOOK] Signature verification failed:', err.message);
-      return res.status(400).send('Webhook processing failed');
-    }
-
-    console.log('[STRIPE WEBHOOK] Event received:', event.type);
-
-    try {
-      switch (event.type) {
-        case 'checkout.session.completed': {
-          const session = event.data.object;
-          const userId = session.metadata?.userId;
-          const customerId = session.customer;
-          const subscriptionId = session.subscription;
-          const priceType = session.metadata?.priceType || 'monthly';
-          const specialty = session.metadata?.specialty || 'plastic-surgery';
-
-          if (userId) {
-            // Use upsert to create or update the subscription record
-            await supabaseAdmin
-              .from('subscriptions')
-              .upsert({
-                user_id: userId,
-                stripe_customer_id: customerId,
-                stripe_subscription_id: subscriptionId,
-                status: 'active',
-                price_type: priceType,
-                specialty: specialty,
-                created_at: new Date().toISOString()
-              }, {
-                onConflict: 'user_id'
-              });
-
-            console.log('[STRIPE] Subscription activated for user:', userId);
-          }
-          break;
-        }
-
-        case 'customer.subscription.updated': {
-          const subscription = event.data.object;
-          const status = subscription.status === 'active' ? 'active' : 'past_due';
-
-          await supabaseAdmin
-            .from('subscriptions')
-            .update({
-              status,
-              current_period_end: new Date(subscription.current_period_end * 1000).toISOString()
-            })
-            .eq('stripe_subscription_id', subscription.id);
-
-          console.log('[STRIPE] Subscription updated:', subscription.id, status);
-          break;
-        }
-
-        case 'customer.subscription.deleted': {
-          const subscription = event.data.object;
-
-          await supabaseAdmin
-            .from('subscriptions')
-            .update({ status: 'cancelled' })
-            .eq('stripe_subscription_id', subscription.id);
-
-          console.log('[STRIPE] Subscription cancelled:', subscription.id);
-          break;
-        }
-      }
-    } catch (error) {
-      console.error('[STRIPE WEBHOOK] Error processing event:', error);
-    }
-
-    res.json({ received: true });
+app.post('/stripe-webhook', express.raw({ type: 'application/json' }), async (req, res) => {
+  if (!stripe || !supabaseAdmin) {
+    return res.status(503).json({ error: 'Payment processing not configured' });
   }
-);
+
+  const sig = req.headers['stripe-signature'];
+  let event;
+
+  try {
+    event = stripe.webhooks.constructEvent(req.body, sig, config.STRIPE_WEBHOOK_SECRET);
+  } catch (err) {
+    console.error('[STRIPE WEBHOOK] Signature verification failed:', err.message);
+    return res.status(400).send('Webhook processing failed');
+  }
+
+  console.log('[STRIPE WEBHOOK] Event received:', event.type);
+
+  try {
+    switch (event.type) {
+      case 'checkout.session.completed': {
+        const session = event.data.object;
+        const userId = session.metadata?.userId;
+        const customerId = session.customer;
+        const subscriptionId = session.subscription;
+        const priceType = session.metadata?.priceType || 'monthly';
+        const specialty = session.metadata?.specialty || 'plastic-surgery';
+
+        if (userId) {
+          // Use upsert to create or update the subscription record
+          await supabaseAdmin.from('subscriptions').upsert(
+            {
+              user_id: userId,
+              stripe_customer_id: customerId,
+              stripe_subscription_id: subscriptionId,
+              status: 'active',
+              price_type: priceType,
+              specialty: specialty,
+              created_at: new Date().toISOString()
+            },
+            {
+              onConflict: 'user_id'
+            }
+          );
+
+          console.log('[STRIPE] Subscription activated for user:', userId);
+        }
+        break;
+      }
+
+      case 'customer.subscription.updated': {
+        const subscription = event.data.object;
+        const status = subscription.status === 'active' ? 'active' : 'past_due';
+
+        await supabaseAdmin
+          .from('subscriptions')
+          .update({
+            status,
+            current_period_end: new Date(subscription.current_period_end * 1000).toISOString()
+          })
+          .eq('stripe_subscription_id', subscription.id);
+
+        console.log('[STRIPE] Subscription updated:', subscription.id, status);
+        break;
+      }
+
+      case 'customer.subscription.deleted': {
+        const subscription = event.data.object;
+
+        await supabaseAdmin
+          .from('subscriptions')
+          .update({ status: 'cancelled' })
+          .eq('stripe_subscription_id', subscription.id);
+
+        console.log('[STRIPE] Subscription cancelled:', subscription.id);
+        break;
+      }
+    }
+  } catch (error) {
+    console.error('[STRIPE WEBHOOK] Error processing event:', error);
+  }
+
+  res.json({ received: true });
+});
 
 // Create Stripe checkout session with input validation
-app.post('/create-checkout-session',
+app.post(
+  '/create-checkout-session',
   express.json(),
   [
     body('userId').isString().isLength({ min: 1, max: 100 }).trim().escape(),
@@ -949,9 +1055,8 @@ app.post('/create-checkout-session',
       const { userId, email, priceType = 'monthly', specialty = 'plastic-surgery' } = req.body;
 
       // Select price ID based on plan type
-      const priceId = priceType === 'annual'
-        ? config.STRIPE_PRICE_ID_ANNUAL
-        : config.STRIPE_PRICE_ID_MONTHLY;
+      const priceId =
+        priceType === 'annual' ? config.STRIPE_PRICE_ID_ANNUAL : config.STRIPE_PRICE_ID_MONTHLY;
 
       // Verify price ID is configured
       if (!priceId) {
@@ -961,17 +1066,26 @@ app.post('/create-checkout-session',
 
       const session = await stripe.checkout.sessions.create({
         customer_email: email,
-        line_items: [{
-          price: priceId,
-          quantity: 1
-        }],
+        line_items: [
+          {
+            price: priceId,
+            quantity: 1
+          }
+        ],
         mode: 'subscription',
         success_url: `${config.FRONTEND_URL}?payment=success`,
         cancel_url: `${config.FRONTEND_URL}?payment=cancelled`,
         metadata: { userId, priceType, specialty }
       });
 
-      console.log('[STRIPE] Checkout session created for:', email, 'plan:', priceType, 'specialty:', specialty);
+      console.log(
+        '[STRIPE] Checkout session created for:',
+        email,
+        'plan:',
+        priceType,
+        'specialty:',
+        specialty
+      );
       res.json({ url: session.url });
     } catch (error) {
       console.error('[STRIPE] Error creating checkout session:', error);
@@ -981,11 +1095,10 @@ app.post('/create-checkout-session',
 );
 
 // Create Stripe customer portal session with input validation
-app.post('/create-portal-session',
+app.post(
+  '/create-portal-session',
   express.json(),
-  [
-    body('customerId').isString().isLength({ min: 1, max: 100 }).trim().escape()
-  ],
+  [body('customerId').isString().isLength({ min: 1, max: 100 }).trim().escape()],
   async (req, res) => {
     if (!stripe) {
       return res.status(503).json({ error: 'Payment processing not configured' });

@@ -66,11 +66,13 @@ describe('isNoiseTranscript - boundary cases', () => {
     expect(isNoiseTranscript('The flap is well perfused')).toBe(false);
   });
 
-  test('returns true for Thanks and Thank you (echo pickup)', () => {
-    expect(isNoiseTranscript('thanks')).toBe(true);
-    expect(isNoiseTranscript('Thank you')).toBe(true);
-    expect(isNoiseTranscript('Thanks.')).toBe(true);
-    expect(isNoiseTranscript('THANK YOU')).toBe(true);
+  test('returns false for Thanks and Thank you (valid short responses)', () => {
+    // NOTE: "thanks" and "thank you" are valid short responses, not noise
+    // The noise filter intentionally keeps these (see audioHelpers.js comment)
+    expect(isNoiseTranscript('thanks')).toBe(false);
+    expect(isNoiseTranscript('Thank you')).toBe(false);
+    expect(isNoiseTranscript('Thanks.')).toBe(false);
+    expect(isNoiseTranscript('THANK YOU')).toBe(false);
   });
 
   test('returns false for longer sentences containing noise words', () => {
@@ -86,10 +88,10 @@ describe('isNoiseTranscript - boundary cases', () => {
     expect(isNoiseTranscript([])).toBe(true);
   });
 
-  test('returns true for whitespace-padded noise', () => {
-    expect(isNoiseTranscript('  um  ')).toBe(true);
-    expect(isNoiseTranscript('  ok  ')).toBe(true);
-    expect(isNoiseTranscript('  yes  ')).toBe(true);
+  test('handles whitespace-padded text correctly', () => {
+    expect(isNoiseTranscript('  um  ')).toBe(true); // filler sound = noise
+    expect(isNoiseTranscript('  ok  ')).toBe(false); // valid short response
+    expect(isNoiseTranscript('  yes  ')).toBe(false); // valid short response
   });
 });
 

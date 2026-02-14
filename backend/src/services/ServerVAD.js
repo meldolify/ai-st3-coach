@@ -97,7 +97,9 @@ class ServerVAD {
     }
     const noiseProb = await this._runModel(noiseFrame);
 
-    console.log(`[ServerVAD] Self-test: silence=${silenceProb.toFixed(6)}, noise=${noiseProb.toFixed(6)}`);
+    console.log(
+      `[ServerVAD] Self-test: silence=${silenceProb.toFixed(6)}, noise=${noiseProb.toFixed(6)}`
+    );
     if (silenceProb === noiseProb) {
       console.warn('[ServerVAD] WARNING: Model returns identical output for different inputs');
     }
@@ -156,10 +158,14 @@ class ServerVAD {
     let peak = 0;
     for (let i = 0; i < frame.length; i++) {
       const abs = Math.abs(frame[i]);
-      if (abs > peak) peak = abs;
+      if (abs > peak) {
+        peak = abs;
+      }
     }
 
-    if (peak < 0.001 || peak >= 0.1) return frame;
+    if (peak < 0.001 || peak >= 0.1) {
+      return frame;
+    }
 
     const gain = Math.min(0.3 / peak, 50);
     const result = new Float32Array(frame.length);
@@ -196,7 +202,9 @@ class ServerVAD {
    * Update speech/silence state based on probability.
    */
   _updateState(prob, frame) {
-    if (!this._frameCount) this._frameCount = 0;
+    if (!this._frameCount) {
+      this._frameCount = 0;
+    }
     this._frameCount++;
 
     // Diagnostic: log every ~10 frames (~960ms at 96ms/frame)
@@ -204,9 +212,13 @@ class ServerVAD {
       let peak = 0;
       for (let j = 0; j < frame.length; j++) {
         const abs = Math.abs(frame[j]);
-        if (abs > peak) peak = abs;
+        if (abs > peak) {
+          peak = abs;
+        }
       }
-      console.log(`[VAD] Frame ${this._frameCount}: prob=${prob.toFixed(3)}, peak=${peak.toFixed(4)}, speaking=${this.isSpeaking}`);
+      console.log(
+        `[VAD] Frame ${this._frameCount}: prob=${prob.toFixed(3)}, peak=${peak.toFixed(4)}, speaking=${this.isSpeaking}`
+      );
     }
 
     if (!this.isSpeaking) {
@@ -227,7 +239,9 @@ class ServerVAD {
           this.audioBuffer = [...this.preSpeechBuffer];
           this.preSpeechBuffer = [];
 
-          if (this.onSpeechStart) this.onSpeechStart();
+          if (this.onSpeechStart) {
+            this.onSpeechStart();
+          }
         }
       } else {
         this.speechFrameCount = 0;
@@ -238,7 +252,10 @@ class ServerVAD {
       this._framesSinceLastExport++;
 
       // Fire incremental export every ~15s of continuous speech
-      if (this.onIncrementalAudio && this._framesSinceLastExport >= this._incrementalIntervalFrames) {
+      if (
+        this.onIncrementalAudio &&
+        this._framesSinceLastExport >= this._incrementalIntervalFrames
+      ) {
         const snapshot = this._concatenateBuffers();
         this._lastExportIndex = this.audioBuffer.length;
         this._framesSinceLastExport = 0;
@@ -251,7 +268,9 @@ class ServerVAD {
           // Speech ended — log adaptive threshold used
           const adaptiveFrames = this._getRedemptionFrames();
           const speechElapsed = Date.now() - this.speechStartTime;
-          console.log(`[VAD] Adaptive: ${adaptiveFrames} frames / ${Math.round(adaptiveFrames * 96)}ms tolerance (speech ${Math.round(speechElapsed / 1000)}s)`);
+          console.log(
+            `[VAD] Adaptive: ${adaptiveFrames} frames / ${Math.round(adaptiveFrames * 96)}ms tolerance (speech ${Math.round(speechElapsed / 1000)}s)`
+          );
 
           // Compute all data BEFORE clearing state
           const audio = this._concatenateBuffers();
@@ -266,7 +285,9 @@ class ServerVAD {
           this._framesSinceLastExport = 0;
           this._lastExportIndex = 0;
 
-          if (this.onSpeechEnd) this.onSpeechEnd(audio, hadIncrementalExports, audioSinceExport);
+          if (this.onSpeechEnd) {
+            this.onSpeechEnd(audio, hadIncrementalExports, audioSinceExport);
+          }
         }
       } else {
         this.silenceFrameCount = 0;
@@ -283,11 +304,11 @@ class ServerVAD {
   _getRedemptionFrames() {
     const elapsed = Date.now() - this.speechStartTime;
     if (elapsed < 5000) {
-      return this.redemptionFrames;                    // 8 frames = ~768ms
+      return this.redemptionFrames; // 8 frames = ~768ms
     } else if (elapsed < 15000) {
-      return this.redemptionFrames * 2;                // 16 frames = ~1536ms
+      return this.redemptionFrames * 2; // 16 frames = ~1536ms
     } else {
-      return Math.round(this.redemptionFrames * 3.5);  // 28 frames = ~2688ms
+      return Math.round(this.redemptionFrames * 3.5); // 28 frames = ~2688ms
     }
   }
 
@@ -297,7 +318,9 @@ class ServerVAD {
    * @returns {Float32Array}
    */
   getAudioSinceLastExport() {
-    if (this._lastExportIndex === 0) return this._concatenateBuffers();
+    if (this._lastExportIndex === 0) {
+      return this._concatenateBuffers();
+    }
     const sliced = this.audioBuffer.slice(this._lastExportIndex);
     const totalLength = sliced.reduce((sum, buf) => sum + buf.length, 0);
     const result = new Float32Array(totalLength);
@@ -393,8 +416,8 @@ function float32ToWavBuffer(float32Audio, sampleRate) {
 
   // fmt chunk
   buffer.write('fmt ', 12);
-  buffer.writeUInt32LE(16, 16);         // chunk size
-  buffer.writeUInt16LE(1, 20);          // PCM format
+  buffer.writeUInt32LE(16, 16); // chunk size
+  buffer.writeUInt16LE(1, 20); // PCM format
   buffer.writeUInt16LE(numChannels, 22);
   buffer.writeUInt32LE(sampleRate, 24);
   buffer.writeUInt32LE(byteRate, 28);
