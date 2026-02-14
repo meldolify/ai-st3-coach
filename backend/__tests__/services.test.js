@@ -9,6 +9,7 @@ describe('OpenAIService', () => {
   beforeEach(() => {
     jest.resetModules();
     process.env.NODE_ENV = 'test';
+    process.env.GEMINI_API_KEY = 'test-gemini-key';
     process.env.OPENAI_API_KEY = 'test-api-key';
     openaiService = require('../src/services/OpenAIService');
   });
@@ -29,7 +30,7 @@ describe('OpenAIService', () => {
 
   test('generateResponse accepts history array', async () => {
     // Mock the client
-    openaiService.client = {
+    openaiService.llmClient = {
       chat: {
         completions: {
           create: jest.fn().mockResolvedValue({
@@ -43,9 +44,9 @@ describe('OpenAIService', () => {
     const result = await openaiService.generateResponse(history);
 
     expect(result).toBe('Test response');
-    expect(openaiService.client.chat.completions.create).toHaveBeenCalledWith(
+    expect(openaiService.llmClient.chat.completions.create).toHaveBeenCalledWith(
       expect.objectContaining({
-        model: 'gpt-4o-mini',
+        model: expect.any(String),
         messages: history,
         temperature: 0.7,
         max_tokens: 150
@@ -54,7 +55,7 @@ describe('OpenAIService', () => {
   });
 
   test('generateResponse accepts custom options', async () => {
-    openaiService.client = {
+    openaiService.llmClient = {
       chat: {
         completions: {
           create: jest.fn().mockResolvedValue({
@@ -70,7 +71,7 @@ describe('OpenAIService', () => {
       max_tokens: 200
     });
 
-    expect(openaiService.client.chat.completions.create).toHaveBeenCalledWith(
+    expect(openaiService.llmClient.chat.completions.create).toHaveBeenCalledWith(
       expect.objectContaining({
         temperature: 0.5,
         max_tokens: 200
@@ -85,6 +86,7 @@ describe('TTSService', () => {
   beforeEach(() => {
     jest.resetModules();
     process.env.NODE_ENV = 'test';
+    process.env.GEMINI_API_KEY = 'test-gemini-key';
     process.env.OPENAI_API_KEY = 'test-api-key';
     ttsService = require('../src/services/TTSService');
   });

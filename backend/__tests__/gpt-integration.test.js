@@ -4,6 +4,7 @@
  */
 
 process.env.NODE_ENV = 'test';
+process.env.GEMINI_API_KEY = 'test-gemini-key';
 process.env.OPENAI_API_KEY = 'test-api-key';
 
 describe('OpenAIService - generateResponse', () => {
@@ -18,7 +19,7 @@ describe('OpenAIService - generateResponse', () => {
     const mockCreate = jest.fn().mockResolvedValue({
       choices: [{ message: { content: 'Good morning, shall we begin?' } }]
     });
-    openaiService.client = { chat: { completions: { create: mockCreate } } };
+    openaiService.llmClient = { chat: { completions: { create: mockCreate } } };
 
     const history = [
       { role: 'system', content: 'You are an examiner.' },
@@ -27,24 +28,27 @@ describe('OpenAIService - generateResponse', () => {
     const result = await openaiService.generateResponse(history);
 
     expect(result).toBe('Good morning, shall we begin?');
-    expect(mockCreate).toHaveBeenCalledWith({
-      model: 'gpt-4o-mini',
-      messages: history,
-      temperature: 0.7,
-      max_tokens: 150
-    });
+    expect(mockCreate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        model: expect.any(String),
+        messages: history,
+        temperature: 0.7,
+        max_tokens: 150
+      })
+    );
   });
 
   test('passes custom options to OpenAI', async () => {
     const mockCreate = jest.fn().mockResolvedValue({
       choices: [{ message: { content: 'response' } }]
     });
-    openaiService.client = { chat: { completions: { create: mockCreate } } };
+    openaiService.llmClient = { chat: { completions: { create: mockCreate } } };
 
-    await openaiService.generateResponse(
-      [{ role: 'user', content: 'test' }],
-      { model: 'gpt-4', temperature: 0.3, max_tokens: 500 }
-    );
+    await openaiService.generateResponse([{ role: 'user', content: 'test' }], {
+      model: 'gpt-4',
+      temperature: 0.3,
+      max_tokens: 500
+    });
 
     expect(mockCreate).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -57,12 +61,9 @@ describe('OpenAIService - generateResponse', () => {
 
   test('returns first choice message content', async () => {
     const mockCreate = jest.fn().mockResolvedValue({
-      choices: [
-        { message: { content: 'First choice' } },
-        { message: { content: 'Second choice' } }
-      ]
+      choices: [{ message: { content: 'First choice' } }, { message: { content: 'Second choice' } }]
     });
-    openaiService.client = { chat: { completions: { create: mockCreate } } };
+    openaiService.llmClient = { chat: { completions: { create: mockCreate } } };
 
     const result = await openaiService.generateResponse([{ role: 'user', content: 'test' }]);
     expect(result).toBe('First choice');
@@ -70,7 +71,7 @@ describe('OpenAIService - generateResponse', () => {
 
   test('propagates errors from OpenAI client', async () => {
     const mockCreate = jest.fn().mockRejectedValue(new Error('API rate limit exceeded'));
-    openaiService.client = { chat: { completions: { create: mockCreate } } };
+    openaiService.llmClient = { chat: { completions: { create: mockCreate } } };
 
     await expect(
       openaiService.generateResponse([{ role: 'user', content: 'test' }])
@@ -81,25 +82,29 @@ describe('OpenAIService - generateResponse', () => {
     const mockCreate = jest.fn().mockResolvedValue({
       choices: [{ message: { content: 'response' } }]
     });
-    openaiService.client = { chat: { completions: { create: mockCreate } } };
+    openaiService.llmClient = { chat: { completions: { create: mockCreate } } };
 
-    await openaiService.generateResponse(
-      [{ role: 'user', content: 'test' }],
-      { temperature: 0 }
-    );
+    await openaiService.generateResponse([{ role: 'user', content: 'test' }], { temperature: 0 });
 
     // temperature uses ?? so 0 should be passed through
-    expect(mockCreate).toHaveBeenCalledWith(
-      expect.objectContaining({ temperature: 0 })
-    );
+    expect(mockCreate).toHaveBeenCalledWith(expect.objectContaining({ temperature: 0 }));
   });
 
-  test('initializes client lazily via _ensureClient', () => {
-    openaiService.client = null;
-    const client = openaiService._ensureClient();
+  test('initializes LLM client lazily via _ensureLLMClient', () => {
+    openaiService.llmClient = null;
+    const client = openaiService._ensureLLMClient();
     expect(client).toBeDefined();
     // Calling again returns same instance
-    const client2 = openaiService._ensureClient();
+    const client2 = openaiService._ensureLLMClient();
+    expect(client2).toBe(client);
+  });
+
+  test('initializes Whisper client lazily via _ensureWhisperClient', () => {
+    openaiService.whisperClient = null;
+    const client = openaiService._ensureWhisperClient();
+    expect(client).toBeDefined();
+    // Calling again returns same instance
+    const client2 = openaiService._ensureWhisperClient();
     expect(client2).toBe(client);
   });
 });

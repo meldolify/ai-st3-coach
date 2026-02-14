@@ -5,10 +5,15 @@
 
 // Must set NODE_ENV before requiring config
 process.env.NODE_ENV = 'test';
+process.env.GEMINI_API_KEY = 'test-gemini-key';
 process.env.OPENAI_API_KEY = 'test-key';
 
 const { loadScenarioPrompt } = require('../src/utils/scenarioLoader');
-const { validateMessage, sanitizeForLog, generateSecureSessionId } = require('../src/middleware/websocketSecurity');
+const {
+  validateMessage,
+  sanitizeForLog,
+  generateSecureSessionId
+} = require('../src/middleware/websocketSecurity');
 
 describe('loadScenarioPrompt', () => {
   test('loads an existing scenario file', () => {

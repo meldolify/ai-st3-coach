@@ -15,6 +15,7 @@ describe('Config Module', () => {
       PATH: savedEnv.PATH,
       SystemRoot: savedEnv.SystemRoot,
       NODE_ENV: 'test',
+      GEMINI_API_KEY: 'test-gemini-key',
       OPENAI_API_KEY: 'test-api-key'
     };
   });
@@ -23,9 +24,15 @@ describe('Config Module', () => {
     process.env = savedEnv;
   });
 
-  test('loads with required OPENAI_API_KEY', () => {
+  test('loads with required API keys', () => {
     const config = require('../src/config');
+    expect(config.GEMINI_API_KEY).toBe('test-gemini-key');
     expect(config.OPENAI_API_KEY).toBe('test-api-key');
+  });
+
+  test('has correct default LLM_MODEL', () => {
+    const config = require('../src/config');
+    expect(config.LLM_MODEL).toBe('gemini-2.5-flash');
   });
 
   test('has correct default PORT values', () => {

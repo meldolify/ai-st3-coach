@@ -99,6 +99,8 @@ export default defineConfig({
         ...process.env,
         // Override FRONTEND_URL so CORS allows the test frontend origin
         FRONTEND_URL: 'http://localhost:3001',
+        // Provide a dummy Gemini key so the server starts (E2E tests don't call the real LLM)
+        GEMINI_API_KEY: process.env.GEMINI_API_KEY || 'e2e-test-key',
       },
     },
   ],
