@@ -100,7 +100,7 @@ class AudioPlayer {
     // Fallback: standard Audio element
     const binaryString = atob(base64Audio);
     const bytes = Uint8Array.from(binaryString, char => char.charCodeAt(0));
-    const blob = new Blob([bytes], { type: 'audio/mp3' });
+    const blob = new Blob([bytes], { type: 'audio/wav' });
     const url = URL.createObjectURL(blob);
 
     if (this.playbackTimeout) {
@@ -160,7 +160,7 @@ class AudioPlayer {
     // Fallback: standard Audio element playback
     const binaryString = atob(base64Audio);
     const bytes = Uint8Array.from(binaryString, char => char.charCodeAt(0));
-    const blob = new Blob([bytes], { type: 'audio/mp3' });
+    const blob = new Blob([bytes], { type: 'audio/wav' });
     const url = URL.createObjectURL(blob);
 
     if (this.playbackTimeout) {

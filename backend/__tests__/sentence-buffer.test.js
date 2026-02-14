@@ -9,7 +9,8 @@ describe('SentenceBuffer', () => {
   let buffer;
 
   beforeEach(() => {
-    buffer = new SentenceBuffer();
+    // batchSize=1 preserves legacy 1:1 sentence emission for existing tests
+    buffer = new SentenceBuffer(1);
   });
 
   // -------------------------------------------------------------------------
@@ -259,14 +260,111 @@ describe('SentenceBuffer', () => {
     });
 
     test('separate instances do not share state', () => {
-      const b1 = new SentenceBuffer();
-      const b2 = new SentenceBuffer();
+      const b1 = new SentenceBuffer(1);
+      const b2 = new SentenceBuffer(1);
 
       b1.addToken('Hello from b1');
       b2.addToken('Hello from b2');
 
       expect(b1.flush()).toBe('Hello from b1');
       expect(b2.flush()).toBe('Hello from b2');
+    });
+
+    test('batchSize defaults to 2', () => {
+      const b = new SentenceBuffer();
+      expect(b.batchSize).toBe(2);
+    });
+
+    test('batchSize=1 disables batching', () => {
+      const b = new SentenceBuffer(1);
+      expect(b.batchSize).toBe(1);
+    });
+  });
+
+  // -------------------------------------------------------------------------
+  // Sentence batching (batchSize=2)
+  // -------------------------------------------------------------------------
+  describe('batching (batchSize=2)', () => {
+    let batchBuffer;
+
+    beforeEach(() => {
+      batchBuffer = new SentenceBuffer(2);
+    });
+
+    test('first sentence emits immediately (low latency)', () => {
+      const result = batchBuffer.addToken('Hello world. ');
+      expect(result).toEqual(['Hello world.']);
+    });
+
+    test('second sentence is held until a partner arrives', () => {
+      batchBuffer.addToken('First. '); // emits 'First.' (first-fast)
+      const s2 = batchBuffer.addToken('Second. '); // held — only 1 pending, threshold=2
+      expect(s2).toEqual([]);
+      // Third sentence arrives, forming a pair with Second
+      const s3 = batchBuffer.addToken('Third. ');
+      expect(s3).toEqual(['Second. Third.']);
+    });
+
+    test('four sentences: first solo, then two pairs', () => {
+      const s1 = batchBuffer.addToken('One. ');
+      expect(s1).toEqual(['One.']);
+
+      batchBuffer.addToken('Two. '); // held
+      const s3 = batchBuffer.addToken('Three. ');
+      expect(s3).toEqual(['Two. Three.']);
+
+      batchBuffer.addToken('Four. '); // held
+      const s5 = batchBuffer.addToken('Five. ');
+      expect(s5).toEqual(['Four. Five.']);
+    });
+
+    test('three sentences in one token: first solo, pair of 2', () => {
+      const result = batchBuffer.addToken('One. Two. Three. ');
+      expect(result).toEqual(['One.', 'Two. Three.']);
+    });
+
+    test('five sentences in one token: 1 solo + 2 pairs', () => {
+      const result = batchBuffer.addToken('A. B. C. D. E. ');
+      expect(result).toEqual(['A.', 'B. C.', 'D. E.']);
+    });
+
+    test('odd sentence count: last one held until flush', () => {
+      batchBuffer.addToken('First. '); // emits solo
+      batchBuffer.addToken('Second. '); // held — needs partner
+      expect(batchBuffer.flush()).toBe('Second.');
+    });
+
+    test('flush drains pending sentences and buffer remainder', () => {
+      batchBuffer.addToken('First. '); // emits solo
+      batchBuffer.addToken('Second. '); // held
+      batchBuffer.addToken('trailing text');
+      expect(batchBuffer.flush()).toBe('Second. trailing text');
+    });
+
+    test('flush resets batching state — next call emits first sentence solo again', () => {
+      batchBuffer.addToken('First. ');
+      batchBuffer.flush();
+
+      // After flush, emittedFirst resets — first sentence should emit solo again
+      const result = batchBuffer.addToken('New first. ');
+      expect(result).toEqual(['New first.']);
+    });
+
+    test('batchSize=3 groups in threes after first solo', () => {
+      const b3 = new SentenceBuffer(3);
+      const result = b3.addToken('A. B. C. D. ');
+      // A emits solo, then B+C+D form a triple
+      expect(result).toEqual(['A.', 'B. C. D.']);
+    });
+
+    test('interruption clears via flush correctly', () => {
+      batchBuffer.addToken('First. ');
+      batchBuffer.addToken('Second. '); // held
+      // Simulate interruption — flush everything
+      const remaining = batchBuffer.flush();
+      expect(remaining).toBe('Second.');
+      // Fresh start
+      expect(batchBuffer.addToken('Fresh. ')).toEqual(['Fresh.']);
     });
   });
 });
