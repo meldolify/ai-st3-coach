@@ -479,13 +479,8 @@ function populateTopicCards(subcategoryId) {
     const difficultyClass = topic.difficulty ? `difficulty-badge--${topic.difficulty}` : '';
     const difficultyLabel = topic.difficulty ? topic.difficulty.charAt(0).toUpperCase() + topic.difficulty.slice(1) : '';
 
-    // Build prompt file path to check access (same logic as selectScenario)
-    const folderName = topic.file.split('/').pop();
-    const heading = topic.file.split('/')[0];
-    const promptFile = `prompts/${topic.file}/${topic.difficulty || 'easy'}_${heading}_${folderName}_1.txt`;
-
-    // Check if user has access to this scenario
-    const isLocked = !canAccessScenario(promptFile);
+    // Check if user has access to this scenario (topicFolder format matches FREE_TIER_SCENARIOS)
+    const isLocked = !canAccessScenario(topic.file);
     const lockedClass = isLocked ? 'locked' : '';
     const lockBadge = isLocked ? `
       <div class="lock-badge" title="Premium subscription required">
