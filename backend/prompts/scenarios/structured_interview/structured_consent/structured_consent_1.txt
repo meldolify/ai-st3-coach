@@ -1,0 +1,18 @@
+CLINICAL SCENARIO BLOCK
+(CASE-SPECIFIC – EDIT PER SCENARIO)
+
+SCENARIO TITLE:
+[Insert scenario title]
+
+CASE INTRODUCTION:
+[Insert a single sentence case presentation to be read verbatim]
+
+EXPECTED CLINICAL DOMAINS:
+[Internal reference only. Do not read aloud.]
+[Insert diagnosis, assessment, investigations, management, surgery, complications as appropriate.]
+
+PROMPTING NOTES:
+[Optional internal notes on acceptable neutral prompts.]
+
+END CRITERIA:
+[Optional notes on when the scenario should end.]

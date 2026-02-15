@@ -12,6 +12,7 @@ const { parsePromptSections } = require('../utils/promptParser');
 
 const BACKEND_DIR = path.join(__dirname, '..', '..');
 const PROMPTS_DIR = path.join(BACKEND_DIR, 'prompts');
+const LEGACY_DIR = path.join(PROMPTS_DIR, '_legacy');
 const TEST_SCRIPTS_DIR = path.join(BACKEND_DIR, 'test-scripts');
 const GENERATED_CACHE_DIR = path.join(TEST_SCRIPTS_DIR, '_generated');
 
@@ -54,7 +55,7 @@ function getPromptPath(topicPath, difficulty) {
   const category = parts[0];
   const folderName = parts[parts.length - 1];
   const filename = `${difficulty}_${category}_${folderName}_1.txt`;
-  return path.join(PROMPTS_DIR, topicPath, filename);
+  return path.join(LEGACY_DIR, topicPath, filename);
 }
 
 function getCachePath(topicPath, testType) {

@@ -12,7 +12,8 @@ const testScriptGenerator = require('./TestScriptGenerator');
 
 const BACKEND_DIR = path.join(__dirname, '..', '..');
 const PROMPTS_DIR = path.join(BACKEND_DIR, 'prompts');
-const FEEDBACK_DIR = path.join(PROMPTS_DIR, 'feedback');
+const LEGACY_DIR = path.join(PROMPTS_DIR, '_legacy');
+const FEEDBACK_DIR = path.join(LEGACY_DIR, 'feedback');
 const TEST_SCRIPTS_DIR = path.join(BACKEND_DIR, 'test-scripts');
 const TEST_RESULTS_DIR = path.join(BACKEND_DIR, 'test-results');
 const FEEDBACK_JSON_TEMPLATE_PATH = path.join(PROMPTS_DIR, 'system', 'feedback_json_template.txt');
@@ -63,7 +64,7 @@ function getPromptPath(topicPath, difficulty) {
   const category = parts[0];
   const folderName = parts[parts.length - 1];
   const filename = `${difficulty}_${category}_${folderName}_1.txt`;
-  return path.join(PROMPTS_DIR, topicPath, filename);
+  return path.join(LEGACY_DIR, topicPath, filename);
 }
 
 /**
@@ -95,16 +96,16 @@ function toTitleCase(str) {
 function listTopics() {
   const topics = [];
 
-  // Read top-level categories
-  const categories = fs.readdirSync(PROMPTS_DIR).filter(d => {
+  // Read top-level categories from legacy directory
+  const categories = fs.readdirSync(LEGACY_DIR).filter(d => {
     if (EXCLUDED_DIRS.has(d)) {
       return false;
     }
-    return fs.statSync(path.join(PROMPTS_DIR, d)).isDirectory();
+    return fs.statSync(path.join(LEGACY_DIR, d)).isDirectory();
   });
 
   for (const category of categories) {
-    const categoryPath = path.join(PROMPTS_DIR, category);
+    const categoryPath = path.join(LEGACY_DIR, category);
     const subcategories = fs
       .readdirSync(categoryPath)
       .filter(d => fs.statSync(path.join(categoryPath, d)).isDirectory());

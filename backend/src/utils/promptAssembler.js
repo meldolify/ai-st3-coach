@@ -137,7 +137,7 @@ function buildFeedbackPrompt(difficulty, topicFolder, variant = 1) {
 
 /**
  * Load legacy monolithic interview prompt file.
- * Reconstructs old file path: prompts/{topicFolder}/{difficulty}_{heading}_{folderName}_1.txt
+ * Reconstructs old file path: prompts/_legacy/{topicFolder}/{difficulty}_{heading}_{folderName}_1.txt
  *
  * @param {string} topicFolder - e.g. "clinical/emergencies/necrotising_fasciitis"
  * @param {string} difficulty - "easy", "medium", or "strict"
@@ -148,7 +148,7 @@ function loadLegacyInterviewPrompt(topicFolder, difficulty) {
     const folderName = topicFolder.split('/').pop();
     const heading = topicFolder.split('/')[0];
     const fileName = `${difficulty}_${heading}_${folderName}_1.txt`;
-    const filePath = path.join(PROMPTS_DIR, topicFolder, fileName);
+    const filePath = path.join(PROMPTS_DIR, '_legacy', topicFolder, fileName);
 
     const normalizedPath = path.normalize(filePath);
     if (!normalizedPath.startsWith(path.normalize(PROMPTS_DIR))) {
@@ -181,7 +181,7 @@ function loadLegacyFeedbackPrompt(topicFolder, difficulty) {
 
   // Try difficulty-prefixed feedback file first
   const difficultyFileName = `${difficulty}_clinical_${scenarioDir}_feedback.txt`;
-  const difficultyPath = path.join(PROMPTS_DIR, 'feedback', difficultyFileName);
+  const difficultyPath = path.join(PROMPTS_DIR, '_legacy/feedback', difficultyFileName);
   if (fs.existsSync(difficultyPath)) {
     console.log(`[PROMPT] Legacy feedback loaded: ${difficultyFileName}`);
     return readFile(difficultyPath);
@@ -189,14 +189,14 @@ function loadLegacyFeedbackPrompt(topicFolder, difficulty) {
 
   // Try generic (no difficulty prefix) - matches old loadFeedbackPrompt() behaviour
   const genericFileName = `clinical_${scenarioDir}_feedback.txt`;
-  const genericPath = path.join(PROMPTS_DIR, 'feedback', genericFileName);
+  const genericPath = path.join(PROMPTS_DIR, '_legacy/feedback', genericFileName);
   if (fs.existsSync(genericPath)) {
     console.log(`[PROMPT] Legacy feedback loaded (generic): ${genericFileName}`);
     return readFile(genericPath);
   }
 
   // Last resort
-  const fallbackPath = path.join(PROMPTS_DIR, 'feedback', 'generic_feedback.txt');
+  const fallbackPath = path.join(PROMPTS_DIR, '_legacy/feedback', 'generic_feedback.txt');
   if (fs.existsSync(fallbackPath)) {
     console.log('[PROMPT] Using generic feedback prompt');
     return readFile(fallbackPath);
