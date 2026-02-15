@@ -15,7 +15,7 @@ const BACKEND_DIR = path.join(__dirname, '../../');
  */
 function loadScenarioPrompt(scenarioFile) {
   try {
-    const filePath = path.join(BACKEND_DIR, scenarioFile);
+    let filePath = path.join(BACKEND_DIR, scenarioFile);
 
     // Security check: ensure the file is within the backend directory
     const normalizedPath = path.normalize(filePath);
@@ -23,13 +23,17 @@ function loadScenarioPrompt(scenarioFile) {
       throw new Error('Invalid scenario file path');
     }
 
+    // Try _legacy/ path if original not found (legacy folders moved)
+    if (!fs.existsSync(filePath)) {
+      const legacyFile = scenarioFile.replace(/^prompts\//, 'prompts/_legacy/');
+      const legacyPath = path.join(BACKEND_DIR, legacyFile);
+      if (fs.existsSync(legacyPath)) {
+        filePath = legacyPath;
+      }
+    }
+
     if (!fs.existsSync(filePath)) {
       console.warn('[SCENARIO] File not found: ' + scenarioFile);
-      const fallbackPath = path.join(BACKEND_DIR, 'scenarios', 'template.txt');
-      if (fs.existsSync(fallbackPath)) {
-        console.warn('[SCENARIO] Using fallback template.txt');
-        return fs.readFileSync(fallbackPath, 'utf8');
-      }
       throw new Error('Scenario file not found and no fallback available');
     }
 

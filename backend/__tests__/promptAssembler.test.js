@@ -134,9 +134,9 @@ describe('buildInterviewPrompt - modular assembly', () => {
   });
 
   test('falls back to legacy when modular files missing', () => {
-    // Use a non-migrated topic that only has legacy files
-    const prompt = buildInterviewPrompt('easy', 'clinical/burns/burn_assessment');
-    expect(prompt.length).toBeGreaterThan(10);
+    // Use a non-existent topic to trigger legacy fallback path
+    const prompt = buildInterviewPrompt('easy', 'clinical/nonexistent/fake_topic');
+    expect(prompt).toContain('Plastic Surgery');
   });
 
   test('rejects invalid difficulty', () => {
@@ -180,8 +180,10 @@ describe('buildFeedbackPrompt - modular assembly', () => {
   });
 
   test('falls back to legacy feedback file', () => {
-    const prompt = buildFeedbackPrompt('easy', 'clinical/burns/burn_assessment');
-    expect(prompt.length).toBeGreaterThan(10);
+    // Use a non-existent topic to trigger legacy fallback path
+    const prompt = buildFeedbackPrompt('easy', 'clinical/nonexistent/fake_topic');
+    expect(prompt).toContain('plastic surgery');
+    expect(prompt.length).toBeGreaterThan(50);
   });
 });
 

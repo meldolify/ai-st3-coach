@@ -147,7 +147,7 @@ describe('loadFeedbackPrompt (logic verification)', () => {
       const parts = scenarioFile.replace(/\\/g, '/').split('/');
       const scenarioDir = parts.length >= 2 ? parts[parts.length - 2] : '';
       const feedbackFileName = `clinical_${scenarioDir}_feedback.txt`;
-      const feedbackPath = path.join(BACKEND_DIR, 'prompts/feedback', feedbackFileName);
+      const feedbackPath = path.join(BACKEND_DIR, 'prompts/_legacy/feedback', feedbackFileName);
 
       if (fs.existsSync(feedbackPath)) {
         return fs.readFileSync(feedbackPath, 'utf8');
@@ -156,7 +156,7 @@ describe('loadFeedbackPrompt (logic verification)', () => {
       // Fall through to generic
     }
 
-    const genericPath = path.join(BACKEND_DIR, 'prompts/feedback/generic_feedback.txt');
+    const genericPath = path.join(BACKEND_DIR, 'prompts/_legacy/feedback/generic_feedback.txt');
     if (fs.existsSync(genericPath)) {
       return fs.readFileSync(genericPath, 'utf8');
     }
@@ -178,7 +178,7 @@ describe('loadFeedbackPrompt (logic verification)', () => {
       'prompts/clinical/emergencies/unknown_scenario/easy_unknown_1.txt'
     );
     // Should load generic_feedback.txt since clinical_unknown_scenario_feedback.txt does not exist
-    const genericPath = path.join(BACKEND_DIR, 'prompts/feedback/generic_feedback.txt');
+    const genericPath = path.join(BACKEND_DIR, 'prompts/_legacy/feedback/generic_feedback.txt');
     // Ensure generic feedback file exists for this test to be meaningful
     expect(fs.existsSync(genericPath)).toBe(true);
     const genericContent = fs.readFileSync(genericPath, 'utf8');
@@ -787,14 +787,14 @@ describe('Feedback prompt files', () => {
   const BACKEND_DIR = path.join(__dirname, '..');
 
   test('generic feedback prompt exists', () => {
-    const genericPath = path.join(BACKEND_DIR, 'prompts/feedback/generic_feedback.txt');
+    const genericPath = path.join(BACKEND_DIR, 'prompts/_legacy/feedback/generic_feedback.txt');
     expect(fs.existsSync(genericPath)).toBe(true);
   });
 
   test('necrotising fasciitis dedicated feedback prompt exists', () => {
     const feedbackPath = path.join(
       BACKEND_DIR,
-      'prompts/feedback/clinical_necrotising_fasciitis_feedback.txt'
+      'prompts/_legacy/feedback/clinical_necrotising_fasciitis_feedback.txt'
     );
     expect(fs.existsSync(feedbackPath)).toBe(true);
   });
@@ -805,7 +805,7 @@ describe('Feedback prompt files', () => {
   });
 
   test('generic feedback prompt mentions sections', () => {
-    const genericPath = path.join(BACKEND_DIR, 'prompts/feedback/generic_feedback.txt');
+    const genericPath = path.join(BACKEND_DIR, 'prompts/_legacy/feedback/generic_feedback.txt');
     const content = fs.readFileSync(genericPath, 'utf8');
     expect(content.length).toBeGreaterThan(50);
   });

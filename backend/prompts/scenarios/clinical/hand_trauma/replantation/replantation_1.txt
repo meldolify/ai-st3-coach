@@ -1,0 +1,88 @@
+CLINICAL SCENARIO BLOCK
+
+(CASE-SPECIFIC)
+
+SCENARIO TITLE
+reimplantation of thumb
+
+MAIN CLINICAL DOMAINS
+
+(Internal reference only. Do not read aloud.)
+
+Diagnosis and urgency
+Assessment, either through A B C D E approach or history and examination
+Investigations
+Initial management
+Definitive management
+Surgical steps
+Post-operative care
+
+ESSENTIAL MARKING POINTS
+
+(Internal reference only. Do not read aloud.)
+
+Diagnosis and urgency
+Thumb amputation which is a clinical emergency.
+
+Assessment, either through A B C D E approach or history and examination
+The primary survey includes making sure that the patient is hemodynamically stable and there is no associated life threatening injuries. Then taking focused history from the patient including The mechanism of injury and the timing since the injury. asking how the amputated part was preserved before arrival to the hospital 
+Examination is divided into examining the hand as a whole, as well as examining the amputated part to confirm the level of amputation.
+Investigations
+X-ray of the hand and the amputated part.
+
+Initial management
+Analgesia, Antibiotics, preservation of the amputated part.
+Consenting the patient for a trial a reimplantation in addition to shortening and direct closure. Discussion with the on call consultant, the consultant anaesthetist.
+
+Definitive management
+
+Surgical steps
+Under general anesthesia with an arm tourniquet, arm table, microscope, c-arm machine, hand set, K-wire set and micro set, the surgery starts by washout with saline. Exploration of the amputated parts through with tagging of the structures in addition to exploration of the hand in the same fashion. Skeletal stabilisation, Repair of the tendons first using 4 strand technique then vessel repair and nerve repair.
+
+Post-operative care
+Hand elevation, Keeping the hand warm, hourly obs, hand therapy in 3-5 days
+
+BONUS MARKING POINTS
+
+(Internal reference only. Do not read aloud.)
+
+Diagnosis 
+Stating that complete finger amputation is a plastic surgery emergency.
+
+Assessment, either through A B C D E approach or history and examination
+Mentioning the components of the A B C D E assessment.
+Taking a focused history including age, hand, dominance, occupation, hobbies. The mechanism of injury and the timing since the injury in addition to the degree of contamination. Asking about the past medical history, drug history, smoking, tetanus status and last meal. Asking how the part was preserved prior to arrival at the hospital (Ideally it should be wrapped in gauze, then put in a plastic bag, and then put in another bag with ice. Acknowledging ischaemia time and knowing the difference between warm ischaemia time (12 hours) and cold ischaemia time (up to 24 hours).
+Examination is divided into examining the hand and the amputated part to confirm the level of amputation, the degree of contamination. Look for tendon or vessel avulsion like the ribbon sign. Examination of the rest of the hand to identify any associated injuries.
+
+Investigations
+Blood tests including group and save to prepare for surgery. X-ray of the hand and the amputated part.
+
+Initial management
+Analgesia, Tetanus, Antibiotics (co-amoxiclav), preservation of the amputated part, irrigation and dressing, hand elevation.
+
+
+Definitive management
+Consenting the patient for a trial at reimplantation, tendon grafts, nerve grafts, vein grafts in addition to shortening and direct closure. Discussion with the on call consultant, the consultant anaesthetist, the theatre coordinator and the bed manager.
+
+Surgical steps
+General anaesthetic.
+Patient positioning, supine in this case with arm table and arm tourniquet
+The needed instruments and sets are: microscope, c-arm machine, hand set, K-wire set and micro set, the surgery starts by marking the veins. 
+Washout with saline. 
+Exploration of the amputated parts through mid lateral incisions with tagging of the structures in addition to exploration of the hand in the same fashion. 
+Nibbling of the bone ends. 
+Osteosynthesis or shortening as required
+Repair of the tendons first using 4 strand technique then either the nerves then the vessels or the opposite.
+
+Post-operative care
+Hand elevation
+Keeping the hand warm
+Monitor the urine output with the aim of at least 0.5 ml/Kg/hour
+hourly obs
+hand therapy to begin within 3-5 days
+
+END OF SCENARIO CRITERIA
+
+(Internal reference only. Do not read aloud.)
+
+The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.

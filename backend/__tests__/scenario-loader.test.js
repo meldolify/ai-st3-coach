@@ -53,15 +53,16 @@ describe('Prompts directory structure', () => {
     expect(fs.existsSync(promptsDir)).toBe(true);
   });
 
-  test('main category folders exist', () => {
-    expect(fs.existsSync(path.join(promptsDir, 'clinical'))).toBe(true);
-    expect(fs.existsSync(path.join(promptsDir, 'call_the_boss'))).toBe(true);
-    expect(fs.existsSync(path.join(promptsDir, 'consent'))).toBe(true);
-    expect(fs.existsSync(path.join(promptsDir, 'structured_interview'))).toBe(true);
+  test('main category folders exist in scenarios/', () => {
+    const scenariosDir = path.join(promptsDir, 'scenarios');
+    expect(fs.existsSync(path.join(scenariosDir, 'clinical'))).toBe(true);
+    expect(fs.existsSync(path.join(scenariosDir, 'call_the_boss'))).toBe(true);
+    expect(fs.existsSync(path.join(scenariosDir, 'consent'))).toBe(true);
+    expect(fs.existsSync(path.join(scenariosDir, 'structured_interview'))).toBe(true);
   });
 
-  test('clinical subheadings exist', () => {
-    const clinicalDir = path.join(promptsDir, 'clinical');
+  test('clinical subheadings exist in scenarios/', () => {
+    const clinicalDir = path.join(promptsDir, 'scenarios', 'clinical');
     const expectedSubheadings = [
       'breast_and_aesthetic',
       'burns',
@@ -80,21 +81,22 @@ describe('Prompts directory structure', () => {
     });
   });
 
-  test('prompt files contain content with expected structure', () => {
+  test('scenario files contain clinical content', () => {
     const filePath = path.join(
       promptsDir,
+      'scenarios',
       'clinical',
       'emergencies',
       'necrotising_fasciitis',
-      'easy_clinical_necrotising_fasciitis_1.txt'
+      'necrotising_fasciitis_1.txt'
     );
     const content = fs.readFileSync(filePath, 'utf-8');
     expect(content.length).toBeGreaterThan(100);
-    expect(content).toContain('SECTION 1');
+    expect(content).toContain('Necrotising Fasciitis');
   });
 
-  test('clinical directory contains multiple prompt files', () => {
-    const clinicalDir = path.join(promptsDir, 'clinical');
+  test('clinical scenarios directory contains topic files', () => {
+    const clinicalDir = path.join(promptsDir, 'scenarios', 'clinical');
     let totalFiles = 0;
 
     const subheadings = fs.readdirSync(clinicalDir);
