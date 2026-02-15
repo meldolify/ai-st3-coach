@@ -72,12 +72,11 @@ class AudioPlayer {
     this._isPlayingChunk = true;
     this.isPlaying = true;
     const base64Audio = this._queue.shift();
-    const hasMore = this._queue.length > 0;
 
     // Suppress idle shimmer between chunks so orb doesn't flicker
     if (this.useVisualizer && window.orbVisualizer) {
-      window.orbVisualizer.suppressIdleOnEnd = hasMore || true;
-      // We always suppress between chunks; _playNextInQueue sets false when queue empties
+      window.orbVisualizer.suppressIdleOnEnd = true;
+      // Always suppress between chunks; _playNextInQueue sets false when queue empties
     }
 
     this._playSingleChunk(base64Audio, () => {
@@ -371,6 +370,7 @@ class V4Session {
 
       case 'ai_response_start': {
         // Streaming response begins — pause mic, show interrupt, set orb
+        this._serverStreamActive = true;
         this.audioStreamer.setAISpeaking(true);
         this._streamedFullText = '';
         const startInterruptBtn = document.getElementById('interruptBtn');
@@ -404,11 +404,16 @@ class V4Session {
 
       case 'ai_response_end': {
         // Streaming done — add full text to transcript
+        this._serverStreamActive = false;
         const fullText = msg.fullText || (this._streamedFullText || '').trim();
         if (window.transcript && fullText) {
           window.transcript.addAIMessage(fullText);
         }
         console.log(`[TIMING] Streaming response complete`);
+        // If audio already finished playing, complete the response cycle now
+        if (!this.audioPlayer.isPlaying) {
+          this._handleResponseComplete();
+        }
         break;
       }
 
@@ -457,6 +462,7 @@ class V4Session {
         break;
 
       case 'interrupt':
+        this._serverStreamActive = false;
         this.audioPlayer.interrupt();
         const interruptBtnOnInterrupt = document.getElementById('interruptBtn');
         if (interruptBtnOnInterrupt) {
@@ -473,6 +479,7 @@ class V4Session {
         break;
 
       case 'error':
+        this._serverStreamActive = false;
         log('Error: ' + msg.message, 'error');
         setOrbState('idle');
         break;
@@ -487,37 +494,11 @@ class V4Session {
     };
 
     this.audioPlayer.onEnd = () => {
-      // Hide interrupt button
-      const interruptBtnOnEnd = document.getElementById('interruptBtn');
-      if (interruptBtnOnEnd) {
-        interruptBtnOnEnd.style.display = 'none';
-        interruptBtnOnEnd.disabled = true;
-        interruptBtnOnEnd.classList.remove('active');
+      if (this._serverStreamActive) {
+        // Server still streaming — more chunks may arrive. Keep orb in speaking state.
+        return;
       }
-      const mobileInterruptBtnOnEnd = document.getElementById('mobileInterruptBtn');
-      if (mobileInterruptBtnOnEnd) {
-        mobileInterruptBtnOnEnd.classList.remove('active');
-      }
-      syncMobileButtonStates();
-
-      // Resume audio streaming
-      this.audioStreamer.setAISpeaking(false);
-
-      // Notify backend AI finished speaking
-      if (this.isConnected && this.sessionId) {
-        this.ws.send(JSON.stringify({
-          type: 'ai_finished',
-          sessionId: this.sessionId
-        }));
-      }
-
-      // Update status after short delay (wait for feedback mode check)
-      setTimeout(() => {
-        if (!this.inFeedbackMode && !this.audioPlayer.isPlaying) {
-          updateStatus('micStatus', 'Listening', 'connected');
-          setOrbState('listening');
-        }
-      }, 500);
+      this._handleResponseComplete();
     };
 
     // Initialize and start audio streaming to server
@@ -531,6 +512,44 @@ class V4Session {
       log('Microphone access failed: ' + error.message, 'error');
       throw error;
     }
+  }
+
+  /**
+   * Handle response completion — called when server stream has ended AND audio queue is drained.
+   * Resumes mic, sends ai_finished, transitions orb to listening.
+   */
+  _handleResponseComplete() {
+    // Hide interrupt button
+    const interruptBtnOnEnd = document.getElementById('interruptBtn');
+    if (interruptBtnOnEnd) {
+      interruptBtnOnEnd.style.display = 'none';
+      interruptBtnOnEnd.disabled = true;
+      interruptBtnOnEnd.classList.remove('active');
+    }
+    const mobileInterruptBtnOnEnd = document.getElementById('mobileInterruptBtn');
+    if (mobileInterruptBtnOnEnd) {
+      mobileInterruptBtnOnEnd.classList.remove('active');
+    }
+    syncMobileButtonStates();
+
+    // Resume audio streaming
+    this.audioStreamer.setAISpeaking(false);
+
+    // Notify backend AI finished speaking
+    if (this.isConnected && this.sessionId) {
+      this.ws.send(JSON.stringify({
+        type: 'ai_finished',
+        sessionId: this.sessionId
+      }));
+    }
+
+    // Update status after short delay (wait for feedback mode check)
+    setTimeout(() => {
+      if (!this.inFeedbackMode && !this.audioPlayer.isPlaying) {
+        updateStatus('micStatus', 'Listening', 'connected');
+        setOrbState('listening');
+      }
+    }, 500);
   }
 
   /**

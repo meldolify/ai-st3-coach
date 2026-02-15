@@ -7,13 +7,17 @@
  *
  * @param {number} batchSize - Number of sentences to group per emission (default 2).
  *   Use batchSize=1 to disable batching (each sentence emits individually).
+ * @param {number} minFirstLength - Minimum character length for the first sentence to emit solo.
+ *   Short fillers (e.g. "Alright." at 8 chars) are held and batched with the next sentence
+ *   to avoid a standalone TTS call followed by a long silence gap. Default 0 (no minimum).
  */
 
 class SentenceBuffer {
-  constructor(batchSize = 2) {
+  constructor(batchSize = 2, minFirstLength = 0) {
     this.buffer = '';
     this.pendingSentences = [];
     this.batchSize = batchSize;
+    this.minFirstLength = minFirstLength;
     this.emittedFirst = false;
   }
 
@@ -50,6 +54,15 @@ class SentenceBuffer {
     const threshold = this.emittedFirst ? this.batchSize : 1;
 
     while (this.pendingSentences.length >= threshold) {
+      // Hold short first sentence for batching with the next — avoids a standalone
+      // TTS call for fillers like "Alright." followed by a long silence gap.
+      if (
+        !this.emittedFirst &&
+        this.pendingSentences.length < 2 &&
+        this.pendingSentences[0].length < this.minFirstLength
+      ) {
+        break;
+      }
       const count = this.emittedFirst ? this.batchSize : 1;
       const batch = this.pendingSentences.splice(0, count);
       batches.push(batch.join(' '));
