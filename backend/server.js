@@ -134,7 +134,7 @@ async function ttsForSession(plainText, session) {
  * @param {Object} options - GPT options (optional)
  */
 async function streamResponseToClient(session, ws, history, options = {}) {
-  const sentenceBuffer = new SentenceBuffer();
+  const sentenceBuffer = new SentenceBuffer(2, 20);
   let fullText = '';
   let chunkIndex = 0;
   const t0 = Date.now();
