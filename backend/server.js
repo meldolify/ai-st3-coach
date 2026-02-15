@@ -378,6 +378,11 @@ wss.on('connection', (ws, req) => {
 
     // Incremental Whisper: transcribe cumulative audio every ~15s during long speech
     vadInstance.onIncrementalAudio = async (audioSnapshot, frameIndex) => {
+      const session = sessions.get(sessionId);
+      if (!session || session.interviewEnded) {
+        return;
+      }
+
       if (incrementalState.pendingTranscription) {
         await incrementalState.pendingTranscription;
       }
@@ -401,6 +406,12 @@ wss.on('connection', (ws, req) => {
     vadInstance.onSpeechEnd = async (audioFloat32, hadIncrementalExports, audioSinceExport) => {
       const session = sessions.get(sessionId);
       if (!session || ws.readyState !== WebSocket.OPEN) {
+        return;
+      }
+
+      // Don't process buffered audio after interview ended
+      if (session.interviewEnded) {
+        console.log('[VAD] Ignoring buffered audio after interview ended');
         return;
       }
 
@@ -669,6 +680,14 @@ wss.on('connection', (ws, req) => {
                 }
               }
 
+              // Flush any remaining content after stream ends
+              const flushed = sectionBuffer.flush();
+              if (flushed && sectionBuffer.sectionStarted) {
+                sectionTexts.push(flushed);
+                ttsPromises.push(ttsForSession(flushed, session));
+                console.log(`[FEEDBACK] Flushed final section ${sectionTexts.length}, TTS started`);
+              }
+
               const t2 = Date.now();
               console.log(
                 `[TIMING] Feedback LLM stream: ${t2 - t1}ms, ${sectionTexts.length} sections`
@@ -679,25 +698,42 @@ wss.on('connection', (ws, req) => {
               console.log(
                 `[FEEDBACK] Parsed ${parsed.sections.length} sections, JSON: ${!!parsed.json}`
               );
+              if (!parsed.json) {
+                console.warn(
+                  '[FEEDBACK] JSON parsing failed. LLM response tail:',
+                  fullText.slice(-500)
+                );
+              }
 
-              // Use streamed sections if available, fall back to parsed sections
-              const sections = sectionTexts.length > 0 ? sectionTexts : parsed.sections;
+              // Use whichever source found more sections — parsed works on complete text
+              const sections =
+                parsed.sections.length > sectionTexts.length ? parsed.sections : sectionTexts;
               if (sections.length === 0) {
                 throw new Error('No feedback sections detected from LLM response');
               }
 
               // 5. Send JSON summary immediately (card shows on client)
-              const feedback = parsed.json || {
-                score: 3,
-                overallImpression: 'Session completed',
-                clinicalKnowledge: {
-                  diagnosis: 'See spoken feedback',
-                  management: 'See spoken feedback'
-                },
-                strengths: ['See spoken feedback above'],
-                improvements: ['See spoken feedback above'],
-                summary: sections[0] || 'Feedback delivered via audio.'
-              };
+              let feedback = parsed.json;
+              if (!feedback) {
+                // Try to extract score from spoken feedback text
+                let extractedScore = null;
+                const scoreMatch = fullText.match(/\bscore\b[^.]*?\b([0-5])\b/i);
+                if (scoreMatch) {
+                  extractedScore = parseInt(scoreMatch[1], 10);
+                  console.log(`[FEEDBACK] Extracted score ${extractedScore} from spoken text`);
+                }
+                feedback = {
+                  score: extractedScore ?? 0,
+                  overallImpression: sections[0] || 'Feedback delivered via audio.',
+                  clinicalKnowledge: {
+                    diagnosis: 'See spoken feedback',
+                    management: 'See spoken feedback'
+                  },
+                  strengths: ['See spoken feedback above'],
+                  improvements: ['See spoken feedback above'],
+                  summary: sections[0] || 'Feedback delivered via audio.'
+                };
+              }
 
               ws.send(
                 JSON.stringify({
