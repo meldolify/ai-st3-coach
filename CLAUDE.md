@@ -58,16 +58,20 @@ Key files: `frontend/simulation.html`, `frontend/js/simulation-app.js` (entry po
 
 Tier logic (`subscription.js:canAccessScenario`): Unlogged → ALL denied. Free → FREE_TIER_SCENARIOS only. Premium → all allowed. Defined in `frontend/config.js` + `backend/src/config/index.js`
 
-### Scenario Loading
+### Scenario Loading (Modular Prompt Architecture)
 
-`backend/prompts/{category}/{subcategory}/{difficulty}_{name}_{variant}.txt` — 231 files.
+**Production** uses modular 3-file assembly via `promptAssembler.js`:
+1. `prompts/shared/interview/core_{domain}_interview.txt` — domain-specific core behaviours
+2. `prompts/shared/interview/{difficulty}_interview_personality.txt` — difficulty-specific personality
+3. `prompts/scenarios/{topicFolder}/{topicName}_1.txt` — clinical scenario content
 
-Examples:
-- `prompts/clinical_stations/emergencies/easy_nec_fasc_1.txt`
-- `prompts/communication/call_boss/medium_call_boss_compromised_flap_1.txt`
-- `prompts/structured_interview/structured_ethics/easy_structured_ethics_1.txt`
+Assembled by `buildInterviewPrompt(difficulty, topicFolder)`. Falls back to legacy monolithic files in `prompts/_legacy/` if modular files missing.
 
-Categories: Clinical Stations (Breast/Aesthetic, Burns, Elective Hand, Emergencies, Hand Trauma, Miscellaneous, Skin Cancer), Communication (Call Boss, Consent), Structured Interview (Audit, Consent, Ethics, Research, Risk Management, Teaching). Loading via `loadScenarioPrompt()` with path traversal protection.
+**Topic path format** (topicFolder): `clinical/emergencies/necrotising_fasciitis` — used consistently across frontend, sessionStorage, WebSocket, and backend.
+
+**Domains:** clinical, call_the_boss, consent, structured_interview. **Difficulties:** easy, medium, strict.
+
+**166 scenario files** across `prompts/scenarios/`. Legacy monolithic files preserved in `prompts/_legacy/` for Prompt Lab and fallback.
 
 ### Authentication & Subscription
 
@@ -93,8 +97,6 @@ Text-in/text-out environment for rapid prompt iteration without STT/TTS overhead
 - 7 automated test scripts with assertion system (good/poor/excellent/derailing/questioning/feedback_interrupt/disruptive candidates)
 - Transcript saving and viewer
 
-**Test prompts isolated** in `backend/prompts/test/` (copied from production). Currently nec fasc only, all 3 difficulties. 3 difficulty-specific feedback prompts with different examiner personalities (easy=John/supportive, medium=Elliot/balanced, strict=Perry/rigorous).
-
 **Gating:** `PROMPT_LAB_ENABLED=true` env var in production (Render). Auto-enabled in dev (`!config.isProduction`). No auth — hidden URL only.
 
 **Key files:** `backend/src/routes/promptLab.js` (12 REST endpoints), `backend/src/services/PromptLabService.js` (session/chat/feedback/tests/transcripts), `backend/src/utils/promptParser.js` (3-section parse/combine), `frontend/prompt-lab.html` (single-page UI with embedded JS), `frontend/css/prompt-lab.css`
@@ -117,9 +119,9 @@ backend/
 ├── src/services/PromptLabService.js # Prompt Lab: sessions, chat, feedback, tests, transcripts
 ├── src/routes/promptLab.js        # Prompt Lab REST API (12 endpoints at /prompt-lab/api)
 ├── src/utils/promptParser.js      # Parse/combine 3-section prompt format
-├── prompts/                       # 231 scenario files (hierarchical)
-├── prompts/test/                  # Isolated test prompts for Prompt Lab (nec fasc)
-├── prompts/test/feedback/         # Difficulty-specific feedback prompts (easy/medium/strict)
+├── prompts/scenarios/              # 166 modular scenario files (topicFolder structure)
+├── prompts/shared/                # Shared interview/feedback core + personality files
+├── prompts/_legacy/               # Legacy monolithic prompts (Prompt Lab + fallback)
 ├── test-scripts/                  # Automated test definitions (7 JSON files)
 ├── test-results/                  # Saved transcripts (git-ignored)
 ├── __tests__/                     # 51 unit tests
@@ -315,7 +317,7 @@ Strategy: Use VS Code debugger instead of console.log. Breakpoints in server.js 
 
 ### Common Tasks
 
-- **Adding scenarios:** Create `backend/prompts/{category}/{subcategory}/{difficulty}_{name}_{variant}.txt`, follow existing structure, add to frontend menu in `index.html`, optional image in `frontend/images/`
+- **Adding scenarios:** Create `backend/prompts/scenarios/{domain}/{subcategory}/{topicName}/{topicName}_1.txt`, add topic entry to `frontend/js/scenarios.js` `getTopicsData()`, optional image in `frontend/images/`
 - **Changing AI behavior:** server.js:162-175 — `model` (gpt-4o-mini), `temperature` (0.7), `max_tokens` (150)
 - **Changing voice quality:** server.js:177-208 — `speakingRate` (1.0), `volumeGainDb` (0.0), `audioEncoding` (MP3)
 - **Modifying noise filter:** `isNoiseTranscript()` in server.js:97-147 — add to `noisePatterns` array, adjust `uniqueChars` threshold
