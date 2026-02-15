@@ -666,7 +666,7 @@ wss.on('connection', (ws, req) => {
               ws.send(JSON.stringify({ type: 'feedback_processing' }));
 
               for await (const token of openaiService.generateResponseStream(feedbackMessages, {
-                max_tokens: 2000
+                max_tokens: 4000
               })) {
                 fullText += token;
 
@@ -715,11 +715,21 @@ wss.on('connection', (ws, req) => {
               // 5. Send JSON summary immediately (card shows on client)
               let feedback = parsed.json;
               if (!feedback) {
-                // Try to extract score from spoken feedback text
+                // Try to extract score from spoken feedback text (digit or word)
                 let extractedScore = null;
                 const scoreMatch = fullText.match(/\bscore\b[^.]*?\b([0-5])\b/i);
                 if (scoreMatch) {
                   extractedScore = parseInt(scoreMatch[1], 10);
+                } else {
+                  const wordMap = { zero: 0, one: 1, two: 2, three: 3, four: 4, five: 5 };
+                  const wordMatch = fullText.match(
+                    /\bscore\b[^.]*?\b(zero|one|two|three|four|five)\b/i
+                  );
+                  if (wordMatch) {
+                    extractedScore = wordMap[wordMatch[1].toLowerCase()];
+                  }
+                }
+                if (extractedScore !== null) {
                   console.log(`[FEEDBACK] Extracted score ${extractedScore} from spoken text`);
                 }
                 feedback = {

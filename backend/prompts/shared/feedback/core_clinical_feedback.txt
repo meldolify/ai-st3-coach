@@ -67,4 +67,4 @@ Do not use lists, bullet points, formatting, symbols, or structured phrasing.
 Keep each section to two to four spoken sentences maximum.
 Speak conversationally as if giving feedback face to face.
 
-Begin with Section 1 now.
+CRITICAL: You MUST generate ALL 6 sections (SECTION_1 through SECTION_6) and the JSON_SUMMARY in a single response. Do not stop until all sections are complete. Begin now.
