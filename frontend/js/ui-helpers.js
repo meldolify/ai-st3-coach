@@ -518,7 +518,7 @@ function showSummaryScreen(feedback, scenarioInfo) {
   // Handle null feedback (timeout case)
   if (!feedback) {
     feedback = {
-      score: 3,
+      score: 0,
       strengths: ['Session completed'],
       improvements: ['Feedback unavailable - please try again'],
       summary: 'Unable to generate detailed feedback. Your session was recorded successfully.'
@@ -526,7 +526,7 @@ function showSummaryScreen(feedback, scenarioInfo) {
   }
 
   // Set score with color coding (0-5 scale)
-  const score = Math.min(5, Math.max(0, feedback.score != null ? feedback.score : 3));
+  const score = Math.min(5, Math.max(0, feedback.score != null ? feedback.score : 0));
   if (scoreValue) scoreValue.textContent = score;
   if (scoreLabel) scoreLabel.textContent = SCORE_LABELS[score] || 'Average';
 
