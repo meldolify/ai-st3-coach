@@ -339,6 +339,10 @@ class V4Session {
         log('Scenario loaded: ' + msg.scenario, 'success');
         break;
 
+      case 'interview_ended':
+        console.log('[V4Session] Interview ended confirmed by server');
+        break;
+
       case 'ai_response': {
         // Legacy single-response (used by feedback mode)
         this.audioStreamer.setAISpeaking(true);
@@ -529,6 +533,24 @@ class V4Session {
     }
   }
 
+  /**
+   * Send end_interview message to server.
+   * Freezes the interview but keeps the WS connection alive for feedback.
+   */
+  sendEndInterview() {
+    if (!this.isConnected || !this.ws) {
+      console.warn('[V4Session] Cannot end interview - not connected');
+      return;
+    }
+    console.log('[V4Session] Sending end_interview');
+    this.audioStreamer.setAISpeaking(true); // Stop audio capture
+    this.audioPlayer.interrupt(); // Stop any playing audio
+    this.ws.send(JSON.stringify({
+      type: 'end_interview',
+      sessionId: this.sessionId
+    }));
+  }
+
   disconnect() {
     this.audioStreamer.destroy();
     this.audioPlayer.interrupt();
@@ -544,7 +566,7 @@ class V4Session {
 
   /**
    * Request feedback from AI before disconnecting.
-   * The server delivers 6 spoken feedback sections (feedback_response) then a final JSON summary (feedback_summary).
+   * Single-call flow: server sends all sections sequentially, then JSON summary.
    * Returns a promise that resolves with feedback data or null on timeout.
    */
   async requestFeedbackAndDisconnect() {
@@ -575,19 +597,19 @@ class V4Session {
       this.ws.addEventListener('message', feedbackHandler);
 
       // Send feedback request
-      console.log('[V4Session] Requesting feedback (hybrid flow)...');
+      console.log('[V4Session] Requesting feedback (single-call flow)...');
       this.ws.send(JSON.stringify({
         type: 'request_feedback',
         sessionId: this.sessionId
       }));
 
-      // Timeout after 90 seconds (6 sections x ~10s each + JSON generation)
+      // Timeout after 120 seconds (LLM call + parallel TTS + sequential delivery)
       timeoutId = setTimeout(() => {
         console.warn('[V4Session] Feedback request timed out');
         this.ws.removeEventListener('message', feedbackHandler);
         this.disconnect();
         resolve(null);
-      }, 90000);
+      }, 120000);
     });
   }
 }

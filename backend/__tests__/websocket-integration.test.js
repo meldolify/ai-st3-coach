@@ -185,8 +185,7 @@ function mockStreamingResponse(tokens) {
 // SETUP / TEARDOWN
 // ============================================================================
 
-const FREE_SCENARIO =
-  'prompts/clinical/emergencies/necrotising_fasciitis/easy_clinical_necrotising_fasciitis_1.txt';
+const FREE_SCENARIO = 'clinical/emergencies/necrotising_fasciitis';
 
 beforeAll(async () => {
   // 1. Get service singletons and mock their clients
@@ -245,6 +244,9 @@ afterAll(async () => {
 beforeEach(() => {
   jest.clearAllMocks();
 
+  // Re-set Gemini TTS mock (resetMocks: true wipes it before each test)
+  geminiTTSService.synthesize = jest.fn().mockResolvedValue(Buffer.from('fake-wav-audio'));
+
   // Default mocks
   mockStreamingResponse(['Hello. ']);
   ttsService.client.synthesizeSpeech.mockResolvedValue([
@@ -278,12 +280,12 @@ describe('WebSocket connection lifecycle', () => {
     }
   });
 
-  test('connection with default scenario loads template fallback', async () => {
+  test('connection with default scenario loads nec fasc fallback', async () => {
     const ws = await connectWS();
     try {
       const msg = await waitForMessage(ws);
       expect(msg.type).toBe('scenario_loaded');
-      expect(msg.scenario).toBe('template.txt');
+      expect(msg.scenario).toBe('clinical/emergencies/necrotising_fasciitis');
     } finally {
       ws.close();
     }
@@ -353,13 +355,9 @@ describe('Message flow - user_transcript', () => {
   });
 
   test('response contains base64 audio from TTS', async () => {
-    const audioBytes = Buffer.from('test-mp3-audio-data');
+    // Gemini TTS is the primary path; mock returns 'fake-wav-audio'
+    const expectedAudio = Buffer.from('fake-wav-audio').toString('base64');
     mockStreamingResponse(['Hello there. ']);
-    ttsService.client.synthesizeSpeech.mockResolvedValue([
-      {
-        audioContent: audioBytes
-      }
-    ]);
 
     const ws = await connectWS(`scenario=${FREE_SCENARIO}`);
     try {
@@ -375,7 +373,7 @@ describe('Message flow - user_transcript', () => {
 
       const messages = await collectMessages(ws, 3);
       const chunk = messages.find(m => m.type === 'ai_response_chunk');
-      expect(chunk.audio).toBe(audioBytes.toString('base64'));
+      expect(chunk.audio).toBe(expectedAudio);
     } finally {
       ws.close();
     }
@@ -809,9 +807,12 @@ describe('Error handling', () => {
 });
 
 describe('Session management', () => {
-  test('voice query parameter is used for TTS', async () => {
+  test('voice query parameter is used for Cloud TTS fallback', async () => {
     const customVoice = 'en-GB-Neural2-B';
     mockStreamingResponse(['Test. ']);
+
+    // Force Gemini TTS to fail so it falls through to Cloud TTS
+    geminiTTSService.synthesize = jest.fn().mockRejectedValue(new Error('Gemini TTS unavailable'));
     ttsService.client.synthesizeSpeech.mockResolvedValue([
       {
         audioContent: Buffer.from('audio')
@@ -872,7 +873,7 @@ describe('Session management', () => {
 });
 
 describe('Request feedback flow', () => {
-  test('request_feedback triggers feedback response', async () => {
+  test('request_feedback triggers feedback response with sections', async () => {
     // First: streaming for the interview turn
     mockStreamingResponse(['Hello candidate. ']);
     ttsService.client.synthesizeSpeech.mockResolvedValue([
@@ -896,9 +897,22 @@ describe('Request feedback flow', () => {
       );
       await collectMessages(ws, 3);
 
-      // Reset for feedback (non-streaming callLLM)
+      // Mock feedback LLM call (non-streaming) with section delimiters
       openaiService.llmClient.chat.completions.create.mockResolvedValue({
-        choices: [{ message: { content: 'Section 1: Overall Impression. Score: 4/5.' } }]
+        choices: [
+          {
+            message: {
+              content:
+                '===SECTION_1===\nOverall good performance.\n' +
+                '===SECTION_2===\nStrong clinical knowledge.\n' +
+                '===SECTION_3===\nGood practical examples.\n' +
+                '===SECTION_4===\nExcellent systematic approach.\n' +
+                '===SECTION_5===\nCould improve differentials.\n' +
+                '===SECTION_6===\nThat concludes feedback.\n' +
+                '===JSON_SUMMARY===\n{"score":4,"overallImpression":"Good","strengths":["Systematic"],"improvements":["Differentials"],"summary":"Good overall."}'
+            }
+          }
+        ]
       });
 
       // Request feedback
@@ -909,16 +923,31 @@ describe('Request feedback flow', () => {
         })
       );
 
+      // Expect first feedback section
       const feedbackMsg = await waitForMessage(ws, 10000);
       expect(feedbackMsg.type).toBe('feedback_response');
-      expect(feedbackMsg.text).toContain('Section 1');
-      expect(feedbackMsg.audio).toBeDefined();
       expect(feedbackMsg.section).toBe(1);
       expect(feedbackMsg.totalSections).toBe(6);
+      expect(feedbackMsg.text).toContain('Overall good performance');
+      expect(feedbackMsg.audio).toBeDefined();
+
+      // Send ai_finished to unblock remaining sections
+      for (let i = 0; i < 5; i++) {
+        ws.send(JSON.stringify({ type: 'ai_finished', sessionId }));
+        const nextMsg = await waitForMessage(ws, 10000);
+        expect(nextMsg.type).toBe('feedback_response');
+        expect(nextMsg.section).toBe(i + 2);
+      }
+
+      // Send final ai_finished to unblock summary
+      ws.send(JSON.stringify({ type: 'ai_finished', sessionId }));
+      const summaryMsg = await waitForMessage(ws, 10000);
+      expect(summaryMsg.type).toBe('feedback_summary');
+      expect(summaryMsg.feedback.score).toBe(4);
     } finally {
       ws.close();
     }
-  });
+  }, 30000);
 });
 
 describe('Health check endpoint', () => {

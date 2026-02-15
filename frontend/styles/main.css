@@ -2262,6 +2262,20 @@ body.has-header .simulation-room.active {
   color: #FCA5A5;
 }
 
+/* Success (Feedback) - Green accent */
+.sim-ctrl-btn--success .sim-ctrl-btn__icon {
+  color: #86EFAC;
+}
+
+.sim-ctrl-btn--success:hover:not(:disabled) {
+  border-color: rgba(34, 197, 94, 0.3);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25), 0 0 12px rgba(34, 197, 94, 0.15);
+}
+
+.sim-ctrl-btn--success:hover:not(:disabled) .sim-ctrl-btn__icon {
+  color: #86EFAC;
+}
+
 /* ===== DISABLED STATE ===== */
 .sim-ctrl-btn:disabled {
   cursor: not-allowed;

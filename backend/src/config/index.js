@@ -70,28 +70,14 @@ Director's notes: Brisk, purposeful delivery with tight pacing and minimal pause
   // Development - bypass auth/subscription checks for local testing
   DEV_BYPASS_AUTH: process.env.DEV_BYPASS_AUTH === 'true',
 
-  // Free tier scenarios - scenarios accessible without subscription
+  // Free tier scenarios - topicFolder paths accessible without subscription
   // Keep in sync with frontend/config.js FREE_TIER_SCENARIOS
+  // All 3 difficulties are implicitly included per topic
   FREE_TIER_SCENARIOS: [
-    // Clinical > Emergencies > Necrotising Fasciitis
-    'prompts/clinical/emergencies/necrotising_fasciitis/easy_clinical_necrotising_fasciitis_1.txt',
-    'prompts/clinical/emergencies/necrotising_fasciitis/medium_clinical_necrotising_fasciitis_1.txt',
-    'prompts/clinical/emergencies/necrotising_fasciitis/strict_clinical_necrotising_fasciitis_1.txt',
-
-    // Call-The-Boss > Scenarios > Major Burn
-    'prompts/call_the_boss/scenarios/major_burn/easy_call_the_boss_major_burn_1.txt',
-    'prompts/call_the_boss/scenarios/major_burn/medium_call_the_boss_major_burn_1.txt',
-    'prompts/call_the_boss/scenarios/major_burn/strict_call_the_boss_major_burn_1.txt',
-
-    // Consent > Hand Surgery > Carpal Tunnel Release
-    'prompts/consent/hand_surgery/carpal_tunnel_release_consent/easy_consent_carpal_tunnel_release_consent_1.txt',
-    'prompts/consent/hand_surgery/carpal_tunnel_release_consent/medium_consent_carpal_tunnel_release_consent_1.txt',
-    'prompts/consent/hand_surgery/carpal_tunnel_release_consent/strict_consent_carpal_tunnel_release_consent_1.txt',
-
-    // Structured Interview > Audit > Focused Interview
-    'prompts/structured_interview/audit/focused_interview/easy_structured_interview_focused_interview_1.txt',
-    'prompts/structured_interview/audit/focused_interview/medium_structured_interview_focused_interview_1.txt',
-    'prompts/structured_interview/audit/focused_interview/strict_structured_interview_focused_interview_1.txt'
+    'clinical/emergencies/necrotising_fasciitis',
+    'call_the_boss/scenarios/major_burn',
+    'consent/hand_surgery/carpal_tunnel_release_consent',
+    'structured_interview/audit/focused_interview'
   ],
 
   // Computed flags

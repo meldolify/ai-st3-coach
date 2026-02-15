@@ -587,12 +587,8 @@ function selectScenario(topicFolder, title, imageFile) {
     return;
   }
 
-  // Construct the prompt file path using the pre-selected difficulty
-  // Extract folder name and heading for the new naming convention
-  const folderName = topicFolder.split('/').pop();
-  const heading = topicFolder.split('/')[0];
-  // Format: prompts/{topicFolder}/{difficulty}_{heading}_{folderName}_1.txt
-  const promptFile = `prompts/${topicFolder}/${selectedDifficulty}_${heading}_${folderName}_1.txt`;
+  // Use topicFolder directly — server assembles modular prompt files
+  const promptFile = topicFolder;
 
   // Check if user has access to this scenario
   if (!canAccessScenario(promptFile)) {

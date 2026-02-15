@@ -8,7 +8,6 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const { body, validationResult } = require('express-validator');
 const WebSocket = require('ws');
-const fs = require('fs');
 const path = require('path');
 const url = require('url');
 
@@ -22,7 +21,8 @@ const ttsService = require('./src/services/TTSService');
 const geminiTTSService = require('./src/services/GeminiTTSService');
 const { ServerVAD, float32ToWavBuffer } = require('./src/services/ServerVAD');
 const { isNoiseTranscript, buildNaturalSSML } = require('./src/utils/audioHelpers');
-const { loadScenarioPrompt } = require('./src/utils/scenarioLoader');
+const { buildInterviewPrompt, buildFeedbackPrompt } = require('./src/utils/promptAssembler');
+const { parseFeedbackResponse } = require('./src/utils/feedbackParser');
 const SentenceBuffer = require('./src/utils/sentenceBuffer');
 const { RateLimitError } = require('openai');
 
@@ -78,43 +78,6 @@ async function callLLM(history, options) {
 }
 
 /**
- * Map a scenario file path to its dedicated feedback prompt path.
- * Falls back to generic feedback prompt if no dedicated file exists.
- * @param {string} scenarioFile - e.g. "prompts/clinical/emergencies/necrotising_fasciitis/easy_clinical_necrotising_fasciitis_1.txt"
- * @returns {string} - The feedback prompt text
- */
-function loadFeedbackPrompt(scenarioFile) {
-  // Extract the scenario name from the path
-  // e.g. "prompts/clinical/emergencies/necrotising_fasciitis/easy_clinical_necrotising_fasciitis_1.txt"
-  // -> directory name "necrotising_fasciitis" -> feedback file "clinical_necrotising_fasciitis_feedback.txt"
-  try {
-    const parts = scenarioFile.replace(/\\/g, '/').split('/');
-    // The scenario directory is the second-to-last part
-    const scenarioDir = parts.length >= 2 ? parts[parts.length - 2] : '';
-    const feedbackFileName = `clinical_${scenarioDir}_feedback.txt`;
-    const feedbackPath = path.join(__dirname, 'prompts/feedback', feedbackFileName);
-
-    if (fs.existsSync(feedbackPath)) {
-      console.log('[FEEDBACK] Loading dedicated feedback prompt:', feedbackFileName);
-      return fs.readFileSync(feedbackPath, 'utf8');
-    }
-  } catch (err) {
-    console.warn('[FEEDBACK] Error resolving dedicated feedback prompt:', err.message);
-  }
-
-  // Fallback to generic feedback prompt
-  const genericPath = path.join(__dirname, 'prompts/feedback/generic_feedback.txt');
-  if (fs.existsSync(genericPath)) {
-    console.log('[FEEDBACK] Using generic feedback prompt');
-    return fs.readFileSync(genericPath, 'utf8');
-  }
-
-  // Last resort fallback
-  console.warn('[FEEDBACK] No feedback prompt files found, using inline fallback');
-  return 'You are an expert plastic surgery examiner. Review the following interview transcript and provide feedback in 6 sections: (1) Overall Impression with score 0-5, (2) Diagnosis & Assessment, (3) Management & Treatment, (4) Strengths, (5) Areas for Improvement, (6) Closing Summary. Deliver one section at a time. When the user sends "continue", move to the next section. Begin with Section 1 now.';
-}
-
-/**
  * Serialize conversation history into a readable transcript string.
  * Skips the system message. Maps roles to [Examiner] and [Candidate].
  * @param {Array} history - Conversation history array of {role, content}
@@ -128,6 +91,30 @@ function serializeTranscript(history) {
       return `${label}: ${msg.content}`;
     })
     .join('\n');
+}
+
+/**
+ * Wait for the client to send 'ai_finished' (audio playback complete).
+ * Resolves when ai_finished is received or timeout expires.
+ * @param {Object} session - Session object
+ * @param {number} timeoutMs - Maximum wait time in ms (default 30s)
+ * @returns {Promise<void>}
+ */
+function waitForAiFinished(session, timeoutMs = 30000) {
+  // If not currently speaking, resolve immediately
+  if (!session.isAISpeaking) {
+    return Promise.resolve();
+  }
+  return new Promise(resolve => {
+    const timer = setTimeout(() => {
+      session._aiFinishedResolve = null;
+      resolve();
+    }, timeoutMs);
+    session._aiFinishedResolve = () => {
+      clearTimeout(timer);
+      resolve();
+    };
+  });
 }
 
 async function googleTTS(text, voiceName, options = {}) {
@@ -283,8 +270,9 @@ wss.on('connection', (ws, req) => {
   });
 
   const queryParams = url.parse(req.url, true).query;
-  const scenarioFile = queryParams.scenario || 'template.txt';
-  const difficulty = queryParams.difficulty || null;
+  // topicFolder e.g. "clinical/emergencies/necrotising_fasciitis"
+  const scenarioFile = queryParams.scenario || 'clinical/emergencies/necrotising_fasciitis';
+  const difficulty = queryParams.difficulty || 'easy';
   const voice = queryParams.voice || config.TTS_VOICE;
   const userId = queryParams.userId || null;
   const authToken = queryParams.token || null;
@@ -363,8 +351,8 @@ wss.on('connection', (ws, req) => {
       }
     }
 
-    // Access validated - create session
-    const scenarioPrompt = loadScenarioPrompt(scenarioFile, difficulty);
+    // Access validated - create session using modular prompt assembly
+    const scenarioPrompt = buildInterviewPrompt(difficulty, scenarioFile);
     const sessionId = generateSecureSessionId();
 
     // Create server-side VAD instance for this session
@@ -388,12 +376,13 @@ wss.on('connection', (ws, req) => {
     sessions.set(sessionId, {
       history: [{ role: 'system', content: scenarioPrompt }],
       ws: ws,
-      scenario: scenarioFile,
+      scenario: scenarioFile, // topicFolder
       voice: voice,
       difficulty: difficulty,
       userId: userId,
       isAISpeaking: false,
       inFeedbackMode: false,
+      interviewEnded: false,
       feedbackCount: 0,
       vad: vadInstance,
       incrementalState
@@ -561,9 +550,9 @@ wss.on('connection', (ws, req) => {
           case 'audio_chunk':
             // Server-side VAD: receive PCM audio, run through Silero VAD
             try {
-              if (session.isAISpeaking || session.inFeedbackMode) {
+              if (session.isAISpeaking || session.inFeedbackMode || session.interviewEnded) {
                 break;
-              } // Ignore audio during AI speech/feedback
+              } // Ignore audio during AI speech/feedback/ended
 
               const pcmData = Buffer.from(msg.audio, 'base64');
               // Copy to aligned ArrayBuffer — Buffer pool can give odd byteOffset
@@ -628,6 +617,9 @@ wss.on('connection', (ws, req) => {
             break;
 
           case 'user_transcript':
+            if (session.interviewEnded) {
+              break;
+            } // Ignore after interview ended
             console.log('[USER] ' + sanitizeForLog(msg.text));
             session.history.push({ role: 'user', content: msg.text });
             await streamResponseToClient(session, ws, session.history);
@@ -640,203 +632,128 @@ wss.on('connection', (ws, req) => {
             }
             break;
 
+          case 'end_interview':
+            console.log('[INTERVIEW] End interview requested for session:', sessionId);
+            session.interviewEnded = true;
+            session.isAISpeaking = false;
+            ws.send(JSON.stringify({ type: 'interview_ended', sessionId }));
+            break;
+
           case 'ai_finished':
             session.isAISpeaking = false;
-
-            // Auto-continue feedback if we're in feedback mode (using separate feedbackHistory)
-            if (session.inFeedbackMode && session.feedbackHistory) {
-              if (session.feedbackCount < 6) {
-                // Continue to next feedback section
-                session.feedbackCount++;
-                console.log(
-                  `[FEEDBACK] Auto-continuing feedback section (${session.feedbackCount}/6)`
-                );
-
-                // Notify frontend that we're preparing next chunk
-                ws.send(
-                  JSON.stringify({
-                    type: 'feedback_processing'
-                  })
-                );
-
-                setTimeout(async () => {
-                  if (ws.readyState !== WebSocket.OPEN || !sessions.has(sessionId)) {
-                    return;
-                  }
-                  try {
-                    session.feedbackHistory.push({ role: 'user', content: 'continue' });
-
-                    const t1 = Date.now();
-                    const responseText = await callLLM(session.feedbackHistory, {
-                      max_tokens: 200
-                    });
-                    const t2 = Date.now();
-                    console.log('[FEEDBACK] ' + responseText);
-                    console.log(`[TIMING] Feedback GPT: ${t2 - t1}ms`);
-                    session.feedbackHistory.push({ role: 'assistant', content: responseText });
-
-                    const t3 = Date.now();
-                    const audioBuffer = await ttsForSession(responseText, session);
-                    const t4 = Date.now();
-                    console.log(`[TIMING] Feedback TTS: ${t4 - t3}ms, Total: ${t4 - t1}ms`);
-
-                    session.isAISpeaking = true;
-                    ws.send(
-                      JSON.stringify({
-                        type: 'feedback_response',
-                        text: responseText,
-                        audio: audioBuffer.toString('base64'),
-                        section: session.feedbackCount,
-                        totalSections: 6
-                      })
-                    );
-                  } catch (error) {
-                    console.error('[FEEDBACK AUTO-CONTINUE ERROR]', error.message);
-                    const isRateLimit = error instanceof RateLimitError || error.isRateLimit;
-                    try {
-                      ws.send(
-                        JSON.stringify({
-                          type: 'error',
-                          message: isRateLimit
-                            ? 'API rate limit reached during feedback. Please try ending the session again.'
-                            : 'Feedback generation failed. Please try again.',
-                          ...(isRateLimit && { code: 'RATE_LIMITED' })
-                        })
-                      );
-                    } catch (sendErr) {
-                      /* ws may be closed */
-                    }
-                    session.inFeedbackMode = false;
-                    session.feedbackCount = 0;
-                  }
-                }, 1500);
-              } else if (session.feedbackCount === 6) {
-                // All 6 spoken sections delivered - now generate JSON summary
-                console.log('[FEEDBACK] All sections delivered, generating JSON summary');
-                try {
-                  const jsonTemplatePath = path.join(
-                    __dirname,
-                    'prompts/system/feedback_json_template.txt'
-                  );
-                  const jsonTemplatePrompt = fs.readFileSync(jsonTemplatePath, 'utf8');
-
-                  session.feedbackHistory.push({ role: 'user', content: jsonTemplatePrompt });
-
-                  const t1 = Date.now();
-                  const feedbackText = await callLLM(session.feedbackHistory, {
-                    max_tokens: 500
-                  });
-                  const t2 = Date.now();
-                  console.log('[FEEDBACK] JSON response:', feedbackText);
-                  console.log(`[TIMING] Feedback JSON GPT: ${t2 - t1}ms`);
-
-                  // Parse JSON from response (with fallback)
-                  let feedback;
-                  try {
-                    const jsonMatch = feedbackText.match(/\{[\s\S]*\}/);
-                    if (jsonMatch) {
-                      feedback = JSON.parse(jsonMatch[0]);
-                    } else {
-                      throw new Error('No JSON found in response');
-                    }
-                  } catch (parseError) {
-                    console.warn(
-                      '[FEEDBACK] JSON parse failed, using fallback:',
-                      parseError.message
-                    );
-                    feedback = {
-                      score: 3,
-                      overallImpression: 'Unable to parse detailed feedback',
-                      clinicalKnowledge: {
-                        diagnosis: 'See spoken feedback',
-                        management: 'See spoken feedback'
-                      },
-                      strengths: ['See spoken feedback above'],
-                      improvements: ['Please try again for detailed report'],
-                      summary: feedbackText.substring(0, 500)
-                    };
-                  }
-
-                  ws.send(
-                    JSON.stringify({
-                      type: 'feedback_summary',
-                      feedback: feedback
-                    })
-                  );
-                  console.log('[FEEDBACK] Summary sent');
-                  session.inFeedbackMode = false;
-                } catch (error) {
-                  console.error('[FEEDBACK JSON ERROR]', error.message);
-                  ws.send(
-                    JSON.stringify({
-                      type: 'feedback_summary',
-                      feedback: {
-                        score: 3,
-                        overallImpression: 'Session completed',
-                        clinicalKnowledge: {
-                          diagnosis: 'Feedback generation error',
-                          management: 'Feedback generation error'
-                        },
-                        strengths: ['Session completed'],
-                        improvements: ['Feedback generation encountered an error'],
-                        summary: 'Unable to generate detailed feedback. Please try again.'
-                      }
-                    })
-                  );
-                  session.inFeedbackMode = false;
-                }
-              }
+            // Resolve any pending waitForAiFinished promise
+            if (session._aiFinishedResolve) {
+              session._aiFinishedResolve();
+              session._aiFinishedResolve = null;
             }
             break;
 
           case 'request_feedback':
-            // Spawn NEW GPT session with dedicated feedback prompt + full transcript
-            console.log('[FEEDBACK] Starting hybrid feedback flow');
+            // Single-call feedback: one LLM call → parse sections → parallel TTS → sequential delivery
+            console.log('[FEEDBACK] Starting single-call feedback flow');
+            session.inFeedbackMode = true;
+            session.interviewEnded = true;
             try {
               // 1. Serialize full conversation into transcript
               const transcript = serializeTranscript(session.history);
               console.log('[FEEDBACK] Transcript length:', transcript.length, 'chars');
 
-              // 2. Load the appropriate feedback prompt
-              const feedbackPrompt = loadFeedbackPrompt(session.scenario);
+              // 2. Build modular feedback prompt (core + personality + clinical)
+              const feedbackPrompt = buildFeedbackPrompt(session.difficulty, session.scenario);
 
-              // 3. Create a NEW conversation history for feedback (separate from interview)
-              session.feedbackHistory = [
-                { role: 'system', content: feedbackPrompt },
-                { role: 'user', content: 'Here is the interview transcript:\n\n' + transcript }
-              ];
-
-              // 4. Call GPT for first feedback section
+              // 3. Single LLM call for all 6 sections + JSON summary
               const t1 = Date.now();
-              const responseText = await callLLM(session.feedbackHistory, {
-                max_tokens: 200
-              });
+              const fullResponse = await callLLM(
+                [
+                  { role: 'system', content: feedbackPrompt },
+                  {
+                    role: 'user',
+                    content: 'Here is the interview transcript:\n\n' + transcript
+                  }
+                ],
+                { max_tokens: 2000 }
+              );
               const t2 = Date.now();
-              console.log('[FEEDBACK] Section 1: ' + responseText);
-              console.log(`[TIMING] Feedback GPT: ${t2 - t1}ms`);
-              session.feedbackHistory.push({ role: 'assistant', content: responseText });
+              console.log(`[TIMING] Feedback LLM: ${t2 - t1}ms`);
 
-              // 5. Generate TTS audio
+              // 4. Parse into sections + JSON
+              const parsed = parseFeedbackResponse(fullResponse);
+              console.log(
+                `[FEEDBACK] Parsed ${parsed.sections.length} sections, JSON: ${!!parsed.json}`
+              );
+
+              if (parsed.sections.length === 0) {
+                throw new Error('No feedback sections parsed from LLM response');
+              }
+
+              // 5. Generate TTS for all sections in parallel
               const t3 = Date.now();
-              const audioBuffer = await ttsForSession(responseText, session);
+              const ttsResults = await Promise.allSettled(
+                parsed.sections.map(section => ttsForSession(section, session))
+              );
               const t4 = Date.now();
-              console.log(`[TIMING] Feedback TTS: ${t4 - t3}ms, Total: ${t4 - t1}ms`);
+              console.log(
+                `[TIMING] Feedback TTS (${parsed.sections.length} sections parallel): ${t4 - t3}ms`
+              );
 
-              // 6. Send as feedback_response (new message type)
-              session.isAISpeaking = true;
-              session.inFeedbackMode = true;
-              session.feedbackCount = 1;
+              // 6. Deliver sections sequentially, waiting for ai_finished between each
+              for (let i = 0; i < parsed.sections.length; i++) {
+                if (ws.readyState !== WebSocket.OPEN) {
+                  break;
+                }
+
+                const ttsResult = ttsResults[i];
+                const sectionText = parsed.sections[i];
+                let audioBase64 = '';
+
+                if (ttsResult.status === 'fulfilled') {
+                  audioBase64 = ttsResult.value.toString('base64');
+                } else {
+                  console.warn(`[FEEDBACK] TTS failed for section ${i + 1}:`, ttsResult.reason);
+                }
+
+                session.isAISpeaking = true;
+                session.feedbackCount = i + 1;
+                ws.send(
+                  JSON.stringify({
+                    type: 'feedback_response',
+                    text: sectionText,
+                    audio: audioBase64,
+                    section: i + 1,
+                    totalSections: parsed.sections.length
+                  })
+                );
+
+                // Wait for client to finish playing audio before sending next section
+                if (i < parsed.sections.length - 1) {
+                  await waitForAiFinished(session, 30000);
+                }
+              }
+
+              // 7. Send JSON summary
+              const feedback = parsed.json || {
+                score: 3,
+                overallImpression: 'Session completed',
+                clinicalKnowledge: {
+                  diagnosis: 'See spoken feedback',
+                  management: 'See spoken feedback'
+                },
+                strengths: ['See spoken feedback above'],
+                improvements: ['See spoken feedback above'],
+                summary: parsed.sections[0] || 'Feedback delivered via audio.'
+              };
+
+              // Wait for last section audio to finish before sending summary
+              await waitForAiFinished(session, 30000);
 
               ws.send(
                 JSON.stringify({
-                  type: 'feedback_response',
-                  text: responseText,
-                  audio: audioBuffer.toString('base64'),
-                  section: 1,
-                  totalSections: 6
+                  type: 'feedback_summary',
+                  feedback: feedback
                 })
               );
-              console.log('[FEEDBACK] Section 1 sent');
+              console.log('[FEEDBACK] Summary sent');
+              session.inFeedbackMode = false;
             } catch (error) {
               console.error('[FEEDBACK ERROR]', error.message);
               const isRateLimit = error instanceof RateLimitError || error.isRateLimit;
@@ -866,6 +783,7 @@ wss.on('connection', (ws, req) => {
                   })
                 );
               }
+              session.inFeedbackMode = false;
             }
             break;
         }
