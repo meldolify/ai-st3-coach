@@ -897,23 +897,23 @@ describe('Request feedback flow', () => {
       );
       await collectMessages(ws, 3);
 
-      // Mock feedback LLM call (non-streaming) with section delimiters
-      openaiService.llmClient.chat.completions.create.mockResolvedValue({
-        choices: [
-          {
-            message: {
-              content:
-                '===SECTION_1===\nOverall good performance.\n' +
-                '===SECTION_2===\nStrong clinical knowledge.\n' +
-                '===SECTION_3===\nGood practical examples.\n' +
-                '===SECTION_4===\nExcellent systematic approach.\n' +
-                '===SECTION_5===\nCould improve differentials.\n' +
-                '===SECTION_6===\nThat concludes feedback.\n' +
-                '===JSON_SUMMARY===\n{"score":4,"overallImpression":"Good","strengths":["Systematic"],"improvements":["Differentials"],"summary":"Good overall."}'
-            }
-          }
-        ]
-      });
+      // Mock feedback LLM call (streaming) with section delimiters
+      mockStreamingResponse([
+        '===SECTION_1===\n',
+        'Overall good performance.\n',
+        '===SECTION_2===\n',
+        'Strong clinical knowledge.\n',
+        '===SECTION_3===\n',
+        'Good practical examples.\n',
+        '===SECTION_4===\n',
+        'Excellent systematic approach.\n',
+        '===SECTION_5===\n',
+        'Could improve differentials.\n',
+        '===SECTION_6===\n',
+        'That concludes feedback.\n',
+        '===JSON_SUMMARY===\n',
+        '{"score":4,"overallImpression":"Good","strengths":["Systematic"],"improvements":["Differentials"],"summary":"Good overall."}'
+      ]);
 
       // Request feedback
       ws.send(
@@ -923,27 +923,22 @@ describe('Request feedback flow', () => {
         })
       );
 
-      // Expect first feedback section
-      const feedbackMsg = await waitForMessage(ws, 10000);
-      expect(feedbackMsg.type).toBe('feedback_response');
-      expect(feedbackMsg.section).toBe(1);
-      expect(feedbackMsg.totalSections).toBe(6);
-      expect(feedbackMsg.text).toContain('Overall good performance');
-      expect(feedbackMsg.audio).toBeDefined();
+      // Streaming flow: feedback_processing → feedback_summary → 6 feedback_response messages
+      const processingMsg = await waitForMessage(ws, 10000);
+      expect(processingMsg.type).toBe('feedback_processing');
 
-      // Send ai_finished to unblock remaining sections
-      for (let i = 0; i < 5; i++) {
-        ws.send(JSON.stringify({ type: 'ai_finished', sessionId }));
-        const nextMsg = await waitForMessage(ws, 10000);
-        expect(nextMsg.type).toBe('feedback_response');
-        expect(nextMsg.section).toBe(i + 2);
-      }
-
-      // Send final ai_finished to unblock summary
-      ws.send(JSON.stringify({ type: 'ai_finished', sessionId }));
       const summaryMsg = await waitForMessage(ws, 10000);
       expect(summaryMsg.type).toBe('feedback_summary');
       expect(summaryMsg.feedback.score).toBe(4);
+
+      // All 6 feedback_response messages arrive rapidly (no ai_finished needed)
+      for (let i = 0; i < 6; i++) {
+        const fbMsg = await waitForMessage(ws, 10000);
+        expect(fbMsg.type).toBe('feedback_response');
+        expect(fbMsg.section).toBe(i + 1);
+        expect(fbMsg.totalSections).toBe(6);
+        expect(fbMsg.audio).toBeDefined();
+      }
     } finally {
       ws.close();
     }

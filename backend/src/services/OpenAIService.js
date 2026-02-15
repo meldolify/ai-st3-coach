@@ -103,7 +103,7 @@ class OpenAIService {
           model: options.model || config.LLM_MODEL,
           messages: history,
           temperature: options.temperature ?? 0.7,
-          max_tokens: options.max_tokens || 150
+          max_tokens: options.max_tokens || 300
         });
         return completion.choices[0].message.content;
       }, config.LLM_MODEL);
@@ -158,7 +158,7 @@ class OpenAIService {
         model: options.model || config.LLM_MODEL,
         messages: history,
         temperature: options.temperature ?? 0.7,
-        max_tokens: options.max_tokens || 150,
+        max_tokens: options.max_tokens || 300,
         stream: true
       });
     }, `${config.LLM_MODEL}-stream`);

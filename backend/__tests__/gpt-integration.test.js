@@ -33,7 +33,7 @@ describe('OpenAIService - generateResponse', () => {
         model: expect.any(String),
         messages: history,
         temperature: 0.7,
-        max_tokens: 150
+        max_tokens: 300
       })
     );
   });
