@@ -451,7 +451,7 @@ class V4Session {
         if (window.transcript) {
           window.transcript.addAIMessage('Feedback: ' + msg.text);
         }
-        this.audioPlayer.playBase64Audio(msg.audio);
+        this.audioPlayer.queueBase64Audio(msg.audio);
         updateStatus('aiStatus', 'Feedback (' + msg.section + '/' + msg.totalSections + ')', 'speaking');
         setOrbState('speaking');
         break;
@@ -565,29 +565,27 @@ class V4Session {
   }
 
   /**
-   * Request feedback from AI before disconnecting.
-   * Single-call flow: server sends all sections sequentially, then JSON summary.
-   * Returns a promise that resolves with feedback data or null on timeout.
+   * Request feedback from AI.
+   * Streaming flow: server streams LLM → sends summary → then audio sections.
+   * Resolves with feedback data when summary arrives. Audio continues playing from queue.
+   * Session stays alive — caller is responsible for disconnecting when ready.
    */
-  async requestFeedbackAndDisconnect() {
+  async requestFeedback() {
     if (!this.isConnected || !this.ws) {
       console.warn('[V4Session] Cannot request feedback - not connected');
       return null;
     }
 
     return new Promise((resolve) => {
-      let timeoutId;
-
       const feedbackHandler = (event) => {
         try {
           const msg = JSON.parse(event.data);
 
           if (msg.type === 'feedback_summary') {
-            console.log('[V4Session] Received feedback summary (final)');
-            clearTimeout(timeoutId);
+            console.log('[V4Session] Received feedback summary');
             this.ws.removeEventListener('message', feedbackHandler);
-            this.disconnect();
             resolve(msg.feedback);
+            // Audio sections continue arriving via handleMessage — no disconnect
           }
         } catch (e) {
           console.error('[V4Session] Error parsing feedback message:', e);
@@ -597,19 +595,13 @@ class V4Session {
       this.ws.addEventListener('message', feedbackHandler);
 
       // Send feedback request
-      console.log('[V4Session] Requesting feedback (single-call flow)...');
+      console.log('[V4Session] Requesting feedback (streaming flow)...');
       this.ws.send(JSON.stringify({
         type: 'request_feedback',
         sessionId: this.sessionId
       }));
 
-      // Timeout after 120 seconds (LLM call + parallel TTS + sequential delivery)
-      timeoutId = setTimeout(() => {
-        console.warn('[V4Session] Feedback request timed out');
-        this.ws.removeEventListener('message', feedbackHandler);
-        this.disconnect();
-        resolve(null);
-      }, 120000);
+      // No timeout — session stays alive until user navigates away
     });
   }
 }

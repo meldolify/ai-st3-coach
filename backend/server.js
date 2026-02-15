@@ -23,6 +23,7 @@ const { ServerVAD, float32ToWavBuffer } = require('./src/services/ServerVAD');
 const { isNoiseTranscript, buildNaturalSSML } = require('./src/utils/audioHelpers');
 const { buildInterviewPrompt, buildFeedbackPrompt } = require('./src/utils/promptAssembler');
 const { parseFeedbackResponse } = require('./src/utils/feedbackParser');
+const { FeedbackSectionBuffer } = require('./src/utils/feedbackSectionBuffer');
 const SentenceBuffer = require('./src/utils/sentenceBuffer');
 const { RateLimitError } = require('openai');
 
@@ -72,10 +73,7 @@ const sessions = new Map();
 // Use secure session ID generation from middleware
 // (keeping function name for backwards compatibility)
 
-// Wrapper functions that use the services (for backwards compatibility with existing code flow)
-async function callLLM(history, options) {
-  return openaiService.generateResponse(history, options);
-}
+// callLLM removed — feedback handler now uses openaiService.generateResponseStream directly
 
 /**
  * Serialize conversation history into a readable transcript string.
@@ -93,29 +91,7 @@ function serializeTranscript(history) {
     .join('\n');
 }
 
-/**
- * Wait for the client to send 'ai_finished' (audio playback complete).
- * Resolves when ai_finished is received or timeout expires.
- * @param {Object} session - Session object
- * @param {number} timeoutMs - Maximum wait time in ms (default 30s)
- * @returns {Promise<void>}
- */
-function waitForAiFinished(session, timeoutMs = 30000) {
-  // If not currently speaking, resolve immediately
-  if (!session.isAISpeaking) {
-    return Promise.resolve();
-  }
-  return new Promise(resolve => {
-    const timer = setTimeout(() => {
-      session._aiFinishedResolve = null;
-      resolve();
-    }, timeoutMs);
-    session._aiFinishedResolve = () => {
-      clearTimeout(timer);
-      resolve();
-    };
-  });
-}
+// waitForAiFinished removed — streaming feedback delivers all sections rapidly without waiting
 
 async function googleTTS(text, voiceName, options = {}) {
   return ttsService.synthesize(text, voiceName, options);
@@ -649,8 +625,8 @@ wss.on('connection', (ws, req) => {
             break;
 
           case 'request_feedback':
-            // Single-call feedback: one LLM call → parse sections → parallel TTS → sequential delivery
-            console.log('[FEEDBACK] Starting single-call feedback flow');
+            // Streaming feedback: stream LLM → detect sections → parallel TTS → rapid delivery
+            console.log('[FEEDBACK] Starting streaming feedback flow');
             session.inFeedbackMode = true;
             session.interviewEnded = true;
             try {
@@ -661,76 +637,56 @@ wss.on('connection', (ws, req) => {
               // 2. Build modular feedback prompt (core + personality + clinical)
               const feedbackPrompt = buildFeedbackPrompt(session.difficulty, session.scenario);
 
-              // 3. Single LLM call for all 6 sections + JSON summary
-              const t1 = Date.now();
-              const fullResponse = await callLLM(
-                [
-                  { role: 'system', content: feedbackPrompt },
-                  {
-                    role: 'user',
-                    content: 'Here is the interview transcript:\n\n' + transcript
-                  }
-                ],
-                { max_tokens: 2000 }
-              );
-              const t2 = Date.now();
-              console.log(`[TIMING] Feedback LLM: ${t2 - t1}ms`);
+              // 3. Stream LLM, start TTS for each section as it's detected
+              const feedbackMessages = [
+                { role: 'system', content: feedbackPrompt },
+                {
+                  role: 'user',
+                  content: 'Here is the interview transcript:\n\n' + transcript
+                }
+              ];
 
-              // 4. Parse into sections + JSON
-              const parsed = parseFeedbackResponse(fullResponse);
+              const sectionBuffer = new FeedbackSectionBuffer();
+              const sectionTexts = [];
+              const ttsPromises = [];
+              let fullText = '';
+              const t1 = Date.now();
+
+              ws.send(JSON.stringify({ type: 'feedback_processing' }));
+
+              for await (const token of openaiService.generateResponseStream(feedbackMessages, {
+                max_tokens: 2000
+              })) {
+                fullText += token;
+
+                // Detect completed sections in stream
+                const completedSections = sectionBuffer.addToken(token);
+                for (const sectionText of completedSections) {
+                  sectionTexts.push(sectionText);
+                  // Start TTS immediately (non-blocking)
+                  ttsPromises.push(ttsForSession(sectionText, session));
+                  console.log(`[FEEDBACK] Section ${sectionTexts.length} detected, TTS started`);
+                }
+              }
+
+              const t2 = Date.now();
+              console.log(
+                `[TIMING] Feedback LLM stream: ${t2 - t1}ms, ${sectionTexts.length} sections`
+              );
+
+              // 4. Parse full response for JSON summary
+              const parsed = parseFeedbackResponse(fullText);
               console.log(
                 `[FEEDBACK] Parsed ${parsed.sections.length} sections, JSON: ${!!parsed.json}`
               );
 
-              if (parsed.sections.length === 0) {
-                throw new Error('No feedback sections parsed from LLM response');
+              // Use streamed sections if available, fall back to parsed sections
+              const sections = sectionTexts.length > 0 ? sectionTexts : parsed.sections;
+              if (sections.length === 0) {
+                throw new Error('No feedback sections detected from LLM response');
               }
 
-              // 5. Generate TTS for all sections in parallel
-              const t3 = Date.now();
-              const ttsResults = await Promise.allSettled(
-                parsed.sections.map(section => ttsForSession(section, session))
-              );
-              const t4 = Date.now();
-              console.log(
-                `[TIMING] Feedback TTS (${parsed.sections.length} sections parallel): ${t4 - t3}ms`
-              );
-
-              // 6. Deliver sections sequentially, waiting for ai_finished between each
-              for (let i = 0; i < parsed.sections.length; i++) {
-                if (ws.readyState !== WebSocket.OPEN) {
-                  break;
-                }
-
-                const ttsResult = ttsResults[i];
-                const sectionText = parsed.sections[i];
-                let audioBase64 = '';
-
-                if (ttsResult.status === 'fulfilled') {
-                  audioBase64 = ttsResult.value.toString('base64');
-                } else {
-                  console.warn(`[FEEDBACK] TTS failed for section ${i + 1}:`, ttsResult.reason);
-                }
-
-                session.isAISpeaking = true;
-                session.feedbackCount = i + 1;
-                ws.send(
-                  JSON.stringify({
-                    type: 'feedback_response',
-                    text: sectionText,
-                    audio: audioBase64,
-                    section: i + 1,
-                    totalSections: parsed.sections.length
-                  })
-                );
-
-                // Wait for client to finish playing audio before sending next section
-                if (i < parsed.sections.length - 1) {
-                  await waitForAiFinished(session, 30000);
-                }
-              }
-
-              // 7. Send JSON summary
+              // 5. Send JSON summary immediately (card shows on client)
               const feedback = parsed.json || {
                 score: 3,
                 overallImpression: 'Session completed',
@@ -740,11 +696,8 @@ wss.on('connection', (ws, req) => {
                 },
                 strengths: ['See spoken feedback above'],
                 improvements: ['See spoken feedback above'],
-                summary: parsed.sections[0] || 'Feedback delivered via audio.'
+                summary: sections[0] || 'Feedback delivered via audio.'
               };
-
-              // Wait for last section audio to finish before sending summary
-              await waitForAiFinished(session, 30000);
 
               ws.send(
                 JSON.stringify({
@@ -753,6 +706,49 @@ wss.on('connection', (ws, req) => {
                 })
               );
               console.log('[FEEDBACK] Summary sent');
+
+              // 6. Deliver audio — TTS already started during stream, most/all complete by now
+              session.isAISpeaking = true;
+              for (let i = 0; i < sections.length; i++) {
+                if (ws.readyState !== WebSocket.OPEN) {
+                  break;
+                }
+
+                let audioBase64 = '';
+                if (i < ttsPromises.length) {
+                  try {
+                    const audio = await ttsPromises[i];
+                    audioBase64 = audio.toString('base64');
+                  } catch (ttsErr) {
+                    console.warn(`[FEEDBACK] TTS failed for section ${i + 1}:`, ttsErr.message);
+                  }
+                } else {
+                  // Fallback: section came from parser, no TTS started during stream
+                  try {
+                    const audio = await ttsForSession(sections[i], session);
+                    audioBase64 = audio.toString('base64');
+                  } catch (ttsErr) {
+                    console.warn(
+                      `[FEEDBACK] Fallback TTS failed for section ${i + 1}:`,
+                      ttsErr.message
+                    );
+                  }
+                }
+
+                session.feedbackCount = i + 1;
+                ws.send(
+                  JSON.stringify({
+                    type: 'feedback_response',
+                    text: sections[i],
+                    audio: audioBase64,
+                    section: i + 1,
+                    totalSections: sections.length
+                  })
+                );
+              }
+
+              const t3 = Date.now();
+              console.log(`[TIMING] Feedback total (stream + TTS + delivery): ${t3 - t1}ms`);
               session.inFeedbackMode = false;
             } catch (error) {
               console.error('[FEEDBACK ERROR]', error.message);

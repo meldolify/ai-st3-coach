@@ -37,16 +37,27 @@ function parseFeedbackResponse(text) {
     const jsonText = text.slice(jsonDelimiterIdx + '===JSON_SUMMARY==='.length).trim();
     textWithoutJson = text.slice(0, jsonDelimiterIdx).trim();
 
+    // Clean up common LLM artifacts before parsing
+    const cleanedJson = jsonText
+      .replace(/^```(?:json)?\s*/i, '') // Strip leading code fence
+      .replace(/\s*```\s*$/, '') // Strip trailing code fence
+      .trim();
+
     try {
-      jsonSummary = JSON.parse(jsonText);
+      jsonSummary = JSON.parse(cleanedJson);
     } catch {
       // Try to extract JSON object from the text (LLM might add extra text)
-      const jsonMatch = jsonText.match(/\{[\s\S]*\}/);
+      const jsonMatch = cleanedJson.match(/\{[\s\S]*\}/);
       if (jsonMatch) {
+        // Strip trailing commas before ] or } (common LLM JSON error)
+        const sanitized = jsonMatch[0].replace(/,\s*([}\]])/g, '$1');
         try {
-          jsonSummary = JSON.parse(jsonMatch[0]);
+          jsonSummary = JSON.parse(sanitized);
         } catch {
-          console.warn('[FEEDBACK_PARSER] Could not parse JSON summary');
+          console.warn(
+            '[FEEDBACK_PARSER] Could not parse JSON summary. Raw text:',
+            jsonText.slice(0, 200)
+          );
         }
       }
     }

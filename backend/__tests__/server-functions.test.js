@@ -318,7 +318,7 @@ describe('callLLM wrapper', () => {
         model: expect.any(String),
         messages: history,
         temperature: 0.7,
-        max_tokens: 150
+        max_tokens: 300
       })
     );
   });
@@ -747,7 +747,7 @@ describe('OpenAI streaming (generateResponseStream)', () => {
         model: expect.any(String),
         messages: [{ role: 'user', content: 'test' }],
         temperature: 0.7,
-        max_tokens: 150,
+        max_tokens: 300,
         stream: true
       })
     );

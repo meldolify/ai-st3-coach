@@ -399,20 +399,18 @@ async function endSessionWithFeedback() {
     if (textEl) textEl.textContent = 'Ending...';
   }
 
-  // Show feedback status while waiting for multi-section delivery
+  // Show feedback status while waiting for streaming feedback
   if (typeof updateStatus === 'function') {
-    updateStatus('aiStatus', 'Receiving Feedback...', 'processing');
+    updateStatus('aiStatus', 'Generating Feedback...', 'processing');
   }
 
-  // Request feedback - waits for all 6 spoken sections + final JSON summary
+  // Request feedback — resolves when summary arrives, audio continues playing from queue
+  // Session stays alive so queued audio sections can continue playing
   let feedback = null;
   try {
-    feedback = await window.session.requestFeedbackAndDisconnect();
+    feedback = await window.session.requestFeedback();
   } catch (error) {
     console.error('[SimulationApp] Error getting feedback:', error);
-    if (window.session) {
-      window.session.disconnect();
-    }
   }
 
   // Save feedback to database
@@ -457,14 +455,11 @@ async function endSessionWithFeedback() {
     setOrbState('idle');
   }
 
-  // Clear session reference
-  window.session = null;
-  session = null;
-
-  // Show summary screen with page-based navigation handlers
+  // Show summary screen — session stays alive for audio playback
+  // Disconnect happens when user navigates (Retry/New/Exit buttons)
   showSimulationSummary(feedback);
 
-  console.log('[SimulationApp] Session ended with feedback');
+  console.log('[SimulationApp] Session ended with feedback, audio may still be playing');
 }
 
 /**
@@ -494,8 +489,18 @@ function showSimulationSummary(feedback) {
   const newScenarioBtn = document.getElementById('summaryNewScenarioBtn');
   const exitBtn = document.getElementById('summaryExitBtn');
 
+  // Helper: disconnect session if still alive (audio may still be playing)
+  function cleanupSession() {
+    if (window.session) {
+      window.session.disconnect();
+      window.session = null;
+      session = null;
+    }
+  }
+
   if (retryBtn) {
     retryBtn.onclick = () => {
+      cleanupSession();
       // Reload the page to restart same scenario (params still in sessionStorage)
       window.location.reload();
     };
@@ -503,6 +508,7 @@ function showSimulationSummary(feedback) {
 
   if (newScenarioBtn) {
     newScenarioBtn.onclick = () => {
+      cleanupSession();
       // Clear params and go to scenario selection
       sessionStorage.removeItem('simulationParams');
       window.location.href = '/#scenarioSelection';
@@ -511,6 +517,7 @@ function showSimulationSummary(feedback) {
 
   if (exitBtn) {
     exitBtn.onclick = () => {
+      cleanupSession();
       // Clear params and go to landing
       sessionStorage.removeItem('simulationParams');
       window.location.href = '/';
@@ -524,6 +531,7 @@ function showSimulationSummary(feedback) {
     if (newScenarioBtn && typeof performScenarioSwitch === 'function') {
       newScenarioBtn.textContent = 'Continue to ' + (pending.title || 'New Scenario');
       newScenarioBtn.onclick = () => {
+        cleanupSession();
         performScenarioSwitch(pending.title, pending.imageFile, pending.promptFile);
       };
     }
@@ -535,6 +543,7 @@ function showSimulationSummary(feedback) {
     window.pendingNavigation = null;
     if (newScenarioBtn) {
       newScenarioBtn.onclick = () => {
+        cleanupSession();
         sessionStorage.removeItem('simulationParams');
         window.location.href = '/#' + dest;
       };

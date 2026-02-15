@@ -38,7 +38,7 @@ const config = {
   TTS_STYLE_PROMPTS: {
     easy: `Audio profile: Warm, reassuring male British voice with gentle resonance and a slight smile in the tone.
 Scene: A calm, supportive clinical teaching environment. The atmosphere is relaxed and encouraging.
-Director's notes: Speak with genuine warmth and patience. Unhurried pace with generous natural pauses — especially after questions, let silence breathe. Soft emphasis on key words rather than sharp stress. Light upward inflection on questions to sound inviting. Let encouragement come through in vocal colour — a slight lift in pitch when acknowledging good points. Breathe naturally between phrases.`,
+Director's notes: Speak with genuine warmth and patience. Natural conversational pace — not rushed, but not drawn out. Brief natural pauses after questions. Soft emphasis on key words rather than sharp stress. Light upward inflection on questions to sound inviting. Let encouragement come through in vocal colour — a slight lift in pitch when acknowledging good points. Breathe naturally between phrases.`,
     medium: `Audio profile: Professional, composed female British voice with clear articulation and neutral warmth.
 Scene: A formal but fair examination room. The tone is businesslike and measured.
 Director's notes: Even, steady pacing throughout — neither rushed nor lingering. Crisp consonants, clean vowel sounds. Keep emotional colouring minimal and neutral. Brief natural pauses between topic transitions. Questions delivered with level intonation — clinical precision without coldness. Maintain consistent vocal energy from start to finish. Slight downward inflection at the end of statements, slight rise on questions.`,
