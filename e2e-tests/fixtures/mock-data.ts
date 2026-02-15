@@ -4,19 +4,19 @@
 export const FREE_SCENARIOS = {
   necFasc: {
     title: 'Necrotising Fasciitis',
-    promptFile: 'prompts/clinical/emergencies/necrotising_fasciitis/easy_clinical_necrotising_fasciitis_1.txt',
+    promptFile: 'clinical/emergencies/necrotising_fasciitis',
     imageFile: null,
     category: 'Clinical Stations',
   },
   majorBurn: {
     title: 'Major Burn',
-    promptFile: 'prompts/call_the_boss/scenarios/major_burn/easy_call_the_boss_major_burn_1.txt',
+    promptFile: 'call_the_boss/scenarios/major_burn',
     imageFile: null,
     category: 'Call-The-Boss',
   },
   carpalTunnel: {
     title: 'Carpal Tunnel Release Consent',
-    promptFile: 'prompts/consent/hand_surgery/carpal_tunnel_release_consent/easy_consent_carpal_tunnel_release_consent_1.txt',
+    promptFile: 'consent/hand_surgery/carpal_tunnel_release_consent',
     imageFile: null,
     category: 'Consent',
   },
@@ -25,7 +25,7 @@ export const FREE_SCENARIOS = {
 /** A scenario path that is NOT in FREE_TIER_SCENARIOS (premium only). */
 export const PREMIUM_SCENARIO = {
   title: 'Breast Reconstruction Consent',
-  promptFile: 'prompts/consent/breast_and_aesthetic/breast_reconstruction_consent/easy_consent_breast_reconstruction_consent_1.txt',
+  promptFile: 'consent/breast_and_aesthetic/breast_reconstruction_consent',
   imageFile: null,
   category: 'Consent',
 };

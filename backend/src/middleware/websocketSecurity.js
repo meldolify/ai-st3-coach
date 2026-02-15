@@ -135,6 +135,10 @@ const MESSAGE_SCHEMAS = {
   request_feedback: {
     required: ['sessionId'],
     sessionId: { type: 'string', maxLength: 100 }
+  },
+  end_interview: {
+    required: ['sessionId'],
+    sessionId: { type: 'string', maxLength: 100 }
   }
 };
 

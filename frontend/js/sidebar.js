@@ -212,12 +212,8 @@ function loadSidebarTopics(subcategoryId, container) {
 
   topics.forEach(topic => {
     // topic structure from getTopicsForSubheading: { file, name, image, difficulty }
-    // Build prompt file path based on topic.file
-    const folderName = topic.file.split('/').pop();
-    const heading = topic.file.split('/')[0];
-
-    // Only create ONE button per topic for the user's selected difficulty
-    const promptFile = `prompts/${topic.file}/${targetDiff}_${heading}_${folderName}_1.txt`;
+    // Use topicFolder directly — server assembles modular prompt files
+    const promptFile = topic.file;
     const canAccess = typeof canAccessScenario === 'function' ? canAccessScenario(promptFile) : true;
     const isCurrent = currentScenarioFile === promptFile;
 

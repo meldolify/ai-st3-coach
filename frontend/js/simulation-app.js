@@ -217,9 +217,11 @@ function loadClinicalImage(imageFile) {
 function setupSimulationButtons() {
   const connectBtn = document.getElementById('connectBtn');
   const disconnectBtn = document.getElementById('disconnectBtn');
+  const feedbackBtn = document.getElementById('feedbackBtn');
   const interruptBtn = document.getElementById('interruptBtn');
   const mobileConnectBtn = document.getElementById('mobileConnectBtn');
   const mobileDisconnectBtn = document.getElementById('mobileDisconnectBtn');
+  const mobileFeedbackBtn = document.getElementById('mobileFeedbackBtn');
   const mobileInterruptBtn = document.getElementById('mobileInterruptBtn');
 
   // Connect button
@@ -229,9 +231,16 @@ function setupSimulationButtons() {
     });
   }
 
-  // Disconnect button
+  // Disconnect button — now ends interview only (no feedback)
   if (disconnectBtn) {
-    disconnectBtn.addEventListener('click', async () => {
+    disconnectBtn.addEventListener('click', () => {
+      endInterviewOnly();
+    });
+  }
+
+  // Feedback button — requests feedback after interview ended
+  if (feedbackBtn) {
+    feedbackBtn.addEventListener('click', async () => {
       await endSessionWithFeedback();
     });
   }
@@ -255,6 +264,9 @@ function setupSimulationButtons() {
   }
   if (mobileDisconnectBtn && disconnectBtn) {
     mobileDisconnectBtn.addEventListener('click', () => disconnectBtn.click());
+  }
+  if (mobileFeedbackBtn && feedbackBtn) {
+    mobileFeedbackBtn.addEventListener('click', () => feedbackBtn.click());
   }
   if (mobileInterruptBtn && interruptBtn) {
     mobileInterruptBtn.addEventListener('click', () => interruptBtn.click());
@@ -319,6 +331,46 @@ async function handleConnect() {
     if (typeof log === 'function') {
       log('Connection failed: ' + error.message, 'error');
     }
+  }
+}
+
+/**
+ * End interview only — freezes the interview, shows feedback button.
+ * Does NOT request feedback or disconnect.
+ */
+function endInterviewOnly() {
+  if (!window.session || !window.session.isConnected) {
+    console.warn('[SimulationApp] No active session to end');
+    return;
+  }
+
+  console.log('[SimulationApp] Ending interview (keeping connection for feedback)');
+
+  // Send end_interview message to server
+  window.session.sendEndInterview();
+
+  // Hide End button, show Feedback button
+  const disconnectBtn = document.getElementById('disconnectBtn');
+  const feedbackBtn = document.getElementById('feedbackBtn');
+  const mobileDisconnectBtn = document.getElementById('mobileDisconnectBtn');
+  const mobileFeedbackBtn = document.getElementById('mobileFeedbackBtn');
+  const interruptBtn = document.getElementById('interruptBtn');
+  const mobileInterruptBtn = document.getElementById('mobileInterruptBtn');
+
+  if (disconnectBtn) disconnectBtn.style.display = 'none';
+  if (feedbackBtn) feedbackBtn.style.display = '';
+  if (mobileDisconnectBtn) mobileDisconnectBtn.style.display = 'none';
+  if (mobileFeedbackBtn) mobileFeedbackBtn.style.display = '';
+  if (interruptBtn) interruptBtn.disabled = true;
+  if (mobileInterruptBtn) mobileInterruptBtn.disabled = true;
+
+  // Update status
+  if (typeof updateStatus === 'function') {
+    updateStatus('aiStatus', 'Interview Ended', 'idle');
+  }
+
+  if (typeof setOrbState === 'function') {
+    setOrbState('idle');
   }
 }
 
