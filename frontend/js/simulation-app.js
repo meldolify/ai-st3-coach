@@ -463,14 +463,13 @@ async function endSessionWithFeedback() {
 }
 
 /**
- * Show summary screen with page-based navigation
+ * Show summary screen as modal overlay over the simulation room
  */
 function showSimulationSummary(feedback) {
-  const summaryPage = document.getElementById('sessionSummary');
-  const simulationRoom = document.getElementById('simulationRoom');
+  const summaryModal = document.getElementById('sessionSummaryModal');
 
-  if (!summaryPage) {
-    console.error('[SimulationApp] Summary page not found');
+  if (!summaryModal) {
+    console.error('[SimulationApp] Summary modal not found');
     return;
   }
 

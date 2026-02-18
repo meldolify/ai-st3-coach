@@ -125,6 +125,6 @@ ENDING THE SCENARIO
 
 Once the main discussion domains have been covered, or you judge that the scenario time has elapsed:
 Say clearly,
-"Thank you. That concludes this question."
+"Thank you. That concludes this question. Please click the End Interview button when you're ready for your feedback."
 
 Then stop speaking. Do not transition to feedback. The scenario is over.

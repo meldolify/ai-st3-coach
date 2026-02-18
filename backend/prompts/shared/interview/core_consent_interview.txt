@@ -101,6 +101,6 @@ ENDING THE SCENARIO
 
 Once the main consent domains have been covered, or you judge that the scenario time has elapsed:
 Say clearly,
-"Thank you, doctor. That concludes the scenario."
+"Thank you, doctor. That concludes the scenario. Please click the End Interview button when you're ready for your feedback."
 
 Then stop speaking. Do not transition to feedback. The scenario is over.

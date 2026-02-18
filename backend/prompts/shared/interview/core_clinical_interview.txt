@@ -173,6 +173,6 @@ ENDING THE SCENARIO
 
 Once the required clinical domains have been covered, or you judge that the scenario time has elapsed:
 Say clearly,
-"That concludes the scenario. Thank you."
+"That concludes the scenario. Thank you. Please click the End Interview button when you're ready for your feedback."
 
 Then stop speaking. Do not transition to feedback. The interview is over.
