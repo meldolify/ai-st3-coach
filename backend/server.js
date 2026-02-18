@@ -659,7 +659,6 @@ wss.on('connection', (ws, req) => {
 
               const sectionBuffer = new FeedbackSectionBuffer();
               const sectionTexts = [];
-              const ttsPromises = [];
               let fullText = '';
               const t1 = Date.now();
 
@@ -674,9 +673,7 @@ wss.on('connection', (ws, req) => {
                 const completedSections = sectionBuffer.addToken(token);
                 for (const sectionText of completedSections) {
                   sectionTexts.push(sectionText);
-                  // Start TTS immediately (non-blocking)
-                  ttsPromises.push(ttsForSession(sectionText, session));
-                  console.log(`[FEEDBACK] Section ${sectionTexts.length} detected, TTS started`);
+                  console.log(`[FEEDBACK] Section ${sectionTexts.length} detected`);
                 }
               }
 
@@ -684,8 +681,7 @@ wss.on('connection', (ws, req) => {
               const flushed = sectionBuffer.flush();
               if (flushed && sectionBuffer.sectionStarted) {
                 sectionTexts.push(flushed);
-                ttsPromises.push(ttsForSession(flushed, session));
-                console.log(`[FEEDBACK] Flushed final section ${sectionTexts.length}, TTS started`);
+                console.log(`[FEEDBACK] Flushed final section ${sectionTexts.length}`);
               }
 
               const t2 = Date.now();
@@ -753,7 +749,7 @@ wss.on('connection', (ws, req) => {
               );
               console.log('[FEEDBACK] Summary sent');
 
-              // 6. Deliver audio — TTS already started during stream, most/all complete by now
+              // 6. Sequential TTS + delivery (matches interview pattern for voice consistency)
               session.isAISpeaking = true;
               for (let i = 0; i < sections.length; i++) {
                 if (ws.readyState !== WebSocket.OPEN) {
@@ -761,24 +757,11 @@ wss.on('connection', (ws, req) => {
                 }
 
                 let audioBase64 = '';
-                if (i < ttsPromises.length) {
-                  try {
-                    const audio = await ttsPromises[i];
-                    audioBase64 = audio.toString('base64');
-                  } catch (ttsErr) {
-                    console.warn(`[FEEDBACK] TTS failed for section ${i + 1}:`, ttsErr.message);
-                  }
-                } else {
-                  // Fallback: section came from parser, no TTS started during stream
-                  try {
-                    const audio = await ttsForSession(sections[i], session);
-                    audioBase64 = audio.toString('base64');
-                  } catch (ttsErr) {
-                    console.warn(
-                      `[FEEDBACK] Fallback TTS failed for section ${i + 1}:`,
-                      ttsErr.message
-                    );
-                  }
+                try {
+                  const audio = await ttsForSession(sections[i], session);
+                  audioBase64 = audio.toString('base64');
+                } catch (ttsErr) {
+                  console.warn(`[FEEDBACK] TTS failed for section ${i + 1}:`, ttsErr.message);
                 }
 
                 session.feedbackCount = i + 1;

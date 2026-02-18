@@ -10652,31 +10652,145 @@ body.has-header {
 .voice-orb-svg--4 { --i: 2; --j: 4; }
 
 /* ============================================
-   SESSION SUMMARY PAGE
+   SESSION SUMMARY MODAL
    ============================================ */
 
-.session-summary-page {
-  display: none;  /* Hidden by default, shown via inline style.display = 'flex' */
+/* Session Summary Modal */
+.summary-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: none;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
-  padding: 40px 20px;
-  background: linear-gradient(135deg, #F7F5F2 0%, #EDE9E4 100%);
+  z-index: 3000;
 }
 
-.summary-card {
-  background: rgba(255, 255, 255, 0.95);
-  -webkit-backdrop-filter: blur(20px);
+.summary-modal.active {
+  display: flex;
+}
+
+.summary-modal__backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.summary-modal__container {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  max-width: 1100px;
+  width: 90%;
+  max-height: 90vh;
+  animation: modalSlideIn 0.3s ease;
+}
+
+.summary-modal__card {
+  background: rgba(255, 255, 255, 0.97);
   backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border-radius: 24px;
-  padding: 48px;
-  max-width: 560px;
-  width: 100%;
-  box-shadow:
-    0 4px 6px rgba(0, 0, 0, 0.02),
-    0 12px 24px rgba(0, 0, 0, 0.04),
-    0 24px 48px rgba(0, 0, 0, 0.06);
+  padding: 36px;
+  overflow-y: auto;
+  max-height: 90vh;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02),
+              0 12px 24px rgba(0, 0, 0, 0.04),
+              0 24px 48px rgba(0, 0, 0, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+.summary-modal__transcript {
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 24px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  max-height: 90vh;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02),
+              0 12px 24px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+.summary-transcript-header {
+  margin-bottom: 16px;
+  flex-shrink: 0;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.summary-transcript-header h4 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1a1a2e;
+}
+
+.summary-transcript-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+/* Transcript message styling within modal */
+.summary-transcript-content .transcript-message {
+  padding: 10px 14px;
+  margin-bottom: 8px;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.summary-transcript-content .transcript-message.message-user {
+  background: rgba(99, 102, 241, 0.08);
+  border-left: 3px solid rgba(99, 102, 241, 0.4);
+}
+
+.summary-transcript-content .transcript-message.message-ai {
+  background: rgba(16, 185, 129, 0.08);
+  border-left: 3px solid rgba(16, 185, 129, 0.4);
+}
+
+.summary-transcript-content .message-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.summary-transcript-content .message-role {
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.summary-transcript-content .message-user .message-role {
+  color: rgba(99, 102, 241, 0.8);
+}
+
+.summary-transcript-content .message-ai .message-role {
+  color: rgba(16, 185, 129, 0.8);
+}
+
+.summary-transcript-content .message-time {
+  font-size: 0.75rem;
+  color: rgba(0, 0, 0, 0.4);
+}
+
+.summary-transcript-content .message-text {
+  color: #374151;
 }
 
 .summary-header {
@@ -10893,12 +11007,35 @@ body.has-header {
   background: rgba(0, 0, 0, 0.05);
 }
 
-/* Mobile adjustments */
-@media (max-width: 640px) {
-  .summary-card {
-    padding: 32px 24px;
+/* Mobile: stack vertically */
+@media (max-width: 768px) {
+  .summary-modal__container {
+    grid-template-columns: 1fr;
+    width: 95%;
+    max-height: 95vh;
+    gap: 0;
   }
 
+  .summary-modal__card {
+    border-radius: 24px 24px 0 0;
+    max-height: 55vh;
+    padding: 24px 20px;
+  }
+
+  .summary-modal__transcript {
+    border-radius: 0 0 24px 24px;
+    max-height: 38vh;
+  }
+}
+
+@media (max-width: 480px) {
+  .summary-modal__card {
+    padding: 20px 16px;
+  }
+}
+
+/* Mobile adjustments for summary content */
+@media (max-width: 640px) {
   .summary-header h2 {
     font-size: 26px;
   }

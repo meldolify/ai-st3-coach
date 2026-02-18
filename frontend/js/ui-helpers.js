@@ -494,7 +494,7 @@ function showSummaryScreen(feedback, scenarioInfo) {
   console.log('[Summary] Showing summary screen with feedback:', feedback);
 
   // Get elements
-  const summaryPage = document.getElementById('sessionSummary');
+  const summaryPage = document.getElementById('sessionSummaryModal');
   const scoreCircle = document.getElementById('summaryScoreCircle');
   const scoreValue = document.getElementById('summaryScoreValue');
   const scoreLabel = document.getElementById('summaryScoreLabel');
@@ -504,7 +504,7 @@ function showSummaryScreen(feedback, scenarioInfo) {
   const summaryText = document.getElementById('summaryText');
 
   if (!summaryPage) {
-    console.error('[Summary] Summary page not found');
+    console.error('[Summary] Summary modal not found');
     return;
   }
 
@@ -573,13 +573,55 @@ function showSummaryScreen(feedback, scenarioInfo) {
     summaryText.textContent = feedback.summary || 'Session completed successfully.';
   }
 
-  // Hide all other pages and show summary
-  document.querySelectorAll('.page').forEach(page => {
-    page.classList.remove('active');
-    page.style.display = 'none';
-  });
+  // Populate transcript panel
+  const transcriptContent = document.getElementById('summaryTranscriptContent');
+  if (transcriptContent && window.transcript && window.transcript.messages) {
+    // Clear existing content
+    while (transcriptContent.firstChild) {
+      transcriptContent.removeChild(transcriptContent.firstChild);
+    }
 
-  summaryPage.style.display = 'flex';
+    // Get persona name for display
+    const personaName = typeof getPersonaName === 'function' ? getPersonaName() : 'Examiner';
+
+    // Show messages in chronological order (NOT reversed)
+    // Filter out feedback messages
+    const interviewMessages = window.transcript.messages.filter(msg =>
+      !(msg.role === 'ai' && msg.text && msg.text.startsWith('Feedback:'))
+    );
+
+    interviewMessages.forEach(msg => {
+      const msgDiv = document.createElement('div');
+      msgDiv.className = `transcript-message ${msg.role === 'user' ? 'message-user' : 'message-ai'}`;
+
+      const headerDiv = document.createElement('div');
+      headerDiv.className = 'message-header';
+
+      const roleSpan = document.createElement('span');
+      roleSpan.className = 'message-role';
+      roleSpan.textContent = msg.role === 'user' ? 'You' : personaName;
+
+      const timeSpan = document.createElement('span');
+      timeSpan.className = 'message-time';
+      timeSpan.textContent = msg.timestamp;
+
+      headerDiv.appendChild(roleSpan);
+      headerDiv.appendChild(timeSpan);
+
+      const textDiv = document.createElement('div');
+      textDiv.className = 'message-text';
+      textDiv.textContent = msg.text;
+
+      msgDiv.appendChild(headerDiv);
+      msgDiv.appendChild(textDiv);
+      transcriptContent.appendChild(msgDiv);
+    });
+
+    // Scroll to top
+    transcriptContent.scrollTop = 0;
+  }
+
+  // Show the modal overlay
   summaryPage.classList.add('active');
 
   // Wire up button handlers
@@ -590,13 +632,8 @@ function showSummaryScreen(feedback, scenarioInfo) {
   if (retryBtn) {
     retryBtn.onclick = () => {
       hideSummaryScreen();
-      // Re-enter simulation room with same scenario
-      // currentScenario is a global variable from state.js
       if (typeof startScenario === 'function' && typeof currentScenario !== 'undefined' && currentScenario) {
         startScenario(currentScenario);
-      } else {
-        // Fallback to showing simulation room
-        transitionToPage('sessionSummary', 'simulationRoom');
       }
     };
   }
@@ -604,28 +641,27 @@ function showSummaryScreen(feedback, scenarioInfo) {
   if (newScenarioBtn) {
     newScenarioBtn.onclick = () => {
       hideSummaryScreen();
-      transitionToPage('sessionSummary', 'scenarioSelection');
+      window.location.href = 'index.html#scenarioSelection';
     };
   }
 
   if (exitBtn) {
     exitBtn.onclick = () => {
       hideSummaryScreen();
-      transitionToPage('sessionSummary', 'specialtySelection');
+      window.location.href = 'index.html';
     };
   }
 
-  console.log('[Summary] Summary screen displayed');
+  console.log('[Summary] Summary modal displayed');
 }
 
 /**
  * Hide the summary screen
  */
 function hideSummaryScreen() {
-  const summaryPage = document.getElementById('sessionSummary');
-  if (summaryPage) {
-    summaryPage.classList.remove('active');
-    summaryPage.style.display = 'none';
+  const modal = document.getElementById('sessionSummaryModal');
+  if (modal) {
+    modal.classList.remove('active');
   }
 }
 
