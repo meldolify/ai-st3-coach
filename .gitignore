@@ -66,4 +66,15 @@ test-results/
 # Claude temporary working directories
 tmpclaude-*-cwd
 
+# Playwright MCP screenshots
+.playwright-mcp/
+
+# MCP config (local)
+.mcp.json
+
+# Misc screenshots
+*.png
+!frontend/**/*.png
+!frontend-react/**/*.png
+
 nul
