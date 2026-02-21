@@ -1,0 +1,299 @@
+/**
+ * Scenario data — categories, subcategories, and topics.
+ * Mirrors frontend/js/scenarios.js for the React sidebar.
+ */
+
+export const CATEGORIES = [
+  { id: 'clinical', name: 'Clinical Stations', icon: '🏥' },
+  { id: 'call-the-boss', name: 'Call-The-Boss', icon: '📞' },
+  { id: 'consent', name: 'Consent', icon: '📝' },
+  { id: 'structured', name: 'Structured Interview', icon: '📊' },
+]
+
+export const SUBCATEGORIES = {
+  clinical: [
+    { id: 'infections', name: 'Infections', icon: '🦠' },
+    { id: 'hand-trauma', name: 'Hand Trauma', icon: '🩹' },
+    { id: 'elective-hand', name: 'Elective Hand', icon: '✋' },
+    { id: 'skin-cancer', name: 'Skin Cancer', icon: '🔬' },
+    { id: 'chronic-wounds', name: 'Chronic Wounds', icon: '🩹' },
+    { id: 'breast-and-aesthetic', name: 'Breast & Aesthetics', icon: '💎' },
+    { id: 'burns', name: 'Burns', icon: '🔥' },
+    { id: 'lower-limb-trauma', name: 'Lower Limb Trauma', icon: '🦵' },
+    { id: 'paediatrics', name: 'Paediatrics', icon: '👶' },
+    { id: 'miscellaneous', name: 'Miscellaneous', icon: '📋' },
+  ],
+  'call-the-boss': [
+    { id: 'call-the-boss-scenarios', name: 'Scenarios', icon: '📞' },
+  ],
+  consent: [
+    { id: 'consent-hand-trauma', name: 'Hand Trauma', icon: '🩹' },
+    { id: 'consent-elective-hand', name: 'Elective Hand', icon: '✋' },
+    { id: 'consent-burn', name: 'Burn', icon: '🔥' },
+    { id: 'consent-lower-limb', name: 'Lower Limb', icon: '🦵' },
+    { id: 'consent-chronic-wounds', name: 'Chronic Wounds', icon: '🩹' },
+    { id: 'consent-skin-cancer', name: 'Skin Cancer', icon: '🔬' },
+    { id: 'consent-breast-and-aesthetic', name: 'Breast & Aesthetics', icon: '💎' },
+  ],
+  structured: [
+    { id: 'structured-audit', name: 'Audit', icon: '📊' },
+    { id: 'structured-research', name: 'Research', icon: '🔬' },
+    { id: 'structured-teaching', name: 'Teaching', icon: '📚' },
+    { id: 'structured-risk-and-safety', name: 'Risk & Safety', icon: '⚠️' },
+    { id: 'structured-leadership', name: 'Leadership & Management', icon: '👔' },
+    { id: 'structured-consent', name: 'Consent', icon: '📝' },
+    { id: 'structured-ethics', name: 'Ethics', icon: '⚖️' },
+    { id: 'structured-misc', name: 'Misc', icon: '📋' },
+  ],
+}
+
+// Topics: subcategoryId -> { title, topics: [[promptFile, displayName], ...] }
+export const TOPICS = {
+  infections: {
+    title: 'Infections',
+    topics: [
+      ['clinical/emergencies/necrotising_fasciitis', 'Necrotising Fasciitis'],
+      ['clinical/emergencies/flexor_sheath_infection', 'Flexor Sheath Infection'],
+      ['clinical/emergencies/palmar_space_infection', 'Palmar Space Infection'],
+      ['clinical/emergencies/hand_abscess', 'Hand Abscess'],
+      ['clinical/emergencies/bite_wounds', 'Bite Wounds'],
+      ['clinical/emergencies/septic_arthritis_hand', 'Septic Arthritis (Hand)'],
+    ],
+  },
+  'hand-trauma': {
+    title: 'Hand Trauma',
+    topics: [
+      ['clinical/hand_trauma/flexor_tendon_injury', 'Flexor Tendon Injury'],
+      ['clinical/hand_trauma/extensor_tendon_injury', 'Extensor Tendon Injury'],
+      ['clinical/hand_trauma/replantation', 'Replantation'],
+      ['clinical/hand_trauma/complex_hand_trauma', 'Complex Hand Trauma'],
+      ['clinical/hand_trauma/digital_nerve_injury', 'Digital Nerve Injury'],
+      ['clinical/hand_trauma/fingertip_amputation', 'Fingertip Amputation'],
+      ['clinical/hand_trauma/nail_bed_injury', 'Nail Bed Injury'],
+      ['clinical/hand_trauma/metacarpal_fracture', 'Metacarpal Fracture'],
+      ['clinical/hand_trauma/phalangeal_fracture', 'Phalangeal Fracture'],
+      ['clinical/hand_trauma/fracture_dislocations_hand', 'Fracture Dislocations (Hand)'],
+      ['clinical/hand_trauma/scaphoid_fracture', 'Scaphoid Fracture'],
+      ['clinical/hand_trauma/distal_radius_fracture', 'Distal Radius Fracture'],
+      ['clinical/hand_trauma/mallet_finger', 'Mallet Finger'],
+      ['clinical/hand_trauma/boutonniere_deformity', 'Boutonniere Deformity'],
+      ['clinical/hand_trauma/thumb_ulnar_collateral_ligament', 'Thumb UCL Injury'],
+    ],
+  },
+  'elective-hand': {
+    title: 'Elective Hand',
+    topics: [
+      ['clinical/elective_hand/carpal_tunnel_syndrome', 'Carpal Tunnel Syndrome'],
+      ['clinical/elective_hand/cubital_tunnel_syndrome', 'Cubital Tunnel Syndrome'],
+      ['clinical/elective_hand/dupuytrens_disease', "Dupuytren's Disease"],
+      ['clinical/elective_hand/trigger_finger', 'Trigger Finger'],
+      ['clinical/elective_hand/de_quervains_tenosynovitis', "De Quervain's Tenosynovitis"],
+      ['clinical/elective_hand/ganglion_cyst', 'Ganglion Cyst'],
+      ['clinical/elective_hand/mucous_cyst', 'Mucous Cyst'],
+      ['clinical/elective_hand/rheumatoid_hand', 'Rheumatoid Hand'],
+      ['clinical/elective_hand/osteoarthritis_hand', 'Osteoarthritis (Hand)'],
+      ['clinical/elective_hand/thumb_cmc_arthritis', 'Thumb CMC Arthritis'],
+      ['clinical/elective_hand/scaphoid_non_union', 'Scaphoid Non-Union'],
+      ['clinical/elective_hand/kienbocks_disease', "Kienbock's Disease"],
+      ['clinical/elective_hand/ulnar_impaction', 'Ulnar Impaction'],
+      ['clinical/elective_hand/madelungs_deformity', "Madelung's Deformity"],
+    ],
+  },
+  'skin-cancer': {
+    title: 'Skin Cancer',
+    topics: [
+      ['clinical/skin_cancer/basal_cell_carcinoma', 'Basal Cell Carcinoma (BCC)'],
+      ['clinical/skin_cancer/squamous_cell_carcinoma', 'Squamous Cell Carcinoma (SCC)'],
+      ['clinical/skin_cancer/melanoma', 'Melanoma'],
+      ['clinical/skin_cancer/merkel_cell_carcinoma', 'Merkel Cell Carcinoma'],
+      ['clinical/skin_cancer/dermatofibrosarcoma', 'Dermatofibrosarcoma'],
+      ['clinical/skin_cancer/soft_tissue_sarcoma', 'Soft Tissue Sarcoma'],
+      ['clinical/skin_cancer/skin_lesion_assessment', 'Skin Lesion Assessment'],
+      ['clinical/skin_cancer/moh_surgery_defects', 'Mohs Surgery Defects'],
+      ['clinical/skin_cancer/sentinel_lymph_node_biopsy', 'Sentinel Lymph Node Biopsy'],
+      ['clinical/skin_cancer/lymph_node_dissection', 'Lymph Node Dissection'],
+    ],
+  },
+  'chronic-wounds': {
+    title: 'Chronic Wounds',
+    topics: [
+      ['clinical/lower_limb/chronic_leg_ulcer', 'Chronic Leg Ulcer'],
+      ['clinical/lower_limb/pressure_sores', 'Pressure Sores'],
+      ['clinical/lower_limb/diabetic_foot', 'Diabetic Foot'],
+      ['clinical/lower_limb/osteomyelitis_lower_limb', 'Osteomyelitis (Lower Limb)'],
+    ],
+  },
+  'breast-and-aesthetic': {
+    title: 'Breast & Aesthetics',
+    topics: [
+      ['clinical/breast_and_aesthetic/breast_reduction', 'Breast Reduction'],
+      ['clinical/breast_and_aesthetic/breast_reconstruction', 'Breast Reconstruction (DIEP)'],
+      ['clinical/breast_and_aesthetic/mastopexy', 'Mastopexy'],
+      ['clinical/breast_and_aesthetic/gynaecomastia', 'Gynaecomastia'],
+      ['clinical/breast_and_aesthetic/rhinoplasty', 'Rhinoplasty'],
+      ['clinical/breast_and_aesthetic/blepharoplasty', 'Blepharoplasty'],
+      ['clinical/breast_and_aesthetic/abdominoplasty', 'Abdominoplasty'],
+      ['clinical/breast_and_aesthetic/otoplasty', 'Otoplasty'],
+      ['clinical/breast_and_aesthetic/liposuction', 'Liposuction'],
+      ['clinical/breast_and_aesthetic/brachioplasty', 'Brachioplasty'],
+      ['clinical/breast_and_aesthetic/thighplasty', 'Thighplasty'],
+      ['clinical/breast_and_aesthetic/capsular_contracture', 'Capsular Contracture'],
+      ['clinical/breast_and_aesthetic/implant_complications', 'Implant Complications'],
+      ['clinical/breast_and_aesthetic/fat_necrosis', 'Fat Necrosis'],
+      ['clinical/breast_and_aesthetic/lymphoedema', 'Lymphoedema'],
+    ],
+  },
+  burns: {
+    title: 'Burns',
+    topics: [
+      ['clinical/burns/acute_burn_assessment', 'Acute Burn Assessment'],
+      ['clinical/burns/major_burn', 'Major Burn'],
+      ['clinical/burns/chemical_burn', 'Chemical Burn'],
+      ['clinical/burns/electrical_burn', 'Electrical Burn'],
+      ['clinical/burns/inhalation_injury', 'Inhalation Injury'],
+      ['clinical/burns/paediatric_burn', 'Paediatric Burn'],
+      ['clinical/burns/burn_reconstruction', 'Burn Reconstruction'],
+      ['clinical/burns/toxic_epidermal_necrolysis', 'Toxic Epidermal Necrolysis'],
+    ],
+  },
+  'lower-limb-trauma': {
+    title: 'Lower Limb Trauma',
+    topics: [
+      ['clinical/lower_limb/open_tibial_fracture', 'Open Tibial Fracture'],
+      ['clinical/lower_limb/degloving_injury', 'Degloving Injury'],
+      ['clinical/lower_limb/compartment_syndrome', 'Compartment Syndrome'],
+      ['clinical/lower_limb/free_flap_lower_limb', 'Free Flap (Lower Limb)'],
+    ],
+  },
+  paediatrics: {
+    title: 'Paediatrics',
+    topics: [
+      ['clinical/paediatrics/cleft_lip_palate', 'Cleft Lip & Palate'],
+      ['clinical/paediatrics/syndactyly', 'Syndactyly'],
+      ['clinical/paediatrics/polydactyly', 'Polydactyly'],
+      ['clinical/paediatrics/prominent_ears', 'Prominent Ears'],
+      ['clinical/paediatrics/haemangioma', 'Haemangioma'],
+      ['clinical/paediatrics/vascular_malformation', 'Vascular Malformation'],
+      ['clinical/paediatrics/craniosynostosis', 'Craniosynostosis'],
+      ['clinical/paediatrics/hypospadias', 'Hypospadias'],
+      ['clinical/paediatrics/nai', 'Non-Accidental Injury'],
+    ],
+  },
+  miscellaneous: {
+    title: 'Miscellaneous',
+    topics: [
+      ['clinical/miscellaneous/facial_palsy', 'Facial Palsy'],
+      ['clinical/miscellaneous/facial_fracture', 'Facial Fracture'],
+      ['clinical/miscellaneous/brachial_plexus_injury', 'Brachial Plexus Injury'],
+      ['clinical/miscellaneous/nerve_transfer', 'Nerve Transfer'],
+      ['clinical/miscellaneous/tendon_transfer', 'Tendon Transfer'],
+      ['clinical/miscellaneous/microsurgery_free_flap', 'Microsurgery / Free Flap'],
+      ['clinical/miscellaneous/local_flaps', 'Local Flaps'],
+      ['clinical/miscellaneous/skin_graft', 'Skin Graft'],
+      ['clinical/miscellaneous/tissue_expansion', 'Tissue Expansion'],
+      ['clinical/miscellaneous/negative_pressure_wound_therapy', 'Negative Pressure Wound Therapy'],
+    ],
+  },
+  'call-the-boss-scenarios': {
+    title: 'Scenarios',
+    topics: [
+      ['call_the_boss/scenarios/major_burn', 'Major Burn'],
+      ['call_the_boss/scenarios/replantation_referral', 'Replantation Referral'],
+      ['call_the_boss/scenarios/necrotising_fasciitis_referral', 'Necrotising Fasciitis Referral'],
+      ['call_the_boss/scenarios/open_fracture_referral', 'Open Fracture Referral'],
+      ['call_the_boss/scenarios/free_flap_failure', 'Free Flap Failure'],
+      ['call_the_boss/scenarios/compartment_syndrome', 'Compartment Syndrome'],
+      ['call_the_boss/scenarios/paediatric_burn', 'Paediatric Burn'],
+      ['call_the_boss/scenarios/hand_infection', 'Hand Infection'],
+    ],
+  },
+  'consent-hand-trauma': {
+    title: 'Hand Trauma',
+    topics: [
+      ['consent/hand_surgery/flexor_tendon_repair_consent', 'Flexor Tendon Repair'],
+      ['consent/hand_surgery/extensor_tendon_repair_consent', 'Extensor Tendon Repair'],
+      ['consent/hand_surgery/orif_metacarpal_consent', 'ORIF Metacarpal'],
+      ['consent/hand_surgery/digital_nerve_repair_consent', 'Digital Nerve Repair'],
+    ],
+  },
+  'consent-elective-hand': {
+    title: 'Elective Hand',
+    topics: [
+      ['consent/hand_surgery/carpal_tunnel_release_consent', 'Carpal Tunnel Release'],
+      ['consent/hand_surgery/cubital_tunnel_release_consent', 'Cubital Tunnel Release'],
+      ['consent/hand_surgery/dupuytrens_fasciectomy_consent', "Dupuytren's Fasciectomy"],
+      ['consent/hand_surgery/trigger_finger_release_consent', 'Trigger Finger Release'],
+      ['consent/hand_surgery/ganglion_excision_consent', 'Ganglion Excision'],
+      ['consent/hand_surgery/trapeziectomy_consent', 'Trapeziectomy'],
+    ],
+  },
+  'consent-burn': {
+    title: 'Burn',
+    topics: [
+      ['consent/burn_surgery/burn_debridement_grafting_consent', 'Burn Debridement & Grafting'],
+      ['consent/burn_surgery/escharotomy_consent', 'Escharotomy'],
+    ],
+  },
+  'consent-lower-limb': {
+    title: 'Lower Limb',
+    topics: [
+      ['consent/lower_limb_surgery/free_flap_lower_limb_consent', 'Free Flap (Lower Limb)'],
+      ['consent/lower_limb_surgery/split_skin_graft_consent', 'Split Skin Graft'],
+    ],
+  },
+  'consent-chronic-wounds': {
+    title: 'Chronic Wounds',
+    topics: [
+      ['consent/chronic_wound_surgery/debridement_vac_consent', 'Debridement + VAC'],
+    ],
+  },
+  'consent-skin-cancer': {
+    title: 'Skin Cancer',
+    topics: [
+      ['consent/skin_cancer_surgery/wide_local_excision_consent', 'Wide Local Excision'],
+      ['consent/skin_cancer_surgery/slnb_consent', 'Sentinel Lymph Node Biopsy'],
+      ['consent/skin_cancer_surgery/lymph_node_dissection_consent', 'Lymph Node Dissection'],
+    ],
+  },
+  'consent-breast-and-aesthetic': {
+    title: 'Breast & Aesthetics',
+    topics: [
+      ['consent/breast_surgery/diep_flap_consent', 'DIEP Flap'],
+      ['consent/breast_surgery/breast_reduction_consent', 'Breast Reduction'],
+      ['consent/aesthetic_surgery/rhinoplasty_consent', 'Rhinoplasty'],
+      ['consent/aesthetic_surgery/abdominoplasty_consent', 'Abdominoplasty'],
+    ],
+  },
+  'structured-audit': {
+    title: 'Audit',
+    topics: [['structured_interview/audit/focused_interview', 'Focused Interview']],
+  },
+  'structured-research': {
+    title: 'Research',
+    topics: [['structured_interview/research/focused_interview', 'Focused Interview']],
+  },
+  'structured-teaching': {
+    title: 'Teaching',
+    topics: [['structured_interview/teaching/focused_interview', 'Focused Interview']],
+  },
+  'structured-risk-and-safety': {
+    title: 'Risk & Safety',
+    topics: [['structured_interview/risk_and_safety/focused_interview', 'Focused Interview']],
+  },
+  'structured-leadership': {
+    title: 'Leadership & Management',
+    topics: [['structured_interview/leadership/focused_interview', 'Focused Interview']],
+  },
+  'structured-consent': {
+    title: 'Consent',
+    topics: [['structured_interview/consent/focused_interview', 'Focused Interview']],
+  },
+  'structured-ethics': {
+    title: 'Ethics',
+    topics: [['structured_interview/ethics/focused_interview', 'Focused Interview']],
+  },
+  'structured-misc': {
+    title: 'Misc',
+    topics: [['structured_interview/miscellaneous/focused_interview', 'Focused Interview']],
+  },
+}
