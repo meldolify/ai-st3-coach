@@ -45,7 +45,6 @@ temp/
 # Build outputs
 dist/
 build/
-frontend/assets/
 
 # Testing
 coverage/
