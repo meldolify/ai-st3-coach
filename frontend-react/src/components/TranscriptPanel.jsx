@@ -3,19 +3,18 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { cn } from '../lib/utils'
 
 /**
- * TranscriptPanel — Dominant right panel showing conversation transcript.
- * Solid white background, auto-scrolling, iMessage-inspired layout.
- * Supports streaming text with typing cursor during AI response chunks.
+ * TranscriptPanel — Conversation transcript panel.
+ * Auto-scrolling, messages appear only on ai_response_end (no streaming text).
  */
-export default function TranscriptPanel({ messages, streamingText, personaName = 'Examiner' }) {
+export default function TranscriptPanel({ messages, personaName = 'Examiner' }) {
   const scrollRef = useRef(null)
 
-  // Auto-scroll to bottom on new messages or streaming updates
+  // Auto-scroll to bottom on new messages
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight
     }
-  }, [messages, streamingText])
+  }, [messages])
 
   const formatTimestamp = (ts) => {
     const date = new Date(ts)
@@ -45,12 +44,11 @@ export default function TranscriptPanel({ messages, streamingText, personaName =
   return (
     <div
       className={cn(
-        'flex flex-col h-full bg-bg-elevated rounded-lg',
-        'border border-bg-secondary'
+        'flex flex-col h-full rounded-2xl glass-panel'
       )}
     >
       {/* Panel header */}
-      <div className="flex items-center justify-between px-5 py-3 border-b border-bg-secondary">
+      <div className="flex items-center justify-between px-5 py-3 border-b border-black/5">
         <h2 className="text-[13px] font-medium text-text-secondary uppercase tracking-wider">
           Transcript
         </h2>
@@ -67,7 +65,7 @@ export default function TranscriptPanel({ messages, streamingText, personaName =
         aria-label="Interview transcript"
         className="flex-1 overflow-y-auto px-5 py-4 custom-scrollbar"
       >
-        {messages.length === 0 && !streamingText && (
+        {messages.length === 0 && (
           <div className="flex items-center justify-center h-full">
             <p className="text-text-muted text-sm">
               Conversation will appear here once the session starts.
@@ -121,41 +119,6 @@ export default function TranscriptPanel({ messages, streamingText, personaName =
           ))}
         </AnimatePresence>
 
-        {/* Streaming text — appears during AI response chunks */}
-        {streamingText !== null && (
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.2 }}
-            className="mb-4"
-          >
-            <div className="flex items-center gap-2 mb-1.5">
-              <span className="text-[11px] font-medium text-text-muted">
-                {personaName}
-              </span>
-              <span className="text-[11px] text-text-muted">
-                typing...
-              </span>
-            </div>
-            <div
-              className={cn(
-                'max-w-[85%] rounded-lg px-4 py-2.5 text-[15px] leading-relaxed',
-                'bg-bg-secondary text-text-primary border-l-2 border-accent-light'
-              )}
-            >
-              {streamingText || (
-                <span className="inline-flex gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-text-muted animate-pulse" style={{ animationDelay: '0ms' }} />
-                  <span className="w-1.5 h-1.5 rounded-full bg-text-muted animate-pulse" style={{ animationDelay: '150ms' }} />
-                  <span className="w-1.5 h-1.5 rounded-full bg-text-muted animate-pulse" style={{ animationDelay: '300ms' }} />
-                </span>
-              )}
-              {streamingText && (
-                <span className="inline-block w-0.5 h-4 bg-accent ml-0.5 animate-pulse align-text-bottom" />
-              )}
-            </div>
-          </motion.div>
-        )}
       </div>
     </div>
   )

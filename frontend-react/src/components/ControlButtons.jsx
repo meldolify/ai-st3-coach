@@ -2,15 +2,19 @@ import { motion } from 'framer-motion'
 import { cn } from '../lib/utils'
 
 /**
- * ControlButtons — Start/Pause/End session controls.
- * Animated with Framer Motion. Connect button has pulse animation when idle.
+ * ControlButtons — Start/Interrupt/End session controls.
+ * Interrupt button shows during AI speaking with amber pulse animation.
  */
 export default function ControlButtons({
   isConnected,
   isConnecting,
+  orbState,
   onConnect,
+  onInterrupt,
   onEnd,
 }) {
+  const isAISpeaking = orbState === 'speaking'
+
   return (
     <div className="flex items-center justify-center gap-3">
       {!isConnected ? (
@@ -48,6 +52,29 @@ export default function ControlButtons({
         </motion.button>
       ) : (
         <>
+          {/* Interrupt button — visible only during AI speaking */}
+          {isAISpeaking && (
+            <motion.button
+              onClick={onInterrupt}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className={cn(
+                'p-2.5 rounded-md text-[13px] font-medium',
+                'border border-amber-400/30 text-amber-400',
+                'hover:bg-amber-400/10 transition-colors',
+                'animate-[interrupt-amber-pulse_1.5s_ease-in-out_infinite]'
+              )}
+              whileTap={{ scale: 0.95 }}
+              title="Pause AI"
+              aria-label="Pause AI"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M6 4h4v16H6zM14 4h4v16h-4z" />
+              </svg>
+            </motion.button>
+          )}
+
           <motion.button
             onClick={onEnd}
             className={cn(

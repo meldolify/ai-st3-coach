@@ -3,17 +3,17 @@
 @import "tailwindcss";
 
 /* ============================================================================
-   DESIGN TOKENS — "Clinical Clarity" Theme
+   DESIGN TOKENS — Vanilla-faithful theme
    Tailwind v4 CSS-first configuration
    ============================================================================ */
 
 @theme {
-  /* Backgrounds — bright and airy */
+  /* Backgrounds */
   --color-bg-primary: #FAFBFC;
   --color-bg-secondary: #F4F5F7;
   --color-bg-elevated: #FFFFFF;
 
-  /* Text — readable, not harsh */
+  /* Text */
   --color-text-primary: #111827;
   --color-text-secondary: #6B7280;
   --color-text-muted: #737B8B;
@@ -23,10 +23,10 @@
   --color-accent-light: #E8EDEA;
   --color-accent-hover: #3D4E3F;
 
-  /* Semantic states */
-  --color-listening: #059669;
-  --color-speaking: #D97706;
-  --color-thinking: #4F46E5;
+  /* Semantic states (vanilla: teal/amber/indigo) */
+  --color-listening: #10B981;
+  --color-speaking: #F59E0B;
+  --color-thinking: #6366F1;
   --color-error: #DC2626;
 
   /* Fonts */
@@ -52,10 +52,6 @@
   --header-height: 56px;
   --mobile-dock-height: 120px;
 }
-
-/* ============================================================================
-   FONT IMPORTS
-   ============================================================================ */
 
 /* ============================================================================
    BASE STYLES
@@ -95,30 +91,57 @@ body {
 }
 
 /* ============================================================================
-   ANIMATED GRADIENT BACKGROUND
+   PERSONA BACKDROP — Sage green radial gradient (vanilla sim-main)
    ============================================================================ */
 
-@property --gradient-angle {
-  syntax: '<angle>';
-  initial-value: 0deg;
-  inherits: false;
-}
-
-@keyframes gradient-rotate {
-  0% { --gradient-angle: 0deg; }
-  100% { --gradient-angle: 360deg; }
-}
-
-.animated-bg {
-  background: conic-gradient(
-    from var(--gradient-angle),
-    #FAFBFC 0%,
-    #F0F4F8 25%,
-    #F5F7F2 50%,
-    #F0F4F8 75%,
-    #FAFBFC 100%
+.persona-backdrop {
+  background: radial-gradient(
+    ellipse 80% 70% at 50% 50%,
+    #5C6F5E 0%,
+    #4A5D4C 40%,
+    #3E4F40 70%,
+    #354536 100%
   );
-  animation: gradient-rotate 45s linear infinite;
+}
+
+/* ============================================================================
+   GLASS-MORPHISM PANELS — Light glass (vanilla float-panel / info-badge)
+   ============================================================================ */
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.05),
+    0 10px 15px -3px rgba(0, 0, 0, 0.08),
+    0 20px 25px -5px rgba(0, 0, 0, 0.04),
+    inset 0 1px 1px rgba(255, 255, 255, 0.8);
+}
+
+/* ============================================================================
+   MOBILE DARK GLASS — Dark sage backdrop (vanilla mobile-sim-header / dock)
+   ============================================================================ */
+
+.mobile-glass-dark {
+  background: rgba(42, 56, 44, 0.96);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* ============================================================================
+   AI STATUS BUBBLE — Dark glass pill (vanilla ai-status-bubble)
+   ============================================================================ */
+
+.ai-status-bubble {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 10px 20px;
+  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  min-width: 140px;
 }
 
 /* ============================================================================
@@ -140,4 +163,13 @@ body {
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background-color: var(--color-text-secondary);
+}
+
+/* ============================================================================
+   KEYFRAME ANIMATIONS
+   ============================================================================ */
+
+@keyframes interrupt-amber-pulse {
+  0%, 100% { box-shadow: 0 0 12px rgba(251, 191, 36, 0.2); }
+  50% { box-shadow: 0 0 20px rgba(251, 191, 36, 0.35); }
 }

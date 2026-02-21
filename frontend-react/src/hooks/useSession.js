@@ -32,8 +32,6 @@ export function useSession({ orbVisualizerRef }) {
 
   // Transcript messages: { id, speaker: 'user' | 'ai', text, timestamp }
   const [messages, setMessages] = useState([])
-  // Streaming text shown word-by-word during AI response chunks
-  const [streamingText, setStreamingText] = useState(null)
 
   // Refs for mutable state that doesn't trigger re-renders
   const wsRef = useRef(null)
@@ -44,6 +42,8 @@ export function useSession({ orbVisualizerRef }) {
   const speechStartAtRef = useRef(null)
   const feedbackResolveRef = useRef(null)
   const messageIdRef = useRef(0)
+  const sessionIdRef = useRef(null)
+  const inFeedbackModeRef = useRef(false)
 
   // Clean up on unmount
   useEffect(() => {
@@ -80,24 +80,25 @@ export function useSession({ orbVisualizerRef }) {
   const handleResponseComplete = useCallback(() => {
     audioStreamerRef.current.setAISpeaking(false)
 
-    if (wsRef.current?.readyState === WebSocket.OPEN && sessionId) {
+    if (wsRef.current?.readyState === WebSocket.OPEN && sessionIdRef.current) {
       wsRef.current.send(
-        JSON.stringify({ type: 'ai_finished', sessionId })
+        JSON.stringify({ type: 'ai_finished', sessionId: sessionIdRef.current })
       )
     }
 
     setTimeout(() => {
-      if (!inFeedbackMode && !audioPlayerRef.current.isPlaying) {
+      if (!inFeedbackModeRef.current && !audioPlayerRef.current.isPlaying) {
         setOrbState('listening')
         setStatusText('Listening')
       }
     }, 500)
-  }, [sessionId, inFeedbackMode])
+  }, [])
 
   const handleMessage = useCallback(
     (msg) => {
       switch (msg.type) {
         case 'scenario_loaded':
+          sessionIdRef.current = msg.sessionId
           setSessionId(msg.sessionId)
           audioStreamerRef.current.setSessionId(msg.sessionId)
           setStatusText('Ready')
@@ -118,7 +119,6 @@ export function useSession({ orbVisualizerRef }) {
           serverStreamActiveRef.current = true
           audioStreamerRef.current.setAISpeaking(true)
           streamedFullTextRef.current = ''
-          setStreamingText('')
           setOrbState('speaking')
           setStatusText('Speaking')
           break
@@ -130,14 +130,12 @@ export function useSession({ orbVisualizerRef }) {
           const updated =
             (streamedFullTextRef.current || '') + (streamedFullTextRef.current ? ' ' : '') + msg.text
           streamedFullTextRef.current = updated
-          setStreamingText(updated.trim())
           audioPlayerRef.current.queueBase64Audio(msg.audio)
           break
         }
 
         case 'ai_response_end': {
           serverStreamActiveRef.current = false
-          setStreamingText(null)
           const fullText =
             msg.fullText || (streamedFullTextRef.current || '').trim()
           if (fullText) {
@@ -162,12 +160,14 @@ export function useSession({ orbVisualizerRef }) {
           break
 
         case 'feedback_processing':
+          inFeedbackModeRef.current = true
           setInFeedbackMode(true)
           setOrbState('thinking')
           setStatusText(getRandomProcessingMessage())
           break
 
         case 'feedback_response':
+          inFeedbackModeRef.current = true
           setInFeedbackMode(true)
           audioStreamerRef.current.setAISpeaking(true)
           addMessage('ai', `Feedback: ${msg.text}`)
@@ -185,7 +185,6 @@ export function useSession({ orbVisualizerRef }) {
 
         case 'interrupt':
           serverStreamActiveRef.current = false
-          setStreamingText(null)
           audioPlayerRef.current.interrupt()
           setOrbState('listening')
           break
@@ -215,6 +214,22 @@ export function useSession({ orbVisualizerRef }) {
       let wsUrl = CONFIG.BACKEND_URL + '?scenario=' + promptFile
       if (difficulty) wsUrl += '&difficulty=' + difficulty
       if (voice) wsUrl += '&voice=' + voice
+
+      // Add userId and auth token for server-side tier validation
+      if (window.currentUser?.id) {
+        wsUrl += '&userId=' + encodeURIComponent(window.currentUser.id)
+      }
+      if (window.supabaseClient) {
+        try {
+          const { data } = await window.supabaseClient.auth.getSession()
+          const token = data?.session?.access_token
+          if (token) {
+            wsUrl += '&token=' + encodeURIComponent(token)
+          }
+        } catch (err) {
+          console.warn('[useSession] Could not get auth token:', err)
+        }
+      }
 
       return new Promise((resolve, reject) => {
         const ws = new WebSocket(wsUrl)
@@ -265,14 +280,26 @@ export function useSession({ orbVisualizerRef }) {
     setStatusText('Listening')
   }, [handleResponseComplete])
 
+  const sendInterrupt = useCallback(() => {
+    if (!audioPlayerRef.current.isPlaying) return
+    audioPlayerRef.current.interrupt()
+    if (wsRef.current?.readyState === WebSocket.OPEN && sessionIdRef.current) {
+      wsRef.current.send(
+        JSON.stringify({ type: 'user_speaking', sessionId: sessionIdRef.current })
+      )
+    }
+    setOrbState('listening')
+    setStatusText('Listening')
+  }, [])
+
   const sendEndInterview = useCallback(() => {
     if (!wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) return
     audioStreamerRef.current.setAISpeaking(true)
     audioPlayerRef.current.interrupt()
     wsRef.current.send(
-      JSON.stringify({ type: 'end_interview', sessionId })
+      JSON.stringify({ type: 'end_interview', sessionId: sessionIdRef.current })
     )
-  }, [sessionId])
+  }, [])
 
   const requestFeedback = useCallback(() => {
     if (!wsRef.current || wsRef.current.readyState !== WebSocket.OPEN)
@@ -282,10 +309,10 @@ export function useSession({ orbVisualizerRef }) {
       feedbackResolveRef.current = resolve
 
       wsRef.current.send(
-        JSON.stringify({ type: 'request_feedback', sessionId })
+        JSON.stringify({ type: 'request_feedback', sessionId: sessionIdRef.current })
       )
     })
-  }, [sessionId])
+  }, [])
 
   const disconnect = useCallback(() => {
     audioStreamerRef.current.destroy()
@@ -294,11 +321,13 @@ export function useSession({ orbVisualizerRef }) {
       wsRef.current.close()
       wsRef.current = null
     }
+    sessionIdRef.current = null
+    inFeedbackModeRef.current = false
     setIsConnected(false)
     setSessionId(null)
+    setInFeedbackMode(false)
     setOrbState('idle')
     setStatusText('')
-    setStreamingText(null)
   }, [])
 
   return {
@@ -307,10 +336,10 @@ export function useSession({ orbVisualizerRef }) {
     orbState,
     statusText,
     messages,
-    streamingText,
     inFeedbackMode,
     connect,
     startListening,
+    sendInterrupt,
     sendEndInterview,
     requestFeedback,
     disconnect,

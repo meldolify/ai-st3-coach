@@ -27,9 +27,8 @@ export default function ClinicalImageCard({ imageFile, scenarioTitle, onExpand, 
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.3, delay: 0.1 }}
       className={cn(
-        'rounded-lg overflow-hidden cursor-pointer group',
-        'shadow-card hover:shadow-lg transition-shadow duration-200',
-        'bg-bg-elevated border border-bg-secondary'
+        'rounded-2xl overflow-hidden cursor-pointer group',
+        'glass-panel hover:shadow-lg transition-shadow duration-200'
       )}
       onClick={() => onExpand?.(imageSrc)}
       onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onExpand?.(imageSrc) } }}
