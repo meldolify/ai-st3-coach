@@ -42,9 +42,10 @@ tmp/
 temp/
 *.tmp
 
-# Build outputs (if you add a build process later)
+# Build outputs
 dist/
 build/
+frontend/assets/
 
 # Testing
 coverage/

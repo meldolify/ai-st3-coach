@@ -10,6 +10,13 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  build: {
+    outDir: '../frontend',
+    emptyOutDir: false,
+    rollupOptions: {
+      input: path.resolve(__dirname, 'simulation.html'),
+    },
+  },
   server: {
     port: 3001,
     proxy: {
