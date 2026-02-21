@@ -80,13 +80,13 @@ export class OrbVisualizer {
   getStateColor() {
     switch (this.currentState) {
       case 'speaking':
-        return { r: 217, g: 119, b: 6 } // Amber
+        return { r: 245, g: 158, b: 11 } // Amber
       case 'listening':
-        return { r: 5, g: 150, b: 105 } // Emerald
+        return { r: 16, g: 185, b: 129 } // Teal
       case 'thinking':
-        return { r: 79, g: 70, b: 229 } // Indigo
+        return { r: 99, g: 102, b: 241 } // Indigo
       default:
-        return { r: 74, g: 93, b: 76 } // Sage (idle)
+        return { r: 184, g: 140, b: 90 } // Copper (idle)
     }
   }
 

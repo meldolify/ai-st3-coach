@@ -44,13 +44,33 @@ export default function SimulationRoom() {
     orbState,
     statusText,
     messages,
-    streamingText,
     connect,
     startListening,
+    sendInterrupt,
     sendEndInterview,
     requestFeedback,
     disconnect,
   } = useSession({ orbVisualizerRef: orbRef })
+
+  // Beforeunload warning during active session
+  useEffect(() => {
+    if (!isConnected) return
+    const handler = (e) => {
+      e.preventDefault()
+      e.returnValue = ''
+    }
+    window.addEventListener('beforeunload', handler)
+    return () => window.removeEventListener('beforeunload', handler)
+  }, [isConnected])
+
+  // Access control check on mount
+  useEffect(() => {
+    if (scenario.promptFile && typeof window.canAccessScenario === 'function') {
+      if (!window.canAccessScenario(scenario.promptFile)) {
+        window.location.href = '/index.html#accessDenied'
+      }
+    }
+  }, [scenario.promptFile])
 
   // Escape key handling for modals
   useEscapeKey(
@@ -154,33 +174,12 @@ export default function SimulationRoom() {
     [isConnected, disconnect, params]
   )
 
-  // Animation variants
-  const stagger = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: { staggerChildren: 0.1 },
-    },
-  }
-
-  const fadeUp = {
-    hidden: { opacity: 0, y: 12 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.3, ease: 'easeOut' } },
-  }
+  // Resolve persona image for backdrop
+  const personaImageSrc = persona.imageWide || persona.image
 
   return (
-    <div className="h-screen flex flex-col overflow-hidden animated-bg">
-      {/* Header */}
-      <Header
-        scenario={scenario}
-        difficulty={difficulty}
-        timeLimit={params?.mockExam?.isActive ? 480 : 300}
-        isConnected={isConnected}
-        onExit={handleExit}
-        onToggleSidebar={() => setSidebarOpen((prev) => !prev)}
-      />
-
-      {/* Sidebar */}
+    <div className="h-screen flex overflow-hidden">
+      {/* Sidebar — desktop: inline collapsed/hover-expand. Mobile: overlay drawer */}
       <Sidebar
         currentPromptFile={scenario.promptFile}
         isOpen={sidebarOpen}
@@ -188,121 +187,174 @@ export default function SimulationRoom() {
         onSelectScenario={handleSelectScenario}
       />
 
-      {/* Single <main> wrapper — contains both desktop and mobile layout variants */}
-      <main className="flex-1 overflow-hidden flex flex-col">
-        {/* ======================== DESKTOP LAYOUT ======================== */}
-        <motion.section
-          variants={stagger}
-          initial="hidden"
-          animate="show"
-          aria-label="Simulation room desktop layout"
-          className={cn(
-            'flex-1 overflow-hidden',
-            'hidden lg:grid lg:ml-16 lg:grid-cols-[minmax(320px,_2fr)_minmax(400px,_3fr)] lg:gap-4 lg:p-4'
-          )}
-        >
-          {/* Center stage: Clinical image + Persona + Orb + Controls */}
+      {/* ======================== DESKTOP LAYOUT ======================== */}
+      <div className="hidden lg:flex flex-col flex-1 ml-16">
+        {/* Slim header — desktop only */}
+        <Header
+          scenario={scenario}
+          difficulty={difficulty}
+          timeLimit={params?.mockExam?.isActive ? 480 : 300}
+          isConnected={isConnected}
+          onExit={handleExit}
+          onToggleSidebar={() => setSidebarOpen((prev) => !prev)}
+        />
+
+        {/* Main content area — persona backdrop with floating elements */}
+        <main className="flex-1 relative overflow-hidden">
+          {/* Persona backdrop — sage gradient + centered persona image */}
+          <div className="absolute inset-0 persona-backdrop">
+            {personaImageSrc && (
+              <img
+                src={personaImageSrc}
+                alt={persona.name}
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[88%] max-w-[92%] object-contain z-[2] drop-shadow-[0_8px_16px_rgba(0,0,0,0.25)] drop-shadow-[0_20px_40px_rgba(0,0,0,0.2)]"
+              />
+            )}
+            {/* Vignette overlay */}
+            <div className="absolute inset-0 z-[3] pointer-events-none" style={{
+              background: 'radial-gradient(ellipse 90% 80% at 50% 50%, transparent 60%, rgba(0,0,0,0.03) 100%)'
+            }} />
+          </div>
+
+          {/* Info badge — floating top-left glass card */}
           <motion.div
-            variants={fadeUp}
-            className="flex flex-col gap-4 overflow-y-auto custom-scrollbar"
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.2 }}
+            className="absolute top-6 left-6 z-10 glass-panel px-5 py-4 min-w-[200px] rounded-2xl"
           >
+            <p className="font-display text-[17px] text-text-primary">{persona.name}</p>
+            <p className="text-[13px] text-text-secondary mt-0.5">{persona.title}</p>
+            <div className="h-px my-2.5" style={{ background: 'linear-gradient(to right, rgba(74,93,76,0.3), transparent)' }} />
+            <p className="text-[14px] text-text-primary font-medium truncate max-w-[240px]">{scenario.title}</p>
+            {scenario.category && (
+              <p className="text-[12px] text-text-muted mt-1 capitalize">
+                {scenario.category.replace(/\//g, ' · ')}
+                {difficulty && ` · ${difficulty}`}
+              </p>
+            )}
+          </motion.div>
+
+          {/* Floating panels — right side: clinical image + transcript */}
+          <div className="absolute top-20 right-5 bottom-[220px] w-[340px] flex flex-col gap-5 z-20 pointer-events-none">
+            {/* Clinical image panel */}
+            {scenario.imageFile && (
+              <motion.div
+                initial={{ opacity: 0, x: 12 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4, delay: 0.3 }}
+                className="shrink-0 pointer-events-auto"
+              >
+                <ClinicalImageCard
+                  imageFile={scenario.imageFile}
+                  scenarioTitle={scenario.title}
+                  onExpand={(src) => setExpandedImage(src)}
+                />
+              </motion.div>
+            )}
+
+            {/* Transcript panel */}
+            <motion.div
+              initial={{ opacity: 0, x: 12 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.4, delay: 0.4 }}
+              className="flex-1 min-h-[200px] max-h-[400px] pointer-events-auto"
+            >
+              <TranscriptPanel messages={messages} personaName={persona.name} />
+            </motion.div>
+          </div>
+
+          {/* Orb + Controls — centered bottom */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="absolute bottom-[100px] left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-4 overflow-visible"
+          >
+            {/* AI status bubble */}
+            {statusText && (
+              <motion.div
+                key={statusText}
+                initial={{ opacity: 0, y: 4 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="ai-status-bubble text-[13px] text-white/90 font-medium text-center"
+              >
+                {statusText}
+              </motion.div>
+            )}
+
+            <VoiceOrb ref={orbRef} state={orbState} size={120} />
+
+            <ControlButtons
+              isConnected={isConnected}
+              isConnecting={isConnecting}
+              orbState={orbState}
+              onConnect={handleConnect}
+              onInterrupt={sendInterrupt}
+              onEnd={handleEnd}
+            />
+          </motion.div>
+        </main>
+      </div>
+
+      {/* ======================== MOBILE LAYOUT ======================== */}
+      <div className="lg:hidden flex flex-col fixed inset-0">
+        {/* Dark glass header */}
+        <header className="h-14 px-3 flex items-center justify-between shrink-0 z-[200] mobile-glass-dark border-b border-white/[0.08]">
+          <button
+            onClick={() => setSidebarOpen((prev) => !prev)}
+            className="w-11 h-11 flex items-center justify-center text-white/80 hover:text-white"
+            aria-label="Toggle sidebar"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M3 12h18" /><path d="M3 6h18" /><path d="M3 18h18" />
+            </svg>
+          </button>
+          <div className="flex-1 min-w-0 mx-3 text-center">
+            <p className="text-[14px] text-white font-medium truncate">{scenario.title}</p>
+            {scenario.category && (
+              <p className="text-[11px] text-white/60 capitalize truncate">{scenario.category.replace(/\//g, ' · ')}</p>
+            )}
+          </div>
+          <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-[13px] font-medium" style={{ backgroundColor: persona.accentColor || '#4A5D4C' }}>
+            {persona.name?.charAt(0) || '?'}
+          </div>
+        </header>
+
+        {/* Scrollable content — dark glass panels */}
+        <div className="flex-1 overflow-y-auto p-3 flex flex-col gap-3">
+          {/* Clinical image */}
+          {scenario.imageFile && (
             <ClinicalImageCard
               imageFile={scenario.imageFile}
               scenarioTitle={scenario.title}
               onExpand={(src) => setExpandedImage(src)}
+              compact
             />
-            <PersonaCard persona={persona} />
-
-            {/* Voice Orb + Controls */}
-            <motion.div
-              variants={fadeUp}
-              className="flex flex-col items-center gap-4 py-4 flex-1 justify-center"
-            >
-              <VoiceOrb ref={orbRef} state={orbState} size={160} />
-              {statusText && (
-                <motion.p
-                  key={statusText}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="text-[13px] text-text-secondary font-medium"
-                >
-                  {statusText}
-                </motion.p>
-              )}
-              <ControlButtons
-                isConnected={isConnected}
-                isConnecting={isConnecting}
-                onConnect={handleConnect}
-                onEnd={handleEnd}
-              />
-            </motion.div>
-          </motion.div>
-
-          {/* Transcript panel — dominant right column */}
-          <motion.div variants={fadeUp} className="min-h-0">
-            <TranscriptPanel messages={messages} streamingText={streamingText} personaName={persona.name} />
-          </motion.div>
-        </motion.section>
-
-        {/* ======================== MOBILE LAYOUT ======================== */}
-        <motion.section
-          variants={stagger}
-          initial="hidden"
-          animate="show"
-          aria-label="Simulation room mobile layout"
-          className={cn(
-            'flex-1 flex flex-col overflow-hidden',
-            'lg:hidden',
-            'pb-[var(--mobile-dock-height)]'
           )}
-        >
-          {/* Clinical image at top — 200px on mobile */}
-          {scenario.imageFile && (
-            <motion.div variants={fadeUp} className="shrink-0 px-3 pt-3">
-              <ClinicalImageCard
-                imageFile={scenario.imageFile}
-                scenarioTitle={scenario.title}
-                onExpand={(src) => setExpandedImage(src)}
-                compact
-              />
-            </motion.div>
-          )}
+          {/* Transcript */}
+          <div className="flex-1 min-h-[200px]">
+            <TranscriptPanel messages={messages} personaName={persona.name} />
+          </div>
+        </div>
 
-          {/* Transcript fills remaining space */}
-          <motion.div variants={fadeUp} className="flex-1 min-h-0 px-3 pt-3">
-            <TranscriptPanel messages={messages} streamingText={streamingText} personaName={persona.name} />
-          </motion.div>
-        </motion.section>
-      </main>
-
-      {/* Mobile bottom dock — fixed, always visible */}
-      <div
-        className={cn(
-          'fixed bottom-0 left-0 right-0 z-30',
-          'bg-bg-elevated/95 backdrop-blur-sm border-t border-bg-secondary',
-          'flex items-center justify-center gap-4 px-4 py-3',
-          'lg:hidden'
-        )}
-        style={{ height: 'var(--mobile-dock-height)' }}
-      >
-        <div className="flex flex-col items-center gap-2">
-          <div className="flex items-center gap-4">
-            {/* Mobile orb — 80px, no audio ref (desktop orb drives audio viz) */}
-            <VoiceOrb state={orbState} size={80} />
-
-            <div className="flex flex-col items-center gap-1.5">
+        {/* Fixed bottom dock — dark glass */}
+        <div className="relative z-[200] flex flex-col items-center gap-3 px-5 py-7 pb-[calc(16px+env(safe-area-inset-bottom))] mobile-glass-dark border-t border-white/[0.08] overflow-visible">
+          <div className="flex items-center gap-5">
+            <div className="flex flex-col items-center gap-1">
+              <VoiceOrb state={orbState} size={64} />
               {statusText && (
-                <p className="text-[12px] text-text-secondary font-medium">
-                  {statusText}
-                </p>
+                <p className="text-[11px] text-white/70 font-medium">{statusText}</p>
               )}
-              <ControlButtons
-                isConnected={isConnected}
-                isConnecting={isConnecting}
-                onConnect={handleConnect}
-                onEnd={handleEnd}
-              />
             </div>
+            <ControlButtons
+              isConnected={isConnected}
+              isConnecting={isConnecting}
+              orbState={orbState}
+              onConnect={handleConnect}
+              onInterrupt={sendInterrupt}
+              onEnd={handleEnd}
+            />
           </div>
         </div>
       </div>
@@ -356,7 +408,7 @@ export default function SimulationRoom() {
             initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-            className="bg-bg-elevated rounded-xl p-6 max-w-lg w-full shadow-xl max-h-[80vh] overflow-y-auto"
+            className="glass-panel rounded-xl p-6 max-w-lg w-full shadow-xl max-h-[80vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <h2 className="font-display text-xl text-text-primary mb-4">

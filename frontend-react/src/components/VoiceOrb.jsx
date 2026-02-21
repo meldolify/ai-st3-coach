@@ -37,20 +37,20 @@ const VoiceOrb = forwardRef(function VoiceOrb({ state = 'idle', size = 160 }, re
     }
   }, [state])
 
-  // State-based glow color
+  // State-based glow color (vanilla: copper/teal/amber/indigo)
   const glowColor = {
-    idle: 'rgba(74, 93, 76, 0.15)',
-    listening: 'rgba(5, 150, 105, 0.2)',
-    speaking: 'rgba(217, 119, 6, 0.2)',
-    thinking: 'rgba(79, 70, 229, 0.2)',
+    idle: 'rgba(184, 140, 90, 0.2)',
+    listening: 'rgba(16, 185, 129, 0.25)',
+    speaking: 'rgba(245, 158, 11, 0.25)',
+    thinking: 'rgba(99, 102, 241, 0.25)',
   }
 
   // State-based ring color for the CSS backdrop
   const ringColor = {
-    idle: '#4A5D4C',
-    listening: '#059669',
-    speaking: '#D97706',
-    thinking: '#4F46E5',
+    idle: '#B88C5A',
+    listening: '#10B981',
+    speaking: '#F59E0B',
+    thinking: '#6366F1',
   }
 
   const canvasSize = 280

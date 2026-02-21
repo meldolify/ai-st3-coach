@@ -75,7 +75,7 @@ export default function Sidebar({
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         className={cn(
-          'fixed top-[56px] left-0 bottom-0 z-40',
+          'fixed top-0 left-0 bottom-0 z-40',
           'bg-bg-elevated border-r border-bg-secondary',
           'flex flex-col overflow-hidden',
           // Desktop: slim collapsed, expand on hover
