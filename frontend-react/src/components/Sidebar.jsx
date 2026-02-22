@@ -4,14 +4,12 @@ import { cn } from '../lib/utils'
 import { CATEGORIES, SUBCATEGORIES, TOPICS } from '../data/scenarios'
 
 /**
- * Sidebar — Collapsible scenario navigation with persona card.
+ * Sidebar — Collapsible scenario navigation.
  * Desktop: 64px collapsed (icons only), 280px expanded on hover.
  * Mobile: Full overlay drawer.
  */
 export default function Sidebar({
   currentPromptFile,
-  persona,
-  difficulty,
   isOpen,
   onToggle,
   onSelectScenario,
@@ -54,9 +52,6 @@ export default function Sidebar({
 
   const isExpanded = isOpen || isHovered
 
-  const difficultyLabel = { easy: 'Friendly', medium: 'Standard', strict: 'Strict' }
-  const difficultyColor = { easy: '#10B981', medium: '#F59E0B', strict: '#EF4444' }
-
   return (
     <>
       {/* Mobile overlay backdrop */}
@@ -89,48 +84,6 @@ export default function Sidebar({
         }}
         transition={{ type: 'spring', stiffness: 400, damping: 30 }}
       >
-        {/* Persona card at top */}
-        {persona && (
-          <div className={cn(
-            'shrink-0 px-3 py-4 border-b border-black/[0.06]',
-            'flex items-center gap-3',
-            !isExpanded && 'justify-center'
-          )}>
-            <div
-              className="w-10 h-10 rounded-full shrink-0 bg-cover bg-center border-2"
-              style={{
-                backgroundImage: persona.image ? `url(${persona.image})` : 'none',
-                backgroundColor: persona.accentColor || '#4A5D4C',
-                borderColor: `${difficultyColor[difficulty] || '#4A5D4C'}40`,
-              }}
-            />
-            <AnimatePresence>
-              {isExpanded && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ delay: 0.1 }}
-                  className="min-w-0 flex-1"
-                >
-                  <p className="text-[13px] font-medium text-text-primary truncate">
-                    {persona.name}
-                  </p>
-                  <div className="flex items-center gap-1.5 mt-0.5">
-                    <span
-                      className="w-2 h-2 rounded-full shrink-0"
-                      style={{ backgroundColor: difficultyColor[difficulty] }}
-                    />
-                    <span className="text-[11px] text-text-muted truncate">
-                      {difficultyLabel[difficulty] || difficulty}
-                    </span>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        )}
-
         {/* Scrollable nav items */}
         <div className="flex-1 overflow-y-auto py-2 custom-scrollbar">
           {CATEGORIES.map((cat) => {
