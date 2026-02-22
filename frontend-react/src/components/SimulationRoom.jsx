@@ -191,27 +191,38 @@ export default function SimulationRoom() {
       />
 
       {/* ======================== DESKTOP LAYOUT ======================== */}
-      <div className="hidden lg:flex flex-col flex-1 ml-16">
-        {/* Frosted glass header */}
-        <Header
-          scenario={scenario}
-          difficulty={difficulty}
-          timeLimit={params?.mockExam?.isActive ? 480 : 300}
-          isConnected={isConnected}
-          onExit={handleExit}
-          onToggleSidebar={() => setSidebarOpen((prev) => !prev)}
-        />
+      <div className="hidden lg:flex flex-col flex-1 ml-16 relative">
+        {/* Background fading grid lines */}
+        <div className="background-lines" aria-hidden="true" />
 
-        {/* Main content — 3-column layout */}
-        <main className="flex-1 flex gap-4 p-4 min-h-0">
-          {/* Left: Persona panel */}
-          <motion.div
-            initial={{ opacity: 0, x: -12 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.4, delay: 0.1 }}
-            className="w-[22%] shrink-0 min-w-[180px]"
-          >
-            <div className="glass-panel rounded-2xl h-full flex flex-col items-center justify-center p-5 gap-4">
+        {/* Dashboard frame — single card with animated border beam */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.98 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
+          className="flex-1 flex flex-col m-3 rounded-2xl dashboard-frame overflow-visible relative z-10"
+        >
+          {/* Header */}
+          <div className="border-b border-black/[0.06]">
+            <Header
+              scenario={scenario}
+              difficulty={difficulty}
+              timeLimit={params?.mockExam?.isActive ? 480 : 300}
+              isConnected={isConnected}
+              onExit={handleExit}
+              onToggleSidebar={() => setSidebarOpen((prev) => !prev)}
+            />
+          </div>
+
+          {/* Main content — 3 columns separated by thin dividers */}
+          <main className="flex-1 flex min-h-0">
+            {/* Left: Persona panel */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.4, delay: 0.15 }}
+              className="w-[22%] min-w-[180px] shrink-0 border-r border-black/[0.06] p-5 flex flex-col items-center justify-center gap-4"
+            >
               <div
                 className="w-20 h-20 rounded-full bg-cover bg-center border-3 shadow-md"
                 style={{
@@ -233,66 +244,63 @@ export default function SimulationRoom() {
                   {difficultyLabel[difficulty] || difficulty}
                 </span>
               </div>
-            </div>
-          </motion.div>
-
-          {/* Center: Clinical image panel */}
-          {scenario.imageFile && (
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.2 }}
-              className="w-[48%] shrink-0"
-            >
-              <ClinicalImageCard
-                imageFile={scenario.imageFile}
-                scenarioTitle={scenario.title}
-                onExpand={(src) => setExpandedImage(src)}
-                fillHeight
-              />
             </motion.div>
-          )}
 
-          {/* Right: Transcript panel */}
-          <motion.div
-            initial={{ opacity: 0, x: 12 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.4, delay: 0.3 }}
-            className="flex-1 min-w-0 min-h-0"
-          >
-            <TranscriptPanel messages={messages} personaName={persona.name} />
-          </motion.div>
-        </main>
-
-        {/* Bottom dock — ALWAYS visible, fixed height */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          className="flex flex-col items-center gap-2 pb-5 pt-2 shrink-0 overflow-visible"
-          style={{ minHeight: 160 }}
-        >
-          <div className="h-8 flex items-center justify-center">
-            {statusText && (
+            {/* Center: Clinical image */}
+            {scenario.imageFile && (
               <motion.div
-                key={statusText}
-                initial={{ opacity: 0, y: 4 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="ai-status-bubble text-[13px] font-medium text-center"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.4, delay: 0.25 }}
+                className="w-[48%] shrink-0 border-r border-black/[0.06] p-3"
               >
-                {statusText}
+                <ClinicalImageCard
+                  imageFile={scenario.imageFile}
+                  scenarioTitle={scenario.title}
+                  onExpand={(src) => setExpandedImage(src)}
+                  fillHeight
+                />
               </motion.div>
             )}
+
+            {/* Right: Transcript */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.4, delay: 0.35 }}
+              className="flex-1 min-w-0 min-h-0"
+            >
+              <TranscriptPanel messages={messages} personaName={persona.name} />
+            </motion.div>
+          </main>
+
+          {/* Bottom dock — always visible, fixed height */}
+          <div
+            className="border-t border-black/[0.06] flex flex-col items-center gap-2 pb-5 pt-2 shrink-0"
+            style={{ minHeight: 160, overflow: 'visible' }}
+          >
+            <div className="h-8 flex items-center justify-center">
+              {statusText && (
+                <motion.div
+                  key={statusText}
+                  initial={{ opacity: 0, y: 4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="ai-status-bubble text-[13px] font-medium text-center"
+                >
+                  {statusText}
+                </motion.div>
+              )}
+            </div>
+
+            <VoiceOrb ref={orbRef} state={orbState} size={100} />
+
+            <SessionToggle
+              isConnected={isConnected}
+              isConnecting={isConnecting}
+              onConnect={handleConnect}
+              onEnd={handleEnd}
+            />
           </div>
-
-          <VoiceOrb ref={orbRef} state={orbState} size={100} />
-
-          <SessionToggle
-            isConnected={isConnected}
-            isConnecting={isConnecting}
-            onConnect={handleConnect}
-            onEnd={handleEnd}
-          />
         </motion.div>
       </div>
 
