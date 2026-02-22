@@ -34,15 +34,15 @@ export default function ClinicalImageCard({ imageFile, scenarioTitle, onExpand, 
       tabIndex={0}
       aria-label={`Clinical image for ${scenarioTitle}. Press Enter to expand.`}
     >
-      <div className={cn('relative', fillHeight && 'h-full')}>
+      <div className={cn('relative', fillHeight && 'h-full flex items-center justify-center bg-black/[0.03]')}>
         <img
           src={imageSrc}
           alt={`Clinical image: ${scenarioTitle || 'scenario'}`}
           className={cn(
-            'w-full object-cover transition-transform duration-300',
+            'w-full transition-transform duration-300',
             'group-hover:scale-[1.02]',
             imageLoaded ? 'opacity-100' : 'opacity-0',
-            fillHeight ? 'h-full' : compact ? 'h-[200px]' : 'h-[280px]'
+            fillHeight ? 'h-full object-contain' : compact ? 'h-[200px] object-cover' : 'h-[280px] object-cover'
           )}
           onLoad={() => setImageLoaded(true)}
           onError={() => setImageError(true)}

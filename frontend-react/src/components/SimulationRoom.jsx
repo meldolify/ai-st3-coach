@@ -200,8 +200,10 @@ export default function SimulationRoom() {
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, ease: 'easeOut' }}
-          className="flex-1 flex flex-col m-3 rounded-2xl dashboard-frame overflow-visible relative z-10"
+          className="flex-1 m-3 rounded-2xl dashboard-frame overflow-visible relative z-10"
         >
+          {/* Inner wrapper constrains content height; outer keeps overflow-visible for beam */}
+          <div className="flex flex-col h-full overflow-hidden rounded-[inherit]">
           {/* Header */}
           <div className="border-b border-black/[0.06]">
             <Header
@@ -301,6 +303,7 @@ export default function SimulationRoom() {
               onEnd={handleEnd}
             />
           </div>
+          </div>{/* end inner wrapper */}
         </motion.div>
       </div>
 
