@@ -191,7 +191,7 @@ export default function SimulationRoom() {
       />
 
       {/* ======================== DESKTOP LAYOUT ======================== */}
-      <div className="hidden lg:flex flex-col flex-1 ml-16 relative">
+      <div className="hidden lg:flex flex-col flex-1 min-h-0 ml-16 relative">
         {/* Background fading grid lines */}
         <div className="background-lines" aria-hidden="true" />
 
@@ -200,7 +200,7 @@ export default function SimulationRoom() {
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, ease: 'easeOut' }}
-          className="flex-1 m-3 rounded-2xl dashboard-frame overflow-visible relative z-10"
+          className="flex-1 min-h-0 m-3 rounded-2xl dashboard-frame overflow-visible relative z-10"
         >
           {/* Inner wrapper constrains content height; outer keeps overflow-visible for beam */}
           <div className="flex flex-col h-full overflow-hidden rounded-[inherit]">
