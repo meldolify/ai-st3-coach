@@ -2,6 +2,7 @@ import { useState, useRef, useCallback, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { cn } from '../lib/utils'
 import { PERSONA_CONFIG } from '../config'
+import { IMAGE_MAP } from '../data/scenarios'
 import { useSimulationParams } from '../hooks/useSimulationParams'
 import { useSession } from '../hooks/useSession'
 import { useEscapeKey } from '../hooks/useEscapeKey'
@@ -30,11 +31,16 @@ export default function SimulationRoom() {
   const [feedbackData, setFeedbackData] = useState(null)
   const [confirmModal, setConfirmModal] = useState(null)
 
-  const scenario = params?.scenario || {
+  const rawScenario = params?.scenario || {
     title: 'No scenario selected',
     promptFile: null,
     imageFile: null,
     category: '',
+  }
+  // Resolve imageFile from IMAGE_MAP if not set in sessionStorage
+  const scenario = {
+    ...rawScenario,
+    imageFile: rawScenario.imageFile || IMAGE_MAP[rawScenario.promptFile] || null,
   }
   const difficulty = params?.difficulty || 'medium'
   const persona = PERSONA_CONFIG[difficulty] || PERSONA_CONFIG.medium
@@ -342,7 +348,7 @@ export default function SimulationRoom() {
         <div className="relative z-[200] flex flex-col items-center gap-3 px-5 py-7 pb-[calc(16px+env(safe-area-inset-bottom))] mobile-glass-dark border-t border-white/[0.08] overflow-visible">
           <div className="flex items-center gap-5">
             <div className="flex flex-col items-center gap-1">
-              <VoiceOrb state={orbState} size={64} />
+              <VoiceOrb state={orbState} size={64} mobile />
               {statusText && (
                 <p className="text-[11px] text-white/70 font-medium">{statusText}</p>
               )}

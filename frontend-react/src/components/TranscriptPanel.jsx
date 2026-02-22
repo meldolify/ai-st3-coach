@@ -1,26 +1,28 @@
-import { useRef, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { cn } from '../lib/utils'
 
 /**
  * TranscriptPanel — Conversation transcript panel.
- * Auto-scrolling, messages appear only on ai_response_end (no streaming text).
+ * Newest messages at top (reverse chronological). Relative timestamps.
  */
 export default function TranscriptPanel({ messages, personaName = 'Examiner' }) {
-  const scrollRef = useRef(null)
+  const [, setTick] = useState(0)
 
-  // Auto-scroll to bottom on new messages
+  // Re-render every 30s to update relative timestamps
   useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight
-    }
-  }, [messages])
+    const interval = setInterval(() => setTick((t) => t + 1), 30000)
+    return () => clearInterval(interval)
+  }, [])
 
-  const formatTimestamp = (ts) => {
-    const date = new Date(ts)
-    const m = date.getMinutes().toString().padStart(2, '0')
-    const s = date.getSeconds().toString().padStart(2, '0')
-    return `${m}:${s}`
+  const formatRelativeTime = (ts) => {
+    const diff = Math.floor((Date.now() - ts) / 1000)
+    if (diff < 10) return 'just now'
+    if (diff < 60) return `${diff}s ago`
+    const mins = Math.floor(diff / 60)
+    if (mins < 60) return `${mins}m ago`
+    const hrs = Math.floor(mins / 60)
+    return `${hrs}h ago`
   }
 
   // Group consecutive messages from same speaker
@@ -41,6 +43,9 @@ export default function TranscriptPanel({ messages, personaName = 'Examiner' }) 
     return groups
   }, [])
 
+  // Reverse so newest groups appear first
+  const reversedGroups = [...groupedMessages].reverse()
+
   return (
     <div
       className={cn(
@@ -57,9 +62,8 @@ export default function TranscriptPanel({ messages, personaName = 'Examiner' }) 
         </span>
       </div>
 
-      {/* Messages */}
+      {/* Messages — newest at top */}
       <div
-        ref={scrollRef}
         role="log"
         aria-live="polite"
         aria-label="Interview transcript"
@@ -74,10 +78,10 @@ export default function TranscriptPanel({ messages, personaName = 'Examiner' }) 
         )}
 
         <AnimatePresence initial={false}>
-          {groupedMessages.map((group, gi) => (
+          {reversedGroups.map((group, gi) => (
             <motion.div
               key={`group-${gi}-${group.timestamp}`}
-              initial={{ opacity: 0, y: 12 }}
+              initial={{ opacity: 0, y: -12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.25, ease: 'easeOut' }}
               className={cn(
@@ -96,7 +100,7 @@ export default function TranscriptPanel({ messages, personaName = 'Examiner' }) 
                   {group.speaker === 'user' ? 'You' : personaName}
                 </span>
                 <span className="text-[11px] text-text-muted">
-                  {formatTimestamp(group.timestamp)}
+                  {formatRelativeTime(group.timestamp)}
                 </span>
               </div>
 

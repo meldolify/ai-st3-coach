@@ -47,6 +47,11 @@ export const SUBCATEGORIES = {
   ],
 }
 
+// Clinical image map: promptFile -> imageFile (in public/images/)
+export const IMAGE_MAP = {
+  'clinical/emergencies/necrotising_fasciitis': 'nec_fasc_1.jpg',
+}
+
 // Topics: subcategoryId -> { title, topics: [[promptFile, displayName], ...] }
 export const TOPICS = {
   infections: {
