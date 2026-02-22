@@ -11,14 +11,13 @@ import Sidebar from './Sidebar'
 import TranscriptPanel from './TranscriptPanel'
 import ClinicalImageCard from './ClinicalImageCard'
 import VoiceOrb from './VoiceOrb'
-import ControlButtons from './ControlButtons'
+import SessionToggle from './SessionToggle'
 import ConfirmModal from './ConfirmModal'
-import ShaderBackground from './ShaderBackground'
 
 /**
- * SimulationRoom — Main layout component (Ethereal Glass Studio redesign).
- * Desktop: Shader bg + split glass panels (image | transcript) + centered orb dock
- * Mobile: Shader bg + stacked content + fixed bottom dock
+ * SimulationRoom — Main layout component.
+ * Desktop: 3-column (persona | clinical image | transcript) + centered orb dock
+ * Mobile: stacked content + fixed bottom dock
  */
 export default function SimulationRoom() {
   const { params } = useSimulationParams()
@@ -178,16 +177,14 @@ export default function SimulationRoom() {
     [isConnected, disconnect, params]
   )
 
-  return (
-    <div className="h-screen flex overflow-hidden">
-      {/* Shader background — full viewport, audio-reactive */}
-      <ShaderBackground orbVisualizerRef={orbRef} />
+  const difficultyLabel = { easy: 'Friendly', medium: 'Standard', strict: 'Strict' }
+  const difficultyColor = { easy: '#10B981', medium: '#F59E0B', strict: '#EF4444' }
 
+  return (
+    <div className="h-screen flex overflow-hidden bg-gradient-to-br from-[#f5f7f5] via-[#fafbfa] to-[#f0f4f1]">
       {/* Sidebar — desktop: inline collapsed/hover-expand. Mobile: overlay drawer */}
       <Sidebar
         currentPromptFile={scenario.promptFile}
-        persona={persona}
-        difficulty={difficulty}
         isOpen={sidebarOpen}
         onToggle={() => setSidebarOpen(false)}
         onSelectScenario={handleSelectScenario}
@@ -205,15 +202,47 @@ export default function SimulationRoom() {
           onToggleSidebar={() => setSidebarOpen((prev) => !prev)}
         />
 
-        {/* Main content — split glass panels */}
-        <main className="flex-1 flex gap-5 p-5 min-h-0">
-          {/* Clinical image panel */}
+        {/* Main content — 3-column layout */}
+        <main className="flex-1 flex gap-4 p-4 min-h-0">
+          {/* Left: Persona panel */}
+          <motion.div
+            initial={{ opacity: 0, x: -12 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.4, delay: 0.1 }}
+            className="w-[22%] shrink-0 min-w-[180px]"
+          >
+            <div className="glass-panel rounded-2xl h-full flex flex-col items-center justify-center p-5 gap-4">
+              <div
+                className="w-20 h-20 rounded-full bg-cover bg-center border-3 shadow-md"
+                style={{
+                  backgroundImage: persona.image ? `url(${persona.image})` : 'none',
+                  backgroundColor: persona.accentColor || '#4A5D4C',
+                  borderColor: `${difficultyColor[difficulty] || '#4A5D4C'}50`,
+                }}
+              />
+              <div className="text-center">
+                <p className="font-display text-[17px] text-text-primary">{persona.name}</p>
+                <p className="text-[13px] text-text-muted mt-0.5">{persona.title}</p>
+              </div>
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/[0.04]">
+                <span
+                  className="w-2.5 h-2.5 rounded-full shrink-0"
+                  style={{ backgroundColor: difficultyColor[difficulty] }}
+                />
+                <span className="text-[12px] font-medium text-text-secondary">
+                  {difficultyLabel[difficulty] || difficulty}
+                </span>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Center: Clinical image panel */}
           {scenario.imageFile && (
             <motion.div
-              initial={{ opacity: 0, x: -12 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.2 }}
-              className="w-[45%] shrink-0"
+              className="w-[48%] shrink-0"
             >
               <ClinicalImageCard
                 imageFile={scenario.imageFile}
@@ -224,7 +253,7 @@ export default function SimulationRoom() {
             </motion.div>
           )}
 
-          {/* Transcript panel */}
+          {/* Right: Transcript panel */}
           <motion.div
             initial={{ opacity: 0, x: 12 }}
             animate={{ opacity: 1, x: 0 }}
@@ -235,39 +264,40 @@ export default function SimulationRoom() {
           </motion.div>
         </main>
 
-        {/* Bottom dock — centered orb + controls */}
+        {/* Bottom dock — ALWAYS visible, fixed height */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
-          className="flex flex-col items-center gap-3 pb-6 pt-2 shrink-0 overflow-visible"
+          className="flex flex-col items-center gap-2 pb-5 pt-2 shrink-0 overflow-visible"
+          style={{ minHeight: 160 }}
         >
-          {statusText && (
-            <motion.div
-              key={statusText}
-              initial={{ opacity: 0, y: 4 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="ai-status-bubble text-[13px] font-medium text-center"
-            >
-              {statusText}
-            </motion.div>
-          )}
+          <div className="h-8 flex items-center justify-center">
+            {statusText && (
+              <motion.div
+                key={statusText}
+                initial={{ opacity: 0, y: 4 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="ai-status-bubble text-[13px] font-medium text-center"
+              >
+                {statusText}
+              </motion.div>
+            )}
+          </div>
 
           <VoiceOrb ref={orbRef} state={orbState} size={100} />
 
-          <ControlButtons
+          <SessionToggle
             isConnected={isConnected}
             isConnecting={isConnecting}
-            orbState={orbState}
             onConnect={handleConnect}
-            onInterrupt={sendInterrupt}
             onEnd={handleEnd}
           />
         </motion.div>
       </div>
 
       {/* ======================== MOBILE LAYOUT ======================== */}
-      <div className="lg:hidden flex flex-col fixed inset-0">
+      <div className="lg:hidden flex flex-col fixed inset-0 bg-gradient-to-br from-[#f5f7f5] via-[#fafbfa] to-[#f0f4f1]">
         {/* Frosted glass header */}
         <header className="h-14 px-3 flex items-center justify-between shrink-0 z-[200] mobile-glass-dark border-b border-black/[0.06]">
           <button
@@ -305,21 +335,19 @@ export default function SimulationRoom() {
           </div>
         </div>
 
-        {/* Fixed bottom dock */}
-        <div className="relative z-[200] flex flex-col items-center gap-3 px-5 py-7 pb-[calc(16px+env(safe-area-inset-bottom))] mobile-glass-dark border-t border-black/[0.06] overflow-visible">
-          <div className="flex items-center gap-5">
-            <div className="flex flex-col items-center gap-1">
+        {/* Fixed bottom dock — overflow visible for orb glow */}
+        <div className="relative z-[200] flex flex-col items-center gap-2 px-5 pt-4 pb-[calc(16px+env(safe-area-inset-bottom))] mobile-glass-dark border-t border-black/[0.06]" style={{ overflow: 'visible' }}>
+          <div className="flex items-center gap-5" style={{ overflow: 'visible' }}>
+            <div className="flex flex-col items-center gap-1" style={{ overflow: 'visible' }}>
               <VoiceOrb state={orbState} size={64} mobile />
               {statusText && (
                 <p className="text-[11px] text-text-muted font-medium">{statusText}</p>
               )}
             </div>
-            <ControlButtons
+            <SessionToggle
               isConnected={isConnected}
               isConnecting={isConnecting}
-              orbState={orbState}
               onConnect={handleConnect}
-              onInterrupt={sendInterrupt}
               onEnd={handleEnd}
             />
           </div>

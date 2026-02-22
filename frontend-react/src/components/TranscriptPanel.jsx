@@ -1,13 +1,40 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { cn } from '../lib/utils'
 
 /**
+ * AnimatedMessage — Streams text word-by-word with staggered fade-in.
+ * Only animates once; after all words are revealed it renders plain text.
+ */
+function AnimatedMessage({ text, animate = false }) {
+  if (!animate) return <span>{text}</span>
+
+  const words = text.split(' ')
+  return (
+    <span>
+      {words.map((word, i) => (
+        <motion.span
+          key={i}
+          initial={{ opacity: 0, y: 4 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: i * 0.03, duration: 0.2, ease: 'easeOut' }}
+          className="inline-block"
+        >
+          {word}{i < words.length - 1 ? '\u00A0' : ''}
+        </motion.span>
+      ))}
+    </span>
+  )
+}
+
+/**
  * TranscriptPanel — Conversation transcript panel.
  * Newest messages at top (reverse chronological). Relative timestamps.
+ * AI messages stream in word-by-word; user messages appear instantly.
  */
 export default function TranscriptPanel({ messages, personaName = 'Examiner' }) {
   const [, setTick] = useState(0)
+  const animatedIdsRef = useRef(new Set())
 
   // Re-render every 30s to update relative timestamps
   useEffect(() => {
@@ -45,6 +72,11 @@ export default function TranscriptPanel({ messages, personaName = 'Examiner' }) 
 
   // Reverse so newest groups appear first
   const reversedGroups = [...groupedMessages].reverse()
+
+  // Find the latest AI message ID for animation
+  const latestAiMsgId = messages.length > 0
+    ? [...messages].reverse().find(m => m.speaker !== 'user')?.id
+    : null
 
   return (
     <div
@@ -105,20 +137,31 @@ export default function TranscriptPanel({ messages, personaName = 'Examiner' }) 
               </div>
 
               {/* Message bubbles */}
-              {group.items.map((msg) => (
-                <div
-                  key={msg.id}
-                  aria-label={`${msg.speaker === 'user' ? 'You' : personaName}: ${msg.text}`}
-                  className={cn(
-                    'max-w-[85%] rounded-lg px-4 py-2.5 mb-1 text-[15px] leading-relaxed',
-                    group.speaker === 'user'
-                      ? 'bg-accent text-white ml-auto'
-                      : 'bg-bg-secondary text-text-primary border-l-2 border-accent-light'
-                  )}
-                >
-                  {msg.text}
-                </div>
-              ))}
+              {group.items.map((msg) => {
+                // Animate only the latest AI message that hasn't been animated yet
+                const shouldAnimate = msg.speaker !== 'user'
+                  && msg.id === latestAiMsgId
+                  && !animatedIdsRef.current.has(msg.id)
+
+                if (shouldAnimate) {
+                  animatedIdsRef.current.add(msg.id)
+                }
+
+                return (
+                  <div
+                    key={msg.id}
+                    aria-label={`${msg.speaker === 'user' ? 'You' : personaName}: ${msg.text}`}
+                    className={cn(
+                      'max-w-[85%] rounded-lg px-4 py-2.5 mb-1 text-[15px] leading-relaxed',
+                      group.speaker === 'user'
+                        ? 'bg-accent text-white ml-auto'
+                        : 'bg-bg-secondary text-text-primary border-l-2 border-accent-light'
+                    )}
+                  >
+                    <AnimatedMessage text={msg.text} animate={shouldAnimate} />
+                  </div>
+                )
+              })}
             </motion.div>
           ))}
         </AnimatePresence>
