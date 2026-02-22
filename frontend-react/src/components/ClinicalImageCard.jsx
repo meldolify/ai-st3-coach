@@ -3,20 +3,17 @@ import { motion } from 'framer-motion'
 import { cn } from '../lib/utils'
 
 /**
- * ClinicalImageCard — Prominent clinical image display.
- * Desktop: ~280px card in center column.
- * Mobile (compact): ~200px card at top.
- * Hidden entirely when no image exists (no placeholder).
+ * ClinicalImageCard — Clinical image display with frosted glass styling.
+ * Desktop (fillHeight): fills parent height as a glass panel.
+ * Mobile (compact): 200px card.
  * Click to open fullscreen modal.
  */
-export default function ClinicalImageCard({ imageFile, scenarioTitle, onExpand, compact = false }) {
+export default function ClinicalImageCard({ imageFile, scenarioTitle, onExpand, compact = false, fillHeight = false }) {
   const [imageError, setImageError] = useState(false)
   const [imageLoaded, setImageLoaded] = useState(false)
 
-  // Don't render if no image or image failed to load
   if (!imageFile || imageError) return null
 
-  // Resolve image path — images are in public/images/
   const imageSrc = imageFile.startsWith('http')
     ? imageFile
     : `/images/${imageFile}`
@@ -28,7 +25,8 @@ export default function ClinicalImageCard({ imageFile, scenarioTitle, onExpand, 
       transition={{ duration: 0.3, delay: 0.1 }}
       className={cn(
         'rounded-2xl overflow-hidden cursor-pointer group',
-        'glass-panel hover:shadow-lg transition-shadow duration-200'
+        'glass-panel hover:shadow-lg transition-shadow duration-200',
+        fillHeight && 'h-full'
       )}
       onClick={() => onExpand?.(imageSrc)}
       onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onExpand?.(imageSrc) } }}
@@ -36,7 +34,7 @@ export default function ClinicalImageCard({ imageFile, scenarioTitle, onExpand, 
       tabIndex={0}
       aria-label={`Clinical image for ${scenarioTitle}. Press Enter to expand.`}
     >
-      <div className="relative">
+      <div className={cn('relative', fillHeight && 'h-full')}>
         <img
           src={imageSrc}
           alt={`Clinical image: ${scenarioTitle || 'scenario'}`}
@@ -44,21 +42,20 @@ export default function ClinicalImageCard({ imageFile, scenarioTitle, onExpand, 
             'w-full object-cover transition-transform duration-300',
             'group-hover:scale-[1.02]',
             imageLoaded ? 'opacity-100' : 'opacity-0',
-            compact ? 'h-[200px]' : 'h-[280px]'
+            fillHeight ? 'h-full' : compact ? 'h-[200px]' : 'h-[280px]'
           )}
           onLoad={() => setImageLoaded(true)}
           onError={() => setImageError(true)}
         />
 
-        {/* Loading skeleton */}
         {!imageLoaded && (
           <div className={cn(
-            'absolute inset-0 bg-bg-secondary animate-pulse',
-            compact ? 'h-[200px]' : 'h-[280px]'
+            'absolute inset-0 bg-bg-secondary/50 animate-pulse',
+            fillHeight ? 'h-full' : compact ? 'h-[200px]' : 'h-[280px]'
           )} />
         )}
 
-        {/* Expand icon overlay on hover */}
+        {/* Expand icon overlay */}
         <div
           className={cn(
             'absolute top-3 right-3 p-1.5 rounded-md',
@@ -84,7 +81,7 @@ export default function ClinicalImageCard({ imageFile, scenarioTitle, onExpand, 
           </svg>
         </div>
 
-        {/* Subtle label */}
+        {/* Label */}
         <div className="absolute bottom-0 left-0 right-0 px-3 py-2 bg-gradient-to-t from-black/30 to-transparent">
           <span className="text-[11px] text-white/90 font-medium">
             Clinical Image
