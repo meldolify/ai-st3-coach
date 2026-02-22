@@ -2,14 +2,12 @@ import { useState, useEffect, useCallback } from 'react'
 import { cn } from '../lib/utils'
 
 /**
- * Header — Slim top bar with scenario info, timer, and navigation.
- * Integrates: logo, scenario title + category + difficulty, countdown timer, profile icon.
+ * Header — Frosted glass top bar with scenario info, timer, and navigation.
  */
 export default function Header({ scenario, difficulty, timeLimit = 300, isConnected, onExit, onToggleSidebar }) {
   const [secondsLeft, setSecondsLeft] = useState(timeLimit)
   const [isRunning, setIsRunning] = useState(false)
 
-  // Start timer when connected
   useEffect(() => {
     if (isConnected && !isRunning) {
       setIsRunning(true)
@@ -20,7 +18,6 @@ export default function Header({ scenario, difficulty, timeLimit = 300, isConnec
     }
   }, [isConnected, timeLimit, isRunning])
 
-  // Countdown logic
   useEffect(() => {
     if (!isRunning) return
     const interval = setInterval(() => {
@@ -44,23 +41,18 @@ export default function Header({ scenario, difficulty, timeLimit = 300, isConnec
   const isWarning = secondsLeft <= 60 && secondsLeft > 0
   const isExpired = secondsLeft === 0
 
-  const difficultyLabel = {
-    easy: 'Friendly',
-    medium: 'Standard',
-    strict: 'Strict',
-  }
+  const difficultyLabel = { easy: 'Friendly', medium: 'Standard', strict: 'Strict' }
 
   return (
     <header
       className={cn(
         'flex items-center justify-between px-5 h-[56px]',
-        'bg-bg-elevated border-b border-bg-secondary',
+        'glass-panel !rounded-none !border-t-0 !border-l-0 !border-r-0',
         'shrink-0'
       )}
     >
       {/* Left: Hamburger + Logo + scenario info */}
       <div className="flex items-center gap-4 min-w-0">
-        {/* Mobile hamburger */}
         <button
           onClick={onToggleSidebar}
           className="lg:hidden p-1 text-text-secondary hover:text-text-primary transition-colors"
@@ -78,28 +70,17 @@ export default function Header({ scenario, difficulty, timeLimit = 300, isConnec
           className="flex items-center gap-2 text-text-secondary hover:text-text-primary transition-colors"
           aria-label="Exit simulation"
         >
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M19 12H5" />
             <path d="M12 19l-7-7 7-7" />
           </svg>
           <span className="text-[15px] font-medium hidden sm:inline">Reviva</span>
         </button>
 
-        <div className="h-5 w-px bg-bg-secondary hidden sm:block" />
+        <div className="h-5 w-px bg-black/[0.08] hidden sm:block" />
 
         <div className="flex items-center gap-2 min-w-0">
-          <h1
-            className="font-display text-[17px] text-text-primary truncate max-w-[300px] lg:max-w-[500px]"
-          >
+          <h1 className="font-display text-[17px] text-text-primary truncate max-w-[300px] lg:max-w-[500px]">
             {scenario?.title || 'Select a scenario'}
           </h1>
           {scenario?.category && (

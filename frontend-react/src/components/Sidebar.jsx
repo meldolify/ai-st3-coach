@@ -4,13 +4,14 @@ import { cn } from '../lib/utils'
 import { CATEGORIES, SUBCATEGORIES, TOPICS } from '../data/scenarios'
 
 /**
- * Sidebar — Collapsible scenario navigation.
+ * Sidebar — Collapsible scenario navigation with persona card.
  * Desktop: 64px collapsed (icons only), 280px expanded on hover.
  * Mobile: Full overlay drawer.
- * Single component — CSS handles responsive behavior.
  */
 export default function Sidebar({
   currentPromptFile,
+  persona,
+  difficulty,
   isOpen,
   onToggle,
   onSelectScenario,
@@ -19,7 +20,6 @@ export default function Sidebar({
   const [expandedSubcategories, setExpandedSubcategories] = useState(new Set())
   const [isHovered, setIsHovered] = useState(false)
 
-  // Auto-expand category containing current scenario
   const currentCategoryId = useMemo(() => {
     if (!currentPromptFile) return null
     for (const cat of CATEGORIES) {
@@ -54,6 +54,9 @@ export default function Sidebar({
 
   const isExpanded = isOpen || isHovered
 
+  const difficultyLabel = { easy: 'Friendly', medium: 'Standard', strict: 'Strict' }
+  const difficultyColor = { easy: '#10B981', medium: '#F59E0B', strict: '#EF4444' }
+
   return (
     <>
       {/* Mobile overlay backdrop */}
@@ -76,11 +79,9 @@ export default function Sidebar({
         onMouseLeave={() => setIsHovered(false)}
         className={cn(
           'fixed top-0 left-0 bottom-0 z-40',
-          'bg-bg-elevated border-r border-bg-secondary',
+          'glass-panel !rounded-none !border-l-0 !border-t-0 !border-b-0',
           'flex flex-col overflow-hidden',
-          // Desktop: slim collapsed, expand on hover
           'hidden lg:flex',
-          // Mobile: full overlay
           isOpen && '!flex'
         )}
         animate={{
@@ -88,6 +89,48 @@ export default function Sidebar({
         }}
         transition={{ type: 'spring', stiffness: 400, damping: 30 }}
       >
+        {/* Persona card at top */}
+        {persona && (
+          <div className={cn(
+            'shrink-0 px-3 py-4 border-b border-black/[0.06]',
+            'flex items-center gap-3',
+            !isExpanded && 'justify-center'
+          )}>
+            <div
+              className="w-10 h-10 rounded-full shrink-0 bg-cover bg-center border-2"
+              style={{
+                backgroundImage: persona.image ? `url(${persona.image})` : 'none',
+                backgroundColor: persona.accentColor || '#4A5D4C',
+                borderColor: `${difficultyColor[difficulty] || '#4A5D4C'}40`,
+              }}
+            />
+            <AnimatePresence>
+              {isExpanded && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ delay: 0.1 }}
+                  className="min-w-0 flex-1"
+                >
+                  <p className="text-[13px] font-medium text-text-primary truncate">
+                    {persona.name}
+                  </p>
+                  <div className="flex items-center gap-1.5 mt-0.5">
+                    <span
+                      className="w-2 h-2 rounded-full shrink-0"
+                      style={{ backgroundColor: difficultyColor[difficulty] }}
+                    />
+                    <span className="text-[11px] text-text-muted truncate">
+                      {difficultyLabel[difficulty] || difficulty}
+                    </span>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        )}
+
         {/* Scrollable nav items */}
         <div className="flex-1 overflow-y-auto py-2 custom-scrollbar">
           {CATEGORIES.map((cat) => {
@@ -97,23 +140,19 @@ export default function Sidebar({
 
             return (
               <div key={cat.id} className="mb-1">
-                {/* Category header */}
                 <button
                   onClick={() => toggleCategory(cat.id)}
                   className={cn(
                     'w-full flex items-center gap-3 px-4 py-2.5',
                     'text-left transition-colors duration-150',
-                    'hover:bg-bg-secondary',
+                    'hover:bg-black/[0.04]',
                     isActiveCat && 'border-l-3 border-accent'
                   )}
                   title={cat.name}
                   aria-label={cat.name}
                   aria-expanded={isCatExpanded}
                 >
-                  <span className="text-[18px] shrink-0 w-8 text-center">
-                    {cat.icon}
-                  </span>
-
+                  <span className="text-[18px] shrink-0 w-8 text-center">{cat.icon}</span>
                   <AnimatePresence>
                     {isExpanded && (
                       <motion.div
@@ -123,21 +162,9 @@ export default function Sidebar({
                         transition={{ delay: 0.1 }}
                         className="flex items-center justify-between flex-1 min-w-0"
                       >
-                        <span className="text-[13px] font-medium text-text-primary truncate">
-                          {cat.name}
-                        </span>
-                        <svg
-                          width="12"
-                          height="12"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          className={cn(
-                            'text-text-muted transition-transform duration-200 shrink-0',
-                            isCatExpanded && 'rotate-90'
-                          )}
-                        >
+                        <span className="text-[13px] font-medium text-text-primary truncate">{cat.name}</span>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+                          className={cn('text-text-muted transition-transform duration-200 shrink-0', isCatExpanded && 'rotate-90')}>
                           <path d="M9 18l6-6-6-6" />
                         </svg>
                       </motion.div>
@@ -145,7 +172,6 @@ export default function Sidebar({
                   </AnimatePresence>
                 </button>
 
-                {/* Subcategories */}
                 <AnimatePresence>
                   {isCatExpanded && isExpanded && (
                     <motion.div
@@ -162,39 +188,23 @@ export default function Sidebar({
 
                         return (
                           <div key={sub.id}>
-                            {/* Subcategory header */}
                             <button
                               onClick={() => toggleSubcategory(sub.id)}
                               className={cn(
                                 'w-full flex items-center gap-2 pl-12 pr-4 py-2',
-                                'text-left transition-colors hover:bg-bg-secondary'
+                                'text-left transition-colors hover:bg-black/[0.04]'
                               )}
                               aria-label={sub.name}
                               aria-expanded={isSubExpanded}
                             >
-                              <span className="text-[13px] shrink-0">
-                                {sub.icon}
-                              </span>
-                              <span className="text-[12px] text-text-secondary truncate flex-1">
-                                {sub.name}
-                              </span>
-                              <svg
-                                width="10"
-                                height="10"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                className={cn(
-                                  'text-text-muted transition-transform duration-200 shrink-0',
-                                  isSubExpanded && 'rotate-90'
-                                )}
-                              >
+                              <span className="text-[13px] shrink-0">{sub.icon}</span>
+                              <span className="text-[12px] text-text-secondary truncate flex-1">{sub.name}</span>
+                              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+                                className={cn('text-text-muted transition-transform duration-200 shrink-0', isSubExpanded && 'rotate-90')}>
                                 <path d="M9 18l6-6-6-6" />
                               </svg>
                             </button>
 
-                            {/* Topics */}
                             <AnimatePresence>
                               {isSubExpanded && (
                                 <motion.div
@@ -204,25 +214,21 @@ export default function Sidebar({
                                   transition={{ duration: 0.15 }}
                                   className="overflow-hidden"
                                 >
-                                  {topics.map(([promptFile, name]) => {
-                                    const isActive = promptFile === currentPromptFile
-
-                                    return (
-                                      <button
-                                        key={promptFile}
-                                        onClick={() => onSelectScenario(promptFile, name)}
-                                        className={cn(
-                                          'w-full text-left pl-16 pr-4 py-1.5',
-                                          'text-[12px] transition-colors',
-                                          isActive
-                                            ? 'text-accent font-medium border-l-2 border-accent bg-accent-light/30'
-                                            : 'text-text-secondary hover:text-text-primary hover:bg-bg-secondary'
-                                        )}
-                                      >
-                                        {name}
-                                      </button>
-                                    )
-                                  })}
+                                  {topics.map(([promptFile, name]) => (
+                                    <button
+                                      key={promptFile}
+                                      onClick={() => onSelectScenario(promptFile, name)}
+                                      className={cn(
+                                        'w-full text-left pl-16 pr-4 py-1.5',
+                                        'text-[12px] transition-colors',
+                                        promptFile === currentPromptFile
+                                          ? 'text-accent font-medium border-l-2 border-accent bg-accent-light/30'
+                                          : 'text-text-secondary hover:text-text-primary hover:bg-black/[0.04]'
+                                      )}
+                                    >
+                                      {name}
+                                    </button>
+                                  ))}
                                 </motion.div>
                               )}
                             </AnimatePresence>
