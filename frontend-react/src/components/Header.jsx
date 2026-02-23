@@ -47,7 +47,7 @@ export default function Header({ scenario, difficulty, timeLimit = 300, isConnec
     <header
       className={cn(
         'flex items-center justify-between px-5 h-[56px]',
-        'glass-panel !rounded-none !border-t-0 !border-l-0 !border-r-0',
+        'glass-card !rounded-none !border-x-0 !border-t-0',
         'shrink-0'
       )}
     >
@@ -77,7 +77,7 @@ export default function Header({ scenario, difficulty, timeLimit = 300, isConnec
           <span className="text-[15px] font-medium hidden sm:inline">Reviva</span>
         </button>
 
-        <div className="h-5 w-px bg-black/[0.08] hidden sm:block" />
+        <div className="h-5 w-px bg-white/[0.1] hidden sm:block" />
 
         <div className="flex items-center gap-2 min-w-0">
           <h1 className="font-display text-[17px] text-text-primary truncate max-w-[300px] lg:max-w-[500px]">
@@ -110,8 +110,8 @@ export default function Header({ scenario, difficulty, timeLimit = 300, isConnec
           aria-label={`Time remaining: ${formatTime(secondsLeft)}`}
           className={cn(
             'font-body tabular-nums text-[15px] font-medium px-3 py-1 rounded-md',
-            isExpired && 'text-error bg-red-50',
-            isWarning && !isExpired && 'text-speaking bg-amber-50',
+            isExpired && 'text-error bg-red-500/10',
+            isWarning && !isExpired && 'text-speaking bg-amber-500/10',
             !isWarning && !isExpired && 'text-text-secondary'
           )}
         >

@@ -81,11 +81,11 @@ export default function TranscriptPanel({ messages, personaName = 'Examiner' }) 
   return (
     <div
       className={cn(
-        'flex flex-col h-full rounded-2xl glass-panel'
+        'flex flex-col h-full'
       )}
     >
       {/* Panel header */}
-      <div className="flex items-center justify-between px-5 py-3 border-b border-black/5">
+      <div className="flex items-center justify-between px-5 py-3 border-b border-white/[0.06]">
         <h2 className="text-[13px] font-medium text-text-secondary uppercase tracking-wider">
           Transcript
         </h2>
@@ -155,7 +155,7 @@ export default function TranscriptPanel({ messages, personaName = 'Examiner' }) 
                       'max-w-[85%] rounded-lg px-4 py-2.5 mb-1 text-[15px] leading-relaxed',
                       group.speaker === 'user'
                         ? 'bg-accent text-white ml-auto'
-                        : 'bg-bg-secondary text-text-primary border-l-2 border-accent-light'
+                        : 'bg-white/[0.06] text-text-primary border-l-2 border-accent/30'
                     )}
                   >
                     <AnimatedMessage text={msg.text} animate={shouldAnimate} />

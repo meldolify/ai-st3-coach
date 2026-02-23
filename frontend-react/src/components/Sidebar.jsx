@@ -61,7 +61,7 @@ export default function Sidebar({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/30 z-40 lg:hidden"
+            className="fixed inset-0 bg-black/60 z-40 lg:hidden"
             onClick={onToggle}
           />
         )}
@@ -74,7 +74,7 @@ export default function Sidebar({
         onMouseLeave={() => setIsHovered(false)}
         className={cn(
           'fixed top-0 left-0 bottom-0 z-40',
-          'glass-panel !rounded-none !border-l-0 !border-t-0 !border-b-0',
+          'bg-[#0D1117] border-r border-white/[0.06]',
           'flex flex-col overflow-hidden',
           'hidden lg:flex',
           isOpen && '!flex'
@@ -98,7 +98,7 @@ export default function Sidebar({
                   className={cn(
                     'w-full flex items-center gap-3 px-4 py-2.5',
                     'text-left transition-colors duration-150',
-                    'hover:bg-black/[0.04]',
+                    'hover:bg-white/[0.06]',
                     isActiveCat && 'border-l-3 border-accent'
                   )}
                   title={cat.name}
@@ -145,7 +145,7 @@ export default function Sidebar({
                               onClick={() => toggleSubcategory(sub.id)}
                               className={cn(
                                 'w-full flex items-center gap-2 pl-12 pr-4 py-2',
-                                'text-left transition-colors hover:bg-black/[0.04]'
+                                'text-left transition-colors hover:bg-white/[0.06]'
                               )}
                               aria-label={sub.name}
                               aria-expanded={isSubExpanded}
@@ -175,8 +175,8 @@ export default function Sidebar({
                                         'w-full text-left pl-16 pr-4 py-1.5',
                                         'text-[12px] transition-colors',
                                         promptFile === currentPromptFile
-                                          ? 'text-accent font-medium border-l-2 border-accent bg-accent-light/30'
-                                          : 'text-text-secondary hover:text-text-primary hover:bg-black/[0.04]'
+                                          ? 'text-accent font-medium border-l-2 border-accent bg-accent/10'
+                                          : 'text-text-secondary hover:text-text-primary hover:bg-white/[0.04]'
                                       )}
                                     >
                                       {name}
