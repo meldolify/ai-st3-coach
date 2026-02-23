@@ -24,8 +24,8 @@ export default function ClinicalImageCard({ imageFile, scenarioTitle, onExpand, 
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.3, delay: 0.1 }}
       className={cn(
-        'rounded-2xl overflow-hidden cursor-pointer group',
-        'glass-panel hover:shadow-lg transition-shadow duration-200',
+        'rounded-xl overflow-hidden cursor-pointer group',
+        'hover:shadow-lg transition-shadow duration-200',
         fillHeight && 'h-full'
       )}
       onClick={() => onExpand?.(imageSrc)}
@@ -50,7 +50,7 @@ export default function ClinicalImageCard({ imageFile, scenarioTitle, onExpand, 
 
         {!imageLoaded && (
           <div className={cn(
-            'absolute inset-0 bg-bg-secondary/50 animate-pulse',
+            'absolute inset-0 bg-white/[0.04] animate-pulse',
             fillHeight ? 'h-full' : compact ? 'h-[200px]' : 'h-[280px]'
           )} />
         )}
@@ -59,7 +59,7 @@ export default function ClinicalImageCard({ imageFile, scenarioTitle, onExpand, 
         <div
           className={cn(
             'absolute top-3 right-3 p-1.5 rounded-md',
-            'bg-white/80 backdrop-blur-sm',
+            'bg-white/[0.1] backdrop-blur-sm',
             'opacity-0 group-hover:opacity-100 transition-opacity duration-200'
           )}
         >
@@ -72,7 +72,7 @@ export default function ClinicalImageCard({ imageFile, scenarioTitle, onExpand, 
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className="text-text-primary"
+            className="text-white/70"
           >
             <path d="M15 3h6v6" />
             <path d="M9 21H3v-6" />
@@ -82,7 +82,7 @@ export default function ClinicalImageCard({ imageFile, scenarioTitle, onExpand, 
         </div>
 
         {/* Label */}
-        <div className="absolute bottom-0 left-0 right-0 px-3 py-2 bg-gradient-to-t from-black/30 to-transparent">
+        <div className="absolute bottom-0 left-0 right-0 px-3 py-2 bg-gradient-to-t from-black/60 to-transparent">
           <span className="text-[11px] text-white/90 font-medium">
             Clinical Image
           </span>

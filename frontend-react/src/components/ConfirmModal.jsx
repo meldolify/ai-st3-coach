@@ -38,7 +38,7 @@ export default function ConfirmModal({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4"
           onClick={onCancel}
           role="dialog"
           aria-modal="true"
@@ -49,7 +49,7 @@ export default function ConfirmModal({
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.95, opacity: 0 }}
             transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-            className="bg-bg-elevated rounded-xl p-6 max-w-sm w-full shadow-xl"
+            className="glass-card rounded-xl p-6 max-w-sm w-full !bg-white/[0.08] !backdrop-blur-2xl !border-white/[0.1]"
             onClick={(e) => e.stopPropagation()}
           >
             <h3 className="font-display text-lg text-text-primary mb-2">
@@ -63,7 +63,7 @@ export default function ConfirmModal({
               <button
                 ref={cancelRef}
                 onClick={onCancel}
-                className="px-4 py-2 text-[13px] font-medium text-text-secondary hover:text-text-primary transition-colors rounded-md hover:bg-bg-secondary"
+                className="px-4 py-2 text-[13px] font-medium text-text-secondary hover:text-text-primary transition-colors rounded-md hover:bg-white/[0.06]"
               >
                 {cancelLabel}
               </button>
