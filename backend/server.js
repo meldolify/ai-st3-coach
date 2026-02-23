@@ -73,8 +73,6 @@ const sessions = new Map();
 // Use secure session ID generation from middleware
 // (keeping function name for backwards compatibility)
 
-// callLLM removed — feedback handler now uses openaiService.generateResponseStream directly
-
 /**
  * Serialize conversation history into a readable transcript string.
  * Skips the system message. Maps roles to [Examiner] and [Candidate].
@@ -90,8 +88,6 @@ function serializeTranscript(history) {
     })
     .join('\n');
 }
-
-// waitForAiFinished removed — streaming feedback delivers all sections rapidly without waiting
 
 async function googleTTS(text, voiceName, options = {}) {
   return ttsService.synthesize(text, voiceName, options);
@@ -134,16 +130,36 @@ async function ttsForSession(plainText, session) {
  * @param {Object} options - GPT options (optional)
  */
 async function streamResponseToClient(session, ws, history, options = {}) {
-  const sentenceBuffer = new SentenceBuffer(2, 20);
+  const sentenceBuffer = new SentenceBuffer(1, 20);
   let fullText = '';
   let chunkIndex = 0;
   const t0 = Date.now();
+  let firstTokenAt = 0;
+  let firstSentenceAt = 0;
+  let firstChunkSentAt = 0;
 
   session.isAISpeaking = true;
   ws.send(JSON.stringify({ type: 'ai_response_start' }));
 
+  // Parallel TTS: fire TTS immediately as sentences emerge, send in order
+  const ttsQueue = []; // Array of { text, ttsPromise }
+
+  function enqueueTTS(text) {
+    if (!firstSentenceAt) {
+      firstSentenceAt = Date.now();
+      console.log(`[PERF] First sentence ready: ${firstSentenceAt - t0}ms`);
+    }
+    const ttsPromise = ttsForSession(text, session);
+    ttsQueue.push({ text, ttsPromise });
+  }
+
   try {
     for await (const token of openaiService.generateResponseStream(history, options)) {
+      if (!firstTokenAt) {
+        firstTokenAt = Date.now();
+        console.log(`[PERF] LLM first token: ${firstTokenAt - t0}ms`);
+      }
+
       // Abort if user interrupted
       if (!session.isAISpeaking) {
         console.log('[STREAM] Aborted — user interrupted');
@@ -157,26 +173,30 @@ async function streamResponseToClient(session, ws, history, options = {}) {
         if (!session.isAISpeaking) {
           break;
         }
-        const audio = await ttsForSession(sentence, session);
-        ws.send(
-          JSON.stringify({
-            type: 'ai_response_chunk',
-            text: sentence,
-            audio: audio.toString('base64'),
-            chunkIndex: chunkIndex++
-          })
-        );
+        enqueueTTS(sentence);
       }
     }
 
     // Flush remaining text
     const remaining = sentenceBuffer.flush();
     if (remaining && session.isAISpeaking) {
-      const audio = await ttsForSession(remaining, session);
+      enqueueTTS(remaining);
+    }
+
+    // Send all TTS results in order (TTS calls already running in parallel)
+    for (const { text, ttsPromise } of ttsQueue) {
+      if (!session.isAISpeaking) {
+        break;
+      }
+      const audio = await ttsPromise;
+      if (!firstChunkSentAt) {
+        firstChunkSentAt = Date.now();
+        console.log(`[PERF] First chunk sent: ${firstChunkSentAt - t0}ms`);
+      }
       ws.send(
         JSON.stringify({
           type: 'ai_response_chunk',
-          text: remaining,
+          text,
           audio: audio.toString('base64'),
           chunkIndex: chunkIndex++
         })
@@ -184,7 +204,7 @@ async function streamResponseToClient(session, ws, history, options = {}) {
     }
 
     const tEnd = Date.now();
-    console.log(`[TIMING] Streaming pipeline: ${tEnd - t0}ms, ${chunkIndex} chunks`);
+    console.log(`[PERF] Pipeline total: ${tEnd - t0}ms, ${chunkIndex} chunks`);
     console.log('[AI] ' + fullText);
 
     // Push full response to history
@@ -479,7 +499,7 @@ wss.on('connection', (ws, req) => {
 
         // Process with streaming GPT → sentence-level TTS
         session.history.push({ role: 'user', content: transcript });
-        await streamResponseToClient(session, ws, session.history);
+        await streamResponseToClient(session, ws, session.history, { temperature: 0.5 });
       } catch (error) {
         console.error('[VAD] Pipeline error:', error.message);
         ws.send(JSON.stringify({ type: 'error', message: 'Processing failed' }));
@@ -550,16 +570,6 @@ wss.on('connection', (ws, req) => {
               );
               const int16Array = new Int16Array(alignedBuffer);
 
-              // Diagnostic: log first chunk details
-              if (!session._chunkCount) {
-                session._chunkCount = 0;
-                const samples = int16Array.slice(0, 10);
-                console.log(
-                  `[VAD] First chunk: ${int16Array.length} samples, first 10: [${Array.from(samples)}]`
-                );
-              }
-              session._chunkCount++;
-
               await session.vad.processChunk(int16Array);
             } catch (error) {
               console.error('[VAD] Chunk processing error:', error.message);
@@ -609,7 +619,7 @@ wss.on('connection', (ws, req) => {
             } // Ignore after interview ended
             console.log('[USER] ' + sanitizeForLog(msg.text));
             session.history.push({ role: 'user', content: msg.text });
-            await streamResponseToClient(session, ws, session.history);
+            await streamResponseToClient(session, ws, session.history, { temperature: 0.5 });
             break;
 
           case 'user_speaking':
@@ -628,11 +638,6 @@ wss.on('connection', (ws, req) => {
 
           case 'ai_finished':
             session.isAISpeaking = false;
-            // Resolve any pending waitForAiFinished promise
-            if (session._aiFinishedResolve) {
-              session._aiFinishedResolve();
-              session._aiFinishedResolve = null;
-            }
             break;
 
           case 'request_feedback':

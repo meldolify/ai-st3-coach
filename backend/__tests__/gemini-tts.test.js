@@ -98,8 +98,8 @@ describe('GeminiTTSService', () => {
       const result = await geminiTTSService.synthesize('Hello', 'Fenrir');
 
       expect(Buffer.isBuffer(result)).toBe(true);
-      // WAV header (44) + PCM data (4) + 150ms silence padding (7200) = 7248 bytes
-      expect(result.length).toBe(44 + 4 + 7200);
+      // WAV header (44) + PCM data (4) = 48 bytes (no silence padding)
+      expect(result.length).toBe(44 + 4);
       expect(result.toString('ascii', 0, 4)).toBe('RIFF');
       expect(result.toString('ascii', 8, 12)).toBe('WAVE');
       expect(result.toString('ascii', 12, 16)).toBe('fmt ');
@@ -145,37 +145,34 @@ describe('GeminiTTSService', () => {
   });
 
   describe('_pcmToWav', () => {
-    // 150ms silence padding: 24000 * 0.15 * 1 * 2 = 7200 bytes
-    const SILENCE_PADDING = Math.round(24000 * (150 / 1000) * 1 * 2);
-
     test('creates correct WAV header for 24kHz mono 16-bit', () => {
       const pcm = Buffer.from([0x01, 0x02, 0x03, 0x04]);
       const wav = geminiTTSService._pcmToWav(pcm, 24000, 1, 16);
 
-      expect(wav.length).toBe(44 + 4 + SILENCE_PADDING);
-      expect(wav.readUInt32LE(4)).toBe(36 + 4 + SILENCE_PADDING);
+      expect(wav.length).toBe(44 + 4);
+      expect(wav.readUInt32LE(4)).toBe(36 + 4);
       expect(wav.readUInt16LE(20)).toBe(1); // PCM format
       expect(wav.readUInt16LE(22)).toBe(1); // mono
       expect(wav.readUInt32LE(24)).toBe(24000); // sample rate
       expect(wav.readUInt32LE(28)).toBe(48000); // byte rate
       expect(wav.readUInt16LE(32)).toBe(2); // block align
       expect(wav.readUInt16LE(34)).toBe(16); // bits per sample
-      expect(wav.readUInt32LE(40)).toBe(4 + SILENCE_PADDING); // data length includes padding
+      expect(wav.readUInt32LE(40)).toBe(4); // data length
       expect(wav[44]).toBe(0x01);
       expect(wav[47]).toBe(0x04);
     });
 
     test('handles empty PCM data', () => {
       const wav = geminiTTSService._pcmToWav(Buffer.alloc(0), 24000, 1, 16);
-      expect(wav.length).toBe(44 + SILENCE_PADDING);
-      expect(wav.readUInt32LE(40)).toBe(SILENCE_PADDING);
+      expect(wav.length).toBe(44);
+      expect(wav.readUInt32LE(40)).toBe(0);
     });
 
     test('handles large PCM data', () => {
       const pcm = Buffer.alloc(48000);
       const wav = geminiTTSService._pcmToWav(pcm, 24000, 1, 16);
-      expect(wav.length).toBe(44 + 48000 + SILENCE_PADDING);
-      expect(wav.readUInt32LE(40)).toBe(48000 + SILENCE_PADDING);
+      expect(wav.length).toBe(44 + 48000);
+      expect(wav.readUInt32LE(40)).toBe(48000);
     });
   });
 

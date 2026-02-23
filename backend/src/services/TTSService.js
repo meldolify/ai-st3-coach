@@ -39,7 +39,7 @@ class TTSService {
     console.log('[Cloud TTS] Using voice:', voiceName);
 
     // Determine gender based on voice name
-    const femaleVoices = ['Aoede', 'Kore', 'Leda', 'Zephyr', '-F'];
+    const femaleVoices = ['-F', '-A', '-C'];
     const gender = femaleVoices.some(v => voiceName.includes(v)) ? 'FEMALE' : 'MALE';
 
     try {

@@ -47,7 +47,7 @@ class ServerVAD {
     // Detection thresholds — match @ricky0123/vad-web@0.0.19 defaults
     this.posThreshold = options.posThreshold || 0.3;
     this.negThreshold = options.negThreshold || 0.2;
-    this.redemptionFrames = options.redemptionFrames || 8;
+    this.redemptionFrames = options.redemptionFrames || 6;
     this.minSpeechFrames = options.minSpeechFrames || 2;
 
     // State tracking
@@ -207,20 +207,6 @@ class ServerVAD {
     }
     this._frameCount++;
 
-    // Diagnostic: log every ~10 frames (~960ms at 96ms/frame)
-    if (this._frameCount % 10 === 1) {
-      let peak = 0;
-      for (let j = 0; j < frame.length; j++) {
-        const abs = Math.abs(frame[j]);
-        if (abs > peak) {
-          peak = abs;
-        }
-      }
-      console.log(
-        `[VAD] Frame ${this._frameCount}: prob=${prob.toFixed(3)}, peak=${peak.toFixed(4)}, speaking=${this.isSpeaking}`
-      );
-    }
-
     if (!this.isSpeaking) {
       // Maintain rolling pre-speech buffer
       this.preSpeechBuffer.push(new Float32Array(frame));
@@ -304,11 +290,11 @@ class ServerVAD {
   _getRedemptionFrames() {
     const elapsed = Date.now() - this.speechStartTime;
     if (elapsed < 5000) {
-      return this.redemptionFrames; // 8 frames = ~768ms
+      return this.redemptionFrames; // 6 frames = ~576ms
     } else if (elapsed < 15000) {
-      return this.redemptionFrames * 2; // 16 frames = ~1536ms
+      return this.redemptionFrames * 2; // 12 frames = ~1152ms
     } else {
-      return Math.round(this.redemptionFrames * 3.5); // 28 frames = ~2688ms
+      return Math.round(this.redemptionFrames * 3.5); // 21 frames = ~2016ms
     }
   }
 
