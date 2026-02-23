@@ -2,6 +2,13 @@ import { useRef, useEffect, useImperativeHandle, forwardRef } from 'react'
 import { cn } from '../lib/utils'
 import { OrbVisualizer } from '../lib/OrbVisualizer'
 
+const STAGGER_BY_STATE = {
+  idle: 0.6,       // 0s, 0.6s, 1.2s, 1.8s — slow, relaxed
+  listening: 0.15,  // 0s, 0.15s, 0.3s, 0.45s — responsive
+  speaking: 0.1,    // 0s, 0.1s, 0.2s, 0.3s — energetic
+  thinking: 0.2,    // 0s, 0.2s, 0.4s, 0.6s — methodical
+}
+
 /**
  * VoiceOrb — UIverse-style 5-layer SVG arc orb with CSS state animations.
  * Canvas audio-reactive rings overlay on top via OrbVisualizer.
@@ -131,4 +138,44 @@ const VoiceOrb = forwardRef(function VoiceOrb({ state = 'idle', size = 120, mobi
   )
 })
 
+/**
+ * VoiceOrbWithRings — Wraps VoiceOrb with concentric ripple ring divs.
+ * Rings animate per state via CSS classes (.ripple-ring .ring-state-{state}).
+ * Desktop: 4 rings by default, Mobile: 2 rings.
+ * Container sized at size * 2.2 so rings extend beyond the orb.
+ */
+const VoiceOrbWithRings = forwardRef(function VoiceOrbWithRings(
+  { state = 'idle', size = 120, mobile = false, ringCount = 4, ...props },
+  ref
+) {
+  const rings = mobile ? 2 : ringCount
+  const containerSize = size * 2.2
+
+  return (
+    <div
+      className="relative flex items-center justify-center"
+      style={{ width: containerSize, height: containerSize, overflow: 'visible' }}
+    >
+      {/* Ripple rings — behind orb */}
+      {Array.from({ length: rings }).map((_, i) => (
+        <div
+          key={i}
+          className={cn('ripple-ring absolute rounded-full', `ring-state-${state}`)}
+          style={{
+            inset: `${(rings - 1 - i) * 10}%`,
+            animationDelay: `${i * (STAGGER_BY_STATE[state] || 0.2)}s`,
+            zIndex: rings - i,
+          }}
+        />
+      ))}
+
+      {/* Existing SVG orb — center, on top */}
+      <div className="relative z-10">
+        <VoiceOrb ref={ref} state={state} size={size} mobile={mobile} {...props} />
+      </div>
+    </div>
+  )
+})
+
 export default VoiceOrb
+export { VoiceOrbWithRings }
