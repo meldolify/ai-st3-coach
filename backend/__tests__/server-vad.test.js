@@ -100,9 +100,9 @@ describe('ServerVAD - construction and initialization', () => {
     expect(vad.negThreshold).toBe(0.2);
   });
 
-  test('constructor sets default redemptionFrames=8 and minSpeechFrames=2', () => {
+  test('constructor sets default redemptionFrames=6 and minSpeechFrames=2', () => {
     const vad = new ServerVAD();
-    expect(vad.redemptionFrames).toBe(8);
+    expect(vad.redemptionFrames).toBe(6);
     expect(vad.minSpeechFrames).toBe(2);
   });
 
@@ -507,17 +507,17 @@ describe('ServerVAD - adaptive redemption frames', () => {
 
   test('short speech (<5s) uses base redemption frames', () => {
     vad.speechStartTime = Date.now(); // just started
-    expect(vad._getRedemptionFrames()).toBe(8);
+    expect(vad._getRedemptionFrames()).toBe(6);
   });
 
   test('medium speech (5-15s) uses 2x redemption frames', () => {
     vad.speechStartTime = Date.now() - 7000; // 7 seconds ago
-    expect(vad._getRedemptionFrames()).toBe(16);
+    expect(vad._getRedemptionFrames()).toBe(12);
   });
 
   test('long speech (>15s) uses 3.5x redemption frames', () => {
     vad.speechStartTime = Date.now() - 20000; // 20 seconds ago
-    expect(vad._getRedemptionFrames()).toBe(28); // round(8 * 3.5) = 28
+    expect(vad._getRedemptionFrames()).toBe(21); // round(6 * 3.5) = 21
   });
 });
 

@@ -70,6 +70,9 @@ Director's notes: Brisk, purposeful delivery with tight pacing and minimal pause
   // Development - bypass auth/subscription checks for local testing
   DEV_BYPASS_AUTH: process.env.DEV_BYPASS_AUTH === 'true',
 
+  // Debug flags
+  DEBUG_VAD: process.env.DEBUG_VAD === 'true',
+
   // Free tier scenarios - topicFolder paths accessible without subscription
   // Keep in sync with frontend/config.js FREE_TIER_SCENARIOS
   // All 3 difficulties are implicitly included per topic

@@ -138,74 +138,6 @@ class AudioPlayer {
   }
 
   /**
-   * Play a single base64 audio (non-queued, for legacy ai_response and feedback).
-   */
-  playBase64Audio(base64Audio) {
-    // Use orb visualizer if available and initialized
-    if (this.useVisualizer && window.orbVisualizer) {
-      this.isPlaying = true;
-      if (this.onStart) this.onStart();
-
-      window.orbVisualizer.suppressIdleOnEnd = false;
-      window.orbVisualizer.onEnd = () => {
-        this.isPlaying = false;
-        if (this.onEnd) this.onEnd();
-      };
-
-      window.orbVisualizer.playWithVisualization(base64Audio);
-      return;
-    }
-
-    // Fallback: standard Audio element playback
-    const binaryString = atob(base64Audio);
-    const bytes = Uint8Array.from(binaryString, char => char.charCodeAt(0));
-    const blob = new Blob([bytes], { type: 'audio/wav' });
-    const url = URL.createObjectURL(blob);
-
-    if (this.playbackTimeout) {
-      clearTimeout(this.playbackTimeout);
-      this.playbackTimeout = null;
-    }
-
-    this.audio.src = url;
-    this.audio.play();
-    this.isPlaying = true;
-    if (this.onStart) this.onStart();
-
-    const estimatedDurationMs = (bytes.length / 4000) * 1000;
-    this.playbackTimeout = setTimeout(() => {
-      if (this.isPlaying) {
-        console.warn('[AUDIO] Playback timeout - forcing end state');
-        this.isPlaying = false;
-        URL.revokeObjectURL(url);
-        if (this.onEnd) this.onEnd();
-      }
-    }, estimatedDurationMs + 10000);
-
-    this.audio.onended = () => {
-      if (this.playbackTimeout) {
-        clearTimeout(this.playbackTimeout);
-        this.playbackTimeout = null;
-      }
-      this.isPlaying = false;
-      URL.revokeObjectURL(url);
-      if (this.onEnd) this.onEnd();
-    };
-
-    this.audio.onerror = (e) => {
-      if (this.playbackTimeout) {
-        clearTimeout(this.playbackTimeout);
-        this.playbackTimeout = null;
-      }
-      console.error('Audio playback error:', e);
-      this.isPlaying = false;
-      URL.revokeObjectURL(url);
-      log('Audio playback error', 'error');
-      if (this.onEnd) this.onEnd();
-    };
-  }
-
-  /**
    * Interrupt all playback — clears queue + stops current chunk.
    */
   interrupt() {
@@ -342,32 +274,6 @@ class V4Session {
         console.log('[V4Session] Interview ended confirmed by server');
         break;
 
-      case 'ai_response': {
-        // Legacy single-response (used by feedback mode)
-        this.audioStreamer.setAISpeaking(true);
-        const aiRoundTrip = this._speechStartAt ? Math.round(performance.now() - this._speechStartAt) : '?';
-        console.log(`[TIMING] AI response received, round-trip from speech start: ${aiRoundTrip}ms`);
-        log('AI: ' + msg.text, 'info');
-        if (window.transcript) {
-          window.transcript.addAIMessage(msg.text);
-        }
-        this.audioPlayer.playBase64Audio(msg.audio);
-        const interruptBtn = document.getElementById('interruptBtn');
-        if (interruptBtn) {
-          interruptBtn.style.display = 'inline-block';
-          interruptBtn.disabled = false;
-          interruptBtn.classList.add('active');
-        }
-        const mobileInterruptBtn = document.getElementById('mobileInterruptBtn');
-        if (mobileInterruptBtn) {
-          mobileInterruptBtn.classList.add('active');
-        }
-        syncMobileButtonStates();
-        updateStatus('aiStatus', 'Speaking', 'speaking');
-        setOrbState('speaking');
-        break;
-      }
-
       case 'ai_response_start': {
         // Streaming response begins — pause mic, show interrupt, set orb
         this._serverStreamActive = true;
@@ -435,11 +341,6 @@ class V4Session {
         console.log('[TIMING] Server VAD: speech start');
         updateStatus('micStatus', 'Recording', 'connected');
         setOrbState('listening');
-        break;
-
-      case 'whisper_transcript':
-        // Legacy: Handle Whisper API transcript from old client-side VAD flow
-        console.log('[WHISPER] Transcript received from backend:', msg.text);
         break;
 
       case 'feedback_processing':

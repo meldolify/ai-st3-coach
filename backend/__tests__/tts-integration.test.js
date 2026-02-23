@@ -63,12 +63,12 @@ describe('TTSService - synthesize', () => {
     );
   });
 
-  test('detects female voice for Kore', async () => {
+  test('detects female voice for Neural2-A (Cloud TTS fallback for Kore)', async () => {
     const mockAudio = Buffer.from('audio');
     const mockSynthesize = jest.fn().mockResolvedValue([{ audioContent: mockAudio }]);
     ttsService.client = { synthesizeSpeech: mockSynthesize };
 
-    await ttsService.synthesize('<speak>Test</speak>', 'en-GB-Kore');
+    await ttsService.synthesize('<speak>Test</speak>', 'en-GB-Neural2-A');
 
     expect(mockSynthesize).toHaveBeenCalledWith(
       expect.objectContaining({

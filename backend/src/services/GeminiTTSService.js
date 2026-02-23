@@ -76,11 +76,7 @@ class GeminiTTSService {
     const header = Buffer.alloc(44);
     const bytesPerSample = bitsPerSample / 8;
 
-    // Add 150ms of silence padding to prevent audio cutoff between streaming chunks
-    const silenceBytes = Math.round(sampleRate * (150 / 1000) * channels * bytesPerSample);
-    const silence = Buffer.alloc(silenceBytes, 0);
-    const paddedPcm = Buffer.concat([pcmBuffer, silence]);
-    const dataLength = paddedPcm.length;
+    const dataLength = pcmBuffer.length;
 
     header.write('RIFF', 0);
     header.writeUInt32LE(36 + dataLength, 4);
@@ -96,7 +92,7 @@ class GeminiTTSService {
     header.write('data', 36);
     header.writeUInt32LE(dataLength, 40);
 
-    return Buffer.concat([header, paddedPcm]);
+    return Buffer.concat([header, pcmBuffer]);
   }
 }
 
