@@ -203,20 +203,27 @@ async function streamResponseToClient(session, ws, history, options = {}) {
       );
     }
 
+    const wasInterrupted = !session.isAISpeaking;
     const tEnd = Date.now();
-    console.log(`[PERF] Pipeline total: ${tEnd - t0}ms, ${chunkIndex} chunks`);
+    console.log(
+      `[PERF] Pipeline total: ${tEnd - t0}ms, ${chunkIndex} chunks${wasInterrupted ? ' (interrupted)' : ''}`
+    );
     console.log('[AI] ' + fullText);
 
-    // Push full response to history
-    history.push({ role: 'assistant', content: fullText });
+    // Only push complete responses to history; interrupted fragments corrupt LLM context
+    if (wasInterrupted) {
+      if (fullText.length > 50) {
+        history.push({ role: 'assistant', content: fullText + ' [interrupted]' });
+      }
+      // Very short fragments are discarded entirely
+    } else {
+      history.push({ role: 'assistant', content: fullText });
+    }
 
     ws.send(JSON.stringify({ type: 'ai_response_end', fullText }));
   } catch (error) {
     console.error('[STREAM] Error:', error.message);
-    // If we got partial text, still save it
-    if (fullText) {
-      history.push({ role: 'assistant', content: fullText });
-    }
+    // Don't push partial text on error — it corrupts LLM context
     const isRateLimit = error instanceof RateLimitError || error.isRateLimit;
     ws.send(
       JSON.stringify({
@@ -255,7 +262,30 @@ const heartbeatInterval = setInterval(() => {
   });
 }, 30000);
 
-wss.on('close', () => clearInterval(heartbeatInterval));
+// Idle session cleanup — remove sessions with no activity for 30 minutes
+const IDLE_TIMEOUT_MS = 30 * 60 * 1000;
+const idleCleanupInterval = setInterval(
+  () => {
+    const now = Date.now();
+    for (const [id, session] of sessions) {
+      if (now - session.lastActivity > IDLE_TIMEOUT_MS) {
+        console.log(
+          `[CLEANUP] Removing idle session: ${id} (idle ${Math.round((now - session.lastActivity) / 60000)}min)`
+        );
+        session.vad?.destroy();
+        session.ws?.terminate();
+        sessions.delete(id);
+        wsRateLimiter.removeClient(id);
+      }
+    }
+  },
+  5 * 60 * 1000
+);
+
+wss.on('close', () => {
+  clearInterval(heartbeatInterval);
+  clearInterval(idleCleanupInterval);
+});
 
 wss.on('connection', (ws, req) => {
   console.log('\n[CLIENT] New client connected');
@@ -381,7 +411,9 @@ wss.on('connection', (ws, req) => {
       interviewEnded: false,
       feedbackCount: 0,
       vad: vadInstance,
-      incrementalState
+      incrementalState,
+      lastActivity: Date.now(),
+      _processingLock: Promise.resolve()
     });
 
     // Wire up VAD callbacks
@@ -516,313 +548,322 @@ wss.on('connection', (ws, req) => {
 
     // Set up message handler only after validation passes
     ws.on('message', async data => {
+      // Parse, validate, and rate-check outside the lock (fast, stateless)
+      let msg;
       try {
-        // Parse and validate message
-        let msg;
-        try {
-          msg = JSON.parse(data);
-        } catch (parseError) {
-          ws.send(JSON.stringify({ type: 'error', message: 'Invalid JSON' }));
-          return;
-        }
-
-        // Validate message schema
-        const validation = validateMessage(msg);
-        if (!validation.valid) {
-          console.warn(`[SECURITY] Invalid message rejected: ${validation.error}`);
-          ws.send(JSON.stringify({ type: 'error', message: validation.error }));
-          return;
-        }
-
-        // Check rate limits
-        const messageType =
-          msg.type === 'whisper_audio' || msg.type === 'audio_chunk' ? 'audio' : 'other';
-        const rateCheck = wsRateLimiter.checkLimit(msg.sessionId, messageType);
-        if (!rateCheck.allowed) {
-          console.warn(
-            `[SECURITY] Rate limit exceeded for session ${msg.sessionId}: ${rateCheck.reason}`
-          );
-          ws.send(JSON.stringify({ type: 'error', message: rateCheck.reason }));
-          return;
-        }
-
-        const session = sessions.get(msg.sessionId);
-
-        if (!session) {
-          ws.send(JSON.stringify({ type: 'error', message: 'Session not found' }));
-          return;
-        }
-
-        switch (msg.type) {
-          case 'audio_chunk':
-            // Server-side VAD: receive PCM audio, run through Silero VAD
-            try {
-              if (session.isAISpeaking || session.inFeedbackMode || session.interviewEnded) {
-                break;
-              } // Ignore audio during AI speech/feedback/ended
-
-              const pcmData = Buffer.from(msg.audio, 'base64');
-              // Copy to aligned ArrayBuffer — Buffer pool can give odd byteOffset
-              // which causes Int16Array to throw RangeError
-              const alignedBuffer = pcmData.buffer.slice(
-                pcmData.byteOffset,
-                pcmData.byteOffset + pcmData.byteLength
-              );
-              const int16Array = new Int16Array(alignedBuffer);
-
-              await session.vad.processChunk(int16Array);
-            } catch (error) {
-              console.error('[VAD] Chunk processing error:', error.message);
-            }
-            break;
-
-          case 'whisper_audio':
-            // Handle Whisper API transcription for browsers without Web Speech API
-            try {
-              const audioBuffer = Buffer.from(msg.audio, 'base64');
-              const audioFormat = msg.format || 'webm'; // Support WAV from Silero VAD
-              const t1 = Date.now();
-
-              // Transcribe using OpenAI service
-              const transcriptionText = await openaiService.transcribeAudio(
-                audioBuffer,
-                msg.sessionId,
-                audioFormat
-              );
-
-              const t2 = Date.now();
-              console.log('[WHISPER STT] ' + transcriptionText);
-              console.log(`[TIMING] Whisper: ${t2 - t1}ms`);
-
-              // Filter noise transcripts (important for VAD mode)
-              if (isNoiseTranscript(transcriptionText)) {
-                console.log('[WHISPER] Filtered as noise, not sending to frontend');
-                break;
-              }
-
-              // Send transcript back to frontend
-              ws.send(
-                JSON.stringify({
-                  type: 'whisper_transcript',
-                  text: transcriptionText
-                })
-              );
-            } catch (error) {
-              console.error('[WHISPER ERROR]', error.message);
-              ws.send(JSON.stringify({ type: 'error', message: 'Transcription failed' }));
-            }
-            break;
-
-          case 'user_transcript':
-            if (session.interviewEnded) {
-              break;
-            } // Ignore after interview ended
-            console.log('[USER] ' + sanitizeForLog(msg.text));
-            session.history.push({ role: 'user', content: msg.text });
-            await streamResponseToClient(session, ws, session.history, { temperature: 0.5 });
-            break;
-
-          case 'user_speaking':
-            if (session.isAISpeaking) {
-              session.isAISpeaking = false;
-              ws.send(JSON.stringify({ type: 'interrupt' }));
-            }
-            break;
-
-          case 'end_interview':
-            console.log('[INTERVIEW] End interview requested for session:', sessionId);
-            session.interviewEnded = true;
-            session.isAISpeaking = false;
-            ws.send(JSON.stringify({ type: 'interview_ended', sessionId }));
-            break;
-
-          case 'ai_finished':
-            session.isAISpeaking = false;
-            break;
-
-          case 'request_feedback':
-            // Streaming feedback: stream LLM → detect sections → parallel TTS → rapid delivery
-            console.log('[FEEDBACK] Starting streaming feedback flow');
-            session.inFeedbackMode = true;
-            session.interviewEnded = true;
-            try {
-              // 1. Serialize full conversation into transcript
-              const transcript = serializeTranscript(session.history);
-              console.log('[FEEDBACK] Transcript length:', transcript.length, 'chars');
-
-              // 2. Build modular feedback prompt (core + personality + clinical)
-              const feedbackPrompt = buildFeedbackPrompt(session.difficulty, session.scenario);
-
-              // 3. Stream LLM, start TTS for each section as it's detected
-              const feedbackMessages = [
-                { role: 'system', content: feedbackPrompt },
-                {
-                  role: 'user',
-                  content: 'Here is the interview transcript:\n\n' + transcript
-                }
-              ];
-
-              const sectionBuffer = new FeedbackSectionBuffer();
-              const sectionTexts = [];
-              let fullText = '';
-              const t1 = Date.now();
-
-              ws.send(JSON.stringify({ type: 'feedback_processing' }));
-
-              for await (const token of openaiService.generateResponseStream(feedbackMessages, {
-                max_tokens: 4000
-              })) {
-                fullText += token;
-
-                // Detect completed sections in stream
-                const completedSections = sectionBuffer.addToken(token);
-                for (const sectionText of completedSections) {
-                  sectionTexts.push(sectionText);
-                  console.log(`[FEEDBACK] Section ${sectionTexts.length} detected`);
-                }
-              }
-
-              // Flush any remaining content after stream ends
-              const flushed = sectionBuffer.flush();
-              if (flushed && sectionBuffer.sectionStarted) {
-                sectionTexts.push(flushed);
-                console.log(`[FEEDBACK] Flushed final section ${sectionTexts.length}`);
-              }
-
-              const t2 = Date.now();
-              console.log(
-                `[TIMING] Feedback LLM stream: ${t2 - t1}ms, ${sectionTexts.length} sections`
-              );
-
-              // 4. Parse full response for JSON summary
-              const parsed = parseFeedbackResponse(fullText);
-              console.log(
-                `[FEEDBACK] Parsed ${parsed.sections.length} sections, JSON: ${!!parsed.json}`
-              );
-              if (!parsed.json) {
-                console.warn(
-                  '[FEEDBACK] JSON parsing failed. LLM response tail:',
-                  fullText.slice(-500)
-                );
-              }
-
-              // Use whichever source found more sections — parsed works on complete text
-              const sections =
-                parsed.sections.length > sectionTexts.length ? parsed.sections : sectionTexts;
-              if (sections.length === 0) {
-                throw new Error('No feedback sections detected from LLM response');
-              }
-
-              // 5. Send JSON summary immediately (card shows on client)
-              let feedback = parsed.json;
-              if (!feedback) {
-                // Try to extract score from spoken feedback text (digit or word)
-                let extractedScore = null;
-                const scoreMatch = fullText.match(/\bscore\b[^.]*?\b([0-5])\b/i);
-                if (scoreMatch) {
-                  extractedScore = parseInt(scoreMatch[1], 10);
-                } else {
-                  const wordMap = { zero: 0, one: 1, two: 2, three: 3, four: 4, five: 5 };
-                  const wordMatch = fullText.match(
-                    /\bscore\b[^.]*?\b(zero|one|two|three|four|five)\b/i
-                  );
-                  if (wordMatch) {
-                    extractedScore = wordMap[wordMatch[1].toLowerCase()];
-                  }
-                }
-                if (extractedScore !== null) {
-                  console.log(`[FEEDBACK] Extracted score ${extractedScore} from spoken text`);
-                }
-                feedback = {
-                  score: extractedScore ?? 0,
-                  overallImpression: sections[0] || 'Feedback delivered via audio.',
-                  clinicalKnowledge: {
-                    diagnosis: 'See spoken feedback',
-                    management: 'See spoken feedback'
-                  },
-                  strengths: ['See spoken feedback above'],
-                  improvements: ['See spoken feedback above'],
-                  summary: sections[0] || 'Feedback delivered via audio.'
-                };
-              }
-
-              ws.send(
-                JSON.stringify({
-                  type: 'feedback_summary',
-                  feedback: feedback
-                })
-              );
-              console.log('[FEEDBACK] Summary sent');
-
-              // 6. Sequential TTS + delivery (matches interview pattern for voice consistency)
-              session.isAISpeaking = true;
-              for (let i = 0; i < sections.length; i++) {
-                if (ws.readyState !== WebSocket.OPEN) {
-                  break;
-                }
-
-                let audioBase64 = '';
-                try {
-                  const audio = await ttsForSession(sections[i], session);
-                  audioBase64 = audio.toString('base64');
-                } catch (ttsErr) {
-                  console.warn(`[FEEDBACK] TTS failed for section ${i + 1}:`, ttsErr.message);
-                }
-
-                session.feedbackCount = i + 1;
-                ws.send(
-                  JSON.stringify({
-                    type: 'feedback_response',
-                    text: sections[i],
-                    audio: audioBase64,
-                    section: i + 1,
-                    totalSections: sections.length
-                  })
-                );
-              }
-
-              const t3 = Date.now();
-              console.log(`[TIMING] Feedback total (stream + TTS + delivery): ${t3 - t1}ms`);
-              session.inFeedbackMode = false;
-            } catch (error) {
-              console.error('[FEEDBACK ERROR]', error.message);
-              const isRateLimit = error instanceof RateLimitError || error.isRateLimit;
-              if (isRateLimit) {
-                ws.send(
-                  JSON.stringify({
-                    type: 'error',
-                    message: 'API rate limit reached. Please wait a moment and try again.',
-                    code: 'RATE_LIMITED'
-                  })
-                );
-              } else {
-                ws.send(
-                  JSON.stringify({
-                    type: 'feedback_summary',
-                    feedback: {
-                      score: 3,
-                      overallImpression: 'Session completed',
-                      clinicalKnowledge: {
-                        diagnosis: 'Feedback generation error',
-                        management: 'Feedback generation error'
-                      },
-                      strengths: ['Session completed'],
-                      improvements: ['Feedback generation encountered an error'],
-                      summary: 'Unable to generate detailed feedback. Please try again.'
-                    }
-                  })
-                );
-              }
-              session.inFeedbackMode = false;
-            }
-            break;
-        }
-      } catch (error) {
-        console.error('[ERROR]', error.message);
-        ws.send(
-          JSON.stringify({ type: 'error', message: 'An error occurred processing your request' })
-        );
+        msg = JSON.parse(data);
+      } catch (parseError) {
+        ws.send(JSON.stringify({ type: 'error', message: 'Invalid JSON' }));
+        return;
       }
+
+      const validation = validateMessage(msg);
+      if (!validation.valid) {
+        console.warn(`[SECURITY] Invalid message rejected: ${validation.error}`);
+        ws.send(JSON.stringify({ type: 'error', message: validation.error }));
+        return;
+      }
+
+      const messageType =
+        msg.type === 'whisper_audio' || msg.type === 'audio_chunk' ? 'audio' : 'other';
+      const rateCheck = wsRateLimiter.checkLimit(msg.sessionId, messageType);
+      if (!rateCheck.allowed) {
+        console.warn(
+          `[SECURITY] Rate limit exceeded for session ${msg.sessionId}: ${rateCheck.reason}`
+        );
+        ws.send(JSON.stringify({ type: 'error', message: rateCheck.reason }));
+        return;
+      }
+
+      const session = sessions.get(msg.sessionId);
+      if (!session) {
+        ws.send(JSON.stringify({ type: 'error', message: 'Session not found' }));
+        return;
+      }
+
+      // Track activity for idle session cleanup
+      session.lastActivity = Date.now();
+
+      // Audio chunks are high-frequency and don't mutate history — process without lock
+      if (msg.type === 'audio_chunk') {
+        try {
+          if (session.isAISpeaking || session.inFeedbackMode || session.interviewEnded) {
+            return;
+          }
+          const pcmData = Buffer.from(msg.audio, 'base64');
+          const alignedBuffer = pcmData.buffer.slice(
+            pcmData.byteOffset,
+            pcmData.byteOffset + pcmData.byteLength
+          );
+          const int16Array = new Int16Array(alignedBuffer);
+          await session.vad.processChunk(int16Array);
+        } catch (error) {
+          console.error('[VAD] Chunk processing error:', error.message);
+        }
+        return;
+      }
+
+      // All other messages serialized through per-session lock to prevent
+      // concurrent streamResponseToClient calls from corrupting history
+      session._processingLock = session._processingLock
+        .then(async () => {
+          try {
+            switch (msg.type) {
+              case 'whisper_audio':
+                // Handle Whisper API transcription for browsers without Web Speech API
+                try {
+                  const audioBuffer = Buffer.from(msg.audio, 'base64');
+                  const audioFormat = msg.format || 'webm'; // Support WAV from Silero VAD
+                  const t1 = Date.now();
+
+                  // Transcribe using OpenAI service
+                  const transcriptionText = await openaiService.transcribeAudio(
+                    audioBuffer,
+                    msg.sessionId,
+                    audioFormat
+                  );
+
+                  const t2 = Date.now();
+                  console.log('[WHISPER STT] ' + transcriptionText);
+                  console.log(`[TIMING] Whisper: ${t2 - t1}ms`);
+
+                  // Filter noise transcripts (important for VAD mode)
+                  if (isNoiseTranscript(transcriptionText)) {
+                    console.log('[WHISPER] Filtered as noise, not sending to frontend');
+                    break;
+                  }
+
+                  // Send transcript back to frontend
+                  ws.send(
+                    JSON.stringify({
+                      type: 'whisper_transcript',
+                      text: transcriptionText
+                    })
+                  );
+                } catch (error) {
+                  console.error('[WHISPER ERROR]', error.message);
+                  ws.send(JSON.stringify({ type: 'error', message: 'Transcription failed' }));
+                }
+                break;
+
+              case 'user_transcript':
+                if (session.interviewEnded) {
+                  break;
+                } // Ignore after interview ended
+                console.log('[USER] ' + sanitizeForLog(msg.text));
+                session.history.push({ role: 'user', content: msg.text });
+                await streamResponseToClient(session, ws, session.history, { temperature: 0.5 });
+                break;
+
+              case 'user_speaking':
+                if (session.isAISpeaking) {
+                  session.isAISpeaking = false;
+                  ws.send(JSON.stringify({ type: 'interrupt' }));
+                }
+                break;
+
+              case 'end_interview':
+                console.log('[INTERVIEW] End interview requested for session:', sessionId);
+                session.interviewEnded = true;
+                session.isAISpeaking = false;
+                session.vad.reset(); // Clear stale audio buffers
+                ws.send(JSON.stringify({ type: 'interview_ended', sessionId }));
+                break;
+
+              case 'ai_finished':
+                session.isAISpeaking = false;
+                break;
+
+              case 'request_feedback':
+                // Streaming feedback: stream LLM → detect sections → parallel TTS → rapid delivery
+                console.log('[FEEDBACK] Starting streaming feedback flow');
+                session.inFeedbackMode = true;
+                session.interviewEnded = true;
+                session.vad.reset(); // Clear stale audio buffers
+                try {
+                  // 1. Serialize full conversation into transcript
+                  const transcript = serializeTranscript(session.history);
+                  console.log('[FEEDBACK] Transcript length:', transcript.length, 'chars');
+
+                  // 2. Build modular feedback prompt (core + personality + clinical)
+                  const feedbackPrompt = buildFeedbackPrompt(session.difficulty, session.scenario);
+
+                  // 3. Stream LLM, start TTS for each section as it's detected
+                  const feedbackMessages = [
+                    { role: 'system', content: feedbackPrompt },
+                    {
+                      role: 'user',
+                      content: 'Here is the interview transcript:\n\n' + transcript
+                    }
+                  ];
+
+                  const sectionBuffer = new FeedbackSectionBuffer();
+                  const sectionTexts = [];
+                  let fullText = '';
+                  const t1 = Date.now();
+
+                  ws.send(JSON.stringify({ type: 'feedback_processing' }));
+
+                  for await (const token of openaiService.generateResponseStream(feedbackMessages, {
+                    max_tokens: 4000
+                  })) {
+                    fullText += token;
+
+                    // Detect completed sections in stream
+                    const completedSections = sectionBuffer.addToken(token);
+                    for (const sectionText of completedSections) {
+                      sectionTexts.push(sectionText);
+                      console.log(`[FEEDBACK] Section ${sectionTexts.length} detected`);
+                    }
+                  }
+
+                  // Flush any remaining content after stream ends
+                  const flushed = sectionBuffer.flush();
+                  if (flushed && sectionBuffer.sectionStarted) {
+                    sectionTexts.push(flushed);
+                    console.log(`[FEEDBACK] Flushed final section ${sectionTexts.length}`);
+                  }
+
+                  const t2 = Date.now();
+                  console.log(
+                    `[TIMING] Feedback LLM stream: ${t2 - t1}ms, ${sectionTexts.length} sections`
+                  );
+
+                  // 4. Parse full response for JSON summary
+                  const parsed = parseFeedbackResponse(fullText);
+                  console.log(
+                    `[FEEDBACK] Parsed ${parsed.sections.length} sections, JSON: ${!!parsed.json}`
+                  );
+                  if (!parsed.json) {
+                    console.warn(
+                      '[FEEDBACK] JSON parsing failed. LLM response tail:',
+                      fullText.slice(-500)
+                    );
+                  }
+
+                  // Use whichever source found more sections — parsed works on complete text
+                  const sections =
+                    parsed.sections.length > sectionTexts.length ? parsed.sections : sectionTexts;
+                  if (sections.length === 0) {
+                    throw new Error('No feedback sections detected from LLM response');
+                  }
+
+                  // 5. Send JSON summary immediately (card shows on client)
+                  let feedback = parsed.json;
+                  if (!feedback) {
+                    // Try to extract score from spoken feedback text (digit or word)
+                    let extractedScore = null;
+                    const scoreMatch = fullText.match(/\bscore\b[^.]*?\b([0-5])\b/i);
+                    if (scoreMatch) {
+                      extractedScore = parseInt(scoreMatch[1], 10);
+                    } else {
+                      const wordMap = { zero: 0, one: 1, two: 2, three: 3, four: 4, five: 5 };
+                      const wordMatch = fullText.match(
+                        /\bscore\b[^.]*?\b(zero|one|two|three|four|five)\b/i
+                      );
+                      if (wordMatch) {
+                        extractedScore = wordMap[wordMatch[1].toLowerCase()];
+                      }
+                    }
+                    if (extractedScore !== null) {
+                      console.log(`[FEEDBACK] Extracted score ${extractedScore} from spoken text`);
+                    }
+                    feedback = {
+                      score: extractedScore ?? 0,
+                      overallImpression: sections[0] || 'Feedback delivered via audio.',
+                      clinicalKnowledge: {
+                        diagnosis: 'See spoken feedback',
+                        management: 'See spoken feedback'
+                      },
+                      strengths: ['See spoken feedback above'],
+                      improvements: ['See spoken feedback above'],
+                      summary: sections[0] || 'Feedback delivered via audio.'
+                    };
+                  }
+
+                  ws.send(
+                    JSON.stringify({
+                      type: 'feedback_summary',
+                      feedback: feedback
+                    })
+                  );
+                  console.log('[FEEDBACK] Summary sent');
+
+                  // 6. Parallel TTS: fire all concurrently, send in order
+                  session.isAISpeaking = true;
+                  const feedbackTTSPromises = sections.map(text =>
+                    ttsForSession(text, session).catch(err => {
+                      console.warn('[FEEDBACK] TTS failed:', err.message);
+                      return null;
+                    })
+                  );
+
+                  for (let i = 0; i < sections.length; i++) {
+                    if (ws.readyState !== WebSocket.OPEN) {
+                      break;
+                    }
+                    const audio = await feedbackTTSPromises[i];
+                    session.feedbackCount = i + 1;
+                    ws.send(
+                      JSON.stringify({
+                        type: 'feedback_response',
+                        text: sections[i],
+                        audio: audio ? audio.toString('base64') : '',
+                        section: i + 1,
+                        totalSections: sections.length
+                      })
+                    );
+                  }
+
+                  const t3 = Date.now();
+                  console.log(`[TIMING] Feedback total (stream + TTS + delivery): ${t3 - t1}ms`);
+                  session.inFeedbackMode = false;
+                } catch (error) {
+                  console.error('[FEEDBACK ERROR]', error.message);
+                  const isRateLimit = error instanceof RateLimitError || error.isRateLimit;
+                  if (isRateLimit) {
+                    ws.send(
+                      JSON.stringify({
+                        type: 'error',
+                        message: 'API rate limit reached. Please wait a moment and try again.',
+                        code: 'RATE_LIMITED'
+                      })
+                    );
+                  } else {
+                    ws.send(
+                      JSON.stringify({
+                        type: 'feedback_summary',
+                        feedback: {
+                          score: 3,
+                          overallImpression: 'Session completed',
+                          clinicalKnowledge: {
+                            diagnosis: 'Feedback generation error',
+                            management: 'Feedback generation error'
+                          },
+                          strengths: ['Session completed'],
+                          improvements: ['Feedback generation encountered an error'],
+                          summary: 'Unable to generate detailed feedback. Please try again.'
+                        }
+                      })
+                    );
+                  }
+                  session.inFeedbackMode = false;
+                }
+                break;
+            }
+          } catch (error) {
+            console.error('[ERROR]', error.message);
+            ws.send(
+              JSON.stringify({
+                type: 'error',
+                message: 'An error occurred processing your request'
+              })
+            );
+          }
+        })
+        .catch(err => {
+          console.error('[LOCK] Handler error:', err.message);
+        });
     });
 
     ws.on('close', () => {

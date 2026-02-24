@@ -46,24 +46,6 @@ const CONFIG = {
     'structured_interview/audit/focused_interview'
   ],
 
-  // Speech Recognition Configuration
-  // V4.5: VAD mode (continuous voice detection) or PTT fallback
-  SPEECH_RECOGNITION: {
-    USE_PUSH_TO_TALK: false,       // false = VAD mode (continuous)
-    USE_VAD: true,                 // Enable Silero VAD via @ricky0123/vad-web
-    WHISPER_PRIMARY: true,         // true = Whisper transcription
-
-    // VAD Configuration (used by VADManager.js)
-    VAD: {
-      POSITIVE_THRESHOLD: 0.3,     // Speech detection start threshold (sensitive)
-      NEGATIVE_THRESHOLD: 0.2,     // Speech detection end threshold (sensitive)
-      PRE_SPEECH_FRAMES: 10,       // ~300ms pre-roll buffer
-      REDEMPTION_FRAMES: 12,       // ~360ms hangover delay (allow natural pauses)
-      MIN_SPEECH_FRAMES: 2,        // ~60ms minimum speech duration
-      INTERRUPT_MIN_MS: 200,       // Minimum duration for interrupt during TTS
-      POST_TTS_COOLDOWN_MS: 250    // Cooldown after TTS ends (prevent echo with speakers)
-    }
-  }
 };
 
 // Log current configuration

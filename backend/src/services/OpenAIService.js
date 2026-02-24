@@ -48,9 +48,15 @@ class OpenAIService {
     if (error instanceof RateLimitError) {
       return true;
     }
-    if (error.status === 429 || error.status === 503) {
+    if ([408, 429, 500, 502, 503].includes(error.status)) {
       return true;
     }
+    if (error.code === 'ECONNRESET' || error.code === 'ENOTFOUND' || error.code === 'ETIMEDOUT') {
+      return true;
+    }
+    if (error.name === 'AbortError') {
+      return false;
+    } // Don't retry intentional aborts
     return false;
   }
 
@@ -126,20 +132,28 @@ class OpenAIService {
     const isWav = audioBuffer.length >= 4 && audioBuffer.slice(0, 4).toString() === 'RIFF';
     const extension = isWav || format === 'wav' ? 'wav' : 'webm';
 
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 30000);
+
     try {
       console.log(`[WHISPER] Processing ${extension} audio, size: ${audioBuffer.length} bytes`);
 
       const file = await toFile(audioBuffer, `audio.${extension}`);
-      const transcription = await client.audio.transcriptions.create({
-        file,
-        model: 'whisper-1',
-        language: 'en'
-      });
+      const transcription = await client.audio.transcriptions.create(
+        { file, model: 'whisper-1', language: 'en' },
+        { signal: controller.signal }
+      );
 
       return transcription.text;
     } catch (error) {
+      if (error.name === 'AbortError') {
+        console.error('[WHISPER] Timed out after 30s');
+        throw new Error('Whisper transcription timed out');
+      }
       console.error('[WHISPER] Error:', error.message);
       throw error;
+    } finally {
+      clearTimeout(timeout);
     }
   }
 
