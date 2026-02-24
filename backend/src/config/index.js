@@ -10,10 +10,33 @@ const path = require('path');
 // Handle Google Cloud credentials for production deployment
 // In production, credentials are passed as a JSON string via environment variable
 if (process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON) {
-  const credsPath = '/tmp/credentials.json';
+  const os = require('os');
+  const crypto = require('crypto');
+  const credsPath = path.join(
+    os.tmpdir(),
+    `gcloud-creds-${crypto.randomBytes(8).toString('hex')}.json`
+  );
   fs.writeFileSync(credsPath, process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON, { mode: 0o600 });
   process.env.GOOGLE_APPLICATION_CREDENTIALS = credsPath;
   console.log('[CONFIG] Using Google Cloud credentials from environment variable');
+
+  // Cleanup on exit
+  const cleanup = () => {
+    try {
+      fs.unlinkSync(credsPath);
+    } catch {
+      /* ignore cleanup errors */
+    }
+  };
+  process.on('exit', cleanup);
+  process.on('SIGTERM', () => {
+    cleanup();
+    process.exit(0);
+  });
+  process.on('SIGINT', () => {
+    cleanup();
+    process.exit(0);
+  });
 }
 
 const config = {

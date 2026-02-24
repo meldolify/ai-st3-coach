@@ -101,6 +101,7 @@ class AudioPlayer {
     const bytes = Uint8Array.from(binaryString, char => char.charCodeAt(0));
     const blob = new Blob([bytes], { type: 'audio/wav' });
     const url = URL.createObjectURL(blob);
+    this._currentBlobUrl = url; // Track for cleanup on interrupt
 
     if (this.playbackTimeout) {
       clearTimeout(this.playbackTimeout);
@@ -145,6 +146,12 @@ class AudioPlayer {
     this._queue = [];
     this._isPlayingChunk = false;
 
+    // Revoke current blob URL to prevent memory leak
+    if (this._currentBlobUrl) {
+      URL.revokeObjectURL(this._currentBlobUrl);
+      this._currentBlobUrl = null;
+    }
+
     // Interrupt visualizer if in use
     if (this.useVisualizer && window.orbVisualizer) {
       window.orbVisualizer.suppressIdleOnEnd = false;
@@ -181,6 +188,10 @@ class V4Session {
     this.difficulty = difficulty || null;
     this.isConnected = false;
     this.inFeedbackMode = false; // Track if we're in feedback mode
+    this._intentionalClose = false; // Track intentional disconnect
+    this._reconnectAttempts = 0;
+    this._maxReconnectAttempts = 5;
+    this._reconnectBaseDelay = 1000;
 
     // Voice mapping for each difficulty level (Gemini TTS voice names)
     this.voiceMap = {
@@ -240,8 +251,12 @@ class V4Session {
       };
 
       this.ws.onmessage = (event) => {
-        const msg = JSON.parse(event.data);
-        this.handleMessage(msg);
+        try {
+          const msg = JSON.parse(event.data);
+          this.handleMessage(msg);
+        } catch (e) {
+          console.error('[V4Session] Failed to parse message:', e);
+        }
       };
 
       this.ws.onerror = (error) => {
@@ -250,12 +265,94 @@ class V4Session {
         reject(error);
       };
 
-      this.ws.onclose = () => {
+      this.ws.onclose = (event) => {
         this.isConnected = false;
         updateStatus('connectionStatus', 'Disconnected', 'disconnected');
-        log('WebSocket closed', 'warning');
+
+        // Don't reconnect if intentionally disconnected or clean close
+        if (this._intentionalClose || event.code === 1000) {
+          log('Session ended', 'info');
+          return;
+        }
+
+        // Attempt reconnection with exponential backoff
+        if (this._reconnectAttempts < this._maxReconnectAttempts) {
+          const delay = this._reconnectBaseDelay * Math.pow(2, this._reconnectAttempts);
+          this._reconnectAttempts++;
+          updateStatus('connectionStatus', `Reconnecting (${this._reconnectAttempts}/${this._maxReconnectAttempts})...`, 'active');
+          log(`Connection lost. Reconnecting in ${delay / 1000}s...`, 'warning');
+          setTimeout(() => this._attemptReconnect(), delay);
+        } else {
+          log('Connection lost. Please refresh the page.', 'error');
+          setOrbState('idle');
+        }
       };
     });
+  }
+
+  /**
+   * Attempt to reconnect the WebSocket, preserving the sessionId
+   * so the server can resume the existing session.
+   */
+  _attemptReconnect() {
+    if (this._intentionalClose) return;
+
+    let wsUrl = this.backendUrl + '?scenario=' + this.promptFile;
+    if (this.difficulty) wsUrl += '&difficulty=' + this.difficulty;
+    if (this.voice) wsUrl += '&voice=' + this.voice;
+    if (this.sessionId) wsUrl += '&sessionId=' + encodeURIComponent(this.sessionId);
+    if (window.currentUser?.id) wsUrl += '&userId=' + encodeURIComponent(window.currentUser.id);
+
+    try {
+      this.ws = new WebSocket(wsUrl);
+
+      this.ws.onopen = () => {
+        this.isConnected = true;
+        this._reconnectAttempts = 0;
+        this.audioStreamer.websocket = this.ws;
+        updateStatus('connectionStatus', 'Reconnected', 'connected');
+        log('Reconnected to backend', 'success');
+
+        // Resume audio streaming if it was active
+        if (this.audioStreamer.isStreaming) {
+          this.audioStreamer.start();
+        }
+      };
+
+      this.ws.onmessage = (event) => {
+        try {
+          const msg = JSON.parse(event.data);
+          this.handleMessage(msg);
+        } catch (e) {
+          console.error('[V4Session] Failed to parse message:', e);
+        }
+      };
+
+      this.ws.onerror = () => {
+        log('Reconnection failed', 'error');
+      };
+
+      // Re-use the same onclose logic for subsequent drops
+      this.ws.onclose = (event) => {
+        this.isConnected = false;
+        updateStatus('connectionStatus', 'Disconnected', 'disconnected');
+
+        if (this._intentionalClose || event.code === 1000) return;
+
+        if (this._reconnectAttempts < this._maxReconnectAttempts) {
+          const delay = this._reconnectBaseDelay * Math.pow(2, this._reconnectAttempts);
+          this._reconnectAttempts++;
+          updateStatus('connectionStatus', `Reconnecting (${this._reconnectAttempts}/${this._maxReconnectAttempts})...`, 'active');
+          log(`Connection lost. Reconnecting in ${delay / 1000}s...`, 'warning');
+          setTimeout(() => this._attemptReconnect(), delay);
+        } else {
+          log('Connection lost. Please refresh the page.', 'error');
+          setOrbState('idle');
+        }
+      };
+    } catch (err) {
+      console.error('[V4Session] Reconnect error:', err);
+    }
   }
 
   handleMessage(msg) {
@@ -472,6 +569,7 @@ class V4Session {
   }
 
   disconnect() {
+    this._intentionalClose = true;
     this.audioStreamer.destroy();
     this.audioPlayer.interrupt();
     if (this.ws) {
@@ -496,12 +594,18 @@ class V4Session {
       return null;
     }
 
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => {
+        this.ws.removeEventListener('message', feedbackHandler);
+        reject(new Error('Feedback request timed out after 60s'));
+      }, 60000);
+
       const feedbackHandler = (event) => {
         try {
           const msg = JSON.parse(event.data);
 
           if (msg.type === 'feedback_summary') {
+            clearTimeout(timeout);
             console.log('[V4Session] Received feedback summary');
             this.ws.removeEventListener('message', feedbackHandler);
             resolve(msg.feedback);
@@ -520,8 +624,6 @@ class V4Session {
         type: 'request_feedback',
         sessionId: this.sessionId
       }));
-
-      // No timeout — session stays alive until user navigates away
     });
   }
 }

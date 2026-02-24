@@ -30,6 +30,7 @@ jest.mock('../src/services/ServerVAD', () => {
     this.initialize = jest.fn(() => Promise.resolve());
     this.processChunk = jest.fn(() => Promise.resolve());
     this.destroy = jest.fn();
+    this.reset = jest.fn();
     this.onSpeechStart = null;
     this.onSpeechEnd = null;
     this.onIncrementalAudio = null;

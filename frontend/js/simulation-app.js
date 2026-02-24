@@ -654,6 +654,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
+  // Clean up WebSocket on tab close/navigate (more reliable than beforeunload on mobile)
+  window.addEventListener('pagehide', () => {
+    if (window.session?.isConnected) {
+      window.session.disconnect();
+    }
+  });
+
   // Check for simulation params
   const params = loadSimulationParams();
   if (!params) {
