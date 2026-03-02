@@ -693,6 +693,16 @@ function initScrollAnimations() {
 // ============================================================================
 
 function showPage(pageId) {
+  // Clean up landing page animations when navigating away
+  if (pageId !== 'landingPage') {
+    if (typeof window.destroyLandingScroll === 'function') {
+      window.destroyLandingScroll();
+    }
+    if (typeof window.destroyLandingThree === 'function') {
+      window.destroyLandingThree();
+    }
+  }
+
   const allPages = ['landingPage', 'authPage', 'profilePage', 'specialtySelection',
     'difficultySelection', 'modeSelection', 'mockTypeSelection',
     'stationTypeSelection', 'scenarioSelection', 'simulationRoom',
