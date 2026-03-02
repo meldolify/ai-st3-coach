@@ -157,19 +157,27 @@
 
   <!-- Landing Page (shown to unauthenticated users) -->
   <div id="landingPage" class="page">
-    <!-- Animated Background -->
-    <div class="landing-bg"></div>
+    <!-- SVG Grain Overlay -->
+    <svg class="grain-overlay" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+      <filter id="grain">
+        <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="4" stitchTiles="stitch"/>
+      </filter>
+      <rect width="100%" height="100%" filter="url(#grain)"/>
+    </svg>
 
-    <!-- Top Navigation -->
-    <nav class="landing-nav">
+    <!-- Three.js Canvas Container -->
+    <canvas id="landingCanvas" aria-hidden="true" role="presentation"></canvas>
+
+    <!-- Navigation -->
+    <nav class="landing-nav-new" id="landingNav">
       <a href="#" class="nav-logo">
         <img src="images/logo/logo-md.png" alt="ReViva" class="logo-img logo-img--nav">
       </a>
       <div class="nav-links" id="navLinksGuest">
         <a href="#pricingSection" class="nav-link">Pricing</a>
-        <button class="nav-link" onclick="browseAsGuest()">Explore without login</button>
+        <button class="nav-link" onclick="browseAsGuest()">Explore</button>
         <button class="nav-link" onclick="showAuthPage('login')">Log In</button>
-        <button class="nav-link" onclick="showAuthPage('signup')">Sign Up</button>
+        <button class="nav-link btn-amber btn-amber--sm" onclick="showAuthPage('signup')">Sign Up</button>
       </div>
       <div class="nav-links initially-hidden" id="navLinksUser">
         <a href="#pricingSection" class="nav-link" id="navPricingUser">Pricing</a>
@@ -179,163 +187,316 @@
       </div>
     </nav>
 
-    <div class="landing-content">
-      <!-- Hero Section with Interactive Elements -->
-      <section class="landing-hero">
-        <!-- Parallax floating decorative elements -->
-        <div class="parallax-element parallax-shape-1" data-speed="0.3"></div>
-        <div class="parallax-element parallax-shape-2" data-speed="0.5"></div>
-        <div class="parallax-element parallax-shape-3" data-speed="0.2"></div>
+    <!-- ================================================================
+         SECTION 1: HERO — "What is it?"
+         Animation: SplitType character stagger on load + parallax blobs
+         ================================================================ -->
+    <section class="section-hero section--light" id="sectionHero">
+      <!-- Parallax decorative blobs (hidden on mobile via CSS) -->
+      <div class="parallax-blob parallax-blob--1" data-speed="0.3" aria-hidden="true"></div>
+      <div class="parallax-blob parallax-blob--2" data-speed="0.5" aria-hidden="true"></div>
+      <div class="parallax-blob parallax-blob--3" data-speed="0.2" aria-hidden="true"></div>
 
-        <!-- Hero Logo -->
-        <div class="hero-logo-container scroll-reveal">
-          <img src="images/logo/logo-full.png" alt="ReViva" class="logo-img logo-img--hero">
-        </div>
-
-        <!-- Tagline -->
-        <h2 class="hero-tagline scroll-reveal scroll-reveal--delay-2">Master Your Surgical Interview</h2>
-        <p class="hero-description scroll-reveal scroll-reveal--delay-2">
-          Practice anytime with AI-powered voice simulation designed by current trainees.
-          Get real-time feedback that mirrors actual interview conditions.
+      <!-- Logged-out hero variant -->
+      <div class="hero-logged-out" id="heroLoggedOut">
+        <span class="landing-overline">Interview Preparation, Reimagined</span>
+        <h1 class="hero-display" aria-label="Practice any time. Any where.">
+          <span class="hero-line">PRACTICE</span>
+          <span class="hero-line">ANY TIME.</span>
+          <span class="hero-line">ANY WHERE.</span>
+        </h1>
+        <p class="landing-body hero-subtitle">
+          AI-powered simulated interviews for surgical training.<br>
+          Hand-crafted stations. 24/7 access. Real interview experience.
         </p>
-      </section>
-
-      <!-- Action Cards Section (dynamically populated based on tier) -->
-      <section class="action-cards-section">
-        <div class="action-cards-grid" id="actionCardsContainer">
-          <!-- Cards will be dynamically populated by renderActionCards() in auth.js -->
+        <div class="hero-ctas">
+          <button class="btn-amber magnetic-btn" onclick="browseAsGuest()">Try Free Samples</button>
+          <button class="btn-outline magnetic-btn" onclick="showAuthPage('signup')">Sign Up</button>
         </div>
-      </section>
+      </div>
 
-      <!-- Features Section - Interactive Image Accordion -->
-      <section class="landing-features" id="featuresSection">
-        <p class="section-label">Why Trainees Trust Us</p>
-        <h2 class="section-title">Preparation that makes the difference</h2>
-
-        <div class="features-accordion animate-in">
-          <!-- Carousel track wrapper (for mobile swipe) -->
-          <div class="carousel-track">
-            <div class="accordion-panel active" data-panel="1">
-              <div class="accordion-image">
-                <img src="images/features/practice-anytime.png" alt="24/7 AI interview practice" loading="lazy">
-                <div class="accordion-overlay"></div>
-              </div>
-              <div class="accordion-content">
-                <h3 class="accordion-title">Practice Anytime</h3>
-                <p class="accordion-description">AI-powered interview simulation available 24/7. No scheduling, no waiting. Practice at your pace, on your terms.</p>
-              </div>
-              <span class="accordion-title-vertical">Practice Anytime</span>
-            </div>
-
-            <div class="accordion-panel" data-panel="2">
-              <div class="accordion-image">
-                <img src="images/features/expert-designed.png" alt="Scenarios by expert trainees" loading="lazy">
-                <div class="accordion-overlay"></div>
-              </div>
-              <div class="accordion-content">
-                <h3 class="accordion-title">Expert-Designed</h3>
-                <p class="accordion-description">Scenarios crafted by current high-ranking trainees who know exactly what the ST3 interview demands.</p>
-              </div>
-              <span class="accordion-title-vertical">Expert-Designed</span>
-            </div>
-
-            <div class="accordion-panel" data-panel="3">
-              <div class="accordion-image">
-                <img src="images/features/try-free.png" alt="Free tier experience" loading="lazy">
-                <div class="accordion-overlay"></div>
-              </div>
-              <div class="accordion-content">
-                <h3 class="accordion-title">Try Before You Subscribe</h3>
-                <p class="accordion-description">Explore the platform and test selected scenarios completely free. Experience the quality before committing.</p>
-              </div>
-              <span class="accordion-title-vertical">Try Free</span>
-            </div>
-          </div>
-
-          <!-- Carousel dots (visible on mobile only) -->
-          <div class="carousel-dots">
-            <button class="carousel-dot active" aria-label="Slide 1" type="button"></button>
-            <button class="carousel-dot" aria-label="Slide 2" type="button"></button>
-            <button class="carousel-dot" aria-label="Slide 3" type="button"></button>
-          </div>
+      <!-- Logged-in hero variant -->
+      <div class="hero-logged-in initially-hidden" id="heroLoggedIn">
+        <h1 class="hero-display" aria-label="Welcome back.">
+          <span class="hero-line">WELCOME</span>
+          <span class="hero-line">BACK.</span>
+        </h1>
+        <div class="hero-ctas">
+          <button class="btn-amber btn-amber--lg magnetic-btn" onclick="showProtectedContent()">Go to Dashboard &rarr;</button>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <!-- Login CTA (for authenticated features) -->
-      <section class="landing-cta">
-        <div class="hero-buttons">
-          <button class="btn-primary" id="heroPrimaryBtn" onclick="showAuthPage('signup')">Login to Access All
-            Scenarios</button>
+    <!-- ================================================================
+         SECTION 2: WHO — "Who is it for?"
+         Animation: Clip-path circle expand reveal
+         ================================================================ -->
+    <section class="section-who section--dark" id="sectionWho">
+      <div class="who-inner">
+        <div class="who-left">
+          <h2 class="landing-display" aria-label="Built for doctors who want more.">
+            <span class="display-line">BUILT FOR</span>
+            <span class="display-line">DOCTORS</span>
+            <span class="display-line">WHO WANT</span>
+            <span class="display-line">MORE.</span>
+          </h2>
         </div>
-      </section>
+        <div class="who-right">
+          <p class="landing-body who-body">
+            Designed for UK doctors applying for national specialty training interviews.
+            ST3 Plastic Surgery stations, with more specialties coming soon.
+          </p>
+          <p class="landing-body who-body" style="font-style: italic; margin-top: 1rem;">
+            The principles apply to any medical interview where practice makes the difference.
+          </p>
+        </div>
+      </div>
+    </section>
 
-      <!-- Pricing Section -->
-      <section class="landing-pricing" id="pricingSection">
-        <p class="section-label">Simple Pricing</p>
-        <h2 class="section-title">Choose your plan</h2>
-        <div class="pricing-grid">
-          <div class="pricing-card">
-            <h3>Monthly</h3>
-            <div class="pricing-price">£XX<span>/month</span></div>
-            <p class="pricing-note">Billed monthly. Cancel anytime.</p>
-            <button class="btn-secondary" onclick="showAuthPage('signup')">Get Started</button>
-          </div>
-          <div class="pricing-card featured">
-            <span class="pricing-badge">Best Value</span>
-            <h3>Annual</h3>
-            <div class="pricing-price">£XX<span>/year</span></div>
-            <p class="pricing-note">Save XX% compared to monthly.</p>
-            <button class="btn-primary" onclick="showAuthPage('signup')">Get Started</button>
-          </div>
+    <!-- ================================================================
+         SECTION 3: WHY — "Why does it matter?"
+         Animation: ScrollTrigger pin with 3-phase content morph
+         ================================================================ -->
+    <section class="section-why section--light" id="sectionWhy">
+      <div class="why-display">
+        <h2 class="landing-display" aria-label="Practice is everything.">
+          <span class="display-line">PRACTICE</span>
+          <span class="display-line">IS</span>
+          <span class="display-line">EVERY</span>
+          <span class="display-line">THING.</span>
+        </h2>
+      </div>
+      <div class="why-phases">
+        <!-- Phase 1: The Problem -->
+        <div class="why-phase" id="whyPhase1">
+          <span class="landing-overline">The Problem</span>
+          <h3 class="landing-display" style="font-size: clamp(1.5rem, 3vw, 2rem);">Finding practice partners is hard.</h3>
+          <p class="landing-body">
+            Trainees struggle to find people to practise with. Consultants are busy.
+            Friends get tired of being asked the same questions. You need structured,
+            reliable practice &mdash; not favours.
+          </p>
         </div>
-      </section>
+        <!-- Phase 2: The Gap -->
+        <div class="why-phase" id="whyPhase2">
+          <span class="landing-overline">The Gap</span>
+          <h3 class="landing-display" style="font-size: clamp(1.5rem, 3vw, 2rem);">AI chatbots don&rsquo;t cut it.</h3>
+          <p class="landing-body">
+            Generic AI chatbots don&rsquo;t understand the interview format.
+            They hallucinate scenarios. They don&rsquo;t push back like a real examiner.
+            You deserve better.
+          </p>
+        </div>
+        <!-- Phase 3: The Solution -->
+        <div class="why-phase" id="whyPhase3">
+          <span class="landing-overline">The Solution</span>
+          <h3 class="landing-display" style="font-size: clamp(1.5rem, 3vw, 2rem);">Hand-crafted. Available 24/7.</h3>
+          <p class="landing-body">
+            24/7 access to hand-crafted interview stations. Each one built to mirror the
+            real experience. Practice at your pace, on your schedule.
+          </p>
+        </div>
+        <!-- Progress indicator line -->
+        <div class="why-progress-line" aria-hidden="true"></div>
+      </div>
+    </section>
 
-      <!-- Footer -->
-      <footer class="landing-footer">
-        <div class="footer-content">
-          <div class="footer-brand">
-            <a href="#" class="nav-logo">
-              <img src="images/logo/logo-md.png" alt="ReViva" class="logo-img logo-img--footer">
-            </a>
-            <p>AI-powered interview preparation for surgical trainees. Practice smarter, not harder.</p>
+    <!-- ================================================================
+         SECTION 4: TRUST — "Why trust us?"
+         Animation: Horizontal parallax text strip + word-by-word reveal
+         ================================================================ -->
+    <section class="section-trust section--dark" id="sectionTrust">
+      <!-- Parallax background text strip -->
+      <div class="trust-strip" aria-hidden="true">
+        HAND-CRAFTED &bull; TRAINEE-TESTED &bull; CLINICALLY ACCURATE &bull; HAND-CRAFTED &bull; TRAINEE-TESTED &bull; CLINICALLY ACCURATE &bull; HAND-CRAFTED &bull; TRAINEE-TESTED
+      </div>
+
+      <div class="trust-content">
+        <h2 class="landing-display trust-display">
+          Every station is built by actual trainees in the specialty. Tested. Refined. Verified.
+        </h2>
+
+        <div class="trust-cards">
+          <div class="trust-card">
+            <h3>Hand-Crafted</h3>
+            <p>Each scenario written by specialty doctors who know the interview inside out.</p>
           </div>
-          <div class="footer-column">
-            <h4>Product</h4>
-            <a href="#" onclick="browseAsGuest(); return false;">Scenarios</a>
-            <a href="#pricingSection">Pricing</a>
-            <a href="#" onclick="showAuthPage('signup'); return false;">Sign Up</a>
+          <div class="trust-card">
+            <h3>Trainee-Tested</h3>
+            <p>Real ST3 trainees have validated every station against the actual exam experience.</p>
           </div>
-          <div class="footer-column">
-            <h4>Support</h4>
-            <a href="#">Help Center</a>
-            <a href="#">Contact Us</a>
-            <a href="#">FAQ</a>
-          </div>
-          <div class="footer-column">
-            <h4>Legal</h4>
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Service</a>
-          </div>
-        </div>
-        <div class="footer-bottom">
-          <p class="footer-copyright">© 2025 ReViva. All rights reserved.</p>
-          <div class="footer-social">
-            <a href="#" title="Twitter">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <path
-                  d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-              </svg>
-            </a>
-            <a href="#" title="LinkedIn">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <path
-                  d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-              </svg>
-            </a>
+          <div class="trust-card">
+            <h3>Constantly Evolving</h3>
+            <p>Updated based on real exam feedback. The curriculum grows with each interview cycle.</p>
           </div>
         </div>
-      </footer>
-    </div>
+
+        <p class="landing-caption" style="margin-top: 48px; opacity: 0.6; font-style: italic;">
+          Collecting feedback from our first cohort of trainees.
+        </p>
+      </div>
+    </section>
+
+    <!-- ================================================================
+         SECTION 5: SERVICES — "What are your services?"
+         Animation: Staggered clip-path rectangle reveals from different corners
+         ================================================================ -->
+    <section class="section-services section--light" id="sectionServices">
+      <h2 class="landing-display services-title">
+        <span class="display-line">EVERYTHING</span>
+        <span class="display-line">YOU NEED.</span>
+      </h2>
+
+      <div class="services-grid">
+        <div class="service-card">
+          <span class="card-overline">Feature</span>
+          <h3>Practice Mode</h3>
+          <p>Choose any scenario. Take your time. Learn at your pace. No pressure, just progress.</p>
+        </div>
+        <div class="service-card">
+          <span class="card-overline">Feature</span>
+          <h3>Mock Exam</h3>
+          <p>Timed exam conditions. Station by station or full circuit. Feel the real pressure.</p>
+        </div>
+        <div class="service-card">
+          <span class="card-overline">Feature</span>
+          <h3>24/7 Access</h3>
+          <p>Morning. Night. Weekend. Your call. Practice whenever inspiration strikes.</p>
+        </div>
+        <div class="service-card">
+          <span class="card-overline">Feature</span>
+          <h3>Structured Feedback</h3>
+          <p>Detailed scoring. Section-by-section breakdown. Know exactly where to improve.</p>
+        </div>
+        <div class="service-card">
+          <span class="card-overline">Feature</span>
+          <h3>Progress Tracking</h3>
+          <p>Watch yourself improve over time. Session history. Score trends. Category insights.</p>
+        </div>
+        <div class="service-card">
+          <span class="card-overline">Feature</span>
+          <h3>Full Curriculum</h3>
+          <p>166 stations across 4 domains. Clinical, communication, consent, and structured interview.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================
+         SECTION 6: PROOF — "Show me proof"
+         Animation: Scale zoom 80% → 100% on scroll
+         ================================================================ -->
+    <section class="section-proof" id="sectionProof">
+      <div class="section-proof-content">
+        <h2 class="hero-display" style="color: var(--text-on-dark);" aria-label="Don't take our word for it.">
+          <span class="display-line">DON&rsquo;T TAKE</span>
+          <span class="display-line">OUR WORD</span>
+          <span class="display-line">FOR IT.</span>
+        </h2>
+        <p class="landing-body" style="color: var(--text-on-dark); opacity: 0.8; margin-top: 1.5rem; max-width: 500px; margin-left: auto; margin-right: auto;">
+          Try sample scenarios completely free. No sign-up required. No credit card. Just click and practice.
+        </p>
+        <div style="margin-top: 2.5rem;">
+          <button class="btn-amber btn-amber--lg magnetic-btn" onclick="browseAsGuest()">
+            Explore Free Scenarios &rarr;
+          </button>
+        </div>
+        <p class="landing-caption" style="color: var(--text-on-dark); opacity: 0.5; margin-top: 1rem;">
+          4 free scenarios across all station types
+        </p>
+      </div>
+    </section>
+
+    <!-- ================================================================
+         SECTION 7: ACTION — "What do I need to do next?"
+         Animation: Split-screen reveal from opposite sides
+         ================================================================ -->
+    <section class="section-action" id="sectionAction">
+      <!-- Unlogged / Free tier — shows pricing -->
+      <div class="action-with-pricing" id="actionPricing">
+        <div class="action-left">
+          <h2 class="landing-display" aria-label="Ready to start?">
+            <span class="display-line">READY TO</span>
+            <span class="display-line">START?</span>
+          </h2>
+          <p class="landing-body" style="margin-top: 1rem;">Choose your path.</p>
+        </div>
+        <div class="action-right" id="pricingSection">
+          <div class="pricing-card-new pricing-card-new--free">
+            <span class="landing-overline" style="color: var(--organic-forest);">Free</span>
+            <h3 style="font-family: var(--font-landing-display); font-size: 1.5rem; margin: 16px 0;">4 Sample Scenarios</h3>
+            <ul style="list-style: none; padding: 0; margin: 16px 0;">
+              <li style="padding: 4px 0;">Basic feedback</li>
+              <li style="padding: 4px 0;">No sign-up required</li>
+            </ul>
+            <p style="font-family: var(--font-landing-display); font-size: 1.75rem; font-weight: 700; margin: 24px 0 16px;">&pound;0</p>
+            <button class="btn-outline" onclick="browseAsGuest()">Explore Free</button>
+          </div>
+          <div class="pricing-card-new pricing-card-new--premium">
+            <span class="landing-overline" style="color: var(--organic-amber);">Premium &starf;</span>
+            <h3 style="font-family: var(--font-landing-display); font-size: 1.5rem; margin: 16px 0; color: var(--text-on-dark);">All 166 Scenarios</h3>
+            <ul style="list-style: none; padding: 0; margin: 16px 0; color: var(--text-muted-dark);">
+              <li style="padding: 4px 0;">Full feedback + scoring</li>
+              <li style="padding: 4px 0;">Mock exams</li>
+              <li style="padding: 4px 0;">Progress tracking</li>
+            </ul>
+            <p style="font-family: var(--font-landing-display); font-size: 1.75rem; font-weight: 700; margin: 24px 0 4px; color: var(--text-on-dark);">From &pound;8.33/mo</p>
+            <p class="landing-caption" style="color: var(--text-muted-dark); margin-bottom: 16px;">&pound;99.99/year (save &pound;80)</p>
+            <button class="btn-amber" onclick="showAuthPage('signup')">Subscribe &rarr;</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Premium tier — no pricing, just dashboard CTA -->
+      <div class="action-premium initially-hidden" id="actionPremium">
+        <h2 class="hero-display" style="color: var(--text-on-dark);" aria-label="Your journey continues.">
+          <span class="display-line">YOUR JOURNEY</span>
+          <span class="display-line">CONTINUES.</span>
+        </h2>
+        <div style="margin-top: 2.5rem;">
+          <button class="btn-amber btn-amber--lg magnetic-btn" onclick="showProtectedContent()">Go to Dashboard &rarr;</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================
+         SECTION 8: FOOTER
+         Animation: Simple fade up
+         ================================================================ -->
+    <footer class="section-footer" id="sectionFooter">
+      <!-- SVG wave divider -->
+      <svg class="footer-wave" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0,40 C360,80 720,0 1080,40 C1260,60 1380,50 1440,40 L1440,80 L0,80 Z" fill="var(--organic-bark)"/>
+      </svg>
+
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#">
+            <img src="images/logo/logo-md.png" alt="ReViva" class="logo-img logo-img--footer" style="height: 32px; margin-bottom: 12px;">
+          </a>
+          <p>AI-powered interview preparation for surgical trainees. Practice smarter, not harder.</p>
+        </div>
+        <div class="footer-column">
+          <h4>Product</h4>
+          <a href="#" onclick="browseAsGuest(); return false;">Practice Mode</a>
+          <a href="#" onclick="browseAsGuest(); return false;">Mock Exams</a>
+          <a href="#pricingSection">Pricing</a>
+        </div>
+        <div class="footer-column">
+          <h4>Support</h4>
+          <a href="#">Contact Us</a>
+          <a href="#">Help</a>
+          <a href="#">FAQ</a>
+        </div>
+        <div class="footer-column">
+          <h4>Legal</h4>
+          <a href="#">Terms &amp; Conditions</a>
+          <a href="#">Privacy Policy</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 ReViva. All rights reserved.</p>
+      </div>
+    </footer>
   </div>
 
   <!-- Auth Page (Login/Signup) - Split Panel Design -->
