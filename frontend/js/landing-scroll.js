@@ -283,23 +283,166 @@
   }
 
   function initSectionServices() {
-    // Phase 2: Rectangular clip-path card reveals
+    if (prefersReducedMotion) return;
+
+    // Title clip-path reveal from left
+    gsap.from('.services-title', {
+      clipPath: 'inset(0 100% 0 0)',
+      scrollTrigger: {
+        trigger: '.services-title',
+        start: 'top 85%',
+        end: 'top 60%',
+        scrub: 0.5
+      }
+    });
+
+    // Each card reveals from a different corner via clip-path
+    var clipDirections = [
+      'inset(0 100% 100% 0)',     // top-left
+      'inset(0 0 100% 100%)',     // top-right
+      'inset(100% 100% 0 0)',     // bottom-left
+      'inset(100% 0 0 100%)',     // bottom-right
+      'inset(50% 50% 50% 50%)',   // center
+      'inset(50% 50% 50% 50%)'    // center
+    ];
+
+    document.querySelectorAll('.service-card').forEach(function (card, i) {
+      gsap.from(card, {
+        clipPath: clipDirections[i] || clipDirections[4],
+        scrollTrigger: {
+          trigger: card,
+          start: 'top 85%',
+          end: 'top 55%',
+          scrub: 0.5
+        }
+      });
+    });
   }
 
   function initSectionProof() {
-    // Phase 2: Scale zoom 80% -> 100%
+    if (prefersReducedMotion) return;
+
+    // Entire content zooms from 80% to 100% scale
+    gsap.from('.section-proof-content', {
+      scale: 0.8,
+      opacity: 0.5,
+      scrollTrigger: {
+        trigger: '.section-proof',
+        start: 'top 70%',
+        end: 'top 10%',
+        scrub: 0.8
+      }
+    });
   }
 
   function initSectionAction() {
-    // Phase 2: Split-screen reveal from opposite sides
+    if (prefersReducedMotion) return;
+
+    // Left content enters from left
+    gsap.from('.action-left', {
+      x: -80,
+      opacity: 0,
+      scrollTrigger: {
+        trigger: '.section-action',
+        start: 'top 70%',
+        end: 'top 30%',
+        scrub: 0.5
+      }
+    });
+
+    // Right content enters from right
+    gsap.from('.action-right', {
+      x: 80,
+      opacity: 0,
+      scrollTrigger: {
+        trigger: '.section-action',
+        start: 'top 65%',
+        end: 'top 25%',
+        scrub: 0.5
+      }
+    });
+
+    // Premium variant (centered) fades up
+    gsap.from('.action-premium', {
+      y: 40,
+      opacity: 0,
+      scrollTrigger: {
+        trigger: '.action-premium',
+        start: 'top 80%',
+        toggleActions: 'play none none none'
+      }
+    });
+
+    // Footer fade up
+    gsap.from('.section-footer .footer-grid, .section-footer .footer-bottom', {
+      opacity: 0,
+      y: 30,
+      duration: 0.8,
+      stagger: 0.15,
+      scrollTrigger: {
+        trigger: '.section-footer',
+        start: 'top 85%',
+        toggleActions: 'play none none none'
+      }
+    });
   }
 
   function initMagneticButtons() {
-    // Phase 2: Magnetic button hover effect
+    // Only on desktop with hover capability
+    if (window.matchMedia('(hover: none)').matches) return;
+    if (prefersReducedMotion) return;
+
+    document.querySelectorAll('.magnetic-btn').forEach(function (btn) {
+      var xTo = gsap.quickTo(btn, 'x', { duration: 0.5, ease: 'power3.out' });
+      var yTo = gsap.quickTo(btn, 'y', { duration: 0.5, ease: 'power3.out' });
+
+      btn.addEventListener('mousemove', function (e) {
+        var rect = btn.getBoundingClientRect();
+        var cx = rect.left + rect.width / 2;
+        var cy = rect.top + rect.height / 2;
+        var dx = e.clientX - cx;
+        var dy = e.clientY - cy;
+        var dist = Math.sqrt(dx * dx + dy * dy);
+        var maxDist = 150;
+
+        if (dist < maxDist) {
+          var strength = (1 - dist / maxDist) * 15;
+          var angle = Math.atan2(dy, dx);
+          xTo(Math.cos(angle) * strength);
+          yTo(Math.sin(angle) * strength);
+        }
+      });
+
+      btn.addEventListener('mouseleave', function () {
+        xTo(0);
+        yTo(0);
+      });
+    });
   }
 
   function initCardTilt() {
-    // Phase 2: 3D card tilt on hover
+    // Only on desktop with hover capability
+    if (window.matchMedia('(hover: none)').matches) return;
+    if (prefersReducedMotion) return;
+
+    document.querySelectorAll('.service-card').forEach(function (card) {
+      card.addEventListener('mousemove', function (e) {
+        var rect = card.getBoundingClientRect();
+        var x = (e.clientX - rect.left) / rect.width - 0.5;
+        var y = (e.clientY - rect.top) / rect.height - 0.5;
+        card.style.transform = 'perspective(800px) rotateY(' + (x * 10) + 'deg) rotateX(' + (y * -10) + 'deg)';
+      });
+
+      card.addEventListener('mouseleave', function () {
+        gsap.to(card, {
+          rotateX: 0,
+          rotateY: 0,
+          duration: 0.4,
+          ease: 'power2.out',
+          clearProps: 'transform'
+        });
+      });
+    });
   }
 
   // ============================================================
