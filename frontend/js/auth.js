@@ -315,52 +315,38 @@ function updateLandingPageForAuthState() {
     navPricingUser.style.display = isSubscribed ? 'none' : 'inline';
   }
 
-  // === HERO CTA BUTTONS ===
-  const primaryBtn = document.getElementById('heroPrimaryBtn');
-  const secondaryBtn = document.getElementById('heroSecondaryBtn');
-
-  if (primaryBtn && secondaryBtn) {
-    if (!isLoggedIn) {
-      // Guest: Show signup and explore options
-      primaryBtn.textContent = 'Login to Practise Free Sample Scenarios';
-      primaryBtn.onclick = () => showAuthPage('signup');
-      secondaryBtn.textContent = 'Explore the website without login';
-      secondaryBtn.onclick = browseAsGuest;
-      secondaryBtn.style.display = 'inline-flex';
-    } else if (isSubscribed) {
-      // Subscribed: Single dashboard button, no pricing CTA
-      primaryBtn.textContent = 'Continue to Dashboard';
-      primaryBtn.onclick = showProtectedContent;
-      secondaryBtn.style.display = 'none';
-    } else {
-      // Free tier: Dashboard button + pricing link
-      primaryBtn.textContent = 'Continue to Dashboard';
-      primaryBtn.onclick = showProtectedContent;
-      secondaryBtn.textContent = 'View Pricing';
-      secondaryBtn.onclick = () => {
-        const pricingSection = document.getElementById('pricingSection');
-        if (pricingSection) {
-          pricingSection.scrollIntoView({ behavior: 'smooth' });
-        }
-      };
-      secondaryBtn.style.display = 'inline-flex';
-    }
+  // === HERO SECTION (new landing page redesign) ===
+  const heroLoggedOut = document.getElementById('heroLoggedOut');
+  const heroLoggedIn = document.getElementById('heroLoggedIn');
+  if (heroLoggedOut && heroLoggedIn) {
+    heroLoggedOut.style.display = isLoggedIn ? 'none' : '';
+    heroLoggedOut.classList.toggle('initially-hidden', isLoggedIn);
+    heroLoggedIn.style.display = isLoggedIn ? '' : 'none';
+    heroLoggedIn.classList.toggle('initially-hidden', !isLoggedIn);
   }
 
-  // === PRICING SECTION ===
+  // === PRICING / ACTION SECTION (new landing page redesign) ===
+  const actionPricing = document.getElementById('actionPricing');
+  const actionPremium = document.getElementById('actionPremium');
+  if (actionPricing && actionPremium) {
+    actionPricing.style.display = isSubscribed ? 'none' : '';
+    actionPremium.style.display = isSubscribed ? '' : 'none';
+    actionPremium.classList.toggle('initially-hidden', !isSubscribed);
+  }
+
+  // Hide pricing nav link for subscribed users
   const pricingSection = document.getElementById('pricingSection');
   if (pricingSection) {
-    pricingSection.style.display = isSubscribed ? 'none' : 'block';
+    pricingSection.style.display = isSubscribed ? 'none' : '';
   }
-
-  // === DYNAMIC ACTION CARDS ===
-  renderActionCards();
 }
 
 // Render dynamic action cards based on user tier
+// NOTE: Action cards section removed in landing page redesign. This function
+// is kept as a no-op for backwards compatibility (called from other code paths).
 function renderActionCards() {
   const container = document.getElementById('actionCardsContainer');
-  if (!container) return;
+  if (!container) return; // No-op: container no longer exists in redesigned landing page
 
   const isLoggedIn = !!currentUser;
   const isPremium = userSubscription?.status === 'active';
