@@ -186,7 +186,6 @@
 #landingPage section:not(.section-footer) {
   position: relative;
   z-index: 1;
-  background: var(--organic-cream);
 }
 
 #landingPage .section--light {
