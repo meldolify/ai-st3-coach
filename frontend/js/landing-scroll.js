@@ -229,6 +229,20 @@
         toggleActions: 'play none none none'
       }
     });
+
+    // Doctor photo scale entrance
+    gsap.from('.who-photo-wrapper', {
+      opacity: 0,
+      scale: 0.95,
+      y: 30,
+      duration: 0.8,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: '.who-photo-wrapper',
+        start: 'top 85%',
+        toggleActions: 'play none none none'
+      }
+    });
   }
 
   function initSectionWhy() {
@@ -245,7 +259,7 @@
         trigger: '.section-why',
         pin: true,
         start: 'top top',
-        end: '+=300%',
+        end: '+=150%',
         scrub: 1
       }
     });
@@ -479,6 +493,21 @@
     });
   }
 
+  function initDividers() {
+    if (prefersReducedMotion) return;
+
+    // Animated amber line between sections 3 and 4
+    gsap.to('#dividerLine34', {
+      width: '90%',
+      scrollTrigger: {
+        trigger: '#dividerLine34',
+        start: 'top 80%',
+        end: 'top 40%',
+        scrub: 0.5
+      }
+    });
+  }
+
   // ============================================================
   // INIT
   // ============================================================
@@ -496,6 +525,7 @@
     initSectionServices();
     initSectionProof();
     initSectionAction();
+    initDividers();
     initMagneticButtons();
     initCardTilt();
 
