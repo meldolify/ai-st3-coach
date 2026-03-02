@@ -192,19 +192,22 @@
          Animation: SplitType character stagger on load + parallax blobs
          ================================================================ -->
     <section class="section-hero section--light" id="sectionHero">
-      <!-- Parallax decorative blobs (hidden on mobile via CSS) -->
-      <div class="parallax-blob parallax-blob--1" data-speed="0.3" aria-hidden="true"></div>
-      <div class="parallax-blob parallax-blob--2" data-speed="0.5" aria-hidden="true"></div>
-      <div class="parallax-blob parallax-blob--3" data-speed="0.2" aria-hidden="true"></div>
+      <!-- Botanical leaf overlays (parallax, hidden on mobile) -->
+      <img src="images/landing/leaf-1.png" class="hero-leaf hero-leaf--1" data-speed="0.2" aria-hidden="true" alt="">
+      <img src="images/landing/leaf-2.png" class="hero-leaf hero-leaf--2" data-speed="0.5" aria-hidden="true" alt="">
+      <img src="images/landing/leaf-3.png" class="hero-leaf hero-leaf--3" data-speed="0.35" aria-hidden="true" alt="">
 
       <!-- Logged-out hero variant -->
       <div class="hero-logged-out" id="heroLoggedOut">
-        <span class="landing-overline">Interview Preparation, Reimagined</span>
-        <h1 class="hero-display" aria-label="Practice any time. Any where.">
-          <span class="hero-line">PRACTICE</span>
-          <span class="hero-line">ANY TIME.</span>
-          <span class="hero-line">ANY WHERE.</span>
+        <h1 class="hero-brand" aria-label="Reviva">
+          <span class="hero-brand-char">R</span><span class="hero-brand-char">E</span><span class="hero-brand-char">V</span><span class="hero-brand-char">I</span><span class="hero-brand-char">V</span><span class="hero-brand-char">A</span>
         </h1>
+        <span class="landing-overline">Interview Preparation, Reimagined</span>
+
+        <div class="hero-image-wrapper">
+          <img src="images/landing/hero-centerpiece.png" class="hero-centerpiece" alt="Organic meets technology — AI-powered interview training">
+        </div>
+
         <p class="landing-body hero-subtitle">
           AI-powered simulated interviews for surgical training.<br>
           Hand-crafted stations. 24/7 access. Real interview experience.
@@ -217,10 +220,10 @@
 
       <!-- Logged-in hero variant -->
       <div class="hero-logged-in initially-hidden" id="heroLoggedIn">
-        <h1 class="hero-display" aria-label="Welcome back.">
-          <span class="hero-line">WELCOME</span>
-          <span class="hero-line">BACK.</span>
+        <h1 class="hero-brand" aria-label="Reviva">
+          <span class="hero-brand-char">R</span><span class="hero-brand-char">E</span><span class="hero-brand-char">V</span><span class="hero-brand-char">I</span><span class="hero-brand-char">V</span><span class="hero-brand-char">A</span>
         </h1>
+        <span class="landing-overline" style="margin-bottom: 1rem;">Welcome back</span>
         <div class="hero-ctas">
           <button class="btn-amber btn-amber--lg magnetic-btn" onclick="showProtectedContent()">Go to Dashboard &rarr;</button>
         </div>

@@ -61,67 +61,90 @@
 
   function initHeroEntrance() {
     if (prefersReducedMotion) {
-      gsap.set('#sectionHero .hero-line, #sectionHero .landing-overline, #sectionHero .hero-subtitle, #sectionHero .hero-ctas > *', {
-        opacity: 1, y: 0
+      gsap.set('#sectionHero .hero-brand-char, #sectionHero .landing-overline, #sectionHero .hero-subtitle, #sectionHero .hero-ctas > *, #sectionHero .hero-centerpiece, #sectionHero .hero-leaf', {
+        opacity: 1, y: 0, scale: 1, filter: 'blur(0px)'
       });
       return;
     }
 
-    // Only animate the visible hero variant
     var activeHero = document.getElementById('heroLoggedOut');
     if (activeHero && activeHero.classList.contains('initially-hidden')) {
       activeHero = document.getElementById('heroLoggedIn');
     }
     if (!activeHero || activeHero.classList.contains('initially-hidden')) return;
 
-    var heroLines = activeHero.querySelectorAll('.hero-line');
-    if (!heroLines.length) return;
-
-    // SplitType each hero line into characters
-    var splits = [];
-    heroLines.forEach(function (line) {
-      splits.push(new SplitType(line, { types: 'chars', tagName: 'span' }));
-    });
-
     var tl = gsap.timeline({ delay: 0.2 });
 
     // Nav fade in
     tl.from('#landingNav', { opacity: 0, y: -20, duration: 0.6, ease: 'power2.out' }, 0);
 
+    // REVIVA brand — scramble-style character reveal
+    var brandChars = activeHero.querySelectorAll('.hero-brand-char');
+    if (brandChars.length) {
+      var scrambleChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      brandChars.forEach(function(charEl, i) {
+        var targetChar = charEl.textContent;
+        charEl.textContent = scrambleChars[Math.floor(Math.random() * scrambleChars.length)];
+        tl.fromTo(charEl, { opacity: 0, y: 40 }, {
+          opacity: 1, y: 0, duration: 0.5, ease: 'back.out(1.7)',
+          onStart: function() {
+            var scrambleCount = 0;
+            var interval = setInterval(function() {
+              charEl.textContent = scrambleChars[Math.floor(Math.random() * scrambleChars.length)];
+              scrambleCount++;
+              if (scrambleCount > 5) {
+                clearInterval(interval);
+                charEl.textContent = targetChar;
+              }
+            }, 50);
+          }
+        }, 0.4 + i * 0.08);
+      });
+    }
+
     // Overline fade up
     var overline = activeHero.querySelector('.landing-overline');
     if (overline) {
-      tl.from(overline, { opacity: 0, y: 20, duration: 0.5, ease: 'power2.out' }, 0.4);
+      tl.from(overline, { opacity: 0, y: 20, duration: 0.5, ease: 'power2.out' }, 1.0);
     }
 
-    // Character reveals per line, staggered 0.3s between lines
-    splits.forEach(function (split, i) {
-      tl.from(split.chars, {
-        opacity: 0, y: 30, duration: 0.6,
-        stagger: 0.025, ease: 'back.out(1.7)'
-      }, 0.6 + i * 0.3);
-    });
+    // Hero centerpiece image — blur-to-sharp entrance
+    var centerpiece = activeHero.querySelector('.hero-centerpiece');
+    if (centerpiece) {
+      tl.fromTo(centerpiece,
+        { opacity: 0, scale: 1.15, filter: 'blur(10px)' },
+        { opacity: 1, scale: 1, filter: 'blur(0px)', duration: 1.2, ease: 'power2.out' },
+        1.0
+      );
+    }
 
     // Subtitle fade up
     var subtitle = activeHero.querySelector('.hero-subtitle');
     if (subtitle) {
-      tl.from(subtitle, { opacity: 0, y: 20, duration: 0.8, ease: 'power2.out' }, 1.6);
+      tl.from(subtitle, { opacity: 0, y: 20, duration: 0.8, ease: 'power2.out' }, 1.8);
     }
 
     // CTA buttons slide up
     var ctas = activeHero.querySelectorAll('.hero-ctas > *');
     if (ctas.length) {
-      tl.from(ctas, { opacity: 0, y: 40, duration: 0.6, stagger: 0.1, ease: 'power2.out' }, 1.8);
+      tl.from(ctas, { opacity: 0, y: 40, duration: 0.6, stagger: 0.1, ease: 'power2.out' }, 2.0);
     }
+
+    // Botanical leaves drift in from edges
+    tl.from('.hero-leaf--1', { opacity: 0, x: -60, rotation: -30, duration: 1.2, ease: 'power2.out' }, 0.8);
+    tl.from('.hero-leaf--2', { opacity: 0, x: 60, rotation: 40, duration: 1.2, ease: 'power2.out' }, 1.0);
+    tl.from('.hero-leaf--3', { opacity: 0, y: 40, rotation: -20, duration: 1.2, ease: 'power2.out' }, 1.2);
   }
 
   function initHeroParallax() {
     if (prefersReducedMotion) return;
 
-    document.querySelectorAll('.parallax-blob').forEach(function (blob) {
-      var speed = parseFloat(blob.dataset.speed) || 0.5;
-      gsap.to(blob, {
+    // Leaf parallax on scroll
+    document.querySelectorAll('.hero-leaf').forEach(function (leaf) {
+      var speed = parseFloat(leaf.dataset.speed) || 0.5;
+      gsap.to(leaf, {
         y: function () { return window.innerHeight * speed * 0.5; },
+        rotation: '+=' + (speed * 20),
         scrollTrigger: {
           trigger: '#sectionHero',
           start: 'top top',
@@ -130,12 +153,23 @@
         }
       });
     });
+
+    // Hero image parallax (moves slower than text for depth)
+    gsap.to('.hero-image-wrapper', {
+      y: -60,
+      scale: 0.92,
+      scrollTrigger: {
+        trigger: '#sectionHero',
+        start: 'top top',
+        end: 'bottom top',
+        scrub: 0.5
+      }
+    });
   }
 
   function initHeroTransition() {
     if (prefersReducedMotion) return;
 
-    // Hero content parallaxes up faster than scroll
     gsap.to('#sectionHero .hero-logged-out, #sectionHero .hero-logged-in', {
       y: -100,
       opacity: 0,

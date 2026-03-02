@@ -170,7 +170,7 @@
   // ============================================================
   function getTargetOpacity(progress) {
     // Hero area (0-12%): visible at 0.3
-    if (progress < 0.12) return 0.3;
+    if (progress < 0.12) return 0.5;
     // Light sections (~12-25%, ~45-60%): subtle at 0.12
     if (progress < 0.25) return 0.12;
     // Dark sections (~25-45%): more visible at 0.35
@@ -202,7 +202,7 @@
     wireMesh.rotation.copy(mesh.rotation);
 
     // Scale
-    var s = 1.0 + Math.sin(scrollProgress * Math.PI) * 0.2;
+    var s = 1.2 + Math.sin(scrollProgress * Math.PI) * 0.25;
     mesh.scale.setScalar(s);
     wireMesh.scale.setScalar(s);
 
