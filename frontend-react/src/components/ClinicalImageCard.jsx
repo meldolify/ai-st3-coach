@@ -50,7 +50,7 @@ export default function ClinicalImageCard({ imageFile, scenarioTitle, onExpand, 
 
         {!imageLoaded && (
           <div className={cn(
-            'absolute inset-0 bg-white/[0.04] animate-pulse',
+            'absolute inset-0 bg-black/[0.04] animate-pulse',
             fillHeight ? 'h-full' : compact ? 'h-[200px]' : 'h-[280px]'
           )} />
         )}
@@ -59,7 +59,7 @@ export default function ClinicalImageCard({ imageFile, scenarioTitle, onExpand, 
         <div
           className={cn(
             'absolute top-3 right-3 p-1.5 rounded-md',
-            'bg-white/[0.1] backdrop-blur-sm',
+            'bg-white/[0.70] backdrop-blur-sm',
             'opacity-0 group-hover:opacity-100 transition-opacity duration-200'
           )}
         >

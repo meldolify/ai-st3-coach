@@ -77,7 +77,7 @@ export default function Header({ scenario, difficulty, timeLimit = 300, isConnec
           <span className="text-[15px] font-medium hidden sm:inline">Reviva</span>
         </button>
 
-        <div className="h-5 w-px bg-white/[0.1] hidden sm:block" />
+        <div className="h-5 w-px bg-black/[0.08] hidden sm:block" />
 
         <div className="flex items-center gap-2 min-w-0">
           <h1 className="font-display text-[17px] text-text-primary truncate max-w-[300px] lg:max-w-[500px]">

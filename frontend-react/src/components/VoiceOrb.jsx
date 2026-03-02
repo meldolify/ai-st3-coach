@@ -114,7 +114,7 @@ const VoiceOrb = forwardRef(function VoiceOrb({ state = 'idle', size = 120, mobi
             left: '50%',
             top: '50%',
             transform: 'translate(-50%, -50%)',
-            mixBlendMode: 'screen',
+            mixBlendMode: 'normal',
             zIndex: 10,
           }}
         />
