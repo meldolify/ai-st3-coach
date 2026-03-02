@@ -259,7 +259,7 @@
         trigger: '.section-why',
         pin: true,
         start: 'top top',
-        end: '+=150%',
+        end: '+=100%',
         scrub: 1
       }
     });
