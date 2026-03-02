@@ -8,49 +8,49 @@
    ============================================================================ */
 
 @theme {
-  /* Backgrounds — dark */
-  --color-bg-primary: #0A0F1C;
-  --color-bg-secondary: #111827;
-  --color-bg-elevated: #1A1F36;
+  /* Backgrounds — warm light */
+  --color-bg-primary: #F0F2F0;
+  --color-bg-secondary: #E8EBE8;
+  --color-bg-elevated: #FFFFFF;
 
-  /* Text — light on dark */
-  --color-text-primary: #F9FAFB;
-  --color-text-secondary: #9CA3AF;
-  --color-text-muted: #6B7280;
+  /* Text — dark on light */
+  --color-text-primary: #1a1a2e;
+  --color-text-secondary: #5a5a6e;
+  --color-text-muted: #8a8a9e;
 
-  /* Accent — sage green (pops on dark, keep) */
+  /* Accent — sage green */
   --color-accent: #4A5D4C;
-  --color-accent-light: #1A2E1C;
+  --color-accent-light: #E8F0E9;
   --color-accent-hover: #5A7A5C;
 
-  /* Semantic states (unchanged — pop on dark) */
+  /* Semantic states */
   --color-listening: #10B981;
   --color-speaking: #F59E0B;
   --color-thinking: #6366F1;
   --color-error: #DC2626;
 
-  /* Fonts (unchanged) */
+  /* Fonts */
   --font-display: 'Instrument Serif', Georgia, serif;
   --font-body: 'Satoshi', -apple-system, BlinkMacSystemFont, sans-serif;
 
-  /* Border radius (unchanged) */
+  /* Border radius */
   --radius-sm: 6px;
   --radius-md: 8px;
   --radius-lg: 12px;
   --radius-xl: 16px;
   --radius-full: 9999px;
 
-  /* Shadows — glow-based for dark theme */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
-  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.3), 0 0 1px rgba(255, 255, 255, 0.05);
-  --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 2px rgba(255, 255, 255, 0.05);
-  --shadow-xl: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 4px rgba(255, 255, 255, 0.05);
+  /* Shadows — soft drop shadows for light theme */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.08), 0 1px 4px rgba(0, 0, 0, 0.04);
+  --shadow-xl: 0 8px 32px rgba(0, 0, 0, 0.10), 0 2px 8px rgba(0, 0, 0, 0.04);
 
-  /* Glass card tokens */
-  --glass-bg: rgba(255, 255, 255, 0.06);
-  --glass-border: rgba(255, 255, 255, 0.08);
+  /* Glass card tokens — frosted white */
+  --glass-bg: rgba(255, 255, 255, 0.72);
+  --glass-border: rgba(0, 0, 0, 0.06);
   --glass-blur: 20px;
-  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 1px rgba(255, 255, 255, 0.05);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
 
   /* State glow colors */
   --glow-idle: rgba(184, 115, 51, 0.4);
@@ -58,7 +58,7 @@
   --glow-speaking: rgba(245, 158, 11, 0.6);
   --glow-thinking: rgba(99, 102, 241, 0.5);
 
-  /* Layout constants (unchanged) */
+  /* Layout constants */
   --sidebar-collapsed: 64px;
   --sidebar-expanded: 280px;
   --header-height: 56px;
@@ -104,13 +104,13 @@ body {
 }
 
 /* ============================================================================
-   GLASS-CARD — Floating glassmorphism panel (dark theme)
+   GLASS-CARD — Floating glassmorphism panel (light theme)
    ============================================================================ */
 
 .glass-card {
   background: var(--glass-bg);
-  backdrop-filter: blur(var(--glass-blur)) saturate(1.2);
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.2);
+  backdrop-filter: blur(var(--glass-blur)) saturate(1.4);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.4);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-xl);
   box-shadow: var(--glass-shadow);
@@ -118,33 +118,33 @@ body {
 }
 
 .glass-card:hover {
-  border-color: rgba(255, 255, 255, 0.12);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 2px rgba(255, 255, 255, 0.08);
+  border-color: rgba(0, 0, 0, 0.10);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.10), 0 1px 4px rgba(0, 0, 0, 0.06);
 }
 
 /* ============================================================================
-   MOBILE FROSTED GLASS — Dark variant
+   MOBILE FROSTED GLASS — Light variant
    ============================================================================ */
 
-.mobile-glass-dark {
-  background: rgba(10, 15, 28, 0.85);
-  backdrop-filter: blur(24px) saturate(1.2);
-  -webkit-backdrop-filter: blur(24px) saturate(1.2);
-  border-color: rgba(255, 255, 255, 0.08);
+.mobile-glass {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(24px) saturate(1.4);
+  -webkit-backdrop-filter: blur(24px) saturate(1.4);
+  border-color: rgba(0, 0, 0, 0.06);
 }
 
 /* ============================================================================
-   AI STATUS BUBBLE — Dark glass pill with state glow
+   AI STATUS BUBBLE — Frosted glass pill with state glow
    ============================================================================ */
 
 .ai-status-bubble {
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(20px) saturate(1.2);
-  -webkit-backdrop-filter: blur(20px) saturate(1.2);
+  background: rgba(255, 255, 255, 0.80);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
   padding: 8px 18px;
   border-radius: 30px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
   min-width: 120px;
   color: var(--color-text-secondary);
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
@@ -152,19 +152,19 @@ body {
 
 .ai-status-bubble.listening {
   border-color: rgba(16, 185, 129, 0.3);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3), 0 0 12px rgba(16, 185, 129, 0.15);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05), 0 0 12px rgba(16, 185, 129, 0.15);
 }
 .ai-status-bubble.speaking {
   border-color: rgba(245, 158, 11, 0.3);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3), 0 0 12px rgba(245, 158, 11, 0.15);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05), 0 0 12px rgba(245, 158, 11, 0.15);
 }
 .ai-status-bubble.thinking {
   border-color: rgba(99, 102, 241, 0.3);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3), 0 0 12px rgba(99, 102, 241, 0.15);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05), 0 0 12px rgba(99, 102, 241, 0.15);
 }
 
 /* ============================================================================
-   SCROLLBAR STYLING — Light on dark
+   SCROLLBAR STYLING — Dark on light
    ============================================================================ */
 
 .custom-scrollbar::-webkit-scrollbar {
@@ -176,12 +176,12 @@ body {
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 255, 255, 0.15);
+  background-color: rgba(0, 0, 0, 0.10);
   border-radius: 9999px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(255, 255, 255, 0.25);
+  background-color: rgba(0, 0, 0, 0.18);
 }
 
 /* ============================================================================
@@ -206,11 +206,11 @@ body {
 .ripple-ring {
   position: absolute;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(0, 0, 0, 0.03);
   backdrop-filter: blur(3px);
   -webkit-backdrop-filter: blur(3px);
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: rgba(0, 0, 0, 0.2) 0px 8px 12px;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: rgba(0, 0, 0, 0.04) 0px 4px 8px;
   pointer-events: none;
   transition: background 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease, opacity 0.5s ease;
 }
@@ -231,7 +231,7 @@ body {
 .ripple-ring.ring-state-listening {
   background: rgba(16, 185, 129, 0.08);
   border-color: rgba(16, 185, 129, 0.25);
-  box-shadow: rgba(0, 0, 0, 0.2) 0px 8px 12px, 0 0 15px rgba(16, 185, 129, 0.1);
+  box-shadow: rgba(0, 0, 0, 0.04) 0px 4px 8px, 0 0 15px rgba(16, 185, 129, 0.1);
   opacity: 0.5;
   animation: ring-listening-pulse 1.5s ease-in-out infinite;
 }
@@ -244,20 +244,20 @@ body {
 .ripple-ring.ring-state-speaking {
   background: rgba(245, 158, 11, 0.1);
   border-color: rgba(245, 158, 11, 0.3);
-  box-shadow: rgba(0, 0, 0, 0.2) 0px 8px 12px, 0 0 20px rgba(245, 158, 11, 0.15);
+  box-shadow: rgba(0, 0, 0, 0.04) 0px 4px 8px, 0 0 20px rgba(245, 158, 11, 0.15);
   opacity: 0.7;
   animation: ring-speaking-expand 0.8s ease-in-out infinite;
 }
 @keyframes ring-speaking-expand {
-  0%, 100% { transform: scale(1); box-shadow: rgba(0,0,0,0.2) 0px 8px 12px, 0 0 20px rgba(245,158,11,0.15); }
-  50% { transform: scale(1.25); box-shadow: rgba(0,0,0,0.2) 0px 16px 24px, 0 0 30px rgba(245,158,11,0.25); }
+  0%, 100% { transform: scale(1); box-shadow: rgba(0,0,0,0.04) 0px 4px 8px, 0 0 20px rgba(245,158,11,0.15); }
+  50% { transform: scale(1.25); box-shadow: rgba(0,0,0,0.04) 0px 8px 16px, 0 0 30px rgba(245,158,11,0.25); }
 }
 
 /* ── THINKING ── Rotate + pulse, indigo tint, medium */
 .ripple-ring.ring-state-thinking {
   background: rgba(99, 102, 241, 0.08);
   border-color: rgba(99, 102, 241, 0.25);
-  box-shadow: rgba(0, 0, 0, 0.2) 0px 8px 12px, 0 0 15px rgba(99, 102, 241, 0.1);
+  box-shadow: rgba(0, 0, 0, 0.04) 0px 4px 8px, 0 0 15px rgba(99, 102, 241, 0.1);
   opacity: 0.5;
   animation: ring-thinking-spin 8s linear infinite, ring-thinking-pulse 3s ease-in-out infinite;
 }
