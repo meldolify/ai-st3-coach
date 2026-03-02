@@ -226,36 +226,78 @@
   margin-top: 2.5rem;
 }
 
-#landingPage .parallax-blob {
+/* ---- Hero Brand "REVIVA" ---- */
+#landingPage .hero-brand {
+  font-family: var(--font-landing-display);
+  font-weight: 700;
+  font-size: clamp(4rem, 14vw, 11rem);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--organic-forest);
+  line-height: 1;
+  margin-bottom: 0.25rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.02em;
+}
+
+#landingPage .hero-brand-char {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+/* ---- Hero Centerpiece Image ---- */
+#landingPage .hero-image-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin: 2rem auto;
+  max-width: 480px;
+  will-change: transform;
+}
+
+#landingPage .hero-centerpiece {
+  width: 100%;
+  max-width: 480px;
+  height: auto;
+  filter: drop-shadow(0 20px 60px rgba(45, 90, 61, 0.3));
+  animation: heroFloat 6s ease-in-out infinite;
+}
+
+@keyframes heroFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+/* ---- Botanical Leaf Overlays ---- */
+#landingPage .hero-leaf {
   position: absolute;
-  border-radius: 50%;
-  filter: blur(40px);
-  opacity: 0.3;
   pointer-events: none;
+  z-index: 2;
+  will-change: transform;
+  opacity: 0.7;
 }
 
-#landingPage .parallax-blob--1 {
-  width: 300px;
-  height: 300px;
-  top: 10%;
-  left: 10%;
-  background: var(--organic-forest);
+#landingPage .hero-leaf--1 {
+  width: clamp(120px, 18vw, 260px);
+  top: 8%;
+  left: 2%;
+  transform: rotate(-15deg);
 }
 
-#landingPage .parallax-blob--2 {
-  width: 200px;
-  height: 200px;
-  top: 60%;
-  right: 15%;
-  background: rgba(45, 90, 61, 0.4);
+#landingPage .hero-leaf--2 {
+  width: clamp(80px, 12vw, 180px);
+  bottom: 15%;
+  right: 3%;
+  transform: rotate(20deg);
 }
 
-#landingPage .parallax-blob--3 {
-  width: 250px;
-  height: 250px;
-  bottom: 10%;
-  left: 50%;
-  background: rgba(212, 148, 58, 0.2);
+#landingPage .hero-leaf--3 {
+  width: clamp(100px, 14vw, 200px);
+  top: 55%;
+  left: 70%;
+  transform: rotate(-8deg);
+  opacity: 0.5;
 }
 
 /* ---- Section 2: Who ---- */
@@ -723,9 +765,9 @@
     align-items: center;
   }
 
-  #landingPage .parallax-blob {
-    display: none;
-  }
+  #landingPage .hero-leaf { display: none; }
+  #landingPage .hero-centerpiece { max-width: 320px; }
+  #landingPage .hero-brand { font-size: clamp(3rem, 16vw, 5rem); }
 
   #landingPage .section-who > div {
     grid-template-columns: 1fr;
