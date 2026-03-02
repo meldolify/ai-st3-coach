@@ -1,1 +1,3 @@
-cd backend && npm test
+# Full test suite runs in CI (.github/workflows/test.yml)
+# Pre-commit lint-staged handles code quality
+# Removed: cd backend && npm test (128s, redundant with CI)
