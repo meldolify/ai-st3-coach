@@ -319,6 +319,7 @@
     gsap.from('.trust-card', {
       opacity: 0,
       y: 60,
+      rotation: -5,
       duration: 0.8,
       stagger: 0.15,
       ease: 'power2.out',
@@ -341,6 +342,21 @@
         start: 'top 85%',
         end: 'top 60%',
         scrub: 0.5
+      }
+    });
+
+    // Services title scale entrance
+    gsap.from('.services-title .display-line', {
+      opacity: 0,
+      scale: 0.9,
+      y: 30,
+      stagger: 0.1,
+      duration: 0.8,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: '.services-title',
+        start: 'top 80%',
+        toggleActions: 'play none none none'
       }
     });
 
@@ -433,6 +449,17 @@
         toggleActions: 'play none none none'
       }
     });
+
+    // Footer parallax reveal — content inside slides up slightly as revealed
+    gsap.from('.section-footer .footer-grid', {
+      y: 40,
+      scrollTrigger: {
+        trigger: '.section-footer',
+        start: 'top bottom',
+        end: 'top 50%',
+        scrub: 0.5
+      }
+    });
   }
 
   function initMagneticButtons() {
@@ -508,6 +535,39 @@
     });
   }
 
+  function initCursorFollower() {
+    if (window.matchMedia('(hover: none)').matches) return;
+    if (prefersReducedMotion) return;
+
+    var cursor = document.getElementById('cursorFollower');
+    if (!cursor) return;
+
+    var xTo = gsap.quickTo(cursor, 'left', { duration: 0.4, ease: 'power3.out' });
+    var yTo = gsap.quickTo(cursor, 'top', { duration: 0.4, ease: 'power3.out' });
+
+    var landingPage = document.getElementById('landingPage');
+
+    landingPage.addEventListener('mousemove', function(e) {
+      xTo(e.clientX);
+      yTo(e.clientY);
+      if (!cursor.classList.contains('active')) {
+        cursor.classList.add('active');
+      }
+    });
+
+    landingPage.addEventListener('mouseleave', function() {
+      cursor.classList.remove('active');
+      cursor.classList.remove('hovering');
+    });
+
+    // Scale up when hovering interactive elements
+    var interactiveEls = landingPage.querySelectorAll('button, a, .service-card, .trust-card, .pricing-card-new');
+    interactiveEls.forEach(function(el) {
+      el.addEventListener('mouseenter', function() { cursor.classList.add('hovering'); });
+      el.addEventListener('mouseleave', function() { cursor.classList.remove('hovering'); });
+    });
+  }
+
   // ============================================================
   // INIT
   // ============================================================
@@ -528,6 +588,7 @@
     initDividers();
     initMagneticButtons();
     initCardTilt();
+    initCursorFollower();
 
     console.log('[LANDING] Landing scroll system initialized');
   }

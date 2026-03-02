@@ -183,6 +183,12 @@
   padding: clamp(80px, 10vw, 160px) clamp(24px, 4vw, 64px);
 }
 
+#landingPage section:not(.section-footer) {
+  position: relative;
+  z-index: 1;
+  background: var(--organic-cream);
+}
+
 #landingPage .section--light {
   background: var(--organic-cream);
   color: var(--text-on-light);
@@ -600,6 +606,7 @@
   display: flex;
   align-items: center;
   margin-top: -60px;
+  margin-bottom: 320px; /* approximate footer height — space for reveal */
   position: relative;
   z-index: 3;
 }
@@ -647,8 +654,11 @@
   margin: 0 auto;
 }
 
-/* ---- Section 8: Footer ---- */
+/* ---- Section 8: Footer (parallax reveal — sits behind content) ---- */
 #landingPage .section-footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 0;
   background: var(--organic-bark);
   color: var(--text-muted-dark);
   padding: 80px clamp(24px, 4vw, 64px) 40px;
@@ -906,4 +916,69 @@
   50% {
     transform: scale(1.015);
   }
+}
+
+/* --------------------------------------------------------------------------
+   16. Cursor Follower
+   -------------------------------------------------------------------------- */
+#landingPage .cursor-follower {
+  position: fixed;
+  width: 16px;
+  height: 16px;
+  background: var(--organic-forest);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 10000;
+  opacity: 0;
+  filter: blur(2px);
+  transition: width 0.3s ease, height 0.3s ease, opacity 0.3s ease, background 0.3s ease, filter 0.3s ease;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: difference;
+}
+
+#landingPage .cursor-follower.active {
+  opacity: 0.6;
+}
+
+#landingPage .cursor-follower.hovering {
+  width: 48px;
+  height: 48px;
+  background: var(--organic-amber);
+  filter: blur(8px);
+  opacity: 0.4;
+}
+
+@media (hover: none) {
+  #landingPage .cursor-follower { display: none; }
+}
+
+/* --------------------------------------------------------------------------
+   17. Premium Card Shimmer
+   -------------------------------------------------------------------------- */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+#landingPage .pricing-card-new--premium {
+  position: relative;
+  overflow: hidden;
+}
+
+#landingPage .pricing-card-new--premium::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(212, 148, 58, 0.08) 40%,
+    rgba(212, 148, 58, 0.15) 50%,
+    rgba(212, 148, 58, 0.08) 60%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 4s ease-in-out infinite;
+  pointer-events: none;
+  border-radius: inherit;
 }
