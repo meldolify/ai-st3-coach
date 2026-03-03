@@ -9,9 +9,35 @@ const fs = require('fs');
 const path = require('path');
 const promptLabService = require('../services/PromptLabService');
 const testScriptGenerator = require('../services/TestScriptGenerator');
+const gitHubService = require('../services/GitHubService');
 const { RateLimitError } = require('openai');
 
 const DEFAULT_TOPIC = 'clinical/emergencies/necrotising_fasciitis';
+const BACKEND_DIR = path.join(__dirname, '..', '..');
+
+/**
+ * Commit saved files to GitHub main branch (if configured).
+ * Non-blocking — returns result but doesn't throw on failure.
+ * @param {Array<{label: string, path: string}>} savedPaths - Paths relative to backend/
+ * @returns {Promise<{committed: boolean, commitError?: string, commitUrl?: string}>}
+ */
+async function autoCommitToGitHub(savedPaths) {
+  if (!gitHubService.isConfigured()) {
+    return { committed: false };
+  }
+  try {
+    const files = savedPaths.map(({ path: relPath }) => ({
+      // Prepend 'backend/' since paths are relative to backend dir, but repo root is one level up
+      path: 'backend/' + relPath.replace(/\\/g, '/'),
+      content: fs.readFileSync(path.join(BACKEND_DIR, relPath), 'utf8')
+    }));
+    const result = await gitHubService.commitToMain(files);
+    return { committed: true, commitUrl: result.commitUrl };
+  } catch (err) {
+    console.error('[PROMPT LAB] GitHub auto-commit failed:', err.message);
+    return { committed: false, commitError: err.message };
+  }
+}
 
 // ──────────────────────────────────────────
 // TOPIC ENDPOINTS
@@ -156,7 +182,7 @@ router.get('/prompts/:difficulty', (req, res) => {
  * Query: ?topic=...
  * Body: { sections: { core, difficulty, clinical } }
  */
-router.put('/prompts/:difficulty', (req, res) => {
+router.put('/prompts/:difficulty', async (req, res) => {
   try {
     const { difficulty } = req.params;
     if (!['easy', 'medium', 'strict'].includes(difficulty)) {
@@ -168,7 +194,10 @@ router.put('/prompts/:difficulty', (req, res) => {
     }
     const topic = req.query.topic || DEFAULT_TOPIC;
     const result = promptLabService.savePrompt(topic, difficulty, sections);
-    res.json(result);
+
+    // Auto-commit to GitHub if configured
+    const commitResult = await autoCommitToGitHub(result.paths);
+    res.json({ ...result, ...commitResult });
   } catch (err) {
     console.error('[PROMPT LAB] Save prompt error:', err.message);
     res.status(500).json({ error: err.message });
@@ -200,7 +229,7 @@ router.get('/feedback-prompt/:difficulty', (req, res) => {
  * Query: ?topic=...
  * Body: { content: "..." }
  */
-router.put('/feedback-prompt/:difficulty', (req, res) => {
+router.put('/feedback-prompt/:difficulty', async (req, res) => {
   try {
     const { difficulty } = req.params;
     if (!['easy', 'medium', 'strict'].includes(difficulty)) {
@@ -212,7 +241,10 @@ router.put('/feedback-prompt/:difficulty', (req, res) => {
     }
     const topic = req.query.topic || DEFAULT_TOPIC;
     const result = promptLabService.saveFeedbackPrompt(topic, difficulty, content);
-    res.json(result);
+
+    // Auto-commit to GitHub if configured
+    const commitResult = await autoCommitToGitHub([{ label: 'feedback', path: result.path }]);
+    res.json({ ...result, ...commitResult });
   } catch (err) {
     console.error('[PROMPT LAB] Save feedback prompt error:', err.message);
     res.status(500).json({ error: err.message });

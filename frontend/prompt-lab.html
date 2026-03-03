@@ -480,7 +480,7 @@ async function savePrompt() {
   saveToLocalStorage();
 
   try {
-    await api.savePrompt(state.difficulty, state.promptSections, state.topic);
+    const result = await api.savePrompt(state.difficulty, state.promptSections, state.topic);
     state.savedSections = { ...state.promptSections };
 
     if (state.feedbackPrompt !== state.savedFeedback) {
@@ -488,12 +488,21 @@ async function savePrompt() {
       state.savedFeedback = state.feedbackPrompt;
     }
 
-    setStatus('Saved (server + local)');
-    showToast('Prompt saved successfully', 'success');
+    // Show commit status
+    if (result.committed) {
+      setStatus('Saved (server + GitHub)');
+      showToast('Saved and committed to GitHub', 'success');
+    } else if (result.commitError) {
+      setStatus('Saved (server only \u2014 GitHub: ' + result.commitError + ')', true);
+      showToast('Saved to server. GitHub commit failed.', 'error', 3500);
+    } else {
+      setStatus('Saved (server + local)');
+      showToast('Prompt saved successfully', 'success');
+    }
     refreshChangeCount();
   } catch (err) {
     setStatus('Saved locally (server error: ' + err.message + ')', true);
-    showToast('Server error — saved locally only', 'error', 3500);
+    showToast('Server error \u2014 saved locally only', 'error', 3500);
   }
 }
 

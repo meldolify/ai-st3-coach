@@ -1,6 +1,7 @@
 /**
  * GitHub Service
- * Creates Pull Requests via the GitHub REST API using native fetch.
+ * Commits prompt changes to GitHub via the REST API.
+ * Supports direct commits to main (for save-on-edit) and PRs (for batch changes).
  * No additional npm dependencies required (Node 18+ has native fetch).
  */
 
@@ -136,4 +137,99 @@ async function createPR(files) {
   };
 }
 
-module.exports = { createPR };
+/**
+ * Check if GitHub integration is configured.
+ */
+function isConfigured() {
+  return !!(GITHUB_TOKEN && GITHUB_OWNER && GITHUB_REPO);
+}
+
+/**
+ * Commit files directly to main branch (fast-forward).
+ * Used by Prompt Lab save to persist changes across deployments.
+ *
+ * @param {Array<{path: string, content: string}>} files - Files to commit
+ *   Each file has a `path` relative to the repo root (e.g., "backend/prompts/...")
+ *   and `content` as the full file text.
+ * @param {string} [message] - Optional commit message
+ * @returns {Promise<{commitSha: string, commitUrl: string, filesChanged: number}>}
+ */
+async function commitToMain(files, message) {
+  if (!isConfigured()) {
+    throw new Error(
+      'GitHub integration not configured (GITHUB_TOKEN, GITHUB_OWNER, GITHUB_REPO required)'
+    );
+  }
+
+  if (!files || files.length === 0) {
+    throw new Error('No files to commit');
+  }
+
+  const repo = `/repos/${GITHUB_OWNER}/${GITHUB_REPO}`;
+
+  // 1. Get main branch HEAD
+  const mainBranch = await githubFetch(`${repo}/branches/main`);
+  const mainCommitSha = mainBranch.commit.sha;
+
+  // 2. Get the commit's tree SHA
+  const mainCommit = await githubFetch(`${repo}/git/commits/${mainCommitSha}`);
+  const baseTreeSha = mainCommit.tree.sha;
+
+  // 3. Create blobs for each file
+  const treeItems = [];
+  for (const file of files) {
+    const blob = await githubFetch(`${repo}/git/blobs`, {
+      method: 'POST',
+      body: JSON.stringify({
+        content: file.content,
+        encoding: 'utf-8'
+      })
+    });
+    treeItems.push({
+      path: file.path,
+      mode: '100644',
+      type: 'blob',
+      sha: blob.sha
+    });
+  }
+
+  // 4. Create a new tree
+  const newTree = await githubFetch(`${repo}/git/trees`, {
+    method: 'POST',
+    body: JSON.stringify({
+      base_tree: baseTreeSha,
+      tree: treeItems
+    })
+  });
+
+  // 5. Create the commit
+  const fileList = files.map(f => `- ${f.path}`).join('\n');
+  const commitMessage =
+    message ||
+    `Prompt Lab: Update ${files.length} prompt file${files.length > 1 ? 's' : ''}\n\nFiles changed:\n${fileList}`;
+
+  const newCommit = await githubFetch(`${repo}/git/commits`, {
+    method: 'POST',
+    body: JSON.stringify({
+      message: commitMessage,
+      tree: newTree.sha,
+      parents: [mainCommitSha]
+    })
+  });
+
+  // 6. Fast-forward main to the new commit
+  await githubFetch(`${repo}/git/refs/heads/main`, {
+    method: 'PATCH',
+    body: JSON.stringify({ sha: newCommit.sha })
+  });
+
+  console.log(`[GITHUB] Committed to main: ${newCommit.sha.substring(0, 7)}`);
+
+  return {
+    commitSha: newCommit.sha,
+    commitUrl: `https://github.com/${GITHUB_OWNER}/${GITHUB_REPO}/commit/${newCommit.sha}`,
+    filesChanged: files.length
+  };
+}
+
+module.exports = { createPR, commitToMain, isConfigured };
