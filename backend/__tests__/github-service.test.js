@@ -184,3 +184,136 @@ describe('GitHubService - createPR', () => {
     await expect(GitHubService.createPR(files)).rejects.toThrow(/Bad credentials/);
   });
 });
+
+// ──────────────────────────────────────────
+// isConfigured
+// ──────────────────────────────────────────
+
+describe('GitHubService - isConfigured', () => {
+  const originalEnv = { ...process.env };
+
+  afterEach(() => {
+    process.env = { ...originalEnv };
+    jest.resetModules();
+  });
+
+  test('returns true when all env vars set', () => {
+    process.env.GITHUB_TOKEN = 'token';
+    process.env.GITHUB_OWNER = 'owner';
+    process.env.GITHUB_REPO = 'repo';
+    jest.resetModules();
+    const GitHubService = require('../src/services/GitHubService');
+    expect(GitHubService.isConfigured()).toBe(true);
+  });
+
+  test('returns false when GITHUB_TOKEN missing', () => {
+    delete process.env.GITHUB_TOKEN;
+    process.env.GITHUB_OWNER = 'owner';
+    process.env.GITHUB_REPO = 'repo';
+    jest.resetModules();
+    const GitHubService = require('../src/services/GitHubService');
+    expect(GitHubService.isConfigured()).toBe(false);
+  });
+
+  test('returns false when GITHUB_REPO missing', () => {
+    process.env.GITHUB_TOKEN = 'token';
+    process.env.GITHUB_OWNER = 'owner';
+    delete process.env.GITHUB_REPO;
+    jest.resetModules();
+    const GitHubService = require('../src/services/GitHubService');
+    expect(GitHubService.isConfigured()).toBe(false);
+  });
+});
+
+// ──────────────────────────────────────────
+// commitToMain
+// ──────────────────────────────────────────
+
+describe('GitHubService - commitToMain', () => {
+  const originalFetch = global.fetch;
+  const originalEnv = { ...process.env };
+
+  beforeEach(() => {
+    process.env.GITHUB_TOKEN = 'test-token';
+    process.env.GITHUB_OWNER = 'test-owner';
+    process.env.GITHUB_REPO = 'test-repo';
+    jest.resetModules();
+  });
+
+  afterEach(() => {
+    global.fetch = originalFetch;
+    process.env = { ...originalEnv };
+  });
+
+  function createCommitMockFetch() {
+    const responses = [
+      // 1. Get main branch
+      { ok: true, json: async () => ({ commit: { sha: 'main-sha' } }) },
+      // 2. Get commit tree
+      { ok: true, json: async () => ({ tree: { sha: 'tree-sha' } }) },
+      // 3. Create blob
+      { ok: true, json: async () => ({ sha: 'blob-sha' }) },
+      // 4. Create tree
+      { ok: true, json: async () => ({ sha: 'new-tree-sha' }) },
+      // 5. Create commit
+      { ok: true, json: async () => ({ sha: 'new-commit-sha-abc123' }) },
+      // 6. Update ref (fast-forward main)
+      { ok: true, json: async () => ({ ref: 'refs/heads/main' }) }
+    ];
+    let idx = 0;
+    return jest.fn(async () => responses[idx++]);
+  }
+
+  test('commits to main and returns commitSha, commitUrl, filesChanged', async () => {
+    global.fetch = createCommitMockFetch();
+    const GitHubService = require('../src/services/GitHubService');
+
+    const files = [{ path: 'backend/prompts/test.txt', content: 'Test content' }];
+    const result = await GitHubService.commitToMain(files);
+
+    expect(result.commitSha).toBe('new-commit-sha-abc123');
+    expect(result.commitUrl).toContain('new-commit-sha-abc123');
+    expect(result.filesChanged).toBe(1);
+  });
+
+  test('makes 6 API calls (no branch/PR creation)', async () => {
+    global.fetch = createCommitMockFetch();
+    const GitHubService = require('../src/services/GitHubService');
+
+    const files = [{ path: 'test.txt', content: 'Test' }];
+    await GitHubService.commitToMain(files);
+
+    // 6 calls: branch + commit + blob + tree + commit + update ref
+    expect(global.fetch).toHaveBeenCalledTimes(6);
+  });
+
+  test('updates refs/heads/main (PATCH, not POST)', async () => {
+    global.fetch = createCommitMockFetch();
+    const GitHubService = require('../src/services/GitHubService');
+
+    const files = [{ path: 'test.txt', content: 'Test' }];
+    await GitHubService.commitToMain(files);
+
+    // Last call should be PATCH to update main ref
+    const lastCall = global.fetch.mock.calls[5];
+    expect(lastCall[1].method).toBe('PATCH');
+    expect(lastCall[0]).toContain('refs/heads/main');
+  });
+
+  test('throws when not configured', async () => {
+    delete process.env.GITHUB_TOKEN;
+    jest.resetModules();
+    const GitHubService = require('../src/services/GitHubService');
+
+    await expect(GitHubService.commitToMain([{ path: 'x', content: 'y' }])).rejects.toThrow(
+      /not configured/
+    );
+  });
+
+  test('throws when files empty', async () => {
+    global.fetch = createCommitMockFetch();
+    const GitHubService = require('../src/services/GitHubService');
+
+    await expect(GitHubService.commitToMain([])).rejects.toThrow(/No files to commit/);
+  });
+});
