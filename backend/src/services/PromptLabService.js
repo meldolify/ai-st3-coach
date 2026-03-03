@@ -472,15 +472,18 @@ function loadFeedbackPromptFile(topicPath, difficulty) {
 }
 
 /**
- * Save feedback prompt.
+ * Save feedback prompt to modular file (same file production reads).
+ * Falls back to legacy path if modular feedback directory doesn't exist.
  */
 function saveFeedbackPrompt(topicPath, difficulty, content) {
   validateTopicPath(topicPath);
-  const { category, folderName } = getFeedbackParts(topicPath);
-  const filePath = path.join(FEEDBACK_DIR, `${difficulty}_${category}_${folderName}_feedback.txt`);
+  const feedbackPaths = getModularFeedbackPaths(topicPath, difficulty);
 
-  if (!fs.existsSync(FEEDBACK_DIR)) {
-    fs.mkdirSync(FEEDBACK_DIR, { recursive: true });
+  // Save to modular core feedback file (shared across scenarios of same domain)
+  const filePath = feedbackPaths.core;
+  const dir = path.dirname(filePath);
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
   }
   fs.writeFileSync(filePath, content, 'utf8');
 
