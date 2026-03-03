@@ -144,16 +144,19 @@ describe('PromptLabService - Topic Discovery', () => {
 // ──────────────────────────────────────────
 
 describe('PromptLabService - Prompt Loading', () => {
-  test('returns raw, sections, and path for valid topic', () => {
+  test('returns sections, paths, and source for valid topic', () => {
     const result = promptLabService.loadPrompt(
       'clinical/emergencies/necrotising_fasciitis',
       'easy'
     );
-    expect(result).toHaveProperty('raw');
     expect(result).toHaveProperty('sections');
-    expect(result).toHaveProperty('path');
-    expect(typeof result.raw).toBe('string');
-    expect(result.raw.length).toBeGreaterThan(100);
+    expect(result).toHaveProperty('paths');
+    expect(result).toHaveProperty('source');
+    // Nec fasc has modular files
+    expect(result.source).toBe('modular');
+    expect(result.paths).toHaveProperty('core');
+    expect(result.paths).toHaveProperty('difficulty');
+    expect(result.paths).toHaveProperty('clinical');
   });
 
   test('sections contain core, difficulty, and clinical keys', () => {
@@ -169,12 +172,16 @@ describe('PromptLabService - Prompt Loading', () => {
     expect(result.sections.clinical.length).toBeGreaterThan(0);
   });
 
-  test('path contains correct filename pattern', () => {
+  test('paths contain correct filename patterns', () => {
     const result = promptLabService.loadPrompt(
       'clinical/emergencies/necrotising_fasciitis',
       'medium'
     );
-    expect(result.path).toContain('medium_clinical_necrotising_fasciitis_1.txt');
+    // Nec fasc has modular files
+    expect(result.source).toBe('modular');
+    expect(result.paths.core).toContain('core_clinical_interview.txt');
+    expect(result.paths.difficulty).toContain('medium_interview_personality.txt');
+    expect(result.paths.clinical).toContain('necrotising_fasciitis');
   });
 
   test('throws for non-existent topic', () => {
@@ -198,15 +205,20 @@ describe('PromptLabService - Prompt Loading', () => {
 // ──────────────────────────────────────────
 
 describe('PromptLabService - Feedback Prompts', () => {
-  test('loads difficulty-specific feedback prompt for nec fasc', () => {
+  test('loads feedback prompt for nec fasc with source field', () => {
     const result = promptLabService.loadFeedbackPromptFile(
       'clinical/emergencies/necrotising_fasciitis',
       'easy'
     );
     expect(result).toHaveProperty('content');
     expect(result).toHaveProperty('path');
+    expect(result).toHaveProperty('source');
     expect(result.content.length).toBeGreaterThan(100);
-    expect(result.path).toContain('easy_clinical_necrotising_fasciitis_feedback.txt');
+    expect(['modular', 'legacy']).toContain(result.source);
+    // Modular uses shared/feedback/ path; legacy uses _legacy/feedback/ path
+    // Path should always contain 'feedback' regardless of source
+    const normalizedPath = result.path.replace(/\\/g, '/');
+    expect(normalizedPath).toContain('feedback');
   });
 
   test('returns content and path as strings', () => {
@@ -226,8 +238,9 @@ describe('PromptLabService - Feedback Prompts', () => {
     expect(nonNecFasc).toBeDefined();
     const result = promptLabService.loadFeedbackPromptFile(nonNecFasc.path, 'easy');
     expect(result.content.length).toBeGreaterThan(0);
-    // Should fall back to generic
-    expect(result.path).toContain('generic_feedback.txt');
+    expect(result).toHaveProperty('source');
+    // Path should always contain 'feedback' regardless of source
+    expect(result.path.replace(/\\/g, '/')).toContain('feedback');
   });
 });
 
@@ -267,7 +280,7 @@ describe('PromptLabService - Modified Files Tracking', () => {
     expect(promptLabService.getModifiedFiles().length).toBe(0);
   });
 
-  test('savePrompt adds file to modifiedFiles', () => {
+  test('savePrompt adds files to modifiedFiles', () => {
     const original = promptLabService.loadPrompt(
       'clinical/emergencies/necrotising_fasciitis',
       'easy'
@@ -279,9 +292,10 @@ describe('PromptLabService - Modified Files Tracking', () => {
     );
 
     const files = promptLabService.getModifiedFiles();
-    expect(files.length).toBe(1);
-    expect(files[0]).toContain('prompts');
-    expect(files[0]).toContain('necrotising_fasciitis');
+    // Modular save writes 3 files (core, difficulty, clinical)
+    expect(files.length).toBe(3);
+    expect(files.every(f => f.includes('prompts'))).toBe(true);
+    expect(files.some(f => f.includes('necrotising_fasciitis'))).toBe(true);
   });
 
   test('no duplicates when saving same file twice', () => {
@@ -301,7 +315,8 @@ describe('PromptLabService - Modified Files Tracking', () => {
     );
 
     const files = promptLabService.getModifiedFiles();
-    expect(files.length).toBe(1);
+    // 3 unique modular files, no duplicates from second save
+    expect(files.length).toBe(3);
   });
 
   test('tracks multiple different files', () => {
@@ -322,7 +337,8 @@ describe('PromptLabService - Modified Files Tracking', () => {
     );
 
     const files = promptLabService.getModifiedFiles();
-    expect(files.length).toBe(2);
+    // core (shared), easy_difficulty, medium_difficulty, clinical (shared) = 4 unique files
+    expect(files.length).toBe(4);
   });
 
   test('saveFeedbackPrompt adds to modifiedFiles', () => {
@@ -513,12 +529,9 @@ describe('PromptLabService - Feedback Generation', () => {
 
   test('generates 6 feedback sections', async () => {
     const mockGenerate = jest.spyOn(openaiService, 'generateResponse');
-    // 6 section calls + 1 JSON summary call = 7 total
-    for (let i = 0; i < 6; i++) {
-      mockGenerate.mockResolvedValueOnce(`Section ${i + 1} feedback content.`);
-    }
+    // Single API call returns all sections with delimiters
     mockGenerate.mockResolvedValueOnce(
-      '{"score":3,"overallImpression":"Good","clinicalKnowledge":{"diagnosis":"OK","management":"OK"},"strengths":["A"],"improvements":["B"],"summary":"Decent"}'
+      '===SECTION_1===\nSection 1 feedback content.\n===SECTION_2===\nSection 2 feedback content.\n===SECTION_3===\nSection 3 feedback content.\n===SECTION_4===\nSection 4 feedback content.\n===SECTION_5===\nSection 5 feedback content.\n===SECTION_6===\nSection 6 feedback content.\n===JSON_SUMMARY===\n{"score":3,"overallImpression":"Good","clinicalKnowledge":{"diagnosis":"OK","management":"OK"},"strengths":["A"],"improvements":["B"],"summary":"Decent"}'
     );
 
     const result = await promptLabService.generateFeedback(sessionId, 'Custom feedback prompt');
@@ -529,11 +542,9 @@ describe('PromptLabService - Feedback Generation', () => {
 
   test('returns JSON summary with score', async () => {
     const mockGenerate = jest.spyOn(openaiService, 'generateResponse');
-    for (let i = 0; i < 6; i++) {
-      mockGenerate.mockResolvedValueOnce(`Section ${i + 1}.`);
-    }
+    // Single API call with delimiters
     mockGenerate.mockResolvedValueOnce(
-      '{"score":4,"overallImpression":"Very good","clinicalKnowledge":{"diagnosis":"Excellent","management":"Good"},"strengths":["Clear","Structured"],"improvements":["Speed"],"summary":"Well done"}'
+      '===SECTION_1===\nSection 1.\n===SECTION_2===\nSection 2.\n===SECTION_3===\nSection 3.\n===SECTION_4===\nSection 4.\n===SECTION_5===\nSection 5.\n===SECTION_6===\nSection 6.\n===JSON_SUMMARY===\n{"score":4,"overallImpression":"Very good","clinicalKnowledge":{"diagnosis":"Excellent","management":"Good"},"strengths":["Clear","Structured"],"improvements":["Speed"],"summary":"Well done"}'
     );
 
     const result = await promptLabService.generateFeedback(sessionId, 'Feedback prompt');
@@ -544,16 +555,15 @@ describe('PromptLabService - Feedback Generation', () => {
 
   test('handles malformed JSON from GPT gracefully with fallback', async () => {
     const mockGenerate = jest.spyOn(openaiService, 'generateResponse');
-    for (let i = 0; i < 6; i++) {
-      mockGenerate.mockResolvedValueOnce(`Section ${i + 1} text.`);
-    }
-    // Return invalid JSON for summary
-    mockGenerate.mockResolvedValueOnce('This is not JSON at all, just text.');
+    // Single call with sections but NO valid JSON_SUMMARY
+    mockGenerate.mockResolvedValueOnce(
+      '===SECTION_1===\nSection 1 text.\n===SECTION_2===\nSection 2 text.\n===SECTION_3===\nSection 3 text.\n===SECTION_4===\nSection 4 text.\n===SECTION_5===\nSection 5 text.\n===SECTION_6===\nSection 6 text.\n===JSON_SUMMARY===\nThis is not JSON at all, just text.'
+    );
 
     const result = await promptLabService.generateFeedback(sessionId, 'Feedback prompt');
     expect(result.sections).toHaveLength(6);
     expect(result.summary.score).toBe(-1);
-    expect(result.summary.overallImpression).toBe('Unable to parse structured feedback');
+    expect(result.summary.overallImpression).toBe('Section 1 text.');
     expect(result.summary.improvements).toContain('JSON parsing failed');
   });
 
@@ -779,11 +789,9 @@ describe('PromptLabService - evaluateAssertions / evaluateSingleAssertion', () =
     });
     const mock = jest.spyOn(openaiService, 'generateResponse');
     mock.mockResolvedValueOnce('Chat reply.');
-    for (let i = 0; i < 6; i++) {
-      mock.mockResolvedValueOnce(`Section ${i + 1}.`);
-    }
+    // Single feedback call with delimiters
     mock.mockResolvedValueOnce(
-      '{"score":3,"overallImpression":"OK","clinicalKnowledge":{"diagnosis":"OK","management":"OK"},"strengths":["A"],"improvements":["B"],"summary":"OK"}'
+      '===SECTION_1===\nSection 1.\n===SECTION_2===\nSection 2.\n===SECTION_3===\nSection 3.\n===SECTION_4===\nSection 4.\n===SECTION_5===\nSection 5.\n===SECTION_6===\nSection 6.\n===JSON_SUMMARY===\n{"score":3,"overallImpression":"OK","clinicalKnowledge":{"diagnosis":"OK","management":"OK"},"strengths":["A"],"improvements":["B"],"summary":"OK"}'
     );
     const result = await promptLabService.runTest('score_pass', TOPIC_PATH, PROMPT_SECTIONS);
     const detail = result.assertions.details.find(d => d.type === 'score_range');
@@ -802,11 +810,9 @@ describe('PromptLabService - evaluateAssertions / evaluateSingleAssertion', () =
     });
     const mock = jest.spyOn(openaiService, 'generateResponse');
     mock.mockResolvedValueOnce('Chat reply.');
-    for (let i = 0; i < 6; i++) {
-      mock.mockResolvedValueOnce(`Section ${i + 1}.`);
-    }
+    // Single feedback call with delimiters
     mock.mockResolvedValueOnce(
-      '{"score":1,"overallImpression":"Poor","clinicalKnowledge":{"diagnosis":"Bad","management":"Bad"},"strengths":["None"],"improvements":["All"],"summary":"Poor"}'
+      '===SECTION_1===\nSection 1.\n===SECTION_2===\nSection 2.\n===SECTION_3===\nSection 3.\n===SECTION_4===\nSection 4.\n===SECTION_5===\nSection 5.\n===SECTION_6===\nSection 6.\n===JSON_SUMMARY===\n{"score":1,"overallImpression":"Poor","clinicalKnowledge":{"diagnosis":"Bad","management":"Bad"},"strengths":["None"],"improvements":["All"],"summary":"Poor"}'
     );
     const result = await promptLabService.runTest('score_fail', TOPIC_PATH, PROMPT_SECTIONS);
     const detail = result.assertions.details.find(d => d.type === 'score_range');
@@ -825,11 +831,9 @@ describe('PromptLabService - evaluateAssertions / evaluateSingleAssertion', () =
     });
     const mock = jest.spyOn(openaiService, 'generateResponse');
     mock.mockResolvedValueOnce('Chat reply.');
-    for (let i = 0; i < 6; i++) {
-      mock.mockResolvedValueOnce(`Section ${i + 1}.`);
-    }
+    // Single feedback call with delimiters
     mock.mockResolvedValueOnce(
-      '{"score":3,"overallImpression":"OK","clinicalKnowledge":{"diagnosis":"OK","management":"OK"},"strengths":["A"],"improvements":["B"],"summary":"OK"}'
+      '===SECTION_1===\nSection 1.\n===SECTION_2===\nSection 2.\n===SECTION_3===\nSection 3.\n===SECTION_4===\nSection 4.\n===SECTION_5===\nSection 5.\n===SECTION_6===\nSection 6.\n===JSON_SUMMARY===\n{"score":3,"overallImpression":"OK","clinicalKnowledge":{"diagnosis":"OK","management":"OK"},"strengths":["A"],"improvements":["B"],"summary":"OK"}'
     );
     const result = await promptLabService.runTest('sec_count', TOPIC_PATH, PROMPT_SECTIONS);
     const detail = result.assertions.details.find(d => d.type === 'section_count');
@@ -848,12 +852,9 @@ describe('PromptLabService - evaluateAssertions / evaluateSingleAssertion', () =
     });
     const mock = jest.spyOn(openaiService, 'generateResponse');
     mock.mockResolvedValueOnce('Chat reply.');
-    mock.mockResolvedValueOnce('You discussed debridement well.');
-    for (let i = 1; i < 6; i++) {
-      mock.mockResolvedValueOnce(`Section ${i + 1}.`);
-    }
+    // Single feedback call — section 1 mentions debridement
     mock.mockResolvedValueOnce(
-      '{"score":3,"overallImpression":"OK","clinicalKnowledge":{"diagnosis":"OK","management":"OK"},"strengths":["A"],"improvements":["B"],"summary":"OK"}'
+      '===SECTION_1===\nYou discussed debridement well.\n===SECTION_2===\nSection 2.\n===SECTION_3===\nSection 3.\n===SECTION_4===\nSection 4.\n===SECTION_5===\nSection 5.\n===SECTION_6===\nSection 6.\n===JSON_SUMMARY===\n{"score":3,"overallImpression":"OK","clinicalKnowledge":{"diagnosis":"OK","management":"OK"},"strengths":["A"],"improvements":["B"],"summary":"OK"}'
     );
     const result = await promptLabService.runTest('fb_contains', TOPIC_PATH, PROMPT_SECTIONS);
     const detail = result.assertions.details.find(d => d.type === 'feedback_contains');
@@ -1124,11 +1125,9 @@ describe('PromptLabService - Assertion engine edge cases', () => {
     });
     const mock = jest.spyOn(openaiService, 'generateResponse');
     mock.mockResolvedValueOnce('Chat reply.');
-    for (let i = 0; i < 6; i++) {
-      mock.mockResolvedValueOnce(`Section ${i + 1}.`);
-    }
+    // Single feedback call with delimiters
     mock.mockResolvedValueOnce(
-      '{"score":3,"overallImpression":"OK","clinicalKnowledge":{"diagnosis":"OK","management":"OK"},"strengths":["A"],"improvements":["B"],"summary":"OK"}'
+      '===SECTION_1===\nSection 1.\n===SECTION_2===\nSection 2.\n===SECTION_3===\nSection 3.\n===SECTION_4===\nSection 4.\n===SECTION_5===\nSection 5.\n===SECTION_6===\nSection 6.\n===JSON_SUMMARY===\n{"score":3,"overallImpression":"OK","clinicalKnowledge":{"diagnosis":"OK","management":"OK"},"strengths":["A"],"improvements":["B"],"summary":"OK"}'
     );
     const result = await promptLabService.runTest('sec_wrong', TOPIC_PATH, PROMPT_SECTIONS);
     const detail = result.assertions.details.find(d => d.type === 'section_count');
@@ -1228,11 +1227,9 @@ describe('PromptLabService - Assertion engine edge cases', () => {
     });
     const mock = jest.spyOn(openaiService, 'generateResponse');
     mock.mockResolvedValueOnce('Chat reply.');
-    for (let i = 0; i < 6; i++) {
-      mock.mockResolvedValueOnce(`Section ${i + 1}.`);
-    }
+    // Single feedback call with delimiters
     mock.mockResolvedValueOnce(
-      '{"score":3,"overallImpression":"OK","clinicalKnowledge":{"diagnosis":"OK","management":"OK"},"strengths":["A"],"improvements":["B"],"summary":"OK"}'
+      '===SECTION_1===\nSection 1.\n===SECTION_2===\nSection 2.\n===SECTION_3===\nSection 3.\n===SECTION_4===\nSection 4.\n===SECTION_5===\nSection 5.\n===SECTION_6===\nSection 6.\n===JSON_SUMMARY===\n{"score":3,"overallImpression":"OK","clinicalKnowledge":{"diagnosis":"OK","management":"OK"},"strengths":["A"],"improvements":["B"],"summary":"OK"}'
     );
     const result = await promptLabService.runTest('score_boundary', TOPIC_PATH, PROMPT_SECTIONS);
     const detail = result.assertions.details.find(d => d.type === 'score_range');
@@ -1251,16 +1248,146 @@ describe('PromptLabService - Assertion engine edge cases', () => {
     });
     const mock = jest.spyOn(openaiService, 'generateResponse');
     mock.mockResolvedValueOnce('Chat reply.');
-    for (let i = 0; i < 6; i++) {
-      mock.mockResolvedValueOnce(`Section ${i + 1}.`);
-    }
+    // Single feedback call with delimiters
     mock.mockResolvedValueOnce(
-      '{"score":0,"overallImpression":"Unsafe","clinicalKnowledge":{"diagnosis":"Bad","management":"Bad"},"strengths":["None"],"improvements":["All"],"summary":"Unsafe"}'
+      '===SECTION_1===\nSection 1.\n===SECTION_2===\nSection 2.\n===SECTION_3===\nSection 3.\n===SECTION_4===\nSection 4.\n===SECTION_5===\nSection 5.\n===SECTION_6===\nSection 6.\n===JSON_SUMMARY===\n{"score":0,"overallImpression":"Unsafe","clinicalKnowledge":{"diagnosis":"Bad","management":"Bad"},"strengths":["None"],"improvements":["All"],"summary":"Unsafe"}'
     );
     const result = await promptLabService.runTest('score_zero', TOPIC_PATH, PROMPT_SECTIONS);
     const detail = result.assertions.details.find(d => d.type === 'score_range');
     expect(detail.passed).toBe(true);
     expect(detail.actual).toBe('score: 0');
+  });
+});
+
+// ──────────────────────────────────────────
+// STRUCTURAL ASSERTIONS (6-state machine)
+// ──────────────────────────────────────────
+
+describe('PromptLabService - Structural assertions', () => {
+  const assistantTurns = [
+    { turn: 1, content: 'Good morning. Are you ready?' },
+    { turn: 2, content: 'This is a 64 year old man. How would you approach this case?' },
+    { turn: 3, content: 'What would you expect to find on examination?' },
+    { turn: 4, content: 'What blood tests would you want to send?' },
+    { turn: 5, content: 'How would you stabilise this patient initially?' },
+    { turn: 6, content: 'What surgical intervention does this patient need?' }
+  ];
+
+  test('stage_covered passes when keywords present', () => {
+    const assertion = {
+      type: 'stage_covered',
+      stage: 'investigations',
+      minKeywords: 1,
+      desc: 'test'
+    };
+    const result = promptLabService.evaluateSingleAssertion(assertion, assistantTurns, null);
+    expect(result.passed).toBe(true);
+    expect(result.actual).toContain('blood test');
+  });
+
+  test('stage_covered fails when keywords absent', () => {
+    const assertion = {
+      type: 'stage_covered',
+      stage: 'investigations',
+      minKeywords: 1,
+      desc: 'test'
+    };
+    const minimalTurns = [{ turn: 1, content: 'Hello, how are you?' }];
+    const result = promptLabService.evaluateSingleAssertion(assertion, minimalTurns, null);
+    expect(result.passed).toBe(false);
+  });
+
+  test('no_stage_announcement passes when AI is well-behaved', () => {
+    const assertion = { type: 'no_stage_announcement', desc: 'test' };
+    const result = promptLabService.evaluateSingleAssertion(assertion, assistantTurns, null);
+    expect(result.passed).toBe(true);
+    expect(result.actual).toBe('[no announcements]');
+  });
+
+  test('no_stage_announcement fails when AI announces', () => {
+    const assertion = { type: 'no_stage_announcement', desc: 'test' };
+    const badTurns = [{ turn: 3, content: 'We are now moving on to investigations.' }];
+    const result = promptLabService.evaluateSingleAssertion(assertion, badTurns, null);
+    expect(result.passed).toBe(false);
+    expect(result.actual).toContain('announcement');
+  });
+
+  test('redirect_on_skip passes when redirect keywords found', () => {
+    const assertion = {
+      type: 'redirect_on_skip',
+      turn: 3,
+      redirectKeywords: ['examination', 'assess'],
+      desc: 'test'
+    };
+    const result = promptLabService.evaluateSingleAssertion(assertion, assistantTurns, null);
+    expect(result.passed).toBe(true);
+  });
+
+  test('redirect_on_skip fails when no redirect keywords', () => {
+    const assertion = {
+      type: 'redirect_on_skip',
+      turn: 1,
+      redirectKeywords: ['surgery', 'debridement'],
+      desc: 'test'
+    };
+    const result = promptLabService.evaluateSingleAssertion(assertion, assistantTurns, null);
+    expect(result.passed).toBe(false);
+  });
+
+  test('redirect_on_skip handles missing turn', () => {
+    const assertion = {
+      type: 'redirect_on_skip',
+      turn: 99,
+      redirectKeywords: ['anything'],
+      desc: 'test'
+    };
+    const result = promptLabService.evaluateSingleAssertion(assertion, assistantTurns, null);
+    expect(result.passed).toBe(false);
+    expect(result.actual).toBe('[no response at turn]');
+  });
+
+  test('prompt_depth easy passes with enough specific questions', () => {
+    const assertion = {
+      type: 'prompt_depth',
+      expectedDifficulty: 'easy',
+      minSpecificQuestions: 2,
+      desc: 'test'
+    };
+    const result = promptLabService.evaluateSingleAssertion(assertion, assistantTurns, null);
+    expect(result.passed).toBe(true);
+    expect(result.actual).toContain('specific');
+  });
+
+  test('prompt_depth strict passes with few specific questions', () => {
+    const assertion = {
+      type: 'prompt_depth',
+      expectedDifficulty: 'strict',
+      maxSpecificQuestions: 1,
+      desc: 'test'
+    };
+    const vagueTurns = [
+      { turn: 3, content: 'Anything else?' },
+      { turn: 4, content: 'And?' },
+      { turn: 5, content: 'Right. Next.' }
+    ];
+    const result = promptLabService.evaluateSingleAssertion(assertion, vagueTurns, null);
+    expect(result.passed).toBe(true);
+  });
+
+  test('prompt_depth medium passes with moderate questions', () => {
+    const assertion = {
+      type: 'prompt_depth',
+      expectedDifficulty: 'medium',
+      maxSpecificQuestions: 2,
+      desc: 'test'
+    };
+    const mediumTurns = [
+      { turn: 3, content: 'Tell me more about that?' },
+      { turn: 4, content: 'What about investigations?' },
+      { turn: 5, content: 'And management?' }
+    ];
+    const result = promptLabService.evaluateSingleAssertion(assertion, mediumTurns, null);
+    expect(result.passed).toBe(true);
   });
 });
 
@@ -1348,11 +1475,9 @@ describe('PromptLabService - runTest', () => {
 
     const mock = jest.spyOn(openaiService, 'generateResponse');
     mock.mockResolvedValueOnce('Chat reply.');
-    for (let i = 0; i < 6; i++) {
-      mock.mockResolvedValueOnce(`Section ${i + 1}.`);
-    }
+    // Single feedback call with delimiters
     mock.mockResolvedValueOnce(
-      '{"score":3,"overallImpression":"OK","clinicalKnowledge":{"diagnosis":"OK","management":"OK"},"strengths":["A"],"improvements":["B"],"summary":"OK"}'
+      '===SECTION_1===\nSection 1.\n===SECTION_2===\nSection 2.\n===SECTION_3===\nSection 3.\n===SECTION_4===\nSection 4.\n===SECTION_5===\nSection 5.\n===SECTION_6===\nSection 6.\n===JSON_SUMMARY===\n{"score":3,"overallImpression":"OK","clinicalKnowledge":{"diagnosis":"OK","management":"OK"},"strengths":["A"],"improvements":["B"],"summary":"OK"}'
     );
 
     const result = await promptLabService.runTest('fb_test', TOPIC_PATH, PROMPT_SECTIONS);

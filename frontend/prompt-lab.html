@@ -34,16 +34,17 @@
   <!-- LEFT PANEL: Prompt Editor -->
   <section class="pl-panel">
     <div class="pl-tabs">
-      <button class="pl-tab active" data-tab="core">Core</button>
-      <button class="pl-tab" data-tab="difficulty">Difficulty</button>
+      <button class="pl-tab active" data-tab="core">Core <span class="pl-badge-shared">shared</span></button>
+      <button class="pl-tab" data-tab="difficulty">Difficulty <span class="pl-badge-shared">shared</span></button>
       <button class="pl-tab" data-tab="clinical">Clinical</button>
-      <button class="pl-tab" data-tab="feedback">Feedback</button>
+      <button class="pl-tab" data-tab="feedback">Feedback <span class="pl-badge-shared">shared</span></button>
     </div>
     <div class="pl-editor-wrap">
       <textarea id="promptEditor" class="pl-editor" placeholder="Loading prompt..."></textarea>
     </div>
     <div class="pl-editor-footer">
       <span id="charCount">0 chars</span>
+      <span id="filePath" style="color: #8b949e; font-size: 11px; margin-left: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 300px;" title=""></span>
       <div style="display: flex; gap: 6px;">
         <button id="revertBtn" class="pl-btn pl-btn-sm">Revert</button>
         <button id="downloadBtn" class="pl-btn pl-btn-sm">Download</button>
@@ -102,8 +103,9 @@
       <div id="testList" class="pl-test-list">
         <div class="pl-loading"><div class="pl-spinner"></div> Loading tests...</div>
       </div>
-      <div style="padding: 8px 14px;">
-        <button id="runTestsBtn" class="pl-btn pl-btn-primary" style="width: 100%;" disabled>Run Selected</button>
+      <div style="padding: 8px 14px; display: flex; gap: 6px;">
+        <button id="runTestsBtn" class="pl-btn pl-btn-primary" style="flex: 1;" disabled>Run Selected</button>
+        <button id="compareDiffBtn" class="pl-btn pl-btn-sm" style="font-size: 11px; white-space: nowrap;" disabled title="Run selected test across Easy/Medium/Strict">Compare Difficulties</button>
       </div>
 
       <div class="pl-section-divider">Assertions</div>
@@ -242,6 +244,13 @@ const api = {
   clearGeneratedTests(topic) {
     return this._fetch('/generated-tests?topic=' + encodeURIComponent(topic), { method: 'DELETE' });
   },
+
+  runDifficultyComparison(testId, topic, difficulties) {
+    return this._fetch('/run-difficulty-comparison', {
+      method: 'POST',
+      body: JSON.stringify({ testId, topic, difficulties })
+    });
+  },
 };
 
 // ================================================================
@@ -371,6 +380,21 @@ function syncEditorToState() {
 function syncStateToEditor() {
   promptEditor.value = getEditorContent();
   charCountEl.textContent = promptEditor.value.length + ' chars';
+  updateFilePath();
+}
+
+function updateFilePath() {
+  const el = $('filePath');
+  if (!el || !state.promptPaths) return;
+  const tab = state.activeTab;
+  let p = '';
+  if (tab === 'feedback') {
+    p = state.feedbackPath || '';
+  } else if (state.promptPaths[tab]) {
+    p = state.promptPaths[tab];
+  }
+  el.textContent = p ? p.replace(/\\/g, '/') : '';
+  el.title = el.textContent;
 }
 
 // ── localStorage persistence ──
@@ -404,8 +428,10 @@ async function loadPrompt() {
     try {
       const fb = await api.loadFeedbackPrompt(state.difficulty, state.topic);
       state.savedFeedback = fb.content;
+      state.feedbackPath = fb.path || '';
     } catch (e) {
       state.savedFeedback = '';
+      state.feedbackPath = '';
     }
 
     // Check localStorage for unsaved edits
@@ -425,9 +451,12 @@ async function loadPrompt() {
 
     // No local edits — use server version
     state.promptSections = { ...data.sections };
+    state.promptPaths = data.paths || {};
+    state.promptSource = data.source || 'unknown';
     state.feedbackPrompt = state.savedFeedback;
     syncStateToEditor();
-    setStatus('Prompt loaded');
+    updateFilePath();
+    setStatus('Prompt loaded (' + state.promptSource + ')');
   } catch (err) {
     // Server unreachable — try localStorage
     const local = loadFromLocalStorage(state.difficulty);
@@ -489,10 +518,9 @@ function downloadPrompt() {
     content = state.feedbackPrompt;
     filename = getFeedbackFilename();
   } else {
-    // Download the full combined prompt (all 3 sections)
-    content = 'SECTION 1\nREALTIME CORE BEHAVIOURS\n\n' + (state.promptSections.core || '') +
-      '\n\nSECTION 2\nDIFFICULTY AND PERSONALITY LAYER\n\n' + (state.promptSections.difficulty || '') +
-      '\n\nSECTION 3\nCLINICAL SCENARIO BLOCK\n\n' + (state.promptSections.clinical || '');
+    // Download the full combined prompt (same \n\n join as production)
+    content = [state.promptSections.core, state.promptSections.difficulty, state.promptSections.clinical]
+      .filter(Boolean).join('\n\n');
     filename = getPromptFilename();
   }
 
@@ -644,7 +672,7 @@ async function requestFeedback() {
   feedbackBtn.disabled = true;
   chatInput.disabled = true;
   sendBtn.disabled = true;
-  addMessage('system', 'Generating feedback (6 sections + summary)...');
+  addMessage('system', 'Generating feedback...');
 
   try {
     syncEditorToState();
@@ -727,6 +755,7 @@ function renderTestList() {
       else selectedTests.delete(t.id);
       renderTestList();
       runTestsBtn.disabled = selectedTests.size === 0;
+      if (typeof compareDiffBtn !== 'undefined') compareDiffBtn.disabled = selectedTests.size === 0;
     });
 
     const info = createEl('div', 'pl-test-item-info');
@@ -820,6 +849,59 @@ async function runSelectedTests() {
   state.loading = false;
   runTestsBtn.disabled = selectedTests.size === 0;
   setStatus('Tests complete');
+}
+
+async function runDifficultyComparison() {
+  if (selectedTests.size === 0) return;
+  const testId = [...selectedTests][0]; // Use first selected test
+
+  state.loading = true;
+  compareDiffBtn.disabled = true;
+  runTestsBtn.disabled = true;
+  switchMode('auto');
+  autoTestContent.textContent = '';
+
+  autoTestContent.appendChild(createEl('div', 'pl-system-msg', 'Comparing difficulties for: ' + testId + '...'));
+
+  try {
+    const data = await api.runDifficultyComparison(testId, state.topic, ['easy', 'medium', 'strict']);
+    const allAssertions = [];
+
+    for (const result of data.results) {
+      autoTestContent.appendChild(createEl('div', 'pl-system-msg',
+        '── ' + result.difficulty.toUpperCase() + ' ──'));
+
+      // Show conversation
+      for (const msg of result.history) {
+        if (msg.role === 'system') continue;
+        const cls = msg.role === 'user' ? 'pl-msg pl-msg-user' : 'pl-msg pl-msg-assistant';
+        autoTestContent.appendChild(createEl('div', cls, msg.content));
+      }
+
+      // Show assertion summary
+      const aResult = result.assertions;
+      const color = aResult.failed === 0 ? 'color: #3fb950' : 'color: #f85149';
+      const summary = createEl('div', 'pl-system-msg');
+      summary.innerHTML = '<span style="' + color + '">' + result.difficulty + ': ' +
+        aResult.passed + '/' + aResult.total + ' assertions passed</span>';
+      autoTestContent.appendChild(summary);
+
+      for (const d of aResult.details) {
+        allAssertions.push({ ...d, testName: result.difficulty });
+      }
+    }
+
+    renderAssertions(allAssertions);
+    loadTranscripts();
+    setStatus('Difficulty comparison complete');
+  } catch (err) {
+    autoTestContent.appendChild(createEl('div', 'pl-system-msg', 'Error: ' + err.message));
+    setStatus('Comparison failed: ' + err.message, true);
+  }
+
+  state.loading = false;
+  compareDiffBtn.disabled = selectedTests.size === 0;
+  runTestsBtn.disabled = selectedTests.size === 0;
 }
 
 function renderAssertions(details) {
@@ -1045,6 +1127,8 @@ feedbackBtn.addEventListener('click', requestFeedback);
 saveManualBtn.addEventListener('click', saveManualTranscript);
 clearChatBtn.addEventListener('click', clearChat);
 runTestsBtn.addEventListener('click', runSelectedTests);
+const compareDiffBtn = $('compareDiffBtn');
+compareDiffBtn.addEventListener('click', runDifficultyComparison);
 
 chatInput.addEventListener('keydown', (e) => {
   if (e.key === 'Enter' && !e.shiftKey) {

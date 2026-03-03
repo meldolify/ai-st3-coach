@@ -1,0 +1,31 @@
+{
+  "name": "Struggling Candidate (Strict)",
+  "description": "Tests that Strict difficulty gives minimal prompts when candidate struggles",
+  "difficulty": "strict",
+  "inputs": [
+    "Good morning, I'm ready.",
+    "Hmm, I'm not sure actually.",
+    "I think maybe some blood tests?",
+    "Um, antibiotics?",
+    "Surgery, I suppose."
+  ],
+  "assertions": [
+    {
+      "type": "prompt_depth",
+      "expectedDifficulty": "strict",
+      "maxSpecificQuestions": 1,
+      "desc": "Strict: AI gives minimal/no specific prompts"
+    },
+    { "type": "no_stage_announcement", "desc": "AI never announces stage transitions" },
+    {
+      "type": "avg_word_count",
+      "min": 3,
+      "max": 40,
+      "desc": "Strict AI keeps responses very brief"
+    }
+  ],
+  "triggerFeedback": true,
+  "feedbackAssertions": [
+    { "type": "score_range", "min": 0, "max": 2, "desc": "Score reflects poor performance" }
+  ]
+}

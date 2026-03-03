@@ -1,13 +1,13 @@
 /**
  * Test Script Generator
  * Generates scenario-specific test scripts by reading the clinical scenario
- * from Section 3 of a prompt file and using GPT to create appropriate
- * candidate inputs and assertions.
+ * file and using the LLM to create appropriate candidate inputs and assertions.
  */
 
 const fs = require('fs');
 const path = require('path');
 const openaiService = require('./OpenAIService');
+const { resolveScenarioPath } = require('../utils/promptAssembler');
 const { parsePromptSections } = require('../utils/promptParser');
 
 const BACKEND_DIR = path.join(__dirname, '..', '..');
@@ -42,7 +42,10 @@ const UNIVERSAL_ASSERTIONS = {
     { type: 'never_contains', value: "I'm an AI", desc: 'AI never breaks character' },
     { type: 'avg_word_count', min: 5, max: 60, desc: 'AI keeps responses brief' }
   ],
-  clinical: [{ type: 'never_contains', value: 'correct', desc: 'AI never confirms correctness' }],
+  clinical: [
+    { type: 'never_contains', value: 'correct', desc: 'AI never confirms correctness' },
+    { type: 'no_stage_announcement', desc: 'AI never announces stage transitions' }
+  ],
   feedback: [{ type: 'section_count', expected: 6, desc: 'All 6 feedback sections are generated' }]
 };
 
@@ -118,6 +121,14 @@ function extractScenarioTitle(clinicalSection) {
 
 function hasRealContent(topicPath) {
   try {
+    // Try modular scenario file first (production source of truth)
+    const scenarioPath = resolveScenarioPath(topicPath);
+    if (fs.existsSync(scenarioPath)) {
+      const content = fs.readFileSync(scenarioPath, 'utf8');
+      return !!(content && !content.includes('[PLACEHOLDER') && content.trim().length > 100);
+    }
+
+    // Fallback: legacy monolithic file
     const promptPath = getPromptPath(topicPath, 'easy');
     if (!fs.existsSync(promptPath)) {
       return false;
@@ -284,25 +295,32 @@ function validateGeneratedScript(script) {
 async function generateTestScript(testType, topicPath, difficulty) {
   difficulty = difficulty || 'easy';
 
-  // 1. Load the prompt file and extract Section 3
-  const promptPath = getPromptPath(topicPath, difficulty);
-  if (!fs.existsSync(promptPath)) {
-    throw new Error(`Prompt file not found for ${topicPath} (${difficulty})`);
+  // 1. Load the clinical scenario (modular file first, legacy fallback)
+  let clinicalContent;
+  const scenarioPath = resolveScenarioPath(topicPath);
+  if (fs.existsSync(scenarioPath)) {
+    clinicalContent = fs.readFileSync(scenarioPath, 'utf8');
+  } else {
+    // Fallback: legacy monolithic file
+    const promptPath = getPromptPath(topicPath, difficulty);
+    if (!fs.existsSync(promptPath)) {
+      throw new Error(`Prompt file not found for ${topicPath} (${difficulty})`);
+    }
+    const raw = fs.readFileSync(promptPath, 'utf8');
+    const sections = parsePromptSections(raw);
+    clinicalContent = sections.clinical;
   }
 
-  const raw = fs.readFileSync(promptPath, 'utf8');
-  const sections = parsePromptSections(raw);
-
-  if (!sections.clinical || sections.clinical.includes('[PLACEHOLDER')) {
+  if (!clinicalContent || clinicalContent.includes('[PLACEHOLDER')) {
     throw new Error(`Scenario ${topicPath} has placeholder content — cannot generate test scripts`);
   }
 
   // 2. Extract scenario title
   const scenarioTitle =
-    extractScenarioTitle(sections.clinical) || topicPath.split('/').pop().replace(/_/g, ' ');
+    extractScenarioTitle(clinicalContent) || topicPath.split('/').pop().replace(/_/g, ' ');
 
   // 3. Build the meta-prompt
-  const metaPrompt = buildGenerationPrompt(testType, sections.clinical, scenarioTitle);
+  const metaPrompt = buildGenerationPrompt(testType, clinicalContent, scenarioTitle);
 
   // 4. Call LLM
   const response = await openaiService.generateResponse([{ role: 'user', content: metaPrompt }], {
@@ -326,7 +344,7 @@ async function generateTestScript(testType, topicPath, difficulty) {
   try {
     script = JSON.parse(jsonStr);
   } catch (parseErr) {
-    throw new Error('GPT returned invalid JSON for test script: ' + parseErr.message);
+    throw new Error('LLM returned invalid JSON for test script: ' + parseErr.message);
   }
 
   // 6. Inject universal assertions (prepend so they come first)
