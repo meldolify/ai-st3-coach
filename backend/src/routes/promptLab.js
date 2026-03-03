@@ -307,6 +307,38 @@ router.post('/run-test', async (req, res) => {
   }
 });
 
+/**
+ * POST /run-difficulty-comparison — Run same test across multiple difficulties
+ * Body: { testId, topic?, difficulties?: ['easy','medium','strict'] }
+ */
+router.post('/run-difficulty-comparison', async (req, res) => {
+  try {
+    const { testId, topic, difficulties } = req.body;
+    if (!testId) {
+      return res.status(400).json({ error: 'testId required' });
+    }
+    const diffs = difficulties || ['easy', 'medium', 'strict'];
+    const results = [];
+    for (const difficulty of diffs) {
+      const loaded = promptLabService.loadPrompt(topic || DEFAULT_TOPIC, difficulty);
+      const result = await promptLabService.runTest(
+        testId,
+        topic || DEFAULT_TOPIC,
+        loaded.sections,
+        undefined
+      );
+      results.push({ difficulty, ...result });
+    }
+    res.json({ results });
+  } catch (err) {
+    console.error('[PROMPT LAB] Difficulty comparison error:', err.message);
+    if (err instanceof RateLimitError || err.isRateLimit) {
+      return res.status(429).json({ error: 'API rate limit reached.', code: 'RATE_LIMITED' });
+    }
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // ──────────────────────────────────────────
 // TRANSCRIPT ENDPOINTS
 // ──────────────────────────────────────────

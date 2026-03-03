@@ -205,11 +205,8 @@ describe('POST /prompt-lab/api/feedback', () => {
 
   test('triggers feedback generation and returns sections + summary', async () => {
     const mock = jest.spyOn(openaiService, 'generateResponse');
-    for (let i = 0; i < 6; i++) {
-      mock.mockResolvedValueOnce(`Section ${i + 1}.`);
-    }
     mock.mockResolvedValueOnce(
-      '{"score":3,"overallImpression":"OK","clinicalKnowledge":{"diagnosis":"OK","management":"OK"},"strengths":["A"],"improvements":["B"],"summary":"OK"}'
+      '===SECTION_1===\nSection 1.\n===SECTION_2===\nSection 2.\n===SECTION_3===\nSection 3.\n===SECTION_4===\nSection 4.\n===SECTION_5===\nSection 5.\n===SECTION_6===\nSection 6.\n===JSON_SUMMARY===\n{"score":3,"overallImpression":"OK","clinicalKnowledge":{"diagnosis":"OK","management":"OK"},"strengths":["A"],"improvements":["B"],"summary":"OK"}'
     );
 
     const res = await request(app).post('/prompt-lab/api/feedback').send({ sessionId });
@@ -220,11 +217,8 @@ describe('POST /prompt-lab/api/feedback', () => {
 
   test('accepts custom feedbackPrompt override', async () => {
     const mock = jest.spyOn(openaiService, 'generateResponse');
-    for (let i = 0; i < 6; i++) {
-      mock.mockResolvedValueOnce(`Section ${i + 1}.`);
-    }
     mock.mockResolvedValueOnce(
-      '{"score":4,"overallImpression":"Good","clinicalKnowledge":{"diagnosis":"Good","management":"Good"},"strengths":["Clear"],"improvements":["Speed"],"summary":"Good"}'
+      '===SECTION_1===\nSection 1.\n===SECTION_2===\nSection 2.\n===SECTION_3===\nSection 3.\n===SECTION_4===\nSection 4.\n===SECTION_5===\nSection 5.\n===SECTION_6===\nSection 6.\n===JSON_SUMMARY===\n{"score":4,"overallImpression":"Good","clinicalKnowledge":{"diagnosis":"Good","management":"Good"},"strengths":["Clear"],"improvements":["Speed"],"summary":"Good"}'
     );
 
     const res = await request(app)
@@ -311,9 +305,9 @@ describe('GET /prompt-lab/api/prompts/:difficulty', () => {
       .get('/prompt-lab/api/prompts/easy')
       .query({ topic: 'clinical/emergencies/necrotising_fasciitis' });
     expect(res.status).toBe(200);
-    expect(res.body).toHaveProperty('raw');
     expect(res.body).toHaveProperty('sections');
-    expect(res.body).toHaveProperty('path');
+    expect(res.body).toHaveProperty('paths');
+    expect(res.body).toHaveProperty('source');
     expect(res.body.sections).toHaveProperty('core');
     expect(res.body.sections).toHaveProperty('difficulty');
     expect(res.body.sections).toHaveProperty('clinical');
@@ -330,7 +324,8 @@ describe('GET /prompt-lab/api/prompts/:difficulty', () => {
   test('uses default topic when not specified', async () => {
     const res = await request(app).get('/prompt-lab/api/prompts/easy');
     expect(res.status).toBe(200);
-    expect(res.body.path).toContain('necrotising_fasciitis');
+    const pathStr = JSON.stringify(res.body.paths);
+    expect(pathStr).toContain('necrotising_fasciitis');
   });
 
   test('returns 404 for non-existent topic', async () => {
@@ -385,7 +380,7 @@ describe('PUT /prompt-lab/api/prompts/:difficulty', () => {
       .query({ topic: 'clinical/emergencies/necrotising_fasciitis' })
       .send({ sections: originalSections });
     expect(res.status).toBe(200);
-    expect(res.body).toHaveProperty('path');
+    expect(res.body).toHaveProperty('paths');
     expect(res.body).toHaveProperty('savedAt');
   });
 

@@ -7,22 +7,22 @@ const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 const openaiService = require('./OpenAIService');
-const { parsePromptSections, combinePromptSections } = require('../utils/promptParser');
+const { parsePromptSections } = require('../utils/promptParser');
+const {
+  buildFeedbackPrompt,
+  extractDomain,
+  resolveScenarioPath
+} = require('../utils/promptAssembler');
+const { parseFeedbackResponse } = require('../utils/feedbackParser');
 const testScriptGenerator = require('./TestScriptGenerator');
 
 const BACKEND_DIR = path.join(__dirname, '..', '..');
 const PROMPTS_DIR = path.join(BACKEND_DIR, 'prompts');
+const SCENARIOS_DIR = path.join(PROMPTS_DIR, 'scenarios');
 const LEGACY_DIR = path.join(PROMPTS_DIR, '_legacy');
 const FEEDBACK_DIR = path.join(LEGACY_DIR, 'feedback');
 const TEST_SCRIPTS_DIR = path.join(BACKEND_DIR, 'test-scripts');
 const TEST_RESULTS_DIR = path.join(BACKEND_DIR, 'test-results');
-const FEEDBACK_JSON_TEMPLATE_PATH = path.join(PROMPTS_DIR, 'system', 'feedback_json_template.txt');
-
-const FEEDBACK_DELAY_MS = 1500;
-
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
 
 // Folders to exclude when scanning for topics
 const EXCLUDED_DIRS = new Set(['feedback', 'system', 'test']);
@@ -53,12 +53,48 @@ function validateTopicPath(topicPath) {
 }
 
 /**
- * Build the prompt file path for a given topic and difficulty.
+ * Get the 3 modular file paths for a topic + difficulty.
+ * Uses the same path resolution as production (promptAssembler.js).
  * @param {string} topicPath - e.g., "clinical/emergencies/necrotising_fasciitis"
  * @param {string} difficulty - easy|medium|strict
- * @returns {string} absolute file path
+ * @returns {{ core: string, difficulty: string, clinical: string }}
  */
-function getPromptPath(topicPath, difficulty) {
+function getModularPaths(topicPath, difficulty) {
+  const domain = extractDomain(topicPath);
+  return {
+    core: path.join(PROMPTS_DIR, 'shared/interview', `core_${domain}_interview.txt`),
+    difficulty: path.join(
+      PROMPTS_DIR,
+      'shared/interview',
+      `${difficulty}_interview_personality.txt`
+    ),
+    clinical: resolveScenarioPath(topicPath)
+  };
+}
+
+/**
+ * Get modular feedback file paths.
+ * @param {string} topicPath
+ * @param {string} difficulty
+ * @returns {{ core: string, personality: string, clinical: string }}
+ */
+function getModularFeedbackPaths(topicPath, difficulty) {
+  const domain = extractDomain(topicPath);
+  return {
+    core: path.join(PROMPTS_DIR, 'shared/feedback', `core_${domain}_feedback.txt`),
+    personality: path.join(
+      PROMPTS_DIR,
+      'shared/feedback',
+      `${difficulty}_feedback_personality.txt`
+    ),
+    clinical: resolveScenarioPath(topicPath)
+  };
+}
+
+/**
+ * Build the legacy prompt file path (fallback).
+ */
+function getLegacyPromptPath(topicPath, difficulty) {
   validateTopicPath(topicPath);
   const parts = topicPath.split('/');
   const category = parts[0];
@@ -68,7 +104,7 @@ function getPromptPath(topicPath, difficulty) {
 }
 
 /**
- * Build feedback prompt path components from topic path.
+ * Build feedback prompt path components from topic path (legacy).
  */
 function getFeedbackParts(topicPath) {
   const parts = topicPath.split('/');
@@ -90,22 +126,23 @@ function toTitleCase(str) {
 }
 
 /**
- * List all available topics by scanning the prompts directory.
+ * List all available topics by scanning prompts/scenarios/ (production source of truth).
+ * Falls back to prompts/_legacy/ if scenarios directory is empty.
  * Returns a flat list grouped by category > subcategory.
  */
 function listTopics() {
   const topics = [];
+  const scanDir = fs.existsSync(SCENARIOS_DIR) ? SCENARIOS_DIR : LEGACY_DIR;
 
-  // Read top-level categories from legacy directory
-  const categories = fs.readdirSync(LEGACY_DIR).filter(d => {
+  const categories = fs.readdirSync(scanDir).filter(d => {
     if (EXCLUDED_DIRS.has(d)) {
       return false;
     }
-    return fs.statSync(path.join(LEGACY_DIR, d)).isDirectory();
+    return fs.statSync(path.join(scanDir, d)).isDirectory();
   });
 
   for (const category of categories) {
-    const categoryPath = path.join(LEGACY_DIR, category);
+    const categoryPath = path.join(scanDir, category);
     const subcategories = fs
       .readdirSync(categoryPath)
       .filter(d => fs.statSync(path.join(categoryPath, d)).isDirectory());
@@ -144,13 +181,17 @@ function listTopics() {
 
 /**
  * Create a new prompt lab session.
+ * Concatenates sections with \n\n — same assembly pattern as production's buildInterviewPrompt().
  * @param {{ core: string, difficulty: string, clinical: string }} promptSections
  * @param {{ difficulty: string }} metadata
  * @returns {{ sessionId: string }}
  */
 function createSession(promptSections, metadata = {}) {
   const sessionId = `pl_${crypto.randomUUID()}`;
-  const combinedPrompt = combinePromptSections(promptSections);
+  // Same join pattern as promptAssembler.buildInterviewPrompt() line 99
+  const combinedPrompt = [promptSections.core, promptSections.difficulty, promptSections.clinical]
+    .filter(Boolean)
+    .join('\n\n');
 
   sessions.set(sessionId, {
     history: [{ role: 'system', content: combinedPrompt }],
@@ -164,7 +205,7 @@ function createSession(promptSections, metadata = {}) {
 }
 
 /**
- * Send a user message and get GPT response.
+ * Send a user message and get LLM response.
  */
 async function chat(sessionId, message) {
   const session = sessions.get(sessionId);
@@ -208,38 +249,43 @@ function serializeTranscript(history) {
 }
 
 /**
- * Load feedback prompt for a topic, with difficulty-specific fallback chain.
+ * Load feedback prompt using production's buildFeedbackPrompt() (modular assembly).
+ * Falls back to legacy feedback files if modular files don't exist.
  */
-function loadFeedbackPrompt(topicPath, difficulty) {
+function loadFeedbackPromptAssembled(topicPath, difficulty) {
   validateTopicPath(topicPath);
-  const { category, folderName } = getFeedbackParts(topicPath);
+  try {
+    // Use production assembler — same prompt as production feedback
+    return buildFeedbackPrompt(difficulty, topicPath);
+  } catch {
+    // Fallback: legacy feedback files
+    const { category, folderName } = getFeedbackParts(topicPath);
 
-  // Try difficulty-specific feedback prompt
-  const difficultyFile = path.join(
-    FEEDBACK_DIR,
-    `${difficulty}_${category}_${folderName}_feedback.txt`
-  );
-  if (fs.existsSync(difficultyFile)) {
-    return fs.readFileSync(difficultyFile, 'utf8');
+    const difficultyFile = path.join(
+      FEEDBACK_DIR,
+      `${difficulty}_${category}_${folderName}_feedback.txt`
+    );
+    if (fs.existsSync(difficultyFile)) {
+      return fs.readFileSync(difficultyFile, 'utf8');
+    }
+
+    const genericTopicFile = path.join(FEEDBACK_DIR, `${category}_${folderName}_feedback.txt`);
+    if (fs.existsSync(genericTopicFile)) {
+      return fs.readFileSync(genericTopicFile, 'utf8');
+    }
+
+    const genericFile = path.join(FEEDBACK_DIR, 'generic_feedback.txt');
+    if (fs.existsSync(genericFile)) {
+      return fs.readFileSync(genericFile, 'utf8');
+    }
+
+    return 'You are an expert plastic surgery examiner. Review the interview transcript and provide feedback in 6 sections using ===SECTION_N=== delimiters, followed by ===JSON_SUMMARY=== with a JSON score object.';
   }
-
-  // Try generic topic feedback prompt (no difficulty prefix)
-  const genericTopicFile = path.join(FEEDBACK_DIR, `${category}_${folderName}_feedback.txt`);
-  if (fs.existsSync(genericTopicFile)) {
-    return fs.readFileSync(genericTopicFile, 'utf8');
-  }
-
-  // Fall back to generic feedback
-  const genericFile = path.join(FEEDBACK_DIR, 'generic_feedback.txt');
-  if (fs.existsSync(genericFile)) {
-    return fs.readFileSync(genericFile, 'utf8');
-  }
-
-  return 'You are an expert plastic surgery examiner. Review the interview transcript and provide feedback in 6 sections. Begin with Section 1 now.';
 }
 
 /**
- * Generate full feedback (all 6 sections + JSON summary) for a session.
+ * Generate full feedback using production-identical single-call pattern.
+ * Uses ===SECTION_N=== delimiters, parsed by feedbackParser.js.
  */
 async function generateFeedback(sessionId, feedbackPromptOverride, topicPath) {
   const session = sessions.get(sessionId);
@@ -250,63 +296,50 @@ async function generateFeedback(sessionId, feedbackPromptOverride, topicPath) {
   const transcript = serializeTranscript(session.history);
   const feedbackPrompt =
     feedbackPromptOverride ||
-    loadFeedbackPrompt(
+    loadFeedbackPromptAssembled(
       topicPath || 'clinical/emergencies/necrotising_fasciitis',
       session.difficulty
     );
 
-  const feedbackHistory = [
+  const feedbackMessages = [
     { role: 'system', content: feedbackPrompt },
     { role: 'user', content: 'Here is the interview transcript:\n\n' + transcript }
   ];
 
-  const sections = [];
+  // Single API call — same pattern as production
+  const fullResponse = await openaiService.generateResponse(feedbackMessages, {
+    max_tokens: 4000,
+    temperature: 0.7
+  });
 
-  for (let i = 0; i < 6; i++) {
-    if (i > 0) {
-      await sleep(FEEDBACK_DELAY_MS);
-      feedbackHistory.push({ role: 'user', content: 'continue' });
-    }
+  // Parse with production's feedbackParser
+  const parsed = parseFeedbackResponse(fullResponse);
 
-    const sectionText = await openaiService.generateResponse(feedbackHistory, {
-      max_tokens: 200,
-      temperature: 0.7
-    });
+  const sections = parsed.sections.length > 0 ? parsed.sections : [fullResponse]; // Fallback: treat whole response as one section
 
-    feedbackHistory.push({ role: 'assistant', content: sectionText });
-    sections.push(sectionText);
-  }
-
-  let summary;
-  try {
-    await sleep(FEEDBACK_DELAY_MS);
-    const jsonTemplate = fs.readFileSync(FEEDBACK_JSON_TEMPLATE_PATH, 'utf8');
-    feedbackHistory.push({ role: 'user', content: jsonTemplate });
-
-    const jsonText = await openaiService.generateResponse(feedbackHistory, {
-      max_tokens: 500,
-      temperature: 0.3
-    });
-
-    const jsonMatch = jsonText.match(/\{[\s\S]*\}/);
-    if (jsonMatch) {
-      summary = JSON.parse(jsonMatch[0]);
-    } else {
-      throw new Error('No JSON found in response');
-    }
-  } catch (err) {
-    console.warn('[PROMPT LAB] Feedback JSON parse failed:', err.message);
-    summary = {
-      score: -1,
-      overallImpression: 'Unable to parse structured feedback',
-      clinicalKnowledge: { diagnosis: 'See spoken feedback', management: 'See spoken feedback' },
-      strengths: ['See spoken feedback above'],
-      improvements: ['JSON parsing failed'],
-      summary: sections[0] || 'Feedback generation issue'
-    };
-  }
+  const summary = parsed.json || buildFallbackSummary(sections, fullResponse);
 
   return { sections, summary };
+}
+
+/**
+ * Build a fallback summary when JSON parsing fails.
+ */
+function buildFallbackSummary(sections, fullText) {
+  let score = -1;
+  const scoreMatch = fullText.match(/\bscore\b[^.]*?\b([0-5])\b/i);
+  if (scoreMatch) {
+    score = parseInt(scoreMatch[1], 10);
+  }
+
+  return {
+    score,
+    overallImpression: sections[0] || 'Unable to parse structured feedback',
+    clinicalKnowledge: { diagnosis: 'See spoken feedback', management: 'See spoken feedback' },
+    strengths: ['See spoken feedback above'],
+    improvements: ['JSON parsing failed'],
+    summary: sections[0] || 'Feedback generation issue'
+  };
 }
 
 // ──────────────────────────────────────────
@@ -314,51 +347,106 @@ async function generateFeedback(sessionId, feedbackPromptOverride, topicPath) {
 // ──────────────────────────────────────────
 
 /**
- * Load a prompt file, parsed into sections.
+ * Load prompt from modular 3-file system (production source of truth).
+ * Falls back to legacy monolithic file if modular files don't exist.
  */
 function loadPrompt(topicPath, difficulty) {
-  const filePath = getPromptPath(topicPath, difficulty);
-  if (!fs.existsSync(filePath)) {
-    throw new Error(`Prompt not found: ${path.relative(BACKEND_DIR, filePath)}`);
+  validateTopicPath(topicPath);
+  const paths = getModularPaths(topicPath, difficulty);
+
+  // Try modular files first (same files production uses)
+  if (
+    fs.existsSync(paths.core) &&
+    fs.existsSync(paths.difficulty) &&
+    fs.existsSync(paths.clinical)
+  ) {
+    return {
+      sections: {
+        core: fs.readFileSync(paths.core, 'utf8'),
+        difficulty: fs.readFileSync(paths.difficulty, 'utf8'),
+        clinical: fs.readFileSync(paths.clinical, 'utf8')
+      },
+      paths: {
+        core: path.relative(BACKEND_DIR, paths.core),
+        difficulty: path.relative(BACKEND_DIR, paths.difficulty),
+        clinical: path.relative(BACKEND_DIR, paths.clinical)
+      },
+      source: 'modular'
+    };
   }
-  const raw = fs.readFileSync(filePath, 'utf8');
+
+  // Fallback: legacy monolithic file
+  const legacyPath = getLegacyPromptPath(topicPath, difficulty);
+  if (!fs.existsSync(legacyPath)) {
+    throw new Error(`Prompt not found (modular or legacy): ${topicPath}/${difficulty}`);
+  }
+  const raw = fs.readFileSync(legacyPath, 'utf8');
   return {
-    raw,
     sections: parsePromptSections(raw),
-    path: path.relative(BACKEND_DIR, filePath)
+    paths: { legacy: path.relative(BACKEND_DIR, legacyPath) },
+    source: 'legacy'
   };
 }
 
 /**
- * Save edited prompt sections.
+ * Save edited prompt sections to modular files.
+ * Core and difficulty files are shared across scenarios — tracked separately.
  */
 function savePrompt(topicPath, difficulty, sections) {
-  const filePath = getPromptPath(topicPath, difficulty);
-  const dir = path.dirname(filePath);
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
+  validateTopicPath(topicPath);
+  const paths = getModularPaths(topicPath, difficulty);
+  const savedPaths = [];
+
+  // Save each section to its modular file
+  const filesToSave = [
+    { content: sections.core, filePath: paths.core, label: 'core' },
+    { content: sections.difficulty, filePath: paths.difficulty, label: 'difficulty' },
+    { content: sections.clinical, filePath: paths.clinical, label: 'clinical' }
+  ];
+
+  for (const { content, filePath, label } of filesToSave) {
+    if (content === undefined) {
+      continue;
+    }
+    const dir = path.dirname(filePath);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+    fs.writeFileSync(filePath, content, 'utf8');
+    const relPath = path.relative(BACKEND_DIR, filePath);
+    modifiedFiles.add(relPath);
+    savedPaths.push({ label, path: relPath });
   }
-  const combined = combinePromptSections(sections);
-  fs.writeFileSync(filePath, combined, 'utf8');
 
-  // Track modification for GitHub PR
-  modifiedFiles.add(path.relative(BACKEND_DIR, filePath));
-
-  return { path: path.relative(BACKEND_DIR, filePath), savedAt: new Date().toISOString() };
+  return { paths: savedPaths, savedAt: new Date().toISOString() };
 }
 
 /**
- * Load feedback prompt file for editing (returns content + path).
+ * Load feedback prompt file for editing (returns core feedback content + path).
+ * Reads from modular feedback files first, falls back to legacy.
  */
 function loadFeedbackPromptFile(topicPath, difficulty) {
   validateTopicPath(topicPath);
+  const feedbackPaths = getModularFeedbackPaths(topicPath, difficulty);
+
+  // Try modular core feedback file
+  if (fs.existsSync(feedbackPaths.core)) {
+    return {
+      content: fs.readFileSync(feedbackPaths.core, 'utf8'),
+      path: path.relative(BACKEND_DIR, feedbackPaths.core),
+      source: 'modular'
+    };
+  }
+
+  // Fallback: legacy feedback files
   const { category, folderName } = getFeedbackParts(topicPath);
 
   const diffFile = path.join(FEEDBACK_DIR, `${difficulty}_${category}_${folderName}_feedback.txt`);
   if (fs.existsSync(diffFile)) {
     return {
       content: fs.readFileSync(diffFile, 'utf8'),
-      path: path.relative(BACKEND_DIR, diffFile)
+      path: path.relative(BACKEND_DIR, diffFile),
+      source: 'legacy'
     };
   }
 
@@ -366,7 +454,8 @@ function loadFeedbackPromptFile(topicPath, difficulty) {
   if (fs.existsSync(genericFile)) {
     return {
       content: fs.readFileSync(genericFile, 'utf8'),
-      path: path.relative(BACKEND_DIR, genericFile)
+      path: path.relative(BACKEND_DIR, genericFile),
+      source: 'legacy'
     };
   }
 
@@ -374,7 +463,8 @@ function loadFeedbackPromptFile(topicPath, difficulty) {
   if (fs.existsSync(fallbackFile)) {
     return {
       content: fs.readFileSync(fallbackFile, 'utf8'),
-      path: path.relative(BACKEND_DIR, fallbackFile)
+      path: path.relative(BACKEND_DIR, fallbackFile),
+      source: 'legacy'
     };
   }
 
@@ -470,7 +560,7 @@ function listTestScripts(topicFolderName, topicPath) {
     }
   }
 
-  // 3. Cached GPT-generated scripts
+  // 3. Cached LLM-generated scripts
   if (topicFolderName) {
     const generatedDir = path.join(TEST_SCRIPTS_DIR, '_generated', topicFolderName);
     if (fs.existsSync(generatedDir)) {
@@ -513,7 +603,7 @@ function listTestScripts(topicFolderName, topicPath) {
         results.push({
           id: testType,
           name: toTitleCase(testType),
-          description: 'GPT-generated test (will be created on first run)',
+          description: 'LLM-generated test (will be created on first run)',
           difficulty: 'easy',
           inputCount: 0,
           triggerFeedback: [
@@ -674,6 +764,128 @@ function evaluateSingleAssertion(assertion, assistantTurns, feedback) {
       const passed = allFeedback.includes(assertion.value.toLowerCase());
       return { ...base, passed, actual: passed ? '[found]' : `[not found: "${assertion.value}"]` };
     }
+
+    // ── Structural assertions (6-state interview machine) ──
+
+    case 'stage_covered': {
+      const stageKeywords = {
+        assessment: ['examination', 'assess', 'a b c d e', 'history', 'findings', 'diagnosis'],
+        investigations: [
+          'blood test',
+          'imaging',
+          'scoring system',
+          'investigate',
+          'lab',
+          'x-ray',
+          'ct',
+          'mri',
+          'bloods'
+        ],
+        initial_management: [
+          'stabilise',
+          'resuscit',
+          'antibiotic',
+          'fluid',
+          'initial management',
+          'involve'
+        ],
+        definitive_management: [
+          'surgery',
+          'operat',
+          'surgical',
+          'debrid',
+          'post-operative',
+          'post operative'
+        ]
+      };
+      const keywords = stageKeywords[assertion.stage] || [];
+      const allContent = assistantTurns
+        .map(t => t.content)
+        .join(' ')
+        .toLowerCase();
+      const found = keywords.filter(kw => allContent.includes(kw));
+      const minKw = assertion.minKeywords || 1;
+      const passed = found.length >= minKw;
+      return {
+        ...base,
+        passed,
+        actual: `Found ${found.length}/${minKw} keywords: ${found.join(', ') || 'none'}`
+      };
+    }
+
+    case 'no_stage_announcement': {
+      const stageNames = [
+        'assessment',
+        'investigations',
+        'initial management',
+        'definitive management'
+      ];
+      const allContent = assistantTurns.map(t => t.content).join(' ');
+      const announcementPatterns = stageNames.map(
+        name =>
+          new RegExp(
+            `(moving on to|let'?s? (?:discuss|talk about|move to)|now (?:let'?s?|we will)|we are now in)\\s+(?:the\\s+)?${name}`,
+            'i'
+          )
+      );
+      const violations = announcementPatterns.filter(p => p.test(allContent));
+      const passed = violations.length === 0;
+      return {
+        ...base,
+        passed,
+        actual: passed ? '[no announcements]' : `Found ${violations.length} announcement(s)`
+      };
+    }
+
+    case 'redirect_on_skip': {
+      const turnResp = assistantTurns.find(t => t.turn === assertion.turn);
+      if (!turnResp) {
+        return { ...base, actual: '[no response at turn]' };
+      }
+      const lower = turnResp.content.toLowerCase();
+      const redirectKws = assertion.redirectKeywords || [];
+      const found = redirectKws.some(kw => lower.includes(kw.toLowerCase()));
+      return { ...base, passed: found, actual: turnResp.content.substring(0, 200) };
+    }
+
+    case 'prompt_depth': {
+      const postIntroTurns = assistantTurns.filter(t => t.turn >= 3);
+      const questionTurns = postIntroTurns.filter(t => t.content.includes('?'));
+      const specificPatterns = [
+        /what.*would you expect/i,
+        /can you describe/i,
+        /what.*blood test/i,
+        /scoring system/i,
+        /what.*antibiotic/i,
+        /what.*surgical/i,
+        /walk.*through/i,
+        /post.?operative/i,
+        /what.*examination/i,
+        /a b c d e/i,
+        /what.*imaging/i,
+        /what.*teams/i
+      ];
+      const specificCount = questionTurns.filter(t =>
+        specificPatterns.some(p => p.test(t.content))
+      ).length;
+
+      let passed = false;
+      const diff = assertion.expectedDifficulty;
+      if (diff === 'easy') {
+        passed = specificCount >= (assertion.minSpecificQuestions || 3);
+      } else if (diff === 'medium') {
+        passed =
+          questionTurns.length >= 2 && specificCount <= (assertion.maxSpecificQuestions || 2);
+      } else if (diff === 'strict') {
+        passed = specificCount <= (assertion.maxSpecificQuestions || 1);
+      }
+      return {
+        ...base,
+        passed,
+        actual: `${questionTurns.length} questions, ${specificCount} specific`
+      };
+    }
+
     default:
       return { ...base, actual: `[unknown assertion type: ${assertion.type}]` };
   }
@@ -750,7 +962,9 @@ function generateTranscriptId(label) {
 }
 
 function hashPrompt(sections) {
-  const combined = combinePromptSections(sections);
+  const combined = [sections.core, sections.difficulty, sections.clinical]
+    .filter(Boolean)
+    .join('\n\n');
   return crypto.createHash('sha256').update(combined).digest('hex').substring(0, 8);
 }
 
@@ -854,5 +1068,10 @@ module.exports = {
   deleteTranscript,
   serializeTranscript,
   getModifiedFiles,
-  clearModifiedFiles
+  clearModifiedFiles,
+  // Exposed for testing
+  getModularPaths,
+  getModularFeedbackPaths,
+  evaluateAssertions,
+  evaluateSingleAssertion
 };

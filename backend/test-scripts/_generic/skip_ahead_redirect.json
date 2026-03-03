@@ -1,0 +1,23 @@
+{
+  "name": "Skip Ahead Redirect",
+  "description": "Tests that AI redirects candidate back to missed stages when they jump ahead",
+  "difficulty": "easy",
+  "inputs": [
+    "Good morning, I'm ready.",
+    "I think this patient needs urgent surgery and debridement right away.",
+    "Okay, on examination I would expect to see rapidly spreading erythema and swelling.",
+    "I would send bloods including F B C, C R P, and lactate.",
+    "For initial management I would start broad spectrum antibiotics and I V fluids.",
+    "The surgery involves debridement of all affected tissue."
+  ],
+  "assertions": [
+    {
+      "type": "redirect_on_skip",
+      "turn": 3,
+      "redirectKeywords": ["assess", "examination", "approach", "history", "a b c d e", "look for"],
+      "desc": "AI redirects back to assessment when candidate jumps to surgery"
+    },
+    { "type": "no_stage_announcement", "desc": "AI never announces stage transitions" }
+  ],
+  "triggerFeedback": false
+}

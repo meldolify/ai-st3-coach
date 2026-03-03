@@ -1,0 +1,23 @@
+{
+  "name": "Struggling Candidate (Easy)",
+  "description": "Tests that Easy difficulty provides multiple specific prompts when candidate struggles",
+  "difficulty": "easy",
+  "inputs": [
+    "Good morning, yes I'm ready.",
+    "Hmm, I'm not really sure. What is this?",
+    "I think maybe some blood tests? I'm not sure which ones.",
+    "Um, antibiotics maybe? I don't know which ones specifically.",
+    "I think they probably need surgery but I'm not sure what kind."
+  ],
+  "assertions": [
+    {
+      "type": "prompt_depth",
+      "expectedDifficulty": "easy",
+      "minSpecificQuestions": 2,
+      "desc": "Easy: AI uses multiple specific prompts to help struggling candidate"
+    },
+    { "type": "no_stage_announcement", "desc": "AI never announces stage transitions" },
+    { "type": "avg_word_count", "min": 5, "max": 60, "desc": "AI keeps responses brief" }
+  ],
+  "triggerFeedback": false
+}

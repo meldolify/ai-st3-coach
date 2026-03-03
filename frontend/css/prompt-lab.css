@@ -160,6 +160,16 @@ body {
 .pl-tab:hover { color: var(--pl-text); }
 .pl-tab.active { color: var(--pl-accent); border-bottom-color: var(--pl-accent); }
 
+.pl-badge-shared {
+  font-size: 9px;
+  padding: 1px 4px;
+  border-radius: 3px;
+  background: rgba(136, 198, 190, 0.15);
+  color: #88c6be;
+  vertical-align: middle;
+  margin-left: 2px;
+}
+
 /* ── Editor ── */
 .pl-editor-wrap {
   flex: 1;
