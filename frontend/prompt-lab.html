@@ -268,6 +268,7 @@ let state = {
   feedbackPrompt: '',
   savedSections: null,
   savedFeedback: null,
+  dirtySections: new Set(), // tracks which sections were edited since last load/save
   githubEnabled: false,
   pendingChanges: 0,
 };
@@ -420,6 +421,7 @@ function loadFromLocalStorage(difficulty) {
 }
 
 async function loadPrompt() {
+  state.dirtySections.clear();
   try {
     // Load from server (git baseline)
     const data = await api.loadPrompt(state.difficulty, state.topic);
@@ -480,13 +482,35 @@ async function savePrompt() {
   saveToLocalStorage();
 
   try {
-    const result = await api.savePrompt(state.difficulty, state.promptSections, state.topic);
+    // Only send sections that were actually modified
+    const dirtySections = {};
+    let hasDirtyPromptSections = false;
+    for (const key of ['core', 'difficulty', 'clinical']) {
+      if (state.dirtySections.has(key)) {
+        dirtySections[key] = state.promptSections[key];
+        hasDirtyPromptSections = true;
+      }
+    }
+    const hasDirtyFeedback = state.dirtySections.has('feedback') && state.feedbackPrompt !== state.savedFeedback;
+
+    if (!hasDirtyPromptSections && !hasDirtyFeedback) {
+      setStatus('No changes to save');
+      showToast('No changes to save', 'info');
+      return;
+    }
+
+    let result = {};
+    if (hasDirtyPromptSections) {
+      result = await api.savePrompt(state.difficulty, dirtySections, state.topic);
+    }
     state.savedSections = { ...state.promptSections };
 
-    if (state.feedbackPrompt !== state.savedFeedback) {
+    if (hasDirtyFeedback) {
       await api.saveFeedbackPrompt(state.difficulty, state.feedbackPrompt, state.topic);
       state.savedFeedback = state.feedbackPrompt;
     }
+
+    state.dirtySections.clear();
 
     // Show commit status
     if (result.committed) {
@@ -507,6 +531,7 @@ async function savePrompt() {
 }
 
 function revertPrompt() {
+  state.dirtySections.delete(state.activeTab);
   if (state.activeTab === 'feedback') {
     state.feedbackPrompt = state.savedFeedback || '';
   } else if (state.savedSections) {
@@ -556,6 +581,8 @@ document.querySelectorAll('.pl-tab').forEach(tab => {
 let _autoSaveTimer = null;
 promptEditor.addEventListener('input', () => {
   charCountEl.textContent = promptEditor.value.length + ' chars';
+  // Mark current tab as dirty
+  state.dirtySections.add(state.activeTab);
   // Auto-save to localStorage (debounced 1s)
   clearTimeout(_autoSaveTimer);
   _autoSaveTimer = setTimeout(() => {
