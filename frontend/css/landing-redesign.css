@@ -210,12 +210,17 @@
   justify-content: center;
   text-align: center;
   flex-direction: column;
+  position: relative;
+  background: url('../images/Landing/hero-marble-bg.jpg') center/cover no-repeat;
+  overflow: hidden;
 }
 
 #landingPage .hero-logged-out,
 #landingPage .hero-logged-in {
   max-width: 1000px;
   margin: 0 auto;
+  position: relative;
+  z-index: 2;
 }
 
 #landingPage .hero-subtitle {
@@ -251,27 +256,67 @@
   will-change: transform, opacity;
 }
 
-/* ---- Hero Centerpiece Image ---- */
-#landingPage .hero-image-wrapper {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  margin: 2rem auto;
-  max-width: 480px;
+/* ---- Hero Knowledge Tableau ---- */
+#landingPage .hero-tableau {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+#landingPage .hero-asset {
+  position: absolute;
   will-change: transform;
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.12));
 }
 
-#landingPage .hero-centerpiece {
-  width: 100%;
-  max-width: 480px;
-  height: auto;
-  filter: drop-shadow(0 20px 60px rgba(45, 90, 61, 0.3));
-  animation: heroFloat 6s ease-in-out infinite;
+#landingPage .hero-asset--textbook {
+  width: clamp(220px, 26vw, 380px);
+  top: 1%;
+  left: -1%;
+  transform: rotate(-12deg);
 }
 
-@keyframes heroFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-12px); }
+#landingPage .hero-asset--scalpel {
+  width: clamp(150px, 18vw, 260px);
+  bottom: 4%;
+  left: 12%;
+  transform: rotate(32deg);
+}
+
+#landingPage .hero-asset--penlight {
+  width: clamp(140px, 17vw, 240px);
+  top: 42%;
+  right: 1%;
+  transform: rotate(-20deg);
+}
+
+#landingPage .hero-asset--reflex-hammer {
+  width: clamp(180px, 20vw, 300px);
+  top: 3%;
+  right: 3%;
+  transform: rotate(15deg);
+}
+
+#landingPage .hero-asset--tablet {
+  width: clamp(210px, 24vw, 370px);
+  bottom: 1%;
+  right: 3%;
+  transform: rotate(-3deg);
+}
+
+#landingPage .hero-asset--stethoscope {
+  width: clamp(200px, 22vw, 330px);
+  top: 48%;
+  left: -2%;
+  transform: rotate(8deg);
+}
+
+/* Text readability over marble background */
+#landingPage .hero-brand,
+#landingPage .landing-overline,
+#landingPage .hero-subtitle {
+  text-shadow: 0 2px 20px rgba(255, 255, 255, 0.8);
 }
 
 /* ---- Botanical Leaf Overlays ---- */
@@ -384,13 +429,25 @@
   position: absolute;
   inset: 0;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  flex-direction: row;
+  align-items: center;
+  gap: 40px;
   padding: 40px;
 }
 
 #landingPage .why-phase:first-child {
   position: relative;
+}
+
+#landingPage .why-phase-text {
+  flex: 1;
+}
+
+#landingPage .why-phase-img {
+  width: clamp(200px, 28vw, 400px);
+  height: auto;
+  filter: drop-shadow(0 12px 32px rgba(0, 0, 0, 0.10));
+  flex-shrink: 0;
 }
 
 #landingPage .why-progress-line {
@@ -835,8 +892,32 @@
   }
 
   #landingPage .hero-leaf { display: none; }
-  #landingPage .hero-centerpiece { max-width: 320px; }
   #landingPage .hero-brand { font-size: clamp(3rem, 16vw, 5rem); }
+
+  /* Mobile: show only textbook, scalpel, tablet */
+  #landingPage .hero-asset--penlight,
+  #landingPage .hero-asset--reflex-hammer,
+  #landingPage .hero-asset--stethoscope {
+    display: none;
+  }
+
+  #landingPage .hero-asset--textbook {
+    width: clamp(140px, 32vw, 200px);
+    top: 3%;
+    left: -2%;
+  }
+
+  #landingPage .hero-asset--scalpel {
+    width: clamp(100px, 22vw, 150px);
+    bottom: 8%;
+    left: 2%;
+  }
+
+  #landingPage .hero-asset--tablet {
+    width: clamp(140px, 32vw, 200px);
+    bottom: 5%;
+    right: -1%;
+  }
 
   #landingPage .section-who > div {
     grid-template-columns: 1fr;
@@ -845,6 +926,15 @@
 
   #landingPage .section-why {
     grid-template-columns: 1fr;
+  }
+
+  #landingPage .why-phase {
+    flex-direction: column;
+  }
+
+  #landingPage .why-phase-img {
+    width: clamp(160px, 50vw, 280px);
+    order: -1; /* image above text on mobile */
   }
 
   #landingPage .trust-cards {
