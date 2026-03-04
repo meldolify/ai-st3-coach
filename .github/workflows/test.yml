@@ -3,6 +3,8 @@ name: Tests
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - 'backend/prompts/**'
   pull_request:
     branches: [main]
 
