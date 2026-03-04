@@ -102,34 +102,51 @@
   // Core: Parallax In (page + stagger children)
   // --------------------------------------------------------------------------
   function parallaxIn(page, direction) {
-    // Ensure page is visible and positioned for entry
-    page.style.display = 'block';
-    page.classList.remove('hidden', 'initially-hidden');
-    page.classList.add('active');
+    const tl = gsap.timeline();
 
     if (prefersReducedMotion) {
-      gsap.set(page, { clearProps: 'all' });
-      page.style.display = 'block';
-      staggerChildren(page);
-      return gsap.to(page, {
-        opacity: 1,
-        duration: T.duration.fast,
-        ease: 'none',
+      tl.call(() => {
+        page.style.display = 'block';
+        page.classList.remove('hidden', 'initially-hidden');
+        page.classList.add('active');
+        gsap.set(page, { clearProps: 'all' });
+        page.style.display = 'block';
       });
+      staggerChildren(page);
+      tl.to(page, { opacity: 1, duration: T.duration.fast, ease: 'none' });
+      return tl;
     }
 
     const yFrom = direction === 'forward' ? T.distance.parallaxOffset : -T.distance.parallaxOffset;
 
-    // Set initial state
-    gsap.set(page, {
+    // Show page at timeline-play time (not during construction)
+    tl.call(() => {
+      page.style.display = 'block';
+      page.classList.remove('hidden', 'initially-hidden');
+      page.classList.add('active');
+    });
+
+    // Set initial animation state at timeline-play time
+    tl.set(page, {
       scale: 1.08,
       y: yFrom,
       opacity: 0,
       filter: 'blur(6px)',
     });
 
-    // Animate page in
-    const tl = gsap.timeline();
+    // Pre-hide children at timeline-play time
+    tl.call(() => {
+      const allEls = page.querySelectorAll('[data-animate]');
+      if (allEls.length) {
+        gsap.set(allEls, { opacity: 0, y: T.distance.slide, scale: 0.95 });
+      }
+      const cards = page.querySelectorAll('[data-animate="card"]');
+      if (cards.length) {
+        gsap.set(cards, { opacity: 0, y: T.distance.slide, scale: 0.92, rotateX: 8 });
+      }
+    });
+
+    // Animate page container in
     tl.to(page, {
       scale: 1,
       y: 0,
@@ -161,12 +178,21 @@
       return;
     }
 
-    // Set initial hidden state for all animatable children
     const allEls = [title, backBtn, ...cards].filter(Boolean);
-    gsap.set(allEls, { opacity: 0, y: T.distance.slide, scale: 0.95 });
+    if (allEls.length === 0) return;
 
     const tl = timeline || gsap.timeline();
     const startOffset = timeline ? '-=0.3' : '+=0';
+
+    // Only set initial hidden states in standalone mode (revealPage).
+    // When called from parallaxIn with a timeline, children are already
+    // hidden by the tl.call() inside parallaxIn.
+    if (!timeline) {
+      gsap.set(allEls, { opacity: 0, y: T.distance.slide, scale: 0.95 });
+      if (cards.length > 0) {
+        gsap.set(cards, { opacity: 0, y: T.distance.slide, scale: 0.92, rotateX: 8 });
+      }
+    }
 
     // Back button first (small, quick)
     if (backBtn) {
@@ -192,14 +218,6 @@
 
     // Cards stagger in with dramatic entrance
     if (cards.length > 0) {
-      // Reset cards with rotation for more drama
-      gsap.set(cards, {
-        opacity: 0,
-        y: T.distance.slide,
-        scale: 0.92,
-        rotateX: 8,
-      });
-
       tl.to(cards, {
         opacity: 1,
         y: 0,
@@ -233,11 +251,10 @@
     const direction = getDirection(fromId, toId);
     const tl = gsap.timeline({
       onComplete: () => {
-        // Clean up outgoing page
+        // Clean up inline GSAP transforms on both pages
         gsap.set(fromPage, { clearProps: 'all' });
-        fromPage.style.display = 'none';
-        fromPage.classList.remove('active');
-        fromPage.classList.add('hidden');
+        gsap.set(toPage, { clearProps: 'all' });
+        toPage.style.display = 'block'; // Restore after clearProps
 
         isTransitioning = false;
         if (callback) callback();
@@ -247,10 +264,16 @@
     // Phase 1: Parallax out the current page
     tl.add(parallaxOut(fromPage, direction));
 
-    // Phase 2: Hide all other pages, show target
+    // Phase 2: Swap — hide FROM page and all others BEFORE showing TO page
+    // (Pages are position:relative in flow, so both can't be display:block at once)
     tl.call(() => {
+      gsap.set(fromPage, { clearProps: 'all' });
+      fromPage.style.display = 'none';
+      fromPage.classList.remove('active');
+      fromPage.classList.add('hidden');
+
       ALL_PAGES.forEach(pageId => {
-        if (pageId !== toId && pageId !== fromId) {
+        if (pageId !== toId) {
           const el = document.getElementById(pageId);
           if (el) {
             el.style.display = 'none';
@@ -259,10 +282,12 @@
           }
         }
       });
+
+      window.scrollTo(0, 0);
     });
 
-    // Phase 3: Parallax in the new page
-    tl.add(parallaxIn(toPage, direction), '-=0.15');
+    // Phase 3: Parallax in the new page (no overlap — starts after swap)
+    tl.add(parallaxIn(toPage, direction));
 
     return tl;
   }
@@ -284,7 +309,8 @@
       }
     });
 
-    // Show and animate the target page
+    // Scroll to top and animate the target page
+    window.scrollTo(0, 0);
     page.style.display = 'block';
     page.classList.remove('hidden', 'initially-hidden');
     page.classList.add('active');
