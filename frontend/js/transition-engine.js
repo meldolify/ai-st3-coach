@@ -123,17 +123,19 @@
     // atomically to prevent a flash of unstyled content between display:block
     // and the GSAP set.
     tl.call(() => {
-      gsap.set(page, { opacity: 0, scale: 1.08, y: yFrom, filter: 'blur(6px)' });
+      gsap.set(page, { opacity: 0, scale: 1.08, y: yFrom, filter: 'blur(6px)', transition: 'none' });
       page.style.display = 'block';
       page.classList.remove('hidden', 'initially-hidden');
       page.classList.add('active');
     });
 
-    // Pre-hide children at timeline-play time
+    // Pre-hide children at timeline-play time.
+    // Disable CSS transitions first — cards have `transition: all 0.4s` which
+    // would animate the gsap.set() values instead of applying them instantly.
     tl.call(() => {
       const allEls = page.querySelectorAll('[data-animate]');
       if (allEls.length) {
-        gsap.set(allEls, { opacity: 0, y: T.distance.slide, scale: 0.95 });
+        gsap.set(allEls, { opacity: 0, y: T.distance.slide, scale: 0.95, transition: 'none' });
       }
       const cards = page.querySelectorAll('[data-animate="card"]');
       if (cards.length) {
@@ -183,7 +185,7 @@
     // When called from parallaxIn with a timeline, children are already
     // hidden by the tl.call() inside parallaxIn.
     if (!timeline) {
-      gsap.set(allEls, { opacity: 0, y: T.distance.slide, scale: 0.95 });
+      gsap.set(allEls, { opacity: 0, y: T.distance.slide, scale: 0.95, transition: 'none' });
       if (cards.length > 0) {
         gsap.set(cards, { opacity: 0, y: T.distance.slide, scale: 0.92, rotateX: 8 });
       }
@@ -246,10 +248,13 @@
     const direction = getDirection(fromId, toId);
     const tl = gsap.timeline({
       onComplete: () => {
-        // Clean up inline GSAP transforms on both pages
+        // Clean up ALL inline GSAP styles (including transition: none on children)
         gsap.set(fromPage, { clearProps: 'all' });
         gsap.set(toPage, { clearProps: 'all' });
         toPage.style.display = 'block'; // Restore after clearProps
+        // Restore CSS transitions on animated children
+        const animEls = toPage.querySelectorAll('[data-animate]');
+        if (animEls.length) gsap.set(animEls, { clearProps: 'all' });
 
         isTransitioning = false;
         if (callback) callback();
