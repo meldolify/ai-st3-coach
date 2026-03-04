@@ -14,6 +14,7 @@
   // LENIS SMOOTH SCROLL
   // ============================================================
   let lenis = null;
+  let lenisTickerFn = null;
 
   function initLenis() {
     if (prefersReducedMotion) return;
@@ -35,9 +36,10 @@
     lenis.on('scroll', ScrollTrigger.update);
 
     // Feed Lenis RAF into GSAP ticker (time is in seconds, Lenis wants ms)
-    gsap.ticker.add(function (time) {
-      lenis.raf(time * 1000);
-    });
+    lenisTickerFn = function (time) {
+      if (lenis) lenis.raf(time * 1000);
+    };
+    gsap.ticker.add(lenisTickerFn);
     gsap.ticker.lagSmoothing(0);
 
     console.log('[LANDING] Lenis smooth scroll initialized');
@@ -609,6 +611,10 @@
   // CLEANUP (called when navigating away from landing page)
   // ============================================================
   window.destroyLandingScroll = function () {
+    if (lenisTickerFn) {
+      gsap.ticker.remove(lenisTickerFn);
+      lenisTickerFn = null;
+    }
     if (lenis) {
       lenis.destroy();
       lenis = null;
