@@ -1,5 +1,5 @@
-import { useState, useRef, useCallback, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { useState, useRef, useCallback, useEffect, useMemo } from 'react'
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import { cn } from '../lib/utils'
 import { PERSONA_CONFIG } from '../config'
 import { IMAGE_MAP } from '../data/scenarios'
@@ -26,6 +26,7 @@ export default function SimulationRoom() {
   const imageCloseRef = useRef(null)
   const feedbackContinueRef = useRef(null)
   const [isConnecting, setIsConnecting] = useState(false)
+  const [isExiting, setIsExiting] = useState(false)
   const [expandedImage, setExpandedImage] = useState(null)
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [feedbackData, setFeedbackData] = useState(null)
@@ -123,9 +124,13 @@ export default function SimulationRoom() {
   const handleExit = useCallback(() => {
     const doExit = () => {
       disconnect()
-      window.location.href = params?.returnPage
-        ? `/index.html#${params.returnPage}`
-        : '/index.html#scenarioSelection'
+      // Trigger exit animation, then redirect after it completes
+      setIsExiting(true)
+      setTimeout(() => {
+        window.location.href = params?.returnPage
+          ? `/index.html#${params.returnPage}`
+          : '/index.html#scenarioSelection'
+      }, 500) // match exit animation duration
     }
 
     if (isConnected) {
@@ -180,13 +185,35 @@ export default function SimulationRoom() {
 
   const difficultyLabel = { easy: 'Friendly', medium: 'Standard', strict: 'Strict' }
   const difficultyColor = { easy: '#10B981', medium: '#F59E0B', strict: '#EF4444' }
+  const prefersReduced = useReducedMotion()
 
-  const panelEntry = { opacity: 0, scale: 0.95, filter: 'blur(8px)' }
-  const panelVisible = { opacity: 1, scale: 1, filter: 'blur(0px)' }
-  const spring = (delay) => ({ type: 'spring', stiffness: 300, damping: 25, delay })
+  // Cinematic staggered reveal — each panel has a unique entrance
+  // Falls back to simple fade for reduced motion users
+  const ease = [0.16, 1, 0.3, 1]
+  const reveal = useMemo(() => {
+    if (prefersReduced) {
+      const simple = (delay) => ({
+        initial: { opacity: 0 },
+        animate: { opacity: 1 },
+        transition: { duration: 0.1, delay: delay * 0.05 },
+      })
+      return { header: simple(0), persona: simple(1), image: simple(2), transcript: simple(3), dock: simple(4) }
+    }
+    return {
+      header:     { initial: { opacity: 0, y: -30, filter: 'blur(8px)' },         animate: { opacity: 1, y: 0, filter: 'blur(0px)' },         transition: { duration: 0.7, ease, delay: 0.2 } },
+      persona:    { initial: { opacity: 0, scale: 0.85, filter: 'blur(12px)' },   animate: { opacity: 1, scale: 1, filter: 'blur(0px)' },      transition: { duration: 0.8, ease, delay: 0.4 } },
+      image:      { initial: { opacity: 0, scale: 0.9, filter: 'blur(8px)' },     animate: { opacity: 1, scale: 1, filter: 'blur(0px)' },      transition: { duration: 0.9, ease, delay: 0.6 } },
+      transcript: { initial: { opacity: 0, x: 80 },                               animate: { opacity: 1, x: 0 },                               transition: { duration: 0.7, ease, delay: 0.8 } },
+      dock:       { initial: { opacity: 0, y: 40, scale: 0.95 },                  animate: { opacity: 1, y: 0, scale: 1 },                     transition: { duration: 0.6, ease, delay: 1.0 } },
+    }
+  }, [prefersReduced])
 
   return (
-    <div className="h-screen flex overflow-hidden bg-bg-primary">
+    <motion.div
+      className="h-screen flex overflow-hidden bg-bg-primary"
+      animate={isExiting ? { scale: 0.92, opacity: 0, filter: 'blur(6px)' } : { scale: 1, opacity: 1, filter: 'blur(0px)' }}
+      transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+    >
       <AnimatedBackground />
 
       {/* Sidebar — desktop: inline collapsed/hover-expand. Mobile: overlay drawer */}
@@ -202,9 +229,9 @@ export default function SimulationRoom() {
 
         {/* Header — glass card */}
         <motion.div
-          initial={panelEntry}
-          animate={panelVisible}
-          transition={spring(0.0)}
+          initial={reveal.header.initial}
+          animate={reveal.header.animate}
+          transition={reveal.header.transition}
         >
           <Header
             scenario={scenario}
@@ -220,9 +247,9 @@ export default function SimulationRoom() {
         <main className="flex-1 flex min-h-0 gap-5">
           {/* Left: Persona panel */}
           <motion.div
-            initial={panelEntry}
-            animate={panelVisible}
-            transition={spring(0.08)}
+            initial={reveal.persona.initial}
+            animate={reveal.persona.animate}
+            transition={reveal.persona.transition}
             className="glass-card rounded-xl w-[22%] min-w-[180px] p-5 flex flex-col items-center justify-center gap-4"
           >
             <div
@@ -251,9 +278,9 @@ export default function SimulationRoom() {
           {/* Center: Clinical image */}
           {scenario.imageFile && (
             <motion.div
-              initial={panelEntry}
-              animate={panelVisible}
-              transition={spring(0.16)}
+              initial={reveal.image.initial}
+              animate={reveal.image.animate}
+              transition={reveal.image.transition}
               className="glass-card rounded-xl w-[48%] shrink-0"
             >
               <ClinicalImageCard
@@ -267,9 +294,9 @@ export default function SimulationRoom() {
 
           {/* Right: Transcript */}
           <motion.div
-            initial={panelEntry}
-            animate={panelVisible}
-            transition={spring(0.24)}
+            initial={reveal.transcript.initial}
+            animate={reveal.transcript.animate}
+            transition={reveal.transcript.transition}
             className="glass-card rounded-xl flex-1 min-w-0 min-h-0"
           >
             <TranscriptPanel messages={messages} personaName={persona.name} />
@@ -278,9 +305,9 @@ export default function SimulationRoom() {
 
         {/* Bottom dock — glass card */}
         <motion.div
-          initial={panelEntry}
-          animate={panelVisible}
-          transition={spring(0.32)}
+          initial={reveal.dock.initial}
+          animate={reveal.dock.animate}
+          transition={reveal.dock.transition}
           className="glass-card rounded-xl flex flex-col items-center gap-2 pb-5 pt-2 shrink-0"
           style={{ minHeight: 160, overflow: 'visible' }}
         >
@@ -485,6 +512,6 @@ export default function SimulationRoom() {
         onConfirm={confirmModal?.onConfirm}
         onCancel={() => setConfirmModal(null)}
       />
-    </div>
+    </motion.div>
   )
 }

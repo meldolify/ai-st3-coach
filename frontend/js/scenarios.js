@@ -610,21 +610,37 @@ function selectScenario(topicFolder, title, imageFile) {
     });
   }
 
-  // Show "Entering Simulation Room" overlay
-  const overlay = document.getElementById('simulationTransition');
-  overlay.style.display = 'flex';
+  // Animate current page content out with depth effect, then show overlay
+  if (window.TransitionEngine) {
+    window.TransitionEngine.animateExit(() => {
+      // Show "Entering Simulation Room" overlay after page exits
+      const overlay = document.getElementById('simulationTransition');
+      overlay.style.display = 'flex';
 
-  // Trigger fade-in
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      overlay.classList.add('active');
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          overlay.classList.add('active');
+        });
+      });
+
+      // Navigate after overlay is visible
+      setTimeout(() => {
+        window.location.href = 'simulation.html';
+      }, 800);
     });
-  });
-
-  // Wait 1 second then navigate to simulation page
-  setTimeout(() => {
-    window.location.href = 'simulation.html';
-  }, 1000); // Display overlay for 1 second
+  } else {
+    // Fallback: original overlay behavior
+    const overlay = document.getElementById('simulationTransition');
+    overlay.style.display = 'flex';
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        overlay.classList.add('active');
+      });
+    });
+    setTimeout(() => {
+      window.location.href = 'simulation.html';
+    }, 1000);
+  }
 }
 
 // NOTE: startScenario(), syncMobileSimulationElements(), syncMobileButtonStates(),

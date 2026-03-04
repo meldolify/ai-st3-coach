@@ -204,6 +204,7 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  perspective: 1200px;
 }
 
 /* ============================================
@@ -279,28 +280,25 @@ a,
   }
 }
 
-/* Page Transition Classes */
+/* Page Transition Classes (GSAP-driven via TransitionEngine) */
 .page {
   opacity: 1;
-  transition: opacity 0.5s ease-in-out;
+  will-change: transform, opacity, filter;
 }
 
-.page.fade-out {
-  opacity: 0;
+/* Initially hidden pages — GSAP sets display/opacity when animating */
+.page.initially-hidden {
+  display: none;
 }
 
+.page.hidden {
+  display: none;
+}
+
+/* Legacy fade classes kept as no-ops for safety (TransitionEngine handles all transitions) */
+.page.fade-out,
 .page.fade-in {
-  animation: fadeIn 0.5s ease-in-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
+  /* No-op — handled by GSAP */
 }
 
 /* Simulation Room Transition Overlay */

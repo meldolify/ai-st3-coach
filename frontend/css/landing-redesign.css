@@ -211,7 +211,7 @@
   text-align: center;
   flex-direction: column;
   position: relative;
-  background: url('../images/Landing/hero-marble-bg.jpg') center/cover no-repeat;
+  /* background handled by Three.js canvas (#heroCanvas) */
   overflow: hidden;
 }
 
@@ -312,11 +312,11 @@
   transform: rotate(8deg);
 }
 
-/* Text readability over marble background */
+/* Text readability over animated background */
 #landingPage .hero-brand,
 #landingPage .landing-overline,
 #landingPage .hero-subtitle {
-  text-shadow: 0 2px 20px rgba(255, 255, 255, 0.8);
+  text-shadow: 0 2px 20px rgba(255, 255, 255, 0.6);
 }
 
 /* ---- Botanical Leaf Overlays ---- */

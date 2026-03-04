@@ -202,12 +202,12 @@
 
       <!-- Hero parallax assets (Knowledge Tableau) — direct child of section for full-viewport positioning -->
       <div class="hero-tableau">
-        <img src="images/Landing/hero-textbook.png" class="hero-asset hero-asset--textbook" data-speed="0.06" data-drift="-0.08" alt="" aria-hidden="true">
-        <img src="images/Landing/hero-scalpel.png" class="hero-asset hero-asset--scalpel" data-speed="0.35" data-drift="-0.05" alt="" aria-hidden="true">
-        <img src="images/Landing/hero-penlight.png" class="hero-asset hero-asset--penlight" data-speed="0.25" data-drift="0.10" alt="" aria-hidden="true">
-        <img src="images/Landing/hero-reflex-hammer.png" class="hero-asset hero-asset--reflex-hammer" data-speed="0.12" data-drift="0.06" alt="" aria-hidden="true">
-        <img src="images/Landing/hero-tablet.png" class="hero-asset hero-asset--tablet" data-speed="0.10" data-drift="0.08" alt="" aria-hidden="true">
-        <img src="images/Landing/hero-stethoscope.png" class="hero-asset hero-asset--stethoscope" data-speed="0.20" data-drift="-0.12" alt="" aria-hidden="true">
+        <img src="images/landing/hero-textbook.png" class="hero-asset hero-asset--textbook" data-speed="0.06" data-drift="-0.08" alt="" aria-hidden="true">
+        <img src="images/landing/hero-scalpel.png" class="hero-asset hero-asset--scalpel" data-speed="0.35" data-drift="-0.05" alt="" aria-hidden="true">
+        <img src="images/landing/hero-penlight.png" class="hero-asset hero-asset--penlight" data-speed="0.25" data-drift="0.10" alt="" aria-hidden="true">
+        <img src="images/landing/hero-reflex-hammer.png" class="hero-asset hero-asset--reflex-hammer" data-speed="0.12" data-drift="0.06" alt="" aria-hidden="true">
+        <img src="images/landing/hero-tablet.png" class="hero-asset hero-asset--tablet" data-speed="0.10" data-drift="0.08" alt="" aria-hidden="true">
+        <img src="images/landing/hero-stethoscope.png" class="hero-asset hero-asset--stethoscope" data-speed="0.20" data-drift="-0.12" alt="" aria-hidden="true">
       </div>
 
       <!-- Logged-out hero variant -->
@@ -296,7 +296,7 @@
               reliable practice &mdash; not favours.
             </p>
           </div>
-          <img src="images/Landing/why-problem.png" class="why-phase-img" alt="" aria-hidden="true">
+          <img src="images/landing/why-problem.png" class="why-phase-img" alt="" aria-hidden="true">
         </div>
         <!-- Phase 2: The Gap -->
         <div class="why-phase" id="whyPhase2">
@@ -309,7 +309,7 @@
               You deserve better.
             </p>
           </div>
-          <img src="images/Landing/why-gap.png" class="why-phase-img" alt="" aria-hidden="true">
+          <img src="images/landing/why-gap.png" class="why-phase-img" alt="" aria-hidden="true">
         </div>
         <!-- Phase 3: The Solution -->
         <div class="why-phase" id="whyPhase3">
@@ -321,7 +321,7 @@
               real experience. Practice at your pace, on your schedule.
             </p>
           </div>
-          <img src="images/Landing/why-solution.png" class="why-phase-img" alt="" aria-hidden="true">
+          <img src="images/landing/why-solution.png" class="why-phase-img" alt="" aria-hidden="true">
         </div>
         <!-- Progress indicator line -->
         <div class="why-progress-line" aria-hidden="true"></div>
@@ -844,26 +844,26 @@
   <div class="container">
     <!-- Page 1: Specialty Selection -->
     <div id="specialtySelection" class="page initially-hidden">
-      <div class="header header--minimal">
+      <div class="header header--minimal" data-animate="title">
         <h1 class="page-title">ReViva Interview Trainer</h1>
         <p class="subtitle">Select your specialty to begin</p>
       </div>
 
       <div class="specialty-grid">
-        <div class="specialty-card" onclick="selectSpecialty('plastic-surgery')">
+        <div class="specialty-card" data-animate="card" onclick="selectSpecialty('plastic-surgery')">
           <div class="specialty-icon">🔪</div>
           <h2>Plastic Surgery ST3</h2>
           <p>Clinical scenarios, communication stations, and structured interviews</p>
         </div>
 
         <!-- Future specialty slots -->
-        <div class="specialty-card coming-soon">
+        <div class="specialty-card coming-soon" data-animate="card">
           <div class="specialty-icon">🔒</div>
           <h2>Coming Soon</h2>
           <p>More specialties in development</p>
         </div>
 
-        <div class="specialty-card coming-soon">
+        <div class="specialty-card coming-soon" data-animate="card">
           <div class="specialty-icon">🔒</div>
           <h2>Coming Soon</h2>
           <p>More specialties in development</p>
@@ -873,16 +873,16 @@
 
     <!-- Page 2: Difficulty Selection - Gradient Cards -->
     <div id="difficultySelection" class="page initially-hidden gradient-cards-page">
-      <button class="top-back-button" onclick="backToSpecialties()">← Back</button>
+      <button class="top-back-button" data-animate="back" onclick="backToSpecialties()">← Back</button>
 
-      <div class="gradient-cards-header">
+      <div class="gradient-cards-header" data-animate="title">
         <h1>Choose Your Examiner</h1>
         <p>Select your interview difficulty</p>
       </div>
 
       <div class="gradient-cards-container">
         <!-- John Card - Easy (Green) -->
-        <div class="gradient-card" data-difficulty="easy" onclick="handleCardClick(this, 'easy')">
+        <div class="gradient-card" data-animate="card" data-difficulty="easy" onclick="handleCardClick(this, 'easy')">
           <span class="gradient-panel gradient-panel--green"></span>
           <span class="gradient-panel gradient-panel--blur gradient-panel--green"></span>
           <span class="animated-blobs">
@@ -899,7 +899,7 @@
         </div>
 
         <!-- Elliot Card - Medium (Orange) -->
-        <div class="gradient-card" data-difficulty="medium" onclick="handleCardClick(this, 'medium')">
+        <div class="gradient-card" data-animate="card" data-difficulty="medium" onclick="handleCardClick(this, 'medium')">
           <span class="gradient-panel gradient-panel--orange"></span>
           <span class="gradient-panel gradient-panel--blur gradient-panel--orange"></span>
           <span class="animated-blobs">
@@ -916,7 +916,7 @@
         </div>
 
         <!-- Perry Card - Strict (Red) -->
-        <div class="gradient-card" data-difficulty="strict" onclick="handleCardClick(this, 'strict')">
+        <div class="gradient-card" data-animate="card" data-difficulty="strict" onclick="handleCardClick(this, 'strict')">
           <span class="gradient-panel gradient-panel--purple"></span>
           <span class="gradient-panel gradient-panel--blur gradient-panel--purple"></span>
           <span class="animated-blobs">
@@ -936,16 +936,16 @@
 
     <!-- Page: Mode Selection (Practice vs Mock Exam) -->
     <div id="modeSelection" class="page initially-hidden">
-      <button class="top-back-button" onclick="backToDifficultyFromMode()">← Back</button>
+      <button class="top-back-button" data-animate="back" onclick="backToDifficultyFromMode()">← Back</button>
 
-      <div class="header">
+      <div class="header" data-animate="title">
         <h1>Choose Your Mode</h1>
         <p class="subtitle">Select how you want to practice today</p>
         <p id="modeSelectedDifficultyIndicator" class="difficulty-indicator"></p>
       </div>
 
       <div class="mode-grid">
-        <div class="mode-card mode-practice" onclick="selectMode('practice')">
+        <div class="mode-card mode-practice" data-animate="card" onclick="selectMode('practice')">
           <div class="mode-icon">
             <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
               <rect x="8" y="6" width="32" height="36" rx="2" stroke="currentColor" stroke-width="2" />
@@ -962,7 +962,7 @@
           </ul>
         </div>
 
-        <div class="mode-card mode-mock-exam" onclick="selectMode('mock-exam')">
+        <div class="mode-card mode-mock-exam" data-animate="card" onclick="selectMode('mock-exam')">
           <div class="mode-icon">
             <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
               <circle cx="24" cy="24" r="18" stroke="currentColor" stroke-width="2" />
@@ -985,16 +985,16 @@
 
     <!-- Page: Mock Type Selection -->
     <div id="mockTypeSelection" class="page initially-hidden">
-      <button class="top-back-button" onclick="backToModeSelection()">← Back</button>
+      <button class="top-back-button" data-animate="back" onclick="backToModeSelection()">← Back</button>
 
-      <div class="header">
+      <div class="header" data-animate="title">
         <h1>Mock Exam Options</h1>
         <p class="subtitle">Choose your mock exam format</p>
         <p id="mockTypeSelectedDifficultyIndicator" class="difficulty-indicator"></p>
       </div>
 
       <div class="mock-type-grid">
-        <div class="mock-type-card mock-by-station" onclick="selectMockType('by-station')">
+        <div class="mock-type-card mock-by-station" data-animate="card" onclick="selectMockType('by-station')">
           <div class="mock-type-icon">
             <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
               <rect x="8" y="8" width="32" height="32" rx="4" stroke="currentColor" stroke-width="2" />
@@ -1015,7 +1015,7 @@
           </ul>
         </div>
 
-        <div class="mock-type-card full-mock-exam" onclick="selectMockType('full-mock')">
+        <div class="mock-type-card full-mock-exam" data-animate="card" onclick="selectMockType('full-mock')">
           <div class="mock-type-icon">
             <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
               <rect x="8" y="6" width="32" height="36" rx="2" stroke="currentColor" stroke-width="2" />
@@ -1038,34 +1038,34 @@
 
     <!-- Page: Station Type Selection (for Mock by Station) -->
     <div id="stationTypeSelection" class="page initially-hidden">
-      <button class="top-back-button" onclick="backToMockTypeSelection()">← Back</button>
+      <button class="top-back-button" data-animate="back" onclick="backToMockTypeSelection()">← Back</button>
 
-      <div class="header">
+      <div class="header" data-animate="title">
         <h1>Select Station Type</h1>
         <p class="subtitle">A random scenario will be selected from your chosen category</p>
         <p id="stationTypeSelectedDifficultyIndicator" class="difficulty-indicator"></p>
       </div>
 
       <div class="station-type-grid">
-        <div class="station-type-card station-clinical" onclick="selectStationType('clinical')">
+        <div class="station-type-card station-clinical" data-animate="card" onclick="selectStationType('clinical')">
           <div class="station-type-icon">📋</div>
           <h2>Clinical Station</h2>
           <p>Random clinical scenario from any subspecialty</p>
         </div>
 
-        <div class="station-type-card station-call-the-boss" onclick="selectStationType('call-the-boss')">
+        <div class="station-type-card station-call-the-boss" data-animate="card" onclick="selectStationType('call-the-boss')">
           <div class="station-type-icon">📞</div>
           <h2>Call-The-Boss</h2>
           <p>Random emergency escalation scenario</p>
         </div>
 
-        <div class="station-type-card station-consent" onclick="selectStationType('consent')">
+        <div class="station-type-card station-consent" data-animate="card" onclick="selectStationType('consent')">
           <div class="station-type-icon">✍️</div>
           <h2>Consent Station</h2>
           <p>Random consent discussion scenario</p>
         </div>
 
-        <div class="station-type-card station-structured" onclick="selectStationType('structured')">
+        <div class="station-type-card station-structured" data-animate="card" onclick="selectStationType('structured')">
           <div class="station-type-icon">📝</div>
           <h2>Structured Interview</h2>
           <p>Random audit, ethics, or governance scenario</p>
@@ -1076,7 +1076,7 @@
     <!-- Page: Scenario Selection View (Card-based) -->
     <div id="scenarioSelection" class="page initially-hidden">
       <!-- Breadcrumb Navigation -->
-      <nav class="scenario-breadcrumb">
+      <nav class="scenario-breadcrumb" data-animate="title">
         <div class="breadcrumb-inner">
           <button class="top-back-button" onclick="backToModeFromScenarios()">← Back</button>
           <div class="breadcrumb-trail">
@@ -1104,7 +1104,7 @@
           <h2 class="level-title">What would you like to <em>practice?</em></h2>
         </header>
         <div class="scenario-cards-grid">
-          <article class="scenario-card" data-category="clinical" onclick="selectScenarioCategory('clinical')">
+          <article class="scenario-card" data-animate="card" data-category="clinical" onclick="selectScenarioCategory('clinical')">
             <div class="card-header">
               <div class="card-icon-frame">
                 <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
@@ -1123,7 +1123,7 @@
               scenarios</p>
           </article>
 
-          <article class="scenario-card" data-category="call-the-boss"
+          <article class="scenario-card" data-animate="card" data-category="call-the-boss"
             onclick="selectScenarioCategory('call-the-boss')">
             <div class="card-header">
               <div class="card-icon-frame">
@@ -1138,7 +1138,7 @@
             <p class="card-description">Escalation scenarios and communication with senior colleagues</p>
           </article>
 
-          <article class="scenario-card" data-category="consent" onclick="selectScenarioCategory('consent')">
+          <article class="scenario-card" data-animate="card" data-category="consent" onclick="selectScenarioCategory('consent')">
             <div class="card-header">
               <div class="card-icon-frame">
                 <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
@@ -1153,7 +1153,7 @@
             <p class="card-description">Consent discussions for hand trauma, burns, skin cancer, and breast surgery</p>
           </article>
 
-          <article class="scenario-card" data-category="structured" onclick="selectScenarioCategory('structured')">
+          <article class="scenario-card" data-animate="card" data-category="structured" onclick="selectScenarioCategory('structured')">
             <div class="card-header">
               <div class="card-icon-frame">
                 <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
@@ -1263,6 +1263,7 @@
   <script defer src="js/utils/audio-utils.js"></script>
   <script defer src="js/orb-visualizer.js"></script>
   <script defer src="js/session.js"></script>
+  <script defer src="js/transition-engine.js"></script>
   <script defer src="js/scenarios.js"></script>
   <script defer src="js/mock-exam.js"></script>
   <script defer src="js/app.js"></script>
