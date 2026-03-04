@@ -119,19 +119,14 @@
 
     const yFrom = direction === 'forward' ? T.distance.parallaxOffset : -T.distance.parallaxOffset;
 
-    // Show page at timeline-play time (not during construction)
+    // Show page at timeline-play time with initial animation state applied
+    // atomically to prevent a flash of unstyled content between display:block
+    // and the GSAP set.
     tl.call(() => {
+      gsap.set(page, { opacity: 0, scale: 1.08, y: yFrom, filter: 'blur(6px)' });
       page.style.display = 'block';
       page.classList.remove('hidden', 'initially-hidden');
       page.classList.add('active');
-    });
-
-    // Set initial animation state at timeline-play time
-    tl.set(page, {
-      scale: 1.08,
-      y: yFrom,
-      opacity: 0,
-      filter: 'blur(6px)',
     });
 
     // Pre-hide children at timeline-play time
