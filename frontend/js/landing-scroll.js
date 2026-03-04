@@ -270,7 +270,7 @@
         pin: true,
         pinType: 'transform',
         start: 'top top',
-        end: '+=300%',
+        end: '+=200%',
         scrub: 0.5
       }
     });
