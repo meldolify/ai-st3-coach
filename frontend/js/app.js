@@ -106,40 +106,12 @@ function hideAppFooter() {
   if (footer) footer.classList.remove('visible');
 }
 
-// Helper function to transition between pages with fade effect
+// Helper function to transition between pages with GSAP parallax depth effect
 function transitionToPage(fromPageId, toPageId, callback) {
-  const fromPage = document.getElementById(fromPageId);
-  const toPage = document.getElementById(toPageId);
-
   // Pages that should show the app footer
   const pagesWithFooter = ['simulationRoom', 'scenarioSelection'];
 
-  // All navigable pages - ensure only one is visible at a time
-  const allPages = [
-    'landingPage', 'authPage', 'profilePage', 'specialtySelection',
-    'difficultySelection', 'modeSelection', 'mockTypeSelection',
-    'stationTypeSelection', 'scenarioSelection', 'simulationRoom',
-    'sessionSummary'
-  ];
-
-  // Fade out current page
-  fromPage.classList.add('fade-out');
-
-  setTimeout(() => {
-    // Hide ALL pages first to prevent stacking issues
-    allPages.forEach(pageId => {
-      const page = document.getElementById(pageId);
-      if (page && pageId !== toPageId) {
-        page.style.display = 'none';
-        page.classList.remove('fade-out', 'fade-in', 'active');
-      }
-    });
-
-    // Show new page - must set inline style to override hideAllPages()
-    // (inline styles have higher specificity than CSS classes)
-    toPage.style.display = 'block';
-    toPage.classList.add('fade-in');
-
+  window.TransitionEngine.transitionPages(fromPageId, toPageId, () => {
     // Handle footer visibility based on destination page
     if (pagesWithFooter.includes(toPageId)) {
       showAppFooter();
@@ -149,7 +121,6 @@ function transitionToPage(fromPageId, toPageId, callback) {
 
     // Initialize WebGL effects for difficulty selection page
     if (toPageId === 'difficultySelection' && typeof initDifficultyPersonaEffects === 'function') {
-      // Delay to ensure layout is complete
       setTimeout(() => {
         if (!window.difficultyPersonaEffect) {
           initDifficultyPersonaEffects();
@@ -164,12 +135,7 @@ function transitionToPage(fromPageId, toPageId, callback) {
 
     // Execute callback if provided
     if (callback) callback();
-
-    // Remove fade-in class after animation
-    setTimeout(() => {
-      toPage.classList.remove('fade-in');
-    }, 500);
-  }, 500); // Match CSS transition duration
+  });
 }
 
 // ============================================================================
@@ -703,27 +669,34 @@ function showPage(pageId) {
     }
   }
 
-  const allPages = ['landingPage', 'authPage', 'profilePage', 'specialtySelection',
-    'difficultySelection', 'modeSelection', 'mockTypeSelection',
-    'stationTypeSelection', 'scenarioSelection', 'simulationRoom',
-    'sessionSummary'];
-  allPages.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.style.display = 'none';
-      el.classList.remove('active');
-      el.classList.add('hidden');
-    }
-  });
-  const target = document.getElementById(pageId);
-  if (target) {
-    target.style.display = '';
-    target.classList.remove('hidden');
-    target.classList.add('active');
-  }
   const header = document.getElementById('appHeader');
   if (header) header.style.display = 'flex';
   document.body.classList.add('has-header');
+
+  // Use TransitionEngine for animated reveal (handles hiding other pages internally)
+  if (window.TransitionEngine) {
+    window.TransitionEngine.revealPage(pageId);
+  } else {
+    // Fallback if TransitionEngine hasn't loaded yet
+    const allPages = ['landingPage', 'authPage', 'profilePage', 'specialtySelection',
+      'difficultySelection', 'modeSelection', 'mockTypeSelection',
+      'stationTypeSelection', 'scenarioSelection', 'simulationRoom',
+      'sessionSummary'];
+    allPages.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.style.display = 'none';
+        el.classList.remove('active');
+        el.classList.add('hidden');
+      }
+    });
+    const target = document.getElementById(pageId);
+    if (target) {
+      target.style.display = '';
+      target.classList.remove('hidden');
+      target.classList.add('active');
+    }
+  }
 }
 
 // ============================================================================

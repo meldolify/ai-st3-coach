@@ -1,4 +1,5 @@
-import { motion } from 'framer-motion'
+import { useEffect } from 'react'
+import { motion, useMotionValue, useSpring } from 'framer-motion'
 
 /**
  * AnimatedBackground — Floating gradient blobs that drift behind the simulation room.
@@ -6,6 +7,9 @@ import { motion } from 'framer-motion'
  * Renders large, heavily blurred colored circles that animate infinitely with
  * Framer Motion. Desktop shows 4 blobs (sage, copper, teal, indigo); mobile
  * shows 2 (sage, copper) at reduced opacity and size for performance.
+ *
+ * Includes subtle mouse-parallax: the entire blob container shifts +/-5px
+ * based on cursor position for a layered depth feel (desktop only).
  *
  * Container uses a radial mask-image to feather edges and is fully non-interactive
  * (pointer-events: none, aria-hidden).
@@ -77,12 +81,36 @@ const MOBILE_BLOBS = [
 export default function AnimatedBackground({ mobile = false }) {
   const blobs = mobile ? MOBILE_BLOBS : DESKTOP_BLOBS
 
+  // Mouse parallax — subtle shift of the entire blob container (desktop only)
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
+  const springX = useSpring(mouseX, { stiffness: 50, damping: 30 })
+  const springY = useSpring(mouseY, { stiffness: 50, damping: 30 })
+
+  useEffect(() => {
+    if (mobile) return
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (prefersReduced) return
+
+    const handleMove = (e) => {
+      // Map cursor position to -5..+5 range
+      const x = ((e.clientX / window.innerWidth) - 0.5) * 10
+      const y = ((e.clientY / window.innerHeight) - 0.5) * 10
+      mouseX.set(x)
+      mouseY.set(y)
+    }
+    window.addEventListener('mousemove', handleMove, { passive: true })
+    return () => window.removeEventListener('mousemove', handleMove)
+  }, [mobile, mouseX, mouseY])
+
   return (
-    <div
+    <motion.div
       className="fixed inset-0 z-0 pointer-events-none overflow-hidden"
       style={{
         maskImage: 'radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 80%)',
         WebkitMaskImage: 'radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 80%)',
+        x: mobile ? 0 : springX,
+        y: mobile ? 0 : springY,
       }}
       aria-hidden="true"
       data-animated-bg
@@ -114,6 +142,6 @@ export default function AnimatedBackground({ mobile = false }) {
           }}
         />
       ))}
-    </div>
+    </motion.div>
   )
 }
