@@ -268,6 +268,7 @@
       scrollTrigger: {
         trigger: '.section-why',
         pin: true,
+        pinType: 'transform',
         start: 'top top',
         end: '+=300%',
         scrub: 0.5
