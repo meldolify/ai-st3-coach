@@ -61,7 +61,7 @@
 
   function initHeroEntrance() {
     if (prefersReducedMotion) {
-      gsap.set('#sectionHero .hero-brand-char, #sectionHero .landing-overline, #sectionHero .hero-subtitle, #sectionHero .hero-ctas > *, #sectionHero .hero-centerpiece, #sectionHero .hero-leaf', {
+      gsap.set('#sectionHero .hero-brand-char, #sectionHero .landing-overline, #sectionHero .hero-subtitle, #sectionHero .hero-ctas > *, #sectionHero .hero-asset, #sectionHero .hero-leaf', {
         opacity: 1, y: 0, scale: 1, filter: 'blur(0px)'
       });
       return;
@@ -108,15 +108,14 @@
       tl.from(overline, { opacity: 0, y: 20, duration: 0.5, ease: 'power2.out' }, 1.0);
     }
 
-    // Hero centerpiece image — blur-to-sharp entrance
-    var centerpiece = activeHero.querySelector('.hero-centerpiece');
-    if (centerpiece) {
-      tl.fromTo(centerpiece,
-        { opacity: 0, scale: 1.15, filter: 'blur(10px)' },
-        { opacity: 1, scale: 1, filter: 'blur(0px)', duration: 1.2, ease: 'power2.out' },
-        1.0
+    // Hero tableau assets — staggered blur-to-sharp entrance
+    gsap.utils.toArray('.hero-asset').forEach(function(asset, i) {
+      tl.fromTo(asset,
+        { opacity: 0, scale: 1.15, filter: 'blur(12px)' },
+        { opacity: 1, scale: 1, filter: 'blur(0px)', duration: 1.0, ease: 'power3.out' },
+        0.8 + i * 0.2
       );
-    }
+    });
 
     // Subtitle fade up
     var subtitle = activeHero.querySelector('.hero-subtitle');
@@ -154,23 +153,28 @@
       });
     });
 
-    // Hero image parallax (moves slower than text for depth)
-    gsap.to('.hero-image-wrapper', {
-      y: -60,
-      scale: 0.92,
-      scrollTrigger: {
-        trigger: '#sectionHero',
-        start: 'top top',
-        end: 'bottom top',
-        scrub: 0.5
-      }
+    // Hero asset parallax — each with unique vertical + horizontal drift
+    document.querySelectorAll('.hero-asset').forEach(function(asset) {
+      var speed = parseFloat(asset.dataset.speed) || 0.15;
+      var drift = parseFloat(asset.dataset.drift) || 0;
+      gsap.to(asset, {
+        y: function() { return window.innerHeight * speed * 0.5; },
+        x: function() { return window.innerWidth * drift * 0.3; },
+        rotation: '+=' + (speed * 25),
+        scrollTrigger: {
+          trigger: '#sectionHero',
+          start: 'top top',
+          end: 'bottom top',
+          scrub: true
+        }
+      });
     });
   }
 
   function initHeroTransition() {
     if (prefersReducedMotion) return;
 
-    gsap.to('#sectionHero .hero-logged-out, #sectionHero .hero-logged-in', {
+    gsap.to('#sectionHero .hero-logged-out, #sectionHero .hero-logged-in, #sectionHero .hero-tableau', {
       y: -100,
       opacity: 0,
       scrollTrigger: {
@@ -269,13 +273,21 @@
 
     // Phase 1 is visible by default, fades out at ~30%
     tl.to(phases[0], { opacity: 0, y: -40, duration: 0.15 }, 0.25);
+    tl.to('#whyPhase1 .why-phase-img', { opacity: 0, scale: 0.9, duration: 0.15 }, 0.25);
 
     // Phase 2 fades in at ~30%, fades out at ~65%
     tl.fromTo(phases[1], { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.15 }, 0.3);
+    tl.fromTo('#whyPhase2 .why-phase-img', { opacity: 0, scale: 1.1 }, { opacity: 1, scale: 1, duration: 0.15 }, 0.3);
     tl.to(phases[1], { opacity: 0, y: -40, duration: 0.15 }, 0.55);
+    tl.to('#whyPhase2 .why-phase-img', { opacity: 0, scale: 0.9, duration: 0.15 }, 0.55);
 
     // Phase 3 fades in at ~65%
     tl.fromTo(phases[2], { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.15 }, 0.6);
+    tl.fromTo('#whyPhase3 .why-phase-img', { opacity: 0, scale: 1.1 }, { opacity: 1, scale: 1, duration: 0.15 }, 0.6);
+
+    // Background colour transitions through phases
+    tl.to('.section-why', { backgroundColor: '#EBF0F5', duration: 0.3 }, 0.25);
+    tl.to('.section-why', { backgroundColor: '#F5F0E5', duration: 0.3 }, 0.55);
 
     // Progress indicator line fills top to bottom
     tl.fromTo('.why-progress-line', { scaleY: 0 }, { scaleY: 1, duration: 1 }, 0);
