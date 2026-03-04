@@ -226,7 +226,7 @@
 #landingPage .hero-subtitle {
   max-width: 600px;
   margin: 1.5rem auto 0;
-  color: var(--text-muted-light);
+  color: #FFFFFF;
 }
 
 #landingPage .hero-ctas {
