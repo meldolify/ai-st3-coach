@@ -260,38 +260,40 @@
     var phases = section.querySelectorAll('.why-phase');
     if (phases.length < 3) return;
 
+    // Set initial state: phases 2 & 3 hidden
+    gsap.set(phases[1], { opacity: 0, y: 30 });
+    gsap.set(phases[2], { opacity: 0, y: 30 });
+
     var tl = gsap.timeline({
       scrollTrigger: {
         trigger: '.section-why',
         pin: true,
         start: 'top top',
-        end: '+=200%',
-        scrub: 1
+        end: '+=300%',
+        scrub: 0.5
       }
     });
 
-    // Pinned display text zoom in
-    tl.fromTo('.why-display', { scale: 0.9, opacity: 0.6 }, { scale: 1, opacity: 1, duration: 0.5 }, 0);
+    // Display text zoom in (first 20%)
+    tl.fromTo('.why-display',
+      { scale: 0.9, opacity: 0.6 },
+      { scale: 1, opacity: 1, duration: 0.2 }, 0);
 
-    // Phase 1 is visible by default, fades out at ~30%
-    tl.to(phases[0], { opacity: 0, y: -40, duration: 0.15 }, 0.25);
-    tl.to('#whyPhase1 .why-phase-img', { opacity: 0, scale: 0.9, duration: 0.15 }, 0.25);
+    // Phase 1 visible by default, fades out 25-40%
+    tl.to(phases[0], { opacity: 0, y: -30, duration: 0.15 }, 0.25);
 
-    // Phase 2 fades in at ~30%, fades out at ~65%
-    tl.fromTo(phases[1], { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.15 }, 0.3);
-    tl.fromTo('#whyPhase2 .why-phase-img', { opacity: 0, scale: 1.1 }, { opacity: 1, scale: 1, duration: 0.15 }, 0.3);
-    tl.to(phases[1], { opacity: 0, y: -40, duration: 0.15 }, 0.55);
-    tl.to('#whyPhase2 .why-phase-img', { opacity: 0, scale: 0.9, duration: 0.15 }, 0.55);
+    // Phase 2 fades in 30-45%, holds, fades out 58-73%
+    tl.to(phases[1], { opacity: 1, y: 0, duration: 0.15 }, 0.30);
+    tl.to(phases[1], { opacity: 0, y: -30, duration: 0.15 }, 0.58);
 
-    // Phase 3 fades in at ~65%
-    tl.fromTo(phases[2], { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.15 }, 0.6);
-    tl.fromTo('#whyPhase3 .why-phase-img', { opacity: 0, scale: 1.1 }, { opacity: 1, scale: 1, duration: 0.15 }, 0.6);
+    // Phase 3 fades in 63-78%
+    tl.to(phases[2], { opacity: 1, y: 0, duration: 0.15 }, 0.63);
 
-    // Background colour transitions through phases
-    tl.to('.section-why', { backgroundColor: '#EBF0F5', duration: 0.3 }, 0.25);
-    tl.to('.section-why', { backgroundColor: '#F5F0E5', duration: 0.3 }, 0.55);
+    // Background colour transitions
+    tl.to('.section-why', { backgroundColor: '#EBF0F5', duration: 0.20 }, 0.25);
+    tl.to('.section-why', { backgroundColor: '#F5F0E5', duration: 0.20 }, 0.55);
 
-    // Progress indicator line fills top to bottom
+    // Progress indicator line
     tl.fromTo('.why-progress-line', { scaleY: 0 }, { scaleY: 1, duration: 1 }, 0);
   }
 
