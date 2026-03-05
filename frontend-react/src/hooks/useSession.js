@@ -29,6 +29,8 @@ export function useSession({ orbVisualizerRef }) {
   const [orbState, setOrbState] = useState('idle') // idle | listening | speaking | thinking
   const [statusText, setStatusText] = useState('')
   const [inFeedbackMode, setInFeedbackMode] = useState(false)
+  const [interviewEnded, setInterviewEnded] = useState(false)
+  const [feedbackRequested, setFeedbackRequested] = useState(false)
 
   // Transcript messages: { id, speaker: 'user' | 'ai', text, timestamp }
   const [messages, setMessages] = useState([])
@@ -299,12 +301,15 @@ export function useSession({ orbVisualizerRef }) {
     wsRef.current.send(
       JSON.stringify({ type: 'end_interview', sessionId: sessionIdRef.current })
     )
+    setInterviewEnded(true)
   }, [])
 
   const requestFeedback = useCallback(() => {
+    if (feedbackRequested) return Promise.resolve(null)
     if (!wsRef.current || wsRef.current.readyState !== WebSocket.OPEN)
       return Promise.resolve(null)
 
+    setFeedbackRequested(true)
     return new Promise((resolve) => {
       feedbackResolveRef.current = resolve
 
@@ -312,7 +317,7 @@ export function useSession({ orbVisualizerRef }) {
         JSON.stringify({ type: 'request_feedback', sessionId: sessionIdRef.current })
       )
     })
-  }, [])
+  }, [feedbackRequested])
 
   const disconnect = useCallback(() => {
     audioStreamerRef.current.destroy()
@@ -326,6 +331,8 @@ export function useSession({ orbVisualizerRef }) {
     setIsConnected(false)
     setSessionId(null)
     setInFeedbackMode(false)
+    setInterviewEnded(false)
+    setFeedbackRequested(false)
     setOrbState('idle')
     setStatusText('')
   }, [])
@@ -337,6 +344,8 @@ export function useSession({ orbVisualizerRef }) {
     statusText,
     messages,
     inFeedbackMode,
+    interviewEnded,
+    feedbackRequested,
     connect,
     startListening,
     sendInterrupt,
