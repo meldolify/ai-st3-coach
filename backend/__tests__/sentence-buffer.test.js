@@ -145,7 +145,7 @@ describe('SentenceBuffer', () => {
       buffer.addToken('First round');
       buffer.flush();
       buffer.addToken('Second round. ');
-      const sentences = buffer.addToken('');
+      buffer.addToken('');
       // "Second round." should have been emitted when space followed it
       // Actually the sentence was already returned from the previous addToken
       // Let's just verify flush gives empty
@@ -235,7 +235,7 @@ describe('SentenceBuffer', () => {
       buffer.addToken('Température: 40°C. ');
       // The sentence should be emitted
       // Actually let's collect it
-      const sentences = buffer.addToken('');
+      buffer.addToken('');
       // The sentence was already returned from the first addToken call
       // Let's just verify the buffer state
       expect(buffer.flush()).toBe('');

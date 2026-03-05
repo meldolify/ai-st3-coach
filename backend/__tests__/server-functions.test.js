@@ -15,8 +15,6 @@ process.env.NODE_ENV = 'test';
 process.env.GEMINI_API_KEY = 'test-gemini-key';
 process.env.OPENAI_API_KEY = 'test-api-key';
 
-const WebSocket = require('ws');
-const http = require('http');
 const path = require('path');
 const fs = require('fs');
 
@@ -24,7 +22,6 @@ const fs = require('fs');
 let openaiService;
 let ttsService;
 let geminiTTSService;
-let serverVadMock;
 
 // Mock ServerVAD to avoid loading the ONNX model
 jest.mock('../src/services/ServerVAD', () => {
@@ -38,7 +35,6 @@ jest.mock('../src/services/ServerVAD', () => {
     onIncrementalAudio: null,
     speechStartTime: null
   };
-  serverVadMock = mockVADInstance;
   return {
     ServerVAD: jest.fn().mockImplementation(() => {
       // Return a fresh object that delegates to mockVADInstance
@@ -67,10 +63,6 @@ jest.mock('onnxruntime-node', () => ({
   },
   Tensor: jest.fn()
 }));
-
-// Get references to actual services (will be singletons)
-let server;
-let serverAddress;
 
 beforeAll(() => {
   // Require services before server so we can mock their methods
@@ -104,7 +96,7 @@ beforeAll(() => {
 
   // Now require server.js — it will set up Express + WSS on the shared http.Server
   // NODE_ENV=test prevents it from auto-listening
-  const serverModule = require('../server');
+  require('../server');
 
   // Find the http.Server created by server.js
   // server.js creates: const server = http.createServer(app)
@@ -190,9 +182,6 @@ describe('loadFeedbackPrompt (logic verification)', () => {
   test('returns inline fallback when no feedback files exist', () => {
     // Test the final fallback path by using a scenario path with no matching feedback
     // AND mocking fs to simulate missing files
-    const originalExistsSync = fs.existsSync;
-    const originalReadFileSync = fs.readFileSync;
-
     // Temporarily override to simulate no files
     jest.spyOn(fs, 'existsSync').mockReturnValue(false);
 
@@ -386,10 +375,6 @@ describe('googleTTS wrapper', () => {
 // ============================================================================
 
 describe('WebSocket integration', () => {
-  let httpServer;
-  let wsUrl;
-  const TEST_PORT = 0; // Use random available port
-
   beforeAll(() => {
     // The server module has already been required above (in the top-level beforeAll).
     // The http.Server and WSS are created but not listening (NODE_ENV=test).
@@ -738,7 +723,7 @@ describe('OpenAI streaming (generateResponseStream)', () => {
     openaiService.llmClient.chat.completions.create.mockResolvedValue(emptyStream);
 
     // Consume the generator
-    for await (const _token of openaiService.generateResponseStream([
+    for await (const _ of openaiService.generateResponseStream([
       { role: 'user', content: 'test' }
     ])) {
       // no-op
@@ -763,7 +748,7 @@ describe('OpenAI streaming (generateResponseStream)', () => {
     };
     openaiService.llmClient.chat.completions.create.mockResolvedValue(emptyStream);
 
-    for await (const _token of openaiService.generateResponseStream(
+    for await (const _ of openaiService.generateResponseStream(
       [{ role: 'user', content: 'test' }],
       { model: 'gemini-2.5-flash', temperature: 0.3, max_tokens: 500 }
     )) {

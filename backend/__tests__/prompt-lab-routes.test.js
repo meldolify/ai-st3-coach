@@ -649,9 +649,6 @@ describe('Transcript endpoints', () => {
 // ──────────────────────────────────────────
 
 describe('Transcript round-trip via routes', () => {
-  const BACKEND_DIR = path.join(__dirname, '..');
-  const TEST_RESULTS_DIR = path.join(BACKEND_DIR, 'test-results');
-
   test('save, list, load, and delete a transcript end-to-end', async () => {
     // Create session
     const sessionRes = await request(app)

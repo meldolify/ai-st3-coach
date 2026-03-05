@@ -7,7 +7,6 @@
 
 const fs = require('fs');
 const path = require('path');
-const os = require('os');
 
 process.env.NODE_ENV = 'test';
 process.env.GEMINI_API_KEY = 'test-gemini-key';
@@ -17,8 +16,6 @@ const openaiService = require('../src/services/OpenAIService');
 const promptLabService = require('../src/services/PromptLabService');
 
 const BACKEND_DIR = path.join(__dirname, '..');
-const PROMPTS_DIR = path.join(BACKEND_DIR, 'prompts');
-const FEEDBACK_DIR = path.join(PROMPTS_DIR, 'feedback');
 
 // ──────────────────────────────────────────
 // PATH VALIDATION
