@@ -113,7 +113,8 @@ async function ttsForSession(plainText, session) {
     try {
       return await geminiTTSService.synthesize(plainText, session.voice, { stylePrompt });
     } catch (error) {
-      console.warn('[TTS] Gemini TTS failed, falling back to Cloud TTS:', error.message);
+      console.warn('[TTS] Gemini failed, falling back to Cloud TTS:', error.message);
+      console.warn('[TTS] Voice will differ — Cloud TTS fallback for:', plainText.slice(0, 50));
     }
   }
   // Fallback: Cloud TTS with SSML (map Gemini voice names to Cloud equivalents, pass through others)
@@ -675,7 +676,13 @@ wss.on('connection', (ws, req) => {
                 break;
 
               case 'request_feedback':
-                // Streaming feedback: stream LLM → detect sections → parallel TTS → rapid delivery
+                // Guard against duplicate feedback requests
+                if (session.feedbackCount > 0 || session.inFeedbackMode) {
+                  console.log('[FEEDBACK] Already requested, ignoring duplicate');
+                  break;
+                }
+
+                // Streaming feedback: stream LLM → fire TTS per section as detected → send in order
                 console.log('[FEEDBACK] Starting streaming feedback flow');
                 session.inFeedbackMode = true;
                 session.interviewEnded = true;
@@ -698,35 +705,44 @@ wss.on('connection', (ws, req) => {
                   ];
 
                   const sectionBuffer = new FeedbackSectionBuffer();
-                  const sectionTexts = [];
+                  const ttsQueue = []; // { text, ttsPromise } — fire TTS eagerly, await in order
                   let fullText = '';
                   const t1 = Date.now();
 
                   ws.send(JSON.stringify({ type: 'feedback_processing' }));
+                  session.isAISpeaking = true;
 
                   for await (const token of openaiService.generateResponseStream(feedbackMessages, {
                     max_tokens: 4000
                   })) {
                     fullText += token;
 
-                    // Detect completed sections in stream
+                    // Detect completed sections and fire TTS immediately
                     const completedSections = sectionBuffer.addToken(token);
                     for (const sectionText of completedSections) {
-                      sectionTexts.push(sectionText);
-                      console.log(`[FEEDBACK] Section ${sectionTexts.length} detected`);
+                      console.log(`[FEEDBACK] Section ${ttsQueue.length + 1} detected, firing TTS`);
+                      const ttsPromise = ttsForSession(sectionText, session).catch(err => {
+                        console.warn('[FEEDBACK] TTS failed:', err.message);
+                        return null;
+                      });
+                      ttsQueue.push({ text: sectionText, ttsPromise });
                     }
                   }
 
-                  // Flush any remaining content after stream ends
+                  // Flush any remaining content after stream ends (last section before JSON)
                   const flushed = sectionBuffer.flush();
                   if (flushed && sectionBuffer.sectionStarted) {
-                    sectionTexts.push(flushed);
-                    console.log(`[FEEDBACK] Flushed final section ${sectionTexts.length}`);
+                    console.log(`[FEEDBACK] Flushed final section ${ttsQueue.length + 1}`);
+                    const ttsPromise = ttsForSession(flushed, session).catch(err => {
+                      console.warn('[FEEDBACK] TTS failed:', err.message);
+                      return null;
+                    });
+                    ttsQueue.push({ text: flushed, ttsPromise });
                   }
 
                   const t2 = Date.now();
                   console.log(
-                    `[TIMING] Feedback LLM stream: ${t2 - t1}ms, ${sectionTexts.length} sections`
+                    `[TIMING] Feedback LLM stream: ${t2 - t1}ms, ${ttsQueue.length} sections`
                   );
 
                   // 4. Parse full response for JSON summary
@@ -741,9 +757,9 @@ wss.on('connection', (ws, req) => {
                     );
                   }
 
-                  // Use whichever source found more sections — parsed works on complete text
+                  // Use parsed sections as fallback if stream detection missed any
                   const sections =
-                    parsed.sections.length > sectionTexts.length ? parsed.sections : sectionTexts;
+                    ttsQueue.length > 0 ? ttsQueue.map(q => q.text) : parsed.sections;
                   if (sections.length === 0) {
                     throw new Error('No feedback sections detected from LLM response');
                   }
@@ -789,28 +805,31 @@ wss.on('connection', (ws, req) => {
                   );
                   console.log('[FEEDBACK] Summary sent');
 
-                  // 6. Parallel TTS: fire all concurrently, send in order
-                  session.isAISpeaking = true;
-                  const feedbackTTSPromises = sections.map(text =>
-                    ttsForSession(text, session).catch(err => {
-                      console.warn('[FEEDBACK] TTS failed:', err.message);
-                      return null;
-                    })
-                  );
+                  // 6. Dispatch TTS in order (already running from stream phase)
+                  // If stream detection missed sections, fire TTS now as fallback
+                  if (ttsQueue.length === 0 && parsed.sections.length > 0) {
+                    for (const text of parsed.sections) {
+                      const ttsPromise = ttsForSession(text, session).catch(err => {
+                        console.warn('[FEEDBACK] TTS failed:', err.message);
+                        return null;
+                      });
+                      ttsQueue.push({ text, ttsPromise });
+                    }
+                  }
 
-                  for (let i = 0; i < sections.length; i++) {
+                  for (let i = 0; i < ttsQueue.length; i++) {
                     if (ws.readyState !== WebSocket.OPEN) {
                       break;
                     }
-                    const audio = await feedbackTTSPromises[i];
+                    const audio = await ttsQueue[i].ttsPromise;
                     session.feedbackCount = i + 1;
                     ws.send(
                       JSON.stringify({
                         type: 'feedback_response',
-                        text: sections[i],
+                        text: ttsQueue[i].text,
                         audio: audio ? audio.toString('base64') : '',
                         section: i + 1,
-                        totalSections: sections.length
+                        totalSections: ttsQueue.length
                       })
                     );
                   }

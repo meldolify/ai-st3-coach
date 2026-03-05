@@ -50,6 +50,8 @@ export default function SimulationRoom() {
     orbState,
     statusText,
     messages,
+    interviewEnded,
+    feedbackRequested,
     connect,
     startListening,
     sendInterrupt,
@@ -113,13 +115,16 @@ export default function SimulationRoom() {
     }
   }, [scenario.promptFile, difficulty, connect, startListening])
 
-  const handleEnd = useCallback(async () => {
+  const handleEnd = useCallback(() => {
     sendEndInterview()
+  }, [sendEndInterview])
+
+  const handleRequestFeedback = useCallback(async () => {
     const feedback = await requestFeedback()
     if (feedback) {
       setFeedbackData(feedback)
     }
-  }, [sendEndInterview, requestFeedback])
+  }, [requestFeedback])
 
   const handleExit = useCallback(() => {
     const doExit = () => {
@@ -329,8 +334,11 @@ export default function SimulationRoom() {
           <SessionToggle
             isConnected={isConnected}
             isConnecting={isConnecting}
+            interviewEnded={interviewEnded}
+            feedbackRequested={feedbackRequested}
             onConnect={handleConnect}
             onEnd={handleEnd}
+            onRequestFeedback={handleRequestFeedback}
           />
         </motion.div>
       </div>
@@ -391,8 +399,11 @@ export default function SimulationRoom() {
           <SessionToggle
             isConnected={isConnected}
             isConnecting={isConnecting}
+            interviewEnded={interviewEnded}
+            feedbackRequested={feedbackRequested}
             onConnect={handleConnect}
             onEnd={handleEnd}
+            onRequestFeedback={handleRequestFeedback}
           />
         </div>
       </div>

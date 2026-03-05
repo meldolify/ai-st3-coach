@@ -10,6 +10,7 @@ const config = require('../config');
 class GeminiTTSService {
   constructor() {
     this.client = null;
+    this._queue = Promise.resolve(); // Serialization chain — one TTS call at a time
   }
 
   _ensureClient() {
@@ -21,6 +22,8 @@ class GeminiTTSService {
 
   /**
    * Synthesize speech from text using Gemini TTS.
+   * Serialized via internal queue to prevent concurrent API calls
+   * from returning inconsistent voice characteristics.
    * @param {string} text - Plain text to speak
    * @param {string} voiceName - Gemini voice name (e.g. 'Fenrir', 'Kore', 'Charon')
    * @param {Object} options - Optional parameters
@@ -28,6 +31,12 @@ class GeminiTTSService {
    * @returns {Promise<Buffer>} - WAV audio data as Buffer
    */
   async synthesize(text, voiceName, options = {}) {
+    const result = this._queue.then(() => this._doSynthesize(text, voiceName, options));
+    this._queue = result.catch(() => {}); // Prevent chain breakage on errors
+    return result;
+  }
+
+  async _doSynthesize(text, voiceName, options = {}) {
     const client = this._ensureClient();
 
     console.log('[Gemini TTS] Voice:', voiceName, options.stylePrompt ? '(styled)' : '');
