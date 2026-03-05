@@ -2,7 +2,7 @@ name: Supabase Keep-Alive
 
 on:
   schedule:
-    - cron: '0 6 */5 * *'  # Every 5 days at 06:00 UTC
+    - cron: '0 6 */3 * *'  # Every 3 days at 06:00 UTC
   workflow_dispatch:        # Manual trigger for testing
 
 jobs:
@@ -11,17 +11,17 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 1
     steps:
-      - name: Ping Supabase to prevent free tier pause
+      - name: Query Supabase database to prevent free tier pause
         run: |
           HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
-            "${{ secrets.SUPABASE_URL }}/rest/v1/" \
+            "${{ secrets.SUPABASE_URL }}/rest/v1/profiles?select=id&limit=1" \
             -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
             -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}")
 
           echo "Supabase ping: HTTP $HTTP_STATUS at $(date -u)"
 
           if [ "$HTTP_STATUS" -ge 200 ] && [ "$HTTP_STATUS" -lt 300 ]; then
-            echo "OK"
+            echo "OK - Database query successful"
           else
             echo "::error::Supabase ping failed (HTTP $HTTP_STATUS)"
             exit 1
