@@ -92,10 +92,18 @@ Text-in/text-out environment for rapid prompt iteration without STT/TTS overhead
 **Architecture:** Browser → REST `/prompt-lab/api/*` → GPT-4o-mini (no TTS) → JSON responses. Sessions use in-memory Map with `pl_` prefixed IDs, separate from production sessions.
 
 **Features:**
-- 4-tab inline prompt editor (Core Behaviours, Difficulty/Personality, Clinical Scenario, Feedback Prompt)
+- 5-tab inline prompt editor with inline difficulty selector:
+  - **Core** → `prompts/shared/interview/core_{domain}_interview.txt` (shared across difficulties)
+  - **Personality** → `prompts/shared/interview/{difficulty}_interview_personality.txt` (per-difficulty)
+  - **Clinical** → `prompts/scenarios/{topic}/{name}_1.txt` (shared across difficulties)
+  - **Feedback** → `prompts/shared/feedback/core_{domain}_feedback.txt` (shared across difficulties)
+  - **Fb.Personality** → `prompts/shared/feedback/{difficulty}_feedback_personality.txt` (per-difficulty)
+- Changing difficulty reloads Personality + Fb.Personality tabs; Core, Clinical, Feedback stay the same
 - Manual chat interface with feedback trigger (returns all 6 sections + JSON summary at once)
 - 7 automated test scripts with assertion system (good/poor/excellent/derailing/questioning/feedback_interrupt/disruptive candidates)
 - Transcript saving and viewer
+- Dirty tracking: only modified tabs are saved/committed (prevents unnecessary diffs)
+- Auto-commit to GitHub on save (production). GitHub env vars: `GITHUB_TOKEN`, `GITHUB_OWNER`, `GITHUB_REPO`
 
 **Gating:** `PROMPT_LAB_ENABLED=true` env var in production (Render). Auto-enabled in dev (`!config.isProduction`). No auth — hidden URL only.
 

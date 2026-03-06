@@ -139,13 +139,15 @@ body {
 /* ── Tabs ── */
 .pl-tabs {
   display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   background: var(--pl-surface);
   border-bottom: 1px solid var(--pl-border);
   flex-shrink: 0;
 }
 
 .pl-tab {
-  padding: 8px 16px;
+  padding: 8px 10px;
   font-size: 12px;
   color: var(--pl-text-muted);
   cursor: pointer;
@@ -155,10 +157,29 @@ body {
   border-top: none;
   border-left: none;
   border-right: none;
+  white-space: nowrap;
 }
 
 .pl-tab:hover { color: var(--pl-text); }
 .pl-tab.active { color: var(--pl-accent); border-bottom-color: var(--pl-accent); }
+
+.pl-tab-select {
+  margin-left: auto;
+  padding: 4px 8px;
+  font-size: 11px;
+  font-family: var(--pl-font-sans);
+  color: var(--pl-accent);
+  background: var(--pl-surface-2);
+  border: 1px solid var(--pl-border);
+  border-radius: var(--pl-radius);
+  cursor: pointer;
+  align-self: center;
+  margin-right: 6px;
+}
+
+.pl-tab-select:hover {
+  border-color: var(--pl-accent);
+}
 
 .pl-badge-shared {
   font-size: 9px;

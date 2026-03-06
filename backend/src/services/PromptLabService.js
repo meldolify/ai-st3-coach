@@ -422,7 +422,7 @@ function savePrompt(topicPath, difficulty, sections) {
 }
 
 /**
- * Load feedback prompt file for editing (returns core feedback content + path).
+ * Load feedback prompt files for editing (core + personality).
  * Reads from modular feedback files first, falls back to legacy.
  */
 function loadFeedbackPromptFile(topicPath, difficulty) {
@@ -431,11 +431,19 @@ function loadFeedbackPromptFile(topicPath, difficulty) {
 
   // Try modular core feedback file
   if (fs.existsSync(feedbackPaths.core)) {
-    return {
+    const result = {
       content: fs.readFileSync(feedbackPaths.core, 'utf8'),
       path: path.relative(BACKEND_DIR, feedbackPaths.core),
       source: 'modular'
     };
+
+    // Also load difficulty-specific feedback personality if it exists
+    if (fs.existsSync(feedbackPaths.personality)) {
+      result.personalityContent = fs.readFileSync(feedbackPaths.personality, 'utf8');
+      result.personalityPath = path.relative(BACKEND_DIR, feedbackPaths.personality);
+    }
+
+    return result;
   }
 
   // Fallback: legacy feedback files
@@ -475,21 +483,36 @@ function loadFeedbackPromptFile(topicPath, difficulty) {
  * Save feedback prompt to modular file (same file production reads).
  * Falls back to legacy path if modular feedback directory doesn't exist.
  */
-function saveFeedbackPrompt(topicPath, difficulty, content) {
+function saveFeedbackPrompt(topicPath, difficulty, content, personalityContent) {
   validateTopicPath(topicPath);
   const feedbackPaths = getModularFeedbackPaths(topicPath, difficulty);
+  const savedPaths = [];
 
-  // Save to modular core feedback file (shared across scenarios of same domain)
-  const filePath = feedbackPaths.core;
-  const dir = path.dirname(filePath);
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
+  // Save core feedback file if provided
+  if (content !== undefined) {
+    const filePath = feedbackPaths.core;
+    const dir = path.dirname(filePath);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+    fs.writeFileSync(filePath, content, 'utf8');
+    modifiedFiles.add(path.relative(BACKEND_DIR, filePath));
+    savedPaths.push(path.relative(BACKEND_DIR, filePath));
   }
-  fs.writeFileSync(filePath, content, 'utf8');
 
-  modifiedFiles.add(path.relative(BACKEND_DIR, filePath));
+  // Save feedback personality file if provided
+  if (personalityContent !== undefined) {
+    const filePath = feedbackPaths.personality;
+    const dir = path.dirname(filePath);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+    fs.writeFileSync(filePath, personalityContent, 'utf8');
+    modifiedFiles.add(path.relative(BACKEND_DIR, filePath));
+    savedPaths.push(path.relative(BACKEND_DIR, filePath));
+  }
 
-  return { path: path.relative(BACKEND_DIR, filePath), savedAt: new Date().toISOString() };
+  return { paths: savedPaths, savedAt: new Date().toISOString() };
 }
 
 // ──────────────────────────────────────────

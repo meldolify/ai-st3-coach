@@ -1,3 +1,2 @@
-# Full test suite runs in CI (.github/workflows/test.yml)
-# Pre-commit lint-staged handles code quality
-# Removed: cd backend && npm test (128s, redundant with CI)
+# Auto-pull to sync Prompt Lab remote edits before pushing
+git pull --rebase || { echo "Pull failed — resolve conflicts before pushing"; exit 1; }

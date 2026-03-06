@@ -435,13 +435,13 @@ describe('PUT /prompt-lab/api/feedback-prompt/:difficulty', () => {
     expect(res.body.error).toContain('difficulty must be');
   });
 
-  test('returns 400 when content is missing', async () => {
+  test('returns 400 when content and personalityContent are both missing', async () => {
     const res = await request(app).put('/prompt-lab/api/feedback-prompt/easy').send({});
     expect(res.status).toBe(400);
-    expect(res.body.error).toContain('content required');
+    expect(res.body.error).toContain('content or personalityContent required');
   });
 
-  test('saves feedback prompt and returns path and timestamp', async () => {
+  test('saves feedback prompt and returns paths and timestamp', async () => {
     // Read original to restore after test
     const original = await request(app)
       .get('/prompt-lab/api/feedback-prompt/easy')
@@ -452,9 +452,9 @@ describe('PUT /prompt-lab/api/feedback-prompt/:difficulty', () => {
       .query({ topic: 'clinical/emergencies/necrotising_fasciitis' })
       .send({ content: original.body.content });
     expect(res.status).toBe(200);
-    expect(res.body).toHaveProperty('path');
+    expect(res.body).toHaveProperty('paths');
     expect(res.body).toHaveProperty('savedAt');
-    expect(res.body.path).toContain('feedback');
+    expect(res.body.paths[0]).toContain('feedback');
     promptLabService.clearModifiedFiles();
   });
 });

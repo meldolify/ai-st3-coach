@@ -227,7 +227,7 @@ router.get('/feedback-prompt/:difficulty', (req, res) => {
 /**
  * PUT /feedback-prompt/:difficulty — Save edited feedback prompt
  * Query: ?topic=...
- * Body: { content: "..." }
+ * Body: { content?: "...", personalityContent?: "..." }
  */
 router.put('/feedback-prompt/:difficulty', async (req, res) => {
   try {
@@ -235,15 +235,22 @@ router.put('/feedback-prompt/:difficulty', async (req, res) => {
     if (!['easy', 'medium', 'strict'].includes(difficulty)) {
       return res.status(400).json({ error: 'difficulty must be easy, medium, or strict' });
     }
-    const { content } = req.body;
-    if (!content) {
-      return res.status(400).json({ error: 'content required' });
+    const { content, personalityContent } = req.body;
+    if (content === undefined && personalityContent === undefined) {
+      return res.status(400).json({ error: 'content or personalityContent required' });
     }
     const topic = req.query.topic || DEFAULT_TOPIC;
-    const result = promptLabService.saveFeedbackPrompt(topic, difficulty, content);
+    const result = promptLabService.saveFeedbackPrompt(
+      topic,
+      difficulty,
+      content,
+      personalityContent
+    );
 
     // Auto-commit to GitHub if configured
-    const commitResult = await autoCommitToGitHub([{ label: 'feedback', path: result.path }]);
+    const commitResult = await autoCommitToGitHub(
+      result.paths.map(p => ({ label: 'feedback', path: p }))
+    );
     res.json({ ...result, ...commitResult });
   } catch (err) {
     console.error('[PROMPT LAB] Save feedback prompt error:', err.message);
