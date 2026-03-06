@@ -36,6 +36,15 @@ class GeminiTTSService {
     return result;
   }
 
+  /**
+   * Synthesize without queue serialization — runs immediately in parallel.
+   * Use for batch operations (e.g. feedback sections) where all calls share
+   * the same voice/style and will be concatenated into a single playback.
+   */
+  async synthesizeDirect(text, voiceName, options = {}) {
+    return this._doSynthesize(text, voiceName, options);
+  }
+
   async _doSynthesize(text, voiceName, options = {}) {
     const client = this._ensureClient();
 
