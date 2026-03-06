@@ -925,7 +925,7 @@ describe('Request feedback flow', () => {
         })
       );
 
-      // Consolidated flow: feedback_processing → feedback_summary → 1 feedback_response
+      // Streaming flow: feedback_processing → feedback_summary → 6 feedback_response messages
       const processingMsg = await waitForMessage(ws, 10000);
       expect(processingMsg.type).toBe('feedback_processing');
 
@@ -933,14 +933,14 @@ describe('Request feedback flow', () => {
       expect(summaryMsg.type).toBe('feedback_summary');
       expect(summaryMsg.feedback.score).toBe(4);
 
-      // Single consolidated feedback_response with all sections
-      const fbMsg = await waitForMessage(ws, 10000);
-      expect(fbMsg.type).toBe('feedback_response');
-      expect(fbMsg.section).toBe(1);
-      expect(fbMsg.totalSections).toBe(1);
-      expect(fbMsg.audio).toBeDefined();
-      expect(fbMsg.text).toContain('Overall good performance.');
-      expect(fbMsg.text).toContain('Could improve differentials.');
+      // All 6 feedback_response messages (TTS runs in parallel, dispatched in order)
+      for (let i = 0; i < 6; i++) {
+        const fbMsg = await waitForMessage(ws, 10000);
+        expect(fbMsg.type).toBe('feedback_response');
+        expect(fbMsg.section).toBe(i + 1);
+        expect(fbMsg.totalSections).toBe(6);
+        expect(fbMsg.audio).toBeDefined();
+      }
     } finally {
       ws.close();
     }

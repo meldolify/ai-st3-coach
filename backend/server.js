@@ -107,12 +107,15 @@ const VOICE_FALLBACK_MAP = {
  * @param {Object} session - Session object (needs session.voice, session.difficulty)
  * @returns {Promise<Buffer>} - Audio data (WAV from Gemini, MP3 from Cloud TTS)
  */
-async function ttsForSession(plainText, session) {
+async function ttsForSession(plainText, session, { parallel = false } = {}) {
   const stylePrompt = config.TTS_STYLE_PROMPTS?.[session.difficulty];
+  const synthesizeFn = parallel
+    ? geminiTTSService.synthesizeDirect.bind(geminiTTSService)
+    : geminiTTSService.synthesize.bind(geminiTTSService);
   if (stylePrompt) {
     for (let attempt = 0; attempt < 2; attempt++) {
       try {
-        return await geminiTTSService.synthesize(plainText, session.voice, { stylePrompt });
+        return await synthesizeFn(plainText, session.voice, { stylePrompt });
       } catch (error) {
         if (attempt === 0) {
           console.warn('[TTS] Gemini attempt 1 failed, retrying:', error.message);
@@ -724,11 +727,13 @@ wss.on('connection', (ws, req) => {
                   })) {
                     fullText += token;
 
-                    // Detect completed sections and fire TTS immediately
+                    // Detect completed sections and fire TTS immediately (parallel, no queue)
                     const completedSections = sectionBuffer.addToken(token);
                     for (const sectionText of completedSections) {
                       console.log(`[FEEDBACK] Section ${ttsQueue.length + 1} detected, firing TTS`);
-                      const ttsPromise = ttsForSession(sectionText, session).catch(err => {
+                      const ttsPromise = ttsForSession(sectionText, session, {
+                        parallel: true
+                      }).catch(err => {
                         console.warn('[FEEDBACK] TTS failed:', err.message);
                         return null;
                       });
@@ -740,10 +745,12 @@ wss.on('connection', (ws, req) => {
                   const flushed = sectionBuffer.flush();
                   if (flushed && sectionBuffer.sectionStarted) {
                     console.log(`[FEEDBACK] Flushed final section ${ttsQueue.length + 1}`);
-                    const ttsPromise = ttsForSession(flushed, session).catch(err => {
-                      console.warn('[FEEDBACK] TTS failed:', err.message);
-                      return null;
-                    });
+                    const ttsPromise = ttsForSession(flushed, session, { parallel: true }).catch(
+                      err => {
+                        console.warn('[FEEDBACK] TTS failed:', err.message);
+                        return null;
+                      }
+                    );
                     ttsQueue.push({ text: flushed, ttsPromise });
                   }
 
@@ -812,59 +819,34 @@ wss.on('connection', (ws, req) => {
                   );
                   console.log('[FEEDBACK] Summary sent');
 
-                  // 6. If stream detection missed sections, fire TTS now as fallback
+                  // 6. If stream detection missed sections, fire TTS now as fallback (parallel)
                   if (ttsQueue.length === 0 && parsed.sections.length > 0) {
                     for (const text of parsed.sections) {
-                      const ttsPromise = ttsForSession(text, session).catch(err => {
-                        console.warn('[FEEDBACK] TTS failed:', err.message);
-                        return null;
-                      });
+                      const ttsPromise = ttsForSession(text, session, { parallel: true }).catch(
+                        err => {
+                          console.warn('[FEEDBACK] TTS failed:', err.message);
+                          return null;
+                        }
+                      );
                       ttsQueue.push({ text, ttsPromise });
                     }
                   }
 
-                  // 7. Await all TTS, concatenate WAV audio into single buffer
-                  const audioBuffers = [];
+                  // 7. Dispatch TTS in order — send each section as its audio completes
+                  // TTS calls are already running in parallel, so early sections resolve fast
                   for (let i = 0; i < ttsQueue.length; i++) {
+                    if (ws.readyState !== WebSocket.OPEN) {
+                      break;
+                    }
                     const audio = await ttsQueue[i].ttsPromise;
-                    if (audio) {
-                      audioBuffers.push(audio);
-                    }
-                  }
-
-                  let combinedAudio = null;
-                  if (audioBuffers.length === 1) {
-                    combinedAudio = audioBuffers[0];
-                  } else if (audioBuffers.length > 1) {
-                    // Concatenate WAV buffers: strip 44-byte headers, combine PCM, rebuild header
-                    // Only attempt WAV concat if buffers have proper headers (>44 bytes)
-                    const hasWavHeaders = audioBuffers.every(buf => buf.length > 44);
-                    if (hasWavHeaders) {
-                      const pcmChunks = audioBuffers.map(buf => buf.slice(44));
-                      const totalPcm = Buffer.concat(pcmChunks);
-                      const header = Buffer.from(audioBuffers[0].slice(0, 44));
-                      header.writeUInt32LE(36 + totalPcm.length, 4); // RIFF chunk size
-                      header.writeUInt32LE(totalPcm.length, 40); // data chunk size
-                      combinedAudio = Buffer.concat([header, totalPcm]);
-                    } else {
-                      // Fallback: just use raw concatenation (non-WAV audio like MP3)
-                      combinedAudio = Buffer.concat(audioBuffers);
-                    }
-                    console.log(
-                      `[FEEDBACK] Concatenated ${audioBuffers.length} audio buffers (${combinedAudio.length} bytes)`
-                    );
-                  }
-
-                  const combinedText = sections.join('\n\n');
-                  if (ws.readyState === WebSocket.OPEN) {
-                    session.feedbackCount = 1;
+                    session.feedbackCount = i + 1;
                     ws.send(
                       JSON.stringify({
                         type: 'feedback_response',
-                        text: combinedText,
-                        audio: combinedAudio ? combinedAudio.toString('base64') : '',
-                        section: 1,
-                        totalSections: 1
+                        text: ttsQueue[i].text,
+                        audio: audio ? audio.toString('base64') : '',
+                        section: i + 1,
+                        totalSections: ttsQueue.length
                       })
                     );
                   }
