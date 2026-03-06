@@ -1,11 +1,9 @@
 import { cn } from '../lib/utils'
 
 /**
- * SessionToggle — Three-state button:
+ * SessionToggle — Two-state button:
  * 1. Disconnected: green mic icon → Start Session
  * 2. Connected: spinning red stop square → End Session
- * 3. Ended (no feedback yet): blue clipboard icon → Get Feedback (one-shot)
- * 4. Feedback requested: disabled state
  */
 
 const btnBase = [
@@ -22,35 +20,30 @@ const btnBase = [
 ].join(' ')
 
 export default function SessionToggle({
-  isConnected, isConnecting, interviewEnded, feedbackRequested,
-  onConnect, onEnd, onRequestFeedback,
+  isConnected, isConnecting, interviewEnded,
+  onConnect, onEnd,
 }) {
   const handleClick = () => {
-    if (interviewEnded && !feedbackRequested) {
-      onRequestFeedback()
-    } else if (isConnected) {
+    if (isConnected) {
       onEnd()
     } else if (!isConnecting) {
       onConnect()
     }
   }
 
-  const disabled = isConnecting || (interviewEnded && feedbackRequested)
-  const showFeedback = interviewEnded && !feedbackRequested
+  const disabled = isConnecting || interviewEnded
 
-  const title = showFeedback
-    ? 'Get Feedback'
-    : isConnected
-      ? 'End Session'
-      : isConnecting
-        ? 'Connecting...'
+  const title = isConnected
+    ? 'End Session'
+    : isConnecting
+      ? 'Connecting...'
+      : interviewEnded
+        ? 'Session Ended'
         : 'Start Session'
 
-  const hoverClass = showFeedback
-    ? 'hover:border-[rgba(59,130,246,0.3)] hover:shadow-[0_6px_20px_rgba(0,0,0,0.08),0_0_16px_rgba(59,130,246,0.2)]'
-    : isConnected
-      ? 'hover:border-[rgba(239,68,68,0.3)] hover:shadow-[0_6px_20px_rgba(0,0,0,0.08),0_0_16px_rgba(239,68,68,0.2)]'
-      : 'hover:border-[rgba(110,231,183,0.3)] hover:shadow-[0_6px_20px_rgba(0,0,0,0.08),0_0_16px_rgba(110,231,183,0.2)]'
+  const hoverClass = isConnected
+    ? 'hover:border-[rgba(239,68,68,0.3)] hover:shadow-[0_6px_20px_rgba(0,0,0,0.08),0_0_16px_rgba(239,68,68,0.2)]'
+    : 'hover:border-[rgba(110,231,183,0.3)] hover:shadow-[0_6px_20px_rgba(0,0,0,0.08),0_0_16px_rgba(110,231,183,0.2)]'
 
   return (
     <button
@@ -65,15 +58,7 @@ export default function SessionToggle({
       aria-label={title}
     >
       <div className="flex items-center justify-center w-full h-full">
-        {showFeedback ? (
-          /* Clipboard/feedback icon */
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
-            <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
-            <path d="M9 12h6" />
-            <path d="M9 16h6" />
-          </svg>
-        ) : isConnected ? (
+        {isConnected ? (
           <div
             className="w-5 h-5 rounded-sm bg-[#DC2626]"
             style={{ animation: 'spin 3s linear infinite' }}

@@ -13,6 +13,7 @@ import ClinicalImageCard from './ClinicalImageCard'
 import VoiceOrb, { VoiceOrbWithRings } from './VoiceOrb'
 import AnimatedBackground from './AnimatedBackground'
 import SessionToggle from './SessionToggle'
+import FeedbackButton from './FeedbackButton'
 import ConfirmModal from './ConfirmModal'
 
 /**
@@ -331,15 +332,20 @@ export default function SimulationRoom() {
 
           <VoiceOrbWithRings ref={orbRef} state={orbState} size={100} />
 
-          <SessionToggle
-            isConnected={isConnected}
-            isConnecting={isConnecting}
-            interviewEnded={interviewEnded}
-            feedbackRequested={feedbackRequested}
-            onConnect={handleConnect}
-            onEnd={handleEnd}
-            onRequestFeedback={handleRequestFeedback}
-          />
+          <div className="flex items-center gap-3">
+            <SessionToggle
+              isConnected={isConnected}
+              isConnecting={isConnecting}
+              interviewEnded={interviewEnded}
+              onConnect={handleConnect}
+              onEnd={handleEnd}
+            />
+            <FeedbackButton
+              visible={interviewEnded}
+              disabled={feedbackRequested}
+              onClick={handleRequestFeedback}
+            />
+          </div>
         </motion.div>
       </div>
 
@@ -394,16 +400,19 @@ export default function SimulationRoom() {
           )}
         </div>
 
-        {/* Fixed bottom dock — only SessionToggle inside backdrop-filter */}
-        <div className="relative z-[200] flex items-center justify-center px-5 pt-3 pb-[calc(16px+env(safe-area-inset-bottom))] mobile-glass border-t border-black/[0.06]">
+        {/* Fixed bottom dock — SessionToggle + FeedbackButton inside backdrop-filter */}
+        <div className="relative z-[200] flex items-center justify-center gap-3 px-5 pt-3 pb-[calc(16px+env(safe-area-inset-bottom))] mobile-glass border-t border-black/[0.06]">
           <SessionToggle
             isConnected={isConnected}
             isConnecting={isConnecting}
             interviewEnded={interviewEnded}
-            feedbackRequested={feedbackRequested}
             onConnect={handleConnect}
             onEnd={handleEnd}
-            onRequestFeedback={handleRequestFeedback}
+          />
+          <FeedbackButton
+            visible={interviewEnded}
+            disabled={feedbackRequested}
+            onClick={handleRequestFeedback}
           />
         </div>
       </div>

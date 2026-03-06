@@ -367,4 +367,56 @@ describe('SentenceBuffer', () => {
       expect(batchBuffer.addToken('Fresh. ')).toEqual(['Fresh.']);
     });
   });
+
+  // -------------------------------------------------------------------------
+  // minFirstLength batching
+  // -------------------------------------------------------------------------
+  describe('minFirstLength batching', () => {
+    let mflBuffer;
+
+    beforeEach(() => {
+      mflBuffer = new SentenceBuffer(1, 20);
+    });
+
+    test('short first sentence is held until second arrives', () => {
+      const s1 = mflBuffer.addToken('Okay. ');
+      expect(s1).toEqual([]); // held — "Okay." is 5 chars < 20
+    });
+
+    test('held short first sentence batches with second sentence', () => {
+      mflBuffer.addToken('Okay. ');
+      const s2 = mflBuffer.addToken('What blood tests would you send? ');
+      expect(s2).toEqual(['Okay. What blood tests would you send?']);
+    });
+
+    test('long first sentence emits immediately (no hold)', () => {
+      const s1 = mflBuffer.addToken('What blood tests would you send? ');
+      expect(s1).toEqual(['What blood tests would you send?']);
+    });
+
+    test('subsequent sentences after batch emit normally', () => {
+      mflBuffer.addToken('Right. ');
+      mflBuffer.addToken('Tell me about the history. ');
+      // After batched first emission, batchSize=1 means each subsequent emits solo
+      const s3 = mflBuffer.addToken('Go on. ');
+      expect(s3).toEqual(['Go on.']);
+    });
+
+    test('flush returns held short sentence if stream ends early', () => {
+      mflBuffer.addToken('Alright.');
+      expect(mflBuffer.flush()).toBe('Alright.');
+    });
+
+    test('short filler "Go on." batches with next sentence', () => {
+      mflBuffer.addToken('Go on. ');
+      const s2 = mflBuffer.addToken('Can you elaborate on that? ');
+      expect(s2).toEqual(['Go on. Can you elaborate on that?']);
+    });
+
+    test('minFirstLength=0 disables hold (default behavior)', () => {
+      const noHold = new SentenceBuffer(1, 0);
+      const s1 = noHold.addToken('Ok. ');
+      expect(s1).toEqual(['Ok.']); // emits immediately, no hold
+    });
+  });
 });
