@@ -23,6 +23,7 @@ const { ServerVAD, float32ToWavBuffer } = require('./src/services/ServerVAD');
 const { isNoiseTranscript, buildNaturalSSML } = require('./src/utils/audioHelpers');
 const { buildInterviewPrompt, buildFeedbackPrompt } = require('./src/utils/promptAssembler');
 const { parseFeedbackResponse } = require('./src/utils/feedbackParser');
+const { FeedbackSectionBuffer } = require('./src/utils/feedbackSectionBuffer');
 const SentenceBuffer = require('./src/utils/sentenceBuffer');
 const { RateLimitError } = require('openai');
 
@@ -688,8 +689,8 @@ wss.on('connection', (ws, req) => {
                   break;
                 }
 
-                // Feedback: stream LLM → collect all sections → single TTS call
-                console.log('[FEEDBACK] Starting feedback flow');
+                // Feedback: stream LLM → fire TTS per section → concatenate audio → single response
+                console.log('[FEEDBACK] Starting streaming feedback flow');
                 session.inFeedbackMode = true;
                 session.interviewEnded = true;
                 session.vad.reset(); // Clear stale audio buffers
@@ -701,7 +702,7 @@ wss.on('connection', (ws, req) => {
                   // 2. Build modular feedback prompt (core + personality + clinical)
                   const feedbackPrompt = buildFeedbackPrompt(session.difficulty, session.scenario);
 
-                  // 3. Stream LLM, collect full response
+                  // 3. Stream LLM, start TTS for each section as it's detected
                   const feedbackMessages = [
                     { role: 'system', content: feedbackPrompt },
                     {
@@ -710,6 +711,8 @@ wss.on('connection', (ws, req) => {
                     }
                   ];
 
+                  const sectionBuffer = new FeedbackSectionBuffer();
+                  const ttsQueue = []; // { text, ttsPromise } — fire TTS eagerly, await in order
                   let fullText = '';
                   const t1 = Date.now();
 
@@ -720,12 +723,36 @@ wss.on('connection', (ws, req) => {
                     max_tokens: 4000
                   })) {
                     fullText += token;
+
+                    // Detect completed sections and fire TTS immediately
+                    const completedSections = sectionBuffer.addToken(token);
+                    for (const sectionText of completedSections) {
+                      console.log(`[FEEDBACK] Section ${ttsQueue.length + 1} detected, firing TTS`);
+                      const ttsPromise = ttsForSession(sectionText, session).catch(err => {
+                        console.warn('[FEEDBACK] TTS failed:', err.message);
+                        return null;
+                      });
+                      ttsQueue.push({ text: sectionText, ttsPromise });
+                    }
+                  }
+
+                  // Flush any remaining content after stream ends (last section before JSON)
+                  const flushed = sectionBuffer.flush();
+                  if (flushed && sectionBuffer.sectionStarted) {
+                    console.log(`[FEEDBACK] Flushed final section ${ttsQueue.length + 1}`);
+                    const ttsPromise = ttsForSession(flushed, session).catch(err => {
+                      console.warn('[FEEDBACK] TTS failed:', err.message);
+                      return null;
+                    });
+                    ttsQueue.push({ text: flushed, ttsPromise });
                   }
 
                   const t2 = Date.now();
-                  console.log(`[TIMING] Feedback LLM stream: ${t2 - t1}ms`);
+                  console.log(
+                    `[TIMING] Feedback LLM stream: ${t2 - t1}ms, ${ttsQueue.length} sections`
+                  );
 
-                  // 4. Parse full response for JSON summary and sections
+                  // 4. Parse full response for JSON summary
                   const parsed = parseFeedbackResponse(fullText);
                   console.log(
                     `[FEEDBACK] Parsed ${parsed.sections.length} sections, JSON: ${!!parsed.json}`
@@ -737,7 +764,9 @@ wss.on('connection', (ws, req) => {
                     );
                   }
 
-                  const sections = parsed.sections;
+                  // Use parsed sections as fallback if stream detection missed any
+                  const sections =
+                    ttsQueue.length > 0 ? ttsQueue.map(q => q.text) : parsed.sections;
                   if (sections.length === 0) {
                     throw new Error('No feedback sections detected from LLM response');
                   }
@@ -783,24 +812,57 @@ wss.on('connection', (ws, req) => {
                   );
                   console.log('[FEEDBACK] Summary sent');
 
-                  // 6. Single TTS call for all feedback (consistent voice)
+                  // 6. If stream detection missed sections, fire TTS now as fallback
+                  if (ttsQueue.length === 0 && parsed.sections.length > 0) {
+                    for (const text of parsed.sections) {
+                      const ttsPromise = ttsForSession(text, session).catch(err => {
+                        console.warn('[FEEDBACK] TTS failed:', err.message);
+                        return null;
+                      });
+                      ttsQueue.push({ text, ttsPromise });
+                    }
+                  }
+
+                  // 7. Await all TTS, concatenate WAV audio into single buffer
+                  const audioBuffers = [];
+                  for (let i = 0; i < ttsQueue.length; i++) {
+                    const audio = await ttsQueue[i].ttsPromise;
+                    if (audio) {
+                      audioBuffers.push(audio);
+                    }
+                  }
+
+                  let combinedAudio = null;
+                  if (audioBuffers.length === 1) {
+                    combinedAudio = audioBuffers[0];
+                  } else if (audioBuffers.length > 1) {
+                    // Concatenate WAV buffers: strip 44-byte headers, combine PCM, rebuild header
+                    // Only attempt WAV concat if buffers have proper headers (>44 bytes)
+                    const hasWavHeaders = audioBuffers.every(buf => buf.length > 44);
+                    if (hasWavHeaders) {
+                      const pcmChunks = audioBuffers.map(buf => buf.slice(44));
+                      const totalPcm = Buffer.concat(pcmChunks);
+                      const header = Buffer.from(audioBuffers[0].slice(0, 44));
+                      header.writeUInt32LE(36 + totalPcm.length, 4); // RIFF chunk size
+                      header.writeUInt32LE(totalPcm.length, 40); // data chunk size
+                      combinedAudio = Buffer.concat([header, totalPcm]);
+                    } else {
+                      // Fallback: just use raw concatenation (non-WAV audio like MP3)
+                      combinedAudio = Buffer.concat(audioBuffers);
+                    }
+                    console.log(
+                      `[FEEDBACK] Concatenated ${audioBuffers.length} audio buffers (${combinedAudio.length} bytes)`
+                    );
+                  }
+
                   const combinedText = sections.join('\n\n');
-                  console.log(
-                    `[FEEDBACK] Synthesizing ${sections.length} sections as single TTS call (${combinedText.length} chars)`
-                  );
-
-                  const audio = await ttsForSession(combinedText, session).catch(err => {
-                    console.warn('[FEEDBACK] TTS failed:', err.message);
-                    return null;
-                  });
-
                   if (ws.readyState === WebSocket.OPEN) {
                     session.feedbackCount = 1;
                     ws.send(
                       JSON.stringify({
                         type: 'feedback_response',
                         text: combinedText,
-                        audio: audio ? audio.toString('base64') : '',
+                        audio: combinedAudio ? combinedAudio.toString('base64') : '',
                         section: 1,
                         totalSections: 1
                       })
