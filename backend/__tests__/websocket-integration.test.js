@@ -439,7 +439,8 @@ describe('Message flow - user_transcript', () => {
   });
 
   test('multi-sentence response produces multiple chunks', async () => {
-    mockStreamingResponse(['Hello there. ', 'How are you? ']);
+    // First sentence must be >= 20 chars to avoid minFirstLength batching
+    mockStreamingResponse(['Hello there my friend. ', 'How are you doing today? ']);
     ttsService.client.synthesizeSpeech.mockResolvedValue([
       {
         audioContent: Buffer.from('audio')

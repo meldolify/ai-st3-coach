@@ -63,7 +63,11 @@ class SentenceBuffer {
       ) {
         break;
       }
-      const count = this.emittedFirst ? this.batchSize : 1;
+      const count = this.emittedFirst
+        ? this.batchSize
+        : this.pendingSentences.length >= 2 && this.pendingSentences[0].length < this.minFirstLength
+          ? 2
+          : 1;
       const batch = this.pendingSentences.splice(0, count);
       batches.push(batch.join(' '));
       this.emittedFirst = true;
