@@ -15,7 +15,6 @@ Diagnosis
 
 Assessment
 "What aspects of the history are particularly important for this patient?"
-"Can you describe the A B C D E approach for this case?"
 
 Investigations
 "What blood tests would you want to send?"
