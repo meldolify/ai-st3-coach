@@ -3,12 +3,68 @@ CLINICAL SCENARIO BLOCK
 (CASE-SPECIFIC)
 
 SCENARIO TITLE
-reimplantation of thumb
+
+Replantation
+
+CASE INTRODUCTION
+
+(Read verbatim in the Case Introduction state.)
+
+[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+
+Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
+
+Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
+
+Example from Necrotising Fasciitis:
+"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
+
+Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
+
+END OF AUTHOR NOTE]
+
+STAGE PROMPT QUESTIONS
+
+(Internal reference only. Do not read aloud verbatim.
+Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
+
+[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+
+These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
+
+Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
+
+Format them under stage headings exactly like this:
+
+Assessment
+"What would you expect to find on examination of this patient?"
+"Can you describe the A B C D E approach for this case?"
+
+Investigations
+"What blood tests would you want to send?"
+"Are there any scoring systems that might be relevant here?"
+
+Initial Management
+"How would you stabilise this patient initially?"
+"What antibiotics would you consider and why?"
+
+Definitive Management
+"What surgical intervention does this patient need?"
+"Can you walk me through the key steps of the operation?"
+
+Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
+
+END OF AUTHOR NOTE]
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
+[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+
+List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
+
+Example from Necrotising Fasciitis:
 Diagnosis and urgency
 Assessment, either through A B C D E approach or history and examination
 Investigations
@@ -16,73 +72,76 @@ Initial management
 Definitive management
 Surgical steps
 Post-operative care
+
+END OF AUTHOR NOTE]
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-Diagnosis and urgency
-Thumb amputation which is a clinical emergency.
+[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
 
-Assessment, either through A B C D E approach or history and examination
-The primary survey includes making sure that the patient is hemodynamically stable and there is no associated life threatening injuries. Then taking focused history from the patient including The mechanism of injury and the timing since the injury. asking how the amputated part was preserved before arrival to the hospital 
-Examination is divided into examining the hand as a whole, as well as examining the amputated part to confirm the level of amputation.
+List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+
+Each point should be a short statement of the expected answer.
+
+Example from Necrotising Fasciitis:
+
+Diagnosis and urgency
+Necrotising fasciitis which is a clinical emergency.
+
+Assessment
+Must include vital status, rapid progression or spread, and poorly controlled diabetes.
+
 Investigations
-X-ray of the hand and the amputated part.
+Blood tests including lactate level.
 
 Initial management
-Analgesia, Antibiotics, preservation of the amputated part.
-Consenting the patient for a trial a reimplantation in addition to shortening and direct closure. Discussion with the on call consultant, the consultant anaesthetist.
+Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
 
 Definitive management
+Urgent surgery for debridement.
 
 Surgical steps
-Under general anesthesia with an arm tourniquet, arm table, microscope, c-arm machine, hand set, K-wire set and micro set, the surgery starts by washout with saline. Exploration of the amputated parts through with tagging of the structures in addition to exploration of the hand in the same fashion. Skeletal stabilisation, Repair of the tendons first using 4 strand technique then vessel repair and nerve repair.
+Surgical debridement of all unhealthy tissue.
 
 Post-operative care
-Hand elevation, Keeping the hand warm, hourly obs, hand therapy in 3-5 days
+I T U post-operatively, and arranging for a potential second look within forty eight hours.
+
+END OF AUTHOR NOTE]
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-Diagnosis 
-Stating that complete finger amputation is a plastic surgery emergency.
+[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
 
-Assessment, either through A B C D E approach or history and examination
-Mentioning the components of the A B C D E assessment.
-Taking a focused history including age, hand, dominance, occupation, hobbies. The mechanism of injury and the timing since the injury in addition to the degree of contamination. Asking about the past medical history, drug history, smoking, tetanus status and last meal. Asking how the part was preserved prior to arrival at the hospital (Ideally it should be wrapped in gauze, then put in a plastic bag, and then put in another bag with ice. Acknowledging ischaemia time and knowing the difference between warm ischaemia time (12 hours) and cold ischaemia time (up to 24 hours).
-Examination is divided into examining the hand and the amputated part to confirm the level of amputation, the degree of contamination. Look for tendon or vessel avulsion like the ribbon sign. Examination of the rest of the hand to identify any associated injuries.
+List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
 
-Investigations
-Blood tests including group and save to prepare for surgery. X-ray of the hand and the amputated part.
+Group them under the same domain headings. Each point should be a short statement.
 
-Initial management
-Analgesia, Tetanus, Antibiotics (co-amoxiclav), preservation of the amputated part, irrigation and dressing, hand elevation.
+Example from Necrotising Fasciitis:
 
+Diagnosis and urgency
+Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
 
-Definitive management
-Consenting the patient for a trial at reimplantation, tendon grafts, nerve grafts, vein grafts in addition to shortening and direct closure. Discussion with the on call consultant, the consultant anaesthetist, the theatre coordinator and the bed manager.
+Assessment
+Mentioning Sepsis six.
+Examination of spread of erythema beyond previous markings.
 
-Surgical steps
-General anaesthetic.
-Patient positioning, supine in this case with arm table and arm tourniquet
-The needed instruments and sets are: microscope, c-arm machine, hand set, K-wire set and micro set, the surgery starts by marking the veins. 
-Washout with saline. 
-Exploration of the amputated parts through mid lateral incisions with tagging of the structures in addition to exploration of the hand in the same fashion. 
-Nibbling of the bone ends. 
-Osteosynthesis or shortening as required
-Repair of the tendons first using 4 strand technique then either the nerves then the vessels or the opposite.
+These are points a strong candidate would mention but are not required to pass.
 
-Post-operative care
-Hand elevation
-Keeping the hand warm
-Monitor the urine output with the aim of at least 0.5 ml/Kg/hour
-hourly obs
-hand therapy to begin within 3-5 days
+END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
+[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+
+Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
+
+Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
+
+END OF AUTHOR NOTE]
