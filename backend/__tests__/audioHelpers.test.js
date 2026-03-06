@@ -37,6 +37,16 @@ describe('isNoiseTranscript', () => {
     expect(isNoiseTranscript('ah')).toBe(true);
   });
 
+  test('returns true for filler sounds with dots and ellipsis', () => {
+    expect(isNoiseTranscript('Um...')).toBe(true);
+    expect(isNoiseTranscript('um...')).toBe(true);
+    expect(isNoiseTranscript('Um…')).toBe(true);
+    expect(isNoiseTranscript('Uh...')).toBe(true);
+    expect(isNoiseTranscript('Er...')).toBe(true);
+    expect(isNoiseTranscript('Hmm...')).toBe(true);
+    expect(isNoiseTranscript('Mm...')).toBe(true);
+  });
+
   test('returns false for short valid responses (okay, ok)', () => {
     expect(isNoiseTranscript('okay')).toBe(false);
     expect(isNoiseTranscript('ok')).toBe(false);
