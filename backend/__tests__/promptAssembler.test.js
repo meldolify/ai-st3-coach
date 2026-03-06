@@ -175,7 +175,7 @@ describe('buildFeedbackPrompt - modular assembly', () => {
 
     const prompt = buildFeedbackPrompt('easy', 'clinical/emergencies/necrotising_fasciitis');
     expect(prompt.length).toBeGreaterThan(100);
-    expect(prompt).toContain('===SECTION_1===');
+    expect(prompt).toContain('plastic surgery');
     expect(prompt).toContain('Necrotising Fasciitis');
   });
 

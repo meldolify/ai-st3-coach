@@ -16,11 +16,6 @@
     <option value="">Loading topics...</option>
   </select>
   <div class="pl-header-controls">
-    <select id="difficultySelect" class="pl-select">
-      <option value="easy">Easy</option>
-      <option value="medium">Medium</option>
-      <option value="strict">Strict</option>
-    </select>
     <button id="newSessionBtn" class="pl-btn pl-btn-primary">New Session</button>
     <button id="savePromptBtn" class="pl-btn">Save Prompt</button>
     <button id="createPrBtn" class="pl-btn" style="display: none;">Create PR <span id="changeCount"></span></button>
@@ -35,9 +30,15 @@
   <section class="pl-panel">
     <div class="pl-tabs">
       <button class="pl-tab active" data-tab="core">Core <span class="pl-badge-shared">shared</span></button>
-      <button class="pl-tab" data-tab="difficulty">Difficulty <span class="pl-badge-shared">shared</span></button>
+      <button class="pl-tab" data-tab="difficulty">Personality <span class="pl-badge-shared">shared</span></button>
       <button class="pl-tab" data-tab="clinical">Clinical</button>
       <button class="pl-tab" data-tab="feedback">Feedback <span class="pl-badge-shared">shared</span></button>
+      <button class="pl-tab" data-tab="feedbackPersonality">Fb.Personality <span class="pl-badge-shared">shared</span></button>
+      <select id="difficultySelect" class="pl-tab-select">
+        <option value="easy">Easy</option>
+        <option value="medium">Medium</option>
+        <option value="strict">Strict</option>
+      </select>
     </div>
     <div class="pl-editor-wrap">
       <textarea id="promptEditor" class="pl-editor" placeholder="Loading prompt..."></textarea>
@@ -209,10 +210,10 @@ const api = {
     return this._fetch('/feedback-prompt/' + difficulty + '?topic=' + encodeURIComponent(topic));
   },
 
-  saveFeedbackPrompt(difficulty, content, topic) {
+  saveFeedbackPrompt(difficulty, body, topic) {
     return this._fetch('/feedback-prompt/' + difficulty + '?topic=' + encodeURIComponent(topic), {
       method: 'PUT',
-      body: JSON.stringify({ content }),
+      body: JSON.stringify(body),
     });
   },
 
@@ -266,8 +267,10 @@ let state = {
   loading: false,
   promptSections: { core: '', difficulty: '', clinical: '' },
   feedbackPrompt: '',
+  feedbackPersonality: '',
   savedSections: null,
   savedFeedback: null,
+  savedFeedbackPersonality: null,
   dirtySections: new Set(), // tracks which sections were edited since last load/save
   githubEnabled: false,
   pendingChanges: 0,
@@ -363,12 +366,15 @@ function getFeedbackFilename() {
 
 function getEditorContent() {
   if (state.activeTab === 'feedback') return state.feedbackPrompt;
+  if (state.activeTab === 'feedbackPersonality') return state.feedbackPersonality;
   return state.promptSections[state.activeTab] || '';
 }
 
 function setEditorContent(text) {
   if (state.activeTab === 'feedback') {
     state.feedbackPrompt = text;
+  } else if (state.activeTab === 'feedbackPersonality') {
+    state.feedbackPersonality = text;
   } else {
     state.promptSections[state.activeTab] = text;
   }
@@ -391,6 +397,8 @@ function updateFilePath() {
   let p = '';
   if (tab === 'feedback') {
     p = state.feedbackPath || '';
+  } else if (tab === 'feedbackPersonality') {
+    p = state.feedbackPersonalityPath || '';
   } else if (state.promptPaths[tab]) {
     p = state.promptPaths[tab];
   }
@@ -409,6 +417,11 @@ function saveToLocalStorage() {
   const d = state.difficulty;
   localStorage.setItem(localStorageKey('sections', d), JSON.stringify(state.promptSections));
   localStorage.setItem(localStorageKey('feedback', d), state.feedbackPrompt);
+}
+
+function clearLocalStorage(difficulty) {
+  localStorage.removeItem(localStorageKey('sections', difficulty));
+  localStorage.removeItem(localStorageKey('feedback', difficulty));
 }
 
 function loadFromLocalStorage(difficulty) {
@@ -431,31 +444,21 @@ async function loadPrompt() {
       const fb = await api.loadFeedbackPrompt(state.difficulty, state.topic);
       state.savedFeedback = fb.content;
       state.feedbackPath = fb.path || '';
+      state.savedFeedbackPersonality = fb.personalityContent || '';
+      state.feedbackPersonalityPath = fb.personalityPath || '';
     } catch (e) {
       state.savedFeedback = '';
       state.feedbackPath = '';
+      state.savedFeedbackPersonality = '';
+      state.feedbackPersonalityPath = '';
     }
 
-    // Check localStorage for unsaved edits
-    const local = loadFromLocalStorage(state.difficulty);
-    if (local) {
-      const serverJson = JSON.stringify(data.sections);
-      const localJson = JSON.stringify(local.sections);
-      if (localJson !== serverJson || local.feedback !== state.savedFeedback) {
-        // Local edits differ from server — use local version
-        state.promptSections = local.sections;
-        state.feedbackPrompt = local.feedback;
-        syncStateToEditor();
-        setStatus('Restored local edits (unsaved)');
-        return;
-      }
-    }
-
-    // No local edits — use server version
+    // Use server version
     state.promptSections = { ...data.sections };
     state.promptPaths = data.paths || {};
     state.promptSource = data.source || 'unknown';
     state.feedbackPrompt = state.savedFeedback;
+    state.feedbackPersonality = state.savedFeedbackPersonality;
     syncStateToEditor();
     updateFilePath();
     setStatus('Prompt loaded (' + state.promptSource + ')');
@@ -491,9 +494,10 @@ async function savePrompt() {
         hasDirtyPromptSections = true;
       }
     }
-    const hasDirtyFeedback = state.dirtySections.has('feedback') && state.feedbackPrompt !== state.savedFeedback;
+    const hasDirtyFeedback = state.dirtySections.has('feedback');
+    const hasDirtyFbPersonality = state.dirtySections.has('feedbackPersonality');
 
-    if (!hasDirtyPromptSections && !hasDirtyFeedback) {
+    if (!hasDirtyPromptSections && !hasDirtyFeedback && !hasDirtyFbPersonality) {
       setStatus('No changes to save');
       showToast('No changes to save', 'info');
       return;
@@ -505,9 +509,14 @@ async function savePrompt() {
     }
     state.savedSections = { ...state.promptSections };
 
-    if (hasDirtyFeedback) {
-      await api.saveFeedbackPrompt(state.difficulty, state.feedbackPrompt, state.topic);
-      state.savedFeedback = state.feedbackPrompt;
+    if (hasDirtyFeedback || hasDirtyFbPersonality) {
+      const fbBody = {};
+      if (hasDirtyFeedback) fbBody.content = state.feedbackPrompt;
+      if (hasDirtyFbPersonality) fbBody.personalityContent = state.feedbackPersonality;
+      const fbResult = await api.saveFeedbackPrompt(state.difficulty, fbBody, state.topic);
+      if (hasDirtyFeedback) state.savedFeedback = state.feedbackPrompt;
+      if (hasDirtyFbPersonality) state.savedFeedbackPersonality = state.feedbackPersonality;
+      if (!result.committed && fbResult.committed) result = fbResult;
     }
 
     state.dirtySections.clear();
@@ -534,6 +543,8 @@ function revertPrompt() {
   state.dirtySections.delete(state.activeTab);
   if (state.activeTab === 'feedback') {
     state.feedbackPrompt = state.savedFeedback || '';
+  } else if (state.activeTab === 'feedbackPersonality') {
+    state.feedbackPersonality = state.savedFeedbackPersonality || '';
   } else if (state.savedSections) {
     state.promptSections[state.activeTab] = state.savedSections[state.activeTab] || '';
   }
@@ -1146,10 +1157,11 @@ topicSelect.addEventListener('change', () => {
 });
 
 difficultySelect.addEventListener('change', () => {
-  // Save current edits before switching difficulty
   syncEditorToState();
   saveToLocalStorage();
   state.difficulty = difficultySelect.value;
+  // Clear stale localStorage for new difficulty so server data loads fresh
+  clearLocalStorage(state.difficulty);
   loadPrompt();
 });
 
