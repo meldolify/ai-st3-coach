@@ -24,7 +24,7 @@ Initial Management
 "How would you counsel the patient about their injury and the expected recovery outcomes?"
 
 Definitive Management
-"What surgical intervention does this patient need?"
+"What are the indications for attempting a replant in this case?"
 "What order would you repair the different structures in?"
 "Can you walk me through the steps of the operation"
 "How would you monitor the patient post-operatively?"
