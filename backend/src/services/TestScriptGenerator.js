@@ -329,14 +329,17 @@ async function generateTestScript(testType, topicPath, difficulty) {
   });
 
   // 5. Parse JSON from response (handle possible markdown fences)
-  let jsonStr = response;
-  const fenceMatch = response.match(/```(?:json)?\s*([\s\S]*?)```/);
+  let jsonStr = response.trim();
+  const fenceMatch = jsonStr.match(/```(?:json)?\s*([\s\S]*?)```/);
   if (fenceMatch) {
-    jsonStr = fenceMatch[1];
-  } else {
-    const braceMatch = response.match(/\{[\s\S]*\}/);
-    if (braceMatch) {
-      jsonStr = braceMatch[0];
+    jsonStr = fenceMatch[1].trim();
+  }
+  // Always try brace extraction as fallback (covers partial fences, extra text around JSON)
+  if (!jsonStr.startsWith('{')) {
+    const braceStart = jsonStr.indexOf('{');
+    const braceEnd = jsonStr.lastIndexOf('}');
+    if (braceStart !== -1 && braceEnd > braceStart) {
+      jsonStr = jsonStr.substring(braceStart, braceEnd + 1);
     }
   }
 
