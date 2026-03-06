@@ -21,7 +21,6 @@ Investigations
 "Would you consider any imaging?"
 
 Initial Management
-"How would you stabilise this patient initially?"
 "How would you counsel the patient about their injury and the expected recovery outcomes?"
 
 Definitive Management
