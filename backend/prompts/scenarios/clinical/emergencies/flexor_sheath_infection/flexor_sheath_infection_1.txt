@@ -55,14 +55,6 @@ ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
-
-Each point should be a short statement of the expected answer.
-
-Example from Necrotising Fasciitis:
-
 Diagnosis and urgency
 Flexor sheath infection or flexor tenosynovitis which is a clinical emergency.
 
@@ -93,8 +85,6 @@ BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-
-Example from Necrotising Fasciitis:
 
 Making sure that the patient is hemodynamically stable and rule out sepsis.
 
