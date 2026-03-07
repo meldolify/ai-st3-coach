@@ -10,51 +10,31 @@ CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
 
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
+"This is a 34 year old man who was gardening over the weekend. He doesn't recall any specific injury. Yesterday he started to notice that his finger is swollen and painful. You were asked to review this patient in the emergency department."
 
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
-
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
-
-Format them under stage headings exactly like this:
-
 Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
+"What would you assess this patient?"
+"What are the main points of your history and examination?"
 
 Investigations
 "What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
+"What investigations would you like to request?"
 
 Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
+"What would be your initial management?"
+"How would you manage this patient?"
 
 Definitive Management
-"What surgical intervention does this patient need?"
+"What is your surgical plan?"
 "Can you walk me through the key steps of the operation?"
 
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
 
 MAIN CLINICAL DOMAINS
 
