@@ -10,6 +10,9 @@
   // Check for reduced motion preference
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  // Mobile detection for performance budgeting (disable expensive scroll effects)
+  const isMobile = window.innerWidth < 768;
+
   // ============================================================
   // LENIS SMOOTH SCROLL
   // ============================================================
@@ -139,6 +142,7 @@
 
   function initHeroParallax() {
     if (prefersReducedMotion) return;
+    if (isMobile) return; // Leaves hidden on mobile, assets simplified — no parallax needed
 
     // Leaf parallax on scroll
     document.querySelectorAll('.hero-leaf').forEach(function (leaf) {
@@ -194,19 +198,21 @@
       return;
     }
 
-    // Clip-path circle expand reveal
-    gsap.fromTo('.section-who',
-      { clipPath: 'circle(0% at 50% 50%)' },
-      {
-        clipPath: 'circle(150% at 50% 50%)',
-        scrollTrigger: {
-          trigger: '.section-who',
-          start: 'top 80%',
-          end: 'top 20%',
-          scrub: 0.5
+    // Clip-path circle expand reveal (desktop only — expensive on mobile GPUs)
+    if (!isMobile) {
+      gsap.fromTo('.section-who',
+        { clipPath: 'circle(0% at 50% 50%)' },
+        {
+          clipPath: 'circle(150% at 50% 50%)',
+          scrollTrigger: {
+            trigger: '.section-who',
+            start: 'top 80%',
+            end: 'top 20%',
+            scrub: 0.5
+          }
         }
-      }
-    );
+      );
+    }
 
     // Display lines slide in from left after clip opens
     gsap.from('.section-who .display-line', {
@@ -260,6 +266,24 @@
     var phases = section.querySelectorAll('.why-phase');
     if (phases.length < 3) return;
 
+    if (isMobile) {
+      // Mobile: simple stacked fade-in per phase (no pinning — causes scroll freeze)
+      gsap.from(phases[0], {
+        opacity: 0, y: 30, duration: 0.6,
+        scrollTrigger: { trigger: phases[0], start: 'top 80%', toggleActions: 'play none none none' }
+      });
+      gsap.from(phases[1], {
+        opacity: 0, y: 30, duration: 0.6,
+        scrollTrigger: { trigger: phases[1], start: 'top 80%', toggleActions: 'play none none none' }
+      });
+      gsap.from(phases[2], {
+        opacity: 0, y: 30, duration: 0.6,
+        scrollTrigger: { trigger: phases[2], start: 'top 80%', toggleActions: 'play none none none' }
+      });
+      return;
+    }
+
+    // Desktop: pinned timeline with phase transitions
     // Set initial state: phases 2 & 3 hidden
     gsap.set(phases[1], { opacity: 0, y: 30 });
     gsap.set(phases[2], { opacity: 0, y: 30 });
@@ -301,35 +325,45 @@
   function initSectionTrust() {
     if (prefersReducedMotion) return;
 
-    // Parallax text strip — moves left as user scrolls down
-    gsap.to('.trust-strip', {
-      x: '-30%',
-      scrollTrigger: {
-        trigger: '.section-trust',
-        start: 'top bottom',
-        end: 'bottom top',
-        scrub: 0.3
-      }
-    });
+    // Parallax text strip — moves left as user scrolls down (desktop only)
+    if (!isMobile) {
+      gsap.to('.trust-strip', {
+        x: '-30%',
+        scrollTrigger: {
+          trigger: '.section-trust',
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 0.3
+        }
+      });
+    }
 
     // Word-by-word reveal with blur-to-sharp effect
     var trustDisplay = document.querySelector('.trust-display');
-    if (trustDisplay && typeof SplitType !== 'undefined') {
-      var split = new SplitType(trustDisplay, { types: 'words', tagName: 'span' });
-      gsap.from(split.words, {
-        opacity: 0,
-        y: 20,
-        filter: 'blur(4px)',
-        duration: 0.6,
-        stagger: 0.04,
-        ease: 'power2.out',
-        scrollTrigger: {
-          trigger: trustDisplay,
-          start: 'top 70%',
-          end: 'top 30%',
-          scrub: 0.5
-        }
-      });
+    if (trustDisplay) {
+      if (isMobile) {
+        // Mobile: simple fade-up (word-by-word blur is too expensive)
+        gsap.from(trustDisplay, {
+          opacity: 0, y: 30, duration: 0.8,
+          scrollTrigger: { trigger: trustDisplay, start: 'top 70%', toggleActions: 'play none none none' }
+        });
+      } else if (typeof SplitType !== 'undefined') {
+        var split = new SplitType(trustDisplay, { types: 'words', tagName: 'span' });
+        gsap.from(split.words, {
+          opacity: 0,
+          y: 20,
+          filter: 'blur(4px)',
+          duration: 0.6,
+          stagger: 0.04,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: trustDisplay,
+            start: 'top 70%',
+            end: 'top 30%',
+            scrub: 0.5
+          }
+        });
+      }
     }
 
     // Trust cards staggered entrance
@@ -351,16 +385,18 @@
   function initSectionServices() {
     if (prefersReducedMotion) return;
 
-    // Title clip-path reveal from left
-    gsap.from('.services-title', {
-      clipPath: 'inset(0 100% 0 0)',
-      scrollTrigger: {
-        trigger: '.services-title',
-        start: 'top 85%',
-        end: 'top 60%',
-        scrub: 0.5
-      }
-    });
+    if (!isMobile) {
+      // Title clip-path reveal from left (desktop only)
+      gsap.from('.services-title', {
+        clipPath: 'inset(0 100% 0 0)',
+        scrollTrigger: {
+          trigger: '.services-title',
+          start: 'top 85%',
+          end: 'top 60%',
+          scrub: 0.5
+        }
+      });
+    }
 
     // Services title scale entrance
     gsap.from('.services-title .display-line', {
@@ -377,27 +413,35 @@
       }
     });
 
-    // Each card reveals from a different corner via clip-path
-    var clipDirections = [
-      'inset(0 100% 100% 0)',     // top-left
-      'inset(0 0 100% 100%)',     // top-right
-      'inset(100% 100% 0 0)',     // bottom-left
-      'inset(100% 0 0 100%)',     // bottom-right
-      'inset(50% 50% 50% 50%)',   // center
-      'inset(50% 50% 50% 50%)'    // center
-    ];
-
-    document.querySelectorAll('.service-card').forEach(function (card, i) {
-      gsap.from(card, {
-        clipPath: clipDirections[i] || clipDirections[4],
-        scrollTrigger: {
-          trigger: card,
-          start: 'top 85%',
-          end: 'top 55%',
-          scrub: 0.5
-        }
+    if (isMobile) {
+      // Mobile: simple fade-up for cards (no clip-path)
+      gsap.from('.service-card', {
+        opacity: 0, y: 40, duration: 0.6, stagger: 0.1,
+        scrollTrigger: { trigger: '.services-grid', start: 'top 80%', toggleActions: 'play none none none' }
       });
-    });
+    } else {
+      // Desktop: each card reveals from a different corner via clip-path
+      var clipDirections = [
+        'inset(0 100% 100% 0)',     // top-left
+        'inset(0 0 100% 100%)',     // top-right
+        'inset(100% 100% 0 0)',     // bottom-left
+        'inset(100% 0 0 100%)',     // bottom-right
+        'inset(50% 50% 50% 50%)',   // center
+        'inset(50% 50% 50% 50%)'    // center
+      ];
+
+      document.querySelectorAll('.service-card').forEach(function (card, i) {
+        gsap.from(card, {
+          clipPath: clipDirections[i] || clipDirections[4],
+          scrollTrigger: {
+            trigger: card,
+            start: 'top 85%',
+            end: 'top 55%',
+            scrub: 0.5
+          }
+        });
+      });
+    }
   }
 
   function initSectionProof() {
@@ -405,13 +449,15 @@
 
     // Entire content zooms from 80% to 100% scale
     gsap.from('.section-proof-content', {
-      scale: 0.8,
+      scale: isMobile ? 0.95 : 0.8,
       opacity: 0.5,
+      duration: 0.8,
       scrollTrigger: {
         trigger: '.section-proof',
         start: 'top 70%',
-        end: 'top 10%',
-        scrub: 0.8
+        ...(isMobile
+          ? { toggleActions: 'play none none none' }
+          : { end: 'top 10%', scrub: 0.8 })
       }
     });
   }
@@ -419,29 +465,36 @@
   function initSectionAction() {
     if (prefersReducedMotion) return;
 
-    // Left content enters from left
-    gsap.from('.action-left', {
-      x: -80,
-      opacity: 0,
-      scrollTrigger: {
-        trigger: '.section-action',
-        start: 'top 70%',
-        end: 'top 30%',
-        scrub: 0.5
-      }
-    });
+    if (isMobile) {
+      // Mobile: simple fade-up (no horizontal scrub)
+      gsap.from('.action-left, .action-right', {
+        opacity: 0, y: 30, duration: 0.6, stagger: 0.15,
+        scrollTrigger: { trigger: '.section-action', start: 'top 75%', toggleActions: 'play none none none' }
+      });
+    } else {
+      // Desktop: left/right entrance with scrub
+      gsap.from('.action-left', {
+        x: -80,
+        opacity: 0,
+        scrollTrigger: {
+          trigger: '.section-action',
+          start: 'top 70%',
+          end: 'top 30%',
+          scrub: 0.5
+        }
+      });
 
-    // Right content enters from right
-    gsap.from('.action-right', {
-      x: 80,
-      opacity: 0,
-      scrollTrigger: {
-        trigger: '.section-action',
-        start: 'top 65%',
-        end: 'top 25%',
-        scrub: 0.5
-      }
-    });
+      gsap.from('.action-right', {
+        x: 80,
+        opacity: 0,
+        scrollTrigger: {
+          trigger: '.section-action',
+          start: 'top 65%',
+          end: 'top 25%',
+          scrub: 0.5
+        }
+      });
+    }
 
     // Premium variant (centered) fades up
     gsap.from('.action-premium', {
@@ -467,16 +520,18 @@
       }
     });
 
-    // Footer parallax reveal — content inside slides up slightly as revealed
-    gsap.from('.section-footer .footer-grid', {
-      y: 40,
-      scrollTrigger: {
-        trigger: '.section-footer',
-        start: 'top bottom',
-        end: 'top 50%',
-        scrub: 0.5
-      }
-    });
+    // Footer parallax reveal — content inside slides up slightly as revealed (desktop only)
+    if (!isMobile) {
+      gsap.from('.section-footer .footer-grid', {
+        y: 40,
+        scrollTrigger: {
+          trigger: '.section-footer',
+          start: 'top bottom',
+          end: 'top 50%',
+          scrub: 0.5
+        }
+      });
+    }
   }
 
   function initMagneticButtons() {

@@ -126,6 +126,24 @@
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setClearColor(0x000000, 0);
 
+  // Ensure canvas is visible (it now lives outside #landingPage)
+  canvas.style.display = 'block';
+
+  // Handle WebGL context loss (common on Mac GPU driver resets)
+  canvas.addEventListener('webglcontextlost', function (e) {
+    e.preventDefault();
+    console.warn('[LANDING-3D] WebGL context lost');
+    if (animationId) {
+      cancelAnimationFrame(animationId);
+      animationId = null;
+    }
+  }, false);
+
+  canvas.addEventListener('webglcontextrestored', function () {
+    console.log('[LANDING-3D] WebGL context restored');
+    animate();
+  }, false);
+
   // Main displaced mesh
   var geometry = new THREE.IcosahedronGeometry(2, 64);
   var material = new THREE.ShaderMaterial({
@@ -214,8 +232,20 @@
     renderer.render(scene, camera);
   }
 
-  animate();
-  console.log('[LANDING-3D] Three.js scene initialized');
+  // Guard: defer if canvas has zero dimensions (e.g. page not yet visible)
+  if (canvas.width === 0 || canvas.height === 0) {
+    console.warn('[LANDING-3D] Canvas has zero dimensions, deferring init');
+    setTimeout(function () {
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      if (canvas.width > 0 && canvas.height > 0) {
+        animate();
+        console.log('[LANDING-3D] Three.js scene initialized (deferred)');
+      }
+    }, 500);
+  } else {
+    animate();
+    console.log('[LANDING-3D] Three.js scene initialized');
+  }
 
   // ============================================================
   // RESIZE
@@ -247,6 +277,7 @@
     if (wireMat) wireMat.dispose();
     scene = null;
     canvas.style.opacity = '0';
+    canvas.style.display = 'none';
     console.log('[LANDING-3D] Three.js scene destroyed');
   };
 })();
