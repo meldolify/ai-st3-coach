@@ -1061,12 +1061,22 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 60vw;
-    height: 60vw;
+    width: 70vw;
+    height: 70vw;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(74, 93, 76, 0.08) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(74, 93, 76, 0.15) 0%, rgba(74, 93, 76, 0.05) 50%, transparent 70%);
     pointer-events: none;
     z-index: 0;
+  }
+
+  /* On touch devices, why-phases must stack vertically (not overlay) */
+  #landingPage .why-phase {
+    position: relative;
+    inset: auto;
+  }
+
+  #landingPage .why-phases {
+    overflow: visible;
   }
 }
 
