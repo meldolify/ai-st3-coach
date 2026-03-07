@@ -334,7 +334,8 @@ async function generateTestScript(testType, topicPath, difficulty) {
   // 4. Call LLM
   const response = await openaiService.generateResponse([{ role: 'user', content: metaPrompt }], {
     temperature: 0.7,
-    max_tokens: 2500
+    max_tokens: 2500,
+    response_format: { type: 'json_object' }
   });
 
   // 5. Parse JSON from response (strip markdown fences, extract JSON object)
