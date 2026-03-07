@@ -391,16 +391,15 @@ async function generateTestScript(testType, topicPath, difficulty) {
     jsonStr = jsonStr.substring(braceStart, braceEnd + 1);
   }
 
+  // Always repair newlines inside strings before parsing (Gemini frequently does this)
+  jsonStr = repairJsonNewlines(jsonStr);
+
   let script;
   try {
     script = JSON.parse(jsonStr);
-  } catch (firstErr) {
-    // Repair literal newlines inside JSON string values and retry
-    try {
-      script = JSON.parse(repairJsonNewlines(jsonStr));
-    } catch (parseErr) {
-      throw new Error('LLM returned invalid JSON for test script: ' + parseErr.message);
-    }
+  } catch (parseErr) {
+    console.error('[TEST-GEN] JSON parse failed. First 500 chars:', jsonStr.substring(0, 500));
+    throw new Error('LLM returned invalid JSON for test script: ' + parseErr.message);
   }
 
   // 6. Inject universal assertions (prepend so they come first)
