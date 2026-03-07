@@ -156,6 +156,9 @@
   </header>
 
   <!-- Landing Page (shown to unauthenticated users) -->
+  <!-- Three.js Canvas (outside #landingPage to avoid overflow-x containment breaking position:fixed) -->
+  <canvas id="landingCanvas" aria-hidden="true" role="presentation"></canvas>
+
   <div id="landingPage" class="page">
     <!-- Custom cursor follower (desktop only) -->
     <div class="cursor-follower" id="cursorFollower" aria-hidden="true"></div>
@@ -167,9 +170,6 @@
       </filter>
       <rect width="100%" height="100%" filter="url(#grain)"/>
     </svg>
-
-    <!-- Three.js Canvas Container -->
-    <canvas id="landingCanvas" aria-hidden="true" role="presentation"></canvas>
 
     <!-- Navigation -->
     <nav class="landing-nav-new" id="landingNav">
