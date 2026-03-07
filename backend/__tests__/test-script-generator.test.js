@@ -369,3 +369,35 @@ describe('TestScriptGenerator - generateTestScript', () => {
     ).rejects.toThrow('invalid JSON');
   });
 });
+
+// ──────────────────────────────────────────
+// repairJsonNewlines
+// ──────────────────────────────────────────
+
+describe('TestScriptGenerator - repairJsonNewlines', () => {
+  const { repairJsonNewlines } = testScriptGenerator;
+
+  test('fixes literal newlines inside JSON string values', () => {
+    const broken = '{"name": "line1\nline2", "count": 1}';
+    const result = repairJsonNewlines(broken);
+    expect(JSON.parse(result)).toEqual({ name: 'line1\nline2', count: 1 });
+  });
+
+  test('preserves structural newlines between JSON elements', () => {
+    const valid = '{\n  "name": "hello",\n  "count": 1\n}';
+    const result = repairJsonNewlines(valid);
+    expect(JSON.parse(result)).toEqual({ name: 'hello', count: 1 });
+  });
+
+  test('handles already-escaped newlines correctly', () => {
+    const valid = '{"name": "line1\\nline2"}';
+    const result = repairJsonNewlines(valid);
+    expect(JSON.parse(result)).toEqual({ name: 'line1\nline2' });
+  });
+
+  test('strips carriage returns inside strings', () => {
+    const broken = '{"name": "line1\r\nline2"}';
+    const result = repairJsonNewlines(broken);
+    expect(JSON.parse(result)).toEqual({ name: 'line1\nline2' });
+  });
+});
