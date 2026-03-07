@@ -203,7 +203,7 @@
       gsap.set('.section-who', { clipPath: 'none' });
       gsap.from('.section-who .display-line, .section-who .who-body, .who-photo-wrapper', {
         opacity: 0, y: 30, duration: 0.8, stagger: 0.1,
-        scrollTrigger: { trigger: '.section-who', start: 'top 80%', toggleActions: 'play none none none' }
+        scrollTrigger: { trigger: '.section-who', start: 'top 95%', toggleActions: 'play none none none' }
       });
       return;
     }
@@ -279,7 +279,7 @@
       phases.forEach(function(phase) {
         gsap.from(phase, {
           opacity: 0, y: 30, duration: 0.8,
-          scrollTrigger: { trigger: phase, start: 'top 85%', toggleActions: 'play none none none' }
+          scrollTrigger: { trigger: phase, start: 'top 95%', toggleActions: 'play none none none' }
         });
       });
       return;
@@ -329,7 +329,7 @@
     if (isTouch) {
       gsap.from('.trust-card', {
         opacity: 0, y: 40, duration: 0.6, stagger: 0.1,
-        scrollTrigger: { trigger: '.trust-cards', start: 'top 85%', toggleActions: 'play none none none' }
+        scrollTrigger: { trigger: '.trust-cards', start: 'top 95%', toggleActions: 'play none none none' }
       });
       return;
     }
@@ -387,7 +387,7 @@
     if (isTouch) {
       gsap.from('.service-card', {
         opacity: 0, y: 30, duration: 0.6, stagger: 0.1,
-        scrollTrigger: { trigger: '.services-grid', start: 'top 85%', toggleActions: 'play none none none' }
+        scrollTrigger: { trigger: '.services-grid', start: 'top 95%', toggleActions: 'play none none none' }
       });
       return;
     }
@@ -447,7 +447,7 @@
     if (isTouch) {
       gsap.from('.section-proof-content', {
         opacity: 0, y: 30, duration: 0.8,
-        scrollTrigger: { trigger: '.section-proof', start: 'top 85%', toggleActions: 'play none none none' }
+        scrollTrigger: { trigger: '.section-proof', start: 'top 95%', toggleActions: 'play none none none' }
       });
       return;
     }
@@ -471,11 +471,11 @@
     if (isTouch) {
       gsap.from('.action-left, .action-right, .action-premium', {
         opacity: 0, y: 30, duration: 0.8, stagger: 0.1,
-        scrollTrigger: { trigger: '.section-action', start: 'top 85%', toggleActions: 'play none none none' }
+        scrollTrigger: { trigger: '.section-action', start: 'top 95%', toggleActions: 'play none none none' }
       });
       gsap.from('.section-footer .footer-grid, .section-footer .footer-bottom', {
         opacity: 0, y: 30, duration: 0.8, stagger: 0.15,
-        scrollTrigger: { trigger: '.section-footer', start: 'top 85%', toggleActions: 'play none none none' }
+        scrollTrigger: { trigger: '.section-footer', start: 'top 95%', toggleActions: 'play none none none' }
       });
       return;
     }
