@@ -10,6 +10,9 @@
   // Check for reduced motion preference
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  // Touch device detection — covers phones, tablets, iPads regardless of screen size
+  const isTouch = window.matchMedia('(hover: none)').matches;
+
   // ============================================================
   // LENIS SMOOTH SCROLL
   // ============================================================
@@ -139,6 +142,7 @@
 
   function initHeroParallax() {
     if (prefersReducedMotion) return;
+    if (isTouch) return; // Leaves hidden via CSS, assets reduced — skip parallax
 
     // Leaf parallax on scroll
     document.querySelectorAll('.hero-leaf').forEach(function (leaf) {
@@ -175,6 +179,7 @@
 
   function initHeroTransition() {
     if (prefersReducedMotion) return;
+    if (isTouch) return; // Skip scrub-based hero fade on touch
 
     gsap.to('#sectionHero .hero-logged-out, #sectionHero .hero-logged-in, #sectionHero .hero-tableau', {
       y: -100,
@@ -191,6 +196,15 @@
   function initSectionWho() {
     if (prefersReducedMotion) {
       gsap.set('.section-who', { clipPath: 'none' });
+      return;
+    }
+
+    if (isTouch) {
+      gsap.set('.section-who', { clipPath: 'none' });
+      gsap.from('.section-who .display-line, .section-who .who-body, .who-photo-wrapper', {
+        opacity: 0, y: 30, duration: 0.8, stagger: 0.1,
+        scrollTrigger: { trigger: '.section-who', start: 'top 80%', toggleActions: 'play none none none' }
+      });
       return;
     }
 
@@ -260,6 +274,17 @@
     var phases = section.querySelectorAll('.why-phase');
     if (phases.length < 3) return;
 
+    if (isTouch) {
+      // No pinning — phases stack vertically and scroll naturally
+      phases.forEach(function(phase) {
+        gsap.from(phase, {
+          opacity: 0, y: 30, duration: 0.8,
+          scrollTrigger: { trigger: phase, start: 'top 85%', toggleActions: 'play none none none' }
+        });
+      });
+      return;
+    }
+
     // Set initial state: phases 2 & 3 hidden
     gsap.set(phases[1], { opacity: 0, y: 30 });
     gsap.set(phases[2], { opacity: 0, y: 30 });
@@ -300,6 +325,14 @@
 
   function initSectionTrust() {
     if (prefersReducedMotion) return;
+
+    if (isTouch) {
+      gsap.from('.trust-card', {
+        opacity: 0, y: 40, duration: 0.6, stagger: 0.1,
+        scrollTrigger: { trigger: '.trust-cards', start: 'top 85%', toggleActions: 'play none none none' }
+      });
+      return;
+    }
 
     // Parallax text strip — moves left as user scrolls down
     gsap.to('.trust-strip', {
@@ -350,6 +383,14 @@
 
   function initSectionServices() {
     if (prefersReducedMotion) return;
+
+    if (isTouch) {
+      gsap.from('.service-card', {
+        opacity: 0, y: 30, duration: 0.6, stagger: 0.1,
+        scrollTrigger: { trigger: '.services-grid', start: 'top 85%', toggleActions: 'play none none none' }
+      });
+      return;
+    }
 
     // Title clip-path reveal from left
     gsap.from('.services-title', {
@@ -403,6 +444,14 @@
   function initSectionProof() {
     if (prefersReducedMotion) return;
 
+    if (isTouch) {
+      gsap.from('.section-proof-content', {
+        opacity: 0, y: 30, duration: 0.8,
+        scrollTrigger: { trigger: '.section-proof', start: 'top 85%', toggleActions: 'play none none none' }
+      });
+      return;
+    }
+
     // Entire content zooms from 80% to 100% scale
     gsap.from('.section-proof-content', {
       scale: 0.8,
@@ -418,6 +467,18 @@
 
   function initSectionAction() {
     if (prefersReducedMotion) return;
+
+    if (isTouch) {
+      gsap.from('.action-left, .action-right, .action-premium', {
+        opacity: 0, y: 30, duration: 0.8, stagger: 0.1,
+        scrollTrigger: { trigger: '.section-action', start: 'top 85%', toggleActions: 'play none none none' }
+      });
+      gsap.from('.section-footer .footer-grid, .section-footer .footer-bottom', {
+        opacity: 0, y: 30, duration: 0.8, stagger: 0.15,
+        scrollTrigger: { trigger: '.section-footer', start: 'top 85%', toggleActions: 'play none none none' }
+      });
+      return;
+    }
 
     // Left content enters from left
     gsap.from('.action-left', {
@@ -539,6 +600,7 @@
 
   function initDividers() {
     if (prefersReducedMotion) return;
+    if (isTouch) return; // Skip scrub-based divider animation on touch
 
     // Animated amber line between sections 3 and 4
     gsap.to('#dividerLine34', {
