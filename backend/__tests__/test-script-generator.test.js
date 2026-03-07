@@ -243,6 +243,12 @@ describe('TestScriptGenerator - hasRealContent', () => {
   test('returns false for invalid path', () => {
     expect(testScriptGenerator.hasRealContent('../../../etc/passwd')).toBe(false);
   });
+
+  test('returns false for template files with [AUTHOR NOTE] blocks', () => {
+    expect(testScriptGenerator.hasRealContent('clinical/hand_trauma/flexor_tendon_injury')).toBe(
+      false
+    );
+  });
 });
 
 // ──────────────────────────────────────────
