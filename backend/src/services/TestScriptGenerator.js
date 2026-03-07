@@ -125,7 +125,12 @@ function hasRealContent(topicPath) {
     const scenarioPath = resolveScenarioPath(topicPath);
     if (fs.existsSync(scenarioPath)) {
       const content = fs.readFileSync(scenarioPath, 'utf8');
-      return !!(content && !content.includes('[PLACEHOLDER') && content.trim().length > 100);
+      return !!(
+        content &&
+        !content.includes('[PLACEHOLDER') &&
+        !content.includes('[AUTHOR NOTE') &&
+        content.trim().length > 100
+      );
     }
 
     // Fallback: legacy monolithic file
@@ -311,7 +316,11 @@ async function generateTestScript(testType, topicPath, difficulty) {
     clinicalContent = sections.clinical;
   }
 
-  if (!clinicalContent || clinicalContent.includes('[PLACEHOLDER')) {
+  if (
+    !clinicalContent ||
+    clinicalContent.includes('[PLACEHOLDER') ||
+    clinicalContent.includes('[AUTHOR NOTE')
+  ) {
     throw new Error(`Scenario ${topicPath} has placeholder content — cannot generate test scripts`);
   }
 
