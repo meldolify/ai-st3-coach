@@ -111,6 +111,42 @@ function clearCache(topicPath) {
 }
 
 // ──────────────────────────────────────────
+// JSON REPAIR
+// ──────────────────────────────────────────
+
+function repairJsonNewlines(str) {
+  let result = '';
+  let inString = false;
+  let escaped = false;
+  for (let i = 0; i < str.length; i++) {
+    const ch = str[i];
+    if (escaped) {
+      result += ch;
+      escaped = false;
+      continue;
+    }
+    if (ch === '\\') {
+      result += ch;
+      escaped = true;
+      continue;
+    }
+    if (ch === '"') {
+      inString = !inString;
+      result += ch;
+      continue;
+    }
+    if (inString && (ch === '\n' || ch === '\r')) {
+      if (ch === '\n') {
+        result += '\\n';
+      }
+      continue;
+    }
+    result += ch;
+  }
+  return result;
+}
+
+// ──────────────────────────────────────────
 // PROMPT FILE ANALYSIS
 // ──────────────────────────────────────────
 
@@ -189,7 +225,13 @@ ASSERTION TYPES:
 - { type: "section_count", expected: N, desc: "..." } — number of feedback sections
 - { type: "feedback_contains", value: "text", desc: "..." } — feedback text contains value
 
-Turn numbers: Turn 1 = AI greeting. Turn 2 = AI reads case + opening question. Candidate's clinical responses start from turn 3+.`;
+Turn numbers: Turn 1 = AI greeting. Turn 2 = AI reads case + opening question. Candidate's clinical responses start from turn 3+.
+
+OUTPUT FORMAT:
+- Return ONLY a single raw JSON object. No markdown code fences, no backticks, no commentary before or after.
+- Every string value MUST be on a single line — no literal newlines inside any string.
+- Use proper JSON: double quotes for all keys and string values, no trailing commas.
+- The output must be valid JSON that parses with JSON.parse() directly.`;
 
   const typePrompts = {
     excellent_candidate: `Generate an EXCELLENT candidate test (expected score 4-5).
@@ -352,8 +394,13 @@ async function generateTestScript(testType, topicPath, difficulty) {
   let script;
   try {
     script = JSON.parse(jsonStr);
-  } catch (parseErr) {
-    throw new Error('LLM returned invalid JSON for test script: ' + parseErr.message);
+  } catch (firstErr) {
+    // Repair literal newlines inside JSON string values and retry
+    try {
+      script = JSON.parse(repairJsonNewlines(jsonStr));
+    } catch (parseErr) {
+      throw new Error('LLM returned invalid JSON for test script: ' + parseErr.message);
+    }
   }
 
   // 6. Inject universal assertions (prepend so they come first)
@@ -389,5 +436,6 @@ module.exports = {
   // Exported for testing
   validateGeneratedScript,
   buildGenerationPrompt,
-  extractScenarioTitle
+  extractScenarioTitle,
+  repairJsonNewlines
 };
