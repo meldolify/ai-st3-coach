@@ -205,15 +205,13 @@
 /* ---- Section 1: Hero ---- */
 #landingPage .section-hero {
   min-height: 100vh;
-  min-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
   flex-direction: column;
   position: relative;
-  /* Subtle fallback gradient if Three.js canvas fails; canvas overlays this */
-  background: radial-gradient(ellipse at 50% 40%, rgba(45, 90, 61, 0.06) 0%, transparent 70%);
+  background: transparent; /* let Three.js canvas (#landingCanvas) show through */
   overflow: hidden;
 }
 
@@ -361,7 +359,6 @@
 /* ---- Section 2: Who ---- */
 #landingPage .section-who {
   min-height: 100vh;
-  min-height: 100dvh;
   display: flex;
   align-items: center;
 }
@@ -420,7 +417,6 @@
 /* ---- Section 3: Why (pinned) ---- */
 #landingPage .section-why {
   min-height: 100vh;
-  min-height: 100dvh;
   display: grid;
   grid-template-columns: 40% 60%;
   align-items: center;
@@ -886,7 +882,6 @@
 
   #landingPage .section-hero {
     min-height: 90vh;
-    min-height: 90dvh;
   }
 
   #landingPage .hero-display {
@@ -981,23 +976,6 @@
 
   #landingCanvas {
     display: none;
-  }
-
-  /* Disable expensive clip-path animation on mobile */
-  #landingPage .section-who {
-    clip-path: none !important;
-  }
-
-  /* Disable pinning: phases stack vertically with simple fade-in */
-  #landingPage .section-why {
-    min-height: auto;
-    min-height: auto;
-  }
-
-  #landingPage .why-phase {
-    position: relative !important;
-    inset: auto !important;
-    opacity: 1 !important;
   }
 
   #landingPage .section-proof {
