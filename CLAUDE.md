@@ -373,6 +373,41 @@ UI Annotator at `frontend/tools/ui-annotator.html`:
 
 Features: 10 page tabs, priority-colored markers, persistent localStorage, markdown output. See `frontend/tools/README.md`.
 
+## Claude Code Plugins & Skills
+
+### Workflow Automation
+- **Dippy** — Auto-approves safe bash commands via AST analysis, blocks destructive ones. Hook in `~/.claude/settings.json` PreToolUse. Custom deny rules in `.dippy` project file.
+
+### Security Auditing (Trail of Bits)
+Use these skills for security reviews, dependency audits, and vulnerability scanning:
+- `/diff-review` — Security-focused code change review against git history
+- `/insecure-defaults` — Detect unsafe configs, embedded credentials, fail-open patterns
+- `/supply-chain-risk-auditor` — Evaluate dependency threats and supply chain risks
+- `/sharp-edges` — Flag error-prone APIs and risky configurations
+- `/static-analysis:semgrep` or `/static-analysis:codeql` — Static analysis scanning
+- `/variant-analysis` — Find similar vulnerabilities via pattern matching
+- `/fp-check` — Validate whether a security finding is a false positive
+
+### Development Lifecycle (levnikolaevich — 109 skills)
+Full Agile pipeline from planning through quality gates:
+- **Audits** (33 skills): `/ln-620-codebase-auditor` (coordinates 9 sub-auditors), `/ln-621-security-auditor`, `/ln-630-test-auditor`, `/ln-640-pattern-evolution-auditor`, `/ln-650-persistence-performance-auditor`
+- **Planning**: `/ln-200-scope-decomposer` (Epics → Stories), `/ln-230-story-prioritizer` (RICE scoring)
+- **Execution**: `/ln-400-story-executor` (automated implement → review → rework loops), `/ln-500-story-quality-gate` (PASS/CONCERNS/REWORK/FAIL verdicts)
+- **Bootstrap**: `/ln-700-project-bootstrap` (Clean Architecture migration), `/ln-710-dependency-upgrader`, `/ln-730-devops-setup`
+- **Docs**: `/ln-100-documents-pipeline` (auto-generate architecture, API specs, testing strategies)
+
+### Structured Planning
+- **ContextKit** — 4-phase planning system. `/ctxk:proj:init` to set up, then `/ctxk:plan:1-spec` → `/ctxk:plan:2-research-tech` → `/ctxk:plan:3-steps` → `/ctxk:impl:start-working`. Quick mode: `/ctxk:plan:quick`
+- **Context Engineering Kit** — `/sdd:brainstorm` (ideation), `/sdd:plan` (spec-driven with Arc42), `/sdd:implement` (automated LLM implementation), `/reflexion:critique` (multi-perspective review), `/reflexion:reflect` (self-refinement)
+
+### Multi-Session Masterplanning (Deep Plan Trilogy)
+For large features requiring cross-session planning:
+1. `/deep-project` — Decompose vague requirements into focused spec files
+2. `/deep-plan @path/to/spec.md` — Research → interview (5-10 Qs) → planning → external LLM review → TDD stubs + parallelizable sections
+3. `/deep-implement` — TDD execution from deep-plan sections
+
+Output persists in planning directory: `claude-plan.md`, `claude-interview.md`, `claude-research.md`, `sections/section-01-*.md` etc. Auto-resumes if interrupted. Optional: `GEMINI_API_KEY`/`OPENAI_API_KEY` for external review (falls back to Opus subagent).
+
 ## External Documentation
 
 - Google TTS: https://cloud.google.com/text-to-speech
