@@ -105,12 +105,16 @@ class OpenAIService {
 
     try {
       return await this._retryWithBackoff(async () => {
-        const completion = await client.chat.completions.create({
+        const params = {
           model: options.model || config.LLM_MODEL,
           messages: history,
           temperature: options.temperature ?? 0.7,
           max_tokens: options.max_tokens || 300
-        });
+        };
+        if (options.response_format) {
+          params.response_format = options.response_format;
+        }
+        const completion = await client.chat.completions.create(params);
         return completion.choices[0].message.content;
       }, config.LLM_MODEL);
     } catch (error) {
