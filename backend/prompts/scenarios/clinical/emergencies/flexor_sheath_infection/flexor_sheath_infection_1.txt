@@ -96,18 +96,25 @@ BONUS MARKING POINTS
 
 Example from Necrotising Fasciitis:
 
+Making sure that the patient is hemodynamically stable and rule out sepsis.
+
 History
-Mentioning Sepsis six.
+Personal history including patient's age, hand dominance, occupation, smoking history, tetanus status and last meal, social support. More details around any potential injury like the timing of injury, mechanism, onset and progression of symptoms, any treatment given including antibiotics. Past medical history of the patient and drug history.
 
 Examination
+Kanavel signs (fusiform swelling, flexion attitude, pain on passive extension and tenderness along the flexor sheath), neurovascular status of all the fingers, Movement of all tendons individually, palpate for foreign bodies, look for tracking cellulitis/ lymphangitis/ lymphadenopathy
 
 Investigations
+Bloods including inflammatory markers, group and save, glucose, urea and electrolytes, blood culture, wound culture and hand X-ray 
 
 Initial management 
+Urgent admission, intravenous antibiotics, stick hand elevation in Bradford sling,  marking area of redness with date and time recording, Consent and mark the patient, prepare for surgical washout in theatres.
 
 Definitive management
+Using arm tourniquet without exsanguination, mark the incisions down to the carpal tunnel if needed, Excision of  the puncture wound, opening of  A1 and A5 pulley, taking micro swabs, washing by saline using a venflon cannula from proximal to distal.
 
 Post-operative plan
+Splint the hand in position of safe immobilisation, hand elevation, continue antibiotics and arrange for second look in 48 hours and early physiotherapy.
 
 These are points a strong candidate would mention but are not required to pass.
 
@@ -116,11 +123,5 @@ END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
 
-END OF AUTHOR NOTE]
