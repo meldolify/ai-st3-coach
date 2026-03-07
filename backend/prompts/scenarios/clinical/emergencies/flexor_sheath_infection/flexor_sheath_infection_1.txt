@@ -40,9 +40,6 @@ MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
 
 Example from Necrotising Fasciitis:
 Diagnosis and urgency
@@ -53,7 +50,6 @@ Definitive management
 Surgical steps
 Post-operative care
 
-END OF AUTHOR NOTE]
 
 ESSENTIAL MARKING POINTS
 
@@ -68,50 +64,53 @@ Each point should be a short statement of the expected answer.
 Example from Necrotising Fasciitis:
 
 Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
+Flexor sheath infection or flexor tenosynovitis which is a clinical emergency.
 
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
+History
+Patient's age, hand dominance, occupation, smoking history, no recall of injury, possible thorn injury, onset and progression of symptoms, past medical history and drug history.
+
+Examination
+Kanavel signs including: fusiform swelling, flexion attitude, pain on passive extension and tenderness along the flexor sheath.
 
 Investigations
-Blood tests including lactate level.
+Blood tests and x-ray.
 
 Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
+Broad spectrum antibiotics for example Co-amoxiclav.
 
 Definitive management
-Urgent surgery for debridement.
+Urgent surgery for flexor sheath washout.
 
 Surgical steps
-Surgical debridement of all unhealthy tissue.
+Incision over A1 and A5 pulley, wash by saline using venflon cannula.
 
 Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
+Arrange for second look in 48 hours.
 
-END OF AUTHOR NOTE]
+
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
-
-Group them under the same domain headings. Each point should be a short statement.
 
 Example from Necrotising Fasciitis:
 
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
-
-Assessment
+History
 Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+
+Examination
+
+Investigations
+
+Initial management 
+
+Definitive management
+
+Post-operative plan
 
 These are points a strong candidate would mention but are not required to pass.
 
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
