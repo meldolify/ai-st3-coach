@@ -46,6 +46,20 @@ const CONFIG = {
     'structured_interview/audit/focused_interview'
   ],
 
+  // Specialty mapping — maps top-level scenario folder prefix to subscription specialty
+  // Keep in sync with backend/src/config/index.js and frontend-react/src/config.js
+  SPECIALTY_MAP: {
+    'clinical': 'plastic-surgery',
+    'call_the_boss': 'plastic-surgery',
+    'consent': 'plastic-surgery',
+    'structured_interview': 'plastic-surgery',
+  },
+
+  getScenarioSpecialty(topicFolder) {
+    const prefix = topicFolder.split('/')[0];
+    return this.SPECIALTY_MAP[prefix] || null;
+  },
+
 };
 
 // Log current configuration

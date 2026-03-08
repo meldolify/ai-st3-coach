@@ -481,13 +481,14 @@ function showProtectedContent() {
   }
 }
 
-// Allow users to browse without logging in (all scenarios will be locked)
+// Redirect unlogged users to login — browsing requires an account
 function browseAsGuest() {
-  console.log('[AUTH] Browsing as guest - all scenarios will be locked');
-  currentUser = null;
-  userProfile = null;
-  userSubscription = null;
-  showProtectedContent();
+  if (currentUser) {
+    showProtectedContent();
+  } else {
+    console.log('[AUTH] Login required — redirecting to auth page');
+    showPage('authPage');
+  }
 }
 
 function showProfilePage() {
