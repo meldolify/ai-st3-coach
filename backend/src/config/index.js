@@ -106,6 +106,21 @@ Director's notes: Brisk, purposeful delivery with tight pacing and minimal pause
     'structured_interview/audit/focused_interview'
   ],
 
+  // Specialty mapping — maps top-level scenario folder prefix to subscription specialty
+  // Keep in sync with frontend/config.js and frontend-react/src/config.js
+  SPECIALTY_MAP: {
+    clinical: 'plastic-surgery',
+    call_the_boss: 'plastic-surgery',
+    consent: 'plastic-surgery',
+    structured_interview: 'plastic-surgery'
+  },
+
+  // Get the required specialty for a scenario topicFolder
+  getScenarioSpecialty(topicFolder) {
+    const prefix = topicFolder.split('/')[0];
+    return this.SPECIALTY_MAP[prefix] || null;
+  },
+
   // Computed flags
   get isStripeEnabled() {
     return !!this.STRIPE_SECRET_KEY;

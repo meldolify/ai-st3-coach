@@ -30,8 +30,13 @@ function canAccessScenario(scenarioPath) {
     return false;
   }
 
-  // Tier 3: Paid users (logged in + active subscription) - full access
+  // Tier 3: Paid users (logged in + active subscription) - access within their specialty
   if (userSubscription?.status === 'active') {
+    // Check specialty match if subscription has a specialty set
+    const requiredSpecialty = CONFIG.getScenarioSpecialty(scenarioPath);
+    if (requiredSpecialty && userSubscription.specialty && userSubscription.specialty !== requiredSpecialty) {
+      return false; // Subscription for different specialty
+    }
     return true;
   }
 

@@ -659,6 +659,14 @@ function initScrollAnimations() {
 // ============================================================================
 
 function showPage(pageId) {
+  // Require login for all pages beyond landing and auth
+  const publicPages = ['landingPage', 'authPage'];
+  if (!publicPages.includes(pageId) && !currentUser) {
+    console.log('[NAV] Login required — redirecting to auth page');
+    showPage('authPage');
+    return;
+  }
+
   // Clean up landing page animations when navigating away
   if (pageId !== 'landingPage') {
     if (typeof window.destroyLandingScroll === 'function') {

@@ -328,42 +328,46 @@ wss.on('connection', (ws, req) => {
       console.log('[ACCESS] DEV_BYPASS_AUTH enabled - skipping all access checks');
     } else if (config.isSupabaseEnabled && supabaseAdmin) {
       try {
-        // Check if this is a free tier scenario (no auth required)
+        // ALL scenarios require authentication (login required)
+        if (!userId || !authToken) {
+          console.warn('[ACCESS] Rejected: No auth credentials');
+          ws.send(
+            JSON.stringify({ type: 'error', message: 'Authentication required. Please log in.' })
+          );
+          ws.close(4001, 'Unauthorized');
+          return;
+        }
+
+        // Verify the auth token with Supabase
+        const {
+          data: { user },
+          error: authError
+        } = await supabaseAdmin.auth.getUser(authToken);
+
+        if (authError || !user) {
+          console.warn('[ACCESS] Rejected: Invalid auth token');
+          ws.send(JSON.stringify({ type: 'error', message: 'Authentication failed' }));
+          ws.close(4001, 'Unauthorized');
+          return;
+        }
+
+        if (user.id !== userId) {
+          console.warn('[ACCESS] Rejected: User ID mismatch');
+          ws.send(JSON.stringify({ type: 'error', message: 'Authentication failed' }));
+          ws.close(4001, 'Unauthorized');
+          return;
+        }
+
+        // Check if this is a free tier scenario (skip subscription check)
         const isFreeScenario = config.FREE_TIER_SCENARIOS.includes(scenarioFile);
 
-        if (!isFreeScenario) {
-          // Premium scenario - require authentication
-          if (!userId || !authToken) {
-            console.warn('[ACCESS] Rejected: No auth credentials for premium scenario');
-            ws.send(JSON.stringify({ type: 'error', message: 'Authentication required' }));
-            ws.close(4001, 'Unauthorized');
-            return;
-          }
-
-          // Verify the auth token with Supabase
-          const {
-            data: { user },
-            error: authError
-          } = await supabaseAdmin.auth.getUser(authToken);
-
-          if (authError || !user) {
-            console.warn('[ACCESS] Rejected: Invalid auth token');
-            ws.send(JSON.stringify({ type: 'error', message: 'Authentication failed' }));
-            ws.close(4001, 'Unauthorized');
-            return;
-          }
-
-          if (user.id !== userId) {
-            console.warn('[ACCESS] Rejected: User ID mismatch');
-            ws.send(JSON.stringify({ type: 'error', message: 'Authentication failed' }));
-            ws.close(4001, 'Unauthorized');
-            return;
-          }
-
-          // Check subscription status
+        if (isFreeScenario) {
+          console.log('[ACCESS] Allowed: Authenticated user accessing free tier scenario');
+        } else {
+          // Premium scenario - require active subscription with matching specialty
           const { data: subscription } = await supabaseAdmin
             .from('subscriptions')
-            .select('status')
+            .select('status, specialty')
             .eq('user_id', userId)
             .single();
 
@@ -376,9 +380,27 @@ wss.on('connection', (ws, req) => {
             return;
           }
 
+          // Check specialty match
+          const requiredSpecialty = config.getScenarioSpecialty(scenarioFile);
+          if (
+            requiredSpecialty &&
+            subscription.specialty &&
+            subscription.specialty !== requiredSpecialty
+          ) {
+            console.warn(
+              `[ACCESS] Rejected: Subscription specialty '${subscription.specialty}' does not match required '${requiredSpecialty}'`
+            );
+            ws.send(
+              JSON.stringify({
+                type: 'error',
+                message: `This scenario requires a ${requiredSpecialty} subscription`
+              })
+            );
+            ws.close(4003, 'Subscription required');
+            return;
+          }
+
           console.log('[ACCESS] Verified: Premium user accessing premium scenario');
-        } else {
-          console.log('[ACCESS] Allowed: Free tier scenario');
         }
       } catch (err) {
         console.error('[ACCESS] Validation error:', err);
