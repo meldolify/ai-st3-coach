@@ -18,6 +18,9 @@ export function useAuth() {
       const sessionUser = data?.session?.user || null
       setUser(sessionUser)
       window.currentUser = sessionUser
+    }).catch((err) => {
+      console.warn('[useAuth] Failed to restore session:', err)
+    }).finally(() => {
       setLoading(false)
     })
 
