@@ -10,6 +10,13 @@ export function useLandingAnimations() {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     const isTouch = window.matchMedia('(hover: none)').matches
 
+    // Listener cleanup registry — tracks all manually added event listeners
+    const listenerCleanups = []
+    function trackListener(el, event, handler) {
+      el.addEventListener(event, handler)
+      listenerCleanups.push(() => el.removeEventListener(event, handler))
+    }
+
     // ============================================================
     // LENIS SMOOTH SCROLL
     // ============================================================
@@ -466,8 +473,8 @@ export function useLandingAnimations() {
           yTo(0)
         }
 
-        btn.addEventListener('mousemove', handleMove)
-        btn.addEventListener('mouseleave', handleLeave)
+        trackListener(btn, 'mousemove', handleMove)
+        trackListener(btn, 'mouseleave', handleLeave)
       })
     }
 
@@ -478,19 +485,22 @@ export function useLandingAnimations() {
       if (window.matchMedia('(hover: none)').matches || prefersReducedMotion) return
 
       document.querySelectorAll('.service-card').forEach((card) => {
-        card.addEventListener('mousemove', (e) => {
+        const handleMove = (e) => {
           const rect = card.getBoundingClientRect()
           const x = (e.clientX - rect.left) / rect.width - 0.5
           const y = (e.clientY - rect.top) / rect.height - 0.5
           card.style.transform = `perspective(800px) rotateY(${x * 10}deg) rotateX(${y * -10}deg)`
-        })
+        }
 
-        card.addEventListener('mouseleave', () => {
+        const handleLeave = () => {
           gsap.to(card, {
             rotateX: 0, rotateY: 0, duration: 0.4, ease: 'power2.out',
             clearProps: 'transform',
           })
-        })
+        }
+
+        trackListener(card, 'mousemove', handleMove)
+        trackListener(card, 'mouseleave', handleLeave)
       })
     }
 
@@ -518,6 +528,7 @@ export function useLandingAnimations() {
     // ============================================================
     return () => {
       clearTimeout(timer)
+      listenerCleanups.forEach((fn) => fn())
       if (lenisTickerFn) {
         gsap.ticker.remove(lenisTickerFn)
       }

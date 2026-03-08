@@ -48,9 +48,10 @@ export function useAuth() {
     }
 
     // Restore session from localStorage
-    supabaseClient.auth.getSession().then(({ data }) => {
+    // NOTE: .then() callback is async so .finally() waits for hydrateUser to complete
+    supabaseClient.auth.getSession().then(async ({ data }) => {
       const sessionUser = data?.session?.user || null
-      hydrateUser(sessionUser)
+      await hydrateUser(sessionUser)
     }).catch((err) => {
       console.warn('[useAuth] Failed to restore session:', err)
     }).finally(() => {

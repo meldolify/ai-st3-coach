@@ -2,6 +2,8 @@ import { useState, useRef, useCallback, useEffect } from 'react'
 import { CONFIG, PERSONA_CONFIG } from '../config'
 import { AudioStreamer } from '../lib/AudioStreamer'
 import { AudioPlayer } from '../lib/AudioPlayer'
+import { useAuthStore } from '../stores/authStore'
+import { supabaseClient } from '../lib/supabase'
 
 /**
  * useSession — React hook wrapping V4Session WebSocket logic.
@@ -218,19 +220,18 @@ export function useSession({ orbVisualizerRef }) {
       if (voice) wsUrl += '&voice=' + voice
 
       // Add userId and auth token for server-side tier validation
-      if (window.currentUser?.id) {
-        wsUrl += '&userId=' + encodeURIComponent(window.currentUser.id)
+      const currentUser = useAuthStore.getState().currentUser
+      if (currentUser?.id) {
+        wsUrl += '&userId=' + encodeURIComponent(currentUser.id)
       }
-      if (window.supabaseClient) {
-        try {
-          const { data } = await window.supabaseClient.auth.getSession()
-          const token = data?.session?.access_token
-          if (token) {
-            wsUrl += '&token=' + encodeURIComponent(token)
-          }
-        } catch (err) {
-          console.warn('[useSession] Could not get auth token:', err)
+      try {
+        const { data } = await supabaseClient.auth.getSession()
+        const token = data?.session?.access_token
+        if (token) {
+          wsUrl += '&token=' + encodeURIComponent(token)
         }
+      } catch (err) {
+        console.warn('[useSession] Could not get auth token:', err)
       }
 
       return new Promise((resolve, reject) => {

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { memo, useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { cn } from '../lib/utils'
 
@@ -32,7 +32,7 @@ function AnimatedMessage({ text, animate = false }) {
  * Newest messages at top (reverse chronological). Relative timestamps.
  * AI messages stream in word-by-word; user messages appear instantly.
  */
-export default function TranscriptPanel({ messages, personaName = 'Examiner' }) {
+export default memo(function TranscriptPanel({ messages, personaName = 'Examiner' }) {
   const [, setTick] = useState(0)
   const animatedIdsRef = useRef(new Set())
 
@@ -169,4 +169,4 @@ export default function TranscriptPanel({ messages, personaName = 'Examiner' }) 
       </div>
     </div>
   )
-}
+})

@@ -1,7 +1,7 @@
 // Frontend configuration — mirrors frontend/config.js for React app
 
 const hostname = window.location.hostname
-const isLocal = hostname === 'localhost' || hostname === '127.0.0.1'
+const isLocal = ['localhost', '127.0.0.1', '0.0.0.0'].includes(hostname) || import.meta.env.DEV
 
 export const CONFIG = {
   BACKEND_URL: isLocal

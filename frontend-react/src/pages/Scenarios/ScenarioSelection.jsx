@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSelectionStore } from '../../stores/selectionStore'
-import { useAuthStore } from '../../stores/authStore'
+import { useAuthStore, selectIsLoggedIn, selectIsPremium } from '../../stores/authStore'
 import { CATEGORIES, SUBCATEGORIES, TOPICS, IMAGE_MAP } from '../../data/scenarios'
 import { CONFIG } from '../../config'
 import BackButton from '../../components/BackButton'
@@ -83,8 +83,8 @@ export default function ScenarioSelection({ onSelectScenario, onBack, onShowUpgr
   const [selectedSubcategory, setSelectedSubcategory] = useState(null)
 
   const difficulty = useSelectionStore((s) => s.selectedDifficulty)
-  const isLoggedIn = useAuthStore((s) => s.isLoggedIn())
-  const isPremium = useAuthStore((s) => s.isPremium())
+  const isLoggedIn = useAuthStore(selectIsLoggedIn)
+  const isPremium = useAuthStore(selectIsPremium)
 
   /* ---------- Derived names ---------- */
 

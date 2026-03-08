@@ -218,6 +218,126 @@ Implemented comprehensive VS Code development environment with debugging, testin
 
 ---
 
+## 2026-03-08: Full React Migration — All Pages Ported to Unified SPA
+
+### Summary
+Migrated all vanilla frontend pages (`frontend/`) into a unified React SPA (`frontend-react/`). The app is now a single React Router application serving landing, auth, scenarios, simulation, profile, and prompt lab — replacing the previous hybrid vanilla+React architecture.
+
+**Commit:** `87dbe41` — `feat: full React migration — all pages ported to unified SPA`
+**Rollback tag:** `pre-full-react-migration` (pushed to remote)
+
+### Architecture (Before → After)
+
+**Before:** Hybrid — vanilla `frontend/index.html` (landing, auth, scenario selection) + React `frontend-react/` (simulation room only). Hash-based routing via `showPage()`. State via `window.*` globals.
+
+**After:** Single React SPA. React Router v7 (`BrowserRouter`) handles all routes. Zustand 5 manages global state. Vite builds into `frontend/` for Vercel deployment. Backend UNCHANGED.
+
+### Routes
+| Path | Component | Description |
+|------|-----------|-------------|
+| `/` | `LandingPage` | Full landing with GSAP/Three.js animations |
+| `/login` | `AuthPage` | Split-panel auth (email + Google OAuth) |
+| `/scenarios/*` | `ScenarioFlow` | Multi-step selection (specialty→difficulty→mode→scenarios) |
+| `/simulation` | `SimulationRoom` | WebSocket interview room (pre-existing) |
+| `/profile` | `ProfilePage` | User stats, subscription management |
+| `/prompt-lab` | `PromptLab` | 3-panel dark-themed prompt testing |
+| `*` | `Navigate to /` | Catch-all 404 redirect |
+
+### Pages Migrated (7 Total)
+
+1. **Landing Page** (12 components) — GSAP ScrollTrigger, Lenis smooth scroll, Three.js icosahedron background, parallax hero, pinned scroll sections, cursor follower
+2. **Auth Page** — Split-panel with cursor-following glow, Google OAuth, email/password, forgot password
+3. **Scenario Selection** (7 step components) — Specialty → Difficulty → Mode → Mock Type → Station Type → Scenario hierarchy (category/subcategory/topic)
+4. **Simulation Room** — Already React, updated for app-wide auth and React Router navigation
+5. **Profile Page** — User info, subscription status, progress cards, session history
+6. **Prompt Lab** — 3-panel layout (editor/chat/test), dark theme, 12 API endpoints
+7. **Upgrade Modal** — Self-contained inline styles, monthly/annual toggle, Stripe checkout
+
+### 5 Navigation Fixes Baked In
+
+1. **Uniform BackButton** — Single `<BackButton>` component with consistent styling across all pages
+2. **Smart scenario back navigation** — `ScenarioSelection` manages its own level stack (category→subcategory→topic), back button returns to correct parent level
+3. **Difficulty persistence** — Zustand `selectionStore` with `persist` middleware keeps difficulty across navigation
+4. **Auth modal centering** — AuthPage renders as fixed overlay, no `.page` class interference
+5. **Consistent logo sizing** — LandingNav and AppHeader use same sizing
+
+### Key Technical Decisions
+
+- **Zustand 5** with `persist` middleware (sessionStorage) for `selectionStore` — survives page refresh
+- **useAuth hook at App root** — single session restore point hydrates Zustand for all pages
+- **sessionStorage bridge** — simulation params still passed via sessionStorage for backward compat
+- **`emptyOutDir: false`** in Vite — builds into existing `frontend/` without destroying non-React assets (images, etc.)
+- **Prebuild script** — cleans `frontend/assets/` before each build to remove stale hashed files
+- **`cleanUrls: false`** in Vercel — prevents old `.html` files from shadowing React routes
+
+### Files Created (58 new files)
+
+#### Pages
+- `src/pages/LandingPage/` — LandingPage, LandingNav, HeroSection, WhoSection, WhySection, TrustSection, ServicesSection, ProofSection, ActionSection, FooterSection, ThreeBackground, CursorFollower, GrainOverlay, useLandingAnimations.js, landing.css
+- `src/pages/Auth/` — AuthPage, auth.css
+- `src/pages/Scenarios/` — ScenarioFlow, SpecialtySelection, DifficultySelection, ModeSelection, MockTypeSelection, StationTypeSelection, ScenarioSelection, scenario-flow.css
+- `src/pages/Profile/` — ProfilePage, profile.css
+- `src/pages/PromptLab/` — PromptLab, PromptEditor, ChatPanel, TestPanel, promptLabApi.js, prompt-lab.css
+
+#### Shared
+- `src/components/BackButton.jsx` — Uniform back button
+- `src/components/UpgradeModal.jsx` — Stripe checkout modal (inline styles)
+- `src/lib/subscription.js` — `canAccessScenario()`, `isPremiumUser()` ported from vanilla
+- `src/stores/authStore.js` — User, profile, subscription state
+- `src/stores/selectionStore.js` — Selection flow state with persist
+- `src/stores/sessionStore.js` — WebSocket session state
+- `src/data/scenarios.js` — 165+ scenarios ported from vanilla `getTopicsData()`
+- `public/images/Landing/` — 14 hero/parallax/why images
+
+#### Files Modified
+- `src/App.jsx` — React Router with all routes, useAuth at root
+- `src/hooks/useAuth.js` — Full Zustand hydration (profile + subscription)
+- `src/components/SimulationRoom.jsx` — React Router nav, Zustand auth, static access control import
+- `vite.config.js` — SPA mode, proxy config
+- `package.json` — prebuild script, new dependencies
+- `vercel.json` — SPA rewrites, cleanUrls: false
+- `frontend/index.html` — Now React SPA entry (replaced vanilla content)
+
+### Build Output
+- **JS:** ~1,345 KB (some chunks exceed 500KB — Three.js, GSAP, landing page)
+- **CSS:** ~115 KB
+- **Gzipped:** significantly smaller (~350KB JS, ~20KB CSS)
+
+### Rollback Procedure
+```bash
+# Restore all files to pre-migration state
+git checkout pre-full-react-migration -- .
+git commit -m "revert: restore pre-React-migration state"
+git push origin main
+```
+Additional tag `pre-react-migration` marks the state before even the simulation room React migration.
+
+### Known Issues
+- GSAP `ScrollTrigger` logs "target not found" warnings during initial render (cosmetic, no functional impact)
+- Three.js + GSAP + landing CSS contribute to large chunk sizes (consider code splitting later)
+- Existing E2E tests in `e2e-tests/` use vanilla DOM selectors — need updating for React
+
+### Dependencies Added
+- `react-router-dom` ^7 — Client-side routing
+- `zustand` ^5 — Global state management
+- `@supabase/supabase-js` — Auth + database
+- `gsap` — Landing page scroll animations
+- `lenis` — Smooth scroll
+- `three` — 3D background
+- (framer-motion was already installed for simulation room)
+
+### Verification
+- All 7 routes manually tested with Playwright browser
+- Auth flow: login/signup forms render, Google OAuth redirects correctly
+- Scenario flow: full path from specialty → topic → simulation launch
+- Simulation room: WebSocket connects, exit returns to `/scenarios`
+- Profile: loads user data from Zustand store
+- Prompt Lab: 3-panel dark theme, API connectivity to backend
+- Mobile: responsive layout verified at 393px viewport
+- Build: clean Vite build, Vercel-compatible output structure
+
+---
+
 ## Search Keywords for Claude Code
 
 - VAD threshold tuning
@@ -231,3 +351,11 @@ Implemented comprehensive VS Code development environment with debugging, testin
 - Session management
 - Google Cloud TTS
 - GPT-4o-mini integration
+- React migration
+- React Router SPA
+- Zustand state management
+- Landing page GSAP Three.js
+- Vercel SPA deployment
+- Auth session restore
+- Scenario selection flow
+- Rollback pre-full-react-migration

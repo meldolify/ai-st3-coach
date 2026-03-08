@@ -1,4 +1,4 @@
-import { useAuthStore } from '../../stores/authStore'
+import { useAuthStore, selectIsLoggedIn, selectIsPremium } from '../../stores/authStore'
 import { useLandingAnimations } from './useLandingAnimations'
 import LandingNav from './LandingNav'
 import HeroSection from './HeroSection'
@@ -15,8 +15,8 @@ import CursorFollower from './CursorFollower'
 import './landing.css'
 
 export default function LandingPage() {
-  const isLoggedIn = useAuthStore((s) => s.isLoggedIn())
-  const isPremium = useAuthStore((s) => s.isPremium())
+  const isLoggedIn = useAuthStore(selectIsLoggedIn)
+  const isPremium = useAuthStore(selectIsPremium)
 
   // Initialize all GSAP + Lenis scroll animations
   useLandingAnimations()
