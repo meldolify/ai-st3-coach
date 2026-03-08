@@ -5,6 +5,7 @@ import { PERSONA_CONFIG } from '../config'
 import { IMAGE_MAP } from '../data/scenarios'
 import { useSimulationParams } from '../hooks/useSimulationParams'
 import { useSession } from '../hooks/useSession'
+import { useAuth } from '../hooks/useAuth'
 import { useEscapeKey } from '../hooks/useEscapeKey'
 import Header from './Header'
 import Sidebar from './Sidebar'
@@ -22,6 +23,7 @@ import ConfirmModal from './ConfirmModal'
  * Mobile: stacked content + fixed bottom dock
  */
 export default function SimulationRoom() {
+  const { loading: authLoading } = useAuth()
   const { params } = useSimulationParams()
   const orbRef = useRef(null)
   const imageCloseRef = useRef(null)
@@ -104,7 +106,7 @@ export default function SimulationRoom() {
   }, [feedbackData])
 
   const handleConnect = useCallback(async () => {
-    if (!scenario.promptFile) return
+    if (!scenario.promptFile || authLoading) return
     setIsConnecting(true)
     try {
       await connect(scenario.promptFile, difficulty)
