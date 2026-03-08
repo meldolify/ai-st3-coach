@@ -1,6 +1,10 @@
 {
-  "buildCommand": null,
+  "buildCommand": "cd frontend-react && npm install && npm run build",
   "outputDirectory": "frontend",
-  "cleanUrls": true,
-  "trailingSlash": false
+  "cleanUrls": false,
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/prompt-lab/api/(.*)", "destination": "https://api.reviva.live/prompt-lab/api/$1" },
+    { "source": "/((?!assets|images|favicon|logo|vite\\.svg).*)", "destination": "/index.html" }
+  ]
 }

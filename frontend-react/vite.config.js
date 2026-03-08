@@ -14,7 +14,7 @@ export default defineConfig({
     outDir: '../frontend',
     emptyOutDir: false,
     rollupOptions: {
-      input: path.resolve(__dirname, 'simulation.html'),
+      input: path.resolve(__dirname, 'index.html'),
     },
   },
   server: {
@@ -23,6 +23,9 @@ export default defineConfig({
       '/ws': {
         target: 'ws://localhost:8080',
         ws: true,
+      },
+      '/prompt-lab/api': {
+        target: 'http://localhost:8080',
       },
     },
   },
