@@ -106,7 +106,7 @@ export default function SimulationRoom() {
   }, [feedbackData])
 
   const handleConnect = useCallback(async () => {
-    if (!scenario.promptFile || authLoading) return
+    if (!scenario.promptFile) return
     setIsConnecting(true)
     try {
       await connect(scenario.promptFile, difficulty)
