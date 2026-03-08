@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 
 /**
- * Read simulation parameters from sessionStorage (set by index.html before navigation).
- * Returns { params, clearParams } where params is null if missing/invalid.
+ * Read simulation parameters from sessionStorage (set by ScenarioFlow before navigation).
+ * Re-reads when location.search changes (used by scenario switching via query param).
  */
 export function useSimulationParams() {
   const [params, setParams] = useState(null)
+  const location = useLocation()
 
   useEffect(() => {
     const raw = sessionStorage.getItem('simulationParams')
@@ -17,7 +19,7 @@ export function useSimulationParams() {
     } catch (e) {
       console.error('[useSimulationParams] Failed to parse:', e)
     }
-  }, [])
+  }, [location.search])
 
   const clearParams = () => {
     sessionStorage.removeItem('simulationParams')

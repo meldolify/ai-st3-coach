@@ -16,6 +16,7 @@ export class AudioPlayer {
     // Audio queue for streamed sentence chunks
     this._queue = []
     this._isPlayingChunk = false
+    this._currentUrl = null
   }
 
   setOrbVisualizer(visualizer) {
@@ -65,6 +66,7 @@ export class AudioPlayer {
     const bytes = Uint8Array.from(binaryString, (char) => char.charCodeAt(0))
     const blob = new Blob([bytes], { type: 'audio/wav' })
     const url = URL.createObjectURL(blob)
+    this._currentUrl = url
 
     if (this.playbackTimeout) {
       clearTimeout(this.playbackTimeout)
@@ -77,6 +79,7 @@ export class AudioPlayer {
     const estimatedDurationMs = (bytes.length / 4000) * 1000
     this.playbackTimeout = setTimeout(() => {
       URL.revokeObjectURL(url)
+      this._currentUrl = null
       callback()
     }, estimatedDurationMs + 10000)
 
@@ -86,6 +89,7 @@ export class AudioPlayer {
         this.playbackTimeout = null
       }
       URL.revokeObjectURL(url)
+      this._currentUrl = null
       callback()
     }
 
@@ -95,6 +99,7 @@ export class AudioPlayer {
         this.playbackTimeout = null
       }
       URL.revokeObjectURL(url)
+      this._currentUrl = null
       callback()
     }
   }
@@ -116,6 +121,7 @@ export class AudioPlayer {
     const bytes = Uint8Array.from(binaryString, (char) => char.charCodeAt(0))
     const blob = new Blob([bytes], { type: 'audio/wav' })
     const url = URL.createObjectURL(blob)
+    this._currentUrl = url
 
     if (this.playbackTimeout) {
       clearTimeout(this.playbackTimeout)
@@ -132,6 +138,7 @@ export class AudioPlayer {
       if (this.isPlaying) {
         this.isPlaying = false
         URL.revokeObjectURL(url)
+        this._currentUrl = null
         if (this.onEnd) this.onEnd()
       }
     }, estimatedDurationMs + 10000)
@@ -143,6 +150,7 @@ export class AudioPlayer {
       }
       this.isPlaying = false
       URL.revokeObjectURL(url)
+      this._currentUrl = null
       if (this.onEnd) this.onEnd()
     }
 
@@ -153,6 +161,7 @@ export class AudioPlayer {
       }
       this.isPlaying = false
       URL.revokeObjectURL(url)
+      this._currentUrl = null
       if (this.onEnd) this.onEnd()
     }
   }
@@ -174,6 +183,12 @@ export class AudioPlayer {
       this.audio.pause()
       this.audio.currentTime = 0
       this.isPlaying = false
+    }
+
+    // Revoke any active blob URL (onended/onerror won't fire for paused audio)
+    if (this._currentUrl) {
+      URL.revokeObjectURL(this._currentUrl)
+      this._currentUrl = null
     }
   }
 }

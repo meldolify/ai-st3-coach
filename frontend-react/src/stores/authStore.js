@@ -1,6 +1,14 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
+// Fine-grained selectors — use these for components that only need specific fields
+export const selectIsLoggedIn = (state) => state.currentUser !== null
+export const selectIsPremium = (state) => {
+  const sub = state.userSubscription
+  return sub?.status === 'active' || sub?.status === 'trialing'
+}
+export const selectAuthLoading = (state) => state.authLoading
+
 export const useAuthStore = create(
   persist(
     (set, get) => ({
