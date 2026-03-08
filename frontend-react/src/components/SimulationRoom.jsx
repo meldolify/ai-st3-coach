@@ -3,9 +3,11 @@ import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import { cn } from '../lib/utils'
 import { PERSONA_CONFIG } from '../config'
 import { IMAGE_MAP } from '../data/scenarios'
+import { useNavigate } from 'react-router-dom'
 import { useSimulationParams } from '../hooks/useSimulationParams'
 import { useSession } from '../hooks/useSession'
-import { useAuth } from '../hooks/useAuth'
+import { useAuthStore } from '../stores/authStore'
+import { canAccessScenario } from '../lib/subscription'
 import { useEscapeKey } from '../hooks/useEscapeKey'
 import Header from './Header'
 import Sidebar from './Sidebar'
@@ -23,7 +25,8 @@ import ConfirmModal from './ConfirmModal'
  * Mobile: stacked content + fixed bottom dock
  */
 export default function SimulationRoom() {
-  const { loading: authLoading } = useAuth()
+  const authLoading = useAuthStore((s) => s.authLoading)
+  const navigate = useNavigate()
   const { params } = useSimulationParams()
   const orbRef = useRef(null)
   const imageCloseRef = useRef(null)
@@ -76,12 +79,10 @@ export default function SimulationRoom() {
 
   // Access control check on mount
   useEffect(() => {
-    if (scenario.promptFile && typeof window.canAccessScenario === 'function') {
-      if (!window.canAccessScenario(scenario.promptFile)) {
-        window.location.href = '/index.html#accessDenied'
-      }
+    if (scenario.promptFile && !canAccessScenario(scenario.promptFile)) {
+      navigate('/scenarios')
     }
-  }, [scenario.promptFile])
+  }, [scenario.promptFile, navigate])
 
   // Escape key handling for modals
   useEscapeKey(
@@ -135,9 +136,7 @@ export default function SimulationRoom() {
       // Trigger exit animation, then redirect after it completes
       setIsExiting(true)
       setTimeout(() => {
-        window.location.href = params?.returnPage
-          ? `/index.html#${params.returnPage}`
-          : '/index.html#scenarioSelection'
+        navigate(params?.returnPage || '/scenarios')
       }, 500) // match exit animation duration
     }
 
@@ -155,7 +154,7 @@ export default function SimulationRoom() {
     } else {
       doExit()
     }
-  }, [disconnect, params, isConnected])
+  }, [disconnect, params, isConnected, navigate])
 
   const handleSelectScenario = useCallback(
     (promptFile, name) => {
