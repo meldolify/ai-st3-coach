@@ -21,7 +21,7 @@ export default function FooterSection() {
           <h4>Product</h4>
           <a href="#" onClick={(e) => { e.preventDefault(); navigate('/scenarios'); }}>Practice Mode</a>
           <a href="#" onClick={(e) => { e.preventDefault(); navigate('/scenarios'); }}>Mock Exams</a>
-          <a href="#pricingSection">Pricing</a>
+          <a href="#pricingSection" onClick={(e) => { e.preventDefault(); document.getElementById('pricingSection')?.scrollIntoView({ behavior: 'smooth' }); }}>Pricing</a>
         </div>
         <div className="footer-column">
           <h4>Support</h4>
