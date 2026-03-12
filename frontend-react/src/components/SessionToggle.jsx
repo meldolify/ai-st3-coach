@@ -47,6 +47,7 @@ export default function SessionToggle({
 
   return (
     <button
+      data-testid="session-toggle"
       onClick={handleClick}
       disabled={disabled}
       className={cn(

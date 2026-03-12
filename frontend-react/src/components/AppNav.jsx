@@ -22,7 +22,7 @@ export default function AppNav() {
   }
 
   return (
-    <nav style={{
+    <nav data-testid="app-nav" style={{
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',

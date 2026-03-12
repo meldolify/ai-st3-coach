@@ -1,42 +1,28 @@
 import { Page } from '@playwright/test';
 
 /**
- * Navigate to a hash route in index.html.
+ * Navigate to simulation room with params set in sessionStorage.
+ * Mirrors the React SPA flow: set sessionStorage -> navigate to /simulation.
+ * Optionally sets window.__TEST_TIER__ (persists across navigations via addInitScript).
+ * Pass null/undefined tier to skip tier setup (useful when fixture already set tier).
  */
-export async function navigateToHash(page: Page, hash: string) {
-  await page.goto(`/#${hash}`);
-  await page.waitForLoadState('domcontentloaded');
-}
-
-/**
- * Set simulation params in sessionStorage and navigate to simulation.html.
- */
-export async function navigateToSimulation(
-  page: Page,
-  params: {
-    scenario: {
-      title: string;
-      promptFile: string;
-      imageFile: string | null;
-      category: string;
-    };
-    difficulty: 'easy' | 'medium' | 'strict';
-    mode: 'practice' | 'mock-exam';
-    mockExamType?: string | null;
-    returnPage?: string;
+export async function navigateToSimulation(page: Page, params: Record<string, unknown>, tier?: string | null) {
+  // Set tier override before any navigation (persists via addInitScript)
+  if (tier) {
+    await page.addInitScript((t) => {
+      ;(window as any).__TEST_TIER__ = t
+    }, tier);
   }
-) {
-  // Ensure we're on the same origin first
+
+  // Need a page context to set sessionStorage
   if (page.url() === 'about:blank') {
     await page.goto('/');
     await page.waitForLoadState('domcontentloaded');
   }
-
   await page.evaluate((p) => {
     sessionStorage.setItem('simulationParams', JSON.stringify(p));
   }, params);
-
-  await page.goto('/simulation.html');
+  await page.goto('/simulation');
   await page.waitForLoadState('domcontentloaded');
 }
 
@@ -44,5 +30,7 @@ export async function navigateToSimulation(
  * Clear simulation params from sessionStorage.
  */
 export async function clearSimulationParams(page: Page) {
-  await page.evaluate(() => sessionStorage.removeItem('simulationParams'));
+  await page.evaluate(() => {
+    sessionStorage.removeItem('simulationParams');
+  });
 }

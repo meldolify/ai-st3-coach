@@ -4,7 +4,7 @@ export default function HeroSection({ isLoggedIn }) {
   const navigate = useNavigate()
 
   return (
-    <section className="section-hero section--light" id="sectionHero">
+    <section className="section-hero section--light" id="sectionHero" data-testid="hero-section">
       {/* Botanical leaf overlays (parallax, hidden on mobile via CSS) */}
       <img src="/images/landing/leaf-1.png" className="hero-leaf hero-leaf--1" data-speed="0.2" aria-hidden="true" alt="" />
       <img src="/images/landing/leaf-2.png" className="hero-leaf hero-leaf--2" data-speed="0.5" aria-hidden="true" alt="" />

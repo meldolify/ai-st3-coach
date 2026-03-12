@@ -12,7 +12,7 @@ export default function ModeSelection({ onSelect, onBack }) {
   const diff = difficultyDisplay[difficulty] || difficultyDisplay.medium
 
   return (
-    <div className="scenario-flow-page">
+    <div className="scenario-flow-page" data-testid="mode-selection">
       <BackButton label="Difficulty" onClick={onBack} />
 
       <div className="flow-header">

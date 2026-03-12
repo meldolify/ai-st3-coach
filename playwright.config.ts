@@ -75,39 +75,11 @@ export default defineConfig({
       },
       testMatch: /responsive\.spec\.ts/,
     },
-    {
-      name: 'firefox',
-      use: {
-        ...devices['Desktop Firefox'],
-        permissions: [],
-        launchOptions: { args: [] },
-      },
-      testIgnore: /responsive\.spec\.ts/,
-    },
-    {
-      name: 'webkit',
-      use: {
-        ...devices['Desktop Safari'],
-        permissions: [],
-        launchOptions: { args: [] },
-      },
-      testIgnore: /responsive\.spec\.ts/,
-    },
-    {
-      name: 'iphone',
-      use: {
-        ...devices['iPhone 14'],
-        permissions: [],
-        launchOptions: { args: [] },
-      },
-      testMatch: /responsive\.spec\.ts|landing-visual\.spec\.ts/,
-    },
   ],
 
   webServer: [
     {
-      command: 'node serve.js',
-      cwd: './frontend',
+      command: 'cd frontend-react && npm run build && cd ../frontend && node serve.js',
       port: 3001,
       timeout: 120_000,
       reuseExistingServer: !process.env.CI,

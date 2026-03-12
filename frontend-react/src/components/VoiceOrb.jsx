@@ -48,7 +48,7 @@ const VoiceOrb = forwardRef(function VoiceOrb({ state = 'idle', size = 120, mobi
   const canvasSize = Math.round(size * 1.75) // 210px for 120px container
 
   return (
-    <div className="relative flex flex-col items-center">
+    <div className="relative flex flex-col items-center" data-testid="voice-orb">
       {/* SVG Orb Container — CSS class drives all state animations */}
       <div
         className={cn(

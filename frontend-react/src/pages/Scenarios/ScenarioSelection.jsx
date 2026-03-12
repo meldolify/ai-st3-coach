@@ -141,7 +141,7 @@ export default function ScenarioSelection({ onSelectScenario, onBack, onShowUpgr
   /* ---------- Render ---------- */
 
   return (
-    <div className="scenario-selection">
+    <div className="scenario-selection" data-testid="scenario-selection">
       {/* Breadcrumb */}
       <nav className="scenario-breadcrumb">
         <div className="breadcrumb-inner">

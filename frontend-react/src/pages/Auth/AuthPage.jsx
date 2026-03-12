@@ -147,6 +147,7 @@ export default function AuthPage() {
       <div className="auth-container">
         {/* Left Panel - Form */}
         <div
+          data-testid="auth-page"
           className="auth-form-panel"
           ref={formPanelRef}
           onMouseMove={handleMouseMove}

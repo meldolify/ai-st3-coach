@@ -69,6 +69,7 @@ export default function Sidebar({
 
       {/* Sidebar */}
       <motion.nav
+        data-testid="sidebar"
         aria-label="Scenario navigation"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}

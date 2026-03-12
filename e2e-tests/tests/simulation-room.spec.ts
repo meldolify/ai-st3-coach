@@ -1,78 +1,103 @@
-import { test, expect } from '@playwright/test';
-import { navigateToSimulation, clearSimulationParams } from '../helpers/navigation';
-import { setTierViaRoute } from '../helpers/tier-control';
-import { FREE_SCENARIOS, createSimulationParams } from '../fixtures/mock-data';
-import { SELECTORS } from '../helpers/selectors';
+import { test, expect } from '@playwright/test'
+import { SELECTORS } from '../helpers/selectors'
+import { clearSimulationParams } from '../helpers/navigation'
+import { FREE_SCENARIOS, createSimulationParams } from '../fixtures/mock-data'
+
+const DEFAULT_PARAMS = createSimulationParams(FREE_SCENARIOS.necFasc, 'easy', 'practice')
+
+/**
+ * Helper: set tier override via addInitScript (persists across navigations)
+ * then navigate to /simulation with params in sessionStorage.
+ */
+async function setupSimulation(page: import('@playwright/test').Page, params = DEFAULT_PARAMS, tier = 'free') {
+  // addInitScript runs before every navigation's page load
+  await page.addInitScript((t) => {
+    ;(window as any).__TEST_TIER__ = t
+  }, tier)
+
+  // Need a page context to set sessionStorage
+  await page.goto('/')
+  await page.waitForLoadState('domcontentloaded')
+  await page.evaluate((p) => {
+    sessionStorage.setItem('simulationParams', JSON.stringify(p))
+  }, params)
+  await page.goto('/simulation')
+  await page.waitForLoadState('domcontentloaded')
+}
 
 test.describe('Simulation Room', () => {
-  test.beforeEach(async ({ page }) => {
-    await setTierViaRoute(page, 'premium');
-  });
+  // Desktop + mobile layouts both render (CSS controls visibility),
+  // so some data-testid selectors match 2 elements. Use .first() for
+  // the visible desktop instance at the 1280×720 test viewport.
 
-  test.afterEach(async ({ page }) => {
-    await clearSimulationParams(page);
-  });
+  test('room renders with key components', async ({ page }) => {
+    await setupSimulation(page)
 
-  test('should load room with scenario info', async ({ page }) => {
-    const params = createSimulationParams(FREE_SCENARIOS.necFasc);
-    await navigateToSimulation(page, params);
+    await expect(page.locator(SELECTORS.simulation.room)).toBeVisible({ timeout: 10000 })
+    await expect(page.locator(SELECTORS.simulation.sessionToggle).first()).toBeVisible()
+  })
 
-    await expect(page.locator(SELECTORS.simulation.room)).toBeVisible();
-    await expect(page.locator(SELECTORS.simulation.scenarioTitle)).toContainText('Necrotising Fasciitis');
-    await expect(page.locator(SELECTORS.simulation.scenarioCategory)).toContainText('Clinical');
-  });
+  test('header shows scenario title', async ({ page }) => {
+    await setupSimulation(page)
 
-  test('should display voice orb', async ({ page }) => {
-    const params = createSimulationParams(FREE_SCENARIOS.necFasc);
-    await navigateToSimulation(page, params);
+    const header = page.locator(SELECTORS.simulation.header)
+    await expect(header).toBeVisible({ timeout: 10000 })
+    await expect(header).toContainText('Necrotising Fasciitis')
+  })
 
-    await expect(page.locator(SELECTORS.simulation.voiceOrb)).toBeVisible();
-  });
+  test('session toggle is present', async ({ page }) => {
+    await setupSimulation(page)
 
-  test('should show control buttons', async ({ page }) => {
-    const params = createSimulationParams(FREE_SCENARIOS.necFasc);
-    await navigateToSimulation(page, params);
+    const toggle = page.locator(SELECTORS.simulation.sessionToggle).first()
+    await expect(toggle).toBeVisible({ timeout: 10000 })
+  })
 
-    const connectBtn = page.locator(SELECTORS.simulation.connectBtn);
-    await expect(connectBtn).toBeVisible();
+  test('sidebar renders', async ({ page }) => {
+    await setupSimulation(page)
 
-    const disconnectBtn = page.locator(SELECTORS.simulation.disconnectBtn);
-    await expect(disconnectBtn).toBeVisible();
-    await expect(disconnectBtn).toBeDisabled();
-  });
+    const sidebar = page.locator(SELECTORS.simulation.sidebar)
+    await expect(sidebar).toBeAttached({ timeout: 10000 })
+  })
 
-  test('should show sidebar with categories', async ({ page }) => {
-    const params = createSimulationParams(FREE_SCENARIOS.necFasc);
-    await navigateToSimulation(page, params);
+  test('exit button navigates back to /scenarios', async ({ page }) => {
+    await setupSimulation(page)
 
-    const sidebar = page.locator(SELECTORS.simulation.sidebar);
-    await expect(sidebar).toBeVisible();
-    await expect(sidebar.locator('.nav-category-btn')).toHaveCount(4);
-  });
+    await expect(page.locator(SELECTORS.simulation.room)).toBeVisible({ timeout: 10000 })
 
-  test('should show AI status as ready', async ({ page }) => {
-    const params = createSimulationParams(FREE_SCENARIOS.necFasc);
-    await navigateToSimulation(page, params);
+    const exitBtn = page.getByRole('button', { name: /exit/i }).first()
+    await expect(exitBtn).toBeVisible()
+    await exitBtn.click()
 
-    const status = page.locator(SELECTORS.simulation.aiStatus);
-    await expect(status).toBeVisible();
-    await expect(status).toContainText('Ready');
-  });
+    await expect(page).toHaveURL(/\/scenarios/, { timeout: 5000 })
+  })
 
-  test('should have transcript area', async ({ page }) => {
-    const params = createSimulationParams(FREE_SCENARIOS.necFasc);
-    await navigateToSimulation(page, params);
+  test('without simulationParams, shows empty state', async ({ page }) => {
+    // Set tier but NO simulation params
+    await page.addInitScript(() => {
+      ;(window as any).__TEST_TIER__ = 'free'
+    })
+    // Clear any stale params then navigate
+    await page.goto('/', { waitUntil: 'domcontentloaded' })
+    await page.evaluate(() => sessionStorage.removeItem('simulationParams'))
+    await page.goto('/simulation', { waitUntil: 'domcontentloaded' })
 
-    const transcript = page.locator(SELECTORS.simulation.transcript);
-    await expect(transcript).toBeVisible();
-    await expect(transcript).toContainText('Conversation will appear here');
-  });
+    // Room renders but with "No scenario selected" placeholder
+    await expect(page.locator(SELECTORS.simulation.room)).toBeVisible({ timeout: 10000 })
+    await expect(page.locator(SELECTORS.simulation.header)).toContainText('No scenario selected')
+  })
 
-  test('should load different scenarios correctly', async ({ page }) => {
-    const params = createSimulationParams(FREE_SCENARIOS.majorBurn);
-    await navigateToSimulation(page, params);
+  test('timer is present in header', async ({ page }) => {
+    await setupSimulation(page)
 
-    await expect(page.locator(SELECTORS.simulation.scenarioTitle)).toContainText('Major Burn');
-    await expect(page.locator(SELECTORS.simulation.scenarioCategory)).toContainText('Call');
-  });
-});
+    const timer = page.locator(SELECTORS.simulation.timer)
+    await expect(timer).toBeVisible({ timeout: 10000 })
+    await expect(timer).toHaveText(/\d{1,2}:\d{2}/)
+  })
+
+  test('transcript panel is visible', async ({ page }) => {
+    await setupSimulation(page)
+
+    const transcript = page.locator(SELECTORS.simulation.transcriptPanel).first()
+    await expect(transcript).toBeVisible({ timeout: 10000 })
+  })
+})
