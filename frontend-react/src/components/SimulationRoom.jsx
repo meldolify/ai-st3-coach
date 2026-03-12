@@ -219,6 +219,7 @@ export default function SimulationRoom() {
 
   return (
     <motion.div
+      data-testid="sim-room"
       className="h-screen flex overflow-hidden bg-bg-primary"
       animate={isExiting ? { scale: 0.92, opacity: 0, filter: 'blur(6px)' } : { scale: 1, opacity: 1, filter: 'blur(0px)' }}
       transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}

@@ -22,21 +22,21 @@ export default function LandingNav({ isLoggedIn }) {
   }
 
   return (
-    <nav className="landing-nav-new" id="landingNav">
+    <nav className="landing-nav-new" id="landingNav" data-testid="landing-nav">
       <Link to="/" className="nav-logo">
         <img src="/images/logo/logo-md.png" alt="ReViva" className="logo-img logo-img--nav" />
       </Link>
       {!isLoggedIn ? (
         <div className="nav-links">
           <a href="#pricingSection" className="nav-link" onClick={scrollToPricing}>Pricing</a>
-          <button className="nav-link" onClick={() => navigate('/scenarios', { state: { fresh: true } })}>Explore</button>
-          <button className="nav-link" onClick={() => navigate('/login')}>Log In</button>
-          <button className="nav-link btn-amber btn-amber--sm" onClick={() => navigate('/login')}>Sign Up</button>
+          <button className="nav-link" data-testid="nav-explore" onClick={() => navigate('/scenarios', { state: { fresh: true } })}>Explore</button>
+          <button className="nav-link" data-testid="nav-login" onClick={() => navigate('/login')}>Log In</button>
+          <button className="nav-link btn-amber btn-amber--sm" data-testid="nav-signup" onClick={() => navigate('/login')}>Sign Up</button>
         </div>
       ) : (
         <div className="nav-links">
           <a href="#pricingSection" className="nav-link" onClick={scrollToPricing}>Pricing</a>
-          <button className="nav-link" onClick={() => navigate('/scenarios', { state: { fresh: true } })}>Explore</button>
+          <button className="nav-link" data-testid="nav-explore" onClick={() => navigate('/scenarios', { state: { fresh: true } })}>Explore</button>
           <button className="nav-link" onClick={() => navigate('/profile')}>Profile</button>
           <button className="nav-link" onClick={handleLogout}>Log Out</button>
         </div>

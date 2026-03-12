@@ -145,7 +145,7 @@ export default function UpgradeModal({ onClose, title, message }) {
   const isAnnual = selectedPlan === 'annual'
 
   return (
-    <div style={overlayStyle} onClick={handleOverlayClick}>
+    <div style={overlayStyle} onClick={handleOverlayClick} data-testid="upgrade-modal">
       <div style={modalStyle}>
         <button style={closeStyle} onClick={onClose} type="button">
           ×

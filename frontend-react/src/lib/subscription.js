@@ -7,6 +7,15 @@ import { useAuthStore } from '../stores/authStore'
  * Unlogged → all locked. Free → FREE_TIER_SCENARIOS only. Premium → all allowed.
  */
 export function canAccessScenario(scenarioPath) {
+  // E2E test tier override
+  if (typeof window !== 'undefined' && window.__TEST_TIER__) {
+    if (window.__TEST_TIER__ === 'premium') return true
+    if (window.__TEST_TIER__ === 'free') {
+      return CONFIG.FREE_TIER_SCENARIOS.includes(scenarioPath)
+    }
+    if (window.__TEST_TIER__ === 'unlogged') return false
+  }
+
   const { currentUser, userSubscription } = useAuthStore.getState()
 
   // Tier 1: Unlogged users — all scenarios locked

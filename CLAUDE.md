@@ -12,55 +12,159 @@ These rules ensure consistent use of the superpowers skill system for all work i
 
 ## Overview
 
-ST3 Plastic Surgery Interview Trainer V4 — A cost-optimized voice-based AI interview trainer using Web Speech API + GPT-4o-mini + Google Cloud TTS. 94% cost reduction vs V3.
+ST3 Plastic Surgery Interview Trainer V4 — A voice-based AI interview trainer using Server-Side VAD + Whisper + Gemini 2.5 Flash + Gemini TTS.
 
-**Architecture:** Browser → Web Speech API (STT) → WebSocket → GPT-4o-mini → Google Cloud TTS → Audio playback
+**Architecture:** Browser AudioStreamer → WebSocket PCM → Server VAD (Silero v4) → Whisper STT → Gemini 2.5 Flash → Gemini TTS (WAV) → Audio playback
 
-Two-page app: `index.html` (landing/auth/selection) + `simulation.html` (standalone sim room). State transfer via `sessionStorage` (simulationParams).
+**React SPA** in `frontend-react/` builds to `frontend/` for Vercel. React Router v7 handles all pages. Backend is a Node.js WebSocket + Express server.
 
 **Critical gotchas:**
-- Do NOT use `npx serve -s` for frontend — SPA mode redirects simulation.html to index.html. Use `python -m http.server` or `npx serve` without `-s`
-- `FREE_TIER_SCENARIOS` list in `frontend/config.js` and `backend/src/config/index.js` MUST stay in sync
+- `FREE_TIER_SCENARIOS` list must stay in sync across THREE files: `frontend/config.js`, `frontend-react/src/config.js`, and `backend/src/config/index.js`
+- `SPECIALTY_MAP` must also stay in sync across the same three files
+- Do NOT use `npx serve -s` for static frontend — SPA mode breaks direct file access
+- Vanilla files in `frontend/js/` and `frontend/css/` are **orphaned** — not loaded by the React SPA. Only `frontend-react/` source is active.
 
-## Architecture
+## Frontend (React SPA)
+
+Source in `frontend-react/`, Vite builds to `frontend/` (sibling directory) for Vercel deployment. Dev server on port 3001.
+
+### Routes & Pages
+
+All routes use lazy loading with `<Suspense fallback={<LoadingFallback />}>`:
+
+| Route | Component | Purpose |
+|-------|-----------|---------|
+| `/` | LandingPage | Hero, Three.js bg, GSAP scroll animations |
+| `/login` | AuthPage | Email/password + Google OAuth, split-panel modal |
+| `/scenarios/*` | ScenarioFlow | State machine: specialty → difficulty → mode → [mock type] → scenarios |
+| `/simulation` | SimulationRoom | Interview room: voice orb, sidebar, transcript |
+| `/profile` | ProfilePage | Account info, subscription management |
+| `/prompt-lab` | PromptLab | Text-only prompt testing (3-panel dark theme) |
+| `*` | Navigate('/') | Fallback redirect |
+
+### State Management (Zustand)
+
+- **authStore** (`src/stores/authStore.js`) — `currentUser`, `userProfile`, `userSubscription`, `authLoading`. Only `authMode` persisted to localStorage. Sensitive fields restored by `useAuth` hook on each page load.
+- **selectionStore** (`src/stores/selectionStore.js`) — Scenario selection state (specialty, difficulty, mode, scenario nav). Persisted to sessionStorage.
+- **sessionStore** (`src/stores/sessionStore.js`) — WebSocket session, connection state, AI speaking flag. No persistence (memory only).
+
+### Authentication Flow
+
+`useAuth` hook called at App root (runs on every route navigation):
+1. `supabaseClient.auth.getSession()` → restore session from localStorage
+2. If session found: set `authStore.currentUser`, fetch profile + subscription from DB, set `window.currentUser` (legacy compat)
+3. `onAuthStateChange` listener for token refresh / logout in other tabs
+4. `setAuthLoading(false)` when complete
+
+Supabase client created in `src/lib/supabase.js` (also sets `window.supabaseClient`).
+
+### Access Control (Client-Side)
+
+`canAccessScenario(scenarioPath)` in `src/lib/subscription.js`:
+- **Unlogged** → ALL denied (login required beyond landing page)
+- **Free tier** → `FREE_TIER_SCENARIOS` only
+- **Premium (active/trialing)** → All allowed, specialty-scoped via `getScenarioSpecialty()`
+
+### Key Files
+
+```
+frontend-react/
+├── src/
+│   ├── App.jsx                    # Router + ErrorBoundary + useAuth at root
+│   ├── config.js                  # URLs, Supabase keys, FREE_TIER_SCENARIOS, SPECIALTY_MAP, PERSONA_CONFIG
+│   ├── stores/                    # Zustand: authStore, selectionStore, sessionStore
+│   ├── hooks/
+│   │   ├── useAuth.js             # Session restore + store hydration
+│   │   ├── useSession.js          # WebSocket + audio orchestrator (main interview hook)
+│   │   ├── useSimulationParams.js # Read sessionStorage params
+│   │   └── useEscapeKey.js        # Modal escape handler
+│   ├── lib/
+│   │   ├── supabase.js            # Supabase client + window global
+│   │   ├── subscription.js        # canAccessScenario, isPremiumUser, startCheckout, openCustomerPortal
+│   │   ├── AudioPlayer.js         # Base64 MP3/WAV queue player
+│   │   ├── AudioStreamer.js       # PCM mic capture + WS streaming
+│   │   └── OrbVisualizer.js       # Canvas 5-layer audio-reactive orb
+│   ├── components/                # SimulationRoom, VoiceOrb, Sidebar, TranscriptPanel, Header, etc.
+│   ├── pages/                     # LandingPage/, Auth/, Scenarios/, Profile/, PromptLab/
+│   └── data/
+│       └── scenarios.js           # CATEGORIES, SUBCATEGORIES, TOPICS for scenario selection
+├── vite.config.js                 # Build to ../frontend/, proxy WS + API in dev
+└── package.json                   # React 19, Vite 7.3, Tailwind v4, Framer Motion 12, Zustand 5
+```
+
+## Backend
+
+Node.js server combining WebSocket (interview sessions) + Express HTTP (Stripe, Prompt Lab API, health check). Single file `server.js` (~1,219 lines) plus modular services/utils/routes.
 
 ### Message Flow
 
-1. Web Speech API (free, browser-native) → continuous transcription
-2. Client sends `user_transcript` via WebSocket
-3. GPT-4o-mini generates response (full conversation history)
-4. Google Cloud TTS synthesizes speech → Base64 MP3
-5. Browser plays audio, mic pauses during AI speech
+1. Browser `AudioStreamer` (ScriptProcessorNode, 4096 buffer) → 16kHz mono Int16 PCM → base64
+2. Client sends `audio_chunk` via WebSocket
+3. `ServerVAD` (Silero v4 ONNX) detects speech boundaries
+4. Accumulated audio → Whisper STT → transcript text
+5. Gemini 2.5 Flash generates response (streaming, sentence-level chunking)
+6. Gemini TTS synthesizes each sentence → WAV base64 (Google Cloud TTS fallback → MP3)
+7. Client receives `ai_response` chunks, plays audio, mic pauses during AI speech
 
 ### WebSocket Message Types
 
-**Client → Server:** `user_transcript` (speech text), `whisper_audio` (audio blob fallback), `audio_chunk` (raw PCM for server VAD), `user_speaking` (triggers interrupt), `ai_finished` (playback done)
+**Client → Server:** `audio_chunk` (raw PCM for server VAD), `user_transcript` (speech text), `whisper_audio` (audio blob fallback), `user_speaking` (triggers interrupt), `ai_finished` (playback done), `request_feedback`, `end_interview`
 
-**Server → Client:** `scenario_loaded` (session init), `ai_response` (text + base64 MP3), `whisper_transcript` (Whisper result), `vad_speech_start` / `user_transcript_display` (server VAD), `interrupt` (stop playback), `error`
+**Server → Client:** `scenario_loaded` (session init), `ai_response` / `ai_response_start` / `ai_response_chunk` / `ai_response_end` (streaming responses), `user_transcript_display` (VAD detected speech), `vad_speech_start`, `feedback_processing` / `feedback_response` / `feedback_summary`, `interrupt` (stop playback), `error`
 
 ### Session Management
 
-Sessions: `Map<sessionId, SessionData>` with fields: `history` (GPT messages), `ws` (WebSocket), `scenario` (file path), `voice` (TTS name), `userId`, `isAISpeaking`, `inFeedbackMode`, `feedbackCount`
+`sessions = new Map<sessionId, SessionData>` with fields: `history` (GPT messages), `ws` (WebSocket), `scenario` (file path), `voice` (TTS name), `userId`, `isAISpeaking`, `inFeedbackMode`, `feedbackCount`
 
-### Simulation Page
+Heartbeat every 30s. Idle session cleanup every 30 min.
 
-Separate HTML (`simulation.html`) for state isolation. Navigation: index.html → save params to sessionStorage → redirect to simulation.html → on exit redirect to index.html#scenarioSelection
+### Access Control (Server-Side)
 
-State transfer: `simulationParams = { scenario: {title, promptFile, imageFile, category}, difficulty, mode, mockExamType, returnPage }`
+WebSocket URL includes `userId` and `token` query params. On connection:
+1. **All scenarios** require valid Supabase auth token (userId + token validated server-side)
+2. **Free scenarios** (`FREE_TIER_SCENARIOS`): skip subscription check after auth
+3. **Premium scenarios**: require `subscription.status === 'active'` AND `subscription.specialty` matches scenario specialty via `config.getScenarioSpecialty()`
 
-Key files: `frontend/simulation.html`, `frontend/js/simulation-app.js` (entry point), `frontend/js/state.js` (save/load params), `frontend/js/sidebar.js` (performScenarioSwitch)
+Error codes: 4001 (Unauthorized), 4002 (Validation), 4003 (Subscription required)
 
-### Access Control
+### LLM Configuration
 
-- **Layer 1:** Client-side `canAccessScenario(promptFile)` in simulation-app.js:548-558 → denied redirects to index.html#accessDenied
-- **Layer 2:** Hash handler in app.js:751-762 detects #accessDenied → shows upgrade modal
-- **Layer 3:** Server-side in server.js:119-177 — WebSocket URL includes `userId` and `token` query params, validates auth token via Supabase, checks subscription in database. Error codes: 4001 (Unauthorized), 4002 (Validation), 4003 (Subscription required). Free tier scenarios bypass auth check.
+- **Model:** `config.LLM_MODEL` = `'gemini-2.5-flash'` (via OpenAI-compatible wrapper to Google Generative AI)
+- **Temperature:** 0.7
+- **Max tokens:** 300 (interview), 500 (feedback JSON summary)
+- **Retry:** 3 retries with exponential backoff (1s → 15s max)
+- **Service:** `src/services/OpenAIService.js`
 
-Tier logic (`subscription.js:canAccessScenario`): Unlogged → ALL denied. Free → FREE_TIER_SCENARIOS only. Premium → all allowed. Defined in `frontend/config.js` + `backend/src/config/index.js`
+### TTS Configuration
+
+**Primary: Gemini TTS** (`src/services/GeminiTTSService.js`)
+- Model: `gemini-2.5-flash-preview-tts`
+- Voices per difficulty: `Fenrir` (easy), `Kore` (medium), `Charon` (strict)
+- Style prompts in `config.TTS_STYLE_PROMPTS` control vocal delivery per difficulty
+- Output: WAV (PCM), queue-serialized for consistent voice
+
+**Fallback: Google Cloud TTS** (`src/services/TTSService.js`)
+- Used when Gemini TTS fails
+- SSML processing: `buildNaturalSSML(text)` adds pauses at punctuation
+- Output: MP3
+
+### Server-Side VAD
+
+Silero VAD v4 ONNX (`backend/models/silero_vad_v4.onnx` ~1.72MB). Frame=1536 samples@16kHz (~96ms). Thresholds: pos=0.3, neg=0.2. Pre-speech buffer=10 frames (~960ms). v5 model did NOT work — v4 reliably returns 0.7-0.96 for speech.
+
+Audio pipeline: AudioStreamer (ScriptProcessorNode, bufferSize=4096) → 16kHz mono Int16 PCM (~1365 samples/chunk) → base64 → WS `audio_chunk`. Gain normalization: quiet audio boosted up to 50x for VAD, original sent to Whisper.
+
+### Noise Filtering
+
+`isNoiseTranscript(text)` in `src/utils/audioHelpers.js` filters empty/short (<2 chars), repeated chars, noise patterns (um/uh/er/ah), single words (yes/no/okay), echo pickups.
+
+### Feedback System
+
+On End Interview → NEW GPT session with dedicated feedback prompt + transcript → 6 spoken sections with TTS → JSON summary (max_tokens: 500). Score 0-5 (Unsafe→Outstanding). Prompts in `backend/prompts/shared/feedback/`. `feedbackHistory[]` separate from interview history.
 
 ### Scenario Loading (Modular Prompt Architecture)
 
-**Production** uses modular 3-file assembly via `promptAssembler.js`:
+**Production** uses modular 3-file assembly via `src/utils/promptAssembler.js`:
 1. `prompts/shared/interview/core_{domain}_interview.txt` — domain-specific core behaviours
 2. `prompts/shared/interview/{difficulty}_interview_personality.txt` — difficulty-specific personality
 3. `prompts/scenarios/{topicFolder}/{topicName}_1.txt` — clinical scenario content
@@ -71,25 +175,11 @@ Assembled by `buildInterviewPrompt(difficulty, topicFolder)`. Falls back to lega
 
 **Domains:** clinical, call_the_boss, consent, structured_interview. **Difficulties:** easy, medium, strict.
 
-**166 scenario files** across `prompts/scenarios/`. Legacy monolithic files preserved in `prompts/_legacy/` for Prompt Lab and fallback.
-
-### Authentication & Subscription
-
-Optional: Supabase Auth + Stripe subscriptions. Three-tier: Unlogged → Free → Premium. Monthly £14.99/month, Annual £99.99/year (save £80). Session history tracking in database. Demo mode if Supabase not configured.
-
-### Server-Side VAD
-
-AudioStreamer (ScriptProcessorNode, 4096 buffer) → 16kHz mono Int16 PCM → base64 → WS `audio_chunk` → ServerVAD (Silero VAD v4 ONNX) → speech detection → Whisper → GPT → TTS
-
-### Feedback System
-
-On End → NEW GPT session with dedicated feedback prompt + transcript → 6 spoken sections with TTS → JSON summary (max_tokens: 500). Score 0-5. Prompts in `backend/prompts/feedback/`. `feedbackHistory[]` separate from interview history.
-
 ### Prompt Lab (Text-Only Prompt Testing)
 
-Text-in/text-out environment for rapid prompt iteration without STT/TTS overhead. REST API (no WebSocket). Accessible at `/prompt-lab` (Vercel clean URLs).
+Text-in/text-out environment for rapid prompt iteration without STT/TTS overhead. REST API (no WebSocket). Accessible at `/prompt-lab`.
 
-**Architecture:** Browser → REST `/prompt-lab/api/*` → GPT-4o-mini (no TTS) → JSON responses. Sessions use in-memory Map with `pl_` prefixed IDs, separate from production sessions.
+**Architecture:** Browser → REST `/prompt-lab/api/*` → Gemini 2.5 Flash (no TTS) → JSON responses. Sessions use in-memory Map with `pl_` prefixed IDs, separate from production sessions.
 
 **Features:**
 - 5-tab inline prompt editor with inline difficulty selector:
@@ -100,91 +190,62 @@ Text-in/text-out environment for rapid prompt iteration without STT/TTS overhead
   - **Fb.Personality** → `prompts/shared/feedback/{difficulty}_feedback_personality.txt` (per-difficulty)
 - Changing difficulty reloads Personality + Fb.Personality tabs; Core, Clinical, Feedback stay the same
 - Manual chat interface with feedback trigger (returns all 6 sections + JSON summary at once)
-- 7 automated test scripts with assertion system (good/poor/excellent/derailing/questioning/feedback_interrupt/disruptive candidates)
+- 7 automated test scripts with assertion system
 - Transcript saving and viewer
-- Dirty tracking: only modified tabs are saved/committed (prevents unnecessary diffs)
+- Dirty tracking: only modified tabs are saved/committed
 - Auto-commit to GitHub on save (production). GitHub env vars: `GITHUB_TOKEN`, `GITHUB_OWNER`, `GITHUB_REPO`
 
 **Gating:** `PROMPT_LAB_ENABLED=true` env var in production (Render). Auto-enabled in dev (`!config.isProduction`). No auth — hidden URL only.
 
-**Key files:** `backend/src/routes/promptLab.js` (12 REST endpoints), `backend/src/services/PromptLabService.js` (session/chat/feedback/tests/transcripts), `backend/src/utils/promptParser.js` (3-section parse/combine), `frontend/prompt-lab.html` (single-page UI with embedded JS), `frontend/css/prompt-lab.css`
+**Key files:** `src/routes/promptLab.js` (12 REST endpoints), `src/services/PromptLabService.js`, `src/utils/promptParser.js`
 
-### Critical File Structure
+### Key Files
 
 ```
 backend/
-├── server.js                      # Main WebSocket server (~637 lines)
-│   ├── Lines 1-55: Initialization (OpenAI, Google TTS, env vars)
-│   ├── Lines 58-62: Session ID generation
-│   ├── Lines 64-95: Scenario loading with security checks
-│   ├── Lines 97-147: Noise filtering logic
-│   ├── Lines 149-160: SSML builder
-│   ├── Lines 162-175: GPT-4o-mini wrapper
-│   ├── Lines 177-208: Google TTS wrapper
-│   ├── Lines 210-340: WebSocket message handlers
-│   └── Lines 340+: HTTP endpoints (Stripe, Supabase integration)
-├── src/services/ServerVAD.js      # Silero VAD + float32ToWavBuffer
-├── src/services/PromptLabService.js # Prompt Lab: sessions, chat, feedback, tests, transcripts
-├── src/routes/promptLab.js        # Prompt Lab REST API (12 endpoints at /prompt-lab/api)
-├── src/utils/promptParser.js      # Parse/combine 3-section prompt format
-├── prompts/scenarios/              # 166 modular scenario files (topicFolder structure)
-├── prompts/shared/                # Shared interview/feedback core + personality files
-├── prompts/_legacy/               # Legacy monolithic prompts (Prompt Lab + fallback)
-├── test-scripts/                  # Automated test definitions (7 JSON files)
-├── test-results/                  # Saved transcripts (git-ignored)
-├── __tests__/                     # 51 unit tests
-│   ├── scenario-loader.test.js
-│   ├── server.test.js
-│   ├── vad-logic.test.js
-│   ├── gpt-integration.test.js
-│   └── tts-integration.test.js
-└── package.json                   # Dependencies + scripts
-
-frontend/
-├── index.html                     # Main app: landing, auth, scenario selection (~1,800 lines)
-├── simulation.html                # Standalone simulation room page (~1,080 lines)
-├── js/
-│   ├── app.js                     # Main app logic, hash navigation (~770 lines)
-│   ├── auth.js                    # Supabase authentication (~830 lines)
-│   ├── scenarios.js               # Scenario selection & navigation (~950 lines)
-│   ├── session.js                 # V4Session WebSocket + auth params (~590 lines)
-│   ├── simulation-app.js          # simulation.html entry point, access check (~630 lines)
-│   ├── speech.js                  # Web Speech API / Whisper integration (~385 lines)
-│   ├── sidebar.js                 # Sidebar navigation, scenario switching (~715 lines)
-│   ├── mock-exam.js               # Mock exam mode logic (~800 lines)
-│   ├── orb-visualizer.js          # Voice orb WebGL animation (~500 lines)
-│   ├── ui-helpers.js              # UI utility functions (~450 lines)
-│   ├── state.js                   # Global state + sessionStorage helpers (~145 lines)
-│   ├── browser-detect.js          # Browser compatibility checks (~325 lines)
-│   ├── subscription.js            # Stripe + tier access control (~245 lines)
-│   ├── tracking.js                # Analytics tracking (~75 lines)
-│   ├── glow-effect.js             # Visual effects (~310 lines)
-│   ├── features-*.js              # Landing page animations (~360 lines total)
-│   ├── audio-streamer.js          # Browser audio capture & streaming
-│   ├── vad/                       # Voice Activity Detection (legacy, not loaded)
-│   │   ├── VADManager.js          # SileroVAD wrapper (~270 lines)
-│   │   └── SimpleVAD.js           # Volume-based VAD fallback (~470 lines)
+├── server.js                          # Main WebSocket + Express server (~1,219 lines)
+├── src/
+│   ├── config/index.js                # Centralized config with validation
+│   ├── services/
+│   │   ├── OpenAIService.js           # Gemini 2.5 Flash chat + Whisper STT (OpenAI-compatible)
+│   │   ├── GeminiTTSService.js        # Gemini TTS with style prompts (primary)
+│   │   ├── TTSService.js              # Google Cloud TTS (fallback)
+│   │   ├── ServerVAD.js               # Silero VAD v4 ONNX
+│   │   ├── PromptLabService.js        # Prompt Lab sessions/chat/feedback/tests
+│   │   ├── GitHubService.js           # Auto-commit Prompt Lab edits
+│   │   └── TestScriptGenerator.js     # Generate test scripts via Gemini
+│   ├── routes/
+│   │   └── promptLab.js               # 12 REST endpoints at /prompt-lab/api
 │   └── utils/
-│       └── audio-utils.js         # Shared audio utilities (~100 lines)
-├── prompt-lab.html                # Prompt Lab: text-only prompt testing UI (single-page, embedded JS)
-├── css/prompt-lab.css             # Prompt Lab styles (dark theme)
-├── config.js                      # Environment config (Supabase, Stripe, FREE_TIER_SCENARIOS)
-└── serve.js                       # Static file server (port 3001, CWD-relative paths)
-
-e2e-tests/                           # Playwright E2E tests (22 specs)
-├── tests/
-│   ├── landing.spec.ts              # Landing page (5 tests)
-│   ├── navigation.spec.ts          # Multi-page navigation (5 tests)
-│   ├── access-control.spec.ts      # Tier access control (5 tests)
-│   └── simulation-room.spec.ts     # Simulation room UI (7 tests)
-├── fixtures/
-│   ├── test-user.ts                 # freeUser/premiumUser page fixtures
-│   └── mock-data.ts                 # Test scenarios from FREE_TIER_SCENARIOS
-├── helpers/
-│   ├── tier-control.ts              # setTestTier() + setTierViaRoute()
-│   ├── navigation.ts               # navigateToSimulation(), clearSimulationParams()
-│   └── selectors.ts                 # Centralized DOM selectors
+│       ├── promptAssembler.js          # Modular prompt assembly (3-file)
+│       ├── promptParser.js             # Parse/combine 3-section prompt format
+│       ├── audioHelpers.js             # Noise filtering, SSML builder
+│       ├── feedbackParser.js           # Parse structured feedback
+│       ├── feedbackSectionBuffer.js    # Buffer feedback into 6 sections
+│       ├── sentenceBuffer.js           # Buffer streaming tokens into sentences
+│       └── scenarioLoader.js           # Load and validate scenario files
+├── prompts/
+│   ├── shared/interview/              # Core + personality files (7 files)
+│   ├── shared/feedback/               # Feedback core + personality files (7 files)
+│   ├── scenarios/                     # ~166 modular scenario files (topicFolder structure)
+│   └── _legacy/                       # Legacy monolithic prompts (Prompt Lab fallback)
+├── models/silero_vad_v4.onnx         # Silero VAD model (~1.72MB)
+├── test-scripts/                      # Automated test definitions (7 JSON files)
+├── __tests__/                         # 23 test files, 653 tests
+└── package.json
 ```
+
+## Authentication & Subscription
+
+**Required:** Supabase Auth + Stripe subscriptions. Login required for all access beyond the landing page.
+
+**Three-tier access:** Unlogged → Free (logged in) → Premium (active subscription)
+
+**Specialty-scoped subscriptions:** Each subscription has a `specialty` column (default: `'plastic-surgery'`). Premium access only grants scenarios matching the subscription's specialty. `SPECIALTY_MAP` in config maps folder prefixes to specialties. Currently all 4 domains map to `'plastic-surgery'` — when new specialties are added, update the map.
+
+**Pricing:** Monthly £14.99/month, Annual £99.99/year (save £80).
+
+**Database tables:** `profiles` (extends auth.users), `subscriptions` (user_id PK, status, specialty, price_type, stripe IDs), `session_history` (analytics). RLS enabled on all tables.
 
 ## Testing
 
@@ -196,9 +257,17 @@ npm run test:watch                  # Auto-run on changes
 npx jest __tests__/scenario-loader.test.js  # Specific file
 ```
 
-51 tests covering scenario loading, WebSocket, VAD, GPT, TTS. Coverage thresholds: 70% (branches, functions, lines, statements). Maintain threshold — add tests for new message types, scenario loading logic, GPT integration changes, TTS parameter modifications.
+317 tests across 18 suites. Coverage thresholds: 55% branches, 60% functions, 65% lines/statements. Tests focus on behavioral verification ("does this feature work?"), not mock wiring.
 
-Known: 5 pre-existing failures in config.test.js (env isolation), server.js has 0% coverage, ServerVAD.js has 0% coverage.
+Key test files:
+- `behavioral.test.js` (31) — Prompt assembly, noise filtering, feedback parsing, subscription enforcement, session management, error handling
+- `prompt-lab-service.test.js` (40) — Path validation, file loading, feedback, chat, transcripts
+- `promptAssembler.test.js` (26) — Core prompt assembly logic
+- `prompt-parser.test.js` (26) — Prompt parsing
+- `test-script-generator.test.js` (37) — Content detection
+- `server-vad.test.js` (22) — ONNX mock, state machine, WAV headers
+- `websocket-integration.test.js` (24) — Real WebSocket connections
+- `prompt-lab-routes.test.js` (13) — One smoke test per endpoint + security
 
 ### E2E Tests (Playwright)
 
@@ -211,17 +280,23 @@ npm run test:e2e:report    # HTML report
 npx playwright test e2e-tests/tests/landing.spec.ts  # Specific file
 ```
 
-22 specs across 4 files:
-- `landing.spec.ts` (5) — Page load, hero section, navigation links, CTA, Explore flow
-- `navigation.spec.ts` (5) — Guest browse, sessionStorage transfer, simulation room load, missing params redirect, exit navigation
-- `access-control.spec.ts` (5) — Free/premium tier access via `canAccessScenario()`, denied access redirect, upgrade modal
-- `simulation-room.spec.ts` (7) — Room layout, voice orb, control buttons, sidebar categories, AI status, transcript, scenario switching
+45 tests across 6 spec files (3 projects: chromium, mobile, tablet):
+- `landing.spec.ts` (8) — Title, hero, CTAs, nav links, pricing scroll, footer sections
+- `auth-flow.spec.ts` (5) — Auth page, form fields, OAuth button, close nav, mode toggle
+- `scenario-flow.spec.ts` (8) — Specialty→difficulty→mode→scenarios, back nav, fresh start
+- `simulation-room.spec.ts` (8) — Room render, header, toggle, sidebar, exit, timer, transcript, empty state
+- `responsive.spec.ts` (6) — Mobile/tablet layouts, nav, sim room at narrow viewports
+- `access-control.spec.ts` (4) — Free/premium/unlogged tier access via `window.__TEST_TIER__`
 
-Architecture: Chromium only (Web Speech API). `playwright.config.ts` auto-starts frontend (serve.js on 3001) and backend (server.js on 8080). Screenshots/videos/traces on failure in `e2e-tests/test-results/`.
+Playwright projects: `chromium` (desktop, 33 tests), `mobile` (Pixel 5, 6 tests), `tablet` (Galaxy Tab S4, 6 tests).
 
-Tier testing uses `page.route()` to intercept `state.js` and modify `testTierOverride` at source level (`e2e-tests/helpers/tier-control.ts:setTierViaRoute`). NOT `addInitScript` — `testTierOverride` is let-scoped, not window property.
+`playwright.config.ts` builds React SPA before serving, auto-starts frontend (serve.js on 3001) and backend (server.js on 8080). Screenshots/videos/traces on failure.
 
-Fixtures: `freeUser`/`premiumUser` in `e2e-tests/fixtures/test-user.ts`. Helpers: `navigateToSimulation()`, `clearSimulationParams()`. Selectors in `e2e-tests/helpers/selectors.ts`.
+**E2E conventions:**
+- All selectors use `data-testid` attributes (centralized in `e2e-tests/helpers/selectors.ts`)
+- Tier control via `window.__TEST_TIER__` set with `page.addInitScript()` (persists across navigations)
+- Sim room has desktop + mobile layouts in DOM — use `.first()` (desktop) or `.last()` (mobile) for duplicate testids
+- `navigateToSimulation()` helper accepts optional tier parameter
 
 ### Code Quality
 
@@ -232,27 +307,31 @@ npm run lint:fix      # Auto-fix
 npm run format        # Prettier
 ```
 
+`eslint-plugin-jest` with `plugin:jest/recommended`. Husky pre-commit runs `lint-staged`.
+
 ## Deployment
 
-- **Frontend:** https://www.reviva.live/ (Vercel)
+- **Frontend:** https://www.reviva.live/ (Vercel, serves `frontend/` directory)
 - **Backend API:** https://api.reviva.live/ (Render)
 - **WebSocket:** wss://api.reviva.live/
 - **Stripe webhook:** https://api.reviva.live/stripe-webhook
 
 ### Render Environment Variables
 
-`OPENAI_API_KEY`, `GOOGLE_APPLICATION_CREDENTIALS_JSON` (JSON string not file path), `SUPABASE_URL`, `SUPABASE_SERVICE_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_ID_MONTHLY`, `STRIPE_PRICE_ID_ANNUAL`, `FRONTEND_URL=https://www.reviva.live`, `PROMPT_LAB_ENABLED=true`
+`GEMINI_API_KEY` (required), `OPENAI_API_KEY` (optional, Whisper STT only), `GOOGLE_APPLICATION_CREDENTIALS_JSON` (JSON string, not file path), `SUPABASE_URL`, `SUPABASE_SERVICE_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_ID_MONTHLY`, `STRIPE_PRICE_ID_ANNUAL`, `FRONTEND_URL=https://www.reviva.live`, `PROMPT_LAB_ENABLED=true`
 
 ### Local Environment (`backend/.env`)
 
 ```bash
 # Required
-OPENAI_API_KEY=sk-...
+GEMINI_API_KEY=...
 GOOGLE_APPLICATION_CREDENTIALS=./google-tts-key.json
 
-# Optional
+# Optional (Whisper STT)
+OPENAI_API_KEY=sk-...
+
+# Optional (Auth & Payments)
 PORT=8080
-HTTP_PORT=3000
 SUPABASE_URL=https://...
 SUPABASE_SERVICE_KEY=eyJ...
 STRIPE_SECRET_KEY=sk_...
@@ -264,51 +343,20 @@ FRONTEND_URL=https://www.reviva.live
 
 Google Cloud credentials: local uses file path (`GOOGLE_APPLICATION_CREDENTIALS`), production uses JSON string (`GOOGLE_APPLICATION_CREDENTIALS_JSON`).
 
-Production server: `cd backend && npm start`. Frontend static: `cd frontend && node serve.js`.
+### Vercel Configuration
 
-## Audio
-
-### TTS Voice Configuration
-
-Set in `backend/server.js:46`: `const TTS_VOICE = 'en-GB-Neural2-D'`. Also settable per-session via WS query param `?voice=en-GB-Neural2-B`.
-
-**Available British voices:** en-GB-Neural2-B (Male Professional), en-GB-Neural2-D (Male Fast, default), en-GB-Wavenet-D (Male Natural), en-GB-Studio-D (Male Premium), en-GB-Neural2-A (Female Professional), en-GB-Neural2-C (Female Warmer)
-
-TTS params in server.js:177-208: `speakingRate=1.0`, `volumeGainDb=0.0`, `audioEncoding=MP3`
-
-### SSML Processing
-
-`buildNaturalSSML(text)` adds pauses: period → `<break strength="medium"/>`, question mark → `<break strength="medium"/>`, comma → `<break strength="weak"/>`
-
-### Noise Filtering
-
-`isNoiseTranscript(text)` in server.js:97-147 filters empty/short (<2 chars), repeated chars, noise patterns (um/uh/er/ah), single words (yes/no/okay), echo pickups.
-
-### Server-Side VAD Details
-
-Silero VAD v4 ONNX (`backend/models/silero_vad_v4.onnx` ~1.72MB). Frame=1536 samples@16kHz (~96ms). Thresholds: pos=0.3, neg=0.2. Pre-speech buffer=10 frames (~960ms). v5 model did NOT work.
-
-Audio pipeline: AudioStreamer (ScriptProcessorNode, bufferSize=4096) → 16kHz mono Int16 PCM (~1365 samples/chunk) → base64 → WS `audio_chunk`. Gain normalization: quiet audio boosted up to 50x for VAD, original sent to Whisper.
-
-Key files: `backend/src/services/ServerVAD.js`, `frontend/js/audio-streamer.js`, `frontend/js/session.js`
-
-### Browser Compatibility
-
-Chrome + Edge supported (Web Speech API required). Safari + Firefox not supported (uses Whisper API fallback).
-
-### Cost Structure
-
-Per 5-min session: Web Speech API £0.00, GPT-4o-mini £0.0002, Google TTS £0.0001. **Total: £0.0003** (vs £0.25 for V3 — 94% reduction).
+`frontend/vercel.json`: `cleanUrls: true`, `trailingSlash: false`. React SPA — Vercel serves `frontend/index.html` for all routes.
 
 ## Development Workflow
 
 ### Dev Servers
 
 ```bash
-cd backend && npm run dev                    # Nodemon auto-restart
-cd frontend && python -m http.server 5500    # OR: npx serve . -l 5500 (NO -s flag!)
-node serve.js                                # Alternative frontend server
+cd frontend-react && npm run dev     # React dev server (port 3001, HMR)
+cd backend && npm run dev            # Nodemon auto-restart (port 8080)
 ```
+
+Production: `cd backend && npm start`. Frontend is pre-built by Vite to `frontend/`.
 
 ### Debugging
 
@@ -325,53 +373,47 @@ Strategy: Use VS Code debugger instead of console.log. Breakpoints in server.js 
 
 ### Common Tasks
 
-- **Adding scenarios:** Create `backend/prompts/scenarios/{domain}/{subcategory}/{topicName}/{topicName}_1.txt`, add topic entry to `frontend/js/scenarios.js` `getTopicsData()`, optional image in `frontend/images/`
-- **Changing AI behavior:** server.js:162-175 — `model` (gpt-4o-mini), `temperature` (0.7), `max_tokens` (150)
-- **Changing voice quality:** server.js:177-208 — `speakingRate` (1.0), `volumeGainDb` (0.0), `audioEncoding` (MP3)
-- **Modifying noise filter:** `isNoiseTranscript()` in server.js:97-147 — add to `noisePatterns` array, adjust `uniqueChars` threshold
+- **Adding scenarios:** Create `backend/prompts/scenarios/{domain}/{subcategory}/{topicName}/{topicName}_1.txt`, add topic entry to `frontend-react/src/data/scenarios.js` TOPICS object, optional image in `frontend/images/`
+- **Changing AI behavior:** `backend/src/config/index.js` — `LLM_MODEL`, temperature/max_tokens in `server.js` `streamResponseToClient()`
+- **Changing TTS voice or style:** `backend/src/config/index.js` — `TTS_VOICE`, `TTS_STYLE_PROMPTS`
+- **Modifying noise filter:** `src/utils/audioHelpers.js` `isNoiseTranscript()` — add to noise patterns, adjust thresholds
 
 ### Key Technical Decisions
 
-1. **Web Speech API over Whisper:** 100% cost reduction on STT, but Chrome/Edge only
-2. **GPT-4o-mini over GPT-4:** 99% cost reduction, sufficient for conversational AI
-3. **Google TTS over OpenAI TTS:** Better British voices, lower latency
+1. **Server-Side VAD over Web Speech API:** Consistent cross-browser, but requires WebSocket audio streaming
+2. **Gemini 2.5 Flash over GPT-4o-mini:** Better performance, OpenAI-compatible API wrapper
+3. **Gemini TTS over Google Cloud TTS:** Style-prompted vocal delivery per difficulty
 4. **WebSocket over HTTP:** Real-time bidirectional communication for interrupts
-5. **Session-based conversation history:** Full context maintained per session
-6. **SSML for natural speech:** Adds pauses without artificial emphasis
-7. **Noise filtering:** Prevents false positives from ambient audio
+5. **React SPA over vanilla multi-page:** Code splitting, state management, component reuse
+6. **Zustand over Redux:** Minimal boilerplate, fine-grained selectors
 
 ### Git Workflow
 
-Main branch: `main` (stable, production-ready). Backup tag: `pre-dev-environment-setup`. Track changes in `DEVELOPMENT_LOG.md`.
+Main branch: `main` (stable, production-ready). Commit and push directly — no feature branches or PRs.
+
+Rollback tags: `pre-full-react-migration`, `pre-react-migration`, `pre-dev-environment-setup`.
+
+Husky hooks: pre-commit runs `lint-staged`, pre-push runs `git pull --rebase` (syncs Prompt Lab remote edits).
 
 ### Known Issues & Gotchas
 
-- Web Speech API needs manual restart after each recognition (handled in `frontend/index.js`)
 - Mic must pause during AI speech (echo/feedback prevention)
-- Session cleanup only on WS disconnect — no automatic cleanup
-- Path traversal security in `loadScenarioPrompt()`
-- Google Cloud credentials: production requires JSON credentials as environment variable
+- Session cleanup only on WS disconnect + 30-min idle sweep
+- Path traversal security in scenario loading
+- Google Cloud credentials: production requires JSON string env var
 - Stripe webhooks must be configured for subscription management
-- Mock exam still runs in index.html (unification deferred)
-- Most prompts are placeholders (only nec fasc fully developed)
-- `frontend/js/vad/` files still exist but not loaded
+- Most prompts are placeholders (only nec fasc + replantation fully developed)
+- Vanilla `frontend/js/` files still exist but are NOT loaded — orphaned from pre-React era
+- Gemini TTS JSON repair for test script generation has known edge cases (deferred)
 
 ### Dev Tools
 
-**Prompt Lab** at `frontend/prompt-lab.html`:
-- Local: `http://localhost:3000/prompt-lab.html` (backend serves frontend static files)
-- Production: `https://www.reviva.live/prompt-lab` (Vercel clean URLs strip `.html`)
-- REST API: 12 endpoints at `/prompt-lab/api/` (session, chat, feedback, prompts CRUD, tests, transcripts)
+**Prompt Lab** at `/prompt-lab`:
+- Local: `http://localhost:3001/prompt-lab` (React dev) or `http://localhost:8080/prompt-lab` (backend static)
+- Production: `https://www.reviva.live/prompt-lab`
+- REST API: 12 endpoints at `/prompt-lab/api/`
 - Test scripts in `backend/test-scripts/necrotising_fasciitis/` (7 JSON files)
 - Transcripts saved to `backend/test-results/` (git-ignored)
-
-UI Annotator at `frontend/tools/ui-annotator.html`:
-1. Start frontend server: `cd frontend && npx serve . -l 5500` (no `-s` flag)
-2. Open: `http://localhost:5500/tools/ui-annotator.html`
-3. Navigate pages via tabs, click to add markers, fill in change requests
-4. Copy generated prompt and paste to Claude for implementation
-
-Features: 10 page tabs, priority-colored markers, persistent localStorage, markdown output. See `frontend/tools/README.md`.
 
 ## Claude Code Plugins & Skills
 
@@ -410,9 +452,43 @@ Output persists in planning directory: `claude-plan.md`, `claude-interview.md`, 
 
 ## External Documentation
 
+- Gemini API: https://ai.google.dev/docs
 - Google TTS: https://cloud.google.com/text-to-speech
-- OpenAI API: https://platform.openai.com/docs
-- Web Speech API: https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API
+- OpenAI API (Whisper): https://platform.openai.com/docs
+- React: https://react.dev
+- React Router: https://reactrouter.com
+- Zustand: https://zustand.docs.pmnd.rs
+- Vite: https://vite.dev
+- Tailwind CSS v4: https://tailwindcss.com/docs
 - Jest: https://jestjs.io/
+- Playwright: https://playwright.dev
 - Supabase: https://supabase.com/docs
 - Stripe: https://stripe.com/docs/api
+
+## Maintaining This File
+
+This file is loaded into every Claude Code conversation. Keep it accurate.
+
+### When to Update
+- **After changing LLM/TTS provider or model** → Update "LLM Configuration" and "TTS Configuration" in Backend section
+- **After adding/removing routes or pages** → Update "Routes & Pages" in Frontend section
+- **After modifying auth or access control** → Update relevant Access Control section (client or server)
+- **After adding new services, routes, or utils** → Update "Key Files" in Backend section
+- **After adding/modifying tests** → Update "Testing" section counts
+- **After changing env vars or deployment config** → Update "Deployment" section
+- **After adding new WebSocket message types** → Update "WebSocket Message Types" in Backend section
+- **After installing new Claude Code plugins** → Update "Plugins & Skills" section
+
+### How to Update
+1. Edit only the relevant section — don't rewrite the whole file
+2. Use concrete values (model names, file paths, counts) not vague descriptions
+3. Don't include specific line numbers in server.js — they shift constantly
+4. Keep file trees up to date but don't list every file — focus on key files
+5. If a section grows beyond ~30 lines, consider whether details belong in memory files instead
+6. Run `cd backend && npm test` to get current test count before updating Testing section
+
+### What NOT to Put Here
+- Conversation-specific context (use memory files)
+- Implementation plans (use plan files)
+- Debug logs or temporary notes
+- Information derivable from `git log` or reading the code

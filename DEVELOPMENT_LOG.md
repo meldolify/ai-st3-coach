@@ -359,3 +359,72 @@ Additional tag `pre-react-migration` marks the state before even the simulation 
 - Auth session restore
 - Scenario selection flow
 - Rollback pre-full-react-migration
+
+---
+
+## 2026-03-12: Post-Migration Navigation Audit & Fixes
+
+### Summary
+Comprehensive navigation audit across the entire React SPA. Fixed 7 issues including broken image paths, stale state on logout, missing headers, and fragile navigation patterns.
+
+### Bugs Found & Fixed
+
+#### Image Case Sensitivity (commit 375ee7a)
+- **Bug:** Landing page images 404'd on Vercel (Linux). Git tracked `frontend/images/landing/` (lowercase) but React referenced `/images/Landing/` (uppercase). Windows is case-insensitive so worked locally.
+- **Fix:** Normalized all paths to lowercase. Renamed `frontend-react/public/images/Landing/` → `landing/` in git.
+
+#### Logout Button & Pricing Scroll (commit 9215fde)
+- **Bug:** Logout button was a stub (`/* logout */`). Pricing hash links didn't scroll (Lenis intercepts native anchor nav).
+- **Fix:** Logout calls `supabaseClient.auth.signOut()` + Zustand store reset. Pricing uses `scrollIntoView()`.
+
+#### Navigation Audit Fixes (commit 2dc05db)
+1. **Stale state on logout:** `selectionStore` wasn't cleared → "Try Free Samples" showed cached difficulty/mode. Fix: `resetSelection()` + `sessionStorage.removeItem('simulationParams')` on logout.
+2. **Simulation exit → landing page:** `returnPage` was `'scenarioSelection'` (invalid route). Fix: changed to `'/scenarios'`.
+3. **Missing header on inner pages:** ScenarioFlow and ProfilePage had no navigation. Fix: created `AppNav` component (logo + profile + logout).
+4. **Fresh start from landing:** `getInitialStep()` read persisted state and skipped specialty selection. Fix: landing page buttons pass `{ state: { fresh: true } }`, ScenarioFlow resets on fresh flag.
+5. **Auth close fragility:** `navigate(-1)` broke on direct URL access. Fix: `navigate('/')`.
+6. **Profile back button:** `navigate(-1)` broke on direct access. Fix: replaced with AppNav.
+
+### Navigation Architecture (Final)
+
+| Page | Nav Component | Back Behavior |
+|------|--------------|---------------|
+| Landing `/` | LandingNav | N/A |
+| Scenarios `/scenarios/*` | AppNav | Per-step back buttons in flow |
+| Simulation `/simulation` | Header (exit+timer) | Exit → `/scenarios` |
+| Profile `/profile` | AppNav | Logo → `/` |
+| Auth `/login` | None (modal) | Close → `/` |
+| Prompt Lab `/prompt-lab` | None (standalone) | N/A |
+
+### State Persistence Rules
+- **Landing → Scenarios:** Always fresh start (`resetSelection()`)
+- **Simulation → Scenarios:** Preserves specialty + difficulty (resumes at mode step)
+- **Logout:** Clears ALL selection state + simulationParams
+- **selectionStore:** Persisted to sessionStorage via Zustand middleware
+
+### Dead Links Documented (Future Work)
+- `/contact`, `/help`, `/faq`, `/terms`, `/privacy` — footer links exist but pages not yet created
+
+### Files Changed
+- `frontend-react/src/components/AppNav.jsx` — **NEW** lightweight nav for inner pages
+- `frontend-react/src/stores/selectionStore.js` — returnPage fix
+- `frontend-react/src/pages/LandingPage/LandingNav.jsx` — logout reset, fresh nav
+- `frontend-react/src/pages/LandingPage/HeroSection.jsx` — fresh nav, lowercase images
+- `frontend-react/src/pages/LandingPage/WhoSection.jsx` — lowercase images
+- `frontend-react/src/pages/LandingPage/WhySection.jsx` — lowercase images
+- `frontend-react/src/pages/LandingPage/ActionSection.jsx` — fresh nav
+- `frontend-react/src/pages/LandingPage/FooterSection.jsx` — pricing scroll, fresh nav
+- `frontend-react/src/pages/Scenarios/ScenarioFlow.jsx` — AppNav, fresh-start logic
+- `frontend-react/src/pages/Profile/ProfilePage.jsx` — AppNav, removed navigate(-1)
+- `frontend-react/src/pages/Auth/AuthPage.jsx` — close → navigate('/')
+- `frontend-react/public/images/Landing/` → `landing/` — case rename
+
+### Search Keywords
+- Navigation audit
+- AppNav header
+- Logout reset selectionStore
+- returnPage fix
+- Fresh start landing
+- Case sensitivity Vercel Linux
+- Lenis scroll pricing
+- Dead links footer

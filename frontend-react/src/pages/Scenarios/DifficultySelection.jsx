@@ -44,7 +44,7 @@ export default function DifficultySelection({ onSelect, onBack }) {
   }
 
   return (
-    <div className="gradient-cards-page">
+    <div className="gradient-cards-page" data-testid="difficulty-selection">
       <BackButton onClick={onBack} label="Specialties" />
 
       <div className="gradient-cards-header">

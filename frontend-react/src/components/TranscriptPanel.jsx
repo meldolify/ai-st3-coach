@@ -80,6 +80,7 @@ export default memo(function TranscriptPanel({ messages, personaName = 'Examiner
 
   return (
     <div
+      data-testid="transcript-panel"
       className={cn(
         'flex flex-col h-full'
       )}

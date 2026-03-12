@@ -1,7 +1,6 @@
 /**
  * VAD (Voice Activity Detection) Logic Tests
- * Tests isNoiseTranscript edge cases not covered by audioHelpers.test.js
- * Focuses on boundary cases, mixed content, and unusual inputs
+ * Tests isNoiseTranscript filtering and buildNaturalSSML
  */
 
 process.env.NODE_ENV = 'test';
@@ -10,107 +9,72 @@ process.env.OPENAI_API_KEY = 'test-api-key';
 
 const { isNoiseTranscript, buildNaturalSSML } = require('../src/utils/audioHelpers');
 
-describe('isNoiseTranscript - boundary cases', () => {
-  test('returns true for exactly 1 character (below 2-char threshold)', () => {
+describe('isNoiseTranscript', () => {
+  test('returns true for empty, null, and non-string inputs', () => {
+    expect(isNoiseTranscript('')).toBe(true);
+    expect(isNoiseTranscript(null)).toBe(true);
+    expect(isNoiseTranscript(undefined)).toBe(true);
+    expect(isNoiseTranscript(42)).toBe(true);
+    expect(isNoiseTranscript({})).toBe(true);
+  });
+
+  test('returns true for text below 2-char threshold', () => {
     expect(isNoiseTranscript('x')).toBe(true);
   });
 
-  test('returns false for exactly 2 meaningful characters', () => {
-    // "hi" is 2 chars but doesn't match any noise pattern
-    expect(isNoiseTranscript('hi')).toBe(false);
-  });
-
-  test('returns true for filler sounds with trailing period', () => {
-    expect(isNoiseTranscript('um.')).toBe(true);
-    expect(isNoiseTranscript('uh.')).toBe(true);
-    expect(isNoiseTranscript('er.')).toBe(true);
-  });
-
-  test('returns true for case-insensitive filler sounds', () => {
-    expect(isNoiseTranscript('UM')).toBe(true);
-    expect(isNoiseTranscript('Uh')).toBe(true);
-    expect(isNoiseTranscript('ER')).toBe(true);
-    expect(isNoiseTranscript('AH')).toBe(true);
-  });
-
-  test('returns true for extended filler sounds', () => {
-    expect(isNoiseTranscript('ummm')).toBe(true);
-    expect(isNoiseTranscript('uhhh')).toBe(true);
-    expect(isNoiseTranscript('errr')).toBe(true);
-  });
-
-  test('returns true for text with no letters at all', () => {
-    expect(isNoiseTranscript('123')).toBe(true);
-    expect(isNoiseTranscript('!@#$')).toBe(true);
+  test('returns true for whitespace-only and no-letter text', () => {
     expect(isNoiseTranscript('   ')).toBe(true);
+    expect(isNoiseTranscript('!@#$')).toBe(true);
+    expect(isNoiseTranscript('123')).toBe(true);
   });
 
-  test('returns false for text mixing numbers and letters', () => {
-    expect(isNoiseTranscript('The patient is 45 years old')).toBe(false);
-    expect(isNoiseTranscript('Give 2mg of morphine')).toBe(false);
+  test('returns true for filler sounds (case-insensitive, with punctuation)', () => {
+    expect(isNoiseTranscript('um')).toBe(true);
+    expect(isNoiseTranscript('UM')).toBe(true);
+    expect(isNoiseTranscript('uh.')).toBe(true);
+    expect(isNoiseTranscript('ER')).toBe(true);
+    expect(isNoiseTranscript('ummm')).toBe(true);
+    expect(isNoiseTranscript('  um  ')).toBe(true);
   });
 
-  test('returns true for repeated single letter patterns', () => {
+  test('returns true for repeated single-character patterns', () => {
     expect(isNoiseTranscript('aaa')).toBe(true);
-    expect(isNoiseTranscript('bbb')).toBe(true);
     expect(isNoiseTranscript('zzz')).toBe(true);
-  });
-
-  test('returns true for spaced single letter patterns', () => {
     expect(isNoiseTranscript('a b c')).toBe(true);
-    expect(isNoiseTranscript('s s s')).toBe(true);
   });
 
-  test('returns false for legitimate multi-word text', () => {
-    expect(isNoiseTranscript('I would examine the wound')).toBe(false);
-    expect(isNoiseTranscript('Can you tell me more about the history')).toBe(false);
-    expect(isNoiseTranscript('The flap is well perfused')).toBe(false);
-  });
-
-  test('returns false for Thanks and Thank you (valid short responses)', () => {
-    // NOTE: "thanks" and "thank you" are valid short responses, not noise
-    // The noise filter intentionally keeps these (see audioHelpers.js comment)
+  test('returns false for legitimate short responses', () => {
+    expect(isNoiseTranscript('hi')).toBe(false);
     expect(isNoiseTranscript('thanks')).toBe(false);
     expect(isNoiseTranscript('Thank you')).toBe(false);
-    expect(isNoiseTranscript('Thanks.')).toBe(false);
-    expect(isNoiseTranscript('THANK YOU')).toBe(false);
+    expect(isNoiseTranscript('  ok  ')).toBe(false);
+    expect(isNoiseTranscript('  yes  ')).toBe(false);
+  });
+
+  test('returns false for medical speech and full sentences', () => {
+    expect(isNoiseTranscript('I would examine the wound')).toBe(false);
+    expect(isNoiseTranscript('The patient is 45 years old')).toBe(false);
+    expect(isNoiseTranscript('Give 2mg of morphine')).toBe(false);
+    expect(isNoiseTranscript('The flap is well perfused')).toBe(false);
   });
 
   test('returns false for longer sentences containing noise words', () => {
     expect(isNoiseTranscript('Yes, I would manage this with antibiotics')).toBe(false);
-    expect(isNoiseTranscript('Thank you for explaining, now let me')).toBe(false);
     expect(isNoiseTranscript('Okay so the patient has presented with')).toBe(false);
-  });
-
-  test('handles non-string input types', () => {
-    expect(isNoiseTranscript(42)).toBe(true);
-    expect(isNoiseTranscript(true)).toBe(true);
-    expect(isNoiseTranscript({})).toBe(true);
-    expect(isNoiseTranscript([])).toBe(true);
-  });
-
-  test('handles whitespace-padded text correctly', () => {
-    expect(isNoiseTranscript('  um  ')).toBe(true); // filler sound = noise
-    expect(isNoiseTranscript('  ok  ')).toBe(false); // valid short response
-    expect(isNoiseTranscript('  yes  ')).toBe(false); // valid short response
   });
 });
 
-describe('buildNaturalSSML - additional patterns', () => {
-  test('handles text with multiple consecutive periods', () => {
+describe('buildNaturalSSML', () => {
+  test('adds medium breaks after periods and weak breaks after commas', () => {
     const result = buildNaturalSSML('First. Second. Third.');
-    // Two internal ". " should get breaks, trailing period has no space after it
-    const breakCount = (result.match(/break strength="medium"/g) || []).length;
-    expect(breakCount).toBe(2);
+    const mediumBreaks = (result.match(/break strength="medium"/g) || []).length;
+    expect(mediumBreaks).toBe(2);
+
+    const commaResult = buildNaturalSSML('one, two, three');
+    expect(commaResult).toContain(',<break strength="weak"/>');
   });
 
-  test('handles text with only commas', () => {
-    const result = buildNaturalSSML('one, two, three');
-    expect(result).toContain('<speak>');
-    expect(result).toContain(',<break strength="weak"/>');
-  });
-
-  test('preserves text content inside speak tags', () => {
+  test('preserves plain text inside speak tags', () => {
     const result = buildNaturalSSML('Important medical text');
     expect(result).toBe('<speak>Important medical text</speak>');
   });

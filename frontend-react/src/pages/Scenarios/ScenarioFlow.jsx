@@ -225,10 +225,10 @@ export default function ScenarioFlow() {
   }
 
   return (
-    <>
+    <div data-testid="scenario-flow">
       <AppNav />
       {stepContent}
       {showUpgrade && <UpgradeModal onClose={() => setShowUpgrade(false)} />}
-    </>
+    </div>
   )
 }

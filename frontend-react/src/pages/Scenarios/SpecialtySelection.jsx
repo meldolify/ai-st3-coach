@@ -9,7 +9,7 @@ import { PERSONA_CONFIG } from '../../config'
  */
 export default function SpecialtySelection({ onSelect }) {
   return (
-    <div className="selection-page">
+    <div className="selection-page" data-testid="specialty-selection">
       <div className="header--minimal" style={{ textAlign: 'center', padding: '40px 0 24px', marginBottom: '32px' }}>
         <h1 className="page-title">ReViva Interview Trainer</h1>
         <p style={{ fontSize: '15px', color: 'var(--text-secondary)', fontWeight: 400 }}>

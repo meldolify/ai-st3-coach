@@ -45,6 +45,7 @@ export default function Header({ scenario, difficulty, timeLimit = 300, isConnec
 
   return (
     <header
+      data-testid="sim-header"
       className={cn(
         'flex items-center justify-between px-5 h-[56px]',
         'glass-card !rounded-none !border-x-0 !border-t-0',
@@ -105,6 +106,7 @@ export default function Header({ scenario, difficulty, timeLimit = 300, isConnec
       {/* Right: Timer */}
       <div className="flex items-center gap-3">
         <div
+          data-testid="session-timer"
           role="timer"
           aria-live="assertive"
           aria-label={`Time remaining: ${formatTime(secondsLeft)}`}

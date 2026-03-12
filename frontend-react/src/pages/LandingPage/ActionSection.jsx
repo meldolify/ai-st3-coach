@@ -15,7 +15,7 @@ export default function ActionSection({ isLoggedIn, isPremium }) {
             </h2>
             <p className="landing-body" style={{ marginTop: '1rem' }}>Choose your path.</p>
           </div>
-          <div className="action-right" id="pricingSection">
+          <div className="action-right" id="pricingSection" data-testid="pricing-section">
             <div className="pricing-card-new pricing-card-new--free">
               <span className="landing-overline" style={{ color: 'var(--organic-forest)' }}>Free</span>
               <h3 style={{ fontFamily: 'var(--font-landing-display)', fontSize: '1.5rem', margin: '16px 0' }}>4 Sample Scenarios</h3>

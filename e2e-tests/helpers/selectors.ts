@@ -1,62 +1,39 @@
 /**
- * Centralized CSS selectors for E2E tests.
+ * Centralized data-testid selectors for E2E tests (React SPA).
  * Update these when the DOM changes rather than fixing individual tests.
  */
 export const SELECTORS = {
-  // Landing page (index.html #landingPage)
   landing: {
-    page: '#landingPage',
-    heroTagline: '.hero-tagline',
-    heroPrimaryBtn: '#heroPrimaryBtn',
-    navLinksGuest: '#navLinksGuest',
-    navLinksUser: '#navLinksUser',
-    loginBtn: '#navLinksGuest button:nth-child(3)', // "Log In"
-    signupBtn: '#navLinksGuest button:nth-child(4)', // "Sign Up"
-    exploreBtn: '#navLinksGuest button:nth-child(2)', // "Explore without login"
+    nav: '[data-testid="landing-nav"]',
+    heroSection: '[data-testid="hero-section"]',
+    pricingSection: '[data-testid="pricing-section"]',
+    navExplore: '[data-testid="nav-explore"]',
+    navLogin: '[data-testid="nav-login"]',
+    navSignup: '[data-testid="nav-signup"]',
   },
-
-  // Auth modal
   auth: {
-    modal: '#authPage',
-    emailInput: '#authEmail',
-    passwordInput: '#authPassword',
+    page: '[data-testid="auth-page"]',
+    googleOAuth: '[data-testid="google-oauth-btn"]',
   },
-
-  // Upgrade modal
-  upgrade: {
-    modal: '#upgradeModal',
-    title: '#upgradeModalTitle',
-    message: '#upgradeModalMessage',
-    subscribeBtn: '.btn-upgrade',
-    closeBtn: '#upgradeModal .modal-close',
-    maybeLaterBtn: '.btn-cancel',
-  },
-
-  // Scenario selection (index.html #scenarioSelection)
   scenarios: {
-    page: '#scenarioSelection',
+    flow: '[data-testid="scenario-flow"]',
+    specialtySelection: '[data-testid="specialty-selection"]',
+    difficultySelection: '[data-testid="difficulty-selection"]',
+    modeSelection: '[data-testid="mode-selection"]',
+    scenarioSelection: '[data-testid="scenario-selection"]',
   },
-
-  // Simulation room (simulation.html)
   simulation: {
-    room: '#simulationRoom',
-    voiceOrb: '#voiceOrb',
-    aiStatus: '#aiStatus',
-    scenarioTitle: '#currentScenarioTitle',
-    scenarioCategory: '#currentScenarioCategory',
-    connectBtn: '#connectBtn',
-    disconnectBtn: '#disconnectBtn',
-    interruptBtn: '#interruptBtn',
-    sidebar: '#simSidebar',
-    sidebarToggle: '#sidebarToggle',
-    transcript: '#transcriptMessages',
-    clinicalImage: '#clinicalImage',
-    sessionStatus: '#sessionStatus',
-    exitBtn: '.sidebar-back-btn',
-    mockExamTimer: '#mockExamTimer',
-    timerMinutes: '#timerMinutes',
-    timerSeconds: '#timerSeconds',
-    personaName: '#personaName',
-    personaTitle: '#personaTitle',
+    room: '[data-testid="sim-room"]',
+    voiceOrb: '[data-testid="voice-orb"]',
+    sessionToggle: '[data-testid="session-toggle"]',
+    transcriptPanel: '[data-testid="transcript-panel"]',
+    sidebar: '[data-testid="sidebar"]',
+    header: '[data-testid="sim-header"]',
+    timer: '[data-testid="session-timer"]',
+    feedbackButton: '[data-testid="feedback-button"]',
   },
+  upgrade: {
+    modal: '[data-testid="upgrade-modal"]',
+  },
+  appNav: '[data-testid="app-nav"]',
 } as const;

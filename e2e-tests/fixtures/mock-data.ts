@@ -43,6 +43,6 @@ export function createSimulationParams(
     difficulty,
     mode,
     mockExamType: mode === 'mock-exam' ? 'by-station' : null,
-    returnPage: 'scenarioSelection',
+    returnPage: '/scenarios',
   };
 }

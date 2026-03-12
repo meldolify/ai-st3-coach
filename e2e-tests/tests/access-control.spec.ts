@@ -1,89 +1,62 @@
-import { test, expect } from '../fixtures/test-user';
-import { FREE_SCENARIOS, PREMIUM_SCENARIO } from '../fixtures/mock-data';
-import { SELECTORS } from '../helpers/selectors';
-import { navigateToSimulation } from '../helpers/navigation';
+import { test, expect } from '../fixtures/test-user'
+import { SELECTORS } from '../helpers/selectors'
+import { navigateToSimulation } from '../helpers/navigation'
+import { FREE_SCENARIOS, PREMIUM_SCENARIO, createSimulationParams } from '../fixtures/mock-data'
+import { setTestTier } from '../helpers/tier-control'
 
-test.describe('Access Control - Three Tier System', () => {
-  test('free user can access free tier scenario paths', async ({ freeUser }) => {
-    const canAccess = await freeUser.evaluate((path) => {
-      return typeof (window as any).canAccessScenario === 'function'
-        ? (window as any).canAccessScenario(path)
-        : null;
-    }, FREE_SCENARIOS.necFasc.promptFile);
+/**
+ * Access control tests — verifies three-tier scenario gating.
+ *
+ * Uses freeUser/premiumUser fixtures from test-user.ts which set
+ * window.__TEST_TIER__ via addInitScript before navigation.
+ *
+ * Access flow (subscription.js):
+ *   - 'premium' tier: canAccessScenario() returns true for all scenarios
+ *   - 'free' tier: canAccessScenario() returns true only for FREE_TIER_SCENARIOS
+ *   - 'unlogged' tier: canAccessScenario() returns false for all
+ *
+ * When SimulationRoom denies access, it redirects to /scenarios (SimulationRoom.jsx:84).
+ * The UpgradeModal is shown from ScenarioSelection when a locked scenario card is clicked.
+ */
 
-    expect(canAccess).not.toBeNull();
-    expect(canAccess).toBe(true);
-  });
+test.describe('Access Control', () => {
 
-  test('free user cannot access premium scenario paths', async ({ freeUser }) => {
-    const canAccess = await freeUser.evaluate((path) => {
-      return typeof (window as any).canAccessScenario === 'function'
-        ? (window as any).canAccessScenario(path)
-        : null;
-    }, PREMIUM_SCENARIO.promptFile);
+  test('free user can access free-tier scenario', async ({ freeUser: page }) => {
+    const params = createSimulationParams(FREE_SCENARIOS.necFasc)
+    await navigateToSimulation(page, params)
 
-    expect(canAccess).not.toBeNull();
-    expect(canAccess).toBe(false);
-  });
+    // Should stay on simulation page and render the room
+    const room = page.locator(SELECTORS.simulation.room)
+    await expect(room).toBeVisible({ timeout: 10000 })
+    await expect(page).toHaveURL(/\/simulation/)
+  })
 
-  test('premium user can access all scenario paths', async ({ premiumUser }) => {
-    const canAccessFree = await premiumUser.evaluate((path) => {
-      return typeof (window as any).canAccessScenario === 'function'
-        ? (window as any).canAccessScenario(path)
-        : null;
-    }, FREE_SCENARIOS.necFasc.promptFile);
+  test('free user accessing premium scenario is redirected', async ({ freeUser: page }) => {
+    const params = createSimulationParams(PREMIUM_SCENARIO)
+    await navigateToSimulation(page, params)
 
-    const canAccessPremium = await premiumUser.evaluate((path) => {
-      return typeof (window as any).canAccessScenario === 'function'
-        ? (window as any).canAccessScenario(path)
-        : null;
-    }, PREMIUM_SCENARIO.promptFile);
+    // SimulationRoom.jsx — denied access redirects to /scenarios
+    await expect(page).toHaveURL(/\/scenarios/, { timeout: 10_000 })
+  })
 
-    expect(canAccessFree).not.toBeNull();
-    expect(canAccessFree).toBe(true);
-    expect(canAccessPremium).not.toBeNull();
-    expect(canAccessPremium).toBe(true);
-  });
+  test('premium user can access any scenario', async ({ premiumUser: page }) => {
+    const params = createSimulationParams(PREMIUM_SCENARIO)
+    await navigateToSimulation(page, params)
 
-  test('free user is denied access to premium scenario on simulation.html', async ({ freeUser }) => {
-    // Inject premium scenario into sessionStorage
-    await freeUser.evaluate((scenario) => {
-      sessionStorage.setItem('simulationParams', JSON.stringify({
-        scenario,
-        difficulty: 'easy',
-        mode: 'practice',
-        returnPage: 'scenarioSelection',
-      }));
-    }, PREMIUM_SCENARIO);
+    // Should stay on simulation page and render the room
+    const room = page.locator(SELECTORS.simulation.room)
+    await expect(room).toBeVisible({ timeout: 10000 })
+    await expect(page).toHaveURL(/\/simulation/)
+  })
 
-    await freeUser.goto('/simulation.html');
+  test('unlogged user is redirected from simulation', async ({ page }) => {
+    // Set tier to 'unlogged' — canAccessScenario returns false for everything
+    await setTestTier(page, 'unlogged')
 
-    // simulation-app.js denies access and redirects to index.html/#accessDenied
-    // The redirect lands on index.html where checkAuthState runs first
-    // Verify we left simulation.html (redirected back to index)
-    await freeUser.waitForURL(/localhost:\d+\/(?!simulation)/, { timeout: 15000 });
-    // sessionStorage should be cleared by the access check
-    const params = await freeUser.evaluate(() => sessionStorage.getItem('simulationParams'));
-    expect(params).toBeNull();
-  });
+    const params = createSimulationParams(FREE_SCENARIOS.necFasc)
+    await navigateToSimulation(page, params)
 
-  test('upgrade modal can be triggered programmatically', async ({ freeUser }) => {
-    // Test the showUpgradeModal function directly
-    const hasFunction = await freeUser.evaluate(() =>
-      typeof (window as any).showUpgradeModal === 'function'
-    );
-    expect(hasFunction).toBe(true);
-
-    // Trigger the modal
-    await freeUser.evaluate(() => {
-      (window as any).showUpgradeModal({
-        title: 'Access Required',
-        message: 'Please subscribe to access this scenario.',
-      });
-    });
-
-    const modal = freeUser.locator(SELECTORS.upgrade.modal);
-    await expect(modal).toBeVisible();
-    await expect(modal.locator(SELECTORS.upgrade.title)).toContainText('Access Required');
-  });
-});
+    // Should be redirected away from simulation to /scenarios
+    await expect(page).toHaveURL(/\/scenarios/, { timeout: 10_000 })
+  })
+})
