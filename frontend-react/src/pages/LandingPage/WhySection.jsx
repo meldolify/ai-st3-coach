@@ -21,7 +21,7 @@ export default function WhySection() {
               reliable practice &mdash; not favours.
             </p>
           </div>
-          <img src="/images/Landing/why-problem.png" className="why-phase-img" alt="" aria-hidden="true" />
+          <img src="/images/landing/why-problem.png" className="why-phase-img" alt="" aria-hidden="true" />
         </div>
         {/* Phase 2: The Gap */}
         <div className="why-phase" id="whyPhase2">
@@ -34,7 +34,7 @@ export default function WhySection() {
               You deserve better.
             </p>
           </div>
-          <img src="/images/Landing/why-gap.png" className="why-phase-img" alt="" aria-hidden="true" />
+          <img src="/images/landing/why-gap.png" className="why-phase-img" alt="" aria-hidden="true" />
         </div>
         {/* Phase 3: The Solution */}
         <div className="why-phase" id="whyPhase3">
@@ -46,7 +46,7 @@ export default function WhySection() {
               real experience. Practice at your pace, on your schedule.
             </p>
           </div>
-          <img src="/images/Landing/why-solution.png" className="why-phase-img" alt="" aria-hidden="true" />
+          <img src="/images/landing/why-solution.png" className="why-phase-img" alt="" aria-hidden="true" />
         </div>
         {/* Progress indicator line */}
         <div className="why-progress-line" aria-hidden="true"></div>
