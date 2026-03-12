@@ -34,7 +34,7 @@ export default function HeroSection({ isLoggedIn }) {
             Hand-crafted stations. 24/7 access. Real interview experience.
           </p>
           <div className="hero-ctas">
-            <button className="btn-amber magnetic-btn" onClick={() => navigate('/scenarios')}>Try Free Samples</button>
+            <button className="btn-amber magnetic-btn" onClick={() => navigate('/scenarios', { state: { fresh: true } })}>Try Free Samples</button>
             <button className="btn-outline magnetic-btn" onClick={() => navigate('/login')}>Sign Up</button>
           </div>
         </div>
@@ -50,7 +50,7 @@ export default function HeroSection({ isLoggedIn }) {
           </h1>
           <span className="landing-overline" style={{ marginBottom: '1rem' }}>Welcome back</span>
           <div className="hero-ctas">
-            <button className="btn-amber btn-amber--lg magnetic-btn" onClick={() => navigate('/scenarios')}>Go to Dashboard &rarr;</button>
+            <button className="btn-amber btn-amber--lg magnetic-btn" onClick={() => navigate('/scenarios', { state: { fresh: true } })}>Go to Dashboard &rarr;</button>
           </div>
         </div>
       )}

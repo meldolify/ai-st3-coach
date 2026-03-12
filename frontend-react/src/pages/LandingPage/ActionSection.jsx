@@ -24,7 +24,7 @@ export default function ActionSection({ isLoggedIn, isPremium }) {
                 <li style={{ padding: '4px 0' }}>Free sign-up, no card</li>
               </ul>
               <p style={{ fontFamily: 'var(--font-landing-display)', fontSize: '1.75rem', fontWeight: 700, margin: '24px 0 16px' }}>&pound;0</p>
-              <button className="btn-outline" style={{ color: 'var(--text-on-light)', borderColor: 'var(--organic-forest)' }} onClick={() => navigate('/scenarios')}>Explore Free</button>
+              <button className="btn-outline" style={{ color: 'var(--text-on-light)', borderColor: 'var(--organic-forest)' }} onClick={() => navigate('/scenarios', { state: { fresh: true } })}>Explore Free</button>
             </div>
             <div className="pricing-card-new pricing-card-new--premium">
               <span className="landing-overline" style={{ color: 'var(--organic-amber)' }}>Premium &starf;</span>
@@ -50,7 +50,7 @@ export default function ActionSection({ isLoggedIn, isPremium }) {
             <span className="display-line">CONTINUES.</span>
           </h2>
           <div style={{ marginTop: '2.5rem' }}>
-            <button className="btn-amber btn-amber--lg magnetic-btn" onClick={() => navigate('/scenarios')}>Go to Dashboard &rarr;</button>
+            <button className="btn-amber btn-amber--lg magnetic-btn" onClick={() => navigate('/scenarios', { state: { fresh: true } })}>Go to Dashboard &rarr;</button>
           </div>
         </div>
       )}

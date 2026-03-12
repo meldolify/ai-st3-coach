@@ -4,6 +4,7 @@ import { supabaseClient } from '../../lib/supabase'
 import { useAuthStore } from '../../stores/authStore'
 import { isPremiumUser, openCustomerPortal } from '../../lib/subscription'
 import UpgradeModal from '../../components/UpgradeModal'
+import AppNav from '../../components/AppNav'
 import './profile.css'
 
 /**
@@ -164,13 +165,7 @@ export default function ProfilePage() {
 
   return (
     <div className="profile-page">
-      {/* Back button */}
-      <button className="back-btn" onClick={() => navigate(-1)}>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <polyline points="15 18 9 12 15 6" />
-        </svg>
-        Back
-      </button>
+      <AppNav />
 
       <div className="profile-layout">
         {/* Left Panel — Account Info */}

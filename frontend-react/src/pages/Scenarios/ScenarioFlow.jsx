@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { useSelectionStore } from '../../stores/selectionStore'
 import { SUBCATEGORIES, TOPICS } from '../../data/scenarios'
 import SpecialtySelection from './SpecialtySelection'
@@ -9,6 +9,7 @@ import MockTypeSelection from './MockTypeSelection'
 import StationTypeSelection from './StationTypeSelection'
 import ScenarioSelection from './ScenarioSelection'
 import UpgradeModal from '../../components/UpgradeModal'
+import AppNav from '../../components/AppNav'
 import './scenario-flow.css'
 
 /**
@@ -31,10 +32,23 @@ const STEPS = [
 
 export default function ScenarioFlow() {
   const navigate = useNavigate()
+  const location = useLocation()
   const store = useSelectionStore()
 
   // Determine initial step from persisted state
   const getInitialStep = () => {
+    // Fresh entry from landing page — reset all selections
+    if (location.state?.fresh) {
+      store.resetSelection()
+      // Clear the fresh flag so browser back doesn't re-trigger
+      window.history.replaceState({}, '')
+      const defaultSpecialty = localStorage.getItem('defaultSpecialty')
+      if (defaultSpecialty) {
+        store.setSpecialty(defaultSpecialty)
+        return 'difficulty'
+      }
+      return 'specialty'
+    }
     // If returning from simulation with difficulty set, skip to mode
     if (store.selectedDifficulty && store.selectedSpecialty) {
       return 'mode'
@@ -212,6 +226,7 @@ export default function ScenarioFlow() {
 
   return (
     <>
+      <AppNav />
       {stepContent}
       {showUpgrade && <UpgradeModal onClose={() => setShowUpgrade(false)} />}
     </>
