@@ -30,7 +30,7 @@ export default function AuthPage() {
 
   // --- Close handler ---
   const handleClose = useCallback(() => {
-    navigate(-1)
+    navigate('/')
   }, [navigate])
 
   // --- Overlay click (close if clicking backdrop) ---

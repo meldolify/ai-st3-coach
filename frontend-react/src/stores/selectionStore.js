@@ -96,7 +96,7 @@ export const useSelectionStore = create(
             currentIndex: state.currentStationIndex,
             results: state.mockExamResults,
           },
-          returnPage: 'scenarioSelection',
+          returnPage: '/scenarios',
         }
       },
     }),
