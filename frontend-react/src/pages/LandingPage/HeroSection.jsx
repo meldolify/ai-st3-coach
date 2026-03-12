@@ -6,18 +6,18 @@ export default function HeroSection({ isLoggedIn }) {
   return (
     <section className="section-hero section--light" id="sectionHero">
       {/* Botanical leaf overlays (parallax, hidden on mobile via CSS) */}
-      <img src="/images/Landing/leaf-1.png" className="hero-leaf hero-leaf--1" data-speed="0.2" aria-hidden="true" alt="" />
-      <img src="/images/Landing/leaf-2.png" className="hero-leaf hero-leaf--2" data-speed="0.5" aria-hidden="true" alt="" />
-      <img src="/images/Landing/leaf-3.png" className="hero-leaf hero-leaf--3" data-speed="0.35" aria-hidden="true" alt="" />
+      <img src="/images/landing/leaf-1.png" className="hero-leaf hero-leaf--1" data-speed="0.2" aria-hidden="true" alt="" />
+      <img src="/images/landing/leaf-2.png" className="hero-leaf hero-leaf--2" data-speed="0.5" aria-hidden="true" alt="" />
+      <img src="/images/landing/leaf-3.png" className="hero-leaf hero-leaf--3" data-speed="0.35" aria-hidden="true" alt="" />
 
       {/* Hero parallax assets (Knowledge Tableau) */}
       <div className="hero-tableau">
-        <img src="/images/Landing/hero-textbook.png" className="hero-asset hero-asset--textbook" data-speed="0.06" data-drift="-0.08" alt="" aria-hidden="true" />
-        <img src="/images/Landing/hero-scalpel.png" className="hero-asset hero-asset--scalpel" data-speed="0.35" data-drift="-0.05" alt="" aria-hidden="true" />
-        <img src="/images/Landing/hero-penlight.png" className="hero-asset hero-asset--penlight" data-speed="0.25" data-drift="0.10" alt="" aria-hidden="true" />
-        <img src="/images/Landing/hero-reflex-hammer.png" className="hero-asset hero-asset--reflex-hammer" data-speed="0.12" data-drift="0.06" alt="" aria-hidden="true" />
-        <img src="/images/Landing/hero-tablet.png" className="hero-asset hero-asset--tablet" data-speed="0.10" data-drift="0.08" alt="" aria-hidden="true" />
-        <img src="/images/Landing/hero-stethoscope.png" className="hero-asset hero-asset--stethoscope" data-speed="0.20" data-drift="-0.12" alt="" aria-hidden="true" />
+        <img src="/images/landing/hero-textbook.png" className="hero-asset hero-asset--textbook" data-speed="0.06" data-drift="-0.08" alt="" aria-hidden="true" />
+        <img src="/images/landing/hero-scalpel.png" className="hero-asset hero-asset--scalpel" data-speed="0.35" data-drift="-0.05" alt="" aria-hidden="true" />
+        <img src="/images/landing/hero-penlight.png" className="hero-asset hero-asset--penlight" data-speed="0.25" data-drift="0.10" alt="" aria-hidden="true" />
+        <img src="/images/landing/hero-reflex-hammer.png" className="hero-asset hero-asset--reflex-hammer" data-speed="0.12" data-drift="0.06" alt="" aria-hidden="true" />
+        <img src="/images/landing/hero-tablet.png" className="hero-asset hero-asset--tablet" data-speed="0.10" data-drift="0.08" alt="" aria-hidden="true" />
+        <img src="/images/landing/hero-stethoscope.png" className="hero-asset hero-asset--stethoscope" data-speed="0.20" data-drift="-0.12" alt="" aria-hidden="true" />
       </div>
 
       {/* Logged-out hero */}

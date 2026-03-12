@@ -19,7 +19,7 @@ export default function WhoSection() {
             The principles apply to any medical interview where practice makes the difference.
           </p>
           <div className="who-photo-wrapper">
-            <img src="/images/Landing/doctor-portrait.png" className="who-photo" alt="Medical trainee preparing for interviews" loading="lazy" />
+            <img src="/images/landing/doctor-portrait.png" className="who-photo" alt="Medical trainee preparing for interviews" loading="lazy" />
           </div>
         </div>
       </div>
