@@ -1,0 +1,13 @@
+[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+
+Write the patient/procedure information sheet for this consent scenario.
+
+Include:
+- Patient details (name, age)
+- Procedure (name of planned operation)
+- Context (referral reason, clinic visit, why listed for surgery)
+- Patient Expectations (what the patient understands, any concerns)
+
+No Images field for consent scenarios.
+
+END OF AUTHOR NOTE]

@@ -6,11 +6,77 @@ SCENARIO TITLE
 
 Debridement Necrotising Fasciitis Consent
 
-HEADING: Consent
-SUBHEADING: Emergency Procedures
+PATIENT QUESTIONS
 
-[PLACEHOLDER - Clinical scenario to be added]
+(Internal reference only. Questions the patient or patient's relative may ask during the consent discussion.
+Use these after the candidate finishes their explanation.
+How anxious or questioning you are is controlled by the personality layer.)
+
+[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+
+Write 6-10 patient questions that would naturally arise during this consent discussion.
+These should be written in everyday language as a real patient would ask.
+
+Examples for carpal tunnel release:
+"Will I be awake during it?"
+"How long does the operation take?"
+"When can I go back to work?"
+"You said there's a risk of infection — how common is that?"
+"Will the numbness definitely go away?"
+"What about the scar — will it be very noticeable?"
+"When do I need to come back to get checked?"
+
+For paediatric scenarios, write questions as a parent:
+"Will my child be in pain afterwards?"
+"How long will the anaesthetic take to wear off?"
+"When can they go back to school?"
+
+END OF AUTHOR NOTE]
+
+MAIN CONSENT DOMAINS
+
+[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+
+List the 4-6 main consent domains being assessed in this scenario.
+
+Example for carpal tunnel release:
+Introduction and patient identification
+Procedure explanation (what will be done, in layman terms)
+Anaesthesia (local vs general, what to expect)
+Post-operative care (dressings, restrictions, follow-up)
+Risks and complications (infection, bleeding, nerve damage, recurrence, scar)
+Recovery and return to activities
+
+END OF AUTHOR NOTE]
+
+ESSENTIAL MARKING POINTS
+
+[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+
+List the essential marking points, organised by domain.
+These are the minimum requirements for a score of 3 or above.
+
+Format:
+Domain Name
+The candidate must explain X in clear, jargon-free language.
+The candidate must mention Y.
+
+END OF AUTHOR NOTE]
+
+BONUS MARKING POINTS
+
+[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+
+List the bonus marking points that distinguish scores of 4 and 5.
+These demonstrate excellent patient communication or detailed knowledge.
+
+Format:
+Domain Name
+The candidate explains X with a helpful analogy.
+The candidate proactively addresses common patient concerns about Y.
+
+END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
-[PLACEHOLDER - End criteria to be added]
+Once the main consent domains have been reasonably covered, or you judge that the scenario time has elapsed, end the scenario naturally.

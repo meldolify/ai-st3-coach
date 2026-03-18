@@ -206,12 +206,42 @@ function loadLegacyFeedbackPrompt(topicFolder, difficulty) {
   return 'You are an expert plastic surgery examiner. Review the interview transcript and provide detailed feedback with a score from 0 to 5.';
 }
 
+/**
+ * Load the candidate information sheet for a scenario.
+ * Info sheets live in prompts/info-sheets/{domain}/ and are displayed
+ * to the candidate during preparation time — NOT sent to the LLM.
+ *
+ * @param {string} topicFolder - e.g. "call_the_boss/scenarios/major_burn"
+ * @returns {{ fields: Array<{key: string, value: string}>, images: string[] } | null}
+ */
+function loadInfoSheet(topicFolder) {
+  if (!topicFolder || typeof topicFolder !== 'string') {
+    return null;
+  }
+
+  const domain = extractDomain(topicFolder);
+  if (domain !== 'call_the_boss' && domain !== 'consent') {
+    return null;
+  }
+
+  const scenarioName = topicFolder.split('/').pop();
+  const infoSheetPath = path.join(PROMPTS_DIR, 'info-sheets', domain, `${scenarioName}.txt`);
+
+  if (!fs.existsSync(infoSheetPath)) {
+    return null;
+  }
+
+  const { parseInfoSheet } = require('./infoSheetParser');
+  return parseInfoSheet(readFile(infoSheetPath));
+}
+
 module.exports = {
   buildInterviewPrompt,
   buildFeedbackPrompt,
   extractDomain,
   validateInputs,
   resolveScenarioPath,
+  loadInfoSheet,
   loadLegacyInterviewPrompt,
   loadLegacyFeedbackPrompt,
   // Exposed for testing

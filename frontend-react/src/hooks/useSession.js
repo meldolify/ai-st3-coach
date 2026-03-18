@@ -33,6 +33,7 @@ export function useSession({ orbVisualizerRef }) {
   const [inFeedbackMode, setInFeedbackMode] = useState(false)
   const [interviewEnded, setInterviewEnded] = useState(false)
   const [feedbackRequested, setFeedbackRequested] = useState(false)
+  const [scenarioMeta, setScenarioMeta] = useState(null) // { domain, infoSheet, prepTime }
 
   // Transcript messages: { id, speaker: 'user' | 'ai', text, timestamp }
   const [messages, setMessages] = useState([])
@@ -45,6 +46,7 @@ export function useSession({ orbVisualizerRef }) {
   const streamedFullTextRef = useRef('')
   const speechStartAtRef = useRef(null)
   const feedbackResolveRef = useRef(null)
+  const scenarioLoadedResolveRef = useRef(null)
   const messageIdRef = useRef(0)
   const sessionIdRef = useRef(null)
   const inFeedbackModeRef = useRef(false)
@@ -101,12 +103,25 @@ export function useSession({ orbVisualizerRef }) {
   const handleMessage = useCallback(
     (msg) => {
       switch (msg.type) {
-        case 'scenario_loaded':
+        case 'scenario_loaded': {
           sessionIdRef.current = msg.sessionId
           setSessionId(msg.sessionId)
           audioStreamerRef.current.setSessionId(msg.sessionId)
-          setStatusText('Ready')
+
+          const meta = {
+            domain: msg.domain || 'clinical',
+            infoSheet: msg.infoSheet || null,
+            prepTime: msg.prepTime || 0,
+          }
+          setScenarioMeta(meta)
+          setStatusText(meta.prepTime > 0 ? 'Preparation Time' : 'Ready')
+
+          if (scenarioLoadedResolveRef.current) {
+            scenarioLoadedResolveRef.current(meta)
+            scenarioLoadedResolveRef.current = null
+          }
           break
+        }
 
         case 'interview_ended':
           break
@@ -238,11 +253,14 @@ export function useSession({ orbVisualizerRef }) {
         const ws = new WebSocket(wsUrl)
         wsRef.current = ws
 
+        // Resolve when scenario_loaded arrives (not on ws.onopen)
+        // so the caller gets domain/infoSheet/prepTime metadata
+        scenarioLoadedResolveRef.current = resolve
+
         ws.onopen = () => {
           setIsConnected(true)
           audioStreamerRef.current.websocket = ws
           setStatusText('Connected')
-          resolve()
         }
 
         ws.onmessage = (event) => {
@@ -252,6 +270,7 @@ export function useSession({ orbVisualizerRef }) {
 
         ws.onerror = (error) => {
           setIsConnected(false)
+          scenarioLoadedResolveRef.current = null
           reject(error)
         }
 
@@ -329,8 +348,10 @@ export function useSession({ orbVisualizerRef }) {
     }
     sessionIdRef.current = null
     inFeedbackModeRef.current = false
+    scenarioLoadedResolveRef.current = null
     setIsConnected(false)
     setSessionId(null)
+    setScenarioMeta(null)
     setInFeedbackMode(false)
     setInterviewEnded(false)
     setFeedbackRequested(false)
@@ -341,6 +362,7 @@ export function useSession({ orbVisualizerRef }) {
   return {
     isConnected,
     sessionId,
+    scenarioMeta,
     orbState,
     statusText,
     messages,

@@ -13,6 +13,7 @@ import Header from './Header'
 import Sidebar from './Sidebar'
 import TranscriptPanel from './TranscriptPanel'
 import ClinicalImageCard from './ClinicalImageCard'
+import InformationSheet from './InformationSheet'
 import VoiceOrb, { VoiceOrbWithRings } from './VoiceOrb'
 import AnimatedBackground from './AnimatedBackground'
 import SessionToggle from './SessionToggle'
@@ -37,6 +38,7 @@ export default function SimulationRoom() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [feedbackData, setFeedbackData] = useState(null)
   const [confirmModal, setConfirmModal] = useState(null)
+  const [prepPhase, setPrepPhase] = useState(null) // { prepTime } | null
 
   const rawScenario = params?.scenario || {
     title: 'No scenario selected',
@@ -53,6 +55,7 @@ export default function SimulationRoom() {
 
   const {
     isConnected,
+    scenarioMeta,
     orbState,
     statusText,
     messages,
@@ -65,6 +68,8 @@ export default function SimulationRoom() {
     requestFeedback,
     disconnect,
   } = useSession({ orbVisualizerRef: orbRef })
+
+  const domain = scenarioMeta?.domain || 'clinical'
 
   // Beforeunload warning during active session
   useEffect(() => {
@@ -111,14 +116,25 @@ export default function SimulationRoom() {
     if (!scenario.promptFile) return
     setIsConnecting(true)
     try {
-      await connect(scenario.promptFile, difficulty)
-      await startListening()
+      const meta = await connect(scenario.promptFile, difficulty)
+      if (meta.prepTime > 0 && meta.infoSheet) {
+        // CTB/Consent: enter prep phase, defer audio until prep ends
+        setPrepPhase({ prepTime: meta.prepTime })
+      } else {
+        // Clinical/Structured: start listening immediately
+        await startListening()
+      }
     } catch (error) {
       console.error('[SimulationRoom] Connection failed:', error)
     } finally {
       setIsConnecting(false)
     }
   }, [scenario.promptFile, difficulty, connect, startListening])
+
+  const handlePrepEnd = useCallback(async () => {
+    setPrepPhase(null)
+    await startListening()
+  }, [startListening])
 
   const handleEnd = useCallback(() => {
     sendEndInterview()
@@ -248,6 +264,8 @@ export default function SimulationRoom() {
             difficulty={difficulty}
             timeLimit={params?.mockExam?.isActive ? 480 : 300}
             isConnected={isConnected}
+            prepPhase={prepPhase}
+            onPrepEnd={handlePrepEnd}
             onExit={handleExit}
             onToggleSidebar={() => setSidebarOpen((prev) => !prev)}
           />
@@ -272,7 +290,11 @@ export default function SimulationRoom() {
             />
             <div className="text-center">
               <p className="font-display text-[17px] text-text-primary">{persona.name}</p>
-              <p className="text-[13px] text-text-muted mt-0.5">{persona.title}</p>
+              <p className="text-[13px] text-text-muted mt-0.5">
+                {domain === 'call_the_boss' ? 'Consultant On Call' :
+                 domain === 'consent' ? 'Patient' :
+                 persona.title}
+              </p>
             </div>
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/[0.04]">
               <span
@@ -285,8 +307,22 @@ export default function SimulationRoom() {
             </div>
           </motion.div>
 
-          {/* Center: Clinical image */}
-          {scenario.imageFile && (
+          {/* Center: Clinical image (clinical) or Info sheet (CTB/Consent during prep) */}
+          {prepPhase && scenarioMeta?.infoSheet && (
+            <motion.div
+              initial={reveal.image.initial}
+              animate={reveal.image.animate}
+              transition={reveal.image.transition}
+              className="glass-card rounded-xl w-[48%] shrink-0"
+            >
+              <InformationSheet
+                infoSheet={scenarioMeta.infoSheet}
+                domain={domain}
+                onImageExpand={(src) => setExpandedImage(src)}
+              />
+            </motion.div>
+          )}
+          {!prepPhase && scenario.imageFile && domain === 'clinical' && (
             <motion.div
               initial={reveal.image.initial}
               animate={reveal.image.animate}
@@ -322,7 +358,16 @@ export default function SimulationRoom() {
           style={{ minHeight: 160, overflow: 'visible' }}
         >
           <div className="h-8 flex items-center justify-center">
-            {statusText && (
+            {prepPhase ? (
+              <motion.div
+                key="prep-status"
+                initial={{ opacity: 0, y: 4 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-[13px] font-medium text-center text-indigo-600/80"
+              >
+                Read the information sheet — interview starts automatically
+              </motion.div>
+            ) : statusText ? (
               <motion.div
                 key={statusText}
                 initial={{ opacity: 0, y: 4 }}
@@ -331,24 +376,28 @@ export default function SimulationRoom() {
               >
                 {statusText}
               </motion.div>
-            )}
+            ) : null}
           </div>
 
-          <VoiceOrbWithRings ref={orbRef} state={orbState} size={100} />
+          <VoiceOrbWithRings ref={orbRef} state={prepPhase ? 'idle' : orbState} size={100} />
 
           <div className="flex items-center gap-3">
-            <SessionToggle
-              isConnected={isConnected}
-              isConnecting={isConnecting}
-              interviewEnded={interviewEnded}
-              onConnect={handleConnect}
-              onEnd={handleEnd}
-            />
-            <FeedbackButton
-              visible={interviewEnded}
-              disabled={feedbackRequested}
-              onClick={handleRequestFeedback}
-            />
+            {!prepPhase && (
+              <>
+                <SessionToggle
+                  isConnected={isConnected}
+                  isConnecting={isConnecting}
+                  interviewEnded={interviewEnded}
+                  onConnect={handleConnect}
+                  onEnd={handleEnd}
+                />
+                <FeedbackButton
+                  visible={interviewEnded}
+                  disabled={feedbackRequested}
+                  onClick={handleRequestFeedback}
+                />
+              </>
+            )}
           </div>
         </motion.div>
       </div>
@@ -381,7 +430,16 @@ export default function SimulationRoom() {
 
         {/* Scrollable content */}
         <div className="flex-1 overflow-y-auto p-3 flex flex-col gap-4 relative z-10">
-          {scenario.imageFile && (
+          {prepPhase && scenarioMeta?.infoSheet && (
+            <div className="glass-card rounded-xl">
+              <InformationSheet
+                infoSheet={scenarioMeta.infoSheet}
+                domain={domain}
+                onImageExpand={(src) => setExpandedImage(src)}
+              />
+            </div>
+          )}
+          {!prepPhase && scenario.imageFile && domain === 'clinical' && (
             <div className="glass-card rounded-xl">
               <ClinicalImageCard
                 imageFile={scenario.imageFile}

@@ -3,21 +3,51 @@ import { cn } from '../lib/utils'
 
 /**
  * Header — Frosted glass top bar with scenario info, timer, and navigation.
+ * Supports dual timer: prep countdown (CTB/Consent) then interview countdown.
  */
-export default function Header({ scenario, difficulty, timeLimit = 300, isConnected, onExit, onToggleSidebar }) {
+export default function Header({ scenario, difficulty, timeLimit = 300, isConnected, prepPhase, onPrepEnd, onExit, onToggleSidebar }) {
+  // Interview timer state
   const [secondsLeft, setSecondsLeft] = useState(timeLimit)
   const [isRunning, setIsRunning] = useState(false)
 
+  // Prep timer state
+  const [prepSecondsLeft, setPrepSecondsLeft] = useState(0)
+
+  // Start prep timer when prepPhase activates
   useEffect(() => {
-    if (isConnected && !isRunning) {
+    if (prepPhase) {
+      setPrepSecondsLeft(prepPhase.prepTime)
+    }
+  }, [prepPhase])
+
+  // Prep countdown
+  useEffect(() => {
+    if (!prepPhase || prepSecondsLeft <= 0) return
+    const interval = setInterval(() => {
+      setPrepSecondsLeft((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval)
+          onPrepEnd?.()
+          return 0
+        }
+        return prev - 1
+      })
+    }, 1000)
+    return () => clearInterval(interval)
+  }, [prepPhase, prepSecondsLeft, onPrepEnd])
+
+  // Interview timer starts when connected AND prep is done (or no prep)
+  useEffect(() => {
+    if (isConnected && !prepPhase && !isRunning) {
       setIsRunning(true)
       setSecondsLeft(timeLimit)
     }
     if (!isConnected) {
       setIsRunning(false)
     }
-  }, [isConnected, timeLimit, isRunning])
+  }, [isConnected, prepPhase, timeLimit, isRunning])
 
+  // Interview countdown
   useEffect(() => {
     if (!isRunning) return
     const interval = setInterval(() => {
@@ -38,8 +68,10 @@ export default function Header({ scenario, difficulty, timeLimit = 300, isConnec
     return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`
   }, [])
 
-  const isWarning = secondsLeft <= 60 && secondsLeft > 0
-  const isExpired = secondsLeft === 0
+  const isPrepActive = !!prepPhase
+  const displaySeconds = isPrepActive ? prepSecondsLeft : secondsLeft
+  const isWarning = !isPrepActive && secondsLeft <= 60 && secondsLeft > 0
+  const isExpired = !isPrepActive && secondsLeft === 0
 
   const difficultyLabel = { easy: 'Friendly', medium: 'Standard', strict: 'Strict' }
 
@@ -103,21 +135,38 @@ export default function Header({ scenario, difficulty, timeLimit = 300, isConnec
         </div>
       </div>
 
-      {/* Right: Timer */}
+      {/* Right: Timer + optional skip button */}
       <div className="flex items-center gap-3">
-        <div
-          data-testid="session-timer"
-          role="timer"
-          aria-live="assertive"
-          aria-label={`Time remaining: ${formatTime(secondsLeft)}`}
-          className={cn(
-            'font-body tabular-nums text-[15px] font-medium px-3 py-1 rounded-md',
-            isExpired && 'text-error bg-red-500/10',
-            isWarning && !isExpired && 'text-speaking bg-amber-500/10',
-            !isWarning && !isExpired && 'text-text-secondary'
+        {isPrepActive && (
+          <button
+            onClick={onPrepEnd}
+            className="text-[12px] font-medium text-text-muted hover:text-text-primary transition-colors px-2 py-1 rounded-md hover:bg-black/[0.04]"
+          >
+            Start Early
+          </button>
+        )}
+
+        <div className="flex items-center gap-2">
+          {isPrepActive && (
+            <span className="text-[11px] font-medium text-indigo-600/80 uppercase tracking-wider hidden sm:inline">
+              Prep
+            </span>
           )}
-        >
-          {formatTime(secondsLeft)}
+          <div
+            data-testid="session-timer"
+            role="timer"
+            aria-live="assertive"
+            aria-label={`${isPrepActive ? 'Preparation' : ''} Time remaining: ${formatTime(displaySeconds)}`}
+            className={cn(
+              'font-body tabular-nums text-[15px] font-medium px-3 py-1 rounded-md',
+              isPrepActive && 'text-indigo-600 bg-indigo-500/10',
+              !isPrepActive && isExpired && 'text-error bg-red-500/10',
+              !isPrepActive && isWarning && !isExpired && 'text-speaking bg-amber-500/10',
+              !isPrepActive && !isWarning && !isExpired && 'text-text-secondary'
+            )}
+          >
+            {formatTime(displaySeconds)}
+          </div>
         </div>
       </div>
     </header>

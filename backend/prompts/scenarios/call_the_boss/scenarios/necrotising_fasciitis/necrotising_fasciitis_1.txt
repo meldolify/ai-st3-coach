@@ -6,11 +6,72 @@ SCENARIO TITLE
 
 Necrotising Fasciitis
 
-HEADING: Call The Boss
-SUBHEADING: Scenarios
+PROBING QUESTIONS
 
-[PLACEHOLDER - Clinical scenario to be added]
+(Internal reference only. Questions the consultant may ask during the call.
+Use these to challenge or guide the candidate after they finish presenting.
+Delivery specificity is controlled by the personality layer.)
+
+[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+
+Write 4-8 probing questions the consultant might ask during the phone call.
+These should test the candidate's clinical knowledge and management plan.
+
+Examples:
+"What were the blood results?"
+"Have you started any treatment so far?"
+"What is your surgical plan?"
+"Talk me through the steps you would take in theatre."
+"Who else have you contacted?"
+"Are you comfortable managing this yourself or do you need me to come in?"
+
+END OF AUTHOR NOTE]
+
+MAIN COMMUNICATION AND CLINICAL DOMAINS
+
+[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+
+List the 4-6 main domains being assessed in this scenario.
+These should cover both communication skills and clinical knowledge areas.
+
+Example from a burns call:
+Structured clinical presentation (history, examination, observations)
+Burns assessment (TBSA, depth, mechanism)
+Resuscitation and initial management (fluids, analgesia, monitoring)
+Surgical planning (escharotomy, debridement, coverage)
+Escalation and team coordination
+Safety awareness (airway, transfer, ITU)
+
+END OF AUTHOR NOTE]
+
+ESSENTIAL MARKING POINTS
+
+[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+
+List the essential marking points, organised by domain.
+These are the minimum requirements for a score of 3 or above.
+
+Format:
+Domain Name
+The candidate must demonstrate X.
+The candidate must mention Y.
+
+END OF AUTHOR NOTE]
+
+BONUS MARKING POINTS
+
+[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+
+List the bonus marking points that distinguish scores of 4 and 5.
+These demonstrate advanced knowledge or exceptional communication.
+
+Format:
+Domain Name
+The candidate discusses X in detail.
+The candidate demonstrates awareness of Y.
+
+END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
-[PLACEHOLDER - End criteria to be added]
+Once the main communication and clinical domains have been reasonably covered, or you judge that the scenario time has elapsed, end the scenario naturally.
