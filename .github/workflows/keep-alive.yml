@@ -2,7 +2,7 @@ name: Supabase Keep-Alive
 
 on:
   schedule:
-    - cron: '0 0 * * 0,5'  # Every Sunday and Friday at midnight UTC
+    - cron: '0 0 * * *'  # Every day at midnight UTC
   workflow_dispatch:        # Manual trigger for testing
 
 jobs:
@@ -11,18 +11,22 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 1
     steps:
-      - name: Query Supabase database to prevent free tier pause
+      - name: Write to Supabase database to prevent free tier pause
         run: |
           HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
-            "${{ secrets.SUPABASE_URL }}/rest/v1/profiles?select=id&limit=1" \
+            "${{ secrets.SUPABASE_URL }}/rest/v1/keep_alive?id=eq.1" \
+            -X PUT \
             -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
-            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}")
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}" \
+            -H "Content-Type: application/json" \
+            -H "Prefer: return=minimal" \
+            -d '{"id": 1, "pinged_at": "'"$(date -u +%Y-%m-%dT%H:%M:%SZ)"'"}')
 
-          echo "Supabase ping: HTTP $HTTP_STATUS at $(date -u)"
+          echo "Supabase keep-alive: HTTP $HTTP_STATUS at $(date -u)"
 
           if [ "$HTTP_STATUS" -ge 200 ] && [ "$HTTP_STATUS" -lt 300 ]; then
-            echo "OK - Database query successful"
+            echo "OK - Database write successful"
           else
-            echo "::error::Supabase ping failed (HTTP $HTTP_STATUS)"
+            echo "::error::Supabase keep-alive failed (HTTP $HTTP_STATUS)"
             exit 1
           fi
