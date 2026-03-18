@@ -1,7 +1,3 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
 Extravasation Injury
@@ -10,138 +6,112 @@ CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+You are on call and have been asked to review a neonate on the neonatal unit who has developed swelling and discolouration of the dorsum of the right hand following an intravenous infusion. The nurse noticed the swelling approximately thirty minutes ago and stopped the infusion immediately. You have been asked to assess and manage this patient.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
-
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
-
-Format them under stage headings exactly like this:
-
 Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
+"How would you assess this patient?"
+"What specific information do you need about the extravasated substance?"
+"What are your key concerns?"
 
 Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
+"What investigations would you arrange?"
 
 Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
+"What first aid measures should have been taken?"
+"How would you manage this patient?"
 
 Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+"What is the Goult technique and when would you consider it?"
+"What would your follow up plan look like?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
-Investigations
-Initial management
-Definitive management
-Surgical steps
-Post-operative care
-
-END OF AUTHOR NOTE]
+Initial first aid measures
+History including substance identification
+Examination and assessment of skin viability
+Assessment for compartment syndrome
+Management based on substance properties
+Duty of candour and incident reporting
+Reconstruction of any resultant defect
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Initial first aid measures
+Knowing that the infusion should be stopped immediately but the cannula left in situ.
+Aspirating as much of the substance as possible through the cannula before removing it.
+Do not apply pressure to the site.
+Remove all splints and tapes.
+Elevate the limb.
+Take clinical photography.
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+History including substance identification
+Establishing the substance that was extravasated and its properties: whether it is a vesicant, vasoconstrictor, cytotoxic, or calcium-containing.
+Asking about the estimated volume of extravasation.
+Asking about the timing of the extravasation.
+Contacting pharmacy to get more information about the agent and whether an antidote is available.
+In addition to the clinical aspects, recognising the duty of candour and ensuring an incident report is completed.
 
-Each point should be a short statement of the expected answer.
+Examination and assessment of skin viability
+Performing a rapid A to E assessment as some extravasated substances may have systemic effects.
+Assessing the neurovascular status of the affected limb.
+Assessing the skin viability including colour, capillary refill, and any blistering or mottling.
+Ruling out compartment syndrome.
 
-Example from Necrotising Fasciitis:
+Assessment for compartment syndrome
+Knowing the signs of compartment syndrome: pain out of proportion, pain on passive stretch, and tense swelling.
+Knowing that compartment syndrome is a surgical emergency requiring immediate fasciotomy.
 
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
+Management based on substance properties
+Knowing the two main management strategies depending on the substance: dilute and disperse, or localise and neutralise.
+Applying warm or cold compresses depending on the substance. Most substances require cold compresses for fifteen to twenty minutes four times a day. Non D N A binding vesicants such as calcium, vincristine, and dacarbazine require warm compresses.
+Administering a specific antidote if available. For vasoconstrictor agents such as dopamine, adrenaline, and noradrenaline, phentolamine is the antidote. For hyperosmolar and acid or alkali solutions, irrigation is indicated.
+Strict hand elevation and regular monitoring to see how the skin will declare.
 
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
+Duty of candour and incident reporting
+Knowing the legal and professional obligation to inform the patient or their family of the incident.
+Completing a formal clinical incident report.
 
-Investigations
-Blood tests including lactate level.
-
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
-
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
-
-Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Reconstruction of any resultant defect
+Knowing that reconstruction of any resultant tissue loss should be performed once the wound has declared.
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Initial first aid measures
+Knowing that dilution with isotonic saline through the cannula before removal may limit the damage.
+Knowing that the site should be marked for monitoring.
 
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
+History including substance identification
+Knowing the classification of extravasated substances: irritants cause local inflammation, vesicants cause blistering and tissue necrosis which may be D N A binding or non D N A binding, vasoconstrictors cause ischaemia, and hyperosmolar solutions cause osmotic tissue injury.
+Knowing the specific risks of common substances encountered in neonates including total parenteral nutrition, calcium, potassium, and sodium bicarbonate.
 
-Group them under the same domain headings. Each point should be a short statement.
+Examination and assessment of skin viability
+Knowing that blistering indicates at least partial thickness skin injury.
+Knowing that mottling or darkening of the skin suggests deeper tissue damage and possible full thickness necrosis.
 
-Example from Necrotising Fasciitis:
+Management based on substance properties
+Knowing the Goult flush-out technique: under aseptic technique and local anaesthesia, four small puncture holes are made around the affected area using a fine scalpel or large needle. Hyaluronidase five hundred to one thousand units is infiltrated through the puncture holes into the affected area to help disperse the substance. A cannula is then inserted through one of the puncture holes and the subcutaneous tissues are irrigated with aliquots of three to five millilitres of normal saline until the overlying skin improves, up to a maximum of fifty millilitres. Fluid should extrude through the other puncture holes.
+Knowing that the Goult technique should be considered after discussion with the consultant, particularly for dangerous substances or large volume extravasations.
+Knowing that early intervention with the Goult technique produces better outcomes than delayed treatment.
 
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
-
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Reconstruction of any resultant defect
+Knowing the reconstructive options for tissue loss following extravasation including secondary intention healing for small defects, skin grafting, and local flap coverage for larger defects.
+Knowing that neonatal skin has excellent healing capacity but contractures and scarring may require secondary procedures.
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

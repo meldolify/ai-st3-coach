@@ -1,147 +1,127 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
-Thumb Ulnar Collateral Ligament
+Thumb Ulnar Collateral Ligament Injury
 
 CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+This is a 35 year old right hand dominant man who has injured his left thumb while skiing. His thumb was forced into radial deviation when he fell with his hand caught in the ski pole strap. He has a painful and swollen thumb base. He has presented to the emergency department. You have been asked to assess and manage this patient.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
-
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
-
-Format them under stage headings exactly like this:
-
 Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
+"How would you assess this patient?"
+"What is your clinical diagnosis?"
+"How would you test the ulnar collateral ligament?"
 
 Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
+"What investigations would you request?"
+"What would you look for on the X-ray?"
 
 Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
+"How would you manage this patient?"
+"How do you differentiate a partial from a complete tear?"
 
 Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+"When would surgery be indicated?"
+"What is a Stener lesion and why is it important?"
+"Can you walk me through the surgical repair?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
+History and mechanism of injury
+Examination and stress testing
 Investigations
-Initial management
-Definitive management
-Surgical steps
-Post-operative care
-
-END OF AUTHOR NOTE]
+Classification of the injury
+Conservative versus operative management
+Surgical technique
+Post-operative rehabilitation
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+History and mechanism of injury
+Establishing the mechanism: forced radial deviation or abduction of the thumb, which is the classic skier's thumb or gamekeeper's thumb mechanism.
+Asking about hand dominance, occupation, and functional demands, particularly pinch grip.
+Noting the time of injury.
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
-
-Each point should be a short statement of the expected answer.
-
-Example from Necrotising Fasciitis:
-
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
-
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
+Examination and stress testing
+Examining the thumb M C P joint for swelling, bruising, and tenderness over the ulnar aspect.
+Performing a valgus stress test of the thumb M C P joint in extension and in thirty degrees of flexion, comparing with the contralateral thumb.
+Knowing that more than thirty degrees of laxity or more than fifteen degrees compared with the contralateral side indicates a complete tear.
+Knowing that stress testing in flexion isolates the proper collateral ligament, while testing in extension assesses the accessory collateral ligament.
+Assessing for a palpable lump on the ulnar side of the M C P joint which may represent a displaced ligament end, known as a Stener lesion.
 
 Investigations
-Blood tests including lactate level.
+X-ray of the thumb including A P, lateral, and oblique views.
+Looking for an avulsion fracture from the base of the proximal phalanx on the ulnar side.
+Assessing for any associated fracture or subluxation of the M C P joint.
 
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
+Classification of the injury
+Differentiating between a partial tear, where there is pain and some laxity but a firm endpoint on stress testing, and a complete tear, where there is significant laxity and no firm endpoint.
+Knowing the concept of a Stener lesion: the torn ulnar collateral ligament displaces superficial to the adductor aponeurosis, which prevents healing and is an absolute indication for surgery.
 
-Definitive management
-Urgent surgery for debridement.
+Conservative versus operative management
+Knowing the clinical decision pathway: if an avulsion fracture is present and displaced less than two millimetres, do not stress test further and immobilise in a thumb spica for four weeks. If there is no fracture, perform a stress test with or without local anaesthetic. If there is a firm endpoint, this is a sprain or partial tear and should be immobilised in a thumb spica for four weeks. If there is no firm endpoint, arrange ultrasound to check for a Stener lesion. If a Stener lesion is confirmed, operative repair is required.
+Knowing that a Stener lesion cannot heal without surgery as the adductor aponeurosis prevents the ligament from returning to its anatomical position.
 
-Surgical steps
-Surgical debridement of all unhealthy tissue.
+Surgical technique
+Performing the repair through an incision over the ulnar aspect of the thumb M C P joint.
+Identifying and protecting the dorsal sensory branch of the radial nerve.
+Identifying the Stener lesion with the ligament displaced superficial to the adductor aponeurosis.
+Repairing the ligament back to the bone using a suture anchor or transosseous sutures.
+If there is an avulsion fracture, fixing the bony fragment with a K-wire or small screw.
 
-Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Post-operative rehabilitation
+Thumb spica splint or cast for six weeks post-operatively.
+Gradual mobilisation after splint removal.
+Hand therapy for strengthening and return to function.
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+History and mechanism of injury
+Knowing the difference between skier's thumb (acute injury) and gamekeeper's thumb (chronic attritional injury from repetitive stress).
+Asking about previous thumb injuries.
 
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
+Examination and stress testing
+Knowing that stress testing should be performed gently initially and with local anaesthetic or a digital nerve block if the patient is too painful.
+Knowing that stress X-rays under anaesthesia can confirm the degree of laxity.
+Knowing that ultrasound or M R I can identify a Stener lesion preoperatively if the clinical diagnosis is uncertain.
 
-Group them under the same domain headings. Each point should be a short statement.
+Investigations
+Knowing that M R I has high sensitivity and specificity for diagnosing both the degree of ligament tear and the presence of a Stener lesion.
+Knowing that stress radiographs can be performed under local anaesthetic to objectively quantify the degree of laxity.
 
-Example from Necrotising Fasciitis:
+Classification of the injury
+Knowing the grading system: grade one is a sprain with no laxity, grade two is a partial tear with increased laxity but a firm endpoint, and grade three is a complete tear with no endpoint.
 
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
+Conservative versus operative management
+Knowing that delayed presentation beyond three weeks may require ligament reconstruction rather than primary repair.
+Knowing that chronic U C L insufficiency causes weakness of pinch grip which significantly affects hand function.
 
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Surgical technique
+Knowing the anatomy: the U C L is a fan-shaped ligament running from the metacarpal head to the base of the proximal phalanx, reinforced by the adductor aponeurosis and the volar plate.
+Knowing the surgical options for chronic U C L insufficiency when primary repair is not possible: ligament reconstruction using a palmaris longus tendon graft or adductor advancement.
+Knowing that M C P joint fusion in a functional position of approximately twenty degrees flexion may be considered as a salvage procedure for chronic instability with arthritis.
+
+Post-operative rehabilitation
+Knowing that return to sport typically takes three to four months after surgical repair.
+Knowing the complications of surgery: stiffness, persistent weakness, nerve injury to the dorsal sensory branch of the radial nerve, and re-rupture.
+Knowing that long term outcomes of primary repair are generally good with over ninety percent of patients achieving a stable, painless thumb.
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

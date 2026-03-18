@@ -1,7 +1,3 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
 Complex Hand Trauma
@@ -10,138 +6,127 @@ CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+This is a 38 year old right hand dominant factory worker who has sustained a severe crush injury to his dominant hand in a roller press machine. He was brought in by ambulance with a heavily bandaged hand. The emergency department team has stabilised him and he is haemodynamically stable. You have been asked to assess and manage this patient.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
-
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
-
-Format them under stage headings exactly like this:
-
 Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
+"How would you assess this patient?"
+"How would you systematically examine the hand?"
+"What structures are you specifically looking for?"
 
 Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
+"What investigations would you request?"
 
 Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
+"How would you manage this patient initially?"
+"What information would you give the theatre team?"
 
 Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+"Can you walk me through your surgical approach?"
+"What order would you repair the different structures?"
+"What would your post-operative plan look like?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
+Primary survey and stabilisation
+History and mechanism of injury
+Systematic hand examination
 Investigations
-Initial management
-Definitive management
-Surgical steps
-Post-operative care
-
-END OF AUTHOR NOTE]
+Initial wound management
+Surgical planning and approach
+Post-operative care and rehabilitation
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Primary survey and stabilisation
+Performing an A T L S primary survey to ensure the patient is haemodynamically stable and there are no other associated injuries.
+Controlling any active haemorrhage with direct pressure and elevation rather than blind clamping.
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+History and mechanism of injury
+Establishing the mechanism: crush injury in a roller press.
+Asking about hand dominance, occupation, hobbies, and the functional demands of his hand.
+Asking about the timing of injury and any treatment given in the field.
+Taking a medical history including tetanus status, drug history, allergies, and last meal.
 
-Each point should be a short statement of the expected answer.
-
-Example from Necrotising Fasciitis:
-
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
-
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
+Systematic hand examination
+Performing a systematic examination once the dressings are removed.
+Examining the skin and soft tissue for the extent of injury, viability, and contamination.
+Assessing the skeleton by palpating each bone and testing for instability and deformity.
+Testing each flexor tendon individually: F D P by holding the P I P in extension and asking the patient to flex the D I P, and F D S by holding the other fingers extended and asking the patient to flex at the P I P.
+Testing each extensor tendon by asking the patient to extend against resistance.
+Testing the neurovascular status of each finger: capillary refill, digital Allen test, and two point discrimination on both sides of each digit.
 
 Investigations
-Blood tests including lactate level.
+X-ray of the hand including A P, lateral, and oblique views to assess fractures, dislocations, and any foreign bodies.
 
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
+Initial wound management
+Wound irrigation and debridement of any grossly contaminated or devitalised tissue.
+Intravenous antibiotics.
+Updating tetanus prophylaxis.
+Analgesia.
+Temporary wound dressing and splinting in the position of safe immobilisation.
 
-Definitive management
-Urgent surgery for debridement.
+Surgical planning and approach
+Performing surgical exploration under general or regional anaesthesia with an arm tourniquet.
+Taking a systematic approach to repair: skeletal stabilisation first, then tendon repair, then vascular repair, and finally nerve repair.
+Documenting all injuries and the repair performed.
 
-Surgical steps
-Surgical debridement of all unhealthy tissue.
-
-Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Post-operative care and rehabilitation
+Hand elevation.
+Appropriate splinting in the position of safe immobilisation.
+Early hand therapy involvement for rehabilitation planning.
+Follow up in the hand clinic.
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Primary survey and stabilisation
+Knowing that mangled extremity cases can be life threatening due to blood loss and associated injuries.
+Knowing that life takes priority over limb.
 
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
+History and mechanism of injury
+Asking about the contamination level of the injury site.
+Asking about any ischaemia time for any devascularised digits.
+Considering the occupational implications and early involvement of the occupational therapy team.
 
-Group them under the same domain headings. Each point should be a short statement.
+Systematic hand examination
+Breaking the examination down by anatomical location for each injured area.
+Assessing the viability of each digit and making early decisions about salvageability.
+Identifying which structures can be repaired primarily and which may need staged reconstruction.
 
-Example from Necrotising Fasciitis:
+Investigations
+Knowing that C T may be useful for complex fracture patterns.
+Knowing that angiography may be needed if there is concern about major vessel injury in the hand or wrist.
 
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
+Initial wound management
+Knowing the position of safe immobilisation: wrist in twenty to thirty degrees extension, M C P joints in seventy to ninety degrees flexion, interphalangeal joints in full extension, and thumb in abduction.
+Knowing that pulsatile lavage is not recommended for hand wounds as it can drive contamination deeper.
 
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Surgical planning and approach
+Knowing the instruments and equipment needed: hand set, K-wire set, micro set, microscope, and C-arm.
+Knowing the order of repair: bone fixation for skeletal stability, tendon repair for motor function, vascular repair for perfusion, and nerve repair for sensation.
+Knowing that a skin and soft tissue plan must be made to ensure coverage of all repaired structures, using local flaps or skin grafts as needed.
+Making early decisions about amputation versus reconstruction based on the M E S S score or clinical judgement when digits are not salvageable.
+
+Post-operative care and rehabilitation
+Knowing the importance of early active mobilisation protocols when skeletal fixation is stable.
+Planning for staged secondary procedures such as tendon grafting, nerve grafting, or flap coverage if needed.
+Considering the psychological impact of hand trauma and offering appropriate support.
+Knowing that the functional outcome depends on the severity of injury, quality of repair, and patient compliance with rehabilitation.
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

@@ -1,7 +1,3 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
 Burn Scar Contracture
@@ -10,138 +6,125 @@ CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+This is a 25 year old woman who sustained a deep partial thickness flame burn to the anterior aspect of her neck eighteen months ago. She was treated with split thickness skin grafting at the time. She has now developed a tight band of scar tissue across the front of her neck which is limiting her ability to extend her neck fully and is pulling her chin down towards her chest. She has been referred to your clinic for assessment. You have been asked to assess and formulate a management plan.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
-
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
-
-Format them under stage headings exactly like this:
-
 Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
+"How would you assess this patient?"
+"What functional limitations does this contracture cause?"
+"How would you classify this scar?"
 
 Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
+"Do you need any investigations?"
 
 Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
+"What conservative measures are available for burn scar management?"
+"When would you consider surgery?"
 
 Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+"What surgical options are available for this contracture?"
+"Can you describe how you would release this contracture?"
+"What would your post-operative plan look like?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
-Investigations
-Initial management
-Definitive management
-Surgical steps
-Post-operative care
-
-END OF AUTHOR NOTE]
+History and impact assessment
+Examination and classification of the scar
+Conservative scar management
+Indications for surgical release
+Surgical techniques for contracture release
+Skin cover and reconstruction
+Post-operative rehabilitation and scar management
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+History and impact assessment
+Taking a focused history including the original burn injury, treatment received, and healing time.
+Assessing the functional impact of the contracture on neck extension, daily activities, driving, and occupation.
+Assessing the cosmetic impact and the psychological effect on the patient.
+Asking about any previous scar management treatments received.
+Asking about the patient's ideas, concerns, and expectations.
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+Examination and classification of the scar
+Examining the scar noting its location, size, colour, thickness, pliability, and the degree of contracture.
+Measuring the range of motion of the affected joint, in this case neck extension.
+Differentiating between hypertrophic scarring and contracture. Hypertrophic scars are raised, red, and remain within the boundaries of the original wound. Contracture is the functional tightening that limits movement.
+Assessing the quality of the surrounding skin for potential donor tissue.
+Considering the use of the Vancouver Scar Scale to objectively document the scar characteristics: vascularity, pigmentation, pliability, and height.
 
-Each point should be a short statement of the expected answer.
+Conservative scar management
+Knowing the conservative options for burn scar management: pressure garments worn at twenty five millimetres of mercury for up to two years, silicone gel or silicone sheeting applied for at least three months, massage, and moisturising.
+Knowing the role of steroid injections for hypertrophic scars, which can be repeated every six to eight weeks with risks including dermal thinning, atrophy, telangiectasia, and pigmentary change.
+Knowing that conservative measures should be tried first and that scars continue to mature for up to two years.
 
-Example from Necrotising Fasciitis:
+Indications for surgical release
+Knowing that surgery is indicated when there is significant functional limitation that has not responded to conservative measures and the scar has matured.
+Knowing that surgery should ideally be delayed until scar maturation at twelve to eighteen months unless there is severe functional impairment.
 
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
+Surgical techniques for contracture release
+Knowing the options for releasing a linear or band contracture: Z-plasty, multiple Z-plasties, or five-flap plasty which are local tissue rearrangement techniques that lengthen the scar and break up the linear contracture.
+Knowing that for broader sheet contractures where there is insufficient surrounding tissue for local flaps, excision of the scar and resurfacing with a graft or flap is required.
 
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
+Skin cover and reconstruction
+Knowing the skin cover options after contracture release: full thickness skin graft provides better quality skin with less secondary contracture than split thickness graft and is preferred for neck contractures. Split thickness skin graft for larger defects. Local flaps or tissue expansion for optimal cosmetic results.
+Knowing that tissue expansion of adjacent unburned skin can provide like-for-like tissue of matching colour and texture for reconstruction.
 
-Investigations
-Blood tests including lactate level.
-
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
-
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
-
-Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Post-operative rehabilitation and scar management
+Splinting the released area in the extended position post-operatively.
+Early hand therapy and physiotherapy.
+Pressure garments and silicone therapy on the new scar.
+Long-term follow up for scar management and potential revision procedures.
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+History and impact assessment
+Knowing the difference between keloid and hypertrophic scars: hypertrophic scars remain within the boundaries of the wound and regress with time, whereas keloids extend beyond the wound margins, progress with time, have disorganised collagen, and are more common in patients of African or Asian descent.
+Knowing that keloids have twenty times higher collagen synthesis and fourteen times higher collagenase synthesis compared to normal skin.
 
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
+Examination and classification of the scar
+Knowing the modified Vancouver Scar Scale and its components for objective scar assessment.
+Knowing the Patient and Observer Scar Assessment Scale as an alternative validated scar assessment tool.
+Assessing whether any of the contracture is capsular versus scar related by passively testing the range under relaxation.
 
-Group them under the same domain headings. Each point should be a short statement.
+Conservative scar management
+Knowing the role of laser therapy in scar management: pulsed dye laser for vascular scars, fractional C O two laser for scar resurfacing, and Y A G laser for residuum.
+Knowing that radiotherapy can be used as an adjuvant for keloid scars to prevent recurrence after excision by inhibiting fibroblast proliferation.
+Knowing that excision alone for keloid scars has a high recurrence rate and should be combined with adjuvant therapy such as steroid injection, radiotherapy, or pressure therapy.
 
-Example from Necrotising Fasciitis:
+Indications for surgical release
+Knowing that in children, contractures across joints should be released earlier to prevent skeletal growth deformity.
+Knowing that web space contractures, axillary contractures, and contractures across the elbow and knee are also common sites requiring surgical release.
 
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
+Surgical techniques for contracture release
+Knowing the specific techniques: a single Z-plasty with sixty degree angles provides a seventy five percent increase in length along the line of the original scar. Multiple Z-plasties distribute the lengthening over a longer scar. A five-flap plasty or jumping man plasty is useful for web space contractures.
+Knowing the Y to V advancement and V to Y advancement techniques for small contractures.
+Knowing that for severe neck contractures, a supraclavicular artery island flap or a free flap may be needed.
 
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Skin cover and reconstruction
+Knowing the advantages of tissue expansion: provides tissue of matching colour, texture, and thickness, maintains sensation, and has a low donor site morbidity. Disadvantages include the need for multiple operations, risk of expander infection or extrusion, and the period of disfigurement during expansion.
+Knowing that Integra dermal regeneration template followed by thin split thickness skin graft may be used for large contracture releases where local tissue is insufficient and provides a better cosmetic result than split thickness skin graft alone.
+Knowing the concept of serial excision for smaller scars where the surrounding skin has sufficient laxity.
+
+Post-operative rehabilitation and scar management
+Knowing that prolonged splinting in the position of maximum extension may be needed for six or more months to prevent recurrence of the contracture.
+Knowing that occupational therapy assessment for adaptive aids and return to work planning is important.
+Knowing that psychological support is an important component of burn scar rehabilitation.
+Knowing that patients should be counselled that scar revision surgery improves but does not eliminate the scar.
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

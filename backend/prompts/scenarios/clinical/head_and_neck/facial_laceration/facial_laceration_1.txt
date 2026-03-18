@@ -1,7 +1,3 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
 Facial Laceration
@@ -10,138 +6,124 @@ CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+This is a 22 year old man who has been brought to the emergency department after being assaulted with a glass bottle outside a pub. He has a deep laceration running from just in front of his left ear, across the cheek, to the corner of his mouth. There is significant bleeding. You have been asked to assess and manage this patient.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
-
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
-
-Format them under stage headings exactly like this:
-
 Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
+"How would you assess this patient?"
+"What structures are you concerned about in this location?"
+"How would you examine the facial nerve?"
 
 Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
+"What investigations would you request?"
 
 Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
+"How would you manage this patient initially?"
 
 Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+"Can you walk me through the repair of this laceration?"
+"What would you do if the parotid duct is injured?"
+"What would your follow up plan look like?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
+A T L S primary survey
+Assessment of the laceration and underlying structures
+Facial nerve examination
+Parotid duct and gland assessment
 Investigations
-Initial management
-Definitive management
-Surgical steps
+Surgical repair
 Post-operative care
-
-END OF AUTHOR NOTE]
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+A T L S primary survey
+Following A T L S principles to ensure the patient is haemodynamically stable and there are no other injuries.
+Controlling active haemorrhage with direct pressure.
+Asking about the mechanism, timing, tetanus status, last meal, allergies, and alcohol intake.
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+Assessment of the laceration and underlying structures
+Examining the laceration noting its length, depth, and which anatomical zones of the face it crosses.
+Knowing that a laceration in the pre-auricular region running across the cheek to the mouth crosses the territory of the parotid gland, parotid duct, facial nerve branches, and the buccal fat pad.
+Assessing for any visible structures in the wound including fat, muscle, or glandular tissue.
 
-Each point should be a short statement of the expected answer.
+Facial nerve examination
+Testing all five branches of the facial nerve: temporal branch by asking the patient to raise the eyebrows, zygomatic branch by asking the patient to close the eyes tightly, buccal branch by asking the patient to smile and show the teeth, marginal mandibular branch by asking the patient to purse the lips, and cervical branch by asking the patient to platysma.
+Documenting the findings before any local anaesthetic is given.
 
-Example from Necrotising Fasciitis:
-
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
-
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
+Parotid duct and gland assessment
+Knowing that the parotid duct runs along a line from the tragus to the mid-upper lip, roughly along the middle third of the masseter.
+Assessing for parotid duct injury by milking the parotid gland and looking for saliva emerging from the wound rather than from Stensen duct intraorally.
+Examining the intraoral opening of the parotid duct opposite the upper second molar.
 
 Investigations
-Blood tests including lactate level.
+X-ray or C T of the face if there is concern about an underlying fracture or foreign body such as glass.
+Routine bloods if the patient requires a general anaesthetic.
 
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
-
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
+Surgical repair
+Knowing that deep facial lacerations with potential nerve or duct injury should be explored and repaired in theatre under general anaesthetic with good lighting and magnification.
+Thorough wound washout and debridement of any devitalised tissue. Minimal tissue debridement on the face due to the excellent blood supply.
+Repairing the parotid duct over a stent if it is injured.
+If a facial nerve branch is lacerated, performing microsurgical epineural repair if the laceration is posterior to a vertical line dropped from the lateral canthus. Injuries anterior to this line may recover spontaneously due to the extensive anastomoses between terminal branches.
+Layered closure: repairing the muscle layer with absorbable sutures, then the skin with fine non-absorbable sutures such as five-oh or six-oh Nylon or Prolene.
+Meticulous alignment of anatomical landmarks including the vermillion border if the lip is involved.
 
 Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Wound care and suture removal at five to seven days on the face.
+Tetanus prophylaxis.
+Antibiotics if the wound is contaminated, particularly bite injuries.
+Follow up to assess wound healing and facial nerve function.
+Scar management advice.
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+A T L S primary survey
+Considering the possibility of associated injuries including cervical spine injury, head injury, and dental injury.
+Asking about alcohol and drug intake which may affect the assessment and consent.
+Considering the medico-legal implications and documenting the injury carefully for potential legal proceedings.
 
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
+Assessment of the laceration and underlying structures
+Knowing the surface anatomy landmarks: the parotid duct lies along a line from the tragus to the mid-upper lip. The marginal mandibular nerve runs approximately one centimetre below the mandible.
+Knowing that the buccal fat pad may herniate through a deep cheek laceration and should be replaced and the wound closed in layers.
 
-Group them under the same domain headings. Each point should be a short statement.
+Facial nerve examination
+Knowing that the facial nerve exits the stylomastoid foramen and enters the parotid gland where it divides into its five terminal branches.
+Knowing the danger zones of the face where nerve injury is most likely: the temporal branch is vulnerable as it crosses the zygomatic arch in the superficial temporal fascia, and the marginal mandibular branch is vulnerable as it crosses the mandible one centimetre below its lower border.
+Knowing that injuries to facial nerve branches anterior to the lateral canthus generally do not require repair due to the rich anastomotic network.
 
-Example from Necrotising Fasciitis:
+Parotid duct and gland assessment
+Knowing that an unrepaired parotid duct injury may result in a salivary fistula or sialocele.
+Knowing that the parotid duct can be repaired over a fine catheter or stent which is left in situ for two weeks.
+If the duct cannot be repaired, knowing that the proximal end can be ligated or re-routed intraorally, or the gland can be allowed to atrophy.
 
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
+Investigations
+Knowing that C T with contrast may be useful if there is concern about vascular injury.
 
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Surgical repair
+Knowing the principles of facial wound repair: minimal debridement, meticulous alignment of anatomical landmarks, layered closure, and fine sutures with early removal.
+Knowing that the vermillion border of the lip must be aligned precisely as even one millimetre of misalignment is noticeable.
+Knowing that any associated dental injuries should be assessed and managed in conjunction with maxillofacial surgery.
+Knowing the importance of repairing the orbicularis oris muscle in lip lacerations to restore oral competence.
+
+Post-operative care
+Knowing the complications of facial lacerations including infection, hypertrophic scarring, facial nerve palsy, parotid fistula, and poor cosmetic outcome.
+Knowing that secondary scar revision may be considered after twelve to eighteen months if the scar is cosmetically unacceptable.
+Advising sun protection to the scar for at least twelve months.
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

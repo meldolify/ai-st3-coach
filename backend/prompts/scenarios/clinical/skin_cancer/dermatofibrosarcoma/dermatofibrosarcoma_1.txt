@@ -1,147 +1,119 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
-Dermatofibrosarcoma
+Dermatofibrosarcoma Protuberans
 
 CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+This is a 35 year old man who has been referred to your clinic with a slowly growing firm lump on his trunk. He first noticed it about two years ago and it has gradually been getting bigger. His G P performed a punch biopsy which has come back as dermatofibrosarcoma protuberans. You have been asked to see him to discuss the management plan.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
-
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
-
-Format them under stage headings exactly like this:
-
 Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
+"What do you know about this condition?"
+"How would you assess this patient?"
+"What would you look for on examination?"
 
 Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
+"What further investigations would you arrange?"
+"Does this patient need any imaging?"
 
 Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
+"How would you manage this patient?"
+"Would you discuss this case with anyone else?"
 
 Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+"What surgical procedure does this patient need?"
+"What excision margins would you use?"
+"What reconstructive options would you consider?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
-Investigations
-Initial management
-Definitive management
-Surgical steps
-Post-operative care
-
-END OF AUTHOR NOTE]
+Knowledge of the condition
+Clinical assessment
+Investigations and staging
+M D T discussion and management planning
+Definitive surgical management
+Reconstruction
+Follow up and prognosis
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Knowledge of the condition
+Knowing that D F S P is a locally aggressive soft tissue tumour of the dermis and subcutaneous tissue.
+Knowing that D F S P has a high rate of local recurrence but a low rate of distant metastasis.
+Knowing that it typically presents as a slow growing, firm, painless nodule or plaque on the trunk or proximal extremities.
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+Clinical assessment
+Taking a focused history including the duration and growth pattern of the lesion, any symptoms such as pain or tenderness, and any recent rapid changes.
+Examining the lesion noting size, shape, mobility, fixity to underlying structures, and overlying skin changes.
+Performing a head to toe examination and palpating regional lymph nodes.
 
-Each point should be a short statement of the expected answer.
+Investigations and staging
+Confirming the diagnosis on biopsy, noting that D F S P is characteristically positive for C D 34 on immunohistochemistry.
+Arranging M R I of the lesion to assess depth of invasion and involvement of underlying structures such as fascia or muscle.
 
-Example from Necrotising Fasciitis:
+M D T discussion and management planning
+Discussing the case in a sarcoma or skin cancer M D T.
+Management guided by M D T decision.
 
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
+Definitive surgical management
+Wide local excision with a margin of at least three centimetres including the underlying fascia.
+Knowing that Mohs micrographic surgery is an alternative that may achieve lower recurrence rates with tissue conservation.
 
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
+Reconstruction
+Knowing the reconstructive options depending on the defect size and location including direct closure, split thickness skin graft, local flaps, or free tissue transfer for large defects.
 
-Investigations
-Blood tests including lactate level.
-
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
-
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
-
-Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Follow up and prognosis
+Long term follow up due to the high local recurrence rate.
+Knowing that the overall prognosis is good with adequate excision as metastasis is rare.
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Knowledge of the condition
+Knowing that D F S P is associated with a translocation between chromosomes seventeen and twenty two, producing the C O L one A one P D G F B fusion gene.
+Knowing that the fibrosarcomatous variant of D F S P has a higher risk of metastasis.
+Knowing the typical age of presentation is between twenty and fifty years.
 
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
+Clinical assessment
+Describing the typical clinical appearance as a firm, indurated plaque that may be skin coloured, reddish-brown, or violaceous.
+Noting that the lesion often has tentacle-like extensions in the subcutaneous tissue which contribute to the high recurrence rate with inadequate margins.
 
-Group them under the same domain headings. Each point should be a short statement.
+Investigations and staging
+Knowing that C T chest should be considered to exclude pulmonary metastasis, particularly for large or recurrent tumours and the fibrosarcomatous variant.
+Knowing the role of immunohistochemistry in diagnosis: D F S P is C D 34 positive and Factor thirteen A negative, which distinguishes it from dermatofibroma.
 
-Example from Necrotising Fasciitis:
+M D T discussion and management planning
+Knowing that imatinib, a tyrosine kinase inhibitor, can be used for unresectable, recurrent, or metastatic D F S P due to its activity against the P D G F receptor.
+Knowing that radiotherapy may be considered as adjuvant treatment for positive margins when re-excision is not possible.
 
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
+Definitive surgical management
+Knowing that the traditional recommended margin is three centimetres but some guidelines recommend two to four centimetres depending on the tumour size and location.
+Knowing that Mohs micrographic surgery has reported lower recurrence rates than wide local excision, particularly in anatomically constrained areas.
+Knowing that incomplete excision is the main risk factor for local recurrence and re-excision should be performed if margins are positive.
 
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Reconstruction
+Discussing the reconstructive options in relation to the specific anatomical site and the impact on function and cosmesis.
+
+Follow up and prognosis
+Knowing that the local recurrence rate following wide excision with adequate margins is approximately one to five percent but rises significantly with inadequate margins.
+Knowing that follow up should include clinical examination and imaging at regular intervals for at least five to ten years.
+Knowing that the fibrosarcomatous variant requires closer surveillance due to higher metastatic potential.
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

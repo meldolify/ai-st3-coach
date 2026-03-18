@@ -1,7 +1,3 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
 Polydactyly
@@ -10,138 +6,99 @@ CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+This is a newborn baby who has been born with an extra digit on the ulnar border of the right hand. The extra digit appears to be attached by a narrow skin pedicle and has no bony connection. The parents are anxious and would like the digit removed. You have been asked to assess and counsel the parents.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
-
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
-
-Format them under stage headings exactly like this:
-
 Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
+"How would you classify this polydactyly?"
+"What would you look for on examination?"
+"Are there any associated conditions?"
 
 Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
+"What investigations would you arrange?"
 
 Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
+"How would you counsel the parents?"
+"Can this be treated in the neonatal period?"
 
 Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+"What is the definitive management?"
+"When should this be done?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
+Classification of polydactyly
+Clinical assessment and exclusion of associated conditions
 Investigations
-Initial management
-Definitive management
-Surgical steps
+Timing and technique of excision
 Post-operative care
-
-END OF AUTHOR NOTE]
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Classification of polydactyly
+Knowing the classification by location: preaxial or radial polydactyly involving the thumb, central polydactyly involving the index, middle, or ring fingers, and postaxial or ulnar polydactyly involving the little finger.
+Knowing the Stelling classification for postaxial polydactyly: type one is a soft tissue skin tag, type two is a partial duplication with some bony elements, and type three is a complete duplication with a fully formed extra digit.
+This child has a type one postaxial polydactyly.
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
-
-Each point should be a short statement of the expected answer.
-
-Example from Necrotising Fasciitis:
-
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
-
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
+Clinical assessment and exclusion of associated conditions
+Examining the extra digit: noting the attachment (pedunculated or broad-based), presence of a nail, mobility, and any bony elements within it.
+Assessing the remaining hand for any other anomalies.
+Examining both hands and feet.
+Knowing that postaxial polydactyly is the most common form and is more common in patients of African descent where it may be familial and isolated.
+Knowing that polydactyly may be associated with syndromes and should prompt assessment: postaxial polydactyly can be associated with Ellis-van Creveld syndrome, Bardet-Biedl syndrome, and trisomy thirteen.
 
 Investigations
-Blood tests including lactate level.
+X-ray of the hand to determine whether the extra digit contains bony elements and to assess the skeletal anatomy.
+If syndromic features are suspected, further investigations and genetics referral.
 
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
-
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
+Timing and technique of excision
+Knowing that a pedunculated type one postaxial polydactyly with no bony elements can be excised simply.
+Knowing the debate about suture ligation in the neonatal period: tying a suture around the base of the pedicle to cause ischaemic necrosis and auto-amputation is a traditional method but carries risks of incomplete removal, painful neuroma formation, and an unsightly residual bump.
+Knowing that formal surgical excision under general anaesthetic at three to six months is preferred by many surgeons as it allows proper identification and division of any neurovascular structures and a better cosmetic result.
+For more complex duplications with bony elements, formal surgical excision is required with careful preservation of the collateral ligament and tendon insertions of the retained digit.
 
 Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Simple wound dressing.
+Follow up to assess the wound and hand function.
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Classification of polydactyly
+Knowing the Wassel classification for preaxial or radial polydactyly which is based on the level of duplication from distal to proximal: type one is bifid distal phalanx, type two is duplicated distal phalanx, through to type seven which is a triphalangeal thumb.
+Knowing that type four is the most common Wassel type which is duplicated proximal and distal phalanges with a shared metacarpal.
+Knowing that central polydactyly is the rarest form and is often associated with syndactyly of the duplicated digit with its neighbour, known as polysyndactyly.
 
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
+Clinical assessment and exclusion of associated conditions
+Knowing the genetics: isolated postaxial polydactyly type A with a well-formed extra digit and type B which is a rudimentary digit. Type A is autosomal dominant, type B is also autosomal dominant with variable expression.
+Knowing that preaxial polydactyly is more commonly associated with syndromes than postaxial.
 
-Group them under the same domain headings. Each point should be a short statement.
+Investigations
+Knowing that M R I may be useful in complex duplications to assess tendon and joint anatomy before surgery.
 
-Example from Necrotising Fasciitis:
+Timing and technique of excision
+Knowing that for preaxial or thumb polydactyly, the surgical approach is more complex: the less functional of the two thumbs is excised, but the collateral ligaments and tendons from the excised digit must be transferred to the retained digit to ensure stability and function.
+Knowing that the Bilhaut-Cloquet procedure combines elements of both duplicated digits to create a single thumb of more normal width for Wassel type one and two duplications.
+Knowing that Z-plasty of the first web space may be needed in thumb polydactyly to widen the web and improve function.
+Knowing the risk of angular deformity of the retained digit if the surgery is not performed meticulously, which may require secondary osteotomy.
 
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
-
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Post-operative care
+Knowing the complications: angular deformity of the retained digit, joint instability, stiffness, and nail deformity.
+Knowing that long-term follow up until skeletal maturity is needed as growth may unmask a residual angular deformity.
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

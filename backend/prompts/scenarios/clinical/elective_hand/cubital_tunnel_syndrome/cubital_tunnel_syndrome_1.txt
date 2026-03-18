@@ -1,147 +1,111 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
-Cubital Tunnel Syndrome
+Cubital Tunnel Syndrome — Ulnar Nerve Compression at the Elbow
 
 CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+A 38-year-old man presents with a four-month history of numbness and tingling in his right ring and little fingers. The symptoms are worse when he leans on his elbow or holds a phone to his ear for prolonged periods. He has noticed some weakness in his grip and difficulty opening jars. On examination you note some wasting of the first dorsal interosseous muscle.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Assessment:
+"What features in the history are important?"
+"Where can the ulnar nerve be compressed along its course?"
+"How would you examine this patient?"
+"What specific motor and sensory tests would you perform?"
 
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
+Investigations:
+"What investigations would you request?"
+"How do N C S help localise the site of compression?"
+"Would you request any imaging?"
 
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
+Initial Management:
+"How would you manage this patient initially?"
+"What activity modifications would you advise?"
+"When would you consider surgery?"
 
-Format them under stage headings exactly like this:
-
-Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
-
-Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
-
-Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
-
-Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+Definitive Management:
+"What are the surgical options for cubital tunnel syndrome?"
+"What are the advantages and disadvantages of in situ decompression versus transposition?"
+"What types of transposition are available?"
+"What complications would you discuss with the patient?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
-Investigations
-Initial management
-Definitive management
-Surgical steps
-Post-operative care
-
-END OF AUTHOR NOTE]
+Anatomy of the ulnar nerve at the elbow
+Aetiology and sites of compression
+Clinical assessment including motor and sensory testing
+Nerve conduction studies
+Conservative management
+Surgical options and outcomes
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Anatomy:
+Ulnar nerve passes behind the medial epicondyle in the cubital tunnel
+Roof formed by Osborne's ligament between the two heads of flexor carpi ulnaris
+Five potential sites of compression: arcade of Struthers, medial intermuscular septum, medial epicondyle, Osborne's ligament, deep flexor pronator aponeurosis
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+Clinical assessment:
+Sensory loss in ring and little fingers, ulnar one and a half digits
+Motor weakness of intrinsics: first dorsal interosseous, adductor pollicis, hypothenar muscles
+Froment's sign positive indicating adductor pollicis weakness
+Wartenberg's sign with little finger abduction from weak third palmar interosseous
+Claw hand deformity more pronounced in low ulnar nerve lesions
+Tinel's test at the cubital tunnel
+Elbow flexion test reproducing symptoms with sustained elbow flexion
 
-Each point should be a short statement of the expected answer.
+Investigations:
+N C S to confirm diagnosis and localise compression to the elbow
+Reduced conduction velocity across the elbow segment
+E M G showing denervation changes in ulnar innervated muscles
+X-ray of the elbow if bony pathology suspected
+Ultrasound or M R I if space-occupying lesion suspected
 
-Example from Necrotising Fasciitis:
+Conservative management:
+Activity modification avoiding prolonged elbow flexion and direct pressure
+Night splinting with elbow in extension or slight flexion
+Elbow pad to protect the nerve
+Appropriate for mild intermittent symptoms without motor weakness
 
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
+Surgical options:
+Simple in situ decompression dividing Osborne's ligament
+Medial epicondylectomy
+Anterior transposition: subcutaneous, intramuscular, or submuscular
+In situ decompression is simplest with lowest complication rate
+Transposition preferred for subluxing nerve or revision surgery
 
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
-
-Investigations
-Blood tests including lactate level.
-
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
-
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
-
-Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Complications:
+Medial antebrachial cutaneous nerve injury causing painful neuroma
+Elbow stiffness
+Recurrence or persistent symptoms
+Flexor carpi ulnaris weakness after submuscular transposition
+Haematoma and wound infection
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
-
-Group them under the same domain headings. Each point should be a short statement.
-
-Example from Necrotising Fasciitis:
-
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
-
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+McGowan grading system for severity of cubital tunnel syndrome
+Ulnar paradox: higher lesions cause less clawing because F D P to ring and little is also affected
+Difference between cubital tunnel syndrome and Guyon's canal compression
+Endoscopic in situ decompression as a newer technique
+Role of internal neurolysis, which is controversial
+Recovery of intrinsic function is slow and often incomplete in severe cases
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

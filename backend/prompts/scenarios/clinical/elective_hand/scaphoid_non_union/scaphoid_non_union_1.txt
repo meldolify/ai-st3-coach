@@ -1,147 +1,116 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
-Scaphoid Non Union
+Scaphoid Non-Union — Persistent Radial Wrist Pain
 
 CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+A 25-year-old right-hand-dominant man presents with persistent pain in his right wrist that has been present for about eight months. He recalls falling onto his outstretched hand while playing football but did not seek medical attention at the time. The pain is in the anatomical snuffbox area and worsens with gripping. X-rays show a scaphoid waist fracture non-union with a cystic change at the fracture site and no evidence of avascular necrosis.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Assessment:
+"Why do scaphoid fractures commonly go on to non-union?"
+"What is the blood supply of the scaphoid?"
+"How would you assess this patient clinically?"
+"What are the consequences of untreated scaphoid non-union?"
 
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
+Investigations:
+"What imaging would you request?"
+"How would you assess for avascular necrosis?"
+"What classification systems are relevant?"
 
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
+Initial Management:
+"Would you consider conservative management?"
+"What factors influence your decision-making?"
 
-Format them under stage headings exactly like this:
-
-Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
-
-Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
-
-Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
-
-Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+Definitive Management:
+"What are the surgical options for scaphoid non-union?"
+"Describe the technique for non-vascularised bone grafting."
+"When would you use a vascularised bone graft?"
+"What about a scaphoid non-union with advanced arthritis?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
-Investigations
-Initial management
-Definitive management
-Surgical steps
-Post-operative care
-
-END OF AUTHOR NOTE]
+Scaphoid anatomy and blood supply
+Reasons for non-union
+Imaging and assessment of vascularity
+Surgical techniques including bone grafting
+Vascularised versus non-vascularised graft
+Salvage procedures for S N A C wrist
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Anatomy and blood supply:
+Scaphoid bridges the proximal and distal carpal rows
+Blood supply predominantly from the dorsal carpal branch of the radial artery
+Enters through the dorsal ridge supplying the proximal 70 to 80 percent in a retrograde fashion
+Proximal pole fractures at highest risk of avascular necrosis due to this retrograde supply
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+Reasons for non-union:
+Missed diagnosis and delayed presentation
+Proximal pole fractures with precarious blood supply
+Inadequate immobilisation
+Fracture displacement greater than 1 millimetre
+Smoking
 
-Each point should be a short statement of the expected answer.
+Consequences of untreated non-union:
+Predictable pattern of degenerative arthritis called S N A C wrist
+Scaphoid non-union advanced collapse
+Stage 1: radial styloid arthritis
+Stage 2: scaphoid fossa and radioscaphoid arthritis
+Stage 3: capitolunate arthritis
+Stage 4: pan-carpal arthritis
+Carpal collapse with D I S I pattern (dorsal intercalated segment instability)
 
-Example from Necrotising Fasciitis:
+Imaging:
+Plain X-rays in four views including scaphoid views
+C T scan with sagittal reconstructions to assess union, cyst size, and humpback deformity
+M R I to assess proximal pole vascularity: loss of marrow signal on T1 suggests avascular necrosis
+Intrascaphoid angle measurement for humpback deformity
 
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
+Surgical options for non-union without arthritis:
+Non-vascularised bone graft (Matti-Russe or wedge graft from iliac crest or distal radius)
+Headless compression screw fixation (Herbert screw or Acutrak)
+Correct humpback deformity with volar wedge graft to restore scaphoid length and alignment
+Vascularised bone graft for proximal pole avascular necrosis
 
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
+Vascularised bone graft options:
+1,2 intercompartmental supraretinacular artery (1,2 I C S R A) pedicled graft from distal radius (Zaidemberg)
+Volar carpal artery pedicled graft
+Free medial femoral condyle vascularised graft for failed pedicled graft
+Indicated when M R I shows proximal pole avascular necrosis
 
-Investigations
-Blood tests including lactate level.
-
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
-
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
-
-Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Salvage for S N A C wrist:
+Radial styloidectomy for Stage 1
+Scaphoid excision and four-corner fusion for Stage 2 and 3
+Proximal row carpectomy for Stage 2 (if capitate head articular surface preserved)
+Total wrist arthrodesis for Stage 4 or pan-carpal disease
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
-
-Group them under the same domain headings. Each point should be a short statement.
-
-Example from Necrotising Fasciitis:
-
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
-
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Herbert and Fisher classification of scaphoid fractures and non-union
+Green classification of avascular necrosis
+Role of arthroscopy in assessing cartilage quality before deciding on reconstruction versus salvage
+Comparison of proximal row carpectomy versus four-corner fusion outcomes
+Denervation of the wrist as an adjunct for pain control
+Scaphoid non-union in the presence of carpal instability patterns
+Use of bone morphogenetic protein or bone graft substitutes
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

@@ -1,7 +1,3 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
 Hypospadias
@@ -10,138 +6,116 @@ CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+This is a baby boy who has been referred to your clinic at six months of age with a hypospadias. The urethral meatus is located on the ventral surface of the penile shaft at the mid-shaft level. There is a hooded foreskin and mild ventral chordee. You have been asked to assess and counsel the parents about the management.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
-
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
-
-Format them under stage headings exactly like this:
-
 Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
+"How would you classify this hypospadias?"
+"What would you look for on examination?"
+"Are there any associated conditions?"
 
 Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
+"Do you need any investigations?"
 
 Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
+"How would you counsel the parents?"
+"When should this be repaired?"
+"Why is circumcision contraindicated?"
 
 Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+"What surgical technique would you use for this type of hypospadias?"
+"What are the potential complications?"
+"What would your follow up plan look like?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
-Investigations
-Initial management
-Definitive management
-Surgical steps
-Post-operative care
-
-END OF AUTHOR NOTE]
+Classification of hypospadias
+Clinical assessment
+Counselling and timing of repair
+Surgical principles and technique
+Complications
+Long-term follow up
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Classification of hypospadias
+Knowing the classification by meatal position: distal or anterior which includes glanular and subcoronal and accounts for approximately seventy percent, middle or mid-shaft which accounts for approximately fifteen percent, and proximal or posterior which includes penoscrotal, scrotal, and perineal and accounts for approximately fifteen percent.
+This child has a mid-shaft hypospadias.
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+Clinical assessment
+Confirming the position of the urethral meatus.
+Assessing for chordee: ventral curvature of the penis which may be mild, moderate, or severe.
+Noting the hooded prepuce which is dorsally hooded and deficient ventrally.
+Assessing the size of the penis and the quality of the urethral plate.
+Examining the testes to confirm they are both descended: proximal hypospadias with undescended testes requires investigation for a disorder of sex development.
+Examining for any other genital anomalies.
 
-Each point should be a short statement of the expected answer.
+Counselling and timing of repair
+Counselling the parents that the child must not be circumcised as the foreskin tissue may be needed for the surgical repair.
+Knowing that the recommended age for repair is between six and eighteen months.
+Explaining the goals of surgery: to create a straight penis with the meatus at the tip, to correct any chordee, and to achieve a cosmetically normal appearance.
+Discussing the success rates and potential complications.
 
-Example from Necrotising Fasciitis:
+Surgical principles and technique
+Knowing that for a mid-shaft hypospadias with mild chordee, a single-stage repair is appropriate.
+Knowing the commonly used techniques: the tubularised incised plate repair known as the T I P or Snodgrass repair is the most widely used technique for distal and mid-shaft hypospadias. It involves incising the urethral plate in the midline to widen it, then tubularising it over a catheter and covering with a vascularised dartos flap as a waterproofing layer.
+Knowing the alternative techniques: the Mathieu meatal-based flap for distal hypospadias, and the two-stage Bracka repair for proximal hypospadias or where the urethral plate is of poor quality.
+Knowing the importance of a dartos flap or tunica vaginalis flap as an interposition layer to reduce fistula formation.
 
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
+Complications
+Knowing the common complications: urethrocutaneous fistula which is the most common complication occurring in approximately five to ten percent, meatal stenosis, urethral stricture, wound dehiscence, and residual chordee.
+Knowing that fistulae should not be repaired until at least six months after the primary surgery to allow the tissues to mature.
 
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
-
-Investigations
-Blood tests including lactate level.
-
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
-
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
-
-Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Long-term follow up
+Follow up to assess the position of the meatus, the urinary stream, and the cosmetic result.
+Knowing that the child should be followed until toilet trained to assess the functional result.
+Knowing that further review may be needed at puberty to assess erections and residual chordee.
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Classification of hypospadias
+Knowing the incidence: approximately one in three hundred male births.
+Knowing the aetiology: multifactorial with genetic and hormonal factors. The urethra develops from the urethral folds which fuse ventrally from proximal to distal between the eighth and fourteenth week of gestation. Failure of fusion results in hypospadias.
+Knowing that familial recurrence is approximately seven percent if the father is affected.
 
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
+Clinical assessment
+Knowing that proximal hypospadias with bilateral undescended testes should prompt urgent investigation for a disorder of sex development including karyotype, hormonal assays, and pelvic ultrasound.
+Knowing that the degree of chordee may not correlate with the position of the meatus and can only be fully assessed intraoperatively with an artificial erection test.
 
-Group them under the same domain headings. Each point should be a short statement.
+Counselling and timing of repair
+Knowing the role of pre-operative testosterone cream or injections to increase penile size before surgery in cases with a small penis, particularly in proximal hypospadias.
+Knowing that topical oestrogen cream may be used pre-operatively to improve tissue quality.
 
-Example from Necrotising Fasciitis:
+Surgical principles and technique
+Knowing the Snodgrass T I P repair in detail: the urethral plate is preserved and incised in the midline from the meatus to the glans. The plate is then tubularised over a catheter using running subcuticular absorbable sutures. The neourethra is covered with a de-epithelialised dartos flap from the prepuce brought ventrally as a waterproofing layer. The glans wings are closed over the neourethra, and the skin is closed using the prepuce either as a dorsal Byars flap or a ventral preputioplasty.
+Knowing the two-stage Bracka repair: in the first stage, a buccal mucosa graft from the inner cheek is laid onto the ventral surface of the penis as a free graft to create a new urethral plate. After six months, the second stage tubularises the grafted plate into a neourethra.
+Knowing the role of the artificial erection test performed intraoperatively by injecting saline into the corpus cavernosum to assess for residual chordee after degloving.
 
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
+Complications
+Knowing that fistula repair involves excision of the fistula tract and multilayer closure with an interposition flap.
+Knowing that meatal stenosis can often be managed with dilatation or meatoplasty.
+Knowing that urethral diverticulum can occur if the neourethra is too wide.
+Knowing the long-term psychological impact of hypospadias and the importance of age-appropriate counselling as the child grows.
 
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Long-term follow up
+Knowing that uroflowmetry can objectively assess the urinary stream.
+Knowing that some patients will require revision surgery, with reported re-operation rates of approximately fifteen to twenty percent.
+Knowing that long-term satisfaction with cosmetic and functional outcomes is generally good for distal and mid-shaft repairs but more variable for proximal hypospadias.
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

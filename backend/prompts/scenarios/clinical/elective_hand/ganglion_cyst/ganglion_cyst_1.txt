@@ -1,147 +1,115 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
-Ganglion Cyst
+Ganglion Cyst — Painless Dorsal Wrist Lump
 
 CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+A 28-year-old woman presents with a painless lump on the back of her right wrist that she first noticed about three months ago. It has gradually increased in size. She works in an office and finds it cosmetically bothersome. She reports it occasionally aches after prolonged typing. On examination there is a firm, smooth, 2 centimetre transilluminant swelling over the dorsum of the wrist at the scapholunate interval.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Assessment:
+"What is a ganglion cyst?"
+"What are the common locations for ganglion cysts in the hand and wrist?"
+"How would you examine this lump?"
+"What differential diagnoses would you consider?"
 
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
+Investigations:
+"Are any investigations required?"
+"When would you request imaging?"
+"What would an ultrasound show?"
 
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
+Initial Management:
+"What would you advise this patient?"
+"Is aspiration effective?"
+"What are the non-operative options?"
 
-Format them under stage headings exactly like this:
-
-Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
-
-Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
-
-Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
-
-Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+Definitive Management:
+"When would you offer surgical excision?"
+"Describe the surgical technique for dorsal wrist ganglion excision."
+"What about volar wrist ganglions — how does the approach differ?"
+"What complications would you discuss?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
-Investigations
-Initial management
-Definitive management
-Surgical steps
-Post-operative care
-
-END OF AUTHOR NOTE]
+Pathology and common locations
+Clinical assessment and differential diagnosis
+Investigation and imaging
+Conservative management including aspiration
+Surgical excision technique
+Recurrence and complications
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Pathology:
+Mucin-filled cyst arising from joint capsule or tendon sheath
+Not a true cyst as it lacks a synovial lining
+Contains thick clear viscous fluid
+One-way valve mechanism allows filling but not drainage
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+Common locations:
+Dorsal wrist at the scapholunate interval — 60 to 70 percent of all wrist ganglions
+Volar wrist at the radiocarpal joint or scaphotrapezial joint
+Flexor tendon sheath (volar retinacular cyst) at the A1 pulley
+Mucous cyst at the D I P J is a separate entity
 
-Each point should be a short statement of the expected answer.
+Clinical assessment:
+Firm, smooth, well-defined swelling
+Transillumination positive
+Fixed to deep structures but mobile over overlying skin
+Assess wrist range of motion
+Check for scapholunate instability as an associated finding
 
-Example from Necrotising Fasciitis:
+Differential diagnosis:
+Giant cell tumour of tendon sheath
+Lipoma
+Epidermal inclusion cyst
+Carpal boss (bony prominence at second or third C M C joint)
+Sarcoma (rare but must consider in any soft tissue lump)
 
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
+Investigations:
+Ultrasound confirms cystic nature and defines anatomy
+X-ray if bony pathology suspected such as carpal boss
+M R I for occult ganglion not clinically apparent or to exclude other pathology
 
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
+Conservative management:
+Reassurance that ganglions are benign and up to 50 percent resolve spontaneously
+Aspiration with large bore needle, recurrence rate approximately 50 percent
+Aspiration more successful for volar retinacular cysts
+No role for the historical bible technique
 
-Investigations
-Blood tests including lactate level.
-
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
-
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
-
-Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Surgical excision:
+Transverse or longitudinal incision over the ganglion
+Trace the stalk to its origin at the joint capsule
+Excise a cuff of capsule around the stalk attachment
+Dorsal ganglion: protect extensor tendons and posterior interosseous nerve terminal branch
+Volar ganglion: protect radial artery which is intimately related to the cyst
+Recurrence rate approximately 5 to 10 percent after surgical excision
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
-
-Group them under the same domain headings. Each point should be a short statement.
-
-Example from Necrotising Fasciitis:
-
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
-
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Arthroscopic ganglion excision for dorsal wrist ganglions
+Occult ganglion diagnosed on M R I presenting with dorsal wrist pain without a visible lump
+Volar retinacular cysts often present as a small painful lump at the base of the finger
+Intra-osseous ganglion as a rare variant
+Risk of scapholunate ligament damage during dorsal ganglion excision
+Association between dorsal ganglion and underlying scapholunate pathology
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

@@ -1,147 +1,123 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
-Fluid Resuscitation
+Fluid Resuscitation in Burns
 
 CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+This is a 45 year old man weighing eighty kilograms who has sustained a thirty five percent total body surface area flame burn to his torso and both lower limbs in an industrial accident. He arrived at your burns unit two hours after the injury. He has been intubated for airway protection and has two large bore cannulae in situ. His initial fluid boluses have been given by the paramedics but he remains tachycardic with a heart rate of one hundred and twenty and his urine output over the last hour was fifteen millilitres. You have been asked to take over his fluid management.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
-
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
-
-Format them under stage headings exactly like this:
-
 Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
+"How would you assess this patient's fluid status?"
+"What formula would you use to calculate his fluid requirements?"
 
 Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
+"What investigations would you monitor?"
+"What target are you aiming for with the urine output?"
 
 Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
+"Can you calculate the fluid requirements for this patient?"
+"How would you adjust the fluids based on his current status?"
 
 Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+"How would you manage his nutritional requirements?"
+"What would you do if his urine output remains low despite adequate fluids?"
+"When would you consider colloid?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
-Investigations
-Initial management
-Definitive management
-Surgical steps
-Post-operative care
-
-END OF AUTHOR NOTE]
+Assessment of fluid status
+Fluid resuscitation formula and calculation
+Monitoring and titration of fluids
+Urine output targets
+Nutritional support
+Management of inadequate response to fluids
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Assessment of fluid status
+Assessing the patient's haemodynamic status including heart rate, blood pressure, capillary refill, and peripheral perfusion.
+Confirming the T B S A and the patient's weight as these are the two variables in the resuscitation formula.
+Confirming the time of the burn injury, not the time of arrival, as the formula calculates from the time of injury.
+Checking the urine output which is the most reliable clinical indicator of adequate resuscitation.
+Reviewing the fluids already given by the paramedics.
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+Fluid resuscitation formula and calculation
+Knowing the modified Parkland formula: three to four millilitres multiplied by body weight in kilograms multiplied by percentage T B S A.
+For this patient: three to four millilitres times eighty kilograms times thirty five equals eight thousand four hundred to eleven thousand two hundred millilitres in the first twenty four hours.
+The first half is given in the first eight hours from the time of injury and the second half over the following sixteen hours.
+Knowing that the fluid used is Hartmann solution, which is a crystalloid.
+Knowing that the formula is a guide and must be titrated to clinical response.
 
-Each point should be a short statement of the expected answer.
+Monitoring and titration of fluids
+The primary target is urine output of greater than nought point five millilitres per kilogram per hour in adults, which for this patient is at least forty millilitres per hour.
+Knowing that the current urine output of fifteen millilitres per hour is inadequate and the fluid rate should be increased.
+Monitoring heart rate, blood pressure, lactate, and base excess as additional markers of perfusion.
+Regular blood gas analysis to monitor for metabolic acidosis.
 
-Example from Necrotising Fasciitis:
+Urine output targets
+Knowing the target urine output: greater than nought point five millilitres per kilogram per hour in adults and greater than one millilitre per kilogram per hour in children.
+Knowing that in electrical burns the target is higher at one to one point five millilitres per kilogram per hour due to the risk of myoglobinuria.
+Knowing that dark or cola-coloured urine suggests myoglobinuria and requires more aggressive fluid resuscitation.
 
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
+Nutritional support
+Knowing that early enteral nutrition is important in major burns.
+Inserting a nasogastric tube for enteral feeding and gastric decompression in burns greater than fifteen percent T B S A in adults or ten percent in children.
+Knowing the Curreri formula for calorie requirements: twenty five times body weight in kilograms plus forty times percentage T B S A.
 
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
-
-Investigations
-Blood tests including lactate level.
-
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
-
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
-
-Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Management of inadequate response to fluids
+Knowing that if the urine output remains low despite calculated fluid volumes, the fluid rate should be increased in incremental boluses.
+Knowing that persistent under-resuscitation leads to organ failure, while over-resuscitation leads to oedema, abdominal compartment syndrome, and pulmonary oedema.
+Knowing that an arterial line and central venous pressure monitoring may be needed for closer haemodynamic assessment.
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Assessment of fluid status
+Knowing that burns resuscitation is required for burns greater than fifteen percent T B S A in adults and greater than ten percent T B S A in children.
+Knowing that the patient's pre-burn weight should be used, not the weight after fluid resuscitation which will be artificially elevated.
+Knowing that children require maintenance fluids in addition to the resuscitation formula, using five percent dextrose in nought point four five percent saline with potassium supplementation.
 
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
+Fluid resuscitation formula and calculation
+Knowing the original Parkland formula used four millilitres per kilogram per T B S A but the modified formula uses three millilitres per kilogram per T B S A, and E M S B guidance now recommends starting at three millilitres.
+Knowing that the formula gives the total volume for the first twenty four hours from the time of injury: if the patient arrives two hours after the injury, the first half must be given in the remaining six hours, not eight.
+Knowing that colloid such as albumin may be considered after the first twenty four hours to help maintain intravascular volume and reduce total fluid requirements.
 
-Group them under the same domain headings. Each point should be a short statement.
+Monitoring and titration of fluids
+Knowing the complications of under-resuscitation: hypovolaemic shock, acute kidney injury, multi-organ failure, and burn wound conversion from partial to full thickness due to reduced perfusion.
+Knowing the complications of over-resuscitation, sometimes called fluid creep: pulmonary oedema, abdominal compartment syndrome, limb compartment syndrome, and cerebral oedema.
+Knowing that abdominal compartment syndrome from over-resuscitation can be measured by intravesical pressure monitoring via the urinary catheter.
 
-Example from Necrotising Fasciitis:
+Urine output targets
+Knowing that polyuria from mannitol or glycosuria in diabetic patients can give a falsely reassuring urine output.
+Knowing that in myoglobinuria, the urine should be alkalinised with sodium bicarbonate to prevent myoglobin precipitation in the renal tubules.
 
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
+Nutritional support
+Knowing that the hypermetabolic response to burns increases calorie requirements by up to twice the normal rate.
+Knowing that albumin levels should be monitored and supplemented if low.
+Knowing that micronutrient supplementation including vitamin C, vitamin A, zinc, and selenium is important for wound healing.
+Knowing that proton pump inhibitors or H two blockers should be given for stress ulcer prophylaxis, known as Curling ulcers in burns patients.
 
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Management of inadequate response to fluids
+Knowing that if urine output remains poor despite adequate calculated volumes, other causes should be considered including myocardial dysfunction, abdominal compartment syndrome, and unrecognised bleeding.
+Knowing that vasopressors should be avoided in burns resuscitation if possible as they further compromise burn wound perfusion.
+Knowing the role of transoesophageal echocardiography or other advanced haemodynamic monitoring in refractory shock.
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

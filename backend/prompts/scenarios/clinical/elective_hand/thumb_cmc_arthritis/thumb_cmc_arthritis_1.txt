@@ -1,147 +1,117 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
-Thumb Cmc Arthritis
+Thumb C M C Joint Arthritis — Basal Thumb Pain
 
 CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+A 62-year-old right-hand-dominant woman presents with a two-year history of worsening pain at the base of her right thumb. The pain is aggravated by gripping, pinching, and opening jars. She has noticed a bony prominence developing at the base of her thumb and her grip strength has decreased. On examination there is squaring of the thumb base, tenderness over the C M C joint, and a positive grind test.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Assessment:
+"What is the anatomy of the thumb C M C joint?"
+"What are the risk factors for this condition?"
+"How would you examine this patient?"
+"What is the grind test?"
 
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
+Investigations:
+"What imaging would you request?"
+"How do you stage thumb C M C arthritis?"
+"Can you describe the Eaton-Littler classification?"
 
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
+Initial Management:
+"How would you manage this patient conservatively?"
+"What is the role of splinting?"
+"Would you offer a steroid injection?"
 
-Format them under stage headings exactly like this:
-
-Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
-
-Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
-
-Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
-
-Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+Definitive Management:
+"What are the surgical options?"
+"Can you describe trapeziectomy and its variations?"
+"What is the role of ligament reconstruction and tendon interposition?"
+"Would you consider joint replacement?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
-Investigations
-Initial management
-Definitive management
-Surgical steps
-Post-operative care
-
-END OF AUTHOR NOTE]
+Anatomy of the thumb C M C joint
+Clinical assessment and staging
+Eaton-Littler classification
+Conservative management
+Surgical options including trapeziectomy
+Post-operative rehabilitation
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Anatomy:
+Thumb C M C joint is a biconcave saddle joint
+Permits flexion, extension, abduction, adduction, opposition, and circumduction
+Stability provided by the anterior oblique ligament (beak ligament) and dorsoradial ligament
+Most common site of upper limb osteoarthritis after the D I P J
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+Risk factors:
+Female more common than male, ratio approximately 6 to 1
+Post-menopausal women
+Ligament laxity leading to joint instability and secondary arthritis
+Previous Bennett's fracture or other trauma
 
-Each point should be a short statement of the expected answer.
+Clinical assessment:
+Squaring of the thumb base from dorsal subluxation and osteophyte formation
+Grind test: axial load with rotation reproducing pain and crepitus
+Assess thumb opposition, pinch strength, and grip strength
+Hyperextension at the M C P J as a compensatory deformity
+Shoulder sign from prominent metacarpal base subluxation
+Examine for concurrent C T S and trigger thumb
 
-Example from Necrotising Fasciitis:
+Eaton-Littler classification:
+Stage 1: normal articular surfaces, widened joint space from synovitis
+Stage 2: joint space narrowing, osteophytes under 2 millimetres, slight subluxation
+Stage 3: significant joint space loss, large osteophytes, subluxation greater than one third
+Stage 4: scaphotrapezial joint also involved (pantrapezial arthritis)
 
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
+Conservative management:
+Thumb spica splint to rest the C M C joint
+Non-steroidal anti-inflammatory medication
+Activity modification avoiding pinching and gripping
+Corticosteroid injection into the C M C joint for pain relief
+Hand therapy to strengthen thenar muscles
 
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
+Surgical options:
+Trapeziectomy alone with good evidence of pain relief and patient satisfaction
+Trapeziectomy with ligament reconstruction and tendon interposition using F C R or A P L
+Trapeziectomy with suture button suspension arthroplasty
+Joint replacement with silicone or pyrocarbon implant for younger patients (less proven)
+Arthrodesis for young active patients with Stage 2 or 3 but reduces mobility
+M C P J fusion if concurrent M C P J hyperextension greater than 30 degrees
 
-Investigations
-Blood tests including lactate level.
-
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
-
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
-
-Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Post-operative rehabilitation:
+Thumb spica cast for 4 to 6 weeks after trapeziectomy
+Graduated hand therapy from 6 weeks
+Full recovery 3 to 6 months
+Proximal migration of the metacarpal is expected but does not correlate with outcome
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
-
-Group them under the same domain headings. Each point should be a short statement.
-
-Example from Necrotising Fasciitis:
-
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
-
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Burton and Pellegrini L R T I technique using a strip of F C R
+Suture button suspensionplasty (TightRope) as a newer technique
+No consistent evidence that L R T I is superior to simple trapeziectomy alone
+Role of arthroscopy in early-stage disease for debridement and thermal shrinkage
+Denervation of the C M C joint as an alternative for early disease
+Zancolli lasso procedure for M C P J hyperextension correction
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

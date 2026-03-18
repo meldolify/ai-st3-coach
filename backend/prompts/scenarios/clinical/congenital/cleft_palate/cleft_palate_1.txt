@@ -1,7 +1,3 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
 Cleft Palate
@@ -10,138 +6,122 @@ CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+This is a 6 month old baby who was born with an isolated cleft of the soft palate. The baby has been managed by the cleft team and is now being brought to clinic to discuss the planned palate repair. The parents would like to understand the surgery, the risks, and the expected outcomes. You have been asked to counsel the parents.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
-
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
-
-Format them under stage headings exactly like this:
-
 Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
+"How would you classify this cleft?"
+"What problems has this child been experiencing?"
+"What assessments should have been completed before surgery?"
 
 Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
+"Are any investigations needed before surgery?"
 
 Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
+"When should the palate be repaired?"
+"How would you counsel the parents about the surgery?"
 
 Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+"What surgical technique would you use?"
+"What are the potential complications?"
+"What is the long-term follow up plan?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
-Investigations
-Initial management
-Definitive management
-Surgical steps
-Post-operative care
-
-END OF AUTHOR NOTE]
+Classification of cleft palate
+Impact on feeding, speech, and hearing
+Pre-operative assessment
+Timing of palate repair
+Surgical technique
+Complications
+Long-term management including speech and hearing
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Classification of cleft palate
+Knowing that isolated cleft palate is different from cleft lip and palate in terms of embryology and genetics.
+Classifying the cleft: soft palate only, hard and soft palate, or submucous cleft palate.
+Knowing that isolated cleft palate is more common in females and has a higher association with syndromes.
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+Impact on feeding, speech, and hearing
+Knowing that cleft palate causes feeding difficulty due to inability to create negative pressure for sucking.
+Knowing that an unrepaired cleft palate causes velopharyngeal insufficiency leading to hypernasal speech and nasal air escape.
+Knowing that children with cleft palate have a high incidence of otitis media with effusion due to eustachian tube dysfunction, and many will require grommets.
 
-Each point should be a short statement of the expected answer.
+Pre-operative assessment
+Ensuring the child has been seen by the multidisciplinary cleft team.
+Audiological assessment and E N T review for consideration of grommets at the time of palate repair.
+Speech and language baseline assessment.
+Anaesthetic assessment.
 
-Example from Necrotising Fasciitis:
+Timing of palate repair
+Knowing that palate repair is typically performed between six and twelve months of age.
+Knowing the rationale: repairing before the onset of speech development to optimise speech outcomes, while allowing some growth of the palate.
+Knowing the debate about early versus late repair: early repair benefits speech, but very early repair may restrict maxillary growth.
 
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
+Surgical technique
+Knowing the commonly used techniques: the Sommerlad technique using radical muscle dissection and intravelar veloplasty to reconstruct the levator veli palatini muscle sling, the von Langenbeck bipedicled flap technique, and the Veau-Wardill-Kilner V to Y pushback technique.
+Knowing the key goal: reconstruction of the levator veli palatini muscle sling across the midline to create a functional velopharyngeal mechanism for speech.
+Knowing that the mucoperiosteal flaps are raised and the nasal layer is closed separately from the oral layer to create a two-layer closure.
 
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
+Complications
+Bleeding which is the most common early complication.
+Fistula formation: a breakdown of the repair creating a hole between the oral and nasal cavities.
+Velopharyngeal insufficiency despite repair, which may require secondary surgery such as a pharyngoplasty.
+Maxillary growth restriction.
 
-Investigations
-Blood tests including lactate level.
-
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
-
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
-
-Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Long-term management including speech and hearing
+Knowing that speech and language assessment is performed at approximately eighteen months to two years of age.
+Knowing that if velopharyngeal insufficiency persists, options include speech therapy, pharyngoplasty using a posterior pharyngeal flap or sphincter pharyngoplasty, or Furlow double-opposing Z-plasty.
+Knowing that hearing should be monitored throughout childhood.
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Classification of cleft palate
+Knowing the embryology: the palate forms from the palatal shelves of the maxillary processes which fuse in the midline between the sixth and twelfth week of gestation. Failure of fusion results in cleft palate.
+Knowing the Veau classification of cleft palate: class one is soft palate only, class two is hard and soft palate up to the incisive foramen, class three is complete unilateral cleft, and class four is complete bilateral cleft.
+Knowing the features of a submucous cleft palate: bifid uvula, zona pellucida of the soft palate, and a palpable notch in the posterior hard palate. This may present late with speech problems.
 
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
+Impact on feeding, speech, and hearing
+Knowing that the eustachian tube dysfunction is caused by abnormal insertion of the tensor veli palatini muscle.
+Knowing that recurrent otitis media can cause conductive hearing loss which affects speech and language development.
 
-Group them under the same domain headings. Each point should be a short statement.
+Pre-operative assessment
+Knowing that Pierre Robin sequence with associated airway difficulties may require prone positioning, nasopharyngeal airway, or rarely a tracheostomy before palate repair can be undertaken.
 
-Example from Necrotising Fasciitis:
+Timing of palate repair
+Knowing the Schweckendiek approach of early soft palate repair at six months and delayed hard palate repair at a later age, though this is not widely practiced in the U K where single-stage repair is preferred.
+Knowing that in the United Kingdom, most cleft centres perform palate repair between six and twelve months.
 
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
+Surgical technique
+Knowing the Sommerlad technique in more detail: the abnormally inserted levator veli palatini muscles are detached from the posterior edge of the hard palate and the palatal aponeurosis, mobilised, and re-sutured across the midline to reconstruct the muscular sling. This is the key step for achieving velopharyngeal competence.
+Knowing the importance of two-layer closure: the nasal mucosal layer and the oral mucosal layer should be closed separately with the muscle repair in between.
+Knowing that the tensor veli palatini tendon may be divided or rerouted around the hamulus to facilitate closure.
 
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Complications
+Knowing that the fistula rate varies between two and fifteen percent depending on the technique and surgeon experience.
+Knowing that small anterior fistulae may be asymptomatic and can be managed conservatively, while larger symptomatic fistulae require surgical closure.
+Knowing that maxillary hypoplasia may result from palatal surgery and can require orthognathic surgery such as Le Fort one advancement in late adolescence.
+
+Long-term management including speech and hearing
+Knowing the assessment of velopharyngeal function using nasendoscopy and videofluoroscopy.
+Knowing the different secondary speech surgeries: posterior pharyngeal flap raises a superiorly based flap from the posterior pharyngeal wall and inserts it into the soft palate, reducing the velopharyngeal gap. Sphincter pharyngoplasty uses myomucosal flaps from the posterior tonsillar pillars to narrow the velopharyngeal port.
+Knowing the risk of obstructive sleep apnoea after pharyngoplasty.
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

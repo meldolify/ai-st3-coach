@@ -1,7 +1,3 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
 Inhalation Injury
@@ -10,138 +6,125 @@ CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+This is a 40 year old man who has been rescued from a house fire where he was trapped in a smoke-filled room for approximately ten minutes. He has facial burns with singed eyebrows and nasal hair, and soot deposits around his mouth and nostrils. He is conscious but his voice is becoming hoarse. He has burns to approximately twenty percent of his total body surface area. You have been asked to assess and manage this patient.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
-
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
-
-Format them under stage headings exactly like this:
-
 Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
+"How would you assess this patient?"
+"What signs of inhalation injury are you looking for?"
+"What are the different types of inhalation injury?"
 
 Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
+"What investigations would you arrange?"
+"What does the carboxyhaemoglobin level tell you?"
 
 Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
+"How would you manage the airway?"
+"How urgently does this patient need to be intubated?"
 
 Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+"How would you manage carbon monoxide poisoning?"
+"What about cyanide poisoning?"
+"What is the ongoing management for inhalation injury?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
-Investigations
-Initial management
-Definitive management
-Surgical steps
-Post-operative care
-
-END OF AUTHOR NOTE]
+Recognition of inhalation injury
+Clinical signs and types of inhalation injury
+Airway management and early intubation
+Carbon monoxide poisoning
+Cyanide poisoning
+Ongoing respiratory management
+Burns management alongside inhalation injury
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Recognition of inhalation injury
+Recognising the clinical signs that suggest inhalation injury: singed nasal hair, singed eyebrows or eyelashes, soot around the mouth and nostrils, carbonaceous sputum, hoarse voice, facial burns, and history of entrapment in a confined space with smoke.
+Knowing that inhalation injury significantly increases the mortality of burns.
+Knowing that the hoarse voice indicates laryngeal oedema which will progress and may lead to complete airway obstruction.
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+Clinical signs and types of inhalation injury
+Knowing the three types of inhalation injury: upper airway thermal injury causing oedema and obstruction, lower airway chemical injury from inhaled smoke particles causing bronchospasm and mucosal damage, and systemic toxicity from carbon monoxide and cyanide.
+Knowing that heat is rapidly dissipated in the upper airway so thermal injury is predominantly supraglottic. The exception is steam inhalation which can cause lower airway thermal injury.
 
-Each point should be a short statement of the expected answer.
+Airway management and early intubation
+Knowing that early intubation is essential when inhalation injury is suspected because progressive oedema may make delayed intubation extremely difficult or impossible.
+Requesting urgent anaesthetic involvement for intubation.
+Giving high flow one hundred percent oxygen via a non-rebreather mask while awaiting intubation.
+Knowing that the decision to intubate should be made early and is based on clinical assessment rather than waiting for deterioration.
 
-Example from Necrotising Fasciitis:
+Carbon monoxide poisoning
+Knowing that carbon monoxide binds to haemoglobin with two hundred and forty times greater affinity than oxygen, forming carboxyhaemoglobin which reduces oxygen delivery to tissues.
+Knowing the clinical features: headache, confusion, reduced G C S, cherry-red skin colouration which is a late sign, and cardiac arrhythmias.
+Knowing that treatment is high flow one hundred percent oxygen which reduces the half-life of carboxyhaemoglobin from four hours on room air to approximately sixty minutes.
+Measuring carboxyhaemoglobin levels on A B G. Knowing that levels may have already fallen by the time of hospital arrival due to oxygen therapy en route.
 
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
+Cyanide poisoning
+Knowing that cyanide is produced by combustion of synthetic materials such as plastics, foam, and nylon.
+Knowing that cyanide inhibits cytochrome oxidase causing cellular hypoxia and lactic acidosis despite adequate oxygen saturations.
+Suspecting cyanide poisoning in a patient with unexplained metabolic acidosis, reduced G C S, or cardiovascular collapse following smoke inhalation.
+Knowing the treatment: Cyanokit which is hydroxocobalamin five grams given intravenously over fifteen minutes.
 
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
+Ongoing respiratory management
+Knowing that ongoing management of inhalation injury includes ventilatory support, humidified oxygen, regular bronchial suctioning, and bronchoscopy if needed to assess lower airway injury.
+Knowing that I T U care is required for ventilated patients with inhalation injury.
 
-Investigations
-Blood tests including lactate level.
-
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
-
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
-
-Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Burns management alongside inhalation injury
+Knowing that the burns should be managed concurrently following E M S B principles including fluid resuscitation and wound management.
+Knowing that inhalation injury increases fluid requirements beyond the calculated Parkland formula.
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Recognition of inhalation injury
+Knowing that inhalation injury is an independent criterion for referral to a burns centre regardless of the T B S A of the cutaneous burn.
+Knowing that up to thirty percent of patients with major burns have an associated inhalation injury.
 
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
+Clinical signs and types of inhalation injury
+Knowing that fibreoptic bronchoscopy can be used to directly visualise the lower airway and assess the severity of inhalation injury, looking for carbonaceous deposits, mucosal oedema, erythema, and ulceration.
+Knowing that xenon ventilation-perfusion scanning is an alternative method of assessing inhalation injury.
+Knowing that the A B S I score, abbreviated burn severity index, incorporates inhalation injury as a prognostic factor.
 
-Group them under the same domain headings. Each point should be a short statement.
+Airway management and early intubation
+Knowing the specific indications for immediate intubation: stridor, respiratory distress, inability to swallow secretions, circumferential neck burns with rapidly developing oedema, and deep facial burns.
+Knowing that an experienced anaesthetist should perform the intubation as it may be technically difficult due to oedema, and a surgical airway may be needed as a backup.
+Knowing that once intubated, the endotracheal tube should be secured with ties rather than tape as tape will not adhere to burnt or oedematous skin.
 
-Example from Necrotising Fasciitis:
+Carbon monoxide poisoning
+Knowing the carboxyhaemoglobin levels and their significance: levels above ten percent are significant, above twenty five percent cause confusion and cardiac symptoms, and above fifty percent are often fatal.
+Knowing that pulse oximetry is unreliable in carbon monoxide poisoning as the pulse oximeter cannot distinguish between oxyhaemoglobin and carboxyhaemoglobin and may give falsely normal readings.
+Knowing that hyperbaric oxygen therapy has been described for severe carbon monoxide poisoning but is not widely available and its role remains controversial.
 
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
+Cyanide poisoning
+Knowing that blood cyanide levels can be measured but results are not available rapidly enough to guide acute management, so treatment is empirical based on clinical suspicion.
+Knowing the alternative antidote: sodium thiosulphate which converts cyanide to thiocyanate for renal excretion, though it is slower acting than hydroxocobalamin.
+Knowing that the combination of high lactate, metabolic acidosis, and reduced G C S in a fire victim should prompt empirical treatment for cyanide poisoning.
 
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Ongoing respiratory management
+Knowing that regular bronchial lavage with heparinised saline and N-acetylcysteine may be beneficial in managing lower airway inhalation injury.
+Knowing the risk of A R D S following inhalation injury and the importance of lung-protective ventilation strategies.
+Knowing that tracheostomy may be needed for prolonged ventilatory support.
+Knowing that pneumonia is a common complication of inhalation injury and burns.
+
+Burns management alongside inhalation injury
+Knowing that patients with inhalation injury have increased metabolic demands and require early and aggressive nutritional support.
+Knowing that the airway must be secured before transfer to a burns centre.
+Knowing that escharotomy of circumferential chest burns should be performed before transfer if the patient has respiratory compromise.
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

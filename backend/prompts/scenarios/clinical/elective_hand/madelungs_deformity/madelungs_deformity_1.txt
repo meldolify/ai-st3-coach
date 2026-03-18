@@ -1,147 +1,119 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
-Madelungs Deformity
+Madelung's Deformity — Bilateral Wrist Deformity in an Adolescent
 
 CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+A 16-year-old girl is referred by her G P with visible deformity of both wrists that has been gradually developing over the past two years. She complains of bilateral wrist pain, reduced grip strength, and limited forearm rotation. She is self-conscious about the appearance of her wrists. On examination there is increased volar tilt of the distal radius bilaterally, prominent dorsal subluxation of the ulnar head, and reduced forearm supination.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Assessment:
+"What is Madelung's deformity?"
+"What is the underlying cause?"
+"What is Vickers ligament?"
+"How would you examine this patient?"
 
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
+Investigations:
+"What imaging would you request?"
+"What are the characteristic radiological features?"
+"Would you request any genetic testing?"
 
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
+Initial Management:
+"How would you manage this patient conservatively?"
+"What would you counsel the patient and her family?"
 
-Format them under stage headings exactly like this:
-
-Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
-
-Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
-
-Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
-
-Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+Definitive Management:
+"What are the surgical options?"
+"What is the role of Vickers ligament release and physiolysis?"
+"When would you consider a corrective osteotomy?"
+"How do you address the prominent ulnar head?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
-Investigations
-Initial management
-Definitive management
-Surgical steps
-Post-operative care
-
-END OF AUTHOR NOTE]
+Aetiology including Vickers ligament
+Clinical and radiological features
+Association with dyschondrosteosis and Leri-Weill syndrome
+Timing of intervention
+Surgical options including physiolysis and osteotomy
+Management of the distal ulna
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Aetiology:
+Abnormal tethering of the volar-ulnar distal radial physis by Vickers ligament
+Vickers ligament is an anomalous ligament from the volar-ulnar radius to the lunate
+Premature closure of the volar-ulnar portion of the distal radial physis
+Ulnar and volar part of the radius stops growing while dorsal and radial part continues
+Results in increased volar tilt, increased radial inclination, and relative ulnar overgrowth
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+Associations:
+Most commonly associated with Leri-Weill dyschondrosteosis
+S H O X gene mutation (short stature homeobox) on the pseudoautosomal region of the X chromosome
+Autosomal dominant inheritance
+Associated with short stature and mesomelic limb shortening
+Can be idiopathic or associated with Turner syndrome, multiple hereditary exostoses
 
-Each point should be a short statement of the expected answer.
+Clinical features:
+Increased volar tilt of the distal radius giving a dinner fork deformity in reverse
+Dorsal prominence of the distal ulna from relative ulnar overgrowth
+Reduced forearm rotation particularly supination
+Bayonet deformity of the wrist
+Bilateral in most cases
+Pain and weakness with gripping
 
-Example from Necrotising Fasciitis:
+Radiological features:
+Increased volar tilt of the distal radial articular surface
+Increased radial inclination
+V-shaped proximal carpal row wedged between the radius and ulna
+Ulnar and volar displacement of the lunate
+Dorsal subluxation of the distal ulna (positive ulnar variance)
+Premature closure of the ulnar portion of the distal radial physis
+Lucency at the ulnar-volar corner of the radius where Vickers ligament inserts
 
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
+Conservative management:
+Observation if asymptomatic
+Activity modification and analgesia for mild symptoms
+Splinting for symptom relief
+Many patients function well despite the deformity
 
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
+Surgical options in the skeletally immature:
+Vickers ligament release and physiolysis (excision of the bony bar and interposition of fat)
+Best performed while significant growth remains (early adolescence)
+Aims to allow more normal growth of the radius
+May prevent progression but may not correct established deformity
 
-Investigations
-Blood tests including lactate level.
-
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
-
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
-
-Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Surgical options in the skeletally mature:
+Dome or opening wedge corrective osteotomy of the distal radius to correct volar tilt
+Ulnar shortening osteotomy or Darrach procedure for the prominent ulnar head
+Sauve-Kapandji procedure to address D R U J incongruity while preserving forearm rotation
+Combined radial osteotomy and ulnar procedure often needed
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
-
-Group them under the same domain headings. Each point should be a short statement.
-
-Example from Necrotising Fasciitis:
-
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
-
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Reverse Madelung deformity with dorsal tilt (seen in gymnasts from repetitive loading)
+Genetic counselling for Leri-Weill dyschondrosteosis and family screening
+Role of M R I in identifying Vickers ligament pre-operatively
+Three-dimensional C T planning for corrective osteotomy
+Patient-specific cutting guides for precise osteotomy
+Comparison of different ulnar procedures: Darrach, Sauve-Kapandji, ulnar shortening
+Long-term natural history showing many patients manage well without surgery
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

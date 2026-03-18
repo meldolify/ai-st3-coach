@@ -1,7 +1,3 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
 Acute Burns Assessment
@@ -10,138 +6,129 @@ CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+This is a 35 year old man who has been brought to the emergency department by ambulance following a house fire. He was trapped in a room for several minutes before being rescued. He has extensive burns to his torso, both upper limbs, and his face. He is conscious but in significant pain. You have been asked to assess and manage this patient.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
-
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
-
-Format them under stage headings exactly like this:
-
 Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
+"How would you assess this patient?"
+"What are you looking for in the primary survey?"
+"How would you estimate the burn size and depth?"
 
 Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
+"What investigations would you arrange?"
 
 Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
+"How would you resuscitate this patient?"
+"What fluid formula would you use?"
+"Does this patient need to be transferred to a burns centre?"
 
 Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+"What is your surgical strategy for this patient?"
+"What would your post-operative plan look like?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
-Investigations
-Initial management
-Definitive management
-Surgical steps
-Post-operative care
-
-END OF AUTHOR NOTE]
+A T L S and E M S B primary survey
+Airway assessment and inhalation injury
+Burn size estimation using Lund and Browder
+Burn depth assessment
+Fluid resuscitation
+Referral criteria for burns centre transfer
+Surgical strategy
+Post-operative and multidisciplinary care
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+A T L S and E M S B primary survey
+Following A T L S and E M S B principles to assess and resuscitate the patient.
+Airway assessment with cervical spine control, looking specifically for signs of inhalation injury including singed nasal hair, soot around the mouth, hoarse voice, oral cavity burns, and facial swelling. Early anaesthetic involvement for intubation if there is any concern about airway compromise, as swelling may make delayed intubation impossible.
+Breathing assessment including respiratory rate, oxygen saturations, chest expansion, and auscultation. Looking for circumferential chest burns that may require escharotomy. Giving high flow oxygen.
+Circulation assessment including heart rate, blood pressure, and capillary refill. Gaining intravenous access through unburnt skin or intraosseous access if necessary. Inserting a urinary catheter to monitor urine output. Sending bloods including full blood count, urea and electrolytes, liver function tests, clotting, cross-match, carboxyhaemoglobin, and an A B G.
+Disability assessment including G C S, pupils, and blood glucose. A low G C S may indicate carbon monoxide or cyanide poisoning.
+Exposure: undressing the patient and preventing hypothermia using a bear hugger. Estimating the T B S A.
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+Burn size estimation using Lund and Browder
+Using the Lund and Browder chart to estimate the total body surface area burned, which is more accurate than the rule of nines.
+Knowing the rule of nines as a rapid initial estimate: head nine percent, each upper limb nine percent, anterior trunk eighteen percent, posterior trunk eighteen percent, each lower limb eighteen percent, and perineum one percent.
+Knowing the patient's palm including fingers represents approximately one percent T B S A for smaller or scattered burns.
 
-Each point should be a short statement of the expected answer.
+Burn depth assessment
+Assessing depth by examining colour, capillary refill, sensation, and the presence of blisters.
+Superficial burns are red, painful, and blanch. Superficial partial thickness burns have blisters and are painful with brisk capillary refill. Deep partial thickness burns are mottled, have reduced sensation, and sluggish capillary refill. Full thickness burns are white or charred, insensate, and non-blanching.
 
-Example from Necrotising Fasciitis:
+Fluid resuscitation
+Calculating fluid requirements using the modified Parkland formula: three to four millilitres per kilogram per percentage T B S A. The first half is given in the first eight hours from the time of injury and the second half over the following sixteen hours, using Hartmann solution.
+Titrating fluids to achieve a urine output of greater than nought point five millilitres per kilogram per hour in adults.
+Knowing that resuscitation is required for burns greater than fifteen percent T B S A in adults and greater than ten percent in children.
 
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
+Referral criteria for burns centre transfer
+Knowing the criteria for referral to a burns centre including burns greater than ten percent T B S A in adults, any burn in a child, burns to face, hands, feet, genitalia, perineum, or major joints, circumferential burns, full thickness burns, inhalation injury, electrical or chemical burns, and burns in patients with significant comorbidities.
+Knowing that life-saving interventions such as escharotomy and airway management should be performed before transfer.
 
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
+Surgical strategy
+Knowing the principles of surgical management: early excision and skin cover reduces morbidity and mortality.
+Burns greater than five percent T B S A should be debrided in theatre.
 
-Investigations
-Blood tests including lactate level.
-
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
-
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
-
-Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Post-operative and multidisciplinary care
+Recognising the need for a multidisciplinary approach including I T U, nursing, physiotherapy, occupational therapy, dietetics, and psychology.
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+A T L S and E M S B primary survey
+Knowing the A M P L E history: allergies, medications, past medical history, last meal, and events surrounding the injury.
+Knowing the specific questions for flame burns: was there an explosion, was the patient trapped, any loss of consciousness, and what first aid was given.
+Knowing that carbon monoxide poisoning is treated with one hundred percent oxygen. Carboxyhaemoglobin levels should be measured on A B G.
+Knowing that cyanide poisoning from burning synthetic materials may present with a low G C S and metabolic acidosis, and is treated with Cyanokit which is five grams of hydroxocobalamin given intravenously over fifteen minutes.
+Arranging clinical photography of the burns.
+Performing initial bedside debridement by washing with saline and applying clingfilm or Jelonet dressings to decrease fluid loss and pain.
+Inserting a nasogastric tube for burns greater than fifteen percent T B S A in adults or ten percent in children to decompress the stomach and provide early enteral nutrition.
+Knowing that analgesia should be intravenous morphine titrated in two to ten milligram doses.
+Tetanus prophylaxis.
 
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
+Burn size estimation using Lund and Browder
+Knowing that laser Doppler imaging can be used to objectively assess burn depth, particularly for indeterminate depth burns, and is most accurate when performed between two and five days post-burn.
+Knowing that thermography and vital dyes are alternative methods of assessing burn depth.
 
-Group them under the same domain headings. Each point should be a short statement.
+Burn depth assessment
+Knowing the difference between superficial, superficial partial thickness, deep partial thickness, and full thickness burns and the expected healing times: superficial heals within seven days, superficial partial thickness within fourteen days, deep partial thickness may take three or more weeks and is likely to scar, and full thickness will not heal without surgery.
 
-Example from Necrotising Fasciitis:
+Fluid resuscitation
+Knowing that the Parkland formula is a guide and the fluid rate should be titrated to clinical response, particularly urine output.
+Knowing the nutritional requirements calculated by the Curreri formula: twenty five times body weight in kilograms plus forty times percentage T B S A burned.
+Knowing that enteral feeding should be started early and that albumin levels and nutritional markers should be monitored.
 
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
+Referral criteria for burns centre transfer
+Knowing that the secondary survey should be completed before transfer.
+Knowing that adequate documentation and clinical photography should accompany the patient.
 
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Surgical strategy
+Knowing the surgical approach: tangential excision in a warm operating theatre, using adrenaline-infiltrated tumescent solution to reduce bleeding.
+Knowing the surgical endpoints: two to three hours operating time, up to ten units of blood transfused, temperature dropping below thirty six degrees, or the lethal triad of hypothermia, acidosis, and coagulopathy. Up to thirty percent T B S A can be excised per sitting.
+Knowing that the largest area of burns should be addressed first, and hand and face burns should be addressed last but by fourteen days.
+Knowing that sheet grafts should be used for the face, hands, and over joints, while meshed grafts up to four to one ratio may be used for larger areas.
+Knowing the skin cover options: autograft using split thickness skin graft, allograft for temporary cover if insufficient donor sites, and skin substitutes such as Biobrane for superficial partial thickness burns and Integra for full thickness defects.
+Knowing that prophylactic intravenous antibiotics should be given at induction but routine prophylactic antibiotics are not recommended for non-surgical management.
+
+Post-operative and multidisciplinary care
+Knowing the importance of splinting burns over joints in the position of function to prevent contracture.
+Knowing the role of early range of motion exercises and compression garments.
+Knowing the psychological impact of major burns and the importance of early psychological support.
+Knowing that I T U care includes continued fluid management, ventilatory support, nutritional optimisation, and regular surgical planning for further debridement and skin cover.
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

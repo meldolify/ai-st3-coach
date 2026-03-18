@@ -1,147 +1,101 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
-Capsular Contracture
+Capsular Contracture Following Breast Augmentation
 
 CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+A forty-five year old woman presents to your clinic with a painful and firm left breast two years after bilateral breast augmentation with silicone implants. The left breast has become progressively harder and has changed shape over the last six months. On examination the left breast is firm, tender, and appears higher and rounder than the right. The right breast is soft and has a normal appearance.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
-
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
-
-Format them under stage headings exactly like this:
-
 Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
+"What is the likely diagnosis?"
+"How would you classify capsular contracture?"
+"What grade would you assign to this patient's presentation?"
+"What are the risk factors for developing capsular contracture?"
+"What details of the original surgery would you want to know?"
 
 Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
-
-Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
+"Would you arrange any imaging for this patient?"
+"What would you be looking for on ultrasound or M R I?"
 
 Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+"What are the surgical options for managing capsular contracture?"
+"What is a capsulotomy and when might you use it?"
+"What is a capsulectomy and what are the different types?"
+"Would you replace the implant and if so would you change anything?"
+"What strategies can reduce the risk of recurrence?"
+"What would you discuss regarding B I A dash A L C L?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
+Diagnosis and classification
+Risk factors and aetiology
 Investigations
-Initial management
-Definitive management
-Surgical steps
-Post-operative care
-
-END OF AUTHOR NOTE]
+Surgical management options
+Strategies to prevent recurrence
+Awareness of B I A dash A L C L
+Consent and complications
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Diagnosis and Classification
+Baker classification: grade one the breast is normally soft, grade two the breast is slightly firm but looks normal, grade three the breast is firm and looks abnormal, grade four the breast is hard, painful, and looks abnormal
+This patient has Baker grade three or four capsular contracture
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
-
-Each point should be a short statement of the expected answer.
-
-Example from Necrotising Fasciitis:
-
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
-
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
+Risk Factors
+Subclinical infection and biofilm formation
+Haematoma
+Subglandular implant placement has higher rates than submuscular
+Smooth implants compared to textured although textured carry B I A dash A L C L risk
+Radiotherapy
+Silicone gel bleed
 
 Investigations
-Blood tests including lactate level.
+Ultrasound to assess implant integrity and rule out rupture
+M R I which is the gold standard for detecting silicone implant rupture with the linguine sign for intracapsular rupture
+Consideration of seroma or late-onset periprosthetic fluid collection which should raise concern for B I A dash A L C L
 
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
+Surgical Management
+Capsulotomy which is release of the capsule by scoring or dividing it, used for milder contracture
+Open capsulectomy which is partial or total removal of the capsule
+Total capsulectomy or en bloc capsulectomy removing the entire capsule with the implant
+Implant exchange with change of pocket plane for example subglandular to submuscular
+Implant removal without replacement if the patient wishes
 
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
-
-Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Prevention of Recurrence
+Change of pocket plane
+Use of textured implants though this must be balanced against B I A dash A L C L risk
+Meticulous haemostasis
+Antibiotic irrigation of the pocket
+Minimal implant handling and the fourteen-point plan
+Consideration of acellular dermal matrix as a pocket lining
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
-
-Group them under the same domain headings. Each point should be a short statement.
-
-Example from Necrotising Fasciitis:
-
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
-
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Knowledge of the fourteen-point plan for reducing capsular contracture
+Discussion of the role of leukotriene receptor antagonists such as montelukast in early capsular contracture
+Understanding of the biofilm theory of capsular contracture and the role of the Keller funnel in no-touch technique
+Discussion of B I A dash A L C L including its association with textured implants, presentation as late seroma, and the need for C D 30 immunohistochemistry and cytology of periprosthetic fluid
+Knowledge of the difference between intracapsular and extracapsular rupture and their management
+Discussion of fat transfer as an alternative to reimplantation
+Understanding of the M H R A recommendations regarding breast implant surveillance
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

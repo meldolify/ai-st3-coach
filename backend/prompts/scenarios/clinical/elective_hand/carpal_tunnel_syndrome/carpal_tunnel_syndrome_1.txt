@@ -1,147 +1,116 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
-Carpal Tunnel Syndrome
+Carpal Tunnel Syndrome — Nocturnal Numbness and Tingling
 
 CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+A 45-year-old right-hand-dominant woman presents to your clinic with a six-month history of numbness and tingling in her right thumb, index, and middle fingers. The symptoms are worse at night and she frequently wakes up shaking her hand to relieve them. She works as a secretary and is finding it increasingly difficult to type. She has noticed she has been dropping things more frequently.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Assessment:
+"What would you want to ask about in the history?"
+"What are the common causes and associations of C T S?"
+"How would you examine this patient?"
+"What clinical tests would you perform and what is their sensitivity?"
 
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
+Investigations:
+"What investigations would you request?"
+"How do N C S help in the management of C T S?"
+"How would you grade the severity of C T S?"
 
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
+Initial Management:
+"How would you manage a patient with mild C T S?"
+"What is the role of steroid injection?"
+"When would you offer surgery?"
 
-Format them under stage headings exactly like this:
-
-Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
-
-Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
-
-Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
-
-Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+Definitive Management:
+"Describe the surgical technique for carpal tunnel release."
+"What are the differences between open and endoscopic release?"
+"What complications would you warn the patient about?"
+"What structures are at risk during surgery?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
-Investigations
-Initial management
-Definitive management
-Surgical steps
-Post-operative care
-
-END OF AUTHOR NOTE]
+Anatomy of the carpal tunnel
+Aetiology and associations
+Clinical assessment and provocative tests
+Nerve conduction studies and grading
+Conservative management
+Surgical technique and complications
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Anatomy:
+Carpal tunnel bounded by carpal bones and transverse carpal ligament
+Contains median nerve and nine flexor tendons
+Median nerve most superficial structure beneath the ligament
+Palmar cutaneous branch arises proximal to the tunnel and passes superficially
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+Aetiology and associations:
+Idiopathic most common
+Pregnancy, hypothyroidism, diabetes, rheumatoid arthritis, acromegaly
+Space-occupying lesions such as ganglion or lipoma
+Wrist fractures particularly distal radius
 
-Each point should be a short statement of the expected answer.
+Clinical assessment:
+Phalen's test with wrist flexion reproducing symptoms within 60 seconds
+Tinel's test tapping over the carpal tunnel
+Durkan's test with direct compression over the carpal tunnel
+Assess thenar muscle bulk for wasting
+Semmes-Weinstein monofilament testing for sensory threshold
+Two-point discrimination testing
 
-Example from Necrotising Fasciitis:
+Investigations:
+N C S for diagnosis, grading, and localisation
+Mild: prolonged sensory latency only
+Moderate: prolonged sensory and motor latency
+Severe: absent sensory response with prolonged motor latency or denervation
+Ultrasound can show increased cross-sectional area of the median nerve
 
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
+Conservative management:
+Night splinting in neutral wrist position for mild symptoms
+Activity modification
+Corticosteroid injection into the carpal tunnel, maximum of two injections
+Injection useful as diagnostic and therapeutic tool
 
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
+Surgical management:
+Open carpal tunnel release through longitudinal incision ulnar to thenar crease
+Divide transverse carpal ligament under direct vision
+Endoscopic release has quicker return to work but similar long-term outcomes
+Protect palmar cutaneous branch, recurrent motor branch, and superficial palmar arch
 
-Investigations
-Blood tests including lactate level.
-
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
-
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
-
-Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Complications:
+Pillar pain is the most common post-operative complaint
+Incomplete release requiring revision
+Nerve injury particularly recurrent motor branch
+Scar tenderness
+Grip weakness in the early post-operative period
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
-
-Group them under the same domain headings. Each point should be a short statement.
-
-Example from Necrotising Fasciitis:
-
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
-
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Recurrent motor branch anatomical variations: extraligamentous, subligamentous, transligamentous
+Martin-Gruber anastomosis as a source of atypical findings on N C S
+Thenar atrophy as a late sign indicating severe and potentially irreversible damage
+Role of ultrasound-guided injection
+Mini-open technique as a compromise between open and endoscopic
+Double crush syndrome with concurrent cervical radiculopathy
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

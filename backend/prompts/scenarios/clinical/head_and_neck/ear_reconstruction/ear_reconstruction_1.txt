@@ -1,7 +1,3 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
 Ear Reconstruction
@@ -10,138 +6,101 @@ CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+This is a 70 year old gentleman who has undergone Mohs micrographic surgery for a squamous cell carcinoma of the right helix. He has been left with a full thickness defect of the upper helix measuring approximately two centimetres. You have been asked to discuss the reconstructive options.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
-
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
-
-Format them under stage headings exactly like this:
-
 Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
+"How would you assess this defect?"
+"What structures are involved?"
+"What are the key principles of ear reconstruction?"
 
 Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
+"Do you need any further investigations?"
 
 Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
+"What reconstructive options would you consider?"
+"How do you decide which technique to use?"
 
 Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+"Can you describe the technique you would choose?"
+"What would your post-operative plan look like?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
-Investigations
-Initial management
-Definitive management
-Surgical steps
+Assessment of the defect
+Principles of ear reconstruction
+Reconstructive options based on defect size and location
+Surgical technique
 Post-operative care
-
-END OF AUTHOR NOTE]
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Assessment of the defect
+Describing the defect: full thickness loss of approximately two centimetres of the upper helix involving skin, cartilage, and posterior skin.
+Confirming that margins are clear from the Mohs surgery before proceeding with reconstruction.
+Assessing the surrounding skin quality and any previous scars.
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+Principles of ear reconstruction
+Knowing the goal is to maintain the ear contour, symmetry with the contralateral ear, and structural support.
+Knowing that the ear is composed of a skin-cartilage sandwich and full thickness defects require reconstruction of all three layers: anterior skin, cartilage framework, and posterior skin.
 
-Each point should be a short statement of the expected answer.
+Reconstructive options based on defect size and location
+Knowing the reconstructive ladder for ear defects.
+For defects with no cartilage loss: primary closure.
+For defects up to one quarter of the ear: wedge excision and direct closure. The wedge should be designed at thirty degrees to minimise dog-ear formation. Full thickness excision through anterior skin, cartilage, and posterior skin, closed in layers.
+For defects up to one point five centimetres: Burrow triangle technique converting the area into a star shape with three Burrow triangles and approximating each layer.
+For larger helical defects: Antia-Buch chondrocutaneous advancement flap which mobilises the helical rim on both sides of the defect to close it.
+For conchal defects: flip-flop flap from the posterior auricular surface.
 
-Example from Necrotising Fasciitis:
-
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
-
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
-
-Investigations
-Blood tests including lactate level.
-
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
-
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
+Surgical technique
+Describing the chosen technique for a two centimetre helical defect: an Antia-Buch flap or wedge excision depending on the laxity of the remaining ear.
+Closing in layers: cartilage with P D S sutures, posterior skin, and anterior skin with Nylon.
 
 Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Appropriate dressings protecting the ear.
+Suture removal at seven to ten days.
+Follow up for wound healing and oncological surveillance.
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Assessment of the defect
+Assessing the contralateral ear for comparison and symmetry planning.
+Noting the specific subunit of the ear affected: helix, antihelix, concha, lobule, or tragus as each has different reconstructive considerations.
 
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
+Principles of ear reconstruction
+Knowing the blood supply to the ear: the superficial temporal artery and posterior auricular artery.
+Knowing that the ear has minimal subcutaneous tissue making it susceptible to ischaemia with tight closures.
 
-Group them under the same domain headings. Each point should be a short statement.
+Reconstructive options based on defect size and location
+Knowing the Antia-Buch technique in detail: a V-Y advancement of the helical rim based on the chondrocutaneous flap. The helical rim is mobilised superiorly and inferiorly by making a full thickness incision through the scaphal cartilage, allowing the helical segments to advance and close the defect.
+Knowing that for larger defects not amenable to local flaps, options include a post-auricular skin flap with costal cartilage graft for framework reconstruction, or a temporoparietal fascia flap with skin graft.
+Knowing the Nagata technique for total ear reconstruction using costal cartilage framework in congenital microtia, though this is less relevant for post-oncological defects.
+Knowing that prosthetic ear reconstruction using osseointegrated implants is an option for large defects or when multiple previous surgeries have failed.
 
-Example from Necrotising Fasciitis:
+Surgical technique
+Knowing that cartilage sutures should approximate the cartilage edges to maintain contour without excessive tension.
+Knowing that meticulous haemostasis is important as haematoma can compromise the thin skin flaps.
+Knowing the importance of avoiding pressure on the reconstructed ear post-operatively by using a bulky protective dressing.
 
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
-
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Post-operative care
+Knowing the complications: haematoma, infection, cartilage necrosis, notching of the helical rim, and ear asymmetry.
+Knowing that secondary revision procedures may be needed to refine the contour.
+Knowing the importance of oncological follow up with regular skin surveillance.
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

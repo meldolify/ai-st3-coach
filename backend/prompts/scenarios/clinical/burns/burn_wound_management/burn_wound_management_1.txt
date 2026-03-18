@@ -1,7 +1,3 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
 Burn Wound Management
@@ -10,138 +6,123 @@ CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+This is a 28 year old woman who sustained a scald burn to her right forearm three days ago when a pot of boiling water spilled on her at home. She was initially treated in the emergency department with dressings. She has been referred to the burns clinic for review. The burn covers approximately five percent of her total body surface area and appears to be a mixture of superficial and deep partial thickness. You have been asked to assess and formulate a wound management plan.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
-
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
-
-Format them under stage headings exactly like this:
-
 Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
+"How would you assess this burn at three days?"
+"How can you tell the difference between superficial and deep partial thickness?"
+"What methods can help determine the burn depth more accurately?"
 
 Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
+"Would you arrange any investigations at this stage?"
 
 Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
+"How would you manage the superficial partial thickness areas?"
+"What dressing options are available?"
 
 Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+"How would you manage the deep partial thickness areas?"
+"Can you walk me through the surgical technique?"
+"What skin cover options are available?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
-Investigations
-Initial management
-Definitive management
-Surgical steps
-Post-operative care
-
-END OF AUTHOR NOTE]
+Burn depth reassessment at three days
+Dressing options for partial thickness burns
+Indications for surgical management
+Surgical technique of tangential excision
+Skin cover options including autograft and skin substitutes
+Post-operative wound care and rehabilitation
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Burn depth reassessment at three days
+Knowing that burn depth assessment at three days is more reliable than on the day of injury as the burn has had time to declare.
+Reassessing depth by examining colour, capillary refill, sensation, and the condition of the wound bed.
+Superficial partial thickness burns should be pink, painful, have blisters, and brisk capillary refill, and are expected to heal within fourteen days with dressings alone.
+Deep partial thickness burns are mottled pink and white, have reduced sensation, sluggish capillary refill, and are unlikely to heal within three weeks without surgery.
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+Dressing options for partial thickness burns
+Knowing the principles of burn wound dressings: maintain a moist wound environment, prevent infection, reduce pain, and allow assessment.
+For superficial partial thickness burns, appropriate dressings include Biobrane, silver-based dressings such as Acticoat, alginates, foam dressings, or paraffin-based dressings such as Jelonet.
+Knowing that Biobrane is a biological dressing consisting of a nylon mesh with porcine collagen and a silicone outer layer. It is applied in theatre after tangential debridement and adheres to the wound until healing occurs beneath. There is Grade A evidence supporting its use in superficial partial thickness burns in children.
+Knowing that burns should be debrided by washing with saline and removing any loose skin or blisters before dressing application.
 
-Each point should be a short statement of the expected answer.
+Indications for surgical management
+Knowing that deep partial thickness and full thickness burns that will not heal within three weeks should be managed surgically to reduce scarring.
+Knowing that burns greater than five percent T B S A should be debrided in theatre.
+Knowing that hand and face burns should be addressed within fourteen days.
+Knowing that early excision and grafting reduces hospital stay, infection risk, and scarring.
 
-Example from Necrotising Fasciitis:
+Surgical technique of tangential excision
+Performing the procedure under general anaesthetic in a warm operating theatre.
+Pre-operative preparation including ensuring blood products are available, dermatome and mesh equipment, sterile preparation, and infiltration with tumescent adrenaline solution at one in one million concentration.
+Tangential excision using a Watson knife or Humby knife, serially shaving layers of the burn until a healthy bleeding wound bed is obtained.
+Meticulous haemostasis using adrenaline-soaked swabs, diathermy, and topical thrombin if needed.
+Sending wound bed samples for microbiology if infection is suspected.
 
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
+Skin cover options including autograft and skin substitutes
+Split thickness skin graft is the gold standard for definitive wound cover.
+Knowing that sheet grafts should be used for cosmetically important areas such as the face and hands, and over joints.
+Knowing that meshed grafts allow coverage of larger areas and can be expanded up to four to one ratio for very large burns.
+Knowing the donor site options and that the thigh is the most common donor site.
+Knowing that silver-based dressings such as Acticoat should be applied over meshed grafts.
 
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
-
-Investigations
-Blood tests including lactate level.
-
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
-
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
-
-Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Post-operative wound care and rehabilitation
+Appropriate dressing of the graft site and donor site.
+Immobilisation and elevation of the grafted area for five days to allow graft take.
+First graft check at five days.
+Early hand therapy and physiotherapy involvement, particularly for burns over joints.
+Compression garments once healing is established to reduce hypertrophic scarring.
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Burn depth reassessment at three days
+Knowing that laser Doppler imaging can objectively assess burn depth and predict healing potential. It is most accurate between two and five days post-burn and is recommended by N I C E for indeterminate depth burns.
+Knowing that burns that are predicted not to heal within twenty one days are likely to develop hypertrophic scarring and should be offered early surgery.
 
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
+Dressing options for partial thickness burns
+Knowing the advantages and disadvantages of different dressings: Biobrane reduces pain and healing time but must be applied to a clean wound and removed if infection develops. Silver dressings provide antimicrobial activity but require regular changes. Negative pressure wound therapy may be used for burns with exposed structures.
+Knowing that glycerol-preserved allograft is an alternative biological dressing that can be used for larger burns when Biobrane is not suitable.
+Knowing that Integra is a dermal regeneration template consisting of bovine collagen and a silicone outer layer, used for full thickness defects. The silicone layer is removed once the neodermis has formed and a thin autograft is applied on top.
 
-Group them under the same domain headings. Each point should be a short statement.
+Indications for surgical management
+Knowing the concept of burn wound conversion: an initially superficial burn can progress to a deeper burn due to infection, poor perfusion, or inadequate first aid, and regular reassessment is essential.
+Knowing that infected burn wounds may require more urgent surgical debridement.
 
-Example from Necrotising Fasciitis:
+Surgical technique of tangential excision
+Knowing the surgical endpoints for massive burns: two to three hours operating, up to ten units transfused, temperature below thirty six degrees, or the lethal triad. Up to thirty percent T B S A per sitting.
+Knowing the difference between tangential excision which shaves layers preserving viable dermis, and fascial excision which removes all tissue down to fascia and is used for very deep burns. Fascial excision heals with a poorer cosmetic outcome.
+Knowing that the largest burn areas should be addressed first, prioritising the trunk to reduce the total open wound area.
+Giving prophylactic intravenous antibiotics at induction.
 
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
+Skin cover options including autograft and skin substitutes
+Knowing the role of allograft as a temporary biological dressing for large burns when there is insufficient autograft donor skin available.
+Knowing that cultured epithelial autograft can be used for very large burns where donor sites are limited, though it is fragile and expensive.
+Knowing the role of dermal substitutes such as Integra and Matriderm in providing a scaffold for dermal regeneration before thin autograft application, which may improve the quality of the healed skin.
+Knowing that negative pressure wound therapy can be used to improve graft take in difficult areas.
 
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Post-operative wound care and rehabilitation
+Knowing the risk of hypertrophic scarring and the role of pressure garments, silicone sheeting, and steroid injections in scar management.
+Knowing that burn scar contractures over joints may require secondary procedures including Z-plasties, skin grafting, or flap reconstruction.
+Knowing the importance of long-term follow up including scar management, psychological support, and functional rehabilitation.
+Knowing the role of the multidisciplinary burns team including surgeons, nurses, physiotherapists, occupational therapists, dietitians, and psychologists.
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

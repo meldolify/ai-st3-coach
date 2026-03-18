@@ -1,7 +1,3 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
 Bite Wounds
@@ -10,138 +6,128 @@ CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+This is a 28 year old right hand dominant man who has presented to the emergency department with a small wound over the metacarpophalangeal joint of his right middle finger. He says he cut it on a fence but the wound looks suspicious for a human bite injury. The finger is swollen and there is limited range of movement. The injury occurred approximately twelve hours ago. You have been asked to assess and manage this patient.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
-
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
-
-Format them under stage headings exactly like this:
-
 Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
+"How would you assess this patient?"
+"Why are you suspicious of a fight bite?"
+"What structures are you concerned about?"
 
 Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
+"What investigations would you request?"
 
 Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
+"How would you manage this patient initially?"
+"What antibiotics would you start?"
 
 Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+"Does this patient need surgery?"
+"Can you walk me through the procedure?"
+"What would your post-operative plan look like?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
+Recognition of a fight bite injury
+History and examination
+Assessment for joint involvement and tendon injury
 Investigations
-Initial management
-Definitive management
-Surgical steps
+Antibiotic therapy
+Surgical management with joint washout
 Post-operative care
-
-END OF AUTHOR NOTE]
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Recognition of a fight bite injury
+Recognising that a wound over the M C P joint is a fight bite until proven otherwise, regardless of the history given.
+Knowing that fight bite injuries carry a high risk of septic arthritis due to inoculation of oral flora into the M C P joint.
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+History and examination
+Taking a careful history noting the exact mechanism, timing, and any treatment given.
+Asking about hand dominance, occupation, tetanus status, allergies, and H I V and hepatitis B risk.
+Examining the wound with the M C P joint flexed to determine whether the wound communicates with the joint. The skin wound and the tendon injury are at different levels when the fist is clenched versus extended.
+Assessing the neurovascular status of the finger.
+Testing extensor tendon function.
+Assessing for signs of established infection including erythema, warmth, purulent discharge, and lymphangitis.
 
-Each point should be a short statement of the expected answer.
-
-Example from Necrotising Fasciitis:
-
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
-
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
+Assessment for joint involvement and tendon injury
+Knowing that the extensor tendon overlying the M C P joint may be lacerated.
+Knowing that the M C P joint capsule may be breached allowing bacterial contamination of the joint.
+Knowing the importance of examining for joint involvement by testing the range of motion and assessing for joint effusion.
 
 Investigations
-Blood tests including lactate level.
+X-ray of the hand to look for a tooth fragment in the wound, fracture, gas in the soft tissues, or joint involvement.
+Routine bloods including inflammatory markers.
+Wound swab for microscopy, culture, and sensitivity.
 
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
+Antibiotic therapy
+Starting intravenous antibiotics covering oral flora. Co-amoxiclav is the first line.
+Knowing that Eikenella corrodens is the typical culprit organism in human bite injuries.
+Updating tetanus prophylaxis.
 
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
+Surgical management with joint washout
+Knowing that any fight bite injury with suspected or confirmed joint involvement requires formal surgical exploration and joint washout.
+Performing the procedure under general or regional anaesthesia with an arm tourniquet.
+Extending the wound for adequate exposure.
+Thorough debridement of any devitalised tissue.
+Opening and irrigating the M C P joint with copious saline.
+Taking tissue samples for microbiology.
+Leaving the wound open. The wound must not be closed primarily due to the high risk of infection.
+Loose dressing and splinting in the position of safe immobilisation.
 
 Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Continued intravenous antibiotics adjusted based on culture results.
+Strict hand elevation.
+Planned second look at forty eight hours.
+Hand therapy once the wound is healing.
+Counselling about blood-borne virus risk and arranging appropriate testing.
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Recognition of a fight bite injury
+Knowing that patients often give a misleading history about the mechanism of injury.
+Knowing that a delay in presentation beyond twenty four hours significantly increases the risk of established infection and poor outcome.
 
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
+History and examination
+Knowing the difference between human bites, dog bites, and cat bites in terms of organisms and management.
+Dog bites: Pasteurella multocida and Capnocytophaga canimorsus. Cat bites: Pasteurella multocida, deeper inoculation due to narrow pointed teeth.
+Human bites: Eikenella corrodens, Streptococci, Staphylococci, and anaerobes.
 
-Group them under the same domain headings. Each point should be a short statement.
+Assessment for joint involvement and tendon injury
+Knowing that even if the joint does not appear to be involved on initial examination, the dynamic nature of the injury when the fist is clenched means the tendon laceration and joint breach occur at a different level to the skin wound.
 
-Example from Necrotising Fasciitis:
+Investigations
+Knowing that the absence of radiological findings does not exclude joint involvement.
+Knowing that gas in the soft tissues on X-ray suggests established infection and is an ominous sign.
 
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
+Antibiotic therapy
+Knowing that bite wounds should not receive prophylactic antibiotics alone without surgical assessment for joint involvement.
+Knowing the alternative antibiotics for penicillin-allergic patients.
 
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Surgical management with joint washout
+Knowing that even if the wound appears superficial, if it overlies the M C P joint it should be explored formally in theatre.
+Knowing that the sagittal band and joint capsule should be inspected and repaired if damaged.
+Knowing that the articular cartilage should be inspected for damage from the tooth.
+
+Post-operative care
+Knowing the complications of fight bite injuries including osteomyelitis, septic arthritis, tendon rupture, and chronic stiffness.
+Knowing that animal bites to the hand should also be assessed for tendon and joint involvement and managed surgically if there is any concern.
+Knowing the indications for rabies post-exposure prophylaxis for animal bites in at-risk geographical areas.
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

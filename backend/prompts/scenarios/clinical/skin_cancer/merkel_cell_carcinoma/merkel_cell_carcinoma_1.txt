@@ -1,7 +1,3 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
 Merkel Cell Carcinoma
@@ -10,138 +6,120 @@ CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+This is a 75 year old gentleman who has been referred to your clinic with a rapidly growing painless lump on his left cheek. It has appeared over the past three months and has been getting noticeably bigger. His G P performed a punch biopsy which has come back as Merkel cell carcinoma. You have been asked to see him to discuss the management plan.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
-
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
-
-Format them under stage headings exactly like this:
-
 Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
+"What do you know about this condition?"
+"How would you assess this patient?"
+"What would you look for on examination?"
 
 Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
+"What further investigations would you arrange?"
+"How would you stage this patient?"
 
 Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
+"How would you manage this patient?"
+"Would you discuss this case with anyone else?"
 
 Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+"What surgical procedure does this patient need?"
+"Would you consider a sentinel lymph node biopsy?"
+"What adjuvant treatment might be offered?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
-Investigations
-Initial management
-Definitive management
-Surgical steps
-Post-operative care
-
-END OF AUTHOR NOTE]
+Knowledge of the condition
+Clinical assessment
+Investigations and staging
+M D T discussion and management planning
+Definitive surgical management
+Role of sentinel lymph node biopsy
+Adjuvant therapy and follow up
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Knowledge of the condition
+Knowing that Merkel cell carcinoma is a rare, aggressive neuroendocrine tumour of the skin.
+Knowing that it has a high rate of local recurrence, regional lymph node metastasis, and distant metastasis.
+Knowing the typical presentation as a rapidly growing, painless, firm, dome-shaped nodule that is often red or violaceous, typically on sun-exposed skin in elderly patients.
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+Clinical assessment
+Taking a focused history including the duration, rate of growth, and any symptoms.
+Asking about risk factors including advanced age, immunosuppression, excessive U V exposure, and Merkel cell polyomavirus infection.
+Examining the lesion noting size, shape, colour, fixity, and surface features.
+Palpating the regional lymph nodes for lymphadenopathy, in this case the cervical and pre-auricular nodes.
+Performing a head to toe skin examination.
 
-Each point should be a short statement of the expected answer.
+Investigations and staging
+Confirming the diagnosis on biopsy with immunohistochemistry showing positivity for C K 20 in a perinuclear dot pattern and negativity for thyroid transcription factor one which distinguishes it from small cell lung cancer.
+Arranging staging C T of the head, chest, abdomen, and pelvis to exclude distant metastasis.
+Arranging ultrasound of the regional lymph node basin if nodes are not clinically palpable.
 
-Example from Necrotising Fasciitis:
+M D T discussion and management planning
+Discussing the case in a skin cancer M D T or sarcoma M D T.
+Management guided by M D T decision.
 
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
+Definitive surgical management
+Wide local excision with a margin of one to two centimetres where anatomically possible.
+Knowing that margins may be modified in cosmetically sensitive areas such as the face.
 
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
+Role of sentinel lymph node biopsy
+Knowing that S L N B is recommended for clinically node negative Merkel cell carcinoma to stage the regional lymph nodes.
+Knowing that a positive S L N B upstages the patient and may indicate the need for completion lymph node dissection and adjuvant therapy.
 
-Investigations
-Blood tests including lactate level.
-
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
-
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
-
-Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Adjuvant therapy and follow up
+Knowing that adjuvant radiotherapy to the primary site and or the regional lymph node basin is often recommended.
+Regular follow up with clinical examination given the high recurrence rate.
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Knowledge of the condition
+Knowing the A E I O U mnemonic for clinical features: Asymptomatic, Expanding rapidly, Immunosuppression, Older than fifty, U V exposed site.
+Knowing that Merkel cell polyomavirus is detected in approximately eighty percent of Merkel cell carcinomas.
+Knowing that immunosuppressed patients including organ transplant recipients have a significantly increased risk.
 
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
+Clinical assessment
+Recognising that the clinical differential diagnosis includes B C C, S C C, amelanotic melanoma, cutaneous lymphoma, and skin metastasis from an internal malignancy.
 
-Group them under the same domain headings. Each point should be a short statement.
+Investigations and staging
+Knowing the A J C C staging system for Merkel cell carcinoma.
+Considering P E T C T for comprehensive staging particularly in locally advanced or recurrent disease.
+Knowing that serum markers are not routinely available for Merkel cell carcinoma.
 
-Example from Necrotising Fasciitis:
+M D T discussion and management planning
+Knowing the role of the clinical oncologist in planning adjuvant radiotherapy.
+Understanding that immunotherapy with checkpoint inhibitors such as avelumab or pembrolizumab has shown significant activity in advanced Merkel cell carcinoma.
 
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
+Definitive surgical management
+Knowing that Mohs micrographic surgery may be considered in cosmetically sensitive areas to achieve margin control with tissue conservation.
+Knowing that the primary tumour site should ideally receive adjuvant radiotherapy even after complete excision given the high local recurrence rate.
 
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Role of sentinel lymph node biopsy
+Knowing that approximately one third of clinically node negative patients will have a positive sentinel node.
+Knowing that a positive S L N B significantly worsens the prognosis and guides adjuvant therapy decisions.
+Understanding the role of completion lymph node dissection versus adjuvant radiotherapy to the nodal basin after a positive S L N B.
+
+Adjuvant therapy and follow up
+Knowing that adjuvant radiotherapy reduces local and regional recurrence rates.
+Knowing that chemotherapy has limited long term efficacy in Merkel cell carcinoma and immunotherapy is now preferred for advanced disease.
+Knowing that avelumab is approved as first line treatment for metastatic Merkel cell carcinoma.
+Stating that follow up should be frequent, typically every three to six months for the first three years, given the high recurrence rate with the majority of recurrences occurring within two years.
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

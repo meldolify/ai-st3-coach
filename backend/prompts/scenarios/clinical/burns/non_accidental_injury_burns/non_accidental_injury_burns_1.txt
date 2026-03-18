@@ -1,147 +1,125 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
-Non Accidental Injury Burns
+Non-Accidental Injury Burns
 
 CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+This is a 2 year old child who has been brought to the emergency department by a parent with scald burns to both feet. The parent says the child climbed into the bath. The burns have a clear demarcation line, are symmetrical, and there are no splash marks. The child also has some bruising on the upper arms. The injury reportedly happened yesterday but the family have only presented today. You have been asked to assess and manage this patient.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
-
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
-
-Format them under stage headings exactly like this:
-
 Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
+"How would you assess this child?"
+"What features of this burn concern you?"
+"What are the red flags for non-accidental injury?"
 
 Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
+"What investigations would you arrange?"
 
 Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
+"How would you manage the burn itself?"
+"What safeguarding steps would you take?"
 
 Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+"How would you manage this child's burns going forward?"
+"What multidisciplinary involvement is needed?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
-Investigations
-Initial management
-Definitive management
-Surgical steps
-Post-operative care
-
-END OF AUTHOR NOTE]
+Recognition of non-accidental injury
+Burns assessment and management
+Safeguarding procedures
+History taking with awareness of inconsistencies
+Head to toe examination for other injuries
+Multidisciplinary involvement
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Recognition of non-accidental injury
+Recognising the red flags in this presentation: symmetrical bilateral burns with a clear glove or stocking distribution, sharp demarcation lines with no splash marks, delay in presentation, unexplained bruising on the upper arms, and inconsistency between the described mechanism and the burn pattern.
+Knowing that a child climbing into a bath would typically have splash marks and an irregular burn margin, not a clean demarcation.
+Knowing that immersion burns with clear tide marks and symmetrical distribution are highly suspicious for N A I.
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+Burns assessment and management
+Following E M S B principles adapted for the paediatric patient.
+Giving analgesia, which may include intranasal diamorphine.
+Assessing the child's airway, breathing, and circulation, and ensuring the child is kept warm.
+Estimating the T B S A using the child's palm as one percent or a paediatric Lund and Browder chart. Knowing that the rule of nines is not accurate for children due to the proportionally larger head.
+Assessing the burn depth.
+If the burn is greater than ten percent T B S A, the child will need fluid resuscitation using the modified Parkland formula with maintenance fluids calculated for the child's weight.
 
-Each point should be a short statement of the expected answer.
+Safeguarding procedures
+Knowing the duty to safeguard the child, which takes priority alongside clinical management.
+Informing the paediatric team and requesting an urgent safeguarding assessment.
+Contacting the hospital safeguarding lead and social services.
+Documenting findings meticulously including clinical photography.
+Knowing that the child should be admitted for both burn management and safeguarding assessment, regardless of whether the burn itself would normally require admission.
+Knowing that the child should not be discharged until safeguarding concerns have been addressed.
 
-Example from Necrotising Fasciitis:
+History taking with awareness of inconsistencies
+Taking a detailed history from the parent including the exact mechanism, timing, who was present, whether the injury was witnessed, and what first aid was given.
+Noting any delay in presentation and asking why.
+Noting any inconsistency between the described mechanism and the pattern of injury.
+Asking about the child's general health, developmental history, immunisation status, and any previous attendances to the emergency department.
+Asking about the family situation and any previous involvement with social services.
 
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
+Head to toe examination for other injuries
+Performing a thorough head to toe examination of the child looking for other injuries including bruising in unusual locations such as the torso, upper arms, and buttocks, bite marks, fractures, and any other suspicious findings.
+Knowing that bruising on a non-mobile infant or in unusual locations is a significant red flag for N A I.
+Examining the child's general nutritional and developmental status.
 
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
-
-Investigations
-Blood tests including lactate level.
-
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
-
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
-
-Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Multidisciplinary involvement
+Knowing the teams that need to be involved: paediatrics, the hospital safeguarding team, social services, and potentially the police.
+Knowing that a strategy meeting or child protection conference may be needed.
+Knowing the importance of thorough and contemporaneous documentation for potential legal proceedings.
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Recognition of non-accidental injury
+Knowing the burn patterns associated with N A I: forced immersion burns with glove and stocking distribution and clear tide marks, contact burns with a clearly defined shape matching an object such as a cigarette or iron, burns to the buttocks and perineum suggesting punishment for soiling, and bilateral symmetrical burns.
+Knowing the features that distinguish accidental from non-accidental burns: accidental scalds typically have irregular margins, splash marks, and a distribution consistent with a child pulling a container, whereas N A I burns tend to have sharp margins, no splash marks, and a distribution inconsistent with the given history.
+Knowing that a delay in presentation of more than twelve hours is a significant red flag.
 
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
+Burns assessment and management
+Knowing that for paediatric burns the fluid resuscitation formula is the same modified Parkland formula but maintenance fluids must be added, using five percent dextrose in nought point four five percent saline with potassium supplementation.
+Knowing that the urine output target in children is one millilitre per kilogram per hour.
+Knowing that the burn itself should be managed on its merits: superficial partial thickness burns may be managed with Biobrane or dressings, while deeper burns may require excision and grafting.
+Knowing the importance of keeping the child warm as children are more susceptible to hypothermia.
 
-Group them under the same domain headings. Each point should be a short statement.
+Safeguarding procedures
+Knowing the legal framework: the Children Act, local safeguarding children board procedures, and the role of the named doctor for child protection in the hospital.
+Knowing that as a doctor you have a professional and legal duty to report suspected N A I and that maintaining a therapeutic relationship with the family should not prevent reporting.
+Knowing that the child's safety is paramount and overrides concerns about the family relationship.
 
-Example from Necrotising Fasciitis:
+History taking with awareness of inconsistencies
+Knowing that taking the history from each carer separately may reveal inconsistencies.
+Knowing that the mechanism of a child climbing into a bath can be tested against the child's developmental capability: a two year old may be able to climb into a bath but the resulting burn pattern should be asymmetrical with splash marks, not symmetrical with sharp tide marks.
 
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
+Head to toe examination for other injuries
+Knowing that a skeletal survey should be considered for children under two years with suspected N A I to look for occult fractures.
+Knowing that an ophthalmology review should be considered for retinal haemorrhages if head injury is suspected.
+Knowing that blood tests including a full blood count and clotting screen should be performed to exclude a bleeding disorder before attributing bruising to N A I.
 
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Multidisciplinary involvement
+Knowing that the paediatric team should take over as the primary admitting team with burns input for wound management.
+Knowing that the case should be discussed with the designated doctor for child protection.
+Knowing that accurate documentation is critical as the medical records may be used as evidence in family court or criminal proceedings.
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

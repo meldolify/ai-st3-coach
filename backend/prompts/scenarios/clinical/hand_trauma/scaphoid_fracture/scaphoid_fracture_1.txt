@@ -1,7 +1,3 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
 Scaphoid Fracture
@@ -10,138 +6,112 @@ CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+This is a 25 year old right hand dominant man who has fallen onto his outstretched left hand while playing football. He has pain and swelling over the radial side of his wrist. He presented to the emergency department and the initial X-ray has been reported as normal. You have been asked to assess and manage this patient.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
-
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
-
-Format them under stage headings exactly like this:
-
 Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
+"How would you assess this patient?"
+"What would you look for on examination?"
+"Why are you concerned about a scaphoid fracture despite a normal X-ray?"
 
 Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
+"What further investigations would you arrange?"
+"How would you image a suspected scaphoid fracture?"
 
 Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
+"How would you manage this patient initially?"
 
 Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+"If this is confirmed as a scaphoid fracture, what are the management options?"
+"What are the complications of a missed scaphoid fracture?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
-Investigations
+History and mechanism of injury
+Examination of the wrist
+Investigations and imaging
 Initial management
-Definitive management
-Surgical steps
-Post-operative care
-
-END OF AUTHOR NOTE]
+Classification and definitive management
+Complications
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+History and mechanism of injury
+Establishing the mechanism: fall onto outstretched hand.
+Asking about hand dominance, occupation, sporting activities, and any previous wrist injuries.
+Noting the time of injury and any treatment given.
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+Examination of the wrist
+Tenderness in the anatomical snuffbox which is the hallmark clinical sign of scaphoid fracture.
+Tenderness over the scaphoid tubercle on the volar aspect of the wrist.
+Pain on axial compression of the thumb, the telescoping test.
+Assessing the range of movement of the wrist.
+Assessing the neurovascular status of the hand.
 
-Each point should be a short statement of the expected answer.
-
-Example from Necrotising Fasciitis:
-
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
-
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
-
-Investigations
-Blood tests including lactate level.
+Investigations and imaging
+Knowing that initial plain X-rays may not show a scaphoid fracture in up to twenty percent of cases.
+Requesting scaphoid series X-rays including posteroanterior, lateral, and oblique views with the wrist in ulnar deviation.
+If the X-ray is normal but clinical suspicion is high, arranging further imaging. M R I is the gold standard for occult scaphoid fracture. C T scan can also be used to assess fracture configuration.
+Arranging repeat X-rays at ten to fourteen days if M R I is not available, as a fracture line may become visible with resorption at the fracture site.
 
 Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
+Immobilising the wrist in a scaphoid cast or splint below the elbow including the thumb to the interphalangeal joint.
+Analgesia.
+Arranging follow up for further imaging or clinical review.
 
-Definitive management
-Urgent surgery for debridement.
+Classification and definitive management
+Knowing the classification of scaphoid fractures by location: waist, proximal pole, distal pole, and tubercle.
+Knowing that non-displaced waist fractures can be managed conservatively in a scaphoid cast for eight to twelve weeks.
+Knowing the indications for surgical fixation including displaced fractures, proximal pole fractures, and fractures with associated ligament injury.
+Knowing that surgical fixation is typically with a headless compression screw such as a Herbert screw.
 
-Surgical steps
-Surgical debridement of all unhealthy tissue.
-
-Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Complications
+Knowing the risk of avascular necrosis particularly of the proximal pole due to the retrograde blood supply of the scaphoid.
+Knowing the risk of non-union which is more common in proximal pole fractures, displaced fractures, and delayed treatment.
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+History and mechanism of injury
+Asking about smoking which affects fracture healing.
+Asking about contact sport involvement and return to sport expectations.
 
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
+Examination of the wrist
+Assessing for associated injuries including distal radius fracture and ligamentous injuries of the wrist.
+Knowing that scaphoid fracture can be associated with perilunate dislocation or scapholunate ligament injury.
 
-Group them under the same domain headings. Each point should be a short statement.
+Investigations and imaging
+Knowing that M R I has the highest sensitivity and specificity for occult scaphoid fracture.
+Knowing the role of C T in assessing fracture displacement, comminution, and humpback deformity to guide operative planning.
+Knowing that bone scan is sensitive but less specific than M R I.
 
-Example from Necrotising Fasciitis:
+Initial management
+Knowing the debate between below elbow and above elbow casting and that current evidence supports below elbow scaphoid casts.
+Knowing that early surgical fixation may be offered to patients who cannot tolerate prolonged casting such as athletes or manual workers.
 
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
+Classification and definitive management
+Knowing the blood supply of the scaphoid: the dorsal branch of the radial artery supplies approximately eighty percent of the scaphoid in a retrograde fashion, making the proximal pole vulnerable to avascular necrosis.
+Knowing the surgical technique for scaphoid fixation: either dorsal or volar approach depending on the fracture location, reduction, guidewire placement under fluoroscopy, and headless compression screw insertion.
+Knowing that proximal pole fractures have a higher rate of non-union and avascular necrosis and may require bone grafting.
+Knowing the management of established scaphoid non-union including vascularised bone graft from the distal radius, non-vascularised bone graft such as Matti-Russe procedure, and salvage procedures such as proximal row carpectomy or four corner fusion for advanced arthritis.
 
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Complications
+Knowing the long term consequence of scaphoid non-union advanced collapse, known as S N A C wrist, and its stages.
+Knowing that avascular necrosis is identified on M R I and can be assessed intraoperatively by the presence or absence of punctate bleeding.
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]
