@@ -5,6 +5,6 @@
   "trailingSlash": false,
   "rewrites": [
     { "source": "/prompt-lab/api/(.*)", "destination": "https://api.reviva.live/prompt-lab/api/$1" },
-    { "source": "/((?!assets|images|favicon|logo|vite\\.svg).*)", "destination": "/index.html" }
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
