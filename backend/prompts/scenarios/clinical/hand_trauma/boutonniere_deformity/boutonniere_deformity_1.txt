@@ -1,7 +1,3 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
 Boutonniere Deformity
@@ -10,138 +6,113 @@ CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+This is a 42 year old man who jammed his right middle finger in a car door three weeks ago. He did not seek medical attention at the time. He has now presented to the emergency department because his finger has developed a deformity with the middle joint bent down and the tip joint hyperextended. You have been asked to assess and manage this patient.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
-
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
-
-Format them under stage headings exactly like this:
-
 Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
+"What is your clinical diagnosis?"
+"Can you explain the mechanism behind this deformity?"
+"What would you look for on examination?"
 
 Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
+"What investigations would you request?"
 
 Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
+"How would you manage this patient?"
+"Is this an acute or chronic injury?"
 
 Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+"What splinting regime would you use?"
+"When would surgery be indicated?"
+"What surgical options are available?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
+Clinical diagnosis and mechanism of deformity
+History and examination
 Investigations
-Initial management
-Definitive management
-Surgical steps
-Post-operative care
-
-END OF AUTHOR NOTE]
+Classification as acute or chronic
+Conservative management with splinting
+Indications for surgical management
+Complications
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Clinical diagnosis and mechanism of deformity
+Recognising the boutonniere deformity: flexion at the P I P joint and hyperextension at the D I P joint.
+Knowing the mechanism: disruption of the central slip of the extensor tendon at its insertion on the base of the middle phalanx, causing the lateral bands to migrate volarly below the axis of rotation of the P I P joint, resulting in P I P flexion and D I P hyperextension.
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
-
-Each point should be a short statement of the expected answer.
-
-Example from Necrotising Fasciitis:
-
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
-
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
+History and examination
+Asking about the mechanism and timing of injury.
+Asking about hand dominance, occupation, and functional impact.
+Assessing the degree of flexion deformity at the P I P joint and hyperextension at the D I P joint.
+Assessing whether the P I P joint deformity is passively correctable, which distinguishes a supple from a fixed deformity.
+Performing the Elson test: flexing the P I P joint over the edge of a table at ninety degrees and asking the patient to extend against resistance. In a central slip injury, the P I P joint cannot extend but the D I P joint becomes rigid in hyperextension.
 
 Investigations
-Blood tests including lactate level.
+X-ray of the finger to assess for an avulsion fracture at the base of the middle phalanx and to exclude any joint subluxation.
 
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
+Classification as acute or chronic
+Knowing that this is a subacute injury at three weeks.
+Knowing that acute injuries are within the first three weeks, subacute between three and six weeks, and chronic beyond six weeks.
+Knowing that a flexible deformity has a better prognosis than a fixed deformity.
 
-Definitive management
-Urgent surgery for debridement.
+Conservative management with splinting
+Knowing that acute and subacute boutonniere deformities with a passively correctable P I P joint should be managed with splinting.
+Applying a P I P extension splint holding the P I P joint in full extension while leaving the D I P joint free to flex.
+Active D I P flexion exercises are important as they help draw the lateral bands dorsally back to their anatomical position.
+Splinting duration is six weeks of continuous P I P extension splinting.
 
-Surgical steps
-Surgical debridement of all unhealthy tissue.
+Indications for surgical management
+Knowing the indications for surgery: failed conservative treatment, fixed P I P joint contracture, open injury with central slip laceration, or displaced avulsion fracture from the base of the middle phalanx.
 
-Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Complications
+Knowing the risk of P I P joint stiffness and residual flexion contracture.
+Knowing that chronic boutonniere deformity is more difficult to treat and outcomes are less predictable.
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Clinical diagnosis and mechanism of deformity
+Being able to draw or describe the anatomy of the extensor mechanism at the P I P joint: central slip, lateral bands, triangular ligament, transverse retinacular ligament, and oblique retinacular ligament.
+Knowing that boutonniere means buttonhole in French, referring to the P I P joint herniating through the torn central slip like a button through a buttonhole.
 
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
+History and examination
+Differentiating between traumatic boutonniere and rheumatoid boutonniere which is caused by synovitis weakening the central slip.
+Knowing the Burton and Melchior classification of acute boutonniere injuries.
 
-Group them under the same domain headings. Each point should be a short statement.
+Investigations
+Knowing that ultrasound can be useful to assess the integrity of the central slip if the diagnosis is uncertain.
 
-Example from Necrotising Fasciitis:
+Classification as acute or chronic
+Knowing that chronic fixed boutonniere deformity may require serial casting or a dynamic extension splint before surgery to achieve passive P I P extension.
 
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
+Conservative management with splinting
+Knowing that compliance with splinting is critical and the patient must understand that allowing the P I P to flex during the splinting period compromises the outcome.
+Knowing the options for splinting: relative motion extension splint, capener splint for dynamic extension, or custom thermoplastic splint.
 
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Indications for surgical management
+Knowing the surgical options: direct central slip repair for acute open injuries, central slip reconstruction using a lateral band transfer for chronic injuries, Fowler central slip tenotomy for fixed deformities, and extensor tenolysis for stiffness.
+Knowing that joint release surgery such as a checkrein ligament release may be needed for fixed P I P contractures.
+Knowing that in severe chronic deformity, P I P joint fusion in a functional position may be the best option.
+
+Complications
+Knowing the difference between a true boutonniere deformity and pseudo-boutonniere caused by P I P volar plate scarring without central slip injury.
+Knowing that the results of surgical reconstruction for chronic boutonniere deformity are often disappointing and patients should be counselled about this.
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

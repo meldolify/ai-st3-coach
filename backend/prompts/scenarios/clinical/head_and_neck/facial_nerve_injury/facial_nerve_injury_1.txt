@@ -1,7 +1,3 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
 Facial Nerve Injury
@@ -10,138 +6,113 @@ CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+This is a 30 year old woman who has been referred to your clinic after sustaining a deep laceration to the right side of her face two days ago which was sutured in the emergency department. She has noticed that she cannot raise her right eyebrow and cannot close her right eye fully. You have been asked to assess and manage this patient.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
-
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
-
-Format them under stage headings exactly like this:
-
 Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
+"How would you assess this patient?"
+"Which branch of the facial nerve is affected?"
+"How do you determine whether this needs repair?"
 
 Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
+"Do you need any investigations?"
 
 Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
+"How would you manage this patient initially?"
+"How would you protect the eye?"
 
 Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+"Does this patient need surgery?"
+"Can you walk me through the nerve repair?"
+"What would your long-term plan look like?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
-Investigations
-Initial management
-Definitive management
-Surgical steps
-Post-operative care
-
-END OF AUTHOR NOTE]
+Facial nerve anatomy and branch identification
+Clinical assessment and branch testing
+Determining the need for exploration and repair
+Surgical technique for nerve repair
+Eye protection in facial nerve palsy
+Long-term management and reconstruction
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Facial nerve anatomy and branch identification
+Knowing that the facial nerve exits the stylomastoid foramen and enters the parotid gland where it divides into its five terminal branches: temporal, zygomatic, buccal, marginal mandibular, and cervical.
+Knowing the functions of each branch: temporal innervates the frontalis, zygomatic innervates the orbicularis oculi, buccal innervates the buccal muscles and upper lip elevators, marginal mandibular innervates the lower lip depressors, and cervical innervates the platysma.
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+Clinical assessment and branch testing
+Testing all five branches systematically and documenting the findings.
+Identifying that this patient has a temporal branch injury causing inability to raise the eyebrow and a zygomatic branch injury causing inability to close the eye.
+Assessing the location of the laceration in relation to the surface anatomy landmarks.
+Knowing the danger zones: the temporal branch is vulnerable where it crosses the zygomatic arch within the superficial temporal fascia, and the marginal mandibular branch is vulnerable where it crosses the mandible.
 
-Each point should be a short statement of the expected answer.
+Determining the need for exploration and repair
+Knowing the key decision point: the vertical line drawn from the lateral canthus of the eye divides the face. Injuries posterior to this line are likely to involve the main trunk or major branches and require surgical exploration and repair. Injuries anterior to this line may recover spontaneously due to the extensive anastomotic network between the terminal branches.
+Knowing that this patient's laceration and the pattern of nerve injury should be assessed against this landmark to determine whether exploration is needed.
+Knowing that exploration should be performed as soon as possible, ideally within seventy two hours before the distal nerve ends degenerate and can no longer be stimulated to aid identification.
 
-Example from Necrotising Fasciitis:
+Surgical technique for nerve repair
+If exploration is indicated, performing the repair under general anaesthetic with loupe magnification or an operating microscope.
+Extending the wound for adequate exposure along the course of the nerve.
+Identifying the proximal and distal nerve ends using a nerve stimulator for the distal end if within seventy two hours of injury.
+Performing a direct epineural repair without tension using fine non-absorbable sutures such as nine-oh or ten-oh Nylon.
+If a gap exists, interposition nerve grafting using a donor nerve such as the great auricular nerve or sural nerve.
 
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
+Eye protection in facial nerve palsy
+Knowing that inability to close the eye risks exposure keratopathy and corneal ulceration.
+Immediate measures: lubricating eye drops during the day and lubricating ointment at night, taping the eye closed at night, and a moisture chamber.
+Ophthalmology referral for assessment and monitoring.
 
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
-
-Investigations
-Blood tests including lactate level.
-
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
-
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
-
-Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Long-term management and reconstruction
+If the nerve does not recover, knowing the reconstructive options for eye closure: gold weight insertion into the upper eyelid, temporalis muscle transfer, or free gracilis muscle transfer with cross-face nerve graft for dynamic reanimation.
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Facial nerve anatomy and branch identification
+Knowing the course of the temporal branch: it crosses the zygomatic arch within the superficial layer of the deep temporal fascia, approximately one point five centimetres anterior to the tragus. Pitanguy's line from the tragus to a point one point five centimetres above the lateral eyebrow approximates its course.
+Knowing the course of the marginal mandibular branch: it runs superficial to the facial artery and vein and crosses the mandible up to one centimetre below its lower border.
+Knowing that the buccal branch has the most extensive anastomotic connections and isolated buccal branch injuries often recover spontaneously.
 
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
+Clinical assessment and branch testing
+Knowing the difference between an upper motor neuron and lower motor neuron facial nerve palsy: a lower motor neuron palsy affects the entire ipsilateral face including the forehead, whereas an upper motor neuron palsy spares the forehead due to bilateral cortical innervation.
+Knowing that bilateral frontalis innervation means that a temporal branch injury can sometimes be partially compensated.
+Using the House-Brackmann grading system to document the degree of facial nerve dysfunction.
 
-Group them under the same domain headings. Each point should be a short statement.
+Determining the need for exploration and repair
+Knowing that electrophysiological studies including electroneurography and electromyography can be useful in assessing the degree of nerve injury after two to three weeks when Wallerian degeneration has occurred.
+Knowing the Sunderland classification of nerve injuries: neurapraxia, axonotmesis, and neurotmesis, and how each relates to recovery potential.
+Knowing that sharp lacerations are more likely to recover after repair than avulsion or crush injuries.
 
-Example from Necrotising Fasciitis:
+Surgical technique for nerve repair
+Knowing that the great auricular nerve, which is found at Erb's point where it wraps around the posterior border of the sternocleidomastoid at the junction of its upper and middle thirds, is a convenient donor nerve for grafting in the same operative field.
+Knowing that cross-face nerve grafting using the sural nerve can be used to provide innervation from the contralateral facial nerve for delayed reconstruction.
+Knowing the concept of the baby-sit procedure: a hypoglossal to facial nerve transfer to provide tone while awaiting cross-face nerve graft reinnervation.
 
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
+Eye protection in facial nerve palsy
+Knowing that a tarsorrhaphy can be performed as a temporary measure to protect the cornea.
+Knowing that upper eyelid gold or platinum weight insertion is a relatively simple procedure that uses gravity to assist eye closure and is reversible.
 
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Long-term management and reconstruction
+Knowing the options for facial reanimation: static procedures such as fascial slings for facial symmetry at rest, and dynamic procedures such as free gracilis muscle transfer innervated by a cross-face nerve graft or the masseteric nerve for smile restoration.
+Knowing that the masseteric nerve is increasingly used as the motor nerve for free muscle transfer due to its proximity and reliable anatomy, though the smile is initiated by biting rather than being spontaneous.
+Knowing that botulinum toxin can be used to treat synkinesis or to weaken the contralateral side for improved symmetry.
+Knowing the time-sensitive nature of facial nerve reconstruction: muscle transfer should ideally be performed within eighteen to twenty four months of denervation before irreversible motor endplate degeneration.
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

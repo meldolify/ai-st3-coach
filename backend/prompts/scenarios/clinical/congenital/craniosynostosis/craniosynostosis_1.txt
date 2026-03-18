@@ -1,7 +1,3 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
 Craniosynostosis
@@ -10,138 +6,126 @@ CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+This is a 4 month old baby who has been referred to your clinic because the parents have noticed that the head shape is abnormal. The right side of the forehead appears flat and the right ear appears more forward than the left. The baby is otherwise well and developing normally. You have been asked to assess and counsel the parents.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
-
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
-
-Format them under stage headings exactly like this:
-
 Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
+"What is your diagnosis?"
+"How would you differentiate this from positional plagiocephaly?"
+"What would you look for on examination?"
 
 Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
+"What investigations would you arrange?"
 
 Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
+"How would you counsel the parents?"
+"Does every case of craniosynostosis need surgery?"
 
 Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+"What are the surgical options?"
+"When should this be done?"
+"What are the risks of surgery?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
+Diagnosis and classification of craniosynostosis
+Differentiation from positional plagiocephaly
+Clinical assessment and exclusion of raised intracranial pressure
 Investigations
-Initial management
-Definitive management
-Surgical steps
-Post-operative care
-
-END OF AUTHOR NOTE]
+Timing and indications for surgery
+Surgical techniques
+Risks and complications
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Diagnosis and classification of craniosynostosis
+Knowing that craniosynostosis is premature fusion of one or more cranial sutures.
+Knowing the head shape associated with each suture fusion: sagittal synostosis causes scaphocephaly or dolichocephaly, coronal synostosis causes anterior plagiocephaly with ipsilateral forehead flattening, metopic synostosis causes trigonocephaly with a triangular forehead, and lambdoid synostosis causes posterior plagiocephaly.
+This child has right unilateral coronal synostosis based on the right forehead flattening and right ear displacement.
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+Differentiation from positional plagiocephaly
+Knowing the key differences: in positional plagiocephaly the ipsilateral ear is displaced posteriorly and the forehead is prominent on the same side, creating a parallelogram shape when viewed from above. In coronal synostosis the ipsilateral ear is displaced anteriorly and the forehead is flat on the same side.
+Knowing that positional plagiocephaly is common and usually resolves with repositioning and physiotherapy, whereas craniosynostosis requires surgical correction.
+Knowing that a palpable ridge along a fused suture confirms craniosynostosis.
 
-Each point should be a short statement of the expected answer.
-
-Example from Necrotising Fasciitis:
-
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
-
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
+Clinical assessment and exclusion of raised intracranial pressure
+Measuring the head circumference and plotting it on a growth chart. A small or crossing centile head circumference suggests restricted cranial growth.
+Palpating the fontanelle: a tense or bulging fontanelle may indicate raised intracranial pressure.
+Examining the eyes for papilloedema using ophthalmoscopy, and for any restriction of eye movements.
+Assessing developmental milestones.
+Knowing that multi-suture craniosynostosis carries a higher risk of raised intracranial pressure than single suture.
+Knowing that craniosynostosis can be isolated or syndromic, and syndromic cases should be identified: Crouzon syndrome involves craniosynostosis with mid-face hypoplasia, Apert syndrome involves craniosynostosis with syndactyly, and Pfeiffer syndrome involves craniosynostosis with broad thumbs and toes.
 
 Investigations
-Blood tests including lactate level.
+C T scan of the skull with three-dimensional reconstruction to confirm the diagnosis and identify the fused suture.
+Ophthalmology review for papilloedema and visual assessment.
+Genetic testing if a syndrome is suspected.
+M R I of the brain if there is concern about raised intracranial pressure or associated brain anomalies.
 
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
+Timing and indications for surgery
+Knowing that surgery is typically performed between six and twelve months of age for single suture craniosynostosis.
+Knowing the indications: correction of the skull shape deformity, prevention or treatment of raised intracranial pressure, and in syndromic cases, protection of the developing brain and eyes.
+Knowing that untreated craniosynostosis can lead to raised intracranial pressure, visual impairment, developmental delay, and psychosocial impact from the abnormal head shape.
 
-Definitive management
-Urgent surgery for debridement.
+Surgical techniques
+Knowing the main surgical approaches: open cranial vault remodelling performed jointly by the craniofacial plastic surgeon and neurosurgeon, and the less invasive endoscope-assisted strip craniectomy with post-operative helmet therapy.
+Knowing that for coronal synostosis, a fronto-orbital advancement is typically performed: the frontal bone and supraorbital bar are removed, reshaped, and repositioned to correct the forehead and orbital asymmetry.
+Knowing that endoscopic strip craniectomy is an option for younger infants under approximately four months and requires post-operative helmet moulding therapy for six to twelve months.
 
-Surgical steps
-Surgical debridement of all unhealthy tissue.
-
-Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Risks and complications
+Knowing the risks of craniofacial surgery: blood loss which can be significant in infants, infection, dural tears with C S F leak, relapse of the deformity, and rarely brain injury.
+Knowing the importance of adequate blood cross-matching and paediatric anaesthetic expertise.
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Diagnosis and classification of craniosynostosis
+Knowing the incidence: approximately one in two thousand to two thousand five hundred live births. Sagittal synostosis is the most common.
+Knowing the genetic basis of the common syndromes: Crouzon and Apert are caused by F G F R two mutations, and Muenke syndrome by F G F R three mutations.
+Knowing that lambdoid synostosis is the rarest form and is most often confused with positional plagiocephaly.
 
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
+Differentiation from positional plagiocephaly
+Knowing the management of positional plagiocephaly: repositioning to avoid pressure on the flat area, tummy time, physiotherapy, and in persistent cases helmet moulding therapy.
+Knowing that positional plagiocephaly does not require surgery.
 
-Group them under the same domain headings. Each point should be a short statement.
+Clinical assessment and exclusion of raised intracranial pressure
+Knowing the features of copper beaten skull on X-ray or C T which indicates chronic raised intracranial pressure.
+Knowing that intracranial pressure monitoring may be needed in multi-suture or syndromic craniosynostosis.
 
-Example from Necrotising Fasciitis:
+Investigations
+Knowing the utility of three-dimensional C T in surgical planning including creation of cutting guides and planning the osteotomies.
+Knowing that prenatal ultrasound may detect craniosynostosis but is not reliable for all suture types.
 
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
+Timing and indications for surgery
+Knowing that endoscopic strip craniectomy is ideally performed before three to four months of age when the bone is thin and the calvarial remodelling potential is greatest.
+Knowing that the decision between open surgery and endoscopic technique depends on the age of the child, the suture involved, and surgeon expertise and preference.
 
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Surgical techniques
+Knowing the fronto-orbital advancement technique in detail: a bicoronal incision provides access. The frontal bone flap and supraorbital bar are removed as separate pieces. The bar is reshaped using barrel staving osteotomies, advanced, and secured with absorbable plates and screws. The frontal bone is reshaped and replaced. Bone gaps fill in with new bone formation.
+Knowing the use of absorbable plates and screws rather than titanium in the growing skull to avoid migration and interference with growth.
+Knowing the spring-assisted cranioplasty technique as an alternative: metal springs are inserted across the excised suture and gradually expand the skull over several months, then are removed in a second procedure.
+Knowing the posterior vault expansion techniques for sagittal and lambdoid synostosis.
+Knowing that syndromic craniosynostosis often requires multiple staged procedures including mid-face advancement such as a Le Fort three or monobloc osteotomy at a later age.
+
+Risks and complications
+Knowing that intraoperative blood loss can be up to one to two blood volumes in an infant, requiring transfusion.
+Knowing the need for I T U or H D U post-operative care.
+Knowing that re-synostosis can occur in approximately five to ten percent of cases.
+Knowing the long-term follow up requirements including serial head circumference measurement, ophthalmology review, developmental assessment, and repeat imaging if there is concern about relapse or raised intracranial pressure.
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

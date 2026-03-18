@@ -1,147 +1,100 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
-Diep Flap
+D I E P Flap Breast Reconstruction
 
 CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+You are called to see a fifty year old woman in the breast clinic. She has recently been diagnosed with left breast cancer and is scheduled for mastectomy. She has been referred to you to discuss options for autologous breast reconstruction, and she is particularly interested in the D I E P flap. Please discuss this case with the examiner.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Assessment:
+"What pre-operative assessment would you perform for this patient?"
+"How would you evaluate the abdominal donor site?"
+"What imaging would you consider before planning a D I E P flap?"
 
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
+Investigations:
+"What is the role of C T angiography in D I E P flap planning?"
+"How do you assess the perforator anatomy pre-operatively?"
 
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
+Initial Management:
+"Can you describe the key steps of D I E P flap harvest?"
+"How does the D I E P differ from a T R A M flap?"
+"What are the advantages of a D I E P over a muscle-sparing T R A M?"
 
-Format them under stage headings exactly like this:
-
-Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
-
-Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
-
-Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
-
-Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+Definitive Management:
+"How would you monitor this flap post-operatively?"
+"What is your post-operative protocol for free flap breast reconstruction?"
+"How would you manage a suspected vascular compromise in the early post-operative period?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
-Investigations
-Initial management
-Definitive management
-Surgical steps
-Post-operative care
-
-END OF AUTHOR NOTE]
+- Indications and patient selection for D I E P flap
+- Pre-operative assessment and imaging
+- Surgical anatomy of deep inferior epigastric perforators
+- Flap harvest technique and comparison with T R A M
+- Recipient vessel selection and microvascular anastomosis
+- Post-operative monitoring and flap salvage
+- Complications and their management
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Patient Selection and Assessment:
+- B M I, smoking status, previous abdominal surgery, body habitus
+- C T angiography to map perforator location, calibre, and intramuscular course
+- Allen test equivalent: assess dominance of perforator system
+- Discuss with oncology regarding adjuvant therapy timing
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+Surgical Anatomy:
+- Deep inferior epigastric artery arising from external iliac
+- Perforators pass through rectus abdominis muscle to supply overlying skin and fat
+- Mathes-Nahai Type 3 muscle classification for rectus abdominis (two dominant pedicles)
+- Harvest zones: zone 1 ipsilateral periumbilical most reliable, zone 4 contralateral lateral least reliable
 
-Each point should be a short statement of the expected answer.
+D I E P versus T R A M:
+- D I E P preserves rectus abdominis muscle and anterior rectus sheath
+- Reduced donor site morbidity: lower abdominal wall hernia and bulge rates
+- Longer dissection time due to intramuscular perforator dissection
+- T R A M options: pedicled (superior epigastric), free muscle-sparing, or full muscle
 
-Example from Necrotising Fasciitis:
+Recipient Vessels:
+- Internal mammary artery and vein preferred (I M A)
+- Typically third or fourth rib cartilage removed for access
+- Alternative: thoracodorsal vessels
 
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
-
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
-
-Investigations
-Blood tests including lactate level.
-
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
-
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
-
-Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Post-operative Monitoring:
+- Hourly flap checks for first 24 to 48 hours
+- Assess colour, capillary refill time, turgor, temperature, handheld Doppler
+- Venous congestion: blue or purple discolouration, brisk dark capillary refill, raised turgor
+- Arterial insufficiency: pale or white, absent capillary refill, reduced turgor
+- Implantable Doppler monitoring as adjunct
+- Threshold for return to theatre: any signs of vascular compromise warrant urgent exploration
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
-
-Group them under the same domain headings. Each point should be a short statement.
-
-Example from Necrotising Fasciitis:
-
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
-
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+- Stacked or bipedicled D I E P for large volume reconstruction
+- Neurotisation of flap using intercostal nerve to restore sensation
+- Lymphoedema risk and sentinel node considerations
+- Discussion of timing: immediate versus delayed reconstruction
+- Fat necrosis rates related to perfusion zones
+- Supercharging or turbocharging techniques for zone 3 perfusion
+- Use of indocyanine green angiography intra-operatively to assess perfusion
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

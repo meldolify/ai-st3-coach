@@ -1,7 +1,3 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
 Lymph Node Dissection
@@ -10,138 +6,122 @@ CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+This is a 55 year old man who had a melanoma excised from his right upper arm eight months ago. He has now presented with a new pigmented lesion near the previous scar and a palpable lump in his right axilla. He has been referred to you urgently. You have been asked to assess him and formulate a management plan.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
-
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
-
-Format them under stage headings exactly like this:
-
 Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
+"How would you assess this patient?"
+"What are you most concerned about?"
+"What would you look for on examination?"
 
 Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
+"What investigations would you arrange for this patient?"
+"How would you investigate the axillary lump?"
 
 Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
+"How would you stage this patient?"
+"Would you discuss this case with anyone else?"
 
 Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+"What surgery does this patient need?"
+"Can you walk me through an axillary lymph node dissection?"
+"What would your post-operative plan look like?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
-Investigations
-Initial management
-Definitive management
-Surgical steps
-Post-operative care
-
-END OF AUTHOR NOTE]
+Diagnosis and assessment of recurrent or metastatic melanoma
+History and examination
+Investigations and staging
+M D T discussion and management planning
+Principles and types of lymph node dissection
+Surgical technique
+Post-operative care and adjuvant therapy
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Diagnosis and assessment of recurrent or metastatic melanoma
+Recognising that a new lesion near a previous melanoma scar with palpable lymphadenopathy is highly suspicious for melanoma recurrence with regional metastasis.
+Treating this as an urgent cancer pathway referral.
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+History and examination
+Taking a focused history including details of the original melanoma, its Breslow thickness, staging, and any previous treatment including sentinel lymph node biopsy.
+Asking about the new lesion and the timing and progression of the axillary lump.
+Examining the new pigmented lesion using the A B C D E approach.
+Examining the axilla thoroughly for the size, number, and fixity of palpable lymph nodes.
+Performing a head to toe skin examination and examining all lymph node basins.
 
-Each point should be a short statement of the expected answer.
+Investigations and staging
+Arranging ultrasound of the axilla with fine needle aspiration or core biopsy of the palpable node.
+Performing an excision biopsy of the new pigmented lesion with a two millimetre margin.
+Knowing that a patient with confirmed regional lymph node disease is at least stage three and requires staging C T of the head, chest, abdomen, and pelvis.
+Checking serum lactate dehydrogenase.
 
-Example from Necrotising Fasciitis:
+M D T discussion and management planning
+Discussing the case in the skin cancer M D T with pathology, radiology, oncology, and dermatology input.
+Management guided by M D T decision and B A D guidelines.
 
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
+Principles and types of lymph node dissection
+Knowing the indication for lymph node dissection: confirmed regional lymph node metastasis on cytology, biopsy, or imaging.
+Knowing the different types of axillary dissection: levels one to three with or without resection of pectoralis minor.
 
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
+Surgical technique
+Performing axillary lymph node dissection under general anaesthetic.
+Identifying and preserving the long thoracic nerve and thoracodorsal nerve where possible.
+Sending the specimen for histological analysis.
 
-Investigations
-Blood tests including lactate level.
-
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
-
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
-
-Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Post-operative care and adjuvant therapy
+Post-operative wound care including drain management.
+Physiotherapy for shoulder rehabilitation.
+Discussing adjuvant therapy options in M D T.
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Diagnosis and assessment of recurrent or metastatic melanoma
+Stating that melanoma recurrence is a clinical diagnosis and or a life threatening condition requiring urgent management.
+Knowing the difference between local recurrence, in-transit metastasis, and regional lymph node metastasis.
 
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
+History and examination
+Asking about systemic symptoms such as weight loss, fatigue, or bone pain that might suggest distant metastasis.
+Asking about the original treatment including whether a sentinel lymph node biopsy was performed and its result.
 
-Group them under the same domain headings. Each point should be a short statement.
+Investigations and staging
+Knowing the A J C C staging system and being able to stage this patient based on the findings.
+Knowing when P E T C T might be indicated in addition to or instead of conventional C T staging.
+Arranging a biopsy of the new skin lesion and the lymph node simultaneously to confirm the diagnosis.
 
-Example from Necrotising Fasciitis:
+M D T discussion and management planning
+Knowing the role of the oncologist in planning adjuvant or neoadjuvant therapy.
+Understanding the role of neoadjuvant immunotherapy in advanced melanoma before surgery.
 
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
+Principles and types of lymph node dissection
+Knowing the types of neck dissection for head and neck melanoma: radical dissection of levels one to five, modified radical sparing the spinal accessory nerve, internal jugular vein and sternocleidomastoid, and extended radical including the parotid or posterior occipital chain.
+Knowing the types of inguinal dissection: superficial inguinal lymph node dissection for a single clinical node or single positive sentinel node, and pelvic clearance for more than one palpable node, imaging evidence of multiple nodes, involvement of Cloquet node, or conglomerate lymph nodes.
+Understanding the principle that surgery is the treatment of choice for locoregional disease.
 
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Surgical technique
+Knowing the anatomy of the axilla including the axillary vein, long thoracic nerve, thoracodorsal nerve and vessels, and the boundaries of the dissection.
+Describing management of in-transit metastases including surgical excision, C O two laser ablation for multiple lesions, isolated limb infusion or perfusion, and electrochemotherapy.
+
+Post-operative care and adjuvant therapy
+Knowing the complications of lymph node dissection including seroma, lymphoedema, nerve injury causing winged scapula or shoulder weakness, wound infection, and skin flap necrosis.
+Awareness of adjuvant immunotherapy options including checkpoint inhibitors such as pembrolizumab and nivolumab.
+Awareness of targeted therapy with B R A F and M E K inhibitors for B R A F positive melanoma.
+Knowing that palliative options for stage four disease include metastasectomy for isolated disease, systemic therapy, and radiotherapy.
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

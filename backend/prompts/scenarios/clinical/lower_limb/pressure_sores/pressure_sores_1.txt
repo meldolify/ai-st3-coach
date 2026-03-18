@@ -1,7 +1,3 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
 Pressure Sores
@@ -10,138 +6,111 @@ CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+You are asked to review a seventy-eight year old gentleman on the spinal injuries ward. He is wheelchair-bound following a spinal cord injury two years ago and has developed a large sacral pressure ulcer. The nursing staff are concerned because they can see exposed bone at the base of the wound. His albumin is fourteen and he has been losing weight.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Assessment:
+"How would you assess this patient and his pressure ulcer?"
+"How would you grade this pressure ulcer?"
+"What risk factors would you identify?"
 
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
+Investigations:
+"What investigations would you arrange?"
+"How would you assess his nutritional status?"
+"Would you investigate for osteomyelitis?"
 
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
+Initial Management:
+"How would you optimise this patient before considering surgery?"
+"What is the role of the M D T in managing this patient?"
+"What conservative measures would you employ?"
 
-Format them under stage headings exactly like this:
-
-Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
-
-Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
-
-Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
-
-Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+Definitive Management:
+"What surgical options are available for sacral pressure ulcers?"
+"Tell me about the principles of flap selection for pressure sore reconstruction."
+"How would you manage this patient postoperatively?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
-Investigations
-Initial management
-Definitive management
-Surgical steps
-Post-operative care
-
-END OF AUTHOR NOTE]
+Pressure ulcer classification (N P U A P)
+Risk factor assessment and Waterlow scoring
+Nutritional optimisation
+M D T approach
+Surgical reconstruction options and flap selection
+Postoperative care and recurrence prevention
+Kosiak principle and pressure relief
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Classification:
+N P U A P classification from Grade one to Grade four
+Grade one is non-blanchable erythema of intact skin
+Grade two involves partial thickness skin loss
+Grade three is full thickness skin loss with visible subcutaneous fat
+Grade four involves exposed bone, tendon, or muscle
+This patient has a Grade four ulcer with exposed bone
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+Risk assessment:
+Waterlow score assesses pressure ulcer risk — includes weight, continence, skin type, mobility, neurological deficit, nutrition, medication
+Spinal cord injury patients are very high risk due to immobility, loss of sensation, and neurogenic bladder
 
-Each point should be a short statement of the expected answer.
+Nutritional optimisation:
+Albumin must be above twenty before considering surgical reconstruction
+Dietician involvement is essential
+Nutritional supplementation including protein, vitamin C, and zinc
+May require nasogastric or parenteral feeding if oral intake inadequate
 
-Example from Necrotising Fasciitis:
+M D T approach:
+Tissue viability nurse for wound assessment and dressings
+Dietician for nutritional optimisation
+Occupational therapist for seating assessment and pressure-relieving cushions
+Physiotherapist for positioning
+Microbiologist if infection suspected
+Spinal injuries team for overall rehabilitation
 
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
+Conservative management:
+Pressure relief is fundamental — Kosiak principle: five minutes of pressure relief every two hours prevents ulceration
+Appropriate pressure-relieving mattress and cushion
+Regular repositioning schedule
+Wound bed preparation with debridement of necrotic tissue
+V A C therapy can be useful as a bridge to surgery
+Treat infection if present — tissue biopsy more reliable than swabs
 
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
+Surgical options:
+Sacral ulcers: gluteal rotation flap, gluteal V-Y advancement flap
+Ischial ulcers: hamstring V-Y advancement flap, gracilis flap, posterior thigh flap
+Trochanteric ulcers: T F L flap (V-Y advancement or rotation)
+Principles: use muscle or musculocutaneous flaps to fill dead space, preserve adjacent flap options for future recurrence, reusable flaps are preferred
 
-Investigations
-Blood tests including lactate level.
-
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
-
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
-
-Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Postoperative care:
+Strict pressure relief for six weeks on appropriate bed
+Gradual reintroduction of sitting, increasing by thirty minutes per day
+Suction drains to prevent seroma
+Careful wound monitoring
+Long-term pressure relief education
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
-
-Group them under the same domain headings. Each point should be a short statement.
-
-Example from Necrotising Fasciitis:
-
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
-
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Recurrence rates for pressure sore reconstruction are as high as thirty to sixty percent
+Reusable flaps allow re-advancement if ulcer recurs at the same site
+Negative pressure wound therapy as bridge to surgery reduces bacterial load and promotes granulation
+Flap sensibility (sensate flaps) may reduce recurrence in patients with some preserved sensation
+Ostectomy of bony prominence may be performed at time of flap coverage to reduce future pressure
+Discussion of the cost burden of pressure ulcers to the health service
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

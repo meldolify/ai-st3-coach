@@ -1,7 +1,3 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
 Mandible Fracture
@@ -10,138 +6,132 @@ CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+This is a 25 year old man who has been punched in the jaw during an assault. He has pain, swelling over the left side of his jaw, difficulty opening his mouth, and his bite feels abnormal. He has presented to the emergency department. You have been asked to assess and manage this patient.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
-
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
-
-Format them under stage headings exactly like this:
-
 Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
+"How would you assess this patient?"
+"What would you look for on examination?"
+"Where are the common sites of mandible fracture?"
 
 Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
+"What investigations would you request?"
+"What would you look for on the imaging?"
 
 Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
+"How would you manage this patient initially?"
 
 Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+"What are the options for fixing this fracture?"
+"Can you describe the open reduction and internal fixation technique?"
+"What would your post-operative plan look like?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
-Investigations
-Initial management
-Definitive management
-Surgical steps
+A T L S assessment
+Clinical examination of the mandible
+Dental and occlusal assessment
+Investigations and imaging
+Classification and common fracture patterns
+Operative versus conservative management
+Surgical technique
 Post-operative care
-
-END OF AUTHOR NOTE]
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+A T L S assessment
+Following A T L S principles, particularly assessing the airway as mandible fractures can compromise the airway due to loss of anterior tongue support, haemorrhage, and swelling.
+Ruling out associated injuries including other facial fractures, head injury, and cervical spine injury.
+Asking about the mechanism, timing, dental symptoms, malocclusion, numbness of the lower lip, and any difficulty swallowing or breathing.
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+Clinical examination of the mandible
+Inspecting for swelling, bruising, deformity, and asymmetry.
+Palpating along the entire mandible from the condyles to the symphysis for tenderness, step deformity, and crepitus.
+Examining intraorally for mucosal lacerations, sublingual haematoma which suggests a fracture of the anterior mandible, and loose or damaged teeth.
+Assessing the occlusion by asking the patient if the bite feels normal.
+Testing the inferior alveolar nerve by checking sensation of the lower lip and chin.
 
-Each point should be a short statement of the expected answer.
+Dental and occlusal assessment
+Assessing the dentition for any missing, loose, or damaged teeth.
+Noting the pre-injury occlusal relationship.
+Knowing that restoration of the pre-injury occlusion is the primary goal of mandible fracture management.
 
-Example from Necrotising Fasciitis:
+Investigations and imaging
+O P G which is the most useful initial investigation for mandible fractures, showing the entire mandible on a single image.
+C T face with three-dimensional reconstruction for complex fractures or condylar fractures.
+P A mandible view as an adjunct.
 
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
+Classification and common fracture patterns
+Knowing the common sites of mandible fracture: condyle (the most common), angle, body, symphysis and parasymphysis, ramus, and coronoid.
+Knowing that mandible fractures often occur in pairs because the mandible is a ring structure, so always look for a second fracture.
+Classifying the fracture as favourable or unfavourable based on the direction of the fracture line and the pull of the muscles: an unfavourable fracture is one where the muscle forces tend to displace the fragments.
 
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
+Operative versus conservative management
+Knowing that undisplaced or minimally displaced condylar fractures in adults and most paediatric mandible fractures can be managed conservatively with a soft diet, analgesia, and maxillomandibular fixation or training elastics.
+Knowing the indications for open reduction and internal fixation: displaced fractures, fractures with malocclusion, open fractures, and fractures that cannot be adequately reduced by closed methods.
 
-Investigations
-Blood tests including lactate level.
-
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
-
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
+Surgical technique
+Performing the procedure under general anaesthetic, typically with a nasal intubation to allow intraoperative assessment of the occlusion.
+Restoring the occlusion first using intermaxillary fixation with arch bars or I M F screws.
+Performing open reduction and internal fixation through an intraoral or transcutaneous approach depending on the fracture site.
+Plating the fracture using miniplates and monocortical screws following the Champy ideal line of osteosynthesis.
 
 Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Soft diet for six weeks.
+Oral hygiene including chlorhexidine mouthwash.
+Antibiotics, typically co-amoxiclav, for open fractures.
+Follow up to assess the occlusion, wound healing, and inferior alveolar nerve function.
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+A T L S assessment
+Knowing that bilateral parasymphyseal or body fractures can cause posterior displacement of the anterior mandible and tongue with life-threatening airway obstruction.
+Knowing that temporary airway management in mandible fractures includes pulling the tongue forward, suturing the tongue to the lip, or performing a chin lift.
 
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
+Clinical examination of the mandible
+Knowing the tongue blade test: the patient bites on a wooden tongue depressor and the examiner twists it. If the patient can hold the blade without pain, a fracture is unlikely. If the blade breaks easily or causes pain, a fracture is probable.
 
-Group them under the same domain headings. Each point should be a short statement.
+Dental and occlusal assessment
+Knowing the Angle classification of dental occlusion for describing the pre-injury and post-injury bite.
+Knowing how to identify a tooth in the fracture line and whether it should be removed: a tooth in the fracture line should be removed if it is loose, fractured, or prevents adequate reduction, but retained if it helps with fracture alignment and is not infected.
 
-Example from Necrotising Fasciitis:
+Investigations and imaging
+Knowing that O P G may be unreliable for condylar fractures and a C T scan is often needed.
+Knowing the role of three-dimensional C T reconstruction in complex fractures for operative planning.
 
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
+Classification and common fracture patterns
+Knowing the Champy ideal lines of osteosynthesis: for the symphysis and parasymphysis two plates are used, one at the lower border and one along the subapical region. For the body and angle a single plate along the external oblique ridge is often sufficient.
+Knowing the classification of condylar fractures: intracapsular, neck of condyle, and subcondylar, and the management differences.
 
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Operative versus conservative management
+Knowing the debate around open versus closed management of condylar fractures: closed management with maxillomandibular fixation and early mobilisation is traditional, but open reduction and internal fixation with endoscopic or pre-auricular approaches is increasingly used for displaced condylar fractures in adults.
+Knowing that in children, condylar fractures are managed conservatively due to the remodelling potential, and that aggressive open surgery risks damaging the growth centre of the condyle.
+
+Surgical technique
+Knowing the advantages of the intraoral approach: no external scar, direct visualisation of the fracture in the body and angle region. Disadvantages: limited access for posterior fractures.
+Knowing the indications for an external transcutaneous approach: fractures of the condyle, ramus, or posterior body where intraoral access is inadequate.
+Knowing the risk of damage to the marginal mandibular nerve with a transcutaneous submandibular approach and the steps to avoid it: incision two finger breadths below the mandible, identification and preservation of the nerve.
+Knowing the Risdon approach for submandibular access and the retromandibular approach for condylar fractures.
+
+Post-operative care
+Knowing the complications: malocclusion, malunion, non-union, infection, plate exposure, inferior alveolar nerve injury, and temporomandibular joint dysfunction.
+Knowing that persistent malocclusion after fixation requires early re-assessment and possible revision.
+Knowing the role of maxillomandibular fixation using training elastics post-operatively to guide the occlusion during healing.
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

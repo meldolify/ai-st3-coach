@@ -1,7 +1,3 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
 Melanoma
@@ -10,138 +6,122 @@ CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+This is a 32 year old lady who has come to clinic because she has noticed a mole on her forearm that has been changing over the past few months. She is concerned because it seems to have grown slightly and the colour has changed. You have been asked to assess her and formulate a management plan.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
-
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
-
-Format them under stage headings exactly like this:
-
 Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
+"How would you assess this patient?"
+"What features of this lesion would concern you?"
+"What risk factors would you ask about in the history?"
 
 Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
+"What would be your next step to reach a diagnosis?"
+"What information would you want from the pathology report?"
 
 Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
+"How would you manage this patient based on the biopsy results?"
+"What guidelines would you follow?"
+"What multidisciplinary input would be needed?"
 
 Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+"What surgical procedure does this patient need?"
+"Would you consider a sentinel lymph node biopsy and if so why?"
+"What would your follow up plan look like?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
-Investigations
-Initial management
-Definitive management
-Surgical steps
-Post-operative care
-
-END OF AUTHOR NOTE]
+Diagnosis and clinical assessment
+History and risk factors
+Examination of pigmented lesion
+Investigations and biopsy
+Staging and M D T discussion
+Definitive surgical management
+Follow up and surveillance
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Diagnosis and clinical assessment
+Recognising this as a potentially malignant pigmented lesion that requires urgent assessment.
+Differential diagnosis including malignant melanoma, dysplastic naevus, compound or junctional naevus, and pigmented B C C.
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+History and risk factors
+Taking a focused history of the lesion including duration, evolution in size, shape and colour, and any symptoms such as bleeding, itching or pain.
+Asking about risk factors for melanoma including previous personal or family history of melanoma, sun exposure particularly severe sunburns at a young age, Fitzpatrick skin type one or two, immunosuppression, and occupational exposure.
 
-Each point should be a short statement of the expected answer.
+Examination of pigmented lesion
+Using the A B C D E approach to examine the lesion: Asymmetry, Border irregularity, Colour variation, Diameter, and Evolution.
+Examining regional lymph node basins for lymphadenopathy.
+Performing a head to toe skin examination to identify any other suspicious lesions.
 
-Example from Necrotising Fasciitis:
+Investigations and biopsy
+Performing an excision biopsy with a two millimetre margin under local anaesthetic.
+Sending to pathology for Breslow thickness, Clark level, mitotic rate, ulceration, and perineural infiltration.
 
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
+Staging and M D T discussion
+Discussing the case in a skin cancer M D T meeting.
+Management guided by the B A D guidelines for melanoma and A J C C staging.
 
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
+Definitive surgical management
+Wide local excision with margins determined by Breslow thickness.
+Knowing the excision margins: in situ melanoma requires five millimetre margins, less than one millimetre requires one centimetre margins, one to two millimetres requires one to two centimetre margins, two to four millimetres requires two to three centimetre margins, and greater than four millimetres requires three centimetre margins.
 
-Investigations
-Blood tests including lactate level.
-
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
-
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
-
-Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Follow up and surveillance
+Regular follow up with skin surveillance.
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Diagnosis and clinical assessment
+Mentioning dermatoscopy as an adjunct to clinical examination.
+Knowing the types of melanoma including superficial spreading, nodular, lentigo maligna, acral lentiginous, desmoplastic, and amelanotic.
+Giving a broader list of differential diagnoses including seborrhoeic keratosis, blue naevus, and pigmented B C C.
 
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
+History and risk factors
+Asking about familial atypical mole syndrome or more than one hundred compound naevi.
+Asking about congenital naevi or xeroderma pigmentosum.
+General medical history including comorbidities and drug history that would affect surgical management.
 
-Group them under the same domain headings. Each point should be a short statement.
+Examination of pigmented lesion
+Commenting on lesion size, symmetry, and specific colour patterns.
+Examining all lymph node basins including axillary, cervical, and inguinal.
+Looking for evidence of distant metastatic disease.
 
-Example from Necrotising Fasciitis:
+Investigations and biopsy
+Stating that excision biopsy is preferred over punch biopsy or shave biopsy for suspected melanoma.
+Orientating the specimen with a marking stitch along the lines of least tension for potential future wide local excision.
+Knowing that the excision should extend down to fat or fascia.
 
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
+Staging and M D T discussion
+Knowing the A J C C 8th edition T staging: T one A is less than nought point eight millimetres without ulceration, T one B is less than nought point eight millimetres with ulceration or nought point eight to one millimetre with or without ulceration, T two is greater than one to two millimetres, T three is greater than two to four millimetres, T four is greater than four millimetres, each subdivided into A without ulceration and B with ulceration.
+Stating that C T imaging is not recommended for stage one and two disease but should be considered for stage three B and above.
+Knowing when to check serum lactate dehydrogenase as a marker for stage four disease.
+Knowing that B R A F mutation testing should be requested for p T two B and above as it guides targeted therapy options.
+Knowing that vitamin D level should be measured in all patients diagnosed with melanoma.
 
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Definitive surgical management
+Knowing that S L N B is offered to patients with p T one B and above, which includes Breslow thickness nought point eight to one millimetre with ulceration, or greater than one millimetre regardless of ulceration status.
+Explaining the W L E technique including elliptical excision along the lines of least tension, excision down to fascia, and direct closure or reconstruction if needed.
+Knowing that S L N B is a diagnostic procedure and a positive result requires further M D T discussion and staging with C T head, chest, abdomen, and pelvis before deciding on completion lymph node dissection versus surveillance.
+Citing relevant evidence such as the Veronesi study showing no difference between one and three centimetre margins for melanomas less than two millimetres deep.
+
+Follow up and surveillance
+Stating the schedule for clinical follow up based on stage.
+Knowing that patients should be educated on sun protection and self examination of skin and lymph nodes.
+Awareness of specific adjuvant therapy options: targeted therapy with trametinib for B R A F positive tumours, immunotherapy with nivolumab, pembrolizumab which may be offered from stage two B or two C, and ipilimumab. Knowing that a positive S L N B result leads to M D T discussion about completion lymphadenectomy versus adjuvant immunotherapy.
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

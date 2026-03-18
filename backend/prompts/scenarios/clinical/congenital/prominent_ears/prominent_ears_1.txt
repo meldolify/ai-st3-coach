@@ -1,7 +1,3 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
 Prominent Ears
@@ -10,138 +6,119 @@ CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+This is an 8 year old boy who has been referred to your clinic by his G P because his parents are concerned about his prominent ears. He has been teased at school and it is affecting his confidence. The parents would like to discuss surgical correction. You have been asked to assess and counsel the family.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
-
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
-
-Format them under stage headings exactly like this:
-
 Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
+"How would you assess this child?"
+"What measurements would you take?"
+"What are the anatomical causes of prominent ears?"
 
 Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
+"Do you need any investigations?"
 
 Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
+"How would you counsel the parents?"
+"Is this child old enough for surgery?"
+"Is there a non-surgical option?"
 
 Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+"What surgical technique would you use?"
+"Can you walk me through the operation?"
+"What would your post-operative plan look like?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
-Investigations
-Initial management
-Definitive management
-Surgical steps
-Post-operative care
-
-END OF AUTHOR NOTE]
+Assessment and measurement
+Anatomical causes of prominent ears
+Counselling the family
+Timing of surgery
+Surgical technique
+Post-operative care and complications
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Assessment and measurement
+Measuring the conchoscaphal angle which is normally less than ninety degrees. An angle greater than ninety degrees indicates prominent ears.
+Measuring the distance from the helical rim to the mastoid which is normally less than fifteen to twenty millimetres.
+Assessing the ear from the front, side, and behind.
+Assessing for symmetry between the two sides.
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+Anatomical causes of prominent ears
+Knowing the two main anatomical causes: an underdeveloped antihelical fold and a deep or hypertrophic conchal bowl.
+Knowing that the surgical technique should address the specific anatomical cause.
+Knowing the pseudo-prominent ear causes: Stahl ear, Darwin tubercle, and mastoid prominence, which require different management.
 
-Each point should be a short statement of the expected answer.
+Counselling the family
+Discussing the impact on the child and ensuring the child is motivated for surgery, not just the parents.
+Explaining the surgical procedure, expected outcome, and risks.
+Discussing funding: N H S funding for otoplasty in children is generally available when there is demonstrated psychological impact.
+Setting realistic expectations: the aim is improvement, not perfection, and some asymmetry is normal.
 
-Example from Necrotising Fasciitis:
+Timing of surgery
+Knowing that the ear reaches approximately eighty five percent of adult size by age five to six years, so surgery can be performed from age five onwards.
+Knowing that surgery is ideally performed before the child starts school or during primary school years to reduce the impact of teasing.
+Knowing that in neonates, ear splinting or moulding within the first few weeks of life can correct prominent ears non-surgically due to the high circulating maternal oestrogen levels making the cartilage malleable.
 
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
+Surgical technique
+Knowing the two main techniques based on the anatomical cause.
+For an underdeveloped antihelical fold: the Mustarde technique using horizontal mattress sutures to recreate the antihelical fold, placed through a posterior incision.
+For a deep conchal bowl: conchal reduction by excising a strip of conchal cartilage and setting back the concha with concho-mastoid sutures.
+Most cases require a combination of both techniques.
+Performing the surgery under general anaesthetic in children or local anaesthetic in adults.
+Making a posterior auricular incision to access the cartilage.
 
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
-
-Investigations
-Blood tests including lactate level.
-
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
-
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
-
-Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Post-operative care and complications
+Applying a head bandage or ear compression band for one to two weeks post-operatively, then a compression headband at night for a further four to six weeks.
+Advising avoidance of contact sports for six weeks.
+Knowing the complications: haematoma, infection, suture extrusion, recurrence of prominence, overcorrection creating a telephone ear deformity, asymmetry, altered sensation, and keloid scarring particularly in darker-skinned patients.
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Assessment and measurement
+Knowing that the incidence of prominent ears is approximately five percent in the white population.
+Knowing the normal anatomy of the ear: the auricle has a helical rim, antihelix with superior and inferior crura, concha, tragus, antitragus, and lobule.
+Knowing the normal conchoscaphal angle is approximately ninety degrees and the normal helical-mastoid distance is approximately fifteen to eighteen millimetres.
 
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
+Anatomical causes of prominent ears
+Knowing the cartilage anatomy in detail: the antihelix is a Y-shaped ridge formed by a fold in the cartilage. Failure of this fold to develop results in a flat, underdeveloped antihelix and a prominent ear.
+Knowing that an excessively deep concha pushes the entire ear away from the head.
 
-Group them under the same domain headings. Each point should be a short statement.
+Counselling the family
+Knowing the importance of assessing the child's own wishes rather than only the parents' desire for correction.
+Knowing that some trusts require a psychological assessment or evidence of bullying before funding otoplasty.
+Discussing the scar which is hidden behind the ear.
 
-Example from Necrotising Fasciitis:
+Timing of surgery
+Knowing the neonatal splinting technique: ear moulds or splints such as the EarWell device are applied within the first one to two weeks of life and worn for six to eight weeks. Success rates are highest when started within the first week.
+Knowing that after the neonatal period, the cartilage becomes rigid and splinting is no longer effective.
 
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
+Surgical technique
+Knowing the Mustarde technique in detail: horizontal mattress sutures of clear Prolene or Ethibond are placed through the cartilage via a posterior approach. The sutures are placed from the scapha to the antihelical fold position, creating a smooth antihelical fold when tied. Typically three to four sutures are needed.
+Knowing the cartilage scoring technique as an alternative: anterior cartilage scoring through a posterior approach weakens the cartilage and allows it to fold, using the principle that scored cartilage bends away from the scored surface. This is known as the Chongchet technique.
+Knowing that the Stenstrom technique uses anterior scoring through a percutaneous approach using a fine rasp.
+Knowing the importance of checking the result from the front during surgery and aiming for slight overcorrection as there will be some loss of correction post-operatively.
 
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Post-operative care and complications
+Knowing that haematoma is the most serious early complication as it can cause cartilage necrosis and a cauliflower ear deformity. Suspected haematoma should be evacuated urgently.
+Knowing that the telephone ear deformity results from overcorrection of the middle third of the ear without addressing the upper and lower thirds.
+Knowing that suture extrusion may occur months or years later and requires removal of the offending suture.
+Knowing that revision surgery for recurrence or asymmetry is needed in approximately five to ten percent of cases.
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

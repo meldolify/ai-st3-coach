@@ -1,7 +1,3 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
 Palmar Space Infection
@@ -10,138 +6,123 @@ CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+This is a 48 year old right hand dominant woman who has had a worsening infection in her right hand over the past four days following a small cut while cooking. She has been taking oral antibiotics from her G P but the hand is now very swollen and painful, particularly in the palm. She has a fever and feels unwell. You have been asked to assess and manage this patient.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
-
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
-
-Format them under stage headings exactly like this:
-
 Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
+"How would you assess this patient?"
+"What spaces in the hand could be involved?"
+"How would you differentiate between the different deep space infections?"
 
 Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
+"What investigations would you request?"
 
 Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
+"How would you manage this patient initially?"
 
 Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+"What surgical procedure does this patient need?"
+"Can you describe the anatomy of the palmar spaces?"
+"What would your post-operative plan look like?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
-Investigations
-Initial management
-Definitive management
-Surgical steps
+History and risk factors
+Clinical assessment and localisation of the infection
+Anatomy of the deep palmar spaces
+Sepsis assessment and investigations
+Surgical drainage
 Post-operative care
-
-END OF AUTHOR NOTE]
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+History and risk factors
+Taking a focused history including the onset, progression, any preceding injury, and any treatment received so far.
+Asking about diabetes, immunosuppression, and other risk factors for severe hand infection.
+Asking about hand dominance, occupation, tetanus status, and allergies.
+Noting that the patient has failed oral antibiotic therapy and now has systemic signs of infection.
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+Clinical assessment and localisation of the infection
+Performing a rapid A to E assessment given the systemic signs.
+Examining the hand for swelling, erythema, warmth, and point tenderness.
+Identifying the site of maximal tenderness and swelling to determine which space is involved.
+For a mid-palmar space infection: the palm is swollen and tender, the normal palmar concavity is lost, and there may be pain on passive extension of the middle and ring fingers.
+For a thenar space infection: the thenar eminence is swollen with the thumb held in abduction, and there is pain on opposition of the thumb.
+Assessing for web space involvement: fullness and tenderness between the fingers with the adjacent fingers held abducted.
+Assessing the neurovascular status of the hand and fingers.
+Examining for Kanavel signs to rule out concurrent flexor sheath infection.
 
-Each point should be a short statement of the expected answer.
+Anatomy of the deep palmar spaces
+Knowing the three potential deep spaces of the hand: the thenar space, the mid-palmar space, and the hypothenar space.
+Knowing that the thenar and mid-palmar spaces are separated by the oblique septum from the third metacarpal to the palmar fascia.
+Knowing that the space of Parona in the distal forearm communicates with the deep palmar spaces and may also be involved.
+Knowing the web spaces as additional potential spaces for infection.
 
-Example from Necrotising Fasciitis:
+Sepsis assessment and investigations
+Assessing for sepsis and initiating Sepsis six if criteria are met.
+Routine bloods including full blood count, C R P, urea and electrolytes, glucose, and blood cultures if febrile.
+X-ray of the hand to exclude foreign body, gas in the soft tissues, and osteomyelitis.
 
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
-
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
-
-Investigations
-Blood tests including lactate level.
-
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
-
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
+Surgical drainage
+Knowing that deep space infections of the hand require urgent surgical drainage.
+Performing the procedure under general or regional anaesthesia with an arm tourniquet.
+Making appropriate incisions based on the space involved: a palmar incision along the distal palmar crease for the mid-palmar space, a palmar incision along the thenar crease for the thenar space.
+Opening all involved spaces and breaking down any loculations.
+Exploring the adjacent spaces as infection can track between compartments.
+Taking pus samples for microscopy, culture, and sensitivity.
+Thorough washout with saline.
+Leaving the wound open.
+Applying a bulky dressing and splinting in the position of safe immobilisation.
 
 Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Continued intravenous antibiotics adjusted based on culture results.
+Strict hand elevation.
+Planned second look at forty eight hours.
+Hand therapy once infection has settled.
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+History and risk factors
+Knowing that deep space infections often arise from penetrating injuries, extension of flexor sheath infections, or haematogenous spread.
+Knowing that diabetes is the most significant risk factor for severe hand infections.
 
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
+Clinical assessment and localisation of the infection
+Knowing the horseshoe abscess: infection tracking from the little finger flexor sheath through the ulnar bursa into the space of Parona, and then into the radial bursa and the thumb flexor sheath. This requires washout of all spaces including the carpal tunnel.
+Knowing that dorsal hand swelling may be secondary to a deep palmar infection as the loose dorsal subcutaneous tissue swells more readily.
+Knowing that the mid-palmar space infection may track proximally into the space of Parona and distally into the lumbrical canals.
 
-Group them under the same domain headings. Each point should be a short statement.
+Anatomy of the deep palmar spaces
+Drawing or describing the anatomy: the mid-palmar space lies deep to the flexor tendons and superficial to the interossei and metacarpals. It is bounded radially by the oblique septum from the third metacarpal and ulnarly by the hypothenar septum.
+Knowing that the space of Parona lies between the pronator quadratus and the flexor tendons in the distal forearm and communicates with both the radial and ulnar bursae.
 
-Example from Necrotising Fasciitis:
+Sepsis assessment and investigations
+Knowing that ultrasound may help localise a deep collection.
+Knowing that M R I may be indicated if osteomyelitis is suspected or if the extent of the infection is unclear.
 
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
+Surgical drainage
+For a horseshoe abscess, knowing the surgical approach: opening the flexor sheaths of the little finger and thumb via incisions over A one and A five pulleys, extending to open the carpal tunnel, and exploring the space of Parona, the ulnar bursa, the mid-palmar space, the radial bursa, and the web spaces as needed.
+Using a Brunner incision or midlateral approach if frank pus is encountered in the flexor sheath.
+Knowing that inadequate drainage is the most common cause of persistent infection and that all involved spaces must be opened.
 
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Post-operative care
+Knowing that multiple washouts may be required.
+Knowing the importance of early hand therapy once infection is controlled to prevent the significant stiffness that is common after deep space infections.
+Knowing that the functional outcome correlates with the severity of the initial infection and the delay to surgical drainage.
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

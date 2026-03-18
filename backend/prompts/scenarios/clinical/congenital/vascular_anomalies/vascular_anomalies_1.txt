@@ -1,7 +1,3 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
 Vascular Anomalies
@@ -10,138 +6,124 @@ CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+This is a 4 month old baby who has been referred to your clinic with a rapidly growing red lesion on her right cheek. The parents report that it appeared as a small red mark shortly after birth and has been growing rapidly over the past few weeks. It now measures approximately three centimetres and is raised and firm. You have been asked to assess and formulate a management plan.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
-
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
-
-Format them under stage headings exactly like this:
-
 Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
+"What is your diagnosis?"
+"How do you differentiate a haemangioma from a vascular malformation?"
+"What would you look for on examination?"
 
 Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
+"What investigations would you arrange?"
+"Are there any associated conditions you need to rule out?"
 
 Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
+"How would you manage this patient?"
+"When would you consider active treatment rather than observation?"
 
 Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+"What treatment options are available?"
+"Can you tell me about the role of propranolol?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
-Investigations
-Initial management
-Definitive management
-Surgical steps
-Post-operative care
-
-END OF AUTHOR NOTE]
+Diagnosis and differentiation of vascular anomalies
+Natural history of infantile haemangioma
+Assessment for associated conditions
+Indications for active treatment
+Medical treatment with propranolol
+Surgical and laser options
+Management of vascular malformations
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Diagnosis and differentiation of vascular anomalies
+Knowing the I S S V A classification which divides vascular anomalies into vascular tumours and vascular malformations.
+Knowing the key difference: haemangiomas are benign vascular tumours characterised by endothelial cell proliferation, whereas vascular malformations are congenital structural anomalies of blood vessels that do not proliferate.
+Infantile haemangioma typically appears as a herald patch at birth, begins rapid growth after the first month of life, reaches maximum size between six and twenty four months, and then gradually involutes. Fifty percent involute by five years, seventy percent by seven years, and ninety percent by nine years.
+Vascular malformations are present from birth, grow in proportion with the child, and do not involute.
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+Natural history of infantile haemangioma
+Knowing the proliferative phase from one to twelve months, the involuting phase from one to five years, and the involuted phase.
+Knowing that fifty percent of patients will have some residuum after involution such as residual skin laxity, fibrofatty tissue, or telangiectasia.
 
-Each point should be a short statement of the expected answer.
+Assessment for associated conditions
+Knowing that large facial haemangiomas may be associated with P H A C E S syndrome: Posterior fossa anomalies such as Dandy-Walker malformation, Haemangioma, Arterial anomalies, Cardiac anomalies such as coarctation of the aorta, Eye anomalies, and Sternal or midline defects.
+Asking about any coordination problems, diagnosed heart conditions, or visual problems.
+Examining for any associated anomalies.
+Assessing the impact on the child and family including whether the haemangioma affects vision, breathing, feeding, or causes ulceration or bleeding.
 
-Example from Necrotising Fasciitis:
+Indications for active treatment
+Knowing that the majority of infantile haemangiomas can be observed as they will involute spontaneously.
+Active treatment is indicated for: function-threatening haemangiomas affecting the eyes, nose, ears, airway, or genitalia; life-threatening haemangiomas such as airway haemangiomas; disfiguring haemangiomas such as large facial lesions; and ulcerated haemangiomas causing pain or bleeding.
 
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
+Medical treatment with propranolol
+Knowing that propranolol is the first-line medical treatment for problematic infantile haemangiomas.
+Knowing the mechanism: propranolol causes vasoconstriction and decreases V E G F, essentially stimulating involution.
+Knowing the dose: one to two milligrams per kilogram per day given orally.
+Knowing that the child is typically admitted for monitoring when treatment is initiated, with monitoring of heart rate, blood pressure, and blood glucose.
 
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
+Surgical and laser options
+Knowing that surgical excision can be performed for residual deformity after involution or for haemangiomas that do not respond to medical treatment.
+Knowing that pulsed dye laser can be used for superficial haemangiomas and residual telangiectasia.
 
-Investigations
-Blood tests including lactate level.
-
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
-
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
-
-Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Management of vascular malformations
+Knowing the classification of vascular malformations by flow type: low-flow including capillary, venous, and lymphatic malformations, and high-flow which are arteriovenous malformations.
+Knowing the treatment options by type.
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Diagnosis and differentiation of vascular anomalies
+Knowing that congenital haemangiomas are a separate entity from infantile haemangiomas. They are fully formed at birth and may be rapidly involuting, non-involuting, or partially involuting.
+Knowing that infantile haemangiomas are G L U T one positive on immunohistochemistry, which distinguishes them from other vascular tumours.
 
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
+Natural history of infantile haemangioma
+Knowing that ulceration is the most common complication of infantile haemangioma during the proliferative phase, causing pain and risk of infection and scarring.
+Knowing that periorbital haemangiomas can cause amblyopia, astigmatism, and strabismus due to pressure on the developing visual axis.
 
-Group them under the same domain headings. Each point should be a short statement.
+Assessment for associated conditions
+Knowing that multiple cutaneous haemangiomas may be associated with hepatic haemangiomas requiring abdominal ultrasound screening.
+Knowing that segmental haemangiomas in the beard distribution may be associated with airway haemangiomas.
+Knowing that lumbosacral haemangiomas may be associated with spinal dysraphism.
 
-Example from Necrotising Fasciitis:
+Indications for active treatment
+Knowing the specific indications for urgent treatment: periorbital haemangiomas threatening vision, subglottic haemangiomas threatening the airway, and rapidly ulcerating haemangiomas.
 
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
+Medical treatment with propranolol
+Knowing the contraindications to propranolol: reactive airway disease, heart block, and phaeochromocytoma.
+Knowing the side effects: bradycardia, hypotension, hypoglycaemia, bronchospasm, and sleep disturbance.
+Knowing that treatment is typically continued for six to twelve months and then gradually weaned.
+Knowing that rebound growth may occur if propranolol is stopped too early.
+Knowing that before propranolol, systemic corticosteroids were the mainstay of treatment but are now second line due to side effects.
 
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Surgical and laser options
+Knowing the role of Y A G laser for deeper haemangiomas and residual fibrofatty tissue.
+Knowing that surgical excision of involuted haemangioma residuum can be performed using a lenticular excision technique.
+
+Management of vascular malformations
+Knowing the specific malformation types in more detail.
+Port-wine stain or naevus flammeus is a capillary or venous malformation most commonly on the face along the trigeminal nerve distribution. If in the V one distribution, screening for Sturge-Weber syndrome is needed including M R I head for leptomeningeal malformations and ophthalmology review for glaucoma. Treatment is with pulsed dye laser with or without Y A G laser.
+Knowing that if port-wine stain is left untreated, seventy percent develop into cobblestone ectasia.
+Knowing Klippel-Trenaunay syndrome: extremity port-wine stains with deeper underlying venous or lymphatic malformations and skeletal hypertrophy.
+Venous malformations deflate when elevated and fill when dependent. Colour Doppler ultrasound distinguishes low-flow from high-flow lesions. Treatment options include sclerotherapy, surgical excision, or laser.
+Arteriovenous malformations are high-flow lesions that may require embolisation before surgical excision.
+Knowing that M R I is the imaging of choice for characterising vascular malformations.
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

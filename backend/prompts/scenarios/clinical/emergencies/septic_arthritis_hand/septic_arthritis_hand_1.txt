@@ -1,147 +1,142 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
-Septic Arthritis Hand
+Septic Arthritis of the Hand
 
 CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+This is a 60 year old right hand dominant man with rheumatoid arthritis who has presented with a two day history of a hot, swollen, and extremely painful right index finger metacarpophalangeal joint. He has not had any injury that he can recall. He is on methotrexate and has a low-grade fever. You have been asked to assess and manage this patient.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
-
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
-
-Format them under stage headings exactly like this:
-
 Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
+"How would you assess this patient?"
+"What is your differential diagnosis?"
+"What would you look for on examination?"
 
 Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
+"What investigations would you request?"
+"Would you aspirate the joint?"
 
 Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
+"How would you manage this patient initially?"
 
 Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+"What surgical procedure does this patient need?"
+"Can you walk me through the joint washout?"
+"What would your post-operative plan look like?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
+History and risk factors
+Clinical assessment and differential diagnosis
+Joint aspiration
 Investigations
-Initial management
-Definitive management
-Surgical steps
+Antibiotic therapy
+Surgical joint washout
 Post-operative care
-
-END OF AUTHOR NOTE]
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+History and risk factors
+Taking a focused history including the onset and progression of symptoms, any preceding injury or injection, and any recent infections elsewhere in the body.
+Asking about immunosuppression including methotrexate, rheumatoid arthritis, diabetes, and other risk factors for septic arthritis.
+Asking about previous joint problems, gout, or pseudogout which may mimic septic arthritis.
+Asking about hand dominance, occupation, and allergies.
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+Clinical assessment and differential diagnosis
+Examining the affected joint for swelling, erythema, warmth, and an effusion.
+Assessing that the joint is held in a position of comfort, typically slight flexion.
+Pain on any attempt to move the joint actively or passively is characteristic.
+Differential diagnosis including septic arthritis, gout, pseudogout, rheumatoid flare, and reactive arthritis.
+Knowing that septic arthritis must be excluded urgently as delayed treatment leads to joint destruction.
+Assessing the neurovascular status of the finger.
+Examining for other potential sources of infection.
 
-Each point should be a short statement of the expected answer.
-
-Example from Necrotising Fasciitis:
-
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
-
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
+Joint aspiration
+Knowing that joint aspiration is a critical diagnostic step.
+Aspirated fluid should be sent urgently for microscopy including Gram stain and crystal analysis, culture and sensitivity, and cell count.
+Knowing that purulent aspirate or a positive Gram stain confirms the diagnosis and mandates urgent surgical washout.
+Knowing that crystal arthropathy may coexist with septic arthritis and one does not exclude the other.
 
 Investigations
-Blood tests including lactate level.
+Routine bloods including full blood count, C R P, E S R, urea and electrolytes, uric acid, and blood cultures.
+X-ray of the hand which may show soft tissue swelling, joint space widening, or in late cases joint destruction.
+Knowing that normal inflammatory markers do not exclude septic arthritis, particularly in immunosuppressed patients.
 
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
+Antibiotic therapy
+Starting empirical intravenous antibiotics after joint aspiration and blood cultures have been taken.
+First line antibiotics covering staphylococcal and streptococcal organisms such as flucloxacillin, adjusted based on culture results.
+Discussing with microbiology for guidance, particularly in immunosuppressed patients.
+Knowing the most common organism is Staphylococcus aureus.
 
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
+Surgical joint washout
+Knowing that confirmed or suspected septic arthritis of the hand requires urgent surgical washout.
+Performing the procedure under general or regional anaesthesia with an arm tourniquet.
+Making a dorsal incision over the affected joint.
+Opening the joint capsule, draining all pus, and irrigating with copious saline.
+Taking tissue and fluid samples for microbiology.
+Assessing the articular cartilage for damage.
+Leaving the wound open or loosely closed over a drain.
+Splinting in the position of safe immobilisation.
 
 Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Continued intravenous antibiotics for a minimum of two weeks, adjusted based on culture and sensitivity results, followed by oral antibiotics typically for a further four weeks.
+Strict hand elevation.
+Planned second look at forty eight hours if there is any concern about ongoing infection.
+Hand therapy for mobilisation once infection is controlled.
+Liaison with the rheumatology team regarding the patient's immunosuppressive medication.
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+History and risk factors
+Knowing that haematogenous spread is the most common route of infection in native joint septic arthritis.
+Knowing that immunosuppressed patients including those on methotrexate, biological agents, or steroids are at significantly increased risk.
+Knowing that intravenous drug use and recent joint injection are important risk factors.
+Asking about gonococcal arthritis in sexually active young adults presenting with a hot joint.
 
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
+Clinical assessment and differential diagnosis
+Knowing Kocher criteria for septic arthritis, originally described for the hip but applicable in principle: fever, non-weight-bearing or inability to use the joint, raised E S R or C R P, and raised white cell count.
+Knowing that in rheumatoid patients, distinguishing a flare from septic arthritis can be very difficult and a low threshold for aspiration should be maintained.
 
-Group them under the same domain headings. Each point should be a short statement.
+Joint aspiration
+Knowing that a white cell count greater than fifty thousand cells per microlitre in the aspirate is highly suggestive of septic arthritis.
+Knowing the aspiration technique for the M C P joint: dorsal approach with the joint in slight flexion to open the joint space.
+Knowing that if aspiration is dry or equivocal, the clinical picture should guide management and surgical exploration may still be warranted.
 
-Example from Necrotising Fasciitis:
+Investigations
+Knowing that ultrasound may be useful to confirm the presence of a joint effusion and guide aspiration.
+Knowing that M R I may show marrow oedema, synovial enhancement, and joint effusion and can help differentiate septic arthritis from other causes.
 
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
+Antibiotic therapy
+Knowing the recommended duration of antibiotic therapy: typically two weeks of intravenous treatment followed by four weeks of oral antibiotics, guided by clinical response and inflammatory markers.
+Knowing that M R S A cover should be considered in patients with risk factors or in areas of high prevalence.
+Knowing that the methotrexate should be held during the acute infection after discussion with rheumatology.
 
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Surgical joint washout
+Knowing that repeated washouts may be necessary if the infection does not settle.
+Knowing that the articular cartilage damage from septic arthritis is caused by both bacterial enzymes and the host inflammatory response, which is why prompt drainage is critical.
+Knowing that late complications include joint stiffness, chronic osteomyelitis, and secondary osteoarthritis which may eventually require arthrodesis.
+
+Post-operative care
+Knowing that monitoring of inflammatory markers, C R P in particular, is useful to assess response to treatment.
+Knowing the importance of early mobilisation to prevent stiffness once infection is controlled.
+Knowing that the functional outcome depends on the duration of symptoms before treatment, the virulence of the organism, and the degree of cartilage damage at the time of washout.
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

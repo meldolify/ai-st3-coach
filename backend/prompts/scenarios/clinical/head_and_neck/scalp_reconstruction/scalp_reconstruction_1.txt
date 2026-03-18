@@ -1,7 +1,3 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
 Scalp Reconstruction
@@ -10,138 +6,106 @@ CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+This is a 60 year old gentleman who has undergone wide local excision of a squamous cell carcinoma from his vertex scalp. The excision has resulted in a defect measuring eight by six centimetres with exposed calvarium. The periosteum has been excised with the specimen. The margins are confirmed as clear. You have been asked to discuss the reconstructive options.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
-
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
-
-Format them under stage headings exactly like this:
-
 Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
+"How would you assess this defect?"
+"What is the significance of exposed calvarium without periosteum?"
+"What are the key considerations for scalp reconstruction?"
 
 Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
+"Do you need any investigations before reconstruction?"
 
 Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
+"What reconstructive options would you consider?"
 
 Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+"Which option would you choose for this defect and why?"
+"Can you describe the technique?"
+"What would your post-operative plan look like?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
-Investigations
-Initial management
-Definitive management
-Surgical steps
+Assessment of the defect
+Layers of the scalp
+Reconstructive options based on defect characteristics
+Surgical technique
 Post-operative care
-
-END OF AUTHOR NOTE]
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Assessment of the defect
+Describing the defect: size, location, depth, and what structures are exposed.
+Knowing that exposed calvarium without periosteum will not support a skin graft and requires a flap for coverage.
+Assessing the surrounding scalp tissue for laxity and any previous scars.
+Checking for any tethering to underlying structures or infiltration into the calvarium.
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+Layers of the scalp
+Knowing the five layers of the scalp using the mnemonic S C A L P: Skin, Connective tissue or subcutaneous fat, Aponeurosis or galea aponeurotica, Loose areolar tissue, and Periosteum or pericranium.
+Knowing that the galea is the key structural layer and is continuous with the frontalis anteriorly, the occipitalis posteriorly, and the temporoparietal fascia laterally.
+Knowing that the pericranium is the periosteum of the calvarium and is a vascularised layer that will support a skin graft if intact.
 
-Each point should be a short statement of the expected answer.
+Reconstructive options based on defect characteristics
+For small defects with intact pericranium: split thickness or full thickness skin graft.
+For small to moderate defects: local rotation or advancement flaps. Galeal scoring can increase flap mobility by making parallel incisions through the galea on the undersurface of the flap.
+For larger defects: large rotation flaps such as the pinwheel flap using multiple rotation flaps to close the defect.
+For defects with exposed calvarium without periosteum: a flap is required as a graft will not take. Options include local flaps with galeal scoring, tissue expansion of the adjacent scalp, or free tissue transfer.
+For defects with full thickness calvarial loss: free flap with bone reconstruction.
 
-Example from Necrotising Fasciitis:
-
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
-
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
-
-Investigations
-Blood tests including lactate level.
-
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
-
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
+Surgical technique
+Describing the chosen technique for this defect based on its size and the absence of periosteum.
+If a local rotation flap is possible: designing a large rotation flap with a back-cut or Burrow triangle, undermining in the subgaleal plane, and galeal scoring if needed.
+If tissue expansion: inserting a tissue expander under the adjacent scalp to generate additional tissue over several weeks before definitive reconstruction.
 
 Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Drain placement under the flap.
+Head elevation to reduce swelling.
+Wound care and monitoring of flap viability.
+Follow up for oncological surveillance and scar management.
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Assessment of the defect
+Arranging a C T head to check for calvarial infiltration by the tumour if there is any suspicion on clinical examination.
+Knowing that if the outer table of the calvarium is involved, burring of the outer table may be required before reconstruction.
+Assessing the need for pre-operative imaging to plan the blood supply of proposed flaps.
 
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
+Layers of the scalp
+Knowing the blood supply of the scalp: five paired arteries including the supratrochlear, supraorbital, superficial temporal, posterior auricular, and occipital arteries. The rich anastomotic network means scalp flaps have a reliable blood supply.
+Knowing that the scalp has limited laxity and primary closure is often not possible for defects greater than three centimetres.
 
-Group them under the same domain headings. Each point should be a short statement.
+Reconstructive options based on defect characteristics
+Knowing that tissue expansion is the ideal technique for scalp reconstruction as it provides hair-bearing tissue that matches the surrounding scalp. The disadvantage is the need for multiple operations and the period of disfigurement during expansion.
+Knowing that for full thickness calvarial defects, the options include burring of the outer table and skin grafting onto the inner table, titanium mesh cranioplasty with flap coverage, or free tissue transfer with a bone flap such as fibula or iliac crest.
+Knowing that free flaps for scalp reconstruction include the latissimus dorsi, anterolateral thigh, and radial forearm flaps, depending on the size of the defect.
+Knowing that the Orticochea three-flap technique uses three large rotation-advancement flaps to close very large scalp defects.
 
-Example from Necrotising Fasciitis:
+Surgical technique
+Knowing that galeal scoring involves making parallel incisions through the galea perpendicular to the direction of advancement, spaced approximately one centimetre apart, to increase flap extensibility by up to two to three centimetres.
+Knowing that undermining in the subgaleal loose areolar tissue plane is the correct plane for scalp flap elevation as it is relatively avascular and preserves the pericranium.
+Knowing that if the pericranium is intact, a split thickness skin graft can be applied directly as a simpler option.
+Knowing the concept of the crane principle: a flap is raised to cover an avascular bed, and once granulation tissue has formed under the flap after several weeks, the flap is returned to its donor site and the granulating bed is skin grafted.
 
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
-
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Post-operative care
+Knowing the complications of scalp reconstruction: flap necrosis, haematoma, infection, alopecia at the flap edges, contour irregularity, and donor site morbidity for free flaps.
+Knowing that wound healing on the scalp is generally excellent due to the rich blood supply.
+Knowing the importance of oncological follow up and surveillance for local recurrence.
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

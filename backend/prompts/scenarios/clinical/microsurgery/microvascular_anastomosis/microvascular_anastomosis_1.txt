@@ -1,147 +1,122 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
-Microvascular Anastomosis
+Microvascular Anastomosis Principles and Technique
 
 CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+You are in a clinical examination and the examiner would like to discuss the principles and technique of microvascular anastomosis. They ask you to describe how you would perform a microvascular repair, the equipment involved, and how you manage complications. Please discuss this topic with the examiner.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Assessment:
+"What equipment and instruments do you need for microvascular surgery?"
+"What magnification do you use and what are the options?"
+"How do you prepare vessels for anastomosis?"
 
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
+Investigations:
+"How do you assess vessel quality before anastomosis?"
+"What features would make you concerned about a vessel's suitability?"
 
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
+Initial Management:
+"Can you describe the technique of end-to-end microvascular arterial anastomosis?"
+"How many sutures do you typically place and what suture material do you use?"
+"What is the difference between end-to-end and end-to-side anastomosis?"
 
-Format them under stage headings exactly like this:
-
-Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
-
-Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
-
-Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
-
-Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+Definitive Management:
+"How do you perform a venous anastomosis? Is it different from arterial?"
+"What is the role of the venous coupler device?"
+"How do you assess patency of the anastomosis?"
+"What would you do if there is no flow after completing the anastomosis?"
+"What pharmacological adjuncts do you use?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
-Investigations
-Initial management
-Definitive management
-Surgical steps
-Post-operative care
-
-END OF AUTHOR NOTE]
+- Microsurgical equipment and instrumentation
+- Vessel preparation and handling
+- End-to-end arterial anastomosis technique
+- End-to-side anastomosis indications and technique
+- Venous anastomosis and mechanical coupler devices
+- Assessment of anastomotic patency
+- Troubleshooting no-flow situations
+- Pharmacological adjuncts and anticoagulation
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Equipment:
+- Operating microscope with magnification range 4x to 40x (typically work at 10x to 16x)
+- Microsurgical instruments: jeweller's forceps, micro needle holders, adventitia scissors, vessel dilators
+- Irrigation: heparinised saline (100 units per millilitre)
+- Background material: coloured rubber or plastic sheet for contrast
+- Micro vessel clamps: single and double approximating clamps
+- Suture: 8-0 to 10-0 nylon on taper-cut or taper needle (9-0 most common for 1 to 3 millimetre vessels)
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+Vessel Preparation:
+- Adequate vessel length with no tension on the anastomosis
+- Strip adventitia from vessel ends to prevent intimal dissection and thrombosis
+- Gently dilate vessel ends with forceps or dilator
+- Irrigate lumen with heparinised saline to flush clots and debris
+- Ensure no intimal flaps: trim back to healthy vessel if damaged
+- Size discrepancy management: cut smaller vessel obliquely, or fish-mouth larger vessel
 
-Each point should be a short statement of the expected answer.
+End-to-End Arterial Anastomosis:
+- Place vessel ends in approximating clamp
+- Place two stay sutures 120 to 180 degrees apart on the back wall first (or front wall depending on technique)
+- Triangulation technique (Carrel): 3 equidistant stay sutures, suture between each
+- Alternative: back wall first, then front wall with interrupted sutures
+- Full thickness bites: all layers including intima
+- Sutures placed approximately one suture width apart and one width from the edge
+- Typically 6 to 10 interrupted sutures for a 1 to 2 millimetre vessel
+- Avoid catching the back wall when suturing the front wall
+- Release clamps: venous clamp first, then arterial
 
-Example from Necrotising Fasciitis:
+End-to-Side Anastomosis:
+- Indicated when preserving flow in the recipient vessel is important
+- Create arteriotomy in recipient vessel with micro scissors or aortic punch
+- Arteriotomy length approximately 1.5 to 3 times donor vessel diameter
+- Suture donor end to recipient arteriotomy with interrupted or continuous sutures
+- Particularly useful in single-vessel limbs or when size discrepancy is large
 
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
+Venous Anastomosis:
+- Technically more difficult: thinner walls, more fragile, collapse easily
+- Same interrupted suture technique but vessel more prone to tearing
+- Venous coupler device: mechanical device that everts vessel edges over pins on two rings
+- Coupler advantages: faster, reliable patency rates over 95 percent, no suture needed
+- Coupler suitable for veins 1 to 4 millimetres in diameter
+- Always perform at least two venous anastomoses when possible for redundancy
 
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
-
-Investigations
-Blood tests including lactate level.
-
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
-
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
-
-Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Assessing Patency:
+- Visual: pulsation in the artery distal to the anastomosis
+- Milking test (strip test): empty a short segment of vessel and observe refill
+- Flap perfusion: colour change, capillary refill, bleeding from the flap
+- Patency test: occlude vessel distal to anastomosis, release, observe flow
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
-
-Group them under the same domain headings. Each point should be a short statement.
-
-Example from Necrotising Fasciitis:
-
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
-
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+- Supermicrosurgery for vessels less than 0.8 millimetres (lymphovenous anastomosis)
+- Continuous suture technique for larger vessels (faster but less forgiving)
+- Fibrin glue as adjunct to reduce suture count
+- Robot-assisted microvascular anastomosis (emerging technology)
+- No-touch technique: handle adventitia only, never grasp intima
+- Antispasmodic agents: topical papaverine, lignocaine, or verapamil
+- Systemic pharmacology: aspirin, heparin, dextran (variable evidence)
+- Thrombectomy technique with Fogarty catheter for failed anastomosis
+- Vein grafts: cephalic or saphenous vein interposition for vessel gaps
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

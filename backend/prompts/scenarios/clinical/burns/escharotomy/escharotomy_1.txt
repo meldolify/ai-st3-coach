@@ -1,7 +1,3 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
 Escharotomy
@@ -10,138 +6,117 @@ CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+This is a 30 year old man who has been admitted to your burns unit following a flame burn affecting approximately thirty percent total body surface area including circumferential full thickness burns to both upper limbs and the anterior chest. He is intubated and ventilated. The nurses have contacted you because his oxygen saturations are dropping and his hands are becoming mottled and cool. You have been asked to assess and manage this patient.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
-
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
-
-Format them under stage headings exactly like this:
-
 Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
+"How would you assess this patient?"
+"What is causing the drop in saturations and the mottled hands?"
+"What are the indications for escharotomy?"
 
 Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
+"Do you need any investigations before proceeding?"
 
 Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
+"How urgently does this need to be done?"
+"Where can an escharotomy be performed?"
 
 Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+"Can you describe the escharotomy incisions for the chest?"
+"Can you describe the escharotomy incisions for the upper limbs?"
+"What about digital escharotomies?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
-Investigations
-Initial management
-Definitive management
-Surgical steps
-Post-operative care
-
-END OF AUTHOR NOTE]
+Recognition of the need for escharotomy
+Indications for escharotomy
+Chest escharotomy technique
+Limb escharotomy technique
+Digital escharotomy
+Post-procedure monitoring
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Recognition of the need for escharotomy
+Recognising that circumferential full thickness burns cause a rigid eschar that cannot expand, leading to a tourniquet-like effect.
+In the chest, circumferential eschar restricts chest wall expansion causing reduced ventilation, rising airway pressures, and falling oxygen saturations.
+In the limbs, circumferential eschar causes vascular compromise with loss of distal perfusion, cool extremities, absent pulses, and ultimately compartment syndrome.
+Knowing that escharotomy is an emergency procedure that should be performed immediately when indicated.
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+Indications for escharotomy
+Chest: circumferential or near-circumferential full thickness chest burns with deteriorating respiratory function, increasing ventilatory pressures, or decreasing chest wall compliance.
+Limb: circumferential or near-circumferential full thickness limb burns with signs of vascular compromise including absent or diminishing pulses, progressive pain, paraesthesia, mottled or cool extremities, and decreased capillary refill.
+Knowing that escharotomy can be performed at the bedside and does not require a trip to theatre if the clinical situation is urgent.
 
-Each point should be a short statement of the expected answer.
+Chest escharotomy technique
+Incisions are made along the bilateral anterior axillary lines from the clavicle to the costal margin.
+A transverse incision may be added across the upper abdomen below the costal margin connecting the two vertical incisions if the burn extends to the abdominal wall.
+Incisions are made using monopolar diathermy or a scalpel.
+The incision should extend from unburnt skin to unburnt skin.
+The depth of the incision is through the full thickness eschar down to the subcutaneous fat. The incision should release the constricting band but not extend deeper than the subcutaneous tissue.
+Full thickness eschar is insensate so the procedure can be performed without general anaesthetic if necessary, though sedation and analgesia should be given.
 
-Example from Necrotising Fasciitis:
+Limb escharotomy technique
+Incisions are made along the mid-axial lines of the affected limb, on the medial and lateral aspects.
+The incision extends from unburnt skin to unburnt skin and across joints.
+At the elbow, the incision should avoid the ulnar nerve at the medial epicondyle.
+At the knee, the incision should avoid the common peroneal nerve posterior to the fibular head.
+The incision depth is through the eschar into the subcutaneous fat.
 
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
+Digital escharotomy
+Performed along the mid-axial lines of the digits, on the ulnar side of the index, middle, and ring fingers and the radial side of the thumb and little finger to avoid damage to the pinch surfaces.
+Knowing that digital escharotomies are rarely needed and should be performed with caution.
 
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
-
-Investigations
-Blood tests including lactate level.
-
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
-
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
-
-Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Post-procedure monitoring
+Confirming improved chest wall expansion and oxygen saturations after chest escharotomy.
+Confirming return of distal pulses, warmth, and capillary refill after limb escharotomy.
+Applying haemostasis with diathermy and dressing the escharotomy wounds.
+Continuing to monitor for recurrence as ongoing swelling may necessitate re-assessment.
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Recognition of the need for escharotomy
+Knowing the difference between escharotomy and fasciotomy: escharotomy releases the constricting burnt skin and is performed through the eschar into the subcutaneous fat, whereas fasciotomy releases the fascial compartments and is a deeper procedure performed for compartment syndrome, particularly in electrical burns.
+Knowing that escharotomy should be performed before transfer to a burns centre if transfer will be delayed and the patient is compromised.
 
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
+Indications for escharotomy
+Knowing that in ventilated patients, increasing peak inspiratory pressures and decreasing tidal volumes are objective signs of chest wall constriction.
+Knowing that pulse oximetry and Doppler assessment of distal pulses can be used to monitor limb perfusion.
+Knowing that if circumferential limb burns are present but perfusion is intact, the limb should be elevated in a Bradford sling with regular monitoring rather than immediate escharotomy.
 
-Group them under the same domain headings. Each point should be a short statement.
+Chest escharotomy technique
+Knowing that the incisions should not cross the clavicle or extend into the inguinal area.
+Knowing that bilateral incisions are needed for circumferential chest burns.
+Knowing that the procedure provides immediate improvement in ventilation which can be confirmed by the anaesthetist noting reduced airway pressures and improved tidal volumes.
 
-Example from Necrotising Fasciitis:
+Limb escharotomy technique
+Knowing that if a single mid-axial incision on each side is insufficient, additional incisions along the dorsal mid-line of the forearm may be needed.
+Knowing that for forearm escharotomies, the incision should extend across the wrist to decompress the carpal tunnel if necessary.
+Knowing that haemostasis from escharotomy wounds can be significant and should be controlled with diathermy.
 
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
+Digital escharotomy
+Knowing that the incisions should be on the non-pinch surfaces to preserve hand function.
+Knowing that in small children, needle escharotomy using a large-bore needle may be an alternative to incisional escharotomy.
 
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Post-procedure monitoring
+Knowing that escharotomy wounds are left open and are managed as part of the overall burns wound management plan.
+Knowing that the escharotomy sites will eventually require excision and skin grafting as part of the definitive burn surgery.
+Knowing that failure to improve after escharotomy may indicate the need for a deeper fasciotomy, particularly in electrical burns or if there has been prolonged ischaemia.
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

@@ -1,147 +1,102 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
-Thighplasty
+Thighplasty Following Massive Weight Loss
 
 CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+A forty year old woman has been referred to your clinic with excess skin on both inner thighs following massive weight loss after bariatric surgery. She lost fifty kilograms over two years and her weight has been stable for fourteen months. The excess skin causes chafing and recurrent fungal infections in the thigh creases, and she is unable to wear trousers comfortably. Her current B M I is twenty-seven.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
-
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
-
-Format them under stage headings exactly like this:
-
 Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
-
-Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
+"How would you assess this patient?"
+"What specific examination findings would you look for in the thighs?"
+"How does the distribution and extent of skin excess affect your surgical plan?"
+"What functional symptoms would you ask about?"
 
 Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
+"What are the N H S commissioning criteria for thigh lift surgery?"
+"Are there any non-surgical options?"
 
 Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+"What are the different types of thighplasty?"
+"When would you choose a medial thigh lift versus a vertical thigh lift?"
+"Can you describe the incision placement for a medial thigh lift?"
+"What are the important anatomical structures at risk?"
+"What specific complications would you consent for?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
-Investigations
-Initial management
-Definitive management
-Surgical steps
-Post-operative care
-
-END OF AUTHOR NOTE]
+Patient assessment and selection
+Classification of skin excess
+Surgical technique selection
+Incision planning and anatomy
+Consent and complications
+Postoperative care
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
-
-Each point should be a short statement of the expected answer.
-
-Example from Necrotising Fasciitis:
-
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
-
 Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
+Weight stability for at least twelve months
+Functional symptoms including chafing, intertrigo, skin infections, and difficulty with clothing
+Distribution of skin excess in the medial thigh
+Whether excess extends to the lateral thigh or around the full circumference
+Skin quality and degree of laxity
+Previous bariatric procedure and nutritional status
 
-Investigations
-Blood tests including lactate level.
+Surgical Options
+Medial thigh lift with an incision in the groin crease for mild to moderate excess limited to the proximal inner thigh
+Vertical medial thigh lift with a scar extending from the groin to the knee for extensive excess along the full length of the thigh
+Lateral thigh lift or combined circumferential lower body lift for lateral and posterior thigh excess
+Liposuction as an adjunct for fatty excess
 
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
+Incision Planning
+Groin crease incision anchored to Colles fascia to prevent scar migration
+For vertical thigh lift the scar runs along the inner thigh which is the main aesthetic trade-off
+Importance of anchoring the lift to a deep fascial structure to prevent descent of the scar
 
-Definitive management
-Urgent surgery for debridement.
+Important Anatomy
+Lymphatic vessels of the medial thigh at risk of injury causing lymphoedema or lymphocele
+Great saphenous vein and its tributaries
+Femoral triangle structures
+Sensory nerves to the medial thigh
 
-Surgical steps
-Surgical debridement of all unhealthy tissue.
-
-Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Consent
+Wound dehiscence which is common in this area due to tension and moisture
+Scar migration inferiorly if not adequately anchored
+Lymphoedema or lymphocele
+Asymmetry
+Seroma
+Altered sensation in the inner thigh
+Visible scarring particularly with the vertical approach
+Recurrence of laxity
+Labial distortion from excessive traction
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
-
-Group them under the same domain headings. Each point should be a short statement.
-
-Example from Necrotising Fasciitis:
-
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
-
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Discussion of the Pittsburgh classification of thigh deformities after weight loss
+Knowledge of the fascial anchoring technique to Colles fascia or the deep fascia of the thigh
+Understanding of the spiral thigh lift as described by Le Louarn
+Discussion of staging thighplasty with other body contouring procedures
+Knowledge of quilting sutures to reduce dead space and seroma risk
+Understanding that thighplasty has one of the highest complication rates of all body contouring procedures
+Discussion of compression garments and activity restrictions postoperatively
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

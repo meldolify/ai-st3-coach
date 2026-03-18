@@ -1,147 +1,103 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
-Implant Complications
+Breast Implant Rupture and B I A dash A L C L
 
 CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+A fifty year old woman presents to your clinic concerned about a change in the shape of her right breast. She had bilateral silicone breast augmentation with textured implants fifteen years ago. Over the last three months the right breast has become swollen and she has noticed a new fluid collection around it. The left breast is unchanged. She is otherwise well with no constitutional symptoms.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
-
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
-
-Format them under stage headings exactly like this:
-
 Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
+"What are your differential diagnoses for the swollen breast?"
+"What specific features in the history would concern you?"
+"How would you examine this patient?"
+"What is B I A dash A L C L and why is it relevant here?"
 
 Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
-
-Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
+"What imaging would you arrange?"
+"If you suspect B I A dash A L C L what specific investigations would you request?"
+"What is the significance of a late-onset seroma around a textured implant?"
 
 Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+"How would you manage a confirmed implant rupture?"
+"What is the difference between intracapsular and extracapsular rupture?"
+"If B I A dash A L C L were confirmed what would be the surgical management?"
+"How would you counsel this patient about the options going forward?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
-Investigations
-Initial management
-Definitive management
-Surgical steps
-Post-operative care
-
-END OF AUTHOR NOTE]
+Differential diagnosis of breast swelling with implants
+Implant rupture types and management
+B I A dash A L C L awareness and workup
+Investigations including imaging and cytology
+Surgical management
+Patient counselling and follow-up
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Differential Diagnosis
+Implant rupture either intracapsular or extracapsular
+Late-onset seroma which should raise suspicion of B I A dash A L C L
+Capsular contracture
+Infection
+Breast cancer unrelated to the implant
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+Implant Rupture
+Intracapsular rupture where the implant shell fails but silicone is contained within the capsule
+Extracapsular rupture where silicone has leaked beyond the capsule into surrounding tissues
+M R I is the gold standard for diagnosing silicone implant rupture
+The linguine sign on M R I is characteristic of intracapsular rupture
+Management of rupture involves surgical removal of the implant and capsulectomy
 
-Each point should be a short statement of the expected answer.
+B I A dash A L C L
+Breast implant associated anaplastic large cell lymphoma
+Associated with textured surface implants
+Typically presents as a late-onset periprosthetic seroma more than one year after implantation
+Much less commonly presents as a mass or capsular contracture
+Incidence is low but clinicians must have a high index of suspicion
 
-Example from Necrotising Fasciitis:
+B I A dash A L C L Investigations
+Ultrasound-guided aspiration of the periprosthetic fluid
+Cytology of the aspirated fluid for atypical cells
+C D 30 immunohistochemistry which is positive in B I A dash A L C L
+If confirmed then staging with P E T dash C T
+Referral to a lymphoma M D T
 
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
-
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
-
-Investigations
-Blood tests including lactate level.
-
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
-
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
-
-Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+B I A dash A L C L Management
+Total capsulectomy with implant removal as the primary treatment
+En bloc resection if possible
+Most cases are confined to the capsule and have an excellent prognosis with surgery alone
+If there is a mass or lymph node involvement then oncological input for chemotherapy is required
+N I C E and B A P R A S guidance should be followed
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
-
-Group them under the same domain headings. Each point should be a short statement.
-
-Example from Necrotising Fasciitis:
-
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
-
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Knowledge of the M H R A yellow card reporting for breast implant complications
+Discussion of the different implant surfaces including smooth, microtextured, macrotextured, and polyurethane and their relative risk
+Understanding of the breast implant registry and its role in surveillance
+Knowledge of the P I P implant scandal and its implications for implant regulation
+Discussion of silicone granulomas in extracapsular rupture
+Understanding of the Ann Arbor staging system adapted for B I A dash A L C L
+Knowledge that the vast majority of B I A dash A L C L cases are stage one E confined to the capsule with greater than ninety percent five-year survival
+Discussion of patient counselling regarding implant removal with or without replacement and the option of autologous reconstruction
+Understanding of the role of the breast implant check service
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

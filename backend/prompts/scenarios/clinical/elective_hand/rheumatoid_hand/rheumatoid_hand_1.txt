@@ -1,147 +1,120 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
-Rheumatoid Hand
+Rheumatoid Hand — Ulnar Drift and Swan Neck Deformities
 
 CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+A 48-year-old woman with a 12-year history of rheumatoid arthritis is referred to your hand clinic by her rheumatologist. Despite being on biologic therapy, she has developed progressive deformities in both hands. She has difficulty with grip and pinch and is struggling with daily activities. On examination she has ulnar drift at the M C P joints bilaterally, swan neck deformities of several fingers, and subluxation of the M C P joints of her right hand with prominent metacarpal heads on the dorsum.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Assessment:
+"What are the key features you would assess in a rheumatoid hand?"
+"Can you explain the pathomechanics of ulnar drift at the M C P J?"
+"What is a swan neck deformity and what causes it?"
+"What is a boutonniere deformity and how does it differ?"
 
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
+Investigations:
+"What imaging would you request?"
+"What blood tests are relevant?"
+"How do you classify swan neck deformity?"
 
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
+Initial Management:
+"What is the role of the multidisciplinary team?"
+"How important is medical management before surgery?"
+"What non-operative options are available?"
 
-Format them under stage headings exactly like this:
-
-Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
-
-Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
-
-Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
-
-Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+Definitive Management:
+"What are the surgical priorities in the rheumatoid hand?"
+"What operations are available for M C P J disease?"
+"How do you manage swan neck and boutonniere deformities surgically?"
+"What about tendon ruptures in rheumatoid disease?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
-Investigations
-Initial management
-Definitive management
-Surgical steps
-Post-operative care
-
-END OF AUTHOR NOTE]
+Pathomechanics of rheumatoid deformities
+Swan neck and boutonniere classification
+Systematic hand assessment
+Multidisciplinary management
+Surgical priorities and sequencing
+M C P J arthroplasty and tendon surgery
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Pathomechanics of ulnar drift:
+Synovitis stretches the sagittal bands and joint capsule
+Extensor tendons sublux ulnarly between metacarpal heads
+Radial collateral ligaments attenuate
+Intrinsic tightness and flexor tendon pull contribute
+Wrist radial deviation creates a zig-zag pattern with M C P J ulnar drift
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+Swan neck deformity:
+P I P J hyperextension with D I P J flexion
+Causes: F D S rupture, intrinsic tightness, P I P J dorsal capsule laxity, mallet deformity at D I P J
+Nalebuff classification: Type 1 flexible in all positions, Type 2 P I P J flexion limited by intrinsic tightness, Type 3 limited in all positions, Type 4 stiff with joint destruction
 
-Each point should be a short statement of the expected answer.
+Boutonniere deformity:
+P I P J flexion with D I P J hyperextension
+Central slip attenuation allows P I P J to flex
+Lateral bands migrate volarly and become D I P J extensors causing hyperextension
+Stages: passively correctable, fixed P I P J contracture, fixed with joint destruction
 
-Example from Necrotising Fasciitis:
+Systematic assessment:
+Examine wrist, M C P J, P I P J, D I P J, and thumb systematically
+Assess tendon integrity: check individual E D C, E P L function
+Look for extensor tendon ruptures: Vaughan-Jackson pattern starting with E D M
+Check flexor tendons for Mannerfelt lesion (F P L rupture on scaphoid spur)
+Assess skin quality, vascularity, and sensibility
 
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
+Medical management:
+Optimise disease-modifying therapy with rheumatology before surgery
+Biologic agents should be held peri-operatively per rheumatology guidance
+Surgery is reconstructive not curative of the disease process
 
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
+Surgical priorities (Nalebuff):
+1. Treat the wrist first as the keystone
+2. Then M C P joints
+3. Then P I P J and D I P J
+4. Tendon reconstruction before joint reconstruction
+Address tendon ruptures urgently
 
-Investigations
-Blood tests including lactate level.
+M C P J surgery:
+Silicone arthroplasty (Swanson) remains the gold standard for M C P J disease
+Centralise extensor tendons, rebalance soft tissues
+Crossed intrinsic transfer for ulnar drift correction
+Results in pain relief and improved cosmesis, moderate arc of motion
 
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
-
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
-
-Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Tendon surgery:
+Extensor tendon rupture: end-to-side transfer to adjacent intact tendon, or E I P transfer
+Flexor tendon rupture (Mannerfelt): F D S transfer or bridge graft
+Synovectomy and tenosynovectomy for impending rupture
+Darrach procedure or Sauve-Kapandji for distal ulna head involvement causing tendon attrition
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
-
-Group them under the same domain headings. Each point should be a short statement.
-
-Example from Necrotising Fasciitis:
-
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
-
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Wrist arthrodesis versus arthroplasty in rheumatoid disease
+Role of M C P J arthroplasty with newer pyrocarbon or metal-on-polyethylene implants
+Spiral oblique retinacular ligament reconstruction for swan neck deformity
+Fowler central slip tenotomy for flexible swan neck
+Littler release for intrinsic tightness
+Thumb deformities in rheumatoid: Type 1 boutonniere, Type 3 swan neck (Nalebuff classification)
+Caput ulnae syndrome with dorsal prominence of the ulnar head
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

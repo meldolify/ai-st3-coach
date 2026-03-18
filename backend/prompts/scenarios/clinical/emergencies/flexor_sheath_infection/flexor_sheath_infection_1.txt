@@ -1,7 +1,3 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
 Flexor Sheath Infection
@@ -41,14 +37,13 @@ MAIN CLINICAL DOMAINS
 (Internal reference only. Do not read aloud.)
 
 
-Example from Necrotising Fasciitis:
 Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
+History and clinical assessment
+Examination including Kanavel signs
 Investigations
-Initial management
-Definitive management
-Surgical steps
-Post-operative care
+Initial management including antibiotics
+Definitive surgical management and flexor sheath washout
+Post-operative care and second look
 
 
 ESSENTIAL MARKING POINTS
@@ -101,10 +96,10 @@ Initial management
 Urgent admission, intravenous antibiotics, stick hand elevation in Bradford sling,  marking area of redness with date and time recording, Consent and mark the patient, prepare for surgical washout in theatres.
 
 Definitive management
-Using arm tourniquet without exsanguination, mark the incisions down to the carpal tunnel if needed, Excision of  the puncture wound, opening of  A1 and A5 pulley, taking micro swabs, washing by saline using a venflon cannula from proximal to distal.
+Using arm tourniquet without exsanguination, minimal access incisions over A1 and A5 pulley. If frank pus is present, open as Brunner incision or midlateral approach. Excision of the puncture wound, taking microbiology swabs, washing by saline using a venflon cannula from proximal to distal. Ensure the potential spaces are explored and opened including the thenar, hypothenar, and mid-palmar spaces, as well as the space of Parona in the distal forearm and the web spaces if involved. In a horseshoe abscess, both little finger and thumb flexor sheaths communicate through the ulnar and radial bursae and require thorough washout of all spaces.
 
 Post-operative plan
-Splint the hand in position of safe immobilisation, hand elevation, continue antibiotics and arrange for second look in 48 hours and early physiotherapy.
+Splint the hand in position of safe immobilisation using a P O S I cast, hand elevation, continue antibiotics and arrange for second look in 48 hours and early hand therapy.
 
 These are points a strong candidate would mention but are not required to pass.
 

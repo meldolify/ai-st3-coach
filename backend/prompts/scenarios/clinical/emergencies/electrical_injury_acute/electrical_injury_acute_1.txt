@@ -1,147 +1,140 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
-Electrical Injury Acute
+Electrical Injury
 
 CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+This is a 25 year old electrician who has sustained a high voltage electrical injury at work. He was found unconscious at the scene and was resuscitated by the paramedics. He is now in the emergency department resuscitation bay, intubated and ventilated. He has visible burns to both hands. You have been asked to assess and manage this patient.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
-
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
-
-Format them under stage headings exactly like this:
-
 Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
+"How would you assess this patient?"
+"What are you most concerned about with an electrical injury?"
+"What would you look for on examination?"
 
 Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
+"What investigations would you arrange?"
+"What are you specifically looking for in the blood results?"
 
 Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
+"How would you manage this patient initially?"
+"What fluid resuscitation would you use?"
 
 Definitive Management
 "What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+"When would you perform a fasciotomy?"
+"What would your post-operative plan look like?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
-Investigations
-Initial management
-Definitive management
-Surgical steps
-Post-operative care
-
-END OF AUTHOR NOTE]
+Recognition of the severity and systemic nature of the injury
+A T L S and E M S B assessment
+Cardiac monitoring and arrhythmia management
+Assessment for compartment syndrome and rhabdomyolysis
+Fluid resuscitation
+Surgical management including fasciotomy
+I T U care and monitoring
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Recognition of the severity and systemic nature of the injury
+Recognising that a high voltage electrical injury is a life-threatening emergency with implications far beyond the visible skin burns.
+Knowing the mechanisms of electrical injury: thermal injury from the current, direct electrical forces causing cell membrane damage through electroporation, and protein denaturation.
+Knowing that the visible burns represent only a fraction of the total injury as the current travels through deep tissues causing extensive muscle necrosis.
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+A T L S and E M S B assessment
+Following A T L S and E M S B principles with cervical spine immobilisation.
+Airway assessment and management, noting the patient is already intubated and ventilated.
+Breathing assessment including chest expansion and the need for chest escharotomy if circumferential chest burns are present.
+Circulation assessment: continuous E C G monitoring is mandatory given the high risk of cardiac arrhythmias and cardiac arrest.
+Gaining intravenous access through unburnt skin and sending bloods including full blood count, urea and electrolytes with particular attention to potassium, creatine kinase, troponin, clotting, and cross-match.
+Estimating T B S A using Lund and Browder charts. Identifying entry and exit wounds.
+A B G including carboxyhaemoglobin and lactate.
 
-Each point should be a short statement of the expected answer.
+Cardiac monitoring and arrhythmia management
+Knowing that cardiac arrhythmias are a major cause of death in electrical injury.
+Continuous E C G monitoring.
+Cardiology involvement if any arrhythmias are detected.
+Electrolyte correction, particularly potassium, calcium, and magnesium.
 
-Example from Necrotising Fasciitis:
+Assessment for compartment syndrome and rhabdomyolysis
+Examining all limb compartments for tightness and measuring compartment pressures if the patient is sedated and clinical assessment is unreliable.
+Monitoring for rhabdomyolysis: dark urine, rising creatine kinase, hyperkalaemia, and acute kidney injury.
+Inserting a urinary catheter and monitoring urine output. The urine output should be maintained at greater than one millilitre per kilogram per hour as per E M S B guidance.
 
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
+Fluid resuscitation
+Aggressive intravenous fluid resuscitation using the modified Parkland formula as a guide, but knowing that electrical injuries often require more fluid than the formula predicts because the visible burn underestimates the total tissue injury.
+Titrating fluids to urine output.
 
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
+Surgical management including fasciotomy
+Prophylactic fasciotomy of affected limbs given the high likelihood of underlying muscle burns that will develop into compartment syndrome.
+Arranging urgent surgery in a warm operating theatre.
+Performing fasciotomy along standard incision lines, releasing all compartments.
+Identifying and protecting named nerves.
+Excision of any clearly necrotic muscle and skin, taking care to avoid excessive bleeding.
 
-Investigations
-Blood tests including lactate level.
-
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
-
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
-
-Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+I T U care and monitoring
+Post-operative I T U care for close monitoring of haemodynamic status.
+Continued cardiac monitoring.
+Ongoing fluid management and electrolyte correction.
+Planning for second look at forty eight hours with further excision and debridement as needed.
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Recognition of the severity and systemic nature of the injury
+Knowing the difference between high voltage and low voltage injuries. High voltage is greater than one thousand volts and carries a much worse prognosis.
+Knowing the different mechanisms of contact: direct contact with the source, caught in an electrical arc, flash burn from nearby arc, and current transferrance through the ground.
+Knowing that lightning is an extremely high voltage injury with very high mortality.
 
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
+A T L S and E M S B assessment
+Asking about associated injuries: was the patient thrown, was there a flame fire or explosion following the electrical injury.
+Asking about loss of consciousness at the scene and whether there was a cardiac arrest requiring resuscitation or cardioversion.
+Examining the eyes for cataracts and corneal damage.
+Examining for neurological injury.
+Performing an abdominal examination to rule out visceral perforation.
+Requesting a C T trauma series to exclude other injuries.
 
-Group them under the same domain headings. Each point should be a short statement.
+Cardiac monitoring and arrhythmia management
+Knowing that hyperkalaemia from rhabdomyolysis can cause fatal arrhythmias and requires urgent treatment with calcium gluconate for myocardial protection, insulin and dextrose, and sodium bicarbonate.
+Knowing that troponin should be measured to assess for myocardial injury.
 
-Example from Necrotising Fasciitis:
+Assessment for compartment syndrome and rhabdomyolysis
+Knowing that urine should be tested for myoglobin.
+Knowing the management of myoglobinuria: aggressive fluid resuscitation, consideration of mannitol to enhance diuresis, and alkalinisation of the urine with sodium bicarbonate.
+Knowing that if mannitol is used, urine output can no longer be used reliably as a marker of resuscitation adequacy and a central venous pressure line or pulmonary capillary wedge pressure monitoring may be needed.
+Knowing that M R I can provide detail on the anatomical site and severity of muscle injury.
 
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
+Fluid resuscitation
+Knowing the Parkland formula: three to four millilitres per kilogram per percentage T B S A, with the first half given in the first eight hours from the time of injury and the second half over the next sixteen hours using Hartmann solution.
+Knowing that in electrical injuries the fluid requirements are often significantly greater than calculated because the deep tissue injury is not reflected in the T B S A.
 
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Surgical management including fasciotomy
+Knowing that the surgical strategy should be performed in a warm burns theatre to prevent hypothermia.
+Knowing the surgical endpoints: two to three hours operating time, up to ten units transfused, temperature dropping below thirty six degrees, or the lethal triad of hypothermia, acidosis, and coagulopathy.
+Knowing that entry and exit wounds should be examined thoroughly for underlying structural damage.
+Knowing that serial debridements are often needed as the extent of tissue necrosis may declare over several days.
+
+I T U care and monitoring
+Knowing the nutritional requirements of a burns patient: the Curreri formula calculates calorie requirements as twenty five times body weight in kilograms plus forty times T B S A percentage.
+Knowing that enteral feeding via a nasogastric tube should be commenced early.
+Knowing the importance of a multidisciplinary approach including I T U, burns surgery, cardiology, renal medicine, physiotherapy, and psychology.
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

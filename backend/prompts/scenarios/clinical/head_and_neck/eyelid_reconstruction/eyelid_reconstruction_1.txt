@@ -1,7 +1,3 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
 Eyelid Reconstruction
@@ -10,138 +6,115 @@ CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+This is a 72 year old lady who has undergone excision of a basal cell carcinoma from the middle third of her right lower eyelid. The excision has resulted in a full thickness defect involving approximately thirty percent of the lower eyelid. The margins are confirmed as clear. You have been asked to discuss the reconstructive options.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
-
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
-
-Format them under stage headings exactly like this:
-
 Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
+"How would you assess this defect?"
+"What are the key goals of eyelid reconstruction?"
+"What structures need to be reconstructed?"
 
 Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
+"Do you need any further investigations?"
 
 Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
+"What reconstructive options would you consider for this size of defect?"
+"How do you decide which technique to use?"
 
 Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+"Can you describe the technique you would choose?"
+"What would you do for a larger defect?"
+"What would your post-operative plan look like?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
-Investigations
-Initial management
-Definitive management
-Surgical steps
+Assessment of the defect
+Goals and principles of eyelid reconstruction
+Reconstructive ladder for lower eyelid defects
+Reconstructive ladder for upper eyelid defects
+Surgical technique
 Post-operative care
-
-END OF AUTHOR NOTE]
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Assessment of the defect
+Describing the defect: full thickness loss of thirty percent of the lower eyelid involving skin, orbicularis oculi, tarsal plate, and conjunctiva.
+Confirming clear margins before proceeding with reconstruction.
+Assessing the patient's visual acuity and function of the remaining eyelid.
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+Goals and principles of eyelid reconstruction
+Knowing the goals in order of priority: protecting the globe by maintaining corneal coverage, avoiding ectropion, preserving eyelid function including blink and tear drainage, and cosmesis.
+Knowing that full thickness eyelid reconstruction requires restoration of the anterior lamella, which is skin and orbicularis, and the posterior lamella, which is tarsal plate and conjunctiva.
 
-Each point should be a short statement of the expected answer.
+Reconstructive ladder for lower eyelid defects
+Knowing the options based on the percentage of eyelid involved.
+Up to twenty five to thirty percent: direct closure using a pentagon-shaped full thickness excision through skin, orbicularis, tarsal plate, and conjunctiva, closed in layers starting with six-oh Vicryl to the grey line and conjunctiva, then the tarsal plate and orbicularis together, and finally skin with six-oh Nylon.
+Thirty to fifty percent: direct closure with a lateral canthotomy and cantholysis to gain additional length.
+Up to sixty percent: Tenzel semicircular rotation flap which is a laterally based myocutaneous flap from the temple combined with a lateral canthotomy.
+Other options: Tripier flap which is a bipedicled myocutaneous flap from the upper eyelid performed as a two-stage procedure.
+Full eyelid: Mustarde cheek rotation flap.
 
-Example from Necrotising Fasciitis:
+Reconstructive ladder for upper eyelid defects
+Knowing that upper eyelid reconstruction follows similar principles but the upper eyelid is more critical for corneal protection.
+Up to thirty percent: direct closure.
+Thirty to fifty percent: direct closure with lateral canthotomy.
+Larger defects: Cutler-Beard flap which is a full thickness advancement flap from the lower eyelid passed behind the lower lid margin, performed as a two-stage procedure with division at six weeks.
 
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
-
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
-
-Investigations
-Blood tests including lactate level.
-
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
-
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
+Surgical technique
+Describing the chosen technique for a thirty percent lower eyelid defect: direct closure or direct closure with lateral canthotomy.
+Closing in layers: conjunctiva and tarsal plate with six-oh Vicryl, grey line alignment, orbicularis with absorbable sutures, and skin with fine non-absorbable sutures.
+Ensuring meticulous alignment of the grey line to prevent notching.
 
 Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Lubricating eye drops to protect the cornea.
+Suture removal at seven to ten days.
+Follow up to assess for ectropion, entropion, or exposure keratopathy.
+Oncological follow up.
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Assessment of the defect
+Assessing the laxity of the remaining eyelid with a snap-back test and distraction test.
+Noting the position of the punctum and assessing the lacrimal drainage system.
+Ophthalmology involvement for assessment of the globe and visual function.
 
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
+Goals and principles of eyelid reconstruction
+Knowing that the posterior lamella must not be reconstructed with a graft if the anterior lamella is also grafted, as at least one lamella must have a vascularised flap to support the other.
+Knowing that the tarsal plate provides structural rigidity to the eyelid and must be reconstructed or substituted.
 
-Group them under the same domain headings. Each point should be a short statement.
+Reconstructive ladder for lower eyelid defects
+Knowing the Tenzel semicircular flap technique: a semicircular incision is made from the lateral canthus curving superolaterally, the flap is undermined in the subcutaneous plane and advanced medially. A lateral canthotomy and inferior cantholysis are performed to release the lateral attachment of the lower lid, allowing advancement.
+Knowing that the Hughes tarsoconjunctival flap from the upper lid can provide posterior lamellar support for larger lower lid defects, with a skin graft or flap for the anterior lamella. This is a two-stage procedure with pedicle division at four to six weeks.
+Knowing that the Mustarde cheek rotation flap provides skin and muscle but does not provide posterior lamellar support, which must be provided by a cartilage graft from the ear or hard palate mucosa.
 
-Example from Necrotising Fasciitis:
+Reconstructive ladder for upper eyelid defects
+Knowing the Cutler-Beard technique in detail: a full thickness flap of lower eyelid skin, orbicularis, and conjunctiva is advanced under the intact lower lid margin into the upper lid defect. The flap is divided at six weeks.
+Knowing that a free tarsoconjunctival graft from the contralateral upper lid can be used for posterior lamellar reconstruction.
 
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
+Surgical technique
+Knowing the blood supply to the eyelids: medial and lateral palpebral arteries forming a marginal and peripheral arcade.
+Knowing the anatomy of the tarsal plate: approximately one centimetre height in the upper lid and four to five millimetres in the lower lid.
+Knowing that corneal protection with a corneal shield or suturing the lids together temporarily may be needed during healing.
 
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Post-operative care
+Knowing the complications: ectropion, entropion, trichiasis, lagophthalmos, notching of the lid margin, exposure keratopathy, and epiphora.
+Knowing that ectropion is the most common complication of lower eyelid reconstruction and may require secondary correction.
+Knowing that tarsorrhaphy may be performed as a temporary measure to protect the cornea while the reconstruction heals.
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

@@ -1,147 +1,128 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
-Fracture Dislocations Hand
+Fracture Dislocations of the Hand
 
 CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+This is a 28 year old man who has dislocated his right ring finger P I P joint during a rugby match. The finger was pulled back forcefully by another player. It was reduced on the pitch by the team physio but the finger remains swollen and painful. He has presented to the emergency department. The X-ray shows a small volar lip fracture of the base of the middle phalanx with a congruent joint. You have been asked to assess and manage this patient.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
-
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
-
-Format them under stage headings exactly like this:
-
 Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
+"How would you assess this patient?"
+"What structures are you concerned about?"
+"Is the joint stable?"
 
 Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
+"What do the X-rays show?"
+"Do you need any further imaging?"
 
 Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
+"How would you manage this injury?"
+"What are the principles of P I P joint injury management?"
 
 Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+"When would you consider surgery for a P I P joint fracture dislocation?"
+"What surgical options are available?"
+"What is the most important factor for the outcome?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
-Investigations
-Initial management
-Definitive management
-Surgical steps
-Post-operative care
-
-END OF AUTHOR NOTE]
+History and mechanism of injury
+Examination and stability testing
+Radiological assessment
+Classification of P I P joint injuries
+Conservative management
+Indications for surgical management
+Rehabilitation and complications
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+History and mechanism of injury
+Establishing the mechanism: hyperextension injury causing dorsal dislocation.
+Asking about hand dominance, occupation, and sporting involvement.
+Asking whether the joint was reduced and by whom.
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+Examination and stability testing
+Examining the finger for swelling, deformity, and skin integrity.
+Assessing active and passive range of motion at the P I P joint.
+Testing the collateral ligaments for stability with the P I P joint in slight flexion.
+Assessing the stability of the joint through a gentle arc of motion to determine the angle at which the joint redislocates.
+Testing the central slip by performing the Elson test to exclude a boutonniere injury.
+Assessing the neurovascular status of the finger.
 
-Each point should be a short statement of the expected answer.
+Radiological assessment
+Interpreting the X-ray: identifying the volar lip fracture fragment, assessing its size as a percentage of the articular surface, and confirming joint congruency.
+Knowing that a true lateral X-ray is essential to assess joint congruence and fracture fragment size.
 
-Example from Necrotising Fasciitis:
+Classification of P I P joint injuries
+Knowing the classification based on fracture fragment size: stable if the fracture involves less than thirty percent of the articular surface with a congruent joint, unstable if greater than thirty percent, and fracture-dislocation if the joint is incongruent.
+Knowing the difference between dorsal dislocations (most common, hyperextension mechanism, volar plate injury) and volar dislocations (rare, central slip disruption).
 
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
+Conservative management
+Knowing that stable P I P joint injuries with a congruent joint and less than thirty percent articular involvement can be managed conservatively.
+Neighbour strapping to the adjacent finger and early active mobilisation.
+Extension block splinting if the joint is stable within a limited arc, blocking the last degrees of extension where the joint subluxes.
+Knowing that the most important principle is early mobilisation to prevent stiffness.
 
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
+Indications for surgical management
+Fracture involving more than thirty to forty percent of the articular surface.
+Joint incongruence or subluxation on the lateral X-ray.
+Unstable joint that redislocates within a functional range of motion.
+Failed conservative management with persistent subluxation.
 
-Investigations
-Blood tests including lactate level.
-
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
-
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
-
-Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Rehabilitation and complications
+Early active mobilisation is critical for outcome.
+Knowing the risk of P I P joint stiffness which is the most common complication.
+Knowing the risk of post-traumatic arthritis.
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+History and mechanism of injury
+Asking whether there was any rotational component to the injury.
+Asking about any previous injuries to the same finger.
 
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
+Examination and stability testing
+Knowing that the collateral ligaments are assessed with the joint in thirty degrees of flexion as they are relaxed in extension.
+Performing a dynamic fluoroscopic assessment under anaesthesia if there is uncertainty about stability.
 
-Group them under the same domain headings. Each point should be a short statement.
+Radiological assessment
+Knowing that C T may be useful for complex fracture patterns to assess articular congruity and fragment size.
+Identifying the V sign on lateral X-ray which indicates joint subluxation.
 
-Example from Necrotising Fasciitis:
+Classification of P I P joint injuries
+Knowing the Hastings and Carroll classification of P I P fracture dislocations.
+Knowing that pilon fractures of the P I P joint from axial loading carry a worse prognosis.
 
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
+Conservative management
+Knowing the technique of extension block pinning as a minimally invasive option for unstable dorsal fracture dislocations: a K-wire is placed dorsally to act as a block preventing the last degrees of extension while allowing flexion.
+Knowing the Suzuki traction technique using a dynamic external fixator for comminuted or pilon-type fractures.
 
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Indications for surgical management
+Knowing the surgical options: extension block pinning, open reduction and internal fixation with mini screws or a plate, volar plate arthroplasty for chronic injuries, and hemi-hamate autograft for large volar lip defects.
+Knowing the principles of volar plate arthroplasty: the volar plate is advanced into the defect and secured with a pull-out suture.
+Knowing that hemi-hamate arthroplasty uses an osteochondral graft from the hamate to reconstruct the volar base of the middle phalanx.
+
+Rehabilitation and complications
+Knowing that swan neck deformity can result from chronic volar plate laxity at the P I P joint.
+Knowing the long term risk of post-traumatic arthritis particularly with articular incongruity.
+Knowing that P I P joint stiffness is extremely common and difficult to treat once established, which reinforces the importance of early mobilisation.
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

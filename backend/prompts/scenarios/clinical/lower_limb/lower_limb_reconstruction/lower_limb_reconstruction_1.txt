@@ -1,7 +1,3 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
 Lower Limb Reconstruction
@@ -10,138 +6,98 @@ CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+You are called to the emergency department to see a thirty-five year old man who has been involved in a motorcycle accident. He has an open fracture of his right tibia with a large soft tissue defect over the anteromedial aspect of the mid-shaft. The orthopaedic team have classified this as a Gustilo Anderson grade three B injury and have performed initial wound washout and external fixation.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Assessment:
+"How would you assess this patient and this injury?"
+"Can you describe the Gustilo Anderson classification?"
+"What is the significance of the grade three B classification?"
 
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
+Investigations:
+"What investigations would you want?"
+"How would you assess the vascular status of the limb?"
+"What imaging would be helpful?"
 
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
+Initial Management:
+"What are the key principles of initial management of an open tibial fracture?"
+"What is the role of antibiotics?"
+"When should definitive soft tissue cover take place?"
 
-Format them under stage headings exactly like this:
-
-Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
-
-Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
-
-Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
-
-Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+Definitive Management:
+"What are the reconstructive options for soft tissue cover of the tibia?"
+"How does the location of the defect influence your flap choice?"
+"Tell me about the concept of the reconstructive ladder in the context of lower limb trauma."
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
-Investigations
-Initial management
-Definitive management
-Surgical steps
-Post-operative care
-
-END OF AUTHOR NOTE]
+Gustilo Anderson classification of open fractures
+Initial management of open tibial fractures (B A P N guidelines)
+Timing of soft tissue coverage
+Reconstructive options by tibial zone (proximal, middle, distal)
+Free flap versus local flap selection
+Vascular assessment of the traumatised limb
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Gustilo Anderson classification:
+Type one: wound less than one centimetre, minimal contamination, simple fracture pattern
+Type two: wound one to ten centimetres, moderate soft tissue damage, no flap required
+Type three A: adequate soft tissue coverage despite extensive wound, often high energy
+Type three B: inadequate soft tissue coverage requiring flap reconstruction
+Type three C: associated vascular injury requiring repair
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+Initial management:
+A T L S principles — primary survey first
+Photograph wound, apply saline-soaked dressing, splint limb
+Intravenous antibiotics within one hour (co-amoxiclav, add gentamicin for gross contamination)
+Tetanus prophylaxis
+Joint ortho-plastic assessment within twenty-four hours
+Surgical debridement within twelve to twenty-four hours ideally
 
-Each point should be a short statement of the expected answer.
+Timing:
+B A P N (British Association of Plastic Surgeons and British Orthopaedic Association) guidelines
+Definitive soft tissue cover within seventy-two hours if possible, and certainly within seven days
+Early cover reduces infection rates and improves outcomes
+Serial debridement may be needed before definitive cover
 
-Example from Necrotising Fasciitis:
+Reconstructive options by zone:
+Proximal third: gastrocnemius muscle flap (medial head most commonly)
+Middle third: soleus muscle flap (can be hemisoleus), or free flap
+Distal third: free flap is usually required (no reliable local muscle flaps)
+Common free flaps: A L T (anterolateral thigh), gracilis, latissimus dorsi, rectus abdominis
 
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
-
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
-
-Investigations
-Blood tests including lactate level.
-
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
-
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
-
-Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Free flap considerations:
+Recipient vessels: posterior tibial or anterior tibial artery (end-to-side preferred to preserve distal flow)
+C T angiography to assess vessel status pre-operatively
+Muscle flaps preferred for dead space obliteration and infection control
+Fasciocutaneous flaps (A L T) useful for surface coverage without bulk
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
-
-Group them under the same domain headings. Each point should be a short statement.
-
-Example from Necrotising Fasciitis:
-
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
-
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Discussion of the B O A / B A P N standards for major trauma centres
+Negative pressure wound therapy as bridge to definitive cover
+Antibiotic cement spacers or beads for contaminated wounds
+Ilizarov frame or bone transport for segmental bone loss
+Masquelet technique (induced membrane) for bone defects
+Discussion of limb salvage versus primary amputation — M E S S score (Mangled Extremity Severity Score) has poor positive predictive value, decision should be clinical and M D T based
+Role of the orthoplastic combined approach in improving outcomes
+Chimeric flaps incorporating bone (fibula) for composite defects
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

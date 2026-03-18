@@ -1,147 +1,123 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
-Osteomyelitis Lower Limb
+Chronic Osteomyelitis of the Lower Limb
 
 CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+You are asked to see a forty-five year old man in clinic who has a chronic wound over the anterior aspect of his right tibia with a discharging sinus. He had an open tibial fracture treated with intramedullary nailing three years ago. The wound has intermittently discharged since surgery, and he has had multiple courses of antibiotics from his G P. He is otherwise fit and well, and a non-smoker.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Assessment:
+"How would you assess this patient?"
+"What features in the history suggest chronic osteomyelitis?"
+"Are you aware of any classification systems for osteomyelitis?"
 
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
+Investigations:
+"What investigations would you arrange?"
+"What is the role of M R I in this context?"
+"How would you obtain a microbiological diagnosis?"
 
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
+Initial Management:
+"How would you manage this patient initially?"
+"What is the role of antibiotics in chronic osteomyelitis?"
+"Would you remove the metalwork?"
 
-Format them under stage headings exactly like this:
-
-Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
-
-Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
-
-Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
-
-Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+Definitive Management:
+"Describe the surgical management of chronic osteomyelitis."
+"How would you manage the dead space after debridement?"
+"What soft tissue coverage options are available?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
-Investigations
-Initial management
-Definitive management
-Surgical steps
-Post-operative care
-
-END OF AUTHOR NOTE]
+Chronic osteomyelitis diagnosis and classification
+Microbiological assessment and bone biopsy
+Role of metalwork removal
+Surgical debridement principles
+Dead space management
+Antibiotic delivery (local and systemic)
+Soft tissue reconstruction
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Diagnosis:
+Chronic discharging sinus following open fracture fixation is osteomyelitis until proven otherwise
+History of open fracture with metalwork provides the mechanism (haematogenous seeding or direct inoculation)
+Systemic inflammatory markers may be normal in chronic osteomyelitis
+Sinus tract culture does not reliably reflect the causative organism — bone biopsy is essential
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+Classification:
+Cierny-Mader classification:
+Anatomical type: type one medullary, type two superficial, type three localised, type four diffuse
+Physiological host: A host (normal), B host (compromised locally or systemically), C host (treatment worse than disease)
+This patient is likely type three (localised) in an A host
 
-Each point should be a short statement of the expected answer.
+Investigations:
+Bloods: C R P, E S R, white cell count, albumin
+Plain X-rays: may show sequestrum, involucrum, periosteal reaction
+M R I is the imaging modality of choice — high sensitivity for marrow oedema and sequestra
+White cell labelled scan if M R I contraindicated
+Bone biopsy at time of surgery for culture and histology — stop antibiotics two weeks before biopsy if possible
+Multiple deep tissue samples (at least five) sent for culture
 
-Example from Necrotising Fasciitis:
+Metalwork considerations:
+If the fracture has united, metalwork should be removed — biofilm on metalwork perpetuates infection
+If the fracture has not united, staged approach may be needed
+Biofilm on implants makes eradication with antibiotics alone virtually impossible
 
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
+Surgical debridement:
+Radical debridement of all necrotic and infected bone (the paprika sign — bleeding bone indicates viable tissue)
+Excise sinus tracts and scarred soft tissue
+Debridement until bleeding healthy bone margins (positive paprika sign)
+Thorough irrigation
 
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
+Dead space management:
+Local antibiotic delivery: antibiotic-loaded cement beads or spacer (P M M A with gentamicin or vancomycin)
+Bioabsorbable antibiotic carriers as alternative to cement
+Masquelet technique (induced membrane): cement spacer for six to eight weeks, then remove spacer and fill with bone graft within the induced membrane
+Bone graft options: autologous cancellous (iliac crest), R I A (reamer-irrigator-aspirator) graft
+Bone transport (Ilizarov) for segmental defects
 
-Investigations
-Blood tests including lactate level.
+Soft tissue coverage:
+Local muscle flaps improve vascularity and antibiotic delivery to the area
+Gastrocnemius flap for proximal third defects
+Soleus flap for middle third
+Free flap (A L T, gracilis, latissimus dorsi) for distal third or large defects
+Well-vascularised soft tissue coverage is essential for infection eradication
 
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
-
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
-
-Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Antibiotic therapy:
+Prolonged systemic antibiotics guided by bone culture (typically six to twelve weeks)
+Initial intravenous therapy then step down to oral if suitable agent available
+Microbiologist involvement essential for antibiotic selection
+Staphylococcus aureus is the most common organism
+Rifampicin-based combinations have good biofilm penetration but must not be used as monotherapy
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
-
-Group them under the same domain headings. Each point should be a short statement.
-
-Example from Necrotising Fasciitis:
-
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
-
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Discussion of the concept of biofilm and its role in chronic implant-associated infection
+Single-stage versus two-stage approach — single stage possible in selected cases with good host status
+Antibiotic-loaded hydrogels and bioabsorbable carriers as alternatives to P M M A
+Phage therapy as an emerging treatment for resistant organisms
+Role of P E T-C T for assessing disease activity and treatment response
+Vascularised bone transfer (free fibula) for large segmental defects with osteomyelitis
+Discussion of suppressive antibiotic therapy when definitive surgery is not possible
+Hyperbaric oxygen therapy as adjunct — limited evidence
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

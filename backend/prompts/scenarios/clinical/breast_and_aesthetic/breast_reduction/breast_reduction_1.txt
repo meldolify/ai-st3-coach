@@ -1,147 +1,110 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
-Breast Reduction
+Bilateral Breast Reduction for Symptomatic Macromastia
 
 CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+A forty-eight year old woman has been referred to your clinic with symptoms of back pain, neck pain and shoulder grooving from her bra straps. She describes difficulty exercising and finding clothes that fit. On examination she has Regnault grade three ptosis bilaterally with a sternal notch to nipple distance of thirty-six centimetres. Her B M I is thirty-one.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
-
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
-
-Format them under stage headings exactly like this:
-
 Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
+"What specific symptoms would you ask about in a patient presenting with macromastia?"
+"How would you classify the degree of breast ptosis?"
+"What measurements would you take in clinic and why are they important?"
+"What is the significance of the sternal notch to nipple distance in planning your approach?"
 
 Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
+"Would you arrange any investigations before listing this patient for surgery?"
+"Is there a role for breast imaging in this patient?"
 
 Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
+"How would you counsel this patient regarding non-surgical options?"
+"What are the commissioning criteria for breast reduction in your region?"
+"Would you ask her to lose weight first and if so why?"
 
 Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+"What surgical technique would you use for this patient and why?"
+"Can you describe the Wise pattern breast reduction?"
+"Which pedicle would you choose and what are the advantages?"
+"How would you mark this patient preoperatively?"
+"How do you determine the new nipple position?"
+"What specific risks would you discuss during the consent process?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
-Investigations
-Initial management
-Definitive management
-Surgical steps
-Post-operative care
-
-END OF AUTHOR NOTE]
+History and symptom assessment
+Classification of ptosis
+Clinical measurements and examination
+Indications and commissioning
+Surgical planning and technique selection
+Pedicle choice and markings
+Consent and complications
+Postoperative care
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+History and Symptoms
+Functional symptoms including back pain, neck pain, shoulder grooving, intertrigo, difficulty exercising
+Psychological impact and effect on quality of life
+B M I assessment and whether weight optimisation should be attempted first
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+Classification of Ptosis
+Regnault classification: grade one nipple at the level of the inframammary fold, grade two nipple below the fold but above the lowest point of the breast, grade three nipple at the lowest point of the breast
+Pseudoptosis where nipple remains above the fold but breast tissue hangs below
 
-Each point should be a short statement of the expected answer.
+Clinical Measurements
+Sternal notch to nipple distance
+Nipple to inframammary fold distance
+Breast base width
+Understanding that sternal notch to nipple distance guides technique selection
 
-Example from Necrotising Fasciitis:
+Surgical Technique
+Wise pattern with inverted T scar for this degree of ptosis and distance
+Sternal notch to nipple less than thirty centimetres in a young patient with good skin may allow vertical scar technique
+Thirty to forty centimetres generally suitable for Wise pattern with pedicled nipple
+Greater than forty centimetres raises concern about nipple viability on a pedicle and may require free nipple graft
 
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
+Pedicle Choice
+Supermedial pedicle or inferior pedicle for Wise pattern reduction
+Understanding the blood supply to the nipple areola complex on the chosen pedicle
 
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
-
-Investigations
-Blood tests including lactate level.
-
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
-
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
-
-Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Consent
+Scarring in an inverted T pattern
+Altered nipple sensation
+Reduced or absent ability to breastfeed
+Asymmetry
+Wound dehiscence particularly at the T junction
+Fat necrosis
+Nipple necrosis risk especially with longer pedicles
+Need for revision surgery
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
-
-Group them under the same domain headings. Each point should be a short statement.
-
-Example from Necrotising Fasciitis:
-
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
-
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Discussion of supermedial pedicle versus inferior pedicle advantages including better projection with supermedial
+Penn formula for nipple position using breast meridian and inframammary fold measurements
+Knowledge of vertical scar techniques such as Lassus or Lejour and appropriate patient selection
+Understanding of N H S commissioning criteria and typical B M I thresholds
+Discussion of specimen histology and the incidence of incidental malignancy findings
+Mention of liposuction as an adjunct to the lateral breast tissue
+Knowledge of minimum tissue weight removed for funding approval typically three hundred grams per side
+Discussion of postoperative bra use and activity restrictions
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

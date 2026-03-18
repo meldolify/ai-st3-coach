@@ -1,147 +1,118 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
-Kienbocks Disease
+Kienbock's Disease — Lunate Avascular Necrosis
 
 CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+A 30-year-old right-hand-dominant man presents with a six-month history of dorsal wrist pain and stiffness in his dominant hand. He works as a carpenter and the symptoms are affecting his ability to work. On examination there is tenderness over the dorsal lunate, reduced wrist extension, and weak grip. X-rays show increased density and flattening of the lunate consistent with avascular necrosis.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Assessment:
+"What is Kienbock's disease?"
+"What is the proposed aetiology?"
+"How would you examine this patient?"
+"What is the significance of ulnar variance?"
 
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
+Investigations:
+"What imaging would you request?"
+"How do you stage Kienbock's disease?"
+"Can you describe the Lichtman classification?"
 
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
+Initial Management:
+"How would you manage early-stage disease?"
+"Is there a role for conservative management?"
 
-Format them under stage headings exactly like this:
-
-Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
-
-Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
-
-Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
-
-Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+Definitive Management:
+"What are the surgical options based on stage?"
+"What is the role of radial shortening osteotomy?"
+"What salvage procedures are available for advanced disease?"
+"How does ulnar variance influence your choice of procedure?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
-Investigations
-Initial management
-Definitive management
-Surgical steps
-Post-operative care
-
-END OF AUTHOR NOTE]
+Pathology and aetiology of lunate avascular necrosis
+Clinical assessment
+Lichtman classification
+Role of ulnar variance
+Stage-based surgical management
+Salvage procedures
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Pathology and aetiology:
+Avascular necrosis of the lunate
+Aetiology is multifactorial and not fully understood
+Negative ulnar variance (short ulna) concentrates load through the lunate
+Anatomical variation in lunate blood supply with some having a single palmar vessel
+Repetitive trauma and microtrauma may contribute
+Young adult males most commonly affected
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+Clinical assessment:
+Dorsal wrist tenderness localised to the lunate
+Reduced wrist range of motion particularly extension
+Weak grip strength
+Swelling over the dorsum of the wrist
+Must assess ulnar variance on a standard P A wrist radiograph with neutral forearm rotation
 
-Each point should be a short statement of the expected answer.
+Lichtman classification:
+Stage 1: normal X-ray, M R I shows decreased T1 signal in the lunate
+Stage 2: increased lunate density (sclerosis) on X-ray, no collapse
+Stage 3A: lunate collapse but carpal alignment preserved, no scaphoid rotation
+Stage 3B: lunate collapse with fixed scaphoid rotation (increased scapholunate angle)
+Stage 4: generalised degenerative arthritis
 
-Example from Necrotising Fasciitis:
+Role of ulnar variance:
+Negative ulnar variance increases load on the radiolunate articulation
+Measured on standard P A radiograph with forearm in neutral rotation
+Guides surgical decision-making: negative variance favours radial shortening or ulnar lengthening
+Neutral or positive variance favours other unloading procedures
 
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
+Stage-based management:
+Stage 1: immobilisation and observation, or revascularisation procedures
+Stage 2: unloading procedures — radial shortening osteotomy if ulnar negative, capitate shortening if ulnar neutral
+Stage 3A: radial shortening osteotomy, capitate shortening, or S T T fusion (scaphotrapeziotrapezoid)
+Stage 3B: scaphocapitate fusion, proximal row carpectomy
+Stage 4: proximal row carpectomy or total wrist fusion
 
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
+Radial shortening osteotomy:
+Standard procedure for Stages 2 and 3A with negative ulnar variance
+Shorten the radius by 2 to 3 millimetres to equalise variance
+Plate fixation of the osteotomy
+Reduces load on the lunate and may allow revascularisation
+Alternative is ulnar lengthening osteotomy but higher complication rate
 
-Investigations
-Blood tests including lactate level.
-
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
-
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
-
-Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Salvage procedures:
+Proximal row carpectomy removes the entire proximal carpal row
+Requires intact capitate articular surface and lunate fossa
+Wrist fusion is the final salvage option
+Provides pain relief at the cost of all wrist motion
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
-
-Group them under the same domain headings. Each point should be a short statement.
-
-Example from Necrotising Fasciitis:
-
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
-
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Vascularised bone graft from the distal radius (4 plus 5 E C A pedicled graft) for early stages
+Core decompression of the lunate as a minimally invasive option for Stage 1
+Temporary scaphocapitate pinning to unload the lunate
+Comparison with Preiser's disease (scaphoid avascular necrosis)
+Role of M R I in monitoring revascularisation after unloading procedures
+Lunate prosthetic replacement (historical, largely abandoned)
+Graner procedure (capitate transfer into lunate fossa)
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

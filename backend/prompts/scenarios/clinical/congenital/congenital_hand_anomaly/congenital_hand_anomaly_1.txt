@@ -1,7 +1,3 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
 Congenital Hand Anomaly
@@ -10,138 +6,112 @@ CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+This is a 9 month old baby who has been referred to your clinic with an absent right thumb. The baby was born at term with no other medical problems. The parents would like to discuss the options for improving the function of the hand. You have been asked to assess and counsel the family.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
-
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
-
-Format them under stage headings exactly like this:
-
 Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
+"How would you assess this child?"
+"How would you classify congenital hand anomalies?"
+"What is your differential diagnosis for an absent thumb?"
 
 Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
+"What investigations would you arrange?"
 
 Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
+"How would you counsel the parents?"
+"What functional impact does an absent thumb have?"
 
 Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+"What surgical options are available to create a functioning thumb?"
+"Can you describe pollicisation?"
+"When should this be done?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
-Investigations
-Initial management
-Definitive management
-Surgical steps
-Post-operative care
-
-END OF AUTHOR NOTE]
+Classification of congenital hand anomalies
+Clinical assessment of thumb absence
+Assessment of hand function
+Surgical options for thumb reconstruction
+Pollicisation technique
+Post-operative rehabilitation
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Classification of congenital hand anomalies
+Knowing the Swanson or O M T classification of congenital hand anomalies, now updated by the I F S S H classification: failure of formation, failure of differentiation, duplication, overgrowth, undergrowth, constriction band syndrome, and generalised skeletal abnormalities.
+Knowing that thumb absence or hypoplasia falls under failure of formation.
+Knowing the Blauth classification of thumb hypoplasia: type one is minor hypoplasia, type two has thenar hypoplasia and first web narrowing, type three A has thenar hypoplasia with a stable C M C joint, type three B has thenar hypoplasia with an unstable C M C joint, type four is a floating thumb or pouce flottant, and type five is complete absence.
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+Clinical assessment of thumb absence
+Examining the hand to confirm the absence of the thumb and assess the remaining digits.
+Assessing the function of the remaining fingers including grip, pinch, and grasp patterns.
+Examining both upper limbs for any associated anomalies.
+Examining for associated conditions: thumb hypoplasia can be associated with Holt-Oram syndrome involving cardiac anomalies, Fanconi anaemia, thrombocytopenia-absent radius syndrome, and V A C T E R L association.
 
-Each point should be a short statement of the expected answer.
+Assessment of hand function
+Knowing that the thumb is responsible for approximately fifty percent of hand function, and its absence significantly affects pinch grip, opposition, and fine motor tasks.
+Assessing how the child is currently adapting: children often develop compensatory grip patterns using the index and middle fingers.
 
-Example from Necrotising Fasciitis:
+Surgical options for thumb reconstruction
+Knowing the surgical options based on the degree of deficiency.
+For Blauth type one and two: no surgery needed, or opponensplasty and first web deepening.
+For Blauth type three A with a stable C M C joint: opponensplasty using the Huber transfer of abductor digiti minimi, first web deepening, and U C L reconstruction if needed.
+For Blauth type three B and above with an unstable C M C joint, type four floating thumb, and type five absent thumb: pollicisation of the index finger is the treatment of choice.
 
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
+Pollicisation technique
+Knowing that pollicisation involves shortening and rotating the index finger on its neurovascular pedicle to function as a thumb.
+Knowing the key steps: the index finger metacarpal is shortened, the finger is rotated into opposition, the intrinsic muscles are rebalanced to act as thenar muscles, and the skin is rearranged to create a first web space.
+Knowing the timing: pollicisation is typically performed between twelve and eighteen months of age.
 
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
-
-Investigations
-Blood tests including lactate level.
-
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
-
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
-
-Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Post-operative rehabilitation
+Splinting to protect the reconstruction.
+Hand therapy for mobilisation and functional training.
+Long-term follow up to monitor function and growth.
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Classification of congenital hand anomalies
+Knowing the updated I F S S H O M T classification system which includes malformation, deformation, dysplasia, and syndromes.
+Knowing the distinction between radial longitudinal deficiency involving the thumb and radial side of the hand, and ulnar longitudinal deficiency involving the little finger side.
 
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
+Clinical assessment of thumb absence
+Knowing the screening investigations for associated conditions: echocardiogram for Holt-Oram syndrome, full blood count for Fanconi anaemia which presents with pancytopenia, and renal ultrasound for V A C T E R L association.
+Knowing that chromosomal breakage studies may be needed to diagnose Fanconi anaemia which has implications for bone marrow failure and cancer risk.
 
-Group them under the same domain headings. Each point should be a short statement.
+Assessment of hand function
+Knowing that children adapt remarkably well and many develop good compensatory function even without a thumb.
+Knowing that the assessment should include observation of the child's spontaneous hand use in play.
 
-Example from Necrotising Fasciitis:
+Surgical options for thumb reconstruction
+Knowing the Huber opponensplasty in detail: the abductor digiti minimi muscle is transferred on its neurovascular pedicle from the hypothenar eminence to the thumb metacarpal to provide opposition.
+Knowing that free toe-to-hand transfer using the second toe or great toe wrap-around technique is an alternative to pollicisation for thumb reconstruction but is more complex and is typically reserved for post-traumatic cases or when pollicisation is not feasible.
+Knowing the Buck-Gramcko technique of pollicisation which involves specific osteotomy and rotation manoeuvres of the index metacarpal.
 
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
+Pollicisation technique
+Knowing that the index finger extensor and flexor tendons are shortened and reattached to maintain appropriate tension.
+Knowing that the first dorsal interosseous muscle is reattached to simulate the abductor pollicis brevis, and the first palmar interosseous simulates the adductor pollicis.
+Knowing that the metacarpal head of the index finger becomes the new trapezium and should not be removed.
+Knowing that the skin flaps must be carefully designed to create an adequate first web space.
 
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Post-operative rehabilitation
+Knowing that functional outcomes of pollicisation in children are generally excellent with good pinch and grip strength.
+Knowing that the child may need further procedures as the hand grows, including web space deepening or tendon rebalancing.
+Knowing the importance of hand therapy in teaching the child to use the new thumb in functional tasks.
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

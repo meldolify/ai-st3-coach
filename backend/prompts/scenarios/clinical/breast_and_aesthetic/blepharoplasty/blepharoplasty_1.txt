@@ -1,147 +1,101 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
-Blepharoplasty
+Upper Blepharoplasty for Dermatochalasis
 
 CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+A sixty-five year old woman has been referred to your clinic with excess upper eyelid skin that she says is causing difficulty with her peripheral vision. She finds it particularly troublesome when driving and reading. On examination she has significant bilateral upper lid dermatochalasis with the redundant skin resting on her eyelashes. She has no history of thyroid disease or previous eye surgery.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
-
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
-
-Format them under stage headings exactly like this:
-
 Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
+"How would you assess this patient in clinic?"
+"What specific examination findings would you look for?"
+"How would you differentiate between dermatochalasis and blepharoptosis?"
+"What would you look for to exclude other causes of a drooping eyelid?"
 
 Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
+"What investigations would support a functional indication for this surgery?"
+"Would you arrange any other tests before surgery?"
 
 Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
+"How would you determine whether this is a functional or cosmetic problem?"
+"What are the commissioning criteria for functional blepharoplasty?"
 
 Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+"Can you describe the key steps of an upper blepharoplasty?"
+"How do you plan the amount of skin to remove?"
+"What are the important anatomical landmarks to be aware of?"
+"What are the specific risks you would discuss?"
+"How would you manage a patient who also has brow ptosis?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
-Investigations
-Initial management
-Definitive management
-Surgical steps
-Post-operative care
-
-END OF AUTHOR NOTE]
+Assessment and differentiation from ptosis
+Functional versus cosmetic indication
+Visual field assessment
+Surgical technique
+Anatomical considerations
+Consent and complications
+Brow ptosis recognition
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
-
-Each point should be a short statement of the expected answer.
-
-Example from Necrotising Fasciitis:
-
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
-
 Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
+Distinction between dermatochalasis which is excess skin and true blepharoptosis which is a low lid margin relative to the pupil
+Assessment of the margin reflex distance which is the distance from the upper lid margin to the corneal light reflex, normally three to four millimetres
+Levator function assessment
+Assessment for brow ptosis which may contribute to or be unmasked by blepharoplasty
+Check for lagophthalmos and dry eye symptoms
+Bell phenomenon to assess corneal protection
+Assessment of lower lids for laxity
 
-Investigations
-Blood tests including lactate level.
+Functional Assessment
+Visual field testing with the Humphrey or Goldmann perimeter demonstrating a restriction of the superior visual field
+Testing with and without the excess skin taped up to show improvement
+Documentation that the visual field deficit affects daily activities
 
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
+Surgical Technique
+Marking the upper lid crease which is normally eight to ten millimetres above the lash line
+Pinch test to determine the amount of skin to remove ensuring the patient can still close the eye
+Skin excision with or without a strip of orbicularis muscle
+Conservative removal of any herniated orbital fat through the orbital septum if needed
+The incision should not extend more than ten millimetres beyond the lateral canthus
 
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
-
-Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Consent
+Haematoma which can be sight-threatening if retrobulbar
+Lagophthalmos and exposure keratopathy from over-resection
+Dry eye
+Asymmetry
+Scarring
+Under-correction requiring revision
+Injury to the levator aponeurosis causing iatrogenic ptosis
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
-
-Group them under the same domain headings. Each point should be a short statement.
-
-Example from Necrotising Fasciitis:
-
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
-
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Knowledge of the lacrimal gland position in the superolateral orbit and the importance of not excising it mistaking it for fat
+Discussion of brow lift procedures as an adjunct or alternative including direct brow lift, endoscopic brow lift, or temporal lift
+Understanding of the Asian eyelid anatomy where the supratarsal crease may be absent or low and the cultural considerations in blepharoplasty
+Knowledge of lower blepharoplasty techniques including transconjunctival and subciliary approaches
+Discussion of festoons versus malar bags and their management
+Understanding of the retro-orbicularis oculi fat pad and its contribution to upper lid fullness
+Knowledge of the emergency management of retrobulbar haematoma including lateral canthotomy and cantholysis
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]

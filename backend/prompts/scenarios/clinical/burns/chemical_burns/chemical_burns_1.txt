@@ -1,7 +1,3 @@
-CLINICAL SCENARIO BLOCK
-
-(CASE-SPECIFIC)
-
 SCENARIO TITLE
 
 Chemical Burns
@@ -10,138 +6,131 @@ CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the clinical vignette that the examiner reads to the candidate at the start of the scenario.
-
-Keep it to two or three sentences. Include the patient's age, sex, relevant context, and the reason for referral.
-
-Example from Necrotising Fasciitis:
-"This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours."
-
-Write it as natural spoken English. No bullet points, no abbreviations, no formatting.
-
-END OF AUTHOR NOTE]
+This is a 40 year old man who works as a glass etcher and has presented to the emergency department with a burn to his right hand. He was using hydrofluoric acid at work and the substance splashed onto his hand approximately one hour ago. His hand is very painful and swollen. You have been asked to assess and manage this patient.
 
 STAGE PROMPT QUESTIONS
 
 (Internal reference only. Do not read aloud verbatim.
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-These are the questions the examiner can ask the candidate during each stage. They are used to guide the candidate if they stall or give incomplete answers.
-
-Write two to four questions per stage. Each question should target a specific essential or bonus marking point without naming it directly.
-
-Format them under stage headings exactly like this:
-
 Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
+"How would you assess this patient?"
+"Why is hydrofluoric acid particularly dangerous?"
+"What systemic complications are you concerned about?"
 
 Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
+"What investigations would you arrange?"
+"What are you specifically looking for in the blood results?"
 
 Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
+"What first aid measures should be taken?"
+"How would you manage the local burn?"
 
 Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
-
-Not every stage needs to be included. If a stage is not relevant to this case, leave it out. For example, some cases may not need an Investigations stage.
-
-END OF AUTHOR NOTE]
+"What specific treatment is needed for a hydrofluoric acid burn?"
+"When would you take this patient to theatre?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the broad clinical domains this scenario covers. These are the high-level categories the examiner uses to track the candidate's progress.
-
-Example from Necrotising Fasciitis:
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
-Investigations
-Initial management
-Definitive management
-Surgical steps
-Post-operative care
-
-END OF AUTHOR NOTE]
+Recognition of the type of chemical burn
+A T L S and E M S B assessment
+Systemic complications of chemical burns
+First aid and decontamination
+Specific management of hydrofluoric acid burns
+Cardiac monitoring and electrolyte management
+Surgical management
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Recognition of the type of chemical burn
+Knowing that hydrofluoric acid is one of the most dangerous chemical burn agents due to its systemic toxicity.
+Knowing the difference between acid and alkali burns: acids cause coagulation necrosis with eschar formation which limits the depth of injury, whereas alkalis cause saponification of fat and penetrate deeper, leading to progressive tissue destruction. Alkali burns are generally worse than acid burns.
 
-List the critical points the candidate MUST cover to pass. Group them under the same domain headings used above.
+A T L S and E M S B assessment
+Following A T L S and E M S B principles.
+Ensuring the patient has adequate analgesia.
+Airway assessment and ensuring the patient is on high flow oxygen.
+Ensuring the patient is cardiovascularly stable. As hydrofluoric acid can cause cardiac arrhythmias and bradycardia, the patient must be placed on continuous E C G monitoring.
+Gaining intravenous access and sending bloods including full blood count, urea and electrolytes with specific attention to calcium, magnesium, and potassium, renal function, and cross-match.
+Examining the eyes to rule out any chemical splash injury.
 
-Each point should be a short statement of the expected answer.
+Systemic complications of chemical burns
+Knowing that hydrofluoric acid causes systemic hypocalcaemia by the fluoride ion binding to calcium. This can lead to life-threatening cardiac arrhythmias including bradycardia and ventricular fibrillation.
+Knowing that hyperkalaemia, hypomagnesaemia, and acute kidney injury with bony decalcification can also occur.
+Knowing that neurological complications include tetany and seizures from hypocalcaemia.
 
-Example from Necrotising Fasciitis:
+First aid and decontamination
+Removing all contaminated clothing.
+Continuous irrigation of the burn with water. For acid burns, irrigation should continue for at least two hours or until the skin p H normalises. For alkali burns, irrigation should continue for longer as alkalis penetrate deeper.
+Performing the litmus paper p H test to assess the skin p H. Normal skin p H is four point five to five point five. Irrigation should continue until the p H normalises.
+Clipping the patient's nails to remove any trapped chemical.
+Knowing that diphoterine can be used as a universal decontamination agent for chemical burns.
 
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
+Specific management of hydrofluoric acid burns
+Applying topical calcium gluconate gel to the affected area to neutralise the fluoride ions locally.
+If there is evidence of systemic hypocalcaemia, starting intravenous calcium gluconate and monitoring serum calcium levels closely with repeated blood tests.
+Continuous cardiac monitoring with E C G.
+Cardiology involvement if any arrhythmias are detected.
+Electrolyte correction.
 
-Assessment
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
+Cardiac monitoring and electrolyte management
+Regular monitoring of serum calcium, potassium, and magnesium.
+Knowing the E C G changes associated with hypocalcaemia: prolonged Q T interval.
+Correcting hypocalcaemia urgently with intravenous calcium gluconate.
 
-Investigations
-Blood tests including lactate level.
-
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
-
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
-
-Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
-
-END OF AUTHOR NOTE]
+Surgical management
+Knowing that the patient should be referred to a burns unit.
+If the burn is full thickness, the patient will require surgical debridement in theatre using tangential excision down to healthy tissue.
+Reconstruction with split thickness skin graft if there are no exposed structures.
+Clinical photography.
+Tetanus prophylaxis.
+Keeping the patient warm and keeping them nil by mouth for theatre.
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Recognition of the type of chemical burn
+Knowing the specific agents associated with different occupations: hydrofluoric acid in glass etching, semiconductor manufacturing, and pottery glazing. Cement is an alkali burn. Phenols cause C N S and cardiopulmonary collapse.
+Knowing that certain chemicals should never be irrigated with water as they ignite: sodium phosphate and lithium.
+Knowing that cement burns generate an exothermic reaction when mixed with water, and sweat alone is sufficient to initiate the reaction.
 
-List additional points that earn extra credit. These demonstrate deeper knowledge beyond the essentials.
+A T L S and E M S B assessment
+Knowing the specific systemic complications by chemical agent: phenols cause C N S and cardiopulmonary collapse, dichromate causes renal failure, and hydrofluoric acid causes hypocalcaemia and cardiac arrhythmias.
+Asking about the exact chemical agent, duration of exposure, protective equipment worn, and any first aid measures taken.
+Contacting the national toxicology line if the agent is unknown, and obtaining information from the employer who should have a C O S H H data sheet.
 
-Group them under the same domain headings. Each point should be a short statement.
+Systemic complications of chemical burns
+Knowing that hydrofluoric acid effects can continue for days after the initial exposure.
+Knowing that myoglobinuria from rhabdomyolysis can occur in severe cases and urine output should be monitored.
 
-Example from Necrotising Fasciitis:
+First aid and decontamination
+Knowing that for cement burns, the p H should be tested with litmus paper and irrigation continued until the p H normalises to four point five to five point five. A p H of seven point two indicates the burn has not yet neutralised and further irrigation is needed.
+Knowing that eye involvement from alkali chemical burns can cause irreversible corneal damage within three minutes and requires immediate and copious irrigation with saline and urgent ophthalmology review.
 
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
+Specific management of hydrofluoric acid burns
+Knowing that topical calcium gluconate gel should be reapplied every thirty minutes until pain subsides.
+Knowing that if topical treatment is insufficient, subcutaneous injection of ten percent calcium gluconate around the burn site may be considered.
+Knowing that intra-arterial calcium gluconate infusion has been described for severe cases affecting the digits.
+Knowing the indications for urgent surgical debridement: full thickness burns, extensive tissue necrosis, or failure to respond to topical and systemic calcium treatment.
 
-Assessment
-Mentioning Sepsis six.
-Examination of spread of erythema beyond previous markings.
+Cardiac monitoring and electrolyte management
+Knowing that E C G monitoring should continue for at least twenty four hours after the last calcium replacement.
+Knowing that hyperkalaemia from tissue destruction may also contribute to cardiac arrhythmias and requires separate management.
+
+Surgical management
+Knowing that circumferential chemical burns to the limbs carry a risk of compartment syndrome and may require fasciotomy.
+Knowing that the depth of chemical burns may be difficult to assess initially and repeated assessment is needed as the injury may progress.
+Knowing that alkali burns in particular may appear initially benign but can progress to full thickness injury over subsequent days.
 
 These are points a strong candidate would mention but are not required to pass.
-
-END OF AUTHOR NOTE]
 
 END OF SCENARIO CRITERIA
 
 (Internal reference only. Do not read aloud.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Define when the examiner should end the scenario. This is typically when all main clinical domains have been addressed, or when the candidate has covered initial and definitive management.
-
-Example from Necrotising Fasciitis:
 The scenario should be ended once all main clinical domains have been attempted, or once initial and definitive management have been addressed, or when time would reasonably be up in an interview setting.
-
-END OF AUTHOR NOTE]
