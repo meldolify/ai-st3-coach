@@ -21,7 +21,12 @@ const ttsService = require('./src/services/TTSService');
 const geminiTTSService = require('./src/services/GeminiTTSService');
 const { ServerVAD, float32ToWavBuffer } = require('./src/services/ServerVAD');
 const { isNoiseTranscript, buildNaturalSSML } = require('./src/utils/audioHelpers');
-const { buildInterviewPrompt, buildFeedbackPrompt } = require('./src/utils/promptAssembler');
+const {
+  buildInterviewPrompt,
+  buildFeedbackPrompt,
+  extractDomain,
+  loadInfoSheet
+} = require('./src/utils/promptAssembler');
 const { parseFeedbackResponse } = require('./src/utils/feedbackParser');
 const { FeedbackSectionBuffer } = require('./src/utils/feedbackSectionBuffer');
 const SentenceBuffer = require('./src/utils/sentenceBuffer');
@@ -571,11 +576,18 @@ wss.on('connection', (ws, req) => {
       }
     };
 
+    const domain = extractDomain(scenarioFile);
+    const infoSheet = loadInfoSheet(scenarioFile);
+    const prepTime = domain === 'call_the_boss' || domain === 'consent' ? 150 : 0;
+
     ws.send(
       JSON.stringify({
         type: 'scenario_loaded',
         sessionId: sessionId,
-        scenario: scenarioFile
+        scenario: scenarioFile,
+        domain,
+        infoSheet,
+        prepTime
       })
     );
 

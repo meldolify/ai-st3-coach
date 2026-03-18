@@ -1,0 +1,15 @@
+[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+
+Write the patient information sheet for this scenario.
+
+For Call-the-Boss scenarios include:
+- Patient details (name, age, MRN, DOB)
+- Presentation context (who referred, when, where)
+- History of Presenting Complaint
+- Social History
+- PMH, Drug History, Allergies
+- Observations (HR, BP, RR, Temp, Sats)
+- Examination Findings
+- Images: filename.jpg (optional, comma-separated)
+
+END OF AUTHOR NOTE]

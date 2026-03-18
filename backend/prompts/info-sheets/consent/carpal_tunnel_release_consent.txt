@@ -1,0 +1,4 @@
+Patient: Mrs Helen Davies, 58 years old
+Procedure: Right Carpal Tunnel Release
+Context: Referred by GP with a 6 month history of numbness and tingling in the right hand, worse at night. Nerve conduction studies confirm moderate carpal tunnel syndrome. She was seen in clinic two weeks ago by the consultant and listed for surgery. She has attended today for the operation.
+Patient Expectations: Mrs Davies has been told she needs a small operation on her wrist but does not fully understand what is involved. She is anxious about being awake during the procedure and wants to know when she can return to her job as a supermarket cashier.

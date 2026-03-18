@@ -1,0 +1,4 @@
+Patient: Michael, 6 years old
+Procedure: Bilateral Otoplasty (Pinnaplasty) for prominent ears
+Context: Michael has been referred by his GP after being bullied at school about his ears. He was seen in clinic with his parents three weeks ago and listed for surgery. His mother has brought him in today for the operation.
+Patient Expectations: Michael's mother was told about the operation in clinic but wants to understand exactly what will happen. She is concerned about her son being under general anaesthetic and wants to know about pain and recovery time.

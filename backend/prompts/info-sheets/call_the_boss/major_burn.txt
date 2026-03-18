@@ -1,0 +1,12 @@
+Patient: Mr James Walker, 28 years old, MRN 40120815, DOB 15/08/1997
+Presentation: Brought to A&E by ambulance at 11:30pm following a house fire
+HPC: The patient was trapped in his burning kitchen for approximately 10 minutes before being rescued by the fire service. He was found unconscious and was intubated at the scene by the paramedic team. He has circumferential burns to both arms, his anterior chest, and his face. Singed nasal hairs noted. Soot in the airway on intubation.
+Social History: Lives with his partner, works as a chef. Non-smoker.
+PMH: Nil significant
+Drug History: Nil regular medications. NKDA.
+Last Ate: Approximately 5 hours ago
+Observations: HR 120, BP 95/60, RR (ventilated) 16, Temp 36.2, Sats 94% on 100% FiO2, GCS 3T (sedated and intubated)
+Examination: Primary survey — Airway secured (intubated at scene). Circumferential full thickness burns to both forearms and hands. Mixed depth burns to anterior chest and abdomen. Facial burns with oedema around eyes. Estimated TBSA approximately 35%. No other injuries identified on secondary survey.
+Investigations: ABG shows metabolic acidosis with raised lactate. Carboxyhaemoglobin level 18%. Bloods sent — awaiting results. Urinary catheter in situ, urine clear.
+Current Management: IV access x2 large bore. Parkland formula fluids commenced. Catheterised. Tetanus given. Escharotomy not yet performed.
+Images: major_burn_1.jpg
