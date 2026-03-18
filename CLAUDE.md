@@ -345,7 +345,7 @@ Google Cloud credentials: local uses file path (`GOOGLE_APPLICATION_CREDENTIALS`
 
 ### Vercel Configuration
 
-`frontend/vercel.json`: `cleanUrls: true`, `trailingSlash: false`. React SPA — Vercel serves `frontend/index.html` for all routes.
+Root `vercel.json` configures the Vercel project: `buildCommand` runs Vite in `frontend-react/`, `outputDirectory` is `frontend/`, SPA catch-all rewrite routes all paths to `index.html`, and `/prompt-lab/api/*` proxies to `api.reviva.live`. Vercel Root Directory is empty (repo root) in the dashboard.
 
 ## Development Workflow
 
