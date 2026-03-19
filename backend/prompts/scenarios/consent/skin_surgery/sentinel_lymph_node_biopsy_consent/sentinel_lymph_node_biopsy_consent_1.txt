@@ -4,7 +4,7 @@ CLINICAL SCENARIO BLOCK
 
 SCENARIO TITLE
 
-Sentinel Lymph Node Biopsy Consent
+Wide Local Excision and Sentinel Lymph Node Biopsy Consent
 
 PATIENT QUESTIONS
 
@@ -12,70 +12,91 @@ PATIENT QUESTIONS
 Use these after the candidate finishes their explanation.
 How anxious or questioning you are is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write 6-10 patient questions that would naturally arise during this consent discussion.
-These should be written in everyday language as a real patient would ask.
-
-Examples for carpal tunnel release:
-"Will I be awake during it?"
-"How long does the operation take?"
-"When can I go back to work?"
-"You said there's a risk of infection — how common is that?"
-"Will the numbness definitely go away?"
-"What about the scar — will it be very noticeable?"
-"When do I need to come back to get checked?"
-
-For paediatric scenarios, write questions as a parent:
-"Will my child be in pain afterwards?"
-"How long will the anaesthetic take to wear off?"
-"When can they go back to school?"
-
-END OF AUTHOR NOTE]
+"Why do I need more skin taken away — I thought the mole was already removed?"
+"What is a sentinel lymph node — what does that mean?"
+"How do you find the sentinel node?"
+"What happens if the lymph node has cancer in it?"
+"Will the operation leave a big scar on my leg?"
+"Will I need a skin graft?"
+"How long does the whole operation take?"
+"Will I be able to walk afterwards?"
+"I am really scared the cancer has spread — can you reassure me?"
+"When will I get the results?"
 
 MAIN CONSENT DOMAINS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the 4-6 main consent domains being assessed in this scenario.
-
-Example for carpal tunnel release:
 Introduction and patient identification
-Procedure explanation (what will be done, in layman terms)
-Anaesthesia (local vs general, what to expect)
-Post-operative care (dressings, restrictions, follow-up)
-Risks and complications (infection, bleeding, nerve damage, recurrence, scar)
-Recovery and return to activities
-
-END OF AUTHOR NOTE]
+Procedure explanation including wide local excision and sentinel lymph node biopsy technique
+Anaesthesia and operative environment
+Post-operative care and wound management
+Risks and complications
+Recovery timeline and results discussion
 
 ESSENTIAL MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Introduction and patient identification
+Confirming the patient's identity and the planned procedure.
+Establishing rapport and checking the patient's current understanding.
+Sensitivity to the patient's anxiety about the melanoma diagnosis and the possibility of spread.
 
-List the essential marking points, organised by domain.
-These are the minimum requirements for a score of 3 or above.
+Procedure explanation
+Explaining the wide local excision: in lay terms, the previous biopsy site needs a wider area of normal skin removed around it, with a margin of one centimetre, to reduce the risk of any remaining cancer cells. This area will be closed directly with stitches.
+Explaining the sentinel lymph node biopsy in lay terms: the sentinel node is the first lymph gland that the cancer would drain to, like the first station on a railway line. If this gland is clear of cancer, it is very unlikely that the cancer has spread further.
+Explaining the technique: before the operation a radioactive tracer and sometimes a blue dye are injected near the melanoma site. These travel through the lymphatic channels to the sentinel node, allowing the surgeon to identify and remove it through a small cut in the groin.
+Explaining that the sentinel node is sent to the pathology laboratory for detailed analysis, which takes approximately two to three weeks.
+Explaining what happens if the sentinel node is positive: this will be discussed at the multidisciplinary team meeting and further treatment options may include further surgery, immunotherapy, or surveillance.
+Mentioning the approximate duration of surgery, typically one to two hours.
 
-Format:
-Domain Name
-The candidate must explain X in clear, jargon-free language.
-The candidate must mention Y.
+Anaesthesia and operative environment
+Explaining that the procedure is performed under general anaesthetic.
+Mentioning the patient will meet the anaesthetist beforehand.
+Explaining that a hand-held probe will be used in theatre to detect the radioactive tracer and locate the sentinel node.
 
-END OF AUTHOR NOTE]
+Post-operative care
+Explaining that the calf wound will be closed with stitches and the groin wound with stitches or clips.
+Advising that the patient should expect to stay in hospital overnight or may go home the same day.
+Advising the patient to keep both wounds clean and dry.
+Explaining that stitches will be removed at approximately ten to fourteen days.
+Advising elevation of the leg to reduce swelling.
+Mentioning that the blue dye may turn the skin near the injection site blue temporarily and may also cause the urine to appear blue or green for a day or two, which is harmless.
+
+Risks and complications
+Mentioning bleeding and bruising at both surgical sites.
+Mentioning infection.
+Mentioning wound breakdown, particularly on the lower leg where healing can be slower.
+Mentioning scarring at both the calf and groin sites.
+Mentioning seroma at the groin site.
+Mentioning lymphoedema of the leg, although the risk is lower with sentinel node biopsy alone compared to full lymph node dissection.
+Mentioning numbness or altered sensation around both wounds.
+Mentioning the small risk of a false negative result where the sentinel node is reported as clear but microscopic cancer cells are present elsewhere.
+Mentioning allergic reaction to the blue dye, which is rare.
+Mentioning D V T and P E.
+
+Recovery timeline
+Advising avoidance of strenuous exercise and heavy lifting for approximately two to three weeks.
+Advising that the patient should be able to walk from the day of surgery but should take it easy for the first week.
+Advising that driving can usually resume when the patient can comfortably perform an emergency stop, typically one to two weeks.
+Explaining that a follow-up appointment will be arranged to discuss the pathology results, usually within two to three weeks.
 
 BONUS MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Procedure explanation
+Explaining the concept of lymphatic mapping and the role of nuclear medicine in pre-operative lymphoscintigraphy.
+Mentioning that sometimes more than one sentinel node is identified and all will be removed.
+Explaining the false negative rate of sentinel lymph node biopsy, approximately five percent, in appropriate terms.
+Mentioning that S L N B is a staging procedure that provides prognostic information and may influence decisions about adjuvant systemic therapy.
 
-List the bonus marking points that distinguish scores of 4 and 5.
-These demonstrate excellent patient communication or detailed knowledge.
+Risks and complications
+Discussing the specific risk of lower leg wound healing, particularly in older patients or those with peripheral vascular disease.
+Mentioning the risk of injury to structures in the groin such as the femoral vessels or the saphenous vein, which is very rare.
+Discussing anaphylaxis risk from patent blue dye, estimated at one to two percent.
 
-Format:
-Domain Name
-The candidate explains X with a helpful analogy.
-The candidate proactively addresses common patient concerns about Y.
+Recovery timeline
+Mentioning the role of the specialist skin cancer nurse in providing support and information.
+Discussing the psychological impact of waiting for sentinel node results and offering appropriate reassurance.
+Mentioning long-term surveillance requirements: regular skin checks and lymph node examinations.
 
-END OF AUTHOR NOTE]
+These are points a strong candidate would mention but are not required to pass.
 
 END OF SCENARIO CRITERIA
 

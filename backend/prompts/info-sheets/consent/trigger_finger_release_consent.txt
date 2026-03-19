@@ -1,13 +1,4 @@
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the patient/procedure information sheet for this consent scenario.
-
-Include:
-- Patient details (name, age)
-- Procedure (name of planned operation)
-- Context (referral reason, clinic visit, why listed for surgery)
-- Patient Expectations (what the patient understands, any concerns)
-
-No Images field for consent scenarios.
-
-END OF AUTHOR NOTE]
+Patient: Mrs Fatima Al-Rashid, 55 years old
+Procedure: Right Middle Finger Trigger Finger Release
+Context: Referred by GP with a nine month history of painful clicking and locking of the right middle finger. She has tried a course of splinting and two steroid injections without lasting benefit. Seen in clinic four weeks ago by the consultant who confirmed trigger finger with palpable nodule at the A1 pulley. Listed for surgical release. She has attended today for the operation.
+Patient Expectations: Mrs Al-Rashid knows she is having a small operation on her finger but does not understand what is being released. She is worried about whether she will be awake and whether the injection will be painful. She is a primary school teacher and wants to know when she can return to work and write on the board again.

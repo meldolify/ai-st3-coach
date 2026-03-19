@@ -4,7 +4,7 @@ CLINICAL SCENARIO BLOCK
 
 SCENARIO TITLE
 
-Local Flap Consent
+Skin Cancer Excision and Local Flap Consent
 
 PATIENT QUESTIONS
 
@@ -12,70 +12,86 @@ PATIENT QUESTIONS
 Use these after the candidate finishes their explanation.
 How anxious or questioning you are is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write 6-10 patient questions that would naturally arise during this consent discussion.
-These should be written in everyday language as a real patient would ask.
-
-Examples for carpal tunnel release:
-"Will I be awake during it?"
+"Will I be awake for the operation?"
+"Will it affect my eye — it is quite close?"
+"How big will the scar be?"
+"What does a local flap actually mean — where does the skin come from?"
 "How long does the operation take?"
-"When can I go back to work?"
-"You said there's a risk of infection — how common is that?"
-"Will the numbness definitely go away?"
-"What about the scar — will it be very noticeable?"
-"When do I need to come back to get checked?"
-
-For paediatric scenarios, write questions as a parent:
-"Will my child be in pain afterwards?"
-"How long will the anaesthetic take to wear off?"
-"When can they go back to school?"
-
-END OF AUTHOR NOTE]
+"Could the cancer come back even after you remove it?"
+"I have diabetes — does that cause any extra problems?"
+"When do the stitches come out?"
+"Can I drive home afterwards?"
 
 MAIN CONSENT DOMAINS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the 4-6 main consent domains being assessed in this scenario.
-
-Example for carpal tunnel release:
 Introduction and patient identification
-Procedure explanation (what will be done, in layman terms)
-Anaesthesia (local vs general, what to expect)
-Post-operative care (dressings, restrictions, follow-up)
-Risks and complications (infection, bleeding, nerve damage, recurrence, scar)
-Recovery and return to activities
-
-END OF AUTHOR NOTE]
+Procedure explanation including excision margins and local flap reconstruction
+Anaesthesia and pain management
+Post-operative care and wound management
+Risks and complications
+Recovery timeline and follow-up
 
 ESSENTIAL MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Introduction and patient identification
+Confirming the patient's identity and the planned procedure.
+Establishing rapport and checking the patient's current understanding of his diagnosis and the planned operation.
+Acknowledging the patient's specific concerns about proximity to the eye.
 
-List the essential marking points, organised by domain.
-These are the minimum requirements for a score of 3 or above.
+Procedure explanation
+Explaining in lay terms that the operation involves removing the skin cancer along with a rim of normal skin around it, called a margin, to ensure all the cancer cells are removed.
+Explaining that the removed tissue is sent to the pathology laboratory to check that the edges are clear of cancer.
+Explaining what a local flap is: skin from next to the gap is loosened and moved across to cover the hole while remaining attached to its own blood supply, rather than taking skin from a distant area.
+Explaining that the donor area where the flap comes from will also need to be closed with stitches.
+Mentioning that the exact flap design will be decided during the operation based on the size and shape of the defect after excision.
+Explaining the approximate duration of surgery, typically 45 minutes to one hour.
 
-Format:
-Domain Name
-The candidate must explain X in clear, jargon-free language.
-The candidate must mention Y.
+Anaesthesia and pain management
+Explaining that the procedure is performed under local anaesthetic with the patient awake.
+Explaining the injection of local anaesthetic around the area, noting the initial sting that settles quickly.
+Reassuring that there should be no sharp pain during the procedure, only pressure and pulling.
 
-END OF AUTHOR NOTE]
+Post-operative care
+Explaining that the wound will be closed with stitches and a dressing applied.
+Advising that the stitches will be removed at approximately seven to ten days.
+Advising the patient to keep the wound clean, dry, and elevated where possible.
+Mentioning the importance of diabetes control for wound healing.
+Advising the patient to take prescribed antibiotics and painkillers.
+
+Risks and complications
+Mentioning bleeding and bruising, particularly in the temple and peri-orbital region.
+Mentioning infection, with increased risk noted due to diabetes.
+Mentioning partial or complete flap failure where the moved skin loses its blood supply and may die, potentially requiring further surgery or a skin graft.
+Mentioning scarring, explaining that the scar will be permanent but is positioned to follow natural skin creases where possible.
+Mentioning altered sensation or numbness around the surgical site.
+Mentioning damage to underlying structures, specifically the temporal branch of the facial nerve which could affect eyebrow movement.
+Mentioning recurrence of the cancer, explaining that this is uncommon if the margins are clear but that follow-up monitoring is important.
+Mentioning incomplete excision requiring further surgery.
+
+Recovery timeline
+Advising avoidance of strenuous activity and bending forward for approximately two weeks to reduce bleeding risk.
+Advising against driving on the day of surgery and possibly for a few days afterwards depending on comfort and visual field.
+Explaining that bruising and swelling will settle over two to three weeks.
+Explaining the importance of follow-up both for wound review and ongoing skin cancer surveillance.
 
 BONUS MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Procedure explanation
+Discussing different local flap options for the temple such as rotation flap, advancement flap, or rhomboid flap, and explaining the choice in lay terms.
+Mentioning the reconstructive ladder in simple terms: direct closure, skin graft, local flap, and why a flap provides better cosmetic and functional results in this area.
+Explaining that the pathology result will be discussed at the follow-up appointment and will confirm whether the margins are clear.
 
-List the bonus marking points that distinguish scores of 4 and 5.
-These demonstrate excellent patient communication or detailed knowledge.
+Risks and complications
+Mentioning the specific risk of temporal hollowing if deeper tissues are involved.
+Discussing the risk of haematoma formation under the flap which could compromise flap survival.
+Mentioning dog ear deformity at the ends of the flap which may require later revision.
+Discussing the importance of sun protection and skin surveillance for new or recurrent skin cancers.
 
-Format:
-Domain Name
-The candidate explains X with a helpful analogy.
-The candidate proactively addresses common patient concerns about Y.
+Post-operative care
+Mentioning the role of H b A 1 c optimisation in wound healing for diabetic patients.
+Advising scar massage and sun protection once the wound is fully healed.
 
-END OF AUTHOR NOTE]
+These are points a strong candidate would mention but are not required to pass.
 
 END OF SCENARIO CRITERIA
 

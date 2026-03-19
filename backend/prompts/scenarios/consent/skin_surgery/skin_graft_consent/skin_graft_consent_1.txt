@@ -4,7 +4,7 @@ CLINICAL SCENARIO BLOCK
 
 SCENARIO TITLE
 
-Skin Graft Consent
+Skin Lesion Excision and Split Thickness Skin Graft Consent
 
 PATIENT QUESTIONS
 
@@ -12,70 +12,90 @@ PATIENT QUESTIONS
 Use these after the candidate finishes their explanation.
 How anxious or questioning you are is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write 6-10 patient questions that would naturally arise during this consent discussion.
-These should be written in everyday language as a real patient would ask.
-
-Examples for carpal tunnel release:
-"Will I be awake during it?"
+"Will I be awake during the operation?"
+"Where will the skin come from — will it hurt?"
+"Why can you not just stitch the hole closed?"
 "How long does the operation take?"
-"When can I go back to work?"
-"You said there's a risk of infection — how common is that?"
-"Will the numbness definitely go away?"
-"What about the scar — will it be very noticeable?"
-"When do I need to come back to get checked?"
-
-For paediatric scenarios, write questions as a parent:
-"Will my child be in pain afterwards?"
-"How long will the anaesthetic take to wear off?"
-"When can they go back to school?"
-
-END OF AUTHOR NOTE]
+"How long do the dressings need to stay on?"
+"Will I be able to walk after the operation?"
+"Will I need any help at home — I live on my own?"
+"What does the area look like once it has healed?"
+"Is there any chance the cancer could come back?"
 
 MAIN CONSENT DOMAINS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the 4-6 main consent domains being assessed in this scenario.
-
-Example for carpal tunnel release:
 Introduction and patient identification
-Procedure explanation (what will be done, in layman terms)
-Anaesthesia (local vs general, what to expect)
-Post-operative care (dressings, restrictions, follow-up)
-Risks and complications (infection, bleeding, nerve damage, recurrence, scar)
-Recovery and return to activities
-
-END OF AUTHOR NOTE]
+Procedure explanation including excision and split thickness skin graft
+Anaesthesia and pain management
+Post-operative care including graft dressings, donor site care, and mobility
+Risks and complications
+Recovery timeline and follow-up
 
 ESSENTIAL MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Introduction and patient identification
+Confirming the patient's identity and the planned procedure.
+Establishing rapport and checking the patient's current understanding.
+Acknowledging the patient's concerns about living independently and managing dressings at home.
 
-List the essential marking points, organised by domain.
-These are the minimum requirements for a score of 3 or above.
+Procedure explanation
+Explaining in lay terms that the operation involves removing the skin cancer with a margin of normal skin around it.
+Explaining why a skin graft is needed: the gap left after removing the cancer is too large to close directly with stitches, so a thin layer of skin is taken from another area of the body to cover the wound.
+Explaining what a split thickness skin graft is: a thin shaving of skin is taken from the thigh using a special blade, similar to peeling a thin layer from the surface. The donor site heals on its own like a graze.
+Explaining that the skin graft is placed over the wound on the leg, trimmed to fit, and held in place with stitches and a bulky dressing.
+Mentioning the approximate duration of surgery, typically 30 to 45 minutes.
 
-Format:
-Domain Name
-The candidate must explain X in clear, jargon-free language.
-The candidate must mention Y.
+Anaesthesia and pain management
+Explaining that the procedure is performed under local anaesthetic with the patient awake.
+Explaining that local anaesthetic injections will be given at both the excision site and the donor site.
+Reassuring the patient about the injection process and that there should be no sharp pain during the procedure.
 
-END OF AUTHOR NOTE]
+Post-operative care
+Explaining that the graft dressing is bulky and must not be disturbed for approximately five days, when it will be checked in the dressings clinic.
+Explaining that the donor site on the thigh will have a special dressing that is left in place until it peels off on its own, usually within two to three weeks.
+Advising the patient to keep the leg elevated as much as possible in the first week to help the graft take.
+Advising avoidance of getting the dressings wet.
+Advising the patient to take prescribed painkillers and antibiotics.
+Discussing the need for district nurse or clinic visits for dressing changes, given the patient lives alone.
+Advising against driving on the day of surgery.
+
+Risks and complications
+Mentioning graft failure, either partial or complete, where the grafted skin does not survive. Explaining that if this happens the wound will need regular dressing changes and will heal on its own over time, or a further graft may be needed.
+Mentioning bleeding and haematoma under the graft which can prevent it from taking.
+Mentioning infection at either the graft site or the donor site.
+Mentioning scarring at both sites.
+Mentioning that the grafted area may look different from the surrounding skin in colour and texture, and this may be permanent.
+Mentioning altered sensation or numbness at the graft and donor sites.
+Mentioning wound breakdown or delayed healing, particularly on the lower leg.
+Mentioning donor site pain, which is often described as worse than the graft site.
+Mentioning recurrence of the cancer, noting that follow-up is important.
+
+Recovery timeline
+Advising that mobility will be limited for the first one to two weeks while the graft establishes.
+Advising avoidance of prolonged standing and strenuous exercise for approximately four weeks.
+Explaining that the donor site heals like a graze over two to three weeks.
+Explaining that the grafted area will initially look dark or bruised and will gradually lighten over several months, but may always look different from the surrounding skin.
+Advising that follow-up will include checking the pathology results and ongoing skin surveillance.
 
 BONUS MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Procedure explanation
+Explaining the difference between split thickness and full thickness skin grafts in lay terms and why a split thickness graft is appropriate for this defect.
+Mentioning the use of a tie-over dressing or negative pressure dressing to hold the graft in place and improve take rates.
+Explaining the importance of immobilisation of the grafted area to prevent shearing.
 
-List the bonus marking points that distinguish scores of 4 and 5.
-These demonstrate excellent patient communication or detailed knowledge.
+Risks and complications
+Discussing factors that impair graft take: haematoma, seroma, infection, shearing, and poor vascularity of the wound bed.
+Mentioning that lower leg wounds heal more slowly due to reduced blood supply, and this is particularly relevant in elderly patients.
+Mentioning the risk of contracture at the graft site, particularly over joints.
+Discussing the importance of good skin care and moisturising of the grafted area long-term.
 
-Format:
-Domain Name
-The candidate explains X with a helpful analogy.
-The candidate proactively addresses common patient concerns about Y.
+Post-operative care
+Discussing the need for social support or package of care during recovery if the patient lives alone.
+Mentioning the role of the community nursing team for ongoing dressing changes.
+Advising sun protection of the graft and donor site for at least twelve months.
 
-END OF AUTHOR NOTE]
+These are points a strong candidate would mention but are not required to pass.
 
 END OF SCENARIO CRITERIA
 

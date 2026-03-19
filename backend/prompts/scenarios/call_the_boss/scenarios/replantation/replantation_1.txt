@@ -12,65 +12,88 @@ PROBING QUESTIONS
 Use these to challenge or guide the candidate after they finish presenting.
 Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write 4-8 probing questions the consultant might ask during the phone call.
-These should test the candidate's clinical knowledge and management plan.
-
-Examples:
-"What were the blood results?"
-"Have you started any treatment so far?"
-"What is your surgical plan?"
-"Talk me through the steps you would take in theatre."
-"Who else have you contacted?"
-"Are you comfortable managing this yourself or do you need me to come in?"
-
-END OF AUTHOR NOTE]
+"Why don't you just throw it in the bin — it's a single finger?"
+"What are the absolute indications for replantation?"
+"What are the relative contraindications in this case?"
+"How has the amputated part been stored — is it viable?"
+"What is the warm and cold ischaemia time for digits?"
+"How would you counsel this patient about the options?"
+"Talk me through the order of repair if we attempt replantation."
+"I've had a couple of glasses of wine — can you get started without me?"
 
 MAIN COMMUNICATION AND CLINICAL DOMAINS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the 4-6 main domains being assessed in this scenario.
-These should cover both communication skills and clinical knowledge areas.
-
-Example from a burns call:
-Structured clinical presentation (history, examination, observations)
-Burns assessment (TBSA, depth, mechanism)
-Resuscitation and initial management (fluids, analgesia, monitoring)
-Surgical planning (escharotomy, debridement, coverage)
-Escalation and team coordination
-Safety awareness (airway, transfer, ITU)
-
-END OF AUTHOR NOTE]
+Structured clinical presentation covering injury details and storage of amputated part
+Indications and contraindications for replantation
+Patient factors and counselling for informed decision-making
+Theatre preparation and surgical planning
+Operative approach and order of repair
+Post-operative monitoring and hand therapy
 
 ESSENTIAL MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Structured clinical presentation covering injury details and storage of amputated part
+The candidate must introduce themselves, state their role, and convey the urgency.
+The candidate must present the mechanism of injury, timing, hand dominance, and how the amputated part has been stored and transported.
+The candidate must mention the ischaemia time and note that the digit was appropriately transported on moist gauze on ice.
 
-List the essential marking points, organised by domain.
-These are the minimum requirements for a score of 3 or above.
+Indications and contraindications for replantation
+The candidate must know the absolute indications for replantation: thumb amputation, multiple digit amputation, hand or wrist amputation, paediatric amputation, and amputation proximal to the superficial palmar arch.
+The candidate must recognise that a single index finger amputation is not an absolute indication but there are strong relative indications in this case: dominant hand, important finger for occupation and hobbies.
+The candidate must identify the relative contraindications: smoking, diabetes, zone 2 flexor tendon involvement, and comminuted fracture extending into the P I P J.
 
-Format:
-Domain Name
-The candidate must demonstrate X.
-The candidate must mention Y.
+Patient factors and counselling for informed decision-making
+The candidate must recognise the importance of the index finger for this patient given his occupation as a construction worker and his hobby of playing the saxophone.
+The candidate must explain that the patient should be counselled about both options: replantation with a long recovery versus revision amputation with a quicker return to work.
+The candidate must mention consenting for replantation with the additional consent for revision amputation if replantation is not feasible intraoperatively, and consent for vein graft.
 
-END OF AUTHOR NOTE]
+Theatre preparation and surgical planning
+The candidate must state they would like the consultant to come in to assist with the microsurgery.
+The candidate must mention: keeping the patient N B M, I V antibiotics, tetanus booster, analgesia, bloods including group and save and cross-match, urgent anaesthetic review, and informing theatre staff.
+The candidate must mention obtaining an X-ray of the rest of the hand to exclude other injuries.
+The candidate must mention medical photography.
+
+Operative approach and order of repair
+The candidate must describe the order of repair: skeletal fixation first with K-wires, then tendon repair, then vascular repair (artery and vein), and finally nerve repair.
+The candidate must mention working under the microscope and the need for a microsurgical set.
+The candidate must state they can begin the operation by preparing the amputated part and identifying structures while waiting for the consultant.
+
+Post-operative monitoring and hand therapy
+The candidate must mention post-operative hand elevation and keeping the hand warm.
+The candidate must describe hourly monitoring of the replanted digit for colour, capillary refill, temperature, and turgor.
+The candidate must mention early hand therapy within 3 to 5 days.
 
 BONUS MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Structured clinical presentation covering injury details and storage of amputated part
+The candidate mentions the Tamai classification for level of amputation.
+The candidate discusses warm ischaemia time of up to 12 hours for digits and cold ischaemia time of up to 24 hours.
 
-List the bonus marking points that distinguish scores of 4 and 5.
-These demonstrate advanced knowledge or exceptional communication.
+Indications and contraindications for replantation
+The candidate discusses that avulsion injuries carry a worse prognosis than clean sharp amputations.
+The candidate mentions the ribbon sign as an indicator of vessel avulsion with poor prognosis.
+The candidate knows that self-mutilation and severe psychiatric illness are contraindications.
 
-Format:
-Domain Name
-The candidate discusses X in detail.
-The candidate demonstrates awareness of Y.
+Patient factors and counselling for informed decision-making
+The candidate discusses the expected functional outcome honestly, including the fact that replanted fingers rarely achieve normal function.
+The candidate mentions that even a partially functioning replanted finger may be functionally superior to a prosthesis for this patient.
+The candidate discusses the approximately 50 percent success rate given this patient's risk factors.
 
-END OF AUTHOR NOTE]
+Theatre preparation and surgical planning
+The candidate proactively offers to begin the operation and prepare both the stump and amputated part while waiting for the consultant.
+The candidate mentions the need for a C-arm machine in addition to the microscope and micro set.
+
+Operative approach and order of repair
+The candidate describes tagging the structures in the amputated part during back-table preparation before the patient is anaesthetised.
+The candidate discusses the option of shortening the bone to allow tension-free vascular repair without vein grafts.
+The candidate mentions the four-strand core suture technique for tendon repair.
+
+Post-operative monitoring and hand therapy
+The candidate mentions monitoring for signs of arterial insufficiency versus venous congestion and knows the clinical differences.
+The candidate discusses the anticoagulation protocol post-replantation.
+The candidate mentions monitoring urine output aiming for at least 0.5 ml per kg per hour.
+
+These are points a strong candidate would mention but are not required to pass.
 
 END OF SCENARIO CRITERIA
 

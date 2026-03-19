@@ -12,65 +12,89 @@ PROBING QUESTIONS
 Use these to challenge or guide the candidate after they finish presenting.
 Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write 4-8 probing questions the consultant might ask during the phone call.
-These should test the candidate's clinical knowledge and management plan.
-
-Examples:
-"What were the blood results?"
-"Have you started any treatment so far?"
-"What is your surgical plan?"
-"Talk me through the steps you would take in theatre."
-"Who else have you contacted?"
-"Are you comfortable managing this yourself or do you need me to come in?"
-
-END OF AUTHOR NOTE]
+"What makes you think this is necrotising fasciitis rather than severe cellulitis?"
+"What is the L R I N E C score and what did it come back as?"
+"Have you started the Sepsis Six bundle?"
+"What antibiotics are you going to use and why?"
+"Who else have you contacted — anaesthetics, I T U, theatres?"
+"Talk me through what you would do in theatre step by step."
+"What would you do if we get to theatre and the tissue looks viable?"
+"How would you manage the wound post-operatively?"
 
 MAIN COMMUNICATION AND CLINICAL DOMAINS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the 4-6 main domains being assessed in this scenario.
-These should cover both communication skills and clinical knowledge areas.
-
-Example from a burns call:
-Structured clinical presentation (history, examination, observations)
-Burns assessment (TBSA, depth, mechanism)
-Resuscitation and initial management (fluids, analgesia, monitoring)
-Surgical planning (escharotomy, debridement, coverage)
-Escalation and team coordination
-Safety awareness (airway, transfer, ITU)
-
-END OF AUTHOR NOTE]
+Structured clinical presentation using S B A R or equivalent framework
+Recognition of necrotising fasciitis as a life-threatening surgical emergency
+Sepsis recognition and resuscitation
+Antibiotic strategy and escalation from medical management
+Surgical planning including debridement approach
+Post-operative care including I T U and second look planning
 
 ESSENTIAL MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Structured clinical presentation using S B A R or equivalent framework
+The candidate must introduce themselves clearly, state their role, and identify the consultant.
+The candidate must present the case in a logical structured manner covering situation, background, assessment, and recommendation.
+The candidate must convey the urgency of the situation clearly and early in the call.
 
-List the essential marking points, organised by domain.
-These are the minimum requirements for a score of 3 or above.
+Recognition of necrotising fasciitis as a life-threatening surgical emergency
+The candidate must identify that this presentation is consistent with necrotising fasciitis based on the rapid spread, systemic toxicity, and failure to respond to antibiotics.
+The candidate must state that necrotising fasciitis is a clinical diagnosis and a surgical emergency.
+Knowing that key clinical features include erythema spreading beyond markings, pain out of proportion, blistering, dusky discolouration, crepitus, and systemic sepsis.
+Knowing that the L R I N E C score of 9 places the patient in the high-risk category.
 
-Format:
-Domain Name
-The candidate must demonstrate X.
-The candidate must mention Y.
+Sepsis recognition and resuscitation
+The candidate must recognise that the patient is in septic shock with hypotension, tachycardia, raised lactate, oliguria, and confusion.
+The candidate must mention initiating or completing the Sepsis Six bundle: blood cultures, lactate, urine output monitoring, I V fluids, I V antibiotics, and high-flow oxygen.
+The candidate must mention ongoing fluid resuscitation and monitoring of urine output.
 
-END OF AUTHOR NOTE]
+Antibiotic strategy and escalation from medical management
+The candidate must recognise that co-amoxiclav alone is insufficient for necrotising fasciitis.
+The candidate must recommend escalation to broad-spectrum triple antibiotic therapy covering gram-positive, gram-negative, and anaerobic organisms. An appropriate regimen includes benzylpenicillin, clindamycin, and gentamicin, or alternative combinations supported by stating this is per trust guidelines.
+Knowing that clindamycin has a specific role in necrotising fasciitis as it inhibits toxin production.
+
+Surgical planning including debridement approach
+The candidate must state that the patient needs urgent surgical debridement tonight and request the consultant to come in.
+The candidate must describe informing C E P O D theatres, the on-call anaesthetist, and I T U.
+The candidate must mention consent or consent form 4 if the patient lacks capacity, and informing the next of kin.
+The candidate must describe the surgical approach: wide excision of all necrotic tissue, extending until healthy bleeding tissue is encountered, copious washout, tissue samples for microbiology and histology, and wound coverage with V A C or moist dressings.
+
+Post-operative care including I T U and second look planning
+The candidate must arrange post-operative I T U care.
+The candidate must plan a second look in theatre within 48 hours for further debridement.
+The candidate must mention ongoing antibiotic therapy tailored to microbiology results.
 
 BONUS MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Structured clinical presentation using S B A R or equivalent framework
+The candidate demonstrates a calm and professional telephone manner despite the urgency.
+The candidate anticipates the consultant's likely questions and proactively addresses them.
 
-List the bonus marking points that distinguish scores of 4 and 5.
-These demonstrate advanced knowledge or exceptional communication.
+Recognition of necrotising fasciitis as a life-threatening surgical emergency
+The candidate discusses the differential diagnosis including severe cellulitis but states they are treating as necrotising fasciitis until proven otherwise.
+The candidate mentions risk factors in this patient: poorly controlled diabetes, immunocompromised state, and chronic kidney disease.
+The candidate mentions the finger sweep test as a diagnostic adjunct if clinically uncertain, with the caveat that this would be discussed with the consultant before performing.
+Knowing that Type 1 necrotising fasciitis is polymicrobial and Type 2 is monomicrobial, typically Group A Streptococcus.
 
-Format:
-Domain Name
-The candidate discusses X in detail.
-The candidate demonstrates awareness of Y.
+Sepsis recognition and resuscitation
+The candidate mentions involving the critical care outreach team or medical registrar for ongoing resuscitation while preparing for theatre.
+The candidate discusses the need for vasopressor support if the patient remains hypotensive despite fluid resuscitation.
 
-END OF AUTHOR NOTE]
+Antibiotic strategy and escalation from medical management
+The candidate discusses contacting the on-call microbiologist for guidance on antibiotic choice.
+The candidate mentions that tissue samples sent from theatre are more valuable than wound swabs for guiding antibiotic therapy.
+
+Surgical planning including debridement approach
+The candidate describes the pathognomonic finding of dishwater-grey fluid at the fascial plane.
+The candidate mentions that healthy fascia should resist finger dissection whereas necrotic fascia separates easily.
+The candidate discusses the potential need for extensive skin loss and future reconstructive options including skin grafting and flap coverage.
+
+Post-operative care including I T U and second look planning
+The candidate mentions monitoring for complications including acute kidney injury, multi-organ failure, and disseminated intravascular coagulation.
+The candidate discusses the high mortality rate of necrotising fasciitis, which ranges from 20 to 40 percent even with optimal management.
+The candidate mentions the importance of thorough documentation and clear handover.
+
+These are points a strong candidate would mention but are not required to pass.
 
 END OF SCENARIO CRITERIA
 

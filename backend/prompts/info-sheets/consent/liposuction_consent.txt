@@ -1,13 +1,4 @@
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the patient/procedure information sheet for this consent scenario.
-
-Include:
-- Patient details (name, age)
-- Procedure (name of planned operation)
-- Context (referral reason, clinic visit, why listed for surgery)
-- Patient Expectations (what the patient understands, any concerns)
-
-No Images field for consent scenarios.
-
-END OF AUTHOR NOTE]
+Patient: Mrs Rachel Adebayo, 38 years old
+Procedure: Liposuction to Bilateral Flanks and Lower Abdomen
+Context: Mrs Adebayo was referred by her G P with localised fat deposits in the flanks and lower abdomen that have not responded to diet and exercise. She has maintained a stable weight for over a year with a B M I of 26. She was seen in clinic two weeks ago, assessed by the consultant, and listed for liposuction. She has attended today for the operation. She is otherwise fit and well with no significant medical history.
+Patient Expectations: Mrs Adebayo has read about liposuction online but has some misconceptions about it being a weight loss procedure. She wants to know how much fat will be removed, whether it will come back, and what the recovery is like. She is concerned about the final shape being uneven and wants to know when she will see the results.

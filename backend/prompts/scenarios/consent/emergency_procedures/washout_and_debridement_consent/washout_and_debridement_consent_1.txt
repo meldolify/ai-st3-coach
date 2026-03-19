@@ -4,78 +4,102 @@ CLINICAL SCENARIO BLOCK
 
 SCENARIO TITLE
 
-Washout And Debridement Consent
+Wound Washout and Debridement for Open Fracture
 
 PATIENT QUESTIONS
 
-(Internal reference only. Questions the patient or patient's relative may ask during the consent discussion.
+(Internal reference only. Questions the patient may ask during the consent discussion.
 Use these after the candidate finishes their explanation.
 How anxious or questioning you are is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write 6-10 patient questions that would naturally arise during this consent discussion.
-These should be written in everyday language as a real patient would ask.
-
-Examples for carpal tunnel release:
-"Will I be awake during it?"
-"How long does the operation take?"
-"When can I go back to work?"
-"You said there's a risk of infection — how common is that?"
-"Will the numbness definitely go away?"
-"What about the scar — will it be very noticeable?"
-"When do I need to come back to get checked?"
-
-For paediatric scenarios, write questions as a parent:
-"Will my child be in pain afterwards?"
-"How long will the anaesthetic take to wear off?"
-"When can they go back to school?"
-
-END OF AUTHOR NOTE]
+Am I going to lose my arm?
+Will I be put to sleep for this?
+How many operations will I need?
+Will I need a skin graft? That sounds frightening.
+How long will I be in hospital?
+When will the bone be fixed properly?
+The wound was full of dirt. Will I get an infection?
+Will my arm work normally again afterwards?
 
 MAIN CONSENT DOMAINS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the 4-6 main consent domains being assessed in this scenario.
-
-Example for carpal tunnel release:
-Introduction and patient identification
-Procedure explanation (what will be done, in layman terms)
-Anaesthesia (local vs general, what to expect)
-Post-operative care (dressings, restrictions, follow-up)
-Risks and complications (infection, bleeding, nerve damage, recurrence, scar)
-Recovery and return to activities
-
-END OF AUTHOR NOTE]
+Urgency and rationale for the procedure
+Operative environment and anaesthesia
+Operative technique
+Post-operative care and further procedures
+Risks and complications
 
 ESSENTIAL MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+(Internal reference only. Do not read aloud.)
 
-List the essential marking points, organised by domain.
-These are the minimum requirements for a score of 3 or above.
+Urgency and rationale for the procedure
+Explaining clearly why the operation is urgent: the wound is open and contaminated with soil, and the bone is exposed. Bacteria and foreign material in the wound can cause a serious infection including osteomyelitis, which is infection of the bone itself.
+Explaining that the wound needs to be thoroughly washed and any dead or contaminated tissue removed in a controlled theatre environment. This gives the best chance of preventing infection and allowing the wound and fracture to heal.
+Emphasising the time-critical nature: national guidelines recommend formal washout and debridement within 12 to 24 hours for most open fractures, and as soon as possible for heavily contaminated wounds.
+Mentioning that I V antibiotics and tetanus prophylaxis have already been given.
 
-Format:
-Domain Name
-The candidate must explain X in clear, jargon-free language.
-The candidate must mention Y.
+Operative environment and anaesthesia
+Explaining that the procedure is performed under G A. The patient will be put to sleep.
+The anaesthetist will review the patient and explain the anaesthetic, including any additional monitoring needed.
+Describing the sterile theatre environment.
+Mentioning that the orthopaedic team and plastic surgery team may both be involved.
 
-END OF AUTHOR NOTE]
+Operative technique
+Explaining debridement: the surgeon will systematically remove all dead, damaged, and contaminated tissue from the wound. This includes skin, fat, muscle, and any fragments of bone that are devitalised and detached.
+Explaining washout: the wound will be washed with several litres of sterile saline to remove dirt, debris, and bacteria.
+Explaining that the surgeon will assess the wound to determine what structures are damaged, including the bone, tendons, nerves, and blood vessels.
+Explaining that the fracture will be stabilised. The method depends on the pattern of the fracture and may include an external fixator, which is a frame outside the leg with pins into the bone, or internal fixation with a plate or rod. The orthopaedic team will make this decision.
+Being honest that the wound may not be closed at this operation. If there is significant tissue loss, contamination, or swelling, the wound will be left open and covered with a dressing. Closure or coverage will be planned at a later stage.
+Stating the approximate duration: 1 to 2 hours depending on the extent of the injury.
+
+Post-operative care and further procedures
+Explaining that the patient will stay in hospital after the operation. The length of stay depends on the severity of the injury, wound management, and fracture stability.
+Explaining that the patient will need to return to theatre within 24 to 48 hours for a second look. The wound will be reassessed and if it is clean, plans for closure will be made.
+Explaining the options for wound coverage if direct closure is not possible: skin grafts, local flaps, or free flaps depending on the size and location of the wound. This will be discussed when the time comes.
+Explaining that the fracture management may evolve: an initial external fixator may later be converted to internal fixation such as a nail or plate once the soft tissue situation is stable.
+Mentioning that I V antibiotics will continue in hospital and may be given for several days.
+Advising that physiotherapy will begin as soon as safe to maintain movement and function.
+Being honest that multiple operations are common for this type of injury.
+Advising that return to full activity will take months and depends on fracture healing and soft tissue recovery.
+
+Risks and complications
+Infection: the single biggest risk with open fractures. Despite thorough washout, infection including osteomyelitis can develop. This may require prolonged antibiotics, further surgery, or in severe cases bone removal and reconstruction.
+Fracture non-union or delayed union: the bone may fail to heal, particularly if there is bone loss, infection, or poor blood supply. This may require further surgery including bone grafting.
+Further surgery: expected rather than a complication. Multiple returns to theatre for wound management, fracture fixation, soft tissue coverage, and bone grafting are common.
+Skin graft or flap failure: if soft tissue coverage is needed, the graft or flap may partially or fully fail, requiring further procedures.
+Compartment syndrome: swelling in the forearm after the injury and surgery may cause pressure to build up in the muscle compartments. If this occurs, an emergency fasciotomy will be needed.
+Nerve and tendon injury: may be caused by the original injury or identified during debridement. Repair may be needed at the time or as a planned secondary procedure.
+Stiffness: of the wrist, elbow, and fingers, particularly with prolonged immobilisation. Hand therapy and physiotherapy are essential.
+Scarring: significant scarring is inevitable from the injury and subsequent surgery.
+Bleeding and blood transfusion: significant blood loss may occur during debridement.
+D V T and P E: risk of blood clots particularly with immobility. Preventive measures will be used.
+Amputation: in the most severe open fractures, if the limb is not viable or infection cannot be controlled, amputation may be necessary. This is rare for a grade 3A injury but must be mentioned.
 
 BONUS MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+(Internal reference only. Do not read aloud.)
 
-List the bonus marking points that distinguish scores of 4 and 5.
-These demonstrate excellent patient communication or detailed knowledge.
+Urgency and rationale for the procedure
+Explaining the Gustilo-Anderson classification of open fractures: grade 1 is a clean wound less than 1 centimetre, grade 2 is 1 to 10 centimetres without extensive soft tissue damage, grade 3A has adequate soft tissue coverage despite extensive damage, grade 3B has inadequate soft tissue coverage requiring flap, and grade 3C has a vascular injury requiring repair.
+Mentioning the B O A S T guidelines for management of open fractures.
 
-Format:
-Domain Name
-The candidate explains X with a helpful analogy.
-The candidate proactively addresses common patient concerns about Y.
+Operative technique
+Explaining the principle of serial debridement: removing obviously dead tissue while preserving tissue of questionable viability for reassessment at the next operation.
+Mentioning the role of intraoperative tissue samples for microbiology.
+Explaining the concept of the reconstructive ladder or reconstructive elevator in planning soft tissue coverage.
 
-END OF AUTHOR NOTE]
+Post-operative care and further procedures
+Explaining the role of negative pressure wound therapy in managing open fracture wounds between debridements.
+Mentioning the orthoplastic approach: combined orthopaedic and plastic surgery teams managing the bone and soft tissue together.
+Discussing the psychological impact of a significant traumatic injury and the availability of support services.
+
+Risks and complications
+Explaining that Gustilo 3B and 3C injuries carry the highest risk of infection, non-union, and amputation.
+Mentioning heterotopic ossification as a possible long-term complication.
+Mentioning chronic osteomyelitis as a late complication requiring prolonged treatment.
+
+These are points a strong candidate would mention but are not required to pass.
 
 END OF SCENARIO CRITERIA
 

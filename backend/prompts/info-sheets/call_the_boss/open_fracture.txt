@@ -1,15 +1,12 @@
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the patient information sheet for this scenario.
-
-For Call-the-Boss scenarios include:
-- Patient details (name, age, MRN, DOB)
-- Presentation context (who referred, when, where)
-- History of Presenting Complaint
-- Social History
-- PMH, Drug History, Allergies
-- Observations (HR, BP, RR, Temp, Sats)
-- Examination Findings
-- Images: filename.jpg (optional, comma-separated)
-
-END OF AUTHOR NOTE]
+Patient: Mr John Taylor, 45 years old, MRN 40831927, DOB 12/04/1980
+Presentation: Brought to A and E at 10pm by ambulance following a road traffic accident
+HPC: The patient was cycling home from work at approximately 6pm when he was hit by a bus. He was wearing a helmet. There was no loss of consciousness at the scene. He was brought to A and E by ambulance. On arrival he was trauma called and assessed using A T L S principles. The primary survey identified a left-sided pneumothorax with left-sided rib fractures (ribs 5 to 7). The A and E team are planning a chest drain. The C-spine has been cleared clinically and radiologically. Abdominal and pelvic examinations are normal. He has a severe open injury to his left lower leg.
+Social History: Office manager, right hand dominant. Non-smoker. Drinks 10 units per week. Lives with his wife and two children.
+PMH: Hypertension, type 2 diabetes
+Drug History: Metformin, amlodipine, lisinopril. N K D A. Had tetanus course as a child — status unclear.
+Last Ate: Approximately 6 hours ago
+Observations: HR 95, BP 120/60, RR 20, Temp 36.5, Sats 97% on 10L O2, GCS 15
+Examination: Primary survey — Left-sided pneumothorax with rib fractures 5 to 7 (chest drain being inserted by A and E). C-spine cleared. Abdomen and pelvis normal. Lower limb: There is a severe injury to the lateral aspect of the left lower leg extending from just below the knee to the lateral malleolus. There is extensive soft tissue loss with avulsion flaps of skin and muscle, exposed bone with periosteal stripping, and exposed tibial fracture. No heavy contamination visible. The knee and ankle joints appear intact. Dorsalis pedis pulse is palpable. Sensation on the dorsum and sole of the foot is intact. No pain on passive movement of the toes.
+Investigations: X-ray of the left lower leg shows a comminuted fracture of the midshaft tibia with multiple butterfly fragments, and a transverse fracture of the fibula. Both fractures are displaced. No significant debris on X-ray. C T head and C-spine not required. CXR confirms left pneumothorax.
+Current Management: Trauma team managing the chest drain. Large bore I V access x2. I V fluids commenced. Bloods sent including group and save and cross-match 4 units. Wound covered with saline-soaked gauze and clingfilm. Medical photography taken. Awaiting orthopaedic and plastic surgery review.
+Images: open_fracture_1.jpg

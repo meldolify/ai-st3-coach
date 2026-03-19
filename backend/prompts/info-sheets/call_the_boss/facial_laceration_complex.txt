@@ -1,15 +1,12 @@
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the patient information sheet for this scenario.
-
-For Call-the-Boss scenarios include:
-- Patient details (name, age, MRN, DOB)
-- Presentation context (who referred, when, where)
-- History of Presenting Complaint
-- Social History
-- PMH, Drug History, Allergies
-- Observations (HR, BP, RR, Temp, Sats)
-- Examination Findings
-- Images: filename.jpg (optional, comma-separated)
-
-END OF AUTHOR NOTE]
+Patient: Mr Ryan Okonkwo, 26 years old, MRN 55173842, DOB 22/08/1999
+Presentation: Brought to A and E at midnight by ambulance following an assault
+HPC: The patient was assaulted with a broken bottle outside a pub at approximately 10:30pm. He was struck across the left side of his face. He was alert at the scene with no loss of consciousness. He has been drinking alcohol this evening. There is a deep laceration running from just in front of the left ear, across the cheek, to the corner of the mouth. There has been significant bleeding which was controlled with direct pressure by the paramedics. He also reports numbness of his lower lip on the left side and a watery discharge from the wound when he moves his jaw.
+Social History: University student, right hand dominant. Non-smoker. Drinks socially, approximately 15 units tonight. Lives in student accommodation.
+PMH: Nil significant
+Drug History: Nil regular medications. N K D A. Tetanus up to date.
+Last Ate: Approximately 5 hours ago. Significant alcohol intake tonight.
+Observations: HR 92, BP 135/82, RR 16, Temp 36.7, Sats 99% on room air, GCS 15
+Examination: Primary survey using A T L S approach — haemodynamically stable. Active bleeding from the left facial wound has been controlled with pressure. The laceration is approximately 12cm long, running from the pre-auricular region across the left cheek to the left oral commissure. It is deep, extending through skin, subcutaneous tissue, and muscle. Glandular tissue is visible in the wound. Facial nerve examination: temporal and zygomatic branches intact (eyebrow raise and eye closure normal). Buccal branch: weakness of smile on the left. Marginal mandibular branch: weakness of lip depression on the left — the patient cannot show his lower teeth on the left side. Cervical branch intact. On milking the parotid gland, clear fluid exits from the wound rather than from the parotid duct opening intraorally. No dental injuries. No other injuries identified on secondary survey.
+Investigations: X-ray of the face shows no fracture. No foreign body (glass fragments) visible but cannot be excluded. Bloods not yet sent.
+Current Management: Wound packed with saline-soaked gauze and pressure dressing applied. I V access obtained. Analgesia given (I V paracetamol and morphine). The patient has been consented for medical photography. A and E team requesting plastic surgery review.
+Images: facial_laceration_complex_1.jpg

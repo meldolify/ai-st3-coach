@@ -12,65 +12,87 @@ PROBING QUESTIONS
 Use these to challenge or guide the candidate after they finish presenting.
 Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write 4-8 probing questions the consultant might ask during the phone call.
-These should test the candidate's clinical knowledge and management plan.
-
-Examples:
-"What were the blood results?"
-"Have you started any treatment so far?"
-"What is your surgical plan?"
-"Talk me through the steps you would take in theatre."
-"Who else have you contacted?"
-"Are you comfortable managing this yourself or do you need me to come in?"
-
-END OF AUTHOR NOTE]
+"What is the T B S A and how did you calculate it?"
+"Tell me about the airway — why was he intubated?"
+"What does the carboxyhaemoglobin level of 18 percent mean and how would you manage it?"
+"How are you fluid resuscitating this patient — talk me through the Parkland formula."
+"Do you think he needs an escharotomy tonight? Which limbs and why?"
+"What are the criteria for transfer to a burns centre?"
+"Who else have you informed — I T U, anaesthetics?"
+"What is the surgical plan for the coming days?"
 
 MAIN COMMUNICATION AND CLINICAL DOMAINS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the 4-6 main domains being assessed in this scenario.
-These should cover both communication skills and clinical knowledge areas.
-
-Example from a burns call:
-Structured clinical presentation (history, examination, observations)
-Burns assessment (TBSA, depth, mechanism)
-Resuscitation and initial management (fluids, analgesia, monitoring)
-Surgical planning (escharotomy, debridement, coverage)
-Escalation and team coordination
-Safety awareness (airway, transfer, ITU)
-
-END OF AUTHOR NOTE]
+Structured clinical presentation covering mechanism, primary survey, and burn assessment
+Airway assessment and management of inhalation injury
+Burns assessment including T B S A estimation and depth
+Fluid resuscitation using the Parkland formula
+Recognition of the need for escharotomy
+Escalation, transfer criteria, and I T U planning
 
 ESSENTIAL MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Structured clinical presentation covering mechanism, primary survey, and burn assessment
+The candidate must introduce themselves clearly, state the urgency, and present the case in a structured manner.
+The candidate must include the mechanism of injury (house fire, trapped, intubated at scene), the patient's background, and the current clinical status.
+The candidate must present the primary survey findings systematically.
 
-List the essential marking points, organised by domain.
-These are the minimum requirements for a score of 3 or above.
+Airway assessment and management of inhalation injury
+The candidate must recognise the signs of inhalation injury: singed nasal hairs, soot in the airway, intubation at scene, and reduced saturations despite high-flow oxygen.
+The candidate must recognise that the patient was appropriately intubated early at scene.
+Knowing that the carboxyhaemoglobin level of 18 percent confirms carbon monoxide poisoning and should be treated with 100 percent oxygen.
 
-Format:
-Domain Name
-The candidate must demonstrate X.
-The candidate must mention Y.
+Burns assessment including T B S A estimation and depth
+The candidate must estimate the T B S A at approximately 35 percent using the Lund and Browder chart or rule of nines.
+The candidate must describe the burn depths: full thickness circumferential burns to both forearms and hands, mixed depth burns to the anterior chest and abdomen, and facial burns with periorbital oedema.
+The candidate must identify the circumferential full thickness burns as a concern for compartment syndrome requiring escharotomy.
 
-END OF AUTHOR NOTE]
+Fluid resuscitation using the Parkland formula
+The candidate must describe the Parkland formula: 3 to 4 ml per kg per percentage T B S A, with the first half given in the first 8 hours from the time of injury and the second half over the following 16 hours using Hartmann solution.
+The candidate must mention titrating fluids to urine output of greater than 0.5 ml per kg per hour.
+The candidate must mention that fluid resuscitation has been commenced.
+
+Recognition of the need for escharotomy
+The candidate must recognise that circumferential full thickness burns to both forearms require urgent assessment for escharotomy.
+The candidate must describe the escharotomy incisions along the mid-lateral lines of the forearms.
+The candidate must mention monitoring the neurovascular status of the hands before and after escharotomy.
+
+Escalation, transfer criteria, and I T U planning
+The candidate must request the consultant to come in for assessment and potential escharotomy.
+The candidate must mention arranging an I T U bed for ongoing monitoring and ventilatory support.
+The candidate must know the criteria for transfer to a burns centre and discuss whether transfer is appropriate.
+The candidate must mention informing the anaesthetic team and C E P O D theatres.
 
 BONUS MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Structured clinical presentation covering mechanism, primary survey, and burn assessment
+The candidate uses A M P L E history format: allergies, medications, past medical history, last meal, and events.
+The candidate mentions clinical photography of the burns.
 
-List the bonus marking points that distinguish scores of 4 and 5.
-These demonstrate advanced knowledge or exceptional communication.
+Airway assessment and management of inhalation injury
+The candidate discusses the risk of cyanide poisoning from synthetic materials in a house fire and the treatment with Cyanokit (hydroxocobalamin).
+The candidate mentions that the A B G showing metabolic acidosis with raised lactate may indicate cyanide poisoning in addition to poor tissue perfusion.
+The candidate discusses arranging a baseline chest X-ray to monitor for A R D S.
 
-Format:
-Domain Name
-The candidate discusses X in detail.
-The candidate demonstrates awareness of Y.
+Burns assessment including T B S A estimation and depth
+The candidate mentions that the facial burns with periorbital oedema may prevent eye examination and requests an ophthalmology review.
+The candidate discusses that burn depth may evolve over the first 48 to 72 hours and areas initially assessed as partial thickness may convert to full thickness.
 
-END OF AUTHOR NOTE]
+Fluid resuscitation using the Parkland formula
+The candidate recognises that the formula is a guide and clinical response should drive fluid management.
+The candidate mentions monitoring serum lactate and urine output as markers of adequate resuscitation.
+The candidate discusses inserting a nasogastric tube for early enteral nutrition.
+
+Recognition of the need for escharotomy
+The candidate describes the technique of escharotomy: full-thickness incision through the eschar down to subcutaneous fat, along the mid-axial lines, avoiding neurovascular structures.
+The candidate mentions that chest escharotomy may be needed if circumferential chest burns restrict ventilation.
+
+Escalation, transfer criteria, and I T U planning
+The candidate discusses the nutritional requirements using the Curreri formula.
+The candidate mentions the multidisciplinary team including I T U, burns surgery, physiotherapy, dietetics, and psychology.
+The candidate discusses the surgical strategy for the coming days: tangential excision and skin grafting in a warm theatre, with sheet grafts for hands and face.
+
+These are points a strong candidate would mention but are not required to pass.
 
 END OF SCENARIO CRITERIA
 

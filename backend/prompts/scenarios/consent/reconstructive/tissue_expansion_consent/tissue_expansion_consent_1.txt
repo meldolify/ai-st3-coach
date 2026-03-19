@@ -4,7 +4,7 @@ CLINICAL SCENARIO BLOCK
 
 SCENARIO TITLE
 
-Tissue Expansion Consent
+Tissue Expander Insertion for Scalp Reconstruction Consent
 
 PATIENT QUESTIONS
 
@@ -12,70 +12,87 @@ PATIENT QUESTIONS
 Use these after the candidate finishes their explanation.
 How anxious or questioning you are is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write 6-10 patient questions that would naturally arise during this consent discussion.
-These should be written in everyday language as a real patient would ask.
-
-Examples for carpal tunnel release:
-"Will I be awake during it?"
-"How long does the operation take?"
-"When can I go back to work?"
-"You said there's a risk of infection — how common is that?"
-"Will the numbness definitely go away?"
-"What about the scar — will it be very noticeable?"
-"When do I need to come back to get checked?"
-
-For paediatric scenarios, write questions as a parent:
-"Will my child be in pain afterwards?"
-"How long will the anaesthetic take to wear off?"
-"When can they go back to school?"
-
-END OF AUTHOR NOTE]
+"Will I be asleep for the operation?"
+"What does the expander look like — is it like a balloon?"
+"How long does the whole process take from start to finish?"
+"Will I look strange during the expansion — will people notice?"
+"Does the expansion hurt?"
+"How often will I need to come in for the injections?"
+"What happens if the expander gets infected — do you have to take it out?"
+"Will the hair grow on the new skin that covers the scar?"
+"When can I go back to work after the first operation?"
 
 MAIN CONSENT DOMAINS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the 4-6 main consent domains being assessed in this scenario.
-
-Example for carpal tunnel release:
 Introduction and patient identification
-Procedure explanation (what will be done, in layman terms)
-Anaesthesia (local vs general, what to expect)
-Post-operative care (dressings, restrictions, follow-up)
-Risks and complications (infection, bleeding, nerve damage, recurrence, scar)
-Recovery and return to activities
-
-END OF AUTHOR NOTE]
+Procedure explanation including expander insertion, expansion process, and second stage reconstruction
+Anaesthesia and operative environment
+Post-operative care and expansion schedule
+Risks and complications including expander-specific risks
+Recovery timeline and two-stage process
 
 ESSENTIAL MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Introduction and patient identification
+Confirming the patient's identity and the planned procedure.
+Establishing rapport and checking the patient's current understanding of the two-stage process.
+Acknowledging the psychological impact of the alopecia scar and the patient's goals for reconstruction.
 
-List the essential marking points, organised by domain.
-These are the minimum requirements for a score of 3 or above.
+Procedure explanation
+Explaining in lay terms that the operation has two stages: today a silicone balloon called a tissue expander is placed under the normal hair-bearing skin next to the bald scar through a small cut.
+Explaining that over the following weeks the expander is gradually filled with salt water through a small valve called a port, accessed by a needle through the skin, which stretches the overlying skin.
+Explaining that the expansion process creates extra skin that will eventually be used to cover the area of scarring once the scar tissue is cut out in the second operation.
+Explaining that the second operation involves removing the expander and the scar tissue, then advancing the expanded skin to cover the defect and closing it with stitches.
+Mentioning the approximate duration of today's operation, typically one to one and a half hours.
 
-Format:
-Domain Name
-The candidate must explain X in clear, jargon-free language.
-The candidate must mention Y.
+Anaesthesia and operative environment
+Explaining that today's procedure is performed under general anaesthetic.
+Mentioning that the patient will meet the anaesthetist beforehand.
+Explaining the sterile theatre environment.
 
-END OF AUTHOR NOTE]
+Post-operative care and expansion schedule
+Explaining that a drain may be left in place and removed before discharge.
+Advising that the patient should expect to stay in hospital for one night.
+Explaining that expansion typically begins two to three weeks after the first operation and involves clinic visits every one to two weeks.
+Explaining that each expansion visit involves injecting salt water through the skin into the expander using a needle, which may cause a feeling of tightness or mild discomfort that settles within a day.
+Explaining that the expansion process typically takes two to three months depending on the amount of skin needed.
+
+Risks and complications
+Mentioning bleeding and haematoma.
+Mentioning infection, noting that infection around a foreign body like an expander may be difficult to treat with antibiotics alone and may require removal of the device.
+Mentioning expander exposure or extrusion where the device comes through the skin, requiring removal.
+Mentioning expander failure or deflation.
+Mentioning pain or discomfort during the expansion process.
+Mentioning wound breakdown at the incision site.
+Mentioning scarring.
+Mentioning altered sensation or numbness in the expanded skin.
+Mentioning asymmetry or an unsatisfactory cosmetic result.
+Mentioning the possibility that the expanded skin may not be sufficient to cover the entire defect, requiring further procedures.
+
+Recovery timeline
+Advising avoidance of contact sports and vigorous activity during the expansion period to protect the expander.
+Advising return to sedentary work at approximately one to two weeks after the first operation.
+Explaining the altered appearance during expansion and that this is temporary.
+Explaining that the final cosmetic result will not be apparent until several months after the second operation.
 
 BONUS MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Procedure explanation
+Explaining the biological principle of tissue expansion: the body responds to sustained mechanical stretch by generating new skin cells, a process called biological creep, producing genuinely new tissue rather than just stretching existing skin.
+Mentioning that expanded skin in the scalp will grow hair normally because the hair follicles are preserved and duplicated during expansion.
+Discussing the shape and size options for expanders, such as rectangular, crescent, or custom shapes, chosen to match the defect.
 
-List the bonus marking points that distinguish scores of 4 and 5.
-These demonstrate excellent patient communication or detailed knowledge.
+Risks and complications
+Mentioning bone remodelling or thinning of the underlying calvarium with prolonged expansion, which is usually reversible.
+Mentioning the psychological impact of the altered appearance during expansion and the importance of psychological preparation.
+Discussing the risk of widened scars if there is excessive tension on the final closure.
+Mentioning the possibility of serial tissue expansion if the defect is too large for a single expansion cycle.
 
-Format:
-Domain Name
-The candidate explains X with a helpful analogy.
-The candidate proactively addresses common patient concerns about Y.
+Post-operative care
+Explaining that analgesics may be needed after expansion sessions and that mild discomfort is expected.
+Mentioning the importance of protecting the expander from trauma.
 
-END OF AUTHOR NOTE]
+These are points a strong candidate would mention but are not required to pass.
 
 END OF SCENARIO CRITERIA
 

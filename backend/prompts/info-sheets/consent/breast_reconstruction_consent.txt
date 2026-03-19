@@ -1,13 +1,4 @@
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the patient/procedure information sheet for this consent scenario.
-
-Include:
-- Patient details (name, age)
-- Procedure (name of planned operation)
-- Context (referral reason, clinic visit, why listed for surgery)
-- Patient Expectations (what the patient understands, any concerns)
-
-No Images field for consent scenarios.
-
-END OF AUTHOR NOTE]
+Patient: Mrs Priya Sharma, 51 years old
+Procedure: Delayed Left Breast Reconstruction with D I E P Free Flap
+Context: Mrs Sharma had a left mastectomy for breast cancer two years ago and has completed her adjuvant chemotherapy and radiotherapy. She was referred to the plastic surgery team by her breast surgeon for delayed breast reconstruction. She was seen in clinic four weeks ago, the reconstructive options were discussed, and she was listed for a D I E P free flap reconstruction. She has attended today for the operation. She has no other significant medical history and is a non-smoker.
+Patient Expectations: Mrs Sharma has been told the operation uses tissue from her tummy to rebuild her breast but does not fully understand the details. She is anxious about the length of the surgery and wants to know how the result will compare to her other breast, whether she will need further operations, and how long she will be in hospital. She is also worried about the scar on her abdomen.

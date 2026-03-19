@@ -4,7 +4,7 @@ CLINICAL SCENARIO BLOCK
 
 SCENARIO TITLE
 
-Cauda Equina
+Cauda Equina Syndrome with Pressure Injury
 
 PROBING QUESTIONS
 
@@ -12,65 +12,79 @@ PROBING QUESTIONS
 Use these to challenge or guide the candidate after they finish presenting.
 Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write 4-8 probing questions the consultant might ask during the phone call.
-These should test the candidate's clinical knowledge and management plan.
-
-Examples:
-"What were the blood results?"
-"Have you started any treatment so far?"
-"What is your surgical plan?"
-"Talk me through the steps you would take in theatre."
-"Who else have you contacted?"
-"Are you comfortable managing this yourself or do you need me to come in?"
-
-END OF AUTHOR NOTE]
+"What grade is the pressure injury and how are you classifying it?"
+"Does this need any surgical intervention from us tonight?"
+"What positioning advice would you give the spinal team for theatre?"
+"What are your concerns about this patient's pressure areas going forward?"
+"What pressure prevention measures should be in place?"
+"When should I see this patient — does it need to be tonight or can it wait?"
+"What is the long-term plan if this develops into a full-thickness pressure sore?"
 
 MAIN COMMUNICATION AND CLINICAL DOMAINS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the 4-6 main domains being assessed in this scenario.
-These should cover both communication skills and clinical knowledge areas.
-
-Example from a burns call:
-Structured clinical presentation (history, examination, observations)
-Burns assessment (TBSA, depth, mechanism)
-Resuscitation and initial management (fluids, analgesia, monitoring)
-Surgical planning (escharotomy, debridement, coverage)
-Escalation and team coordination
-Safety awareness (airway, transfer, ITU)
-
-END OF AUTHOR NOTE]
+Structured clinical presentation and appropriate triage of urgency
+Pressure injury assessment and classification
+Intraoperative positioning advice for pressure prevention
+Ongoing pressure area management and prevention strategy
+Understanding of cauda equina implications for pressure care
+Communication and liaison with the spinal surgery team
 
 ESSENTIAL MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Structured clinical presentation and appropriate triage of urgency
+The candidate must present the case clearly and differentiate between the surgical emergency being managed by the spinal team and the plastic surgery consultation for the pressure injury.
+The candidate must convey that the pressure injury does not require emergency plastic surgery intervention tonight, but that advice and a management plan are needed.
+The candidate must communicate effectively with the consultant, providing enough information for the consultant to decide whether they need to attend in person.
 
-List the essential marking points, organised by domain.
-These are the minimum requirements for a score of 3 or above.
+Pressure injury assessment and classification
+The candidate must classify the sacral injury using the established grading system. This presentation is consistent with a suspected deep tissue injury or a Category 2 pressure injury.
+The candidate must describe the findings: non-blanchable erythema with central dusky discolouration, no skin breakdown, and the size and location.
+The candidate must recognise that this injury may evolve and worsen over the coming days and requires close monitoring.
 
-Format:
-Domain Name
-The candidate must demonstrate X.
-The candidate must mention Y.
+Intraoperative positioning advice for pressure prevention
+The candidate must advise the spinal team on pressure prevention during the operation: use of gel pads for bony prominences, avoidance of pressure over the sacral area, regular repositioning if the operation is prolonged, and padding of the heels.
+The candidate must mention that the patient will likely be positioned prone for the spinal surgery and that the face, chest, and iliac crests also need protecting.
+The candidate must advise on checking the sacral area and all pressure points at the end of the procedure.
 
-END OF AUTHOR NOTE]
+Ongoing pressure area management and prevention strategy
+The candidate must recommend a pressure-relieving mattress on the ward.
+The candidate must advise regular repositioning with a turning schedule, typically 2-hourly.
+The candidate must recommend barrier cream and skin inspection at each repositioning.
+The candidate must advise on nutritional optimisation to support wound healing.
+
+Understanding of cauda equina implications for pressure care
+The candidate must recognise that if the cauda equina syndrome is not fully reversible after decompression, the patient may have permanent sensory loss in the sacral dermatomes, making them at high risk of recurrent and worsening pressure injuries.
+The candidate must mention that reduced mobility and urinary and faecal incontinence further increase the risk.
+The candidate must discuss involving the tissue viability team for ongoing assessment.
+
+Communication and liaison with the spinal surgery team
+The candidate must provide clear advice to the spinal team regarding what is needed from plastic surgery and when a formal review should take place.
+The candidate must document their advice clearly in the notes.
 
 BONUS MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Structured clinical presentation and appropriate triage of urgency
+The candidate demonstrates good clinical judgement by recognising that the pressure injury is not an emergency tonight and does not need the consultant to come in, while still providing comprehensive advice.
+The candidate mentions that they will review the patient in person on the post-operative ward round.
 
-List the bonus marking points that distinguish scores of 4 and 5.
-These demonstrate advanced knowledge or exceptional communication.
+Pressure injury assessment and classification
+The candidate knows the National Pressure Injury Advisory Panel or European Pressure Ulcer Advisory Panel classification system and can describe the categories from 1 to 4 including unstageable and suspected deep tissue injury.
+The candidate mentions that deep tissue injury may look deceptively mild initially but can rapidly deteriorate to a full-thickness defect.
 
-Format:
-Domain Name
-The candidate discusses X in detail.
-The candidate demonstrates awareness of Y.
+Intraoperative positioning advice for pressure prevention
+The candidate discusses specific prone positioning concerns: eye protection, endotracheal tube security, and avoiding pressure on the abdomen to reduce epidural venous congestion.
+The candidate mentions that the anaesthetic team should also be aware of pressure prevention responsibilities.
 
-END OF AUTHOR NOTE]
+Ongoing pressure area management and prevention strategy
+The candidate mentions the Waterlow score or Braden scale for formal pressure injury risk assessment.
+The candidate discusses the role of negative pressure wound therapy if the wound deteriorates.
+The candidate discusses the reconstructive ladder for sacral pressure sores: secondary intention, skin grafting, and local flaps such as gluteal rotation or V-Y advancement flaps.
+
+Understanding of cauda equina implications for pressure care
+The candidate discusses the importance of a multidisciplinary approach including spinal surgery, plastic surgery, tissue viability, physiotherapy, occupational therapy, and continence services.
+The candidate mentions the psychological impact of potential permanent neurological deficit and the importance of early counselling.
+
+These are points a strong candidate would mention but are not required to pass.
 
 END OF SCENARIO CRITERIA
 

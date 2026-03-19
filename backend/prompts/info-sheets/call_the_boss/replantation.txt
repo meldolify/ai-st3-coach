@@ -1,15 +1,12 @@
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the patient information sheet for this scenario.
-
-For Call-the-Boss scenarios include:
-- Patient details (name, age, MRN, DOB)
-- Presentation context (who referred, when, where)
-- History of Presenting Complaint
-- Social History
-- PMH, Drug History, Allergies
-- Observations (HR, BP, RR, Temp, Sats)
-- Examination Findings
-- Images: filename.jpg (optional, comma-separated)
-
-END OF AUTHOR NOTE]
+Patient: Mr John Berry, 25 years old, MRN 50219364, DOB 08/11/2000
+Presentation: Arrived in A and E at 9pm with a complete amputation of his right index finger
+HPC: Right hand dominant construction worker who sustained an amputation of his right index finger via a circular saw at approximately 4pm today. He bled heavily at the scene and briefly lost consciousness but came around promptly. The amputated digit was wrapped in moist gauze, placed in a plastic bag, and transported on ice. He last ate at 3:30pm.
+Social History: Construction worker, right hand dominant, plays the saxophone as a hobby. Smokes 5 cigarettes per day. Drinks 10 units of alcohol per week. Lives with his partner.
+PMH: Type 2 diabetes, asthma
+Drug History: Metformin, salbutamol inhaler P R N. N K D A. Unclear tetanus status.
+Last Ate: Approximately 5.5 hours ago
+Observations: HR 75, BP 120/80, RR 17, Temp 36.8, Sats 97% on room air, GCS 15
+Examination: Primary survey using A T L S approach is unremarkable. The patient has a complete amputation through the midshaft of the proximal phalanx of the right index finger. The stump is not actively bleeding, dressed with a moist gauze. The rest of the hand examination is unremarkable with normal neurovascular status of all other digits. The amputated part appears viable and has been appropriately stored.
+Investigations: X-ray of the hand shows a clean transverse amputation through the proximal phalanx of the index finger. X-ray of the amputated part shows a transverse fracture through the proximal phalanx which is comminuted and extends into the P I P J. No foreign body seen.
+Current Management: The stump has been dressed. The digit is stored on ice. I V access obtained. Analgesia given (I V morphine). Awaiting bloods.
+Images: replantation_1.jpg

@@ -4,78 +4,90 @@ CLINICAL SCENARIO BLOCK
 
 SCENARIO TITLE
 
-Tendon Repair Consent
+Flexor Tendon Repair
 
 PATIENT QUESTIONS
 
-(Internal reference only. Questions the patient or patient's relative may ask during the consent discussion.
+(Internal reference only. Questions the patient may ask during the consent discussion.
 Use these after the candidate finishes their explanation.
 How anxious or questioning you are is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write 6-10 patient questions that would naturally arise during this consent discussion.
-These should be written in everyday language as a real patient would ask.
-
-Examples for carpal tunnel release:
-"Will I be awake during it?"
-"How long does the operation take?"
-"When can I go back to work?"
-"You said there's a risk of infection — how common is that?"
-"Will the numbness definitely go away?"
-"What about the scar — will it be very noticeable?"
-"When do I need to come back to get checked?"
-
-For paediatric scenarios, write questions as a parent:
-"Will my child be in pain afterwards?"
-"How long will the anaesthetic take to wear off?"
-"When can they go back to school?"
-
-END OF AUTHOR NOTE]
+Why do I need to be put to sleep? Can you not do it with just an injection?
+How long does the operation take?
+Will my finger work normally again afterwards?
+Six weeks in a splint sounds like a very long time. Is there any way around that?
+I am a graphic designer and I draw with my right hand. When will I be able to use my hand properly again?
+What happens if the tendon snaps again after you fix it?
+Will I be able to bend my finger all the way?
+Does smoking really affect how the tendon heals?
 
 MAIN CONSENT DOMAINS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the 4-6 main consent domains being assessed in this scenario.
-
-Example for carpal tunnel release:
-Introduction and patient identification
-Procedure explanation (what will be done, in layman terms)
-Anaesthesia (local vs general, what to expect)
-Post-operative care (dressings, restrictions, follow-up)
-Risks and complications (infection, bleeding, nerve damage, recurrence, scar)
-Recovery and return to activities
-
-END OF AUTHOR NOTE]
+Operative environment and anaesthesia
+Operative technique
+Post-operative regime and rehabilitation
+Risks and complications
 
 ESSENTIAL MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+(Internal reference only. Do not read aloud.)
 
-List the essential marking points, organised by domain.
-These are the minimum requirements for a score of 3 or above.
+Operative environment and anaesthesia
+Explaining that the procedure is performed under G A because it may take longer and requires complete relaxation for tendon retrieval and repair.
+Describing the G A process: meeting the anaesthetist beforehand, the anaesthetist placing a drip and giving a gas to go to sleep.
+Explaining the sterile theatre environment and checking-in process.
+Mentioning that a tourniquet will be inflated on the upper arm to provide a bloodless field, similar to a blood pressure cuff.
+Explaining that the hand will be placed on a side table while the patient is asleep.
 
-Format:
-Domain Name
-The candidate must explain X in clear, jargon-free language.
-The candidate must mention Y.
+Operative technique
+Explaining that the wound will be extended, usually in a zig-zag manner above and below the original cut, to allow the surgeon to see all the structures underneath including tendons, nerves, and arteries.
+Describing that although the main problem is the tendon, the surgeon will check all other structures and repair anything else that is damaged.
+Explaining that sometimes one end of the tendon retracts away from the cut and the incision may need to be extended into the palm to retrieve it.
+Describing the repair: strong permanent sutures are placed through the core of the tendon, and then fine sutures are placed around the outside to smooth the repair. The repair is tested for strength.
+Explaining that the wound is then washed and closed with dissolvable sutures.
+Mentioning that a plaster splint will be applied to the back of the hand and wrist to protect the repair.
+Stating the approximate duration: approximately 1 hour.
 
-END OF AUTHOR NOTE]
+Post-operative regime and rehabilitation
+Explaining that the patient will wake in recovery and can go home the same day once well, with an escort. They should not drive.
+Advising to keep the hand elevated to reduce pain and swelling, and to bend and straighten the fingers regularly within the splint.
+Explaining the follow-up appointment in the hand therapy clinic within 4 to 5 days for wound check and to start a rehabilitation programme.
+Emphasising the importance of hand therapy: the therapist will change the plaster to a lighter plastic splint and begin supervised exercises. Early controlled movement helps prevent adhesions and stiffness.
+Explaining that the splint must be worn for up to 6 weeks and the patient must follow the therapist's instructions carefully to avoid re-rupture.
+Advising no heavy lifting, manual work, exercising, or swimming during the splinting period.
+Advising against driving until the splint is removed and grip is restored, typically 6 to 8 weeks.
+Advising strongly against smoking as it impairs tendon healing and increases re-rupture risk.
+Offering to provide a sick note for the employer.
+Explaining that return to full function typically takes 3 to 4 months.
+
+Risks and complications
+Bleeding: as with any operation.
+Infection: risk is higher if the wound gets wet or the patient smokes.
+Re-rupture of the tendon: this is the main specific risk. More likely if the patient does not follow hand therapy instructions, smokes, or lifts heavy objects during recovery. If this happens another operation will be needed.
+Scar: may be longer than the original cut. Can be raised, thick, painful, or a different colour. Cold intolerance is common.
+Stiffness: one of the most common problems. The repaired tendon can form adhesions to the surrounding tissue, preventing full movement. Further surgery such as tenolysis may be needed if physiotherapy does not resolve it.
+Damage to adjacent structures: nerves or blood vessels near the tendon may be injured during surgery.
+Complex Regional Pain Syndrome: rare but can cause persistent pain, swelling, and stiffness.
+Anaesthetic risks: including nausea, sore throat, and very rarely D V T or P E, though the risk is low for a short procedure.
 
 BONUS MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+(Internal reference only. Do not read aloud.)
 
-List the bonus marking points that distinguish scores of 4 and 5.
-These demonstrate excellent patient communication or detailed knowledge.
+Operative technique
+Explaining that the repair uses a core suture technique such as a modified Kessler or similar 4-strand repair for strength, with an epitendinous circumferential suture.
+Mentioning the concept of tendon zones, and that zone 2 injuries between the A1 pulley and the F D S insertion are the most challenging because of the tight fibro-osseous sheath.
 
-Format:
-Domain Name
-The candidate explains X with a helpful analogy.
-The candidate proactively addresses common patient concerns about Y.
+Post-operative regime and rehabilitation
+Explaining the different rehabilitation protocols: early active motion versus controlled passive motion, and that the therapist will choose the most appropriate one.
+Mentioning that the tendon takes approximately 6 to 8 weeks to gain adequate strength, but remodelling continues for months.
 
-END OF AUTHOR NOTE]
+Risks and complications
+Explaining that adhesion formation is more common in zone 2 injuries and may require tenolysis, a secondary operation to free the tendon, which is not usually performed until at least 3 to 6 months after the initial repair.
+Mentioning bow-stringing as a possible complication if a pulley is disrupted.
+Mentioning that a two-stage tendon reconstruction with a silicone rod may be needed if the primary repair fails.
+
+These are points a strong candidate would mention but are not required to pass.
 
 END OF SCENARIO CRITERIA
 

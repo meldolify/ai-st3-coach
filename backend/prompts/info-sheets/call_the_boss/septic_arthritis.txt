@@ -1,15 +1,12 @@
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the patient information sheet for this scenario.
-
-For Call-the-Boss scenarios include:
-- Patient details (name, age, MRN, DOB)
-- Presentation context (who referred, when, where)
-- History of Presenting Complaint
-- Social History
-- PMH, Drug History, Allergies
-- Observations (HR, BP, RR, Temp, Sats)
-- Examination Findings
-- Images: filename.jpg (optional, comma-separated)
-
-END OF AUTHOR NOTE]
+Patient: Mr Bernard Adeyemi, 62 years old, MRN 93160547, DOB 25/10/1963
+Presentation: Referred by the A and E registrar at 10:15pm with a hot swollen finger joint
+HPC: The patient is a right hand dominant retired carpenter with a background of rheumatoid arthritis. He presents with a 2-day history of a progressively hot, swollen, and extremely painful right index finger metacarpophalangeal joint. He cannot recall any injury or recent injection. He reports feeling generally unwell with a low-grade fever and rigors since yesterday. He has not been seen by his rheumatologist recently and admits he has not been taking his methotrexate regularly. His last dose was approximately 2 weeks ago. He was initially seen by his G P yesterday who thought it was a rheumatoid flare and prescribed oral prednisolone.
+Social History: Retired carpenter, right hand dominant. Non-smoker. Does not drink alcohol. Lives alone since his wife passed away 2 years ago. Has a home carer who visits daily.
+PMH: Rheumatoid arthritis (15 years, on methotrexate and hydroxychloroquine), type 2 diabetes (on insulin), hypertension, previous right knee replacement 5 years ago
+Drug History: Methotrexate 15mg weekly (non-compliant), hydroxychloroquine 200mg daily, folic acid 5mg weekly, insulin glargine 20 units at night, metformin 1g twice daily, ramipril 5mg daily. Prednisolone 30mg started by G P yesterday. Allergy to penicillin (anaphylaxis).
+Last Ate: Approximately 4 hours ago
+Observations: HR 96, BP 108/65, RR 18, Temp 38.4, Sats 97% on room air, GCS 15
+Examination: The patient appears unwell and is guarding his right hand. The right index finger M C P J is grossly swollen, erythematous, and hot. There is a visible effusion. The joint is held in slight flexion. Any attempt to move the joint actively or passively causes severe pain. The overlying skin is tense and shiny. The other M C P joints show typical rheumatoid changes (ulnar drift, swan neck deformities) but are not acutely inflamed. The neurovascular status of the index finger is intact. There is no other obvious source of infection. No skin wounds on the hand.
+Investigations: Bloods: WCC 14.8, CRP 186, E S R 72, Uric acid 0.42 (normal), Glucose 16.4, Cr 105, K 4.8. Blood cultures taken. X-ray of the right hand: soft tissue swelling around the 2nd M C P J with joint space widening. Established rheumatoid changes in both hands. No joint destruction at the 2nd M C P J. No foreign body.
+Current Management: I V access obtained. I V paracetamol given. Blood glucose being managed with a sliding scale. The A and E registrar has not aspirated the joint or started I V antibiotics as they wanted plastic surgery input first. The prednisolone has been continued.
+Images: septic_arthritis_1.jpg

@@ -12,65 +12,85 @@ PROBING QUESTIONS
 Use these to challenge or guide the candidate after they finish presenting.
 Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write 4-8 probing questions the consultant might ask during the phone call.
-These should test the candidate's clinical knowledge and management plan.
-
-Examples:
-"What were the blood results?"
-"Have you started any treatment so far?"
-"What is your surgical plan?"
-"Talk me through the steps you would take in theatre."
-"Who else have you contacted?"
-"Are you comfortable managing this yourself or do you need me to come in?"
-
-END OF AUTHOR NOTE]
+"What voltage are we talking about — high or low voltage?"
+"The C K is very high — what does that tell you and what are the implications?"
+"His urine is dark — what is causing that and how do you manage it?"
+"Do you think he needs a fasciotomy tonight? Which compartments?"
+"How are you fluid resuscitating this patient — can you use the Parkland formula?"
+"What about the cardiac arrest — what monitoring does he need?"
+"Is I T U aware? Do they have a bed?"
+"Talk me through your surgical plan in theatre."
 
 MAIN COMMUNICATION AND CLINICAL DOMAINS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the 4-6 main domains being assessed in this scenario.
-These should cover both communication skills and clinical knowledge areas.
-
-Example from a burns call:
-Structured clinical presentation (history, examination, observations)
-Burns assessment (TBSA, depth, mechanism)
-Resuscitation and initial management (fluids, analgesia, monitoring)
-Surgical planning (escharotomy, debridement, coverage)
-Escalation and team coordination
-Safety awareness (airway, transfer, ITU)
-
-END OF AUTHOR NOTE]
+Structured clinical presentation covering the severity and systemic nature of the injury
+A T L S and E M S B assessment with focus on cardiac monitoring
+Recognition and management of rhabdomyolysis and myoglobinuria
+Assessment for compartment syndrome and indication for fasciotomy
+Fluid resuscitation strategy for electrical injury
+Surgical planning and post-operative I T U care
 
 ESSENTIAL MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Structured clinical presentation covering the severity and systemic nature of the injury
+The candidate must recognise that high voltage electrical injury is a life-threatening emergency with implications far beyond the visible skin burns.
+The candidate must present the case urgently and request the consultant to come in for theatre tonight.
+The candidate must identify the entry and exit wounds and explain that the visible burns represent only a fraction of the total tissue injury as the current travels through deep tissues causing extensive muscle necrosis.
 
-List the essential marking points, organised by domain.
-These are the minimum requirements for a score of 3 or above.
+A T L S and E M S B assessment with focus on cardiac monitoring
+The candidate must describe the primary survey findings including the secured airway, the haemodynamic instability, and the need for ongoing resuscitation.
+The candidate must emphasise the need for continuous E C G monitoring given the cardiac arrest at scene and the mildly elevated troponin.
+The candidate must mention correcting the hyperkalaemia urgently as it poses a risk of fatal arrhythmias. Treatment includes calcium gluconate for myocardial protection, insulin and dextrose, and sodium bicarbonate.
 
-Format:
-Domain Name
-The candidate must demonstrate X.
-The candidate must mention Y.
+Recognition and management of rhabdomyolysis and myoglobinuria
+The candidate must recognise the markedly elevated C K of 12,500, dark urine, and positive dipstick for blood as evidence of rhabdomyolysis and myoglobinuria.
+The candidate must state that urine output should be maintained at greater than 1 ml per kg per hour as per E M S B guidance for electrical injuries.
+The candidate must mention aggressive I V fluid resuscitation and consideration of alkalinisation of the urine with sodium bicarbonate.
+The candidate must recognise the risk of acute kidney injury.
 
-END OF AUTHOR NOTE]
+Assessment for compartment syndrome and indication for fasciotomy
+The candidate must recognise that both forearms are tense and the right hand digits are dusky, indicating likely compartment syndrome.
+The candidate must state that prophylactic fasciotomy is indicated in high voltage electrical injuries given the high likelihood of underlying muscle damage.
+The candidate must mention that in sedated patients, clinical assessment of compartment syndrome is unreliable and compartment pressure measurement should be used if there is any doubt.
+
+Fluid resuscitation strategy for electrical injury
+The candidate must recognise that the modified Parkland formula can be used as a guide but that electrical injuries require significantly more fluid than the formula predicts because the visible burn underestimates total tissue injury.
+The candidate must titrate fluids to urine output.
+
+Surgical planning and post-operative I T U care
+The candidate must describe the surgical plan: urgent fasciotomy of the affected compartments, identification and protection of named nerves, excision of any clearly necrotic muscle and skin, and wound coverage with simple dressings.
+The candidate must arrange an I T U bed for post-operative care with continued cardiac monitoring, fluid management, and electrolyte correction.
+The candidate must plan for a second look at 48 hours with further excision and debridement as needed.
 
 BONUS MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Structured clinical presentation covering the severity and systemic nature of the injury
+The candidate knows the difference between high voltage (greater than 1000 volts) and low voltage injuries and that high voltage carries a much worse prognosis.
+The candidate discusses the different mechanisms of electrical injury: direct contact, arc, flash burn, and ground current.
 
-List the bonus marking points that distinguish scores of 4 and 5.
-These demonstrate advanced knowledge or exceptional communication.
+A T L S and E M S B assessment with focus on cardiac monitoring
+The candidate mentions requesting cardiology input given the cardiac arrest and elevated troponin.
+The candidate mentions examining the eyes for cataracts and corneal damage as a late complication.
+The candidate mentions examining for neurological injury.
 
-Format:
-Domain Name
-The candidate discusses X in detail.
-The candidate demonstrates awareness of Y.
+Recognition and management of rhabdomyolysis and myoglobinuria
+The candidate mentions testing the urine for myoglobin specifically.
+The candidate discusses the use of mannitol to enhance diuresis and notes that if mannitol is used, urine output can no longer be used as a reliable marker of resuscitation adequacy.
+The candidate mentions that M R I can provide detail on the anatomical site and severity of muscle injury.
 
-END OF AUTHOR NOTE]
+Assessment for compartment syndrome and indication for fasciotomy
+The candidate describes the specific fasciotomy incisions for the forearm: volar curvilinear incision with release of the carpal tunnel.
+The candidate mentions that serial debridements are often needed as the extent of tissue necrosis may declare over several days.
+
+Fluid resuscitation strategy for electrical injury
+The candidate knows the Parkland formula details: 3 to 4 ml per kg per percentage T B S A, with the first half in the first 8 hours from injury and the remainder over 16 hours.
+The candidate discusses the surgical endpoints for burns surgery: 2 to 3 hours operating time, up to 10 units transfused, temperature below 36 degrees, or the lethal triad.
+
+Surgical planning and post-operative I T U care
+The candidate discusses nutritional requirements and early enteral feeding.
+The candidate mentions the importance of a multidisciplinary approach including I T U, burns surgery, cardiology, renal medicine, physiotherapy, and psychology.
+
+These are points a strong candidate would mention but are not required to pass.
 
 END OF SCENARIO CRITERIA
 

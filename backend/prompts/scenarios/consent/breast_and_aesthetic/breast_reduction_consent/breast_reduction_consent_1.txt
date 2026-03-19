@@ -4,7 +4,7 @@ CLINICAL SCENARIO BLOCK
 
 SCENARIO TITLE
 
-Breast Reduction Consent
+Bilateral Breast Reduction Consent
 
 PATIENT QUESTIONS
 
@@ -12,70 +12,87 @@ PATIENT QUESTIONS
 Use these after the candidate finishes their explanation.
 How anxious or questioning you are is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write 6-10 patient questions that would naturally arise during this consent discussion.
-These should be written in everyday language as a real patient would ask.
-
-Examples for carpal tunnel release:
-"Will I be awake during it?"
-"How long does the operation take?"
-"When can I go back to work?"
-"You said there's a risk of infection — how common is that?"
-"Will the numbness definitely go away?"
-"What about the scar — will it be very noticeable?"
-"When do I need to come back to get checked?"
-
-For paediatric scenarios, write questions as a parent:
-"Will my child be in pain afterwards?"
-"How long will the anaesthetic take to wear off?"
-"When can they go back to school?"
-
-END OF AUTHOR NOTE]
+"Will I still be able to breastfeed afterwards?"
+"How much will you take away — can I choose my size?"
+"What will the scars look like?"
+"Will I lose sensation in my nipples?"
+"How long will I be in hospital?"
+"When can I go back to work — I am a teacher and quite active?"
+"Do I need to wear a special bra afterwards?"
+"You mentioned the nipple could lose its blood supply — how often does that happen?"
+"Will my breasts stay the same size or could they grow back?"
 
 MAIN CONSENT DOMAINS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the 4-6 main consent domains being assessed in this scenario.
-
-Example for carpal tunnel release:
 Introduction and patient identification
-Procedure explanation (what will be done, in layman terms)
-Anaesthesia (local vs general, what to expect)
-Post-operative care (dressings, restrictions, follow-up)
-Risks and complications (infection, bleeding, nerve damage, recurrence, scar)
-Recovery and return to activities
-
-END OF AUTHOR NOTE]
+Procedure explanation including incision pattern, tissue removal, and nipple repositioning
+Anaesthesia and operative environment
+Post-operative care including drains, compression, and wound care
+Risks and complications
+Recovery timeline and return to activities
 
 ESSENTIAL MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Introduction and patient identification
+Confirming the patient's identity and the planned procedure.
+Establishing rapport and checking the patient's current understanding.
+Acknowledging the patient's symptoms of neck pain, shoulder grooving, and skin irritation as the indication for surgery.
 
-List the essential marking points, organised by domain.
-These are the minimum requirements for a score of 3 or above.
+Procedure explanation
+Explaining in lay terms that the operation reduces the size and weight of the breasts by removing excess breast tissue, fat, and skin.
+Explaining that the nipple is moved up to a higher position on the breast while keeping it attached to its blood supply.
+Describing the typical incision pattern: around the nipple, a vertical line from the nipple downwards, and a horizontal line along the breast crease, creating an anchor-shaped or inverted T scar.
+Explaining that pre-operative markings will be drawn on the breasts before surgery while standing, and a chaperone will be present.
+Mentioning that the exact amount of tissue removed cannot be guaranteed and perfect symmetry is not possible.
+Explaining the approximate duration of surgery, typically two to three hours.
 
-Format:
-Domain Name
-The candidate must explain X in clear, jargon-free language.
-The candidate must mention Y.
+Anaesthesia and operative environment
+Explaining that the procedure is performed under general anaesthetic.
+Mentioning that the patient will meet the anaesthetist beforehand.
+Explaining the sterile theatre environment.
 
-END OF AUTHOR NOTE]
+Post-operative care
+Explaining that drains may be left in each breast and are usually removed before discharge.
+Advising that the patient should expect to stay in hospital for one to two nights.
+Explaining the need for a supportive sports bra to be worn day and night for approximately six weeks.
+Advising the patient to keep wounds clean and dry, take prescribed antibiotics and painkillers, and avoid smoking.
+Explaining that the first dressing check will be at approximately one week.
+
+Risks and complications
+Mentioning bleeding and haematoma, with possible return to theatre or need for blood transfusion.
+Mentioning infection.
+Mentioning scarring, including the anchor-shaped scar pattern, and the possibility of hypertrophic or keloid scarring.
+Mentioning altered or loss of nipple sensation, which may be temporary or permanent.
+Mentioning partial or total nipple necrosis if the blood supply is compromised, noting this is rare.
+Mentioning fat necrosis causing lumps in the breast.
+Mentioning asymmetry between the two breasts.
+Mentioning wound breakdown, particularly where the scars meet.
+Mentioning the potential impact on breastfeeding, which cannot be guaranteed after reduction.
+
+Recovery timeline
+Advising avoidance of heavy lifting, strenuous exercise, and contact sports for approximately six weeks.
+Advising return to sedentary work at approximately two weeks.
+Advising avoidance of swimming until wounds are fully healed.
+Explaining that the breasts will be swollen and bruised initially and the final shape will not be apparent for several months.
 
 BONUS MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Procedure explanation
+Explaining the different pedicle techniques in lay terms, noting that the nipple stays connected to underlying tissue to maintain its blood supply and sensation.
+Mentioning that the removed breast tissue is sent to pathology as a routine measure, particularly in patients with a family history of breast cancer.
+Discussing realistic expectations about cup size, noting the surgeon aims for a proportionate result but exact cup size cannot be guaranteed.
 
-List the bonus marking points that distinguish scores of 4 and 5.
-These demonstrate excellent patient communication or detailed knowledge.
+Risks and complications
+Mentioning the possibility of requiring further surgery for asymmetry correction or dog ear revision.
+Explaining that weight changes after surgery may alter the breast size and shape.
+Discussing the impact on mammographic screening and the need to inform the radiologist of previous breast surgery.
+Mentioning D V T and P E as general risks of surgery under general anaesthetic, with discussion of prophylactic measures.
 
-Format:
-Domain Name
-The candidate explains X with a helpful analogy.
-The candidate proactively addresses common patient concerns about Y.
+Recovery timeline
+Advising scar massage with moisturiser once wounds are fully healed.
+Explaining that scars will initially be red and raised but typically fade over twelve to eighteen months.
 
-END OF AUTHOR NOTE]
+These are points a strong candidate would mention but are not required to pass.
 
 END OF SCENARIO CRITERIA
 

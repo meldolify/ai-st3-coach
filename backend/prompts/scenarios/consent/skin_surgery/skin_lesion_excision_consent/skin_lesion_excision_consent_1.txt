@@ -4,7 +4,7 @@ CLINICAL SCENARIO BLOCK
 
 SCENARIO TITLE
 
-Skin Lesion Excision Consent
+Wide Local Excision and Full Thickness Skin Graft Consent
 
 PATIENT QUESTIONS
 
@@ -12,70 +12,93 @@ PATIENT QUESTIONS
 Use these after the candidate finishes their explanation.
 How anxious or questioning you are is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write 6-10 patient questions that would naturally arise during this consent discussion.
-These should be written in everyday language as a real patient would ask.
-
-Examples for carpal tunnel release:
-"Will I be awake during it?"
+"Will I be awake during the operation?"
+"How much skin will you take away from my face?"
+"Where does the skin graft come from?"
+"Will the graft match the skin on my face?"
 "How long does the operation take?"
-"When can I go back to work?"
-"You said there's a risk of infection — how common is that?"
-"Will the numbness definitely go away?"
-"What about the scar — will it be very noticeable?"
-"When do I need to come back to get checked?"
-
-For paediatric scenarios, write questions as a parent:
-"Will my child be in pain afterwards?"
-"How long will the anaesthetic take to wear off?"
-"When can they go back to school?"
-
-END OF AUTHOR NOTE]
+"What does the area look like while it is healing?"
+"How long until it looks normal?"
+"You mentioned incomplete excision — what happens then?"
+"Can I drive home afterwards?"
+"Will the cancer come back?"
 
 MAIN CONSENT DOMAINS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the 4-6 main consent domains being assessed in this scenario.
-
-Example for carpal tunnel release:
 Introduction and patient identification
-Procedure explanation (what will be done, in layman terms)
-Anaesthesia (local vs general, what to expect)
-Post-operative care (dressings, restrictions, follow-up)
-Risks and complications (infection, bleeding, nerve damage, recurrence, scar)
-Recovery and return to activities
-
-END OF AUTHOR NOTE]
+Procedure explanation including excision margins, defect assessment, and full thickness skin graft
+Anaesthesia and pain management
+Post-operative care including graft dressing and wound management
+Risks and complications
+Recovery timeline and follow-up
 
 ESSENTIAL MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Introduction and patient identification
+Confirming the patient's identity and the planned procedure.
+Establishing rapport and checking the patient's current understanding.
+Acknowledging the patient's concern about facial scarring and cosmetic outcome.
 
-List the essential marking points, organised by domain.
-These are the minimum requirements for a score of 3 or above.
+Procedure explanation
+Explaining in lay terms that the operation involves removing the skin cancer along with a three millimetre rim of normal skin around it to ensure all the cancer cells are removed.
+Explaining that the removed tissue is sent to the pathology laboratory to check the edges are clear of cancer.
+Explaining that depending on how much skin needs to be removed and how mobile the remaining skin is, the gap may either be closed directly or covered with a skin graft.
+Explaining what a full thickness skin graft is: a piece of skin including all its layers is taken from an area where the colour and texture closely match the face. In this case, the skin in front of the ear is a good match.
+Explaining that the donor site in front of the ear is closed directly with stitches, leaving a fine scar.
+Explaining that the graft is stitched into place over the defect and a firm dressing is applied on top to hold it in position.
+Mentioning the approximate duration of surgery, typically 30 to 45 minutes.
 
-Format:
-Domain Name
-The candidate must explain X in clear, jargon-free language.
-The candidate must mention Y.
+Anaesthesia and pain management
+Explaining that the procedure is performed under local anaesthetic with the patient awake.
+Explaining that injections of local anaesthetic will be given to the cheek and in front of the ear.
+Explaining the injection process: the initial injection stings but settles quickly, then the area should be numb. There should be no sharp pain during the procedure, only a feeling of pushing and pulling. Additional local anaesthetic can be given if needed.
 
-END OF AUTHOR NOTE]
+Post-operative care
+Explaining that a bulky dressing will be placed over the graft and must not be disturbed for approximately five to seven days.
+Explaining that the donor site stitches are non-dissolvable and will be removed at approximately ten days.
+Advising the patient to keep both areas clean and dry.
+Advising the patient to take prescribed antibiotics and painkillers.
+Advising against driving home on the day of surgery.
+Explaining that at the first dressing change the area will look bruised and swollen but this will settle over the coming weeks.
+
+Risks and complications
+Mentioning bleeding, including under the graft which can prevent it from taking.
+Mentioning infection.
+Mentioning graft failure, either partial or complete, where the grafted skin does not survive. Explaining that if this happens the wound may need regular dressing changes or a further graft.
+Mentioning scarring at both the graft and donor sites.
+Mentioning that the grafted skin may be a slightly different colour or texture to the surrounding facial skin, which may be noticeable.
+Mentioning altered sensation or numbness over the grafted area.
+Mentioning damage to underlying structures in the face.
+Mentioning incomplete excision where the pathology report shows cancer cells at the edge, potentially requiring further surgery.
+Mentioning recurrence of the cancer, emphasising the importance of follow-up.
+
+Recovery timeline
+Advising avoidance of strenuous activity and bending forward for approximately two weeks.
+Advising that bruising and swelling around the cheek and eye area may take two to three weeks to settle.
+Explaining that the graft will initially look dark or discoloured and gradually lightens and blends over several months but may always look slightly different.
+Advising that the pathology results will be discussed at the follow-up appointment, usually within two weeks.
+Explaining the importance of sun protection for the scar and graft site for at least twelve months.
+Advising ongoing skin surveillance for new or recurrent lesions.
 
 BONUS MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Procedure explanation
+Explaining the difference between a full thickness and split thickness skin graft and why a full thickness graft gives a better cosmetic result on the face due to less contraction and better colour match.
+Explaining the concept of the aesthetic subunit principle: placing scars along natural boundaries of the face makes them less visible.
+Mentioning that the decision between direct closure, graft, or local flap is made during the operation based on the defect size and skin mobility.
 
-List the bonus marking points that distinguish scores of 4 and 5.
-These demonstrate excellent patient communication or detailed knowledge.
+Risks and complications
+Mentioning trapdoor deformity or contraction of the graft over time which may require revision.
+Discussing the concept of incomplete excision rates for basal cell carcinoma and the options if this occurs: further excision, Mohs surgery, or radiotherapy.
+Mentioning keloid or hypertrophic scarring, noting this is less common on the face.
+Mentioning loss of sensation at the pre-auricular donor site.
 
-Format:
-Domain Name
-The candidate explains X with a helpful analogy.
-The candidate proactively addresses common patient concerns about Y.
+Post-operative care
+Advising scar massage with moisturiser once the wound is fully healed.
+Explaining the role of silicone-based products for scar management.
+Mentioning that some patients benefit from cosmetic camouflage advice during the healing period.
 
-END OF AUTHOR NOTE]
+These are points a strong candidate would mention but are not required to pass.
 
 END OF SCENARIO CRITERIA
 

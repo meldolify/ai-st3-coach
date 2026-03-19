@@ -12,65 +12,82 @@ PROBING QUESTIONS
 Use these to challenge or guide the candidate after they finish presenting.
 Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write 4-8 probing questions the consultant might ask during the phone call.
-These should test the candidate's clinical knowledge and management plan.
-
-Examples:
-"What were the blood results?"
-"Have you started any treatment so far?"
-"What is your surgical plan?"
-"Talk me through the steps you would take in theatre."
-"Who else have you contacted?"
-"Are you comfortable managing this yourself or do you need me to come in?"
-
-END OF AUTHOR NOTE]
+"Have you split the cast yet? Why not?"
+"What are the clinical signs that make you think this is compartment syndrome?"
+"Do you need to measure compartment pressures or is this a clinical diagnosis?"
+"How urgently does this need to go to theatre?"
+"Can you describe the fasciotomy incisions for the lower leg?"
+"How many compartments are there and which ones need releasing?"
+"What would your post-operative plan look like?"
+"What happens if we miss this — what are the consequences?"
 
 MAIN COMMUNICATION AND CLINICAL DOMAINS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the 4-6 main domains being assessed in this scenario.
-These should cover both communication skills and clinical knowledge areas.
-
-Example from a burns call:
-Structured clinical presentation (history, examination, observations)
-Burns assessment (TBSA, depth, mechanism)
-Resuscitation and initial management (fluids, analgesia, monitoring)
-Surgical planning (escharotomy, debridement, coverage)
-Escalation and team coordination
-Safety awareness (airway, transfer, ITU)
-
-END OF AUTHOR NOTE]
+Structured clinical presentation with recognition of compartment syndrome as a surgical emergency
+Immediate bedside management including cast removal
+Clinical features and diagnostic approach
+Fasciotomy technique for the lower leg
+Post-operative care and wound management
+Understanding of consequences of delayed treatment
 
 ESSENTIAL MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Structured clinical presentation with recognition of compartment syndrome as a surgical emergency
+The candidate must recognise that this presentation is consistent with compartment syndrome and that it is a surgical emergency requiring immediate fasciotomy.
+The candidate must convey the urgency of the situation and request the consultant's support for theatre tonight.
+The candidate must present the key clinical features clearly: pain out of proportion, escalating analgesia requirement, pain on passive stretch, cool toes with delayed capillary refill, and reduced sensation.
 
-List the essential marking points, organised by domain.
-These are the minimum requirements for a score of 3 or above.
+Immediate bedside management including cast removal
+The candidate must state that the first and most urgent step is to immediately split and bivalve the cast and all underlying padding down to skin.
+The candidate must recognise that this should have been done already and should be done before any other assessment.
+The candidate must mention lowering the limb to heart level rather than keeping it elevated, to maintain perfusion pressure.
+The candidate must provide analgesia but recognise that escalating opioid requirements are suspicious for compartment syndrome.
 
-Format:
-Domain Name
-The candidate must demonstrate X.
-The candidate must mention Y.
+Clinical features and diagnostic approach
+The candidate must know the classic features of compartment syndrome: pain out of proportion, pain on passive stretch, tense swelling, paraesthesia, and the late signs of pallor, paralysis, and pulselessness.
+The candidate must state that compartment syndrome is primarily a clinical diagnosis and treatment should not be delayed for compartment pressure measurements.
+The candidate must recognise that the presence of a palpable pulse does not exclude compartment syndrome as pulselessness is a late sign.
 
-END OF AUTHOR NOTE]
+Fasciotomy technique for the lower leg
+The candidate must know there are four compartments: anterior, lateral, superficial posterior, and deep posterior.
+The candidate must describe a two-incision four-compartment fasciotomy: an anterolateral incision two finger breadths lateral to the tibial crest to release the anterior and lateral compartments, and a posteromedial incision two finger breadths posterior to the posteromedial border of the tibia to release the superficial and deep posterior compartments.
+The candidate must mention that incisions should extend the full length of the compartment and the fascia must be opened along the full length.
+The candidate must mention protecting the common peroneal nerve at the fibular head and the saphenous vein and nerve with the posteromedial incision.
+
+Post-operative care and wound management
+The candidate must state that the fasciotomy wounds are left open initially.
+The candidate must plan a return to theatre at 48 hours for assessment and delayed primary closure, split-thickness skin graft, or negative pressure wound therapy.
+The candidate must mention monitoring the neurovascular status post-operatively.
+The candidate must mention assessing muscle viability at second look: viable muscle should be pink, contractile, and bleed when cut.
+
+Understanding of consequences of delayed treatment
+The candidate must recognise that delayed fasciotomy leads to irreversible muscle and nerve ischaemia.
+The candidate must know that the consequence in the lower limb is irreversible tissue necrosis with potential limb loss.
 
 BONUS MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Structured clinical presentation with recognition of compartment syndrome as a surgical emergency
+The candidate demonstrates urgency in their communication and makes it clear that this cannot wait.
+The candidate mentions the medico-legal significance of compartment syndrome and the importance of thorough documentation.
 
-List the bonus marking points that distinguish scores of 4 and 5.
-These demonstrate advanced knowledge or exceptional communication.
+Immediate bedside management including cast removal
+The candidate discusses compartment pressure measurement using the Whitesides criteria if the diagnosis is uncertain: fasciotomy is indicated when compartment pressure rises to within 10 to 30 mmHg of the diastolic blood pressure, or absolute pressure exceeds 30 mmHg.
+The candidate mentions using a Stryker I C P monitor or needle manometry.
 
-Format:
-Domain Name
-The candidate discusses X in detail.
-The candidate demonstrates awareness of Y.
+Clinical features and diagnostic approach
+The candidate mentions that opioid analgesia may mask symptoms and that escalating analgesia requirements should raise suspicion.
+The candidate discusses the common causes of compartment syndrome: fractures, crush injuries, tight casts, burns, high-pressure injection injuries, and reperfusion after vascular repair.
 
-END OF AUTHOR NOTE]
+Fasciotomy technique for the lower leg
+The candidate describes the compartments of the forearm and hand for comparison, showing broader knowledge.
+The candidate mentions that non-viable muscle at second look should be debrided to prevent rhabdomyolysis, sepsis, and myoglobinuric renal failure.
+
+Post-operative care and wound management
+The candidate mentions systemic complications including rhabdomyolysis, hyperkalaemia, metabolic acidosis, and acute kidney injury from myoglobinuria.
+The candidate discusses the management of rhabdomyolysis: aggressive I V fluid resuscitation, monitoring urine output, monitoring serum creatine kinase and potassium, and alkalinisation of the urine with sodium bicarbonate.
+The candidate mentions that Volkmann ischaemic contracture is the consequence of a missed compartment syndrome in the upper limb.
+
+These are points a strong candidate would mention but are not required to pass.
 
 END OF SCENARIO CRITERIA
 

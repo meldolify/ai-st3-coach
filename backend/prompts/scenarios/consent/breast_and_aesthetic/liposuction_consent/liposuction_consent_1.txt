@@ -12,70 +12,82 @@ PATIENT QUESTIONS
 Use these after the candidate finishes their explanation.
 How anxious or questioning you are is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write 6-10 patient questions that would naturally arise during this consent discussion.
-These should be written in everyday language as a real patient would ask.
-
-Examples for carpal tunnel release:
-"Will I be awake during it?"
-"How long does the operation take?"
-"When can I go back to work?"
-"You said there's a risk of infection — how common is that?"
-"Will the numbness definitely go away?"
-"What about the scar — will it be very noticeable?"
-"When do I need to come back to get checked?"
-
-For paediatric scenarios, write questions as a parent:
-"Will my child be in pain afterwards?"
-"How long will the anaesthetic take to wear off?"
-"When can they go back to school?"
-
-END OF AUTHOR NOTE]
+"Will I be asleep or awake for this?"
+"How much fat will you remove?"
+"Will the fat come back if I put weight on?"
+"Will the skin sag after the fat is removed?"
+"How long until I see the final result?"
+"What does the compression garment look like — how long do I wear it?"
+"Will I have scars?"
+"I read online about fat embolism — should I be worried?"
+"When can I go back to the gym?"
 
 MAIN CONSENT DOMAINS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the 4-6 main consent domains being assessed in this scenario.
-
-Example for carpal tunnel release:
 Introduction and patient identification
-Procedure explanation (what will be done, in layman terms)
-Anaesthesia (local vs general, what to expect)
-Post-operative care (dressings, restrictions, follow-up)
-Risks and complications (infection, bleeding, nerve damage, recurrence, scar)
-Recovery and return to activities
-
-END OF AUTHOR NOTE]
+Procedure explanation including tumescent technique and fat aspiration
+Anaesthesia and operative environment
+Post-operative care including compression garment
+Risks and complications
+Recovery timeline and realistic expectations
 
 ESSENTIAL MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Introduction and patient identification
+Confirming the patient's identity and the planned procedure.
+Establishing rapport and checking the patient's current understanding.
+Clarifying that liposuction is a body contouring procedure, not a weight loss operation.
 
-List the essential marking points, organised by domain.
-These are the minimum requirements for a score of 3 or above.
+Procedure explanation
+Explaining in lay terms that the operation removes localised deposits of fat using a thin tube called a cannula inserted through small cuts in the skin.
+Explaining that a fluid containing local anaesthetic and adrenaline is injected into the fat first, called the tumescent technique, which numbs the area, reduces bleeding, and makes the fat easier to remove.
+Explaining the areas being treated: bilateral flanks and lower abdomen.
+Mentioning that the small incisions are typically five to ten millimetres long and are placed in natural creases where possible.
+Explaining the approximate duration of surgery, typically one to two hours depending on the volume treated.
+Mentioning that the amount of fat removed will be decided during the operation based on the response and contour.
 
-Format:
-Domain Name
-The candidate must explain X in clear, jargon-free language.
-The candidate must mention Y.
+Anaesthesia and operative environment
+Explaining the type of anaesthesia, either general anaesthetic or local anaesthetic with sedation, depending on the extent of the procedure.
+Explaining the sterile theatre environment.
+Mentioning the patient will meet the anaesthetist if a general anaesthetic is planned.
 
-END OF AUTHOR NOTE]
+Post-operative care
+Explaining that a compression garment must be worn for approximately four to six weeks to help the skin conform to the new contour and reduce swelling.
+Advising that the small incisions may leak fluid tinged with blood for the first 24 to 48 hours, which is normal.
+Explaining that the patient may go home the same day or stay overnight.
+Advising the patient to keep wounds clean and dry, take prescribed painkillers, and avoid smoking.
+
+Risks and complications
+Mentioning bleeding and bruising, which is expected and usually settles.
+Mentioning infection.
+Mentioning contour irregularities such as lumps, bumps, or asymmetry.
+Mentioning skin surface irregularities or dimpling.
+Mentioning seroma, a collection of fluid under the skin.
+Mentioning numbness or altered sensation in the treated areas, usually temporary.
+Mentioning scarring at the incision sites.
+Mentioning the possibility of skin laxity if the skin does not contract adequately.
+Mentioning D V T and P E as general risks.
+
+Recovery timeline
+Advising that bruising and swelling will be significant for the first two to three weeks.
+Advising return to sedentary work at approximately one week.
+Advising avoidance of strenuous exercise for approximately four weeks.
+Explaining that the final result will not be apparent for approximately three to six months as swelling resolves.
 
 BONUS MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Procedure explanation
+Explaining the difference between liposuction techniques such as suction-assisted, power-assisted, and ultrasound-assisted in lay terms.
+Mentioning the maximum safe volume of fat that can be removed in a single session, typically up to five percent of body weight.
+Discussing the concept of fat redistribution, explaining that treated areas will not regain fat in the same way but untreated areas may become more prominent with weight gain.
 
-List the bonus marking points that distinguish scores of 4 and 5.
-These demonstrate excellent patient communication or detailed knowledge.
+Risks and complications
+Mentioning fat embolism as a very rare but serious risk and explaining it in reassuring terms.
+Mentioning lidocaine toxicity from the tumescent fluid as a rare risk, particularly with large volume liposuction.
+Mentioning thermal injury if ultrasound or laser-assisted techniques are used.
+Discussing the importance of maintaining a stable weight for long-term results.
 
-Format:
-Domain Name
-The candidate explains X with a helpful analogy.
-The candidate proactively addresses common patient concerns about Y.
-
-END OF AUTHOR NOTE]
+These are points a strong candidate would mention but are not required to pass.
 
 END OF SCENARIO CRITERIA
 

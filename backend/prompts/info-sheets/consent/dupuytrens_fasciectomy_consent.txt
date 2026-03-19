@@ -1,13 +1,4 @@
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the patient/procedure information sheet for this consent scenario.
-
-Include:
-- Patient details (name, age)
-- Procedure (name of planned operation)
-- Context (referral reason, clinic visit, why listed for surgery)
-- Patient Expectations (what the patient understands, any concerns)
-
-No Images field for consent scenarios.
-
-END OF AUTHOR NOTE]
+Patient: Mr Brian Kowalski, 63 years old
+Procedure: Left Ring Finger Fasciectomy for Dupuytren's Contracture
+Context: Referred by GP with progressive flexion contracture of the left ring finger over two years. Unable to lay his hand flat on a table. Seen in clinic six weeks ago by the consultant who confirmed Dupuytren's contracture with a positive Hueston tabletop test and approximately 40 degree M C P joint contracture and 30 degree P I P joint contracture. Listed for fasciectomy. He has attended today for the operation.
+Patient Expectations: Mr Kowalski understands he has a "thickening in the hand" but does not know what the operation involves. He is worried about losing his finger and wants to know if the condition can come back. He works as a plumber and is concerned about how long he will be off work.

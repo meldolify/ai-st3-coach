@@ -4,7 +4,7 @@ CLINICAL SCENARIO BLOCK
 
 SCENARIO TITLE
 
-Local Flap Reconstruction Consent
+Local Flap Reconstruction of Nasal Defect Consent
 
 PATIENT QUESTIONS
 
@@ -12,70 +12,85 @@ PATIENT QUESTIONS
 Use these after the candidate finishes their explanation.
 How anxious or questioning you are is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write 6-10 patient questions that would naturally arise during this consent discussion.
-These should be written in everyday language as a real patient would ask.
-
-Examples for carpal tunnel release:
-"Will I be awake during it?"
+"Will I be awake during the operation?"
+"Where will the skin come from — is it from my nose or somewhere else?"
+"How big will the scar be on my nose?"
+"I am on warfarin — is that a problem?"
 "How long does the operation take?"
-"When can I go back to work?"
-"You said there's a risk of infection — how common is that?"
-"Will the numbness definitely go away?"
-"What about the scar — will it be very noticeable?"
-"When do I need to come back to get checked?"
-
-For paediatric scenarios, write questions as a parent:
-"Will my child be in pain afterwards?"
-"How long will the anaesthetic take to wear off?"
-"When can they go back to school?"
-
-END OF AUTHOR NOTE]
+"Will my nose look normal afterwards?"
+"When will I know if the flap has worked?"
+"How soon can I restart my blood thinners?"
+"When do the stitches come out?"
 
 MAIN CONSENT DOMAINS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the 4-6 main consent domains being assessed in this scenario.
-
-Example for carpal tunnel release:
 Introduction and patient identification
-Procedure explanation (what will be done, in layman terms)
-Anaesthesia (local vs general, what to expect)
-Post-operative care (dressings, restrictions, follow-up)
-Risks and complications (infection, bleeding, nerve damage, recurrence, scar)
-Recovery and return to activities
-
-END OF AUTHOR NOTE]
+Procedure explanation including flap design and reconstruction of the nasal defect
+Anaesthesia and pain management
+Post-operative care including wound care and anticoagulation management
+Risks and complications
+Recovery timeline and cosmetic outcome
 
 ESSENTIAL MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Introduction and patient identification
+Confirming the patient's identity and the planned procedure.
+Establishing rapport and checking the patient's understanding of the Mohs surgery outcome and the need for reconstruction.
+Acknowledging the patient's concerns about the appearance of her nose.
 
-List the essential marking points, organised by domain.
-These are the minimum requirements for a score of 3 or above.
+Procedure explanation
+Explaining in lay terms that the cancer has been completely removed and today's operation is to close the hole using nearby skin that is moved across to fill the gap, which is called a local flap.
+Explaining the concept of a local flap in simple terms: the skin next to the hole is loosened and rotated or advanced to cover the defect while remaining attached to its own blood supply.
+Explaining that the specific flap design, such as a bilobed flap or nasolabial flap, will be decided based on the size and exact location of the defect.
+Mentioning that the donor area where the skin is taken from will also be closed with stitches, resulting in additional scars.
+Explaining the approximate duration of surgery, typically 45 minutes to one hour.
+Explaining that pre-operative markings will be drawn on the nose and surrounding area.
 
-Format:
-Domain Name
-The candidate must explain X in clear, jargon-free language.
-The candidate must mention Y.
+Anaesthesia and pain management
+Explaining that the procedure is performed under local anaesthetic with the patient awake.
+Explaining that injections of local anaesthetic will be given around the nose and that the initial injection stings but the area then becomes numb.
+Reassuring the patient that there should be no sharp pain during the procedure, only a sensation of pressure and pulling, and that additional local anaesthetic can be given if needed.
 
-END OF AUTHOR NOTE]
+Post-operative care
+Explaining that the wound will be closed with fine stitches and a dressing will be applied.
+Explaining that the stitches will be removed at approximately seven to ten days.
+Advising the patient to keep the wound clean and dry.
+Addressing anticoagulation management: explaining when warfarin will be restarted and the plan for bridging anticoagulation, in coordination with the anticoagulation team.
+Explaining that the area will be bruised and swollen initially, particularly around the eyes.
+
+Risks and complications
+Mentioning bleeding, noting the increased risk due to warfarin use and the facial blood supply.
+Mentioning haematoma under the flap which may require return to theatre.
+Mentioning infection.
+Mentioning partial or complete flap failure where the transferred skin loses its blood supply and may die, requiring further surgery or healing by secondary intention.
+Mentioning scarring on the nose and the donor area, noting that scars on the nose are generally well-concealed along natural creases.
+Mentioning altered sensation or numbness around the nose.
+Mentioning distortion of the nasal shape or nostril asymmetry.
+Mentioning wound breakdown.
+
+Recovery timeline
+Advising that bruising and swelling will settle over two to three weeks.
+Explaining that the scar will initially be red and firm but will soften and fade over six to twelve months.
+Advising that the final cosmetic result may not be apparent for several months and a further minor revision procedure may be offered if needed.
+Advising avoidance of strenuous activity, heavy lifting, and bending forward for approximately two weeks to reduce bleeding risk.
 
 BONUS MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Procedure explanation
+Explaining the specific flap options for nasal reconstruction: bilobed flap for small defects, nasolabial flap for larger defects, or paramedian forehead flap for full-thickness defects, and why the chosen option is appropriate.
+Mentioning that reconstruction aims to replace tissue with like tissue, matching colour, texture, and thickness.
+Explaining the subunit principle of nasal reconstruction in lay terms: the nose is made up of natural sections, and scars placed along the borders of these sections are less visible.
 
-List the bonus marking points that distinguish scores of 4 and 5.
-These demonstrate excellent patient communication or detailed knowledge.
+Risks and complications
+Mentioning trapdoor deformity or pincushioning where the flap becomes raised and puffy, which may require later revision.
+Mentioning the risk of skin graft being needed if the flap is insufficient to close the defect.
+Discussing the specific anticoagulation-related bleeding risks and the balance between bleeding risk and thromboembolic risk.
 
-Format:
-Domain Name
-The candidate explains X with a helpful analogy.
-The candidate proactively addresses common patient concerns about Y.
+Recovery timeline
+Advising scar massage once the wound is fully healed.
+Mentioning that sun protection of the scar is important for at least twelve months to prevent hyperpigmentation.
 
-END OF AUTHOR NOTE]
+These are points a strong candidate would mention but are not required to pass.
 
 END OF SCENARIO CRITERIA
 

@@ -1,13 +1,4 @@
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the patient/procedure information sheet for this consent scenario.
-
-Include:
-- Patient details (name, age)
-- Procedure (name of planned operation)
-- Context (referral reason, clinic visit, why listed for surgery)
-- Patient Expectations (what the patient understands, any concerns)
-
-No Images field for consent scenarios.
-
-END OF AUTHOR NOTE]
+Patient: Miss Sophie Taylor, 28 years old
+Procedure: Bilateral Breast Reduction
+Context: Miss Taylor was referred by her G P with chronic neck and shoulder pain, bra strap grooving, and intertrigo beneath both breasts. She has tried physiotherapy and supportive bras without improvement. She was seen in clinic three weeks ago by the consultant, examined, and listed for bilateral breast reduction. She has attended today for the operation. She is otherwise fit and well with no significant medical history. She is a non-smoker.
+Patient Expectations: Miss Taylor understands the operation will make her breasts smaller but is unsure about the details. She is concerned about scarring and whether she will still be able to breastfeed in the future. She wants to know how much tissue will be removed, how long she will be in hospital, and when she can return to her job as a primary school teacher.

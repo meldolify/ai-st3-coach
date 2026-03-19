@@ -1,13 +1,4 @@
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the patient/procedure information sheet for this consent scenario.
-
-Include:
-- Patient details (name, age)
-- Procedure (name of planned operation)
-- Context (referral reason, clinic visit, why listed for surgery)
-- Patient Expectations (what the patient understands, any concerns)
-
-No Images field for consent scenarios.
-
-END OF AUTHOR NOTE]
+Patient: Mrs Karen Okafor, 42 years old
+Procedure: Abdominoplasty (Tummy Tuck)
+Context: Mrs Okafor was referred by her G P after years of back pain and skin irritation from a large apron of excess abdominal skin following three pregnancies and significant weight loss of four stone. She was seen in the plastic surgery clinic six weeks ago, examined by the consultant, and listed for surgery. She has attended today for the operation. Her B M I is 28. She is otherwise well with no significant medical history.
+Patient Expectations: Mrs Okafor understands she is having an operation to remove the loose skin from her tummy but is unsure about the details. She is anxious about having a general anaesthetic and wants to know how long recovery will take, when she can return to her part-time office job, and whether she will have a visible scar. She is also concerned about how her belly button will look afterwards.

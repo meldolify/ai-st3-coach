@@ -1,13 +1,4 @@
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the patient/procedure information sheet for this consent scenario.
-
-Include:
-- Patient details (name, age)
-- Procedure (name of planned operation)
-- Context (referral reason, clinic visit, why listed for surgery)
-- Patient Expectations (what the patient understands, any concerns)
-
-No Images field for consent scenarios.
-
-END OF AUTHOR NOTE]
+Patient: Miss Priya Sharma, 34 years old
+Procedure: Right Little Finger Flexor Tendon Repair
+Context: Presented to A and E after cutting her right little finger on a kitchen knife two hours ago. Examination confirmed a volar laceration at the level of the proximal phalanx with inability to flex the D I P joint. Flexor digitorum profundus tendon divided. Neurovascular status intact distally. Wound irrigated and temporarily closed. She has been listed on the emergency trauma list for flexor tendon repair under G A today.
+Patient Expectations: Miss Sharma was told her tendon is cut and needs an operation. She is frightened about having a G A and wants to know why the operation cannot be done with her awake. She works as a graphic designer and is worried about when she can use her hand again and whether her finger will work normally afterwards.

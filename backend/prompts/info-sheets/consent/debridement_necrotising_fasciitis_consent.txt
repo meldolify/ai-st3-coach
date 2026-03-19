@@ -1,13 +1,4 @@
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the patient/procedure information sheet for this consent scenario.
-
-Include:
-- Patient details (name, age)
-- Procedure (name of planned operation)
-- Context (referral reason, clinic visit, why listed for surgery)
-- Patient Expectations (what the patient understands, any concerns)
-
-No Images field for consent scenarios.
-
-END OF AUTHOR NOTE]
+Patient: Mrs Gloria Mensah, 52 years old
+Procedure: Emergency Debridement of Left Lower Limb for Suspected Necrotising Fasciitis
+Context: Admitted via A and E with a rapidly spreading erythema, severe pain, and crepitus over her left medial calf which began 36 hours ago following a minor scratch. She is septic with a temperature of 39.2, heart rate 120, and blood pressure 90 over 60. Bloods show raised W C C, C R P over 300, and a LRINEC score of 9. I V antibiotics have been started and the I T U team are involved. She has been listed for emergency surgical debridement. Her husband is present.
+Patient Expectations: Mrs Mensah is very unwell, frightened, and in significant pain. She has been told she has a serious infection that needs an emergency operation. She does not understand what debridement means and is terrified of losing her leg. She wants to know how dangerous the infection is and whether she will need to go to intensive care.

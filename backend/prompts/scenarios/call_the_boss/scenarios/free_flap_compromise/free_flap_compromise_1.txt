@@ -12,65 +12,88 @@ PROBING QUESTIONS
 Use these to challenge or guide the candidate after they finish presenting.
 Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write 4-8 probing questions the consultant might ask during the phone call.
-These should test the candidate's clinical knowledge and management plan.
-
-Examples:
-"What were the blood results?"
-"Have you started any treatment so far?"
-"What is your surgical plan?"
-"Talk me through the steps you would take in theatre."
-"Who else have you contacted?"
-"Are you comfortable managing this yourself or do you need me to come in?"
-
-END OF AUTHOR NOTE]
+"Is this arterial or venous compromise — how can you tell?"
+"What bedside measures have you already tried?"
+"Has the flap pinked up after loosening the dressings and releasing sutures?"
+"Do you think this needs to go back to theatre?"
+"How quickly do we need to re-explore — what is the salvage window?"
+"What would you do in theatre if you found a venous thrombus?"
+"Would you consider using leeches? What antibiotic would you need?"
+"What is the overall salvage rate for free flaps?"
 
 MAIN COMMUNICATION AND CLINICAL DOMAINS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the 4-6 main domains being assessed in this scenario.
-These should cover both communication skills and clinical knowledge areas.
-
-Example from a burns call:
-Structured clinical presentation (history, examination, observations)
-Burns assessment (TBSA, depth, mechanism)
-Resuscitation and initial management (fluids, analgesia, monitoring)
-Surgical planning (escharotomy, debridement, coverage)
-Escalation and team coordination
-Safety awareness (airway, transfer, ITU)
-
-END OF AUTHOR NOTE]
+Structured clinical presentation with accurate differentiation of arterial versus venous compromise
+Immediate bedside salvage measures
+Decision to re-explore and theatre preparation
+Operative salvage approach including thrombectomy and vein grafting
+Leech therapy and its management
+Post-operative monitoring and communication with the patient
 
 ESSENTIAL MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Structured clinical presentation with accurate differentiation of arterial versus venous compromise
+The candidate must correctly identify that this is venous congestion based on the clinical signs: blue-purple colour, brisk capillary refill with dark blood, tense and swollen flap, rapid dark bleeding on needle prick, present arterial Doppler signal, and absent venous Doppler signal.
+The candidate must contrast these with the signs of arterial insufficiency: pale or white flap, absent or sluggish capillary refill, soft cool flap, absent arterial Doppler, and no bleeding on needle prick.
+The candidate must convey the urgency and inform the consultant that the flap is in jeopardy and may need to return to theatre.
 
-List the essential marking points, organised by domain.
-These are the minimum requirements for a score of 3 or above.
+Immediate bedside salvage measures
+The candidate must immediately remove all dressings and sutures that may be compressing the pedicle.
+The candidate must reposition the patient to avoid any kinking or pressure on the pedicle.
+The candidate must strip the drains to relieve any clots that may be preventing evacuation of haematoma.
+The candidate must ensure the patient is warm, well hydrated, and haemodynamically stable.
+The candidate must avoid vasoconstrictors.
+The candidate must keep the patient N B M in case theatre is needed.
 
-Format:
-Domain Name
-The candidate must demonstrate X.
-The candidate must mention Y.
+Decision to re-explore and theatre preparation
+The candidate must state that if bedside measures do not improve the flap within a short period, urgent return to theatre is required.
+The candidate must know that salvage rates are highest when explored within 1 to 2 hours of onset.
+The candidate must inform theatres, request an anaesthetic review, and prepare the patient for theatre including cross-matching blood.
+The candidate must consent the patient for flap re-exploration including the possibility of vein graft, revision of the anastomosis, and the risk of flap loss.
+The candidate must inform the consultant and request them to come in.
 
-END OF AUTHOR NOTE]
+Operative salvage approach including thrombectomy and vein grafting
+The candidate must describe the operative approach: deliver the flap and inspect the pedicle along its full length, wash out any haematoma, unkink or reposition any twisted vessels, and perform a milking test to assess flow.
+The candidate must describe management of a venous thrombus: resect the thrombosed segment, re-anastomose with fresh vessel ends, and use an interposition vein graft if there is tension or insufficient vessel length.
+The candidate must mention systemic heparinisation or local heparin flush.
+
+Leech therapy and its management
+The candidate must know that leeches are indicated for venous congestion when surgical salvage alone is insufficient.
+The candidate must know that leeches secrete hirudin, an anticoagulant, which promotes continued bleeding after detachment.
+The candidate must know that antibiotic prophylaxis against Aeromonas hydrophila is mandatory — ciprofloxacin is first line.
+The candidate must mention monitoring haemoglobin closely as patients can become significantly anaemic from leech therapy.
+
+Post-operative monitoring and communication with the patient
+The candidate must describe the post-operative monitoring protocol: hourly flap observations for colour, capillary refill, temperature, turgor, and Doppler signal.
+The candidate must discuss informing the patient of the situation and the need to return to theatre, explaining the risks including potential flap loss.
 
 BONUS MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Structured clinical presentation with accurate differentiation of arterial versus venous compromise
+The candidate mentions implantable Cook Doppler for monitoring buried flaps.
+The candidate discusses indocyanine green angiography in theatre to assess flap perfusion.
 
-List the bonus marking points that distinguish scores of 4 and 5.
-These demonstrate advanced knowledge or exceptional communication.
+Immediate bedside salvage measures
+The candidate mentions releasing any haematoma at the bedside if there is a visible collection around the pedicle.
+The candidate discusses that in a D I E P flap, patient positioning is important to avoid abdominal wall tension that could kink the pedicle.
 
-Format:
-Domain Name
-The candidate discusses X in detail.
-The candidate demonstrates awareness of Y.
+Decision to re-explore and theatre preparation
+The candidate knows that overall free flap salvage rates are approximately 50 to 75 percent, and that venous problems are more common than arterial but arterial problems have a worse salvage rate.
+The candidate discusses risk factors for flap failure: smoking, diabetes, previous radiotherapy, hypercoagulable states, and obesity.
 
-END OF AUTHOR NOTE]
+Operative salvage approach including thrombectomy and vein grafting
+The candidate mentions the use of local thrombolytic agents (t P A) applied to a thrombosed anastomosis.
+The candidate discusses the saphenous vein or cephalic vein as sources for vein grafts.
+
+Leech therapy and its management
+The candidate knows that leeches should continue until neovascularisation establishes venous drainage, typically 3 to 5 days.
+The candidate discusses dextran infusion and aspirin protocols for free flap anticoagulation, noting that dextran has largely fallen out of favour.
+
+Post-operative monitoring and communication with the patient
+The candidate discusses secondary reconstruction options if salvage fails.
+The candidate mentions the psychological impact on the patient and the importance of sensitive communication.
+
+These are points a strong candidate would mention but are not required to pass.
 
 END OF SCENARIO CRITERIA
 

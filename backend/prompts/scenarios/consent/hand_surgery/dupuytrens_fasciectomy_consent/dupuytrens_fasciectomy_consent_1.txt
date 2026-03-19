@@ -4,78 +4,90 @@ CLINICAL SCENARIO BLOCK
 
 SCENARIO TITLE
 
-Dupuytrens Fasciectomy Consent
+Dupuytren's Fasciectomy
 
 PATIENT QUESTIONS
 
-(Internal reference only. Questions the patient or patient's relative may ask during the consent discussion.
+(Internal reference only. Questions the patient may ask during the consent discussion.
 Use these after the candidate finishes their explanation.
 How anxious or questioning you are is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write 6-10 patient questions that would naturally arise during this consent discussion.
-These should be written in everyday language as a real patient would ask.
-
-Examples for carpal tunnel release:
-"Will I be awake during it?"
-"How long does the operation take?"
-"When can I go back to work?"
-"You said there's a risk of infection — how common is that?"
-"Will the numbness definitely go away?"
-"What about the scar — will it be very noticeable?"
-"When do I need to come back to get checked?"
-
-For paediatric scenarios, write questions as a parent:
-"Will my child be in pain afterwards?"
-"How long will the anaesthetic take to wear off?"
-"When can they go back to school?"
-
-END OF AUTHOR NOTE]
+Will my finger be completely straight after the operation?
+Can this come back after surgery? My father had the same thing and needed two operations.
+Will I be awake or asleep for this?
+I am a plumber and need to grip tools. How long until I can get back to work?
+Will the feeling in my finger be normal after the operation?
+Could you just cut the cord rather than doing a big operation?
+What happens if I decide not to have the operation?
+How long will the operation take?
 
 MAIN CONSENT DOMAINS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the 4-6 main consent domains being assessed in this scenario.
-
-Example for carpal tunnel release:
-Introduction and patient identification
-Procedure explanation (what will be done, in layman terms)
-Anaesthesia (local vs general, what to expect)
-Post-operative care (dressings, restrictions, follow-up)
-Risks and complications (infection, bleeding, nerve damage, recurrence, scar)
-Recovery and return to activities
-
-END OF AUTHOR NOTE]
+Operative environment and anaesthesia
+Operative technique
+Post-operative regime and rehabilitation
+Risks and complications
 
 ESSENTIAL MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+(Internal reference only. Do not read aloud.)
 
-List the essential marking points, organised by domain.
-These are the minimum requirements for a score of 3 or above.
+Operative environment and anaesthesia
+Explaining the anaesthetic options: G A or regional anaesthesia such as an axillary nerve block, depending on the complexity and patient preference. Candidate should explain what being asleep involves or what a nerve block involves.
+Describing the sterile theatre environment, checking in process, and that the team will introduce themselves and confirm details.
+Mentioning the use of a tourniquet to provide a bloodless field.
+Explaining that the procedure will be performed with the arm out on a side table.
 
-Format:
-Domain Name
-The candidate must explain X in clear, jargon-free language.
-The candidate must mention Y.
+Operative technique
+Explaining that the surgeon makes a zig-zag or Brunner type incision over the affected area of the palm and finger.
+Describing that the diseased thickened tissue called the Dupuytren's cord is carefully dissected away from the surrounding structures including the nerves, arteries, and tendons that run very close to it.
+Explaining that the nerves and arteries in the finger may be displaced by the disease and must be carefully identified and protected.
+Mentioning that the skin may be closed with sutures, or occasionally the wound may be left partially open to heal by itself if the skin is very tight, particularly over the finger.
+Stating the approximate duration: 45 minutes to 1.5 hours depending on the extent of disease.
 
-END OF AUTHOR NOTE]
+Post-operative regime and rehabilitation
+Explaining that the hand will be placed in a bulky dressing and possibly a plaster splint.
+Advising a follow-up appointment in the hand therapy clinic within 5 to 7 days for wound check and to start exercises.
+Explaining the importance of hand therapy: the patient will need to attend regular sessions for exercises and may need a night splint to maintain correction, worn for up to 3 months.
+Advising that driving should be avoided until the wound has healed and grip strength returns, typically 2 to 4 weeks.
+Discussing return to work: light duties from 2 to 3 weeks, heavy manual work from 6 to 8 weeks.
+Advising on keeping the wound clean and dry and avoiding smoking.
+
+Risks and complications
+Bleeding and haematoma: may require return to theatre for drainage.
+Infection: higher risk if smoker or wound gets wet.
+Nerve injury: the digital nerves run very close to the cord and may be displaced. They can be bruised or damaged during surgery, causing numbness or loss of sensation in the finger. This may be temporary or permanent.
+Arterial injury: the digital arteries can also be damaged. If both arteries to a finger are injured, the blood supply to the finger tip may be compromised.
+Scar: the incision is longer than expected. Scars can be thick, tender, or take time to soften.
+Stiffness: the finger may remain stiff, particularly at the P I P joint, even after successful removal of the cord.
+Recurrence: Dupuytren's disease can recur in the same finger or develop in other fingers or the other hand. Recurrence rates vary but can be up to 50 percent over time.
+Incomplete correction: the finger may not become fully straight, particularly if there is a long-standing P I P joint contracture.
+Wound healing problems: the skin may break down, particularly over the finger where it is tight. This may require dressing changes over several weeks.
+Flare reaction: persistent swelling, stiffness, and pain similar to C R P S, which may require further treatment.
 
 BONUS MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+(Internal reference only. Do not read aloud.)
 
-List the bonus marking points that distinguish scores of 4 and 5.
-These demonstrate excellent patient communication or detailed knowledge.
+Operative environment and anaesthesia
+Explaining the option of wide-awake local anaesthesia no tourniquet, known as W A L A N T, which avoids G A and tourniquet for some cases.
 
-Format:
-Domain Name
-The candidate explains X with a helpful analogy.
-The candidate proactively addresses common patient concerns about Y.
+Operative technique
+Mentioning the use of loupe magnification or an operating microscope to identify and protect the neurovascular bundles.
+Explaining that Z-plasty or other local flap techniques may be used if the skin is contracted and cannot be closed primarily.
+Explaining the difference between fasciectomy and the simpler needle fasciotomy or collagenase injection, and why surgery was chosen.
 
-END OF AUTHOR NOTE]
+Post-operative regime and rehabilitation
+Explaining that the night splint must be worn consistently to prevent the contracture from recurring during the healing phase.
+Advising on scar massage and moisturising once the wound is healed.
+Mentioning that a P I P joint contracture present for longer than a year may not fully correct even with surgery.
+
+Risks and complications
+Mentioning cold intolerance as a possible long-term symptom.
+Mentioning C R P S as a rare but serious complication involving persistent pain, swelling, colour changes, and stiffness that may require specialist referral.
+Explaining that if the disease is very extensive, a dermofasciectomy with skin graft may be needed to reduce recurrence risk, but this was not planned for this operation.
+
+These are points a strong candidate would mention but are not required to pass.
 
 END OF SCENARIO CRITERIA
 

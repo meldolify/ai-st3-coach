@@ -4,78 +4,89 @@ CLINICAL SCENARIO BLOCK
 
 SCENARIO TITLE
 
-Carpal Tunnel Release Consent
+Carpal Tunnel Release
 
 PATIENT QUESTIONS
 
-(Internal reference only. Questions the patient or patient's relative may ask during the consent discussion.
+(Internal reference only. Questions the patient may ask during the consent discussion.
 Use these after the candidate finishes their explanation.
 How anxious or questioning you are is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write 6-10 patient questions that would naturally arise during this consent discussion.
-These should be written in everyday language as a real patient would ask.
-
-Examples for carpal tunnel release:
-"Will I be awake during it?"
-"How long does the operation take?"
-"When can I go back to work?"
-"You said there's a risk of infection — how common is that?"
-"Will the numbness definitely go away?"
-"What about the scar — will it be very noticeable?"
-"When do I need to come back to get checked?"
-
-For paediatric scenarios, write questions as a parent:
-"Will my child be in pain afterwards?"
-"How long will the anaesthetic take to wear off?"
-"When can they go back to school?"
-
-END OF AUTHOR NOTE]
+Will I be awake for this? That sounds scary.
+How long does the operation take?
+Will I feel anything during the operation?
+I work as a cashier and scan items all day. When can I go back to work?
+Will the numbness and tingling definitely go away after the operation?
+Can the problem come back after surgery?
+Will I be able to drive home today?
+My friend had carpal tunnel surgery and said her scar was really painful afterwards. Will that happen to me?
 
 MAIN CONSENT DOMAINS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the 4-6 main consent domains being assessed in this scenario.
-
-Example for carpal tunnel release:
-Introduction and patient identification
-Procedure explanation (what will be done, in layman terms)
-Anaesthesia (local vs general, what to expect)
-Post-operative care (dressings, restrictions, follow-up)
-Risks and complications (infection, bleeding, nerve damage, recurrence, scar)
-Recovery and return to activities
-
-END OF AUTHOR NOTE]
+Operative environment and anaesthesia
+Operative technique
+Post-operative regime and rehabilitation
+Risks and complications
 
 ESSENTIAL MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+(Internal reference only. Do not read aloud.)
 
-List the essential marking points, organised by domain.
-These are the minimum requirements for a score of 3 or above.
+Operative environment and anaesthesia
+Explaining that the procedure is performed under L A with the patient awake.
+Describing the L A injection process: injection at the base of the palm or wrist, initial stinging sensation that settles, then numbness. Candidate should reassure that sharp pain should not be felt, only pressure and pushing.
+Explaining that the operation is performed under sterile conditions with cleaning solution and drapes.
+Mentioning the use of a tourniquet on the upper arm similar to a blood pressure cuff to control bleeding, and that it may feel tight but is safe.
 
-Format:
-Domain Name
-The candidate must explain X in clear, jargon-free language.
-The candidate must mention Y.
+Operative technique
+Explaining that a small incision is made at the base of the palm extending slightly towards the wrist.
+Describing that the surgeon cuts through the ligament forming the roof of the carpal tunnel to release pressure on the median nerve.
+Explaining that the skin is closed with non-dissolvable sutures that will need removal in approximately 10 to 14 days.
+Mentioning that the hand will be dressed with a bandage and may be placed in a sling.
+Stating the approximate duration of the operation: 15 to 30 minutes.
 
-END OF AUTHOR NOTE]
+Post-operative regime and rehabilitation
+Advising the patient they can go home the same day with an escort as they should not drive.
+Explaining the importance of keeping the hand elevated for the first 48 hours to reduce swelling, using a pillow or sling.
+Advising to keep the wound clean and dry until the dressing is reviewed.
+Explaining that they will have a follow-up appointment in the hand therapy clinic in approximately 5 days for wound check and to start exercises.
+Advising that sutures are typically removed at 10 to 14 days by the GP practice nurse or in clinic.
+Discussing return to work: light duties from 2 weeks, manual or repetitive work from 4 to 6 weeks. A sick note can be provided.
+Mentioning that driving should be avoided until sutures are removed and the patient can grip the steering wheel comfortably.
+Stating that full recovery takes approximately 6 to 8 weeks.
+
+Risks and complications
+Bleeding: usually minor oozing that settles. Rarely a haematoma requiring return to theatre.
+Infection: wound may become red, hot, swollen, or discharge pus. Advise to attend if this happens.
+Scar: may not fade completely, may be a different colour to surrounding skin, rarely can be painful or thickened. Pillar pain at the base of the palm is common for several weeks.
+Persistent or recurrent symptoms: numbness may not fully resolve, particularly if the nerve has been compressed for a long time. Occasionally symptoms are caused by compression elsewhere.
+Damage to underlying structures: injury to the median nerve or its branches is rare but possible, which could worsen numbness or cause weakness. Injury to tendons is very rare.
+Stiffness: usually temporary, helped by hand therapy exercises.
+Complex Regional Pain Syndrome: rare, involving persistent pain, swelling, and stiffness. May require referral to a pain specialist.
 
 BONUS MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+(Internal reference only. Do not read aloud.)
 
-List the bonus marking points that distinguish scores of 4 and 5.
-These demonstrate excellent patient communication or detailed knowledge.
+Operative environment and anaesthesia
+Explaining that if the nerve is very sensitive the patient may feel a brief electric shock sensation down the fingers during injection, which is temporary.
+Offering sedation as an option if the patient is very anxious about being awake.
 
-Format:
-Domain Name
-The candidate explains X with a helpful analogy.
-The candidate proactively addresses common patient concerns about Y.
+Operative technique
+Mentioning that the transverse carpal ligament does not need to heal back together and the gap fills with scar tissue.
+Explaining that care is taken to avoid the motor branch of the median nerve and the superficial palmar arch.
 
-END OF AUTHOR NOTE]
+Post-operative regime and rehabilitation
+Advising on scar massage once the wound is healed to help soften the scar.
+Explaining that grip strength may take several months to return to full and that hand therapy exercises are important.
+Advising the patient to take regular breaks if their job involves repetitive movements.
+
+Risks and complications
+Mentioning incomplete release of the ligament which may require reoperation.
+Explaining that damage to the palmar cutaneous branch of the median nerve can cause a patch of numbness in the palm.
+Mentioning D V T and P E as theoretical risks of any surgery, though extremely low for this short procedure.
+
+These are points a strong candidate would mention but are not required to pass.
 
 END OF SCENARIO CRITERIA
 

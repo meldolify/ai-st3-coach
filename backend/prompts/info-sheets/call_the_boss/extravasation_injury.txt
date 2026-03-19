@@ -1,15 +1,12 @@
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the patient information sheet for this scenario.
-
-For Call-the-Boss scenarios include:
-- Patient details (name, age, MRN, DOB)
-- Presentation context (who referred, when, where)
-- History of Presenting Complaint
-- Social History
-- PMH, Drug History, Allergies
-- Observations (HR, BP, RR, Temp, Sats)
-- Examination Findings
-- Images: filename.jpg (optional, comma-separated)
-
-END OF AUTHOR NOTE]
+Patient: Baby Grace Chen, 3 days old, MRN 90215738, DOB 16/03/2026
+Presentation: You are called at 2am by the neonatal unit nurse to urgently review a neonate
+HPC: This is a 3-day-old premature neonate born at 34 weeks gestation who has been receiving total parenteral nutrition (T P N) through a peripheral cannula in the dorsum of the right hand. The nurse noticed swelling and discolouration of the hand approximately 30 minutes ago and stopped the infusion immediately but left the cannula in situ. The T P N had been running for approximately 6 hours before the swelling was noticed. The estimated extravasated volume is uncertain but the T P N bag shows approximately 40ml less than expected.
+Social History: First child, parents present at the bedside. Mother had a normal pregnancy until preterm labour.
+PMH: Prematurity at 34 weeks. Birth weight 2.1kg. Otherwise well. On the neonatal unit for feeding support and T P N.
+Drug History: T P N via peripheral cannula. Vitamin K given at birth. No known allergies.
+Last Fed: Receiving T P N; small volumes of expressed breast milk commenced
+Observations: HR 155, BP 62/38 (appropriate for age), RR 48, Temp 36.9, Sats 97% in room air
+Examination: The dorsum of the right hand is markedly swollen, approximately twice the size of the left hand. The skin is tense and shiny with mottled discolouration — areas of dusky purple and white patches. There is a 2cm area of blistering over the dorsal metacarpal area. The fingers appear swollen with sluggish capillary refill of approximately 4 seconds. The wrist is also swollen with some tracking up the forearm. The cannula is still in situ on the dorsum of the hand. The baby is otherwise stable with normal observations for age.
+Investigations: No imaging performed yet. Blood glucose 4.2. Full bloods not yet taken.
+Current Management: The T P N infusion was stopped 30 minutes ago. The cannula has been left in situ as per neonatal unit protocol. The nurse has elevated the hand on a small pillow. No aspiration attempted. No antidote administered. The neonatal registrar has been informed and is requesting plastic surgery review.
+Images: extravasation_injury_1.jpg

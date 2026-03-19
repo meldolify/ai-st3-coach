@@ -4,7 +4,7 @@ CLINICAL SCENARIO BLOCK
 
 SCENARIO TITLE
 
-Implant Surgery Consent
+Breast Reconstruction with Tissue Expander and Implant Consent
 
 PATIENT QUESTIONS
 
@@ -12,70 +12,83 @@ PATIENT QUESTIONS
 Use these after the candidate finishes their explanation.
 How anxious or questioning you are is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write 6-10 patient questions that would naturally arise during this consent discussion.
-These should be written in everyday language as a real patient would ask.
-
-Examples for carpal tunnel release:
-"Will I be awake during it?"
-"How long does the operation take?"
+"What is the difference between the expander and the final implant?"
+"How many operations will I need altogether?"
+"Will the implant feel natural?"
+"How long does the implant last — will it need replacing?"
+"What happens if my body rejects it?"
+"You mentioned something about capsular contracture — what does that mean in plain English?"
+"Will I be able to have an M R I scan with the implant in?"
 "When can I go back to work?"
-"You said there's a risk of infection — how common is that?"
-"Will the numbness definitely go away?"
-"What about the scar — will it be very noticeable?"
-"When do I need to come back to get checked?"
-
-For paediatric scenarios, write questions as a parent:
-"Will my child be in pain afterwards?"
-"How long will the anaesthetic take to wear off?"
-"When can they go back to school?"
-
-END OF AUTHOR NOTE]
+"How long will I be in hospital this time?"
 
 MAIN CONSENT DOMAINS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the 4-6 main consent domains being assessed in this scenario.
-
-Example for carpal tunnel release:
 Introduction and patient identification
-Procedure explanation (what will be done, in layman terms)
-Anaesthesia (local vs general, what to expect)
-Post-operative care (dressings, restrictions, follow-up)
-Risks and complications (infection, bleeding, nerve damage, recurrence, scar)
-Recovery and return to activities
-
-END OF AUTHOR NOTE]
+Procedure explanation including expander insertion and the two-stage process
+Anaesthesia and operative environment
+Post-operative care and expansion visits
+Risks and complications including implant-specific risks
+Recovery timeline and second stage procedure
 
 ESSENTIAL MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Introduction and patient identification
+Confirming the patient's identity and the planned procedure.
+Establishing rapport and checking the patient's current understanding of implant-based reconstruction.
+Sensitivity to the emotional context of breast cancer and reconstruction.
 
-List the essential marking points, organised by domain.
-These are the minimum requirements for a score of 3 or above.
+Procedure explanation
+Explaining in lay terms that this is the first of two operations: today a tissue expander is placed under the chest muscle, and once it is fully expanded it will be exchanged for a permanent implant at a second operation.
+Explaining that the expander is like a deflated balloon that is gradually filled with salt water over several weeks through a small port, which is accessed by a needle through the skin.
+Explaining that the expansion process takes approximately two to three months with visits every one to two weeks.
+Explaining that the second operation to exchange the expander for the permanent implant is shorter and involves removing the expander and replacing it with a silicone implant.
+Mentioning the approximate duration of today's operation, typically one to two hours.
 
-Format:
-Domain Name
-The candidate must explain X in clear, jargon-free language.
-The candidate must mention Y.
+Anaesthesia and operative environment
+Explaining that the procedure is performed under general anaesthetic.
+Mentioning the patient will meet the anaesthetist beforehand.
+Explaining the sterile theatre environment.
 
-END OF AUTHOR NOTE]
+Post-operative care
+Explaining that a drain will be left in place and usually removed before discharge.
+Advising that the patient should expect to stay in hospital for one to two nights.
+Explaining the need for a supportive bra and avoidance of underwired bras.
+Advising the patient to keep the wound clean and dry, take prescribed antibiotics and painkillers, and avoid smoking.
+Explaining the expansion schedule and what to expect at each expansion visit.
+
+Risks and complications
+Mentioning bleeding and haematoma.
+Mentioning infection, noting that infection around an implant may require removal of the expander.
+Mentioning wound breakdown or skin flap necrosis, particularly in irradiated skin.
+Mentioning expander or implant exposure or extrusion.
+Mentioning capsular contracture, explaining in lay terms that the body forms a scar capsule around any implant and sometimes this tightens, making the breast feel hard and potentially painful, requiring further surgery.
+Mentioning implant rupture or deflation.
+Mentioning asymmetry compared to the other breast.
+Mentioning altered or loss of sensation in the chest wall.
+Mentioning the need for implant replacement in the future, typically every ten to fifteen years.
+
+Recovery timeline
+Advising avoidance of heavy lifting and strenuous upper body exercise for approximately six weeks.
+Advising return to sedentary work at approximately two to three weeks.
+Explaining that the final cosmetic result will not be apparent until after the second stage operation and further settling over several months.
 
 BONUS MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Procedure explanation
+Mentioning the option of an acellular dermal matrix or mesh to support the lower pole of the implant and its benefits for implant coverage.
+Explaining the difference between subpectoral and prepectoral implant placement in lay terms.
+Mentioning that symmetrisation surgery to the opposite breast may be offered at the second stage.
+Discussing the choice between round and anatomical implants and silicone versus saline.
 
-List the bonus marking points that distinguish scores of 4 and 5.
-These demonstrate excellent patient communication or detailed knowledge.
+Risks and complications
+Mentioning B I A dash A L C L, a rare type of lymphoma associated with textured implants, in an appropriate and reassuring way.
+Mentioning breast implant illness as a concern some patients have, acknowledging uncertainty in the evidence.
+Explaining that implant-based reconstruction may be less suitable in patients who have had radiotherapy due to higher complication rates.
+Mentioning animation deformity with subpectoral placement, where the breast moves when the chest muscle contracts.
+Mentioning that M R I screening is recommended periodically to check implant integrity.
 
-Format:
-Domain Name
-The candidate explains X with a helpful analogy.
-The candidate proactively addresses common patient concerns about Y.
-
-END OF AUTHOR NOTE]
+These are points a strong candidate would mention but are not required to pass.
 
 END OF SCENARIO CRITERIA
 

@@ -1,13 +1,4 @@
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the patient/procedure information sheet for this consent scenario.
-
-Include:
-- Patient details (name, age)
-- Procedure (name of planned operation)
-- Context (referral reason, clinic visit, why listed for surgery)
-- Patient Expectations (what the patient understands, any concerns)
-
-No Images field for consent scenarios.
-
-END OF AUTHOR NOTE]
+Patient: Mr James Whitfield, 31 years old
+Procedure: Bilateral Upper Limb Escharotomy
+Context: Admitted to the burns unit via A and E after sustaining circumferential deep dermal to full thickness burns to both forearms in a house fire two hours ago. Estimated T B S A 12 percent. Fluid resuscitation has been commenced using the Parkland formula. The burns team have noted increasing tightness in both forearms with reduced capillary refill in the fingers. He has been listed for emergency escharotomy. He is alert and orientated but in pain.
+Patient Expectations: Mr Whitfield is in pain and frightened. He has been told the burns are tight and restricting blood flow to his hands and that cuts need to be made to release the pressure. He does not understand why cutting his skin will help when he already has burns. He wants to know if he will feel it and whether his hands will be okay.

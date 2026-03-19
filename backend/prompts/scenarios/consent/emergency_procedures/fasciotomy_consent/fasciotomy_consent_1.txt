@@ -4,7 +4,7 @@ CLINICAL SCENARIO BLOCK
 
 SCENARIO TITLE
 
-Fasciotomy Consent
+Emergency Fasciotomy for Compartment Syndrome
 
 PATIENT QUESTIONS
 
@@ -12,70 +12,92 @@ PATIENT QUESTIONS
 Use these after the candidate finishes their explanation.
 How anxious or questioning you are is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write 6-10 patient questions that would naturally arise during this consent discussion.
-These should be written in everyday language as a real patient would ask.
-
-Examples for carpal tunnel release:
-"Will I be awake during it?"
-"How long does the operation take?"
-"When can I go back to work?"
-"You said there's a risk of infection — how common is that?"
-"Will the numbness definitely go away?"
-"What about the scar — will it be very noticeable?"
-"When do I need to come back to get checked?"
-
-For paediatric scenarios, write questions as a parent:
-"Will my child be in pain afterwards?"
-"How long will the anaesthetic take to wear off?"
-"When can they go back to school?"
-
-END OF AUTHOR NOTE]
+What is compartment syndrome? The doctors keep saying it but nobody has explained it to me.
+I thought the fracture had been sorted. Why do I need another operation?
+Could I lose my leg?
+Will I be put to sleep again?
+Why can this not wait until the morning? I have already had one operation today.
+What will the wounds look like? Will they be stitched up?
+How long will I be in hospital for?
+Will my leg work normally afterwards?
 
 MAIN CONSENT DOMAINS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the 4-6 main consent domains being assessed in this scenario.
-
-Example for carpal tunnel release:
-Introduction and patient identification
-Procedure explanation (what will be done, in layman terms)
-Anaesthesia (local vs general, what to expect)
-Post-operative care (dressings, restrictions, follow-up)
-Risks and complications (infection, bleeding, nerve damage, recurrence, scar)
-Recovery and return to activities
-
-END OF AUTHOR NOTE]
+Urgency and rationale for the procedure
+Operative environment and anaesthesia
+Operative technique
+Post-operative care and wound management
+Risks and complications
 
 ESSENTIAL MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+(Internal reference only. Do not read aloud.)
 
-List the essential marking points, organised by domain.
-These are the minimum requirements for a score of 3 or above.
+Urgency and rationale for the procedure
+Explaining compartment syndrome in simple terms: the muscles in the leg sit in tight compartments wrapped in a strong tissue called fascia. After the fracture, swelling inside these compartments has built up and the pressure is squeezing the blood vessels and nerves, cutting off blood supply to the muscles.
+Explaining clearly that this is an emergency. If the pressure is not released within hours, the muscles and nerves will be permanently damaged. The patient could lose function in the leg or, in the worst case, lose the leg.
+Emphasising that the operation cannot wait until the morning. Every hour of delay increases the risk of irreversible damage.
+Acknowledging the patient's frustration at needing another operation and validating their feelings.
 
-Format:
-Domain Name
-The candidate must explain X in clear, jargon-free language.
-The candidate must mention Y.
+Operative environment and anaesthesia
+Explaining that the procedure is performed under G A. The patient will be put to sleep again.
+The anaesthetist will review the patient and explain the anaesthetic.
+Mentioning the sterile theatre environment.
+Explaining that the operation will happen as soon as a theatre is available.
 
-END OF AUTHOR NOTE]
+Operative technique
+Explaining that the surgeon makes two long incisions along the leg to release all four compartments.
+Describing in simple terms: one incision on the outer side of the leg to release the front and side compartments, and one on the inner side to release the two compartments at the back.
+Explaining that the fascia, the tight wrapping around the muscles, is cut open along the full length of the incision to release the pressure.
+Explaining that the surgeon will check the muscles underneath to make sure they are healthy and have blood supply.
+Being honest that the wounds will be long and will be left open. They cannot be stitched closed today because the tissues are swollen. They will be covered with dressings.
+Stating the approximate duration: 30 to 60 minutes.
+
+Post-operative care and wound management
+Explaining that the patient will return to the ward with the wounds open and dressed. The leg will be elevated to reduce swelling.
+Explaining that the patient will need to return to theatre in approximately 48 hours for a second look. At that stage the surgeon will assess the muscles and plan wound closure.
+Explaining the options for wound closure: if the swelling has settled, the wounds may be stitched closed directly. If not, a skin graft may be needed, or a negative pressure dressing may be applied to help the wounds close gradually.
+Mentioning that the orthopaedic team will also plan the definitive management of the fracture.
+Advising that the hospital stay will be at least several days, potentially longer depending on wound healing and fracture management.
+Explaining that physiotherapy will begin as soon as possible to maintain movement and prevent stiffness.
+
+Risks and complications
+Muscle damage and necrosis: despite releasing the pressure, some muscle may already be damaged. Dead muscle will be removed to prevent infection and complications.
+Nerve damage: the nerves may be damaged by the compartment syndrome itself, causing weakness or numbness in the foot. This may be temporary or permanent.
+Bleeding: the incisions will bleed and blood transfusion may occasionally be required.
+Infection: open wounds are at risk of infection. Antibiotics will be given.
+Scarring: the incisions are long and the scars will be significant. If a skin graft is needed, there will also be a scar at the donor site.
+Need for skin grafting: common if the wounds cannot be closed directly.
+Stiffness and contracture: prolonged immobility and swelling can cause stiffness in the knee and ankle.
+Rhabdomyolysis: dead muscle releases proteins into the bloodstream that can damage the kidneys. Blood tests and urine output will be monitored closely.
+Amputation: in the most severe cases, if the muscles are found to be non-viable, amputation may be necessary. This is rare but must be mentioned.
+D V T and P E: risk of blood clots in the legs, particularly with immobility. Preventive measures including blood thinning injections and compression stockings will be used.
+Further surgery: additional operations for wound management, fracture fixation, and reconstruction are likely.
 
 BONUS MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+(Internal reference only. Do not read aloud.)
 
-List the bonus marking points that distinguish scores of 4 and 5.
-These demonstrate excellent patient communication or detailed knowledge.
+Urgency and rationale for the procedure
+Explaining the pathophysiology: increased intra-compartmental pressure exceeds capillary perfusion pressure, leading to ischaemia. The threshold for fasciotomy is a compartment pressure within 30 millimetres of mercury of the diastolic blood pressure.
+Mentioning that clinical signs are the primary basis for decision-making and that compartment pressure measurement is an adjunct in doubtful cases.
 
-Format:
-Domain Name
-The candidate explains X with a helpful analogy.
-The candidate proactively addresses common patient concerns about Y.
+Operative technique
+Naming the four compartments of the lower leg: anterior, lateral, superficial posterior, and deep posterior.
+Explaining the landmarks for the two incisions: anterolateral incision two finger breadths lateral to the tibial crest, and posteromedial incision two finger breadths behind the posteromedial tibial border.
+Mentioning the need to protect the superficial peroneal nerve in the lateral compartment and the saphenous vein and nerve in the posteromedial incision.
 
-END OF AUTHOR NOTE]
+Post-operative care and wound management
+Explaining the concept of muscle viability assessment at second look: viable muscle should be pink, contractile when stimulated, and bleed when cut.
+Mentioning the role of negative pressure wound therapy in managing open fasciotomy wounds.
+Explaining the systemic complications including hyperkalaemia, metabolic acidosis, and acute kidney injury from myoglobinuria, and the importance of aggressive I V fluid resuscitation.
+
+Risks and complications
+Mentioning Volkmann ischaemic contracture as the consequence of missed or delayed compartment syndrome in the forearm.
+Mentioning the medico-legal significance of compartment syndrome and the importance of contemporaneous documentation.
+Explaining that post-operative foot drop from common peroneal nerve damage is a recognised complication of lower leg compartment syndrome.
+
+These are points a strong candidate would mention but are not required to pass.
 
 END OF SCENARIO CRITERIA
 
