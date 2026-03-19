@@ -1,15 +1,12 @@
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the patient information sheet for this scenario.
-
-For Call-the-Boss scenarios include:
-- Patient details (name, age, MRN, DOB)
-- Presentation context (who referred, when, where)
-- History of Presenting Complaint
-- Social History
-- PMH, Drug History, Allergies
-- Observations (HR, BP, RR, Temp, Sats)
-- Examination Findings
-- Images: filename.jpg (optional, comma-separated)
-
-END OF AUTHOR NOTE]
+Patient: Mr Derek Okafor, 64 years old, MRN 30298174, DOB 22/03/1961
+Presentation: Currently an inpatient on the medical ward, you are called at 9:30pm to urgently review a spreading rash
+HPC: The patient was admitted 3 days ago for management of poorly controlled type 2 diabetes. His H B A 1 C on admission was 102. Earlier today the nursing staff noticed redness and swelling over his left medial thigh. Over the last 4 hours the area has spread significantly despite I V antibiotics started by the medical team. The patient is now confused, febrile, and complaining of severe pain in his leg. The nursing staff have marked the borders of the erythema twice and it has extended well beyond both markings.
+Social History: Lives with his wife, retired bus driver. Non-smoker. Drinks alcohol occasionally.
+PMH: Type 2 diabetes (poorly controlled), hypertension, chronic kidney disease stage 3
+Drug History: Metformin, gliclazide, insulin glargine 22 units at night, ramipril, amlodipine. N K D A.
+Last Ate: Approximately 3 hours ago (hospital dinner)
+Observations: HR 128, BP 85/50, RR 26, Temp 39.4, Sats 94% on room air, GCS 14 (E4 V4 M6)
+Examination: The left medial thigh is erythematous, oedematous, and exquisitely tender. The erythema extends from the groin crease to approximately 10cm above the knee. The skin has a dusky purple discolouration centrally with patches of blistering. There is crepitus palpable over the proximal thigh. The borders have extended 5cm beyond the last marking made 1 hour ago. The limb is neurovascularly intact distally.
+Investigations: WCC 22.4, CRP 385, Lactate 5.2, Hb 11.2, Plt 98, Na 131, K 5.4, Cr 198 (baseline 120), Glucose 24.5. Blood cultures taken. L R I N E C score calculated at 9 (high risk).
+Current Management: Medical team started I V co-amoxiclav 6 hours ago with no clinical improvement. 2 litres of I V crystalloid given. Urinary catheter in situ, urine output 15ml in the last hour.
+Images: necrotising_fasciitis_1.jpg

@@ -1,13 +1,4 @@
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the patient/procedure information sheet for this consent scenario.
-
-Include:
-- Patient details (name, age)
-- Procedure (name of planned operation)
-- Context (referral reason, clinic visit, why listed for surgery)
-- Patient Expectations (what the patient understands, any concerns)
-
-No Images field for consent scenarios.
-
-END OF AUTHOR NOTE]
+Patient: Mrs Fatima Al-Hassan, 34 years old
+Procedure: Insertion of Tissue Expander to Right Scalp for Alopecia Scar Reconstruction
+Context: Mrs Al-Hassan sustained a burn injury to her right scalp as a child, leaving a large area of alopecia measuring approximately eight by six centimetres. She was referred by her G P and seen in the plastic surgery clinic three months ago. After discussion of the options, the plan is to insert a tissue expander beneath the normal hair-bearing scalp adjacent to the scar. Once the skin is sufficiently expanded, the scar will be excised and the expanded skin advanced to cover the defect in a second operation. She has attended today for the first stage operation. She is otherwise fit and well with no significant medical history.
+Patient Expectations: Mrs Al-Hassan has been told she needs two operations to stretch the normal skin and cover the bald patch but does not understand the details. She is anxious about the appearance during the expansion process and wants to know how long it will take, whether it will be painful, and what happens if the expander gets infected. She also wants to know how noticeable the scar will be in her hair.

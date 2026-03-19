@@ -4,7 +4,7 @@ CLINICAL SCENARIO BLOCK
 
 SCENARIO TITLE
 
-Lymph Node Dissection Consent
+Axillary Lymph Node Dissection Consent
 
 PATIENT QUESTIONS
 
@@ -12,70 +12,86 @@ PATIENT QUESTIONS
 Use these after the candidate finishes their explanation.
 How anxious or questioning you are is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write 6-10 patient questions that would naturally arise during this consent discussion.
-These should be written in everyday language as a real patient would ask.
-
-Examples for carpal tunnel release:
-"Will I be awake during it?"
-"How long does the operation take?"
-"When can I go back to work?"
-"You said there's a risk of infection — how common is that?"
-"Will the numbness definitely go away?"
-"What about the scar — will it be very noticeable?"
-"When do I need to come back to get checked?"
-
-For paediatric scenarios, write questions as a parent:
-"Will my child be in pain afterwards?"
-"How long will the anaesthetic take to wear off?"
-"When can they go back to school?"
-
-END OF AUTHOR NOTE]
+"Does this mean the cancer has spread everywhere?"
+"How many lymph nodes will you take out?"
+"What is lymphoedema — will my arm definitely swell up?"
+"Will I be able to move my arm normally afterwards?"
+"How long will I be in hospital?"
+"I am a delivery driver — when can I go back to work?"
+"You mentioned nerve damage — what would that mean for me?"
+"Will I need more treatment after this operation?"
+"What happens if the other lymph nodes also have cancer in them?"
 
 MAIN CONSENT DOMAINS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the 4-6 main consent domains being assessed in this scenario.
-
-Example for carpal tunnel release:
 Introduction and patient identification
-Procedure explanation (what will be done, in layman terms)
-Anaesthesia (local vs general, what to expect)
-Post-operative care (dressings, restrictions, follow-up)
-Risks and complications (infection, bleeding, nerve damage, recurrence, scar)
-Recovery and return to activities
-
-END OF AUTHOR NOTE]
+Procedure explanation including extent of dissection
+Anaesthesia and operative environment
+Post-operative care including drains and physiotherapy
+Risks and complications including lymphoedema and nerve injury
+Recovery timeline and oncological follow-up
 
 ESSENTIAL MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Introduction and patient identification
+Confirming the patient's identity and the planned procedure.
+Establishing rapport and checking the patient's understanding of why the operation is needed.
+Addressing the patient's anxiety about the cancer having spread, explaining that a positive sentinel node means cancer cells have reached the nearest lymph gland but this does not mean it has spread to the rest of the body.
 
-List the essential marking points, organised by domain.
-These are the minimum requirements for a score of 3 or above.
+Procedure explanation
+Explaining in lay terms that the operation removes the lymph glands from under the arm on the affected side.
+Explaining that the lymph glands are part of the body's drainage and immune system and that removing them allows pathologists to check whether any more glands contain cancer cells, which helps guide further treatment.
+Explaining that the operation is performed through an incision in the armpit, typically seven to ten centimetres long.
+Explaining that the surgeon will identify and protect important nerves and blood vessels running through the area while removing the lymph gland tissue.
+Mentioning the approximate duration of surgery, typically one to two hours.
 
-Format:
-Domain Name
-The candidate must explain X in clear, jargon-free language.
-The candidate must mention Y.
+Anaesthesia and operative environment
+Explaining that the procedure is performed under general anaesthetic.
+Mentioning the patient will meet the anaesthetist beforehand.
+Explaining the sterile theatre environment.
 
-END OF AUTHOR NOTE]
+Post-operative care
+Explaining that one or two drains will be left in place and may need to stay in for several days until the output is minimal, and the patient may go home with a drain in place.
+Advising that the patient should expect to stay in hospital for one to three days.
+Explaining the importance of early physiotherapy exercises to maintain shoulder and arm movement.
+Advising the patient to keep the wound clean and dry and to take prescribed painkillers and antibiotics.
+
+Risks and complications
+Mentioning lymphoedema, explaining in lay terms that removing the lymph glands can sometimes cause the arm to swell because the drainage system is disrupted. Explaining that this can develop weeks, months, or even years after surgery and may be permanent.
+Mentioning the risk of injury to the long thoracic nerve which can cause winging of the shoulder blade and difficulty raising the arm above the head.
+Mentioning the risk of injury to the thoracodorsal nerve which can affect the ability to push down with the arm, such as when using crutches or getting out of a chair.
+Mentioning numbness or altered sensation in the inner upper arm and armpit due to division of the intercostobrachial nerve, which is often unavoidable.
+Mentioning seroma, a collection of fluid under the skin that may need to be drained with a needle.
+Mentioning bleeding and haematoma.
+Mentioning infection.
+Mentioning wound breakdown.
+Mentioning reduced shoulder movement or stiffness.
+
+Recovery timeline
+Advising avoidance of heavy lifting with the affected arm for approximately six weeks.
+Advising return to sedentary work at approximately two to three weeks.
+Explaining that driving can usually resume when the patient can comfortably perform an emergency stop and check the blind spot, typically three to four weeks.
+Explaining that the pathology results will be discussed at a follow-up appointment, usually within two to three weeks, and further treatment such as immunotherapy or radiotherapy may be recommended depending on the results.
+Advising lifelong skin and lymph node surveillance.
 
 BONUS MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Procedure explanation
+Explaining the anatomical levels of axillary lymph node dissection in lay terms, noting that a level one to three dissection is typically performed.
+Mentioning that the operation removes all identifiable lymph node tissue in the axilla rather than a specific number of nodes.
+Explaining the role of the multidisciplinary team in deciding on further treatment after surgery.
 
-List the bonus marking points that distinguish scores of 4 and 5.
-These demonstrate excellent patient communication or detailed knowledge.
+Risks and complications
+Quoting approximate lymphoedema risk of fifteen to twenty percent after axillary clearance.
+Discussing lymphoedema prevention strategies: avoiding blood pressure measurements, cannulation, and blood tests on the affected arm, avoiding heavy lifting, skin care to prevent infection, and wearing compression garments if needed.
+Mentioning the risk of chronic pain following axillary surgery.
+Mentioning the risk of shoulder adhesive capsulitis (frozen shoulder) and the importance of physiotherapy.
 
-Format:
-Domain Name
-The candidate explains X with a helpful analogy.
-The candidate proactively addresses common patient concerns about Y.
+Recovery timeline
+Discussing the psychological impact of melanoma diagnosis and the importance of access to specialist nurse and psychological support services.
+Mentioning that some patients benefit from lymphoedema specialist assessment even before symptoms develop.
 
-END OF AUTHOR NOTE]
+These are points a strong candidate would mention but are not required to pass.
 
 END OF SCENARIO CRITERIA
 

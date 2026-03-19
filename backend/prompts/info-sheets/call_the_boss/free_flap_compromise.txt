@@ -1,15 +1,12 @@
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the patient information sheet for this scenario.
-
-For Call-the-Boss scenarios include:
-- Patient details (name, age, MRN, DOB)
-- Presentation context (who referred, when, where)
-- History of Presenting Complaint
-- Social History
-- PMH, Drug History, Allergies
-- Observations (HR, BP, RR, Temp, Sats)
-- Examination Findings
-- Images: filename.jpg (optional, comma-separated)
-
-END OF AUTHOR NOTE]
+Patient: Mrs Sandra Williams, 55 years old, MRN 62480193, DOB 30/01/1971
+Presentation: You are called by the ward nurse at 1:30am regarding a patient who is day 1 post D I E P flap breast reconstruction
+HPC: The patient underwent a left D I E P flap immediate breast reconstruction following mastectomy for breast cancer earlier today. The operation was performed by your consultant and reportedly went well — two venous anastomoses and one arterial anastomosis were performed to the internal mammary vessels. At the end of the procedure the flap was pink, warm, and well-perfused with a good Doppler signal. The flap was checked at 9pm and was fine. The nurse is now calling at 1:30am because the flap has become progressively blue-purple in colour over the last 45 minutes. It appears tense and swollen. The nurse has been performing hourly flap observations.
+Social History: Primary school teacher, right hand dominant. Non-smoker. Drinks 5 units per week. Lives with her husband. She has completed neoadjuvant chemotherapy. No previous radiotherapy.
+PMH: Breast cancer (left), hypertension, B M I 32
+Drug History: Amlodipine 5mg daily, tamoxifen (post-chemotherapy). N K D A. Post-operative heparin infusion running as prescribed.
+Last Ate: N B M since the operation
+Observations: HR 78, BP 125/72, RR 14, Temp 36.4, Sats 98% on room air, GCS 15
+Examination: The patient is comfortable, warm, and haemodynamically stable. The D I E P flap is now blue-purple in colour. Capillary refill is brisk with dark blood (less than 1 second). The flap is tense and swollen with increased turgor. On needle prick test, there is rapid bleeding of dark venous blood. The arterial Doppler signal is still present. The venous Doppler signal is absent. The dressings appear tight around the pedicle. The drains contain 120ml of blood-stained fluid. The surrounding skin sutures appear to be under tension.
+Investigations: Post-operative bloods from 6 hours ago: Hb 9.8 (pre-op 12.2), Plt 210, WCC 10.2, clotting normal. Lactate 1.4. Drain output 120ml total since surgery.
+Current Management: Post-operative heparin infusion running as prescribed. I V fluids running. Bear hugger in place. Urinary catheter draining, urine output satisfactory. The nurse has elevated the head of the bed to 30 degrees. No dressings have been loosened or sutures released.
+Images: free_flap_compromise_1.jpg

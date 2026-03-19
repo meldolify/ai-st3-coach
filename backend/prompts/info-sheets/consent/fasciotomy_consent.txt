@@ -1,13 +1,4 @@
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the patient/procedure information sheet for this consent scenario.
-
-Include:
-- Patient details (name, age)
-- Procedure (name of planned operation)
-- Context (referral reason, clinic visit, why listed for surgery)
-- Patient Expectations (what the patient understands, any concerns)
-
-No Images field for consent scenarios.
-
-END OF AUTHOR NOTE]
+Patient: Mr Liam Brennan, 24 years old
+Procedure: Emergency Four Compartment Fasciotomy of the Right Lower Leg
+Context: Admitted via A and E with a closed tibial shaft fracture following a motorcycle accident four hours ago. The fracture has been reduced and placed in a backslab. Over the past two hours he has developed escalating pain not controlled by I V morphine, pain on passive extension of the toes, and a tense swollen right calf. The orthopaedic registrar has referred him to plastics with suspected compartment syndrome. He has been listed for emergency fasciotomy. His parents are present.
+Patient Expectations: Mr Brennan is in severe pain and distressed. He was told his leg fracture had been dealt with and does not understand why he now needs another emergency operation. He wants to know what compartment syndrome is, whether he could lose his leg, and why the operation cannot wait until the morning.

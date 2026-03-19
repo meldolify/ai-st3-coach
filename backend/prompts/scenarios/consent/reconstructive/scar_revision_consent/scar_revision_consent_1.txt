@@ -12,70 +12,84 @@ PATIENT QUESTIONS
 Use these after the candidate finishes their explanation.
 How anxious or questioning you are is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write 6-10 patient questions that would naturally arise during this consent discussion.
-These should be written in everyday language as a real patient would ask.
-
-Examples for carpal tunnel release:
+"Will the new scar be completely invisible?"
 "Will I be awake during it?"
+"Why can't you just cut it out and make it disappear?"
 "How long does the operation take?"
-"When can I go back to work?"
-"You said there's a risk of infection — how common is that?"
-"Will the numbness definitely go away?"
-"What about the scar — will it be very noticeable?"
-"When do I need to come back to get checked?"
-
-For paediatric scenarios, write questions as a parent:
-"Will my child be in pain afterwards?"
-"How long will the anaesthetic take to wear off?"
-"When can they go back to school?"
-
-END OF AUTHOR NOTE]
+"When will I see the final result?"
+"Is there a chance it could end up looking worse than it does now?"
+"Will I need to use any creams or treatments on the scar afterwards?"
+"You mentioned Z-plasty — what does that mean exactly?"
+"When can I go back to the gym?"
 
 MAIN CONSENT DOMAINS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the 4-6 main consent domains being assessed in this scenario.
-
-Example for carpal tunnel release:
 Introduction and patient identification
-Procedure explanation (what will be done, in layman terms)
-Anaesthesia (local vs general, what to expect)
-Post-operative care (dressings, restrictions, follow-up)
-Risks and complications (infection, bleeding, nerve damage, recurrence, scar)
-Recovery and return to activities
-
-END OF AUTHOR NOTE]
+Procedure explanation including excision technique and closure
+Anaesthesia and pain management
+Post-operative care and scar management
+Risks and complications
+Recovery timeline and realistic expectations
 
 ESSENTIAL MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Introduction and patient identification
+Confirming the patient's identity and the planned procedure.
+Establishing rapport and exploring the patient's concerns about the current scar and what she hopes to achieve.
+Setting realistic expectations from the outset: explaining that scar revision improves a scar but cannot make it disappear entirely.
 
-List the essential marking points, organised by domain.
-These are the minimum requirements for a score of 3 or above.
+Procedure explanation
+Explaining in lay terms that the operation involves cutting out the old scar and closing the wound with careful stitching techniques designed to produce a finer, flatter scar.
+Explaining that the new scar will be at least as long as the old one and may be slightly longer depending on the technique used.
+Mentioning that techniques such as Z-plasty may be used to reorient the scar along natural skin creases, explaining this in lay terms as a zigzag cut that helps the scar blend in better.
+Mentioning that any tethering of the scar to deeper tissues will be released.
+Explaining the approximate duration of surgery, typically 30 minutes to one hour.
 
-Format:
-Domain Name
-The candidate must explain X in clear, jargon-free language.
-The candidate must mention Y.
+Anaesthesia and pain management
+Explaining that the procedure is performed under local anaesthetic with the patient awake.
+Explaining the injection process and reassuring the patient that the initial sting settles quickly and there should be no sharp pain during the procedure.
 
-END OF AUTHOR NOTE]
+Post-operative care and scar management
+Explaining that the wound will be closed with fine stitches and possibly also deeper stitches beneath the skin.
+Explaining that stitches will be removed at approximately ten to fourteen days.
+Advising the patient to keep the wound clean and dry until stitches are removed.
+Explaining that scar management measures will be important: silicone gel or sheeting, scar massage, and sun protection.
+Explaining that the new scar will go through a maturation process over twelve to eighteen months during which it may initially look red and raised before fading.
+
+Risks and complications
+Mentioning bleeding and bruising.
+Mentioning infection.
+Mentioning wound breakdown.
+Mentioning hypertrophic or keloid scarring, explaining that the new scar could potentially become raised or thickened again, similar to the original.
+Mentioning that the scar could look the same as or worse than the original scar.
+Mentioning altered sensation or numbness around the scar.
+Mentioning asymmetry or contour irregularity.
+Mentioning the possibility of needing further revision procedures.
+
+Recovery timeline
+Advising avoidance of strenuous exercise and heavy lifting for approximately four weeks to reduce tension on the wound.
+Advising return to normal activities at approximately two weeks.
+Emphasising that the final result takes twelve to eighteen months to mature and patience is needed.
+Explaining that compliance with scar management is important for the best result.
 
 BONUS MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Procedure explanation
+Explaining the principles of scar revision: excising the old scar, undermining the surrounding tissue, meticulous layered closure, and reorienting the scar to lie within relaxed skin tension lines.
+Mentioning alternative or adjunctive treatments such as steroid injection, fat grafting, laser therapy, or dermal substitutes, and when these might be considered.
+Explaining why the original scar formed poorly: wound tension, infection, or the scar crossing skin tension lines.
 
-List the bonus marking points that distinguish scores of 4 and 5.
-These demonstrate excellent patient communication or detailed knowledge.
+Risks and complications
+Discussing patient-specific factors that affect scarring: skin type, ethnicity, age, location on the body, and genetic predisposition to keloid formation.
+Mentioning that darker skin types have a higher tendency to form keloid or hypertrophic scars.
+Mentioning the psychological impact if the result does not meet expectations and the importance of counselling.
 
-Format:
-Domain Name
-The candidate explains X with a helpful analogy.
-The candidate proactively addresses common patient concerns about Y.
+Post-operative care
+Explaining the evidence for silicone-based products in scar management.
+Mentioning the role of pressure garments for hypertrophic scars.
+Advising avoidance of sun exposure to the scar for at least twelve months.
 
-END OF AUTHOR NOTE]
+These are points a strong candidate would mention but are not required to pass.
 
 END OF SCENARIO CRITERIA
 

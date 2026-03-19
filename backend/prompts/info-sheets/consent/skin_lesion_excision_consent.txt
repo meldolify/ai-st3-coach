@@ -1,13 +1,4 @@
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the patient/procedure information sheet for this consent scenario.
-
-Include:
-- Patient details (name, age)
-- Procedure (name of planned operation)
-- Context (referral reason, clinic visit, why listed for surgery)
-- Patient Expectations (what the patient understands, any concerns)
-
-No Images field for consent scenarios.
-
-END OF AUTHOR NOTE]
+Patient: Mr Robert Nowak, 67 years old
+Procedure: Wide Local Excision of Right Cheek Basal Cell Carcinoma and Full Thickness Skin Graft from Pre-auricular Area
+Context: Mr Nowak was referred by his G P with a pearly nodule on his right cheek that has been slowly growing over the past year. Punch biopsy confirmed a nodular basal cell carcinoma. He was seen in the plastic surgery clinic two weeks ago and listed for wide local excision with three millimetre margins. If direct closure is not possible, a full thickness skin graft from the skin in front of the ear has been planned. He has attended today for the operation under local anaesthetic. He is otherwise fit and well with no significant medical history.
+Patient Expectations: Mr Nowak has been told the spot on his face is a type of skin cancer and needs to be cut out. He is worried about the scar on his face and how it will look afterwards. He does not understand what a skin graft is and wants to know whether the operation will leave a noticeable mark. He also wants to know when he can drive and whether the cancer will come back.

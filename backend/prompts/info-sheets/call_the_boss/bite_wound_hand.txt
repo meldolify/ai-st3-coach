@@ -1,15 +1,12 @@
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the patient information sheet for this scenario.
-
-For Call-the-Boss scenarios include:
-- Patient details (name, age, MRN, DOB)
-- Presentation context (who referred, when, where)
-- History of Presenting Complaint
-- Social History
-- PMH, Drug History, Allergies
-- Observations (HR, BP, RR, Temp, Sats)
-- Examination Findings
-- Images: filename.jpg (optional, comma-separated)
-
-END OF AUTHOR NOTE]
+Patient: Mr Callum Reid, 28 years old, MRN 61043829, DOB 03/05/1997
+Presentation: Self-presented to A and E at 11pm with a wound to his right hand
+HPC: Right hand dominant warehouse worker who presents with a small wound over the M C P joint of his right middle finger. He reports he cut his hand on a fence earlier tonight. On closer questioning, the wound is suspicious for a human bite (fight bite). The injury occurred approximately 12 hours ago. He has not received any treatment. The finger has become increasingly swollen and painful over the last few hours with limited range of movement. He admits to having been drinking alcohol this evening.
+Social History: Warehouse worker, right hand dominant. Smoker, 10 per day. Drinks 15 to 20 units of alcohol per week. Lives alone.
+PMH: Nil significant
+Drug History: Nil regular medications. N K D A. Tetanus status uncertain.
+Last Ate: Approximately 6 hours ago
+Observations: HR 82, BP 130/78, RR 16, Temp 37.8, Sats 99% on room air, GCS 15
+Examination: Primary survey unremarkable. There is a 1cm laceration over the dorsum of the right middle finger M C P joint. The wound edges are irregular. The finger is swollen with surrounding erythema and warmth. There is a small amount of purulent discharge from the wound. Range of movement at the M C P J is restricted by pain. Extensor tendon function is intact but painful. Neurovascular status of the finger is intact. No lymphangitis. No axillary lymphadenopathy.
+Investigations: X-ray of the right hand shows soft tissue swelling over the 3rd M C P J. No fracture. No foreign body. No gas in the soft tissues. Bloods: WCC 13.2, CRP 78, otherwise unremarkable.
+Current Management: I V access obtained. Wound has been cleaned superficially by the A and E team. No antibiotics started yet.
+Images: bite_wound_hand_1.jpg

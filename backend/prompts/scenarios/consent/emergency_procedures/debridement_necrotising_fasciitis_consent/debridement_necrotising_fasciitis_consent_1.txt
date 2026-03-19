@@ -4,7 +4,7 @@ CLINICAL SCENARIO BLOCK
 
 SCENARIO TITLE
 
-Debridement Necrotising Fasciitis Consent
+Emergency Debridement for Necrotising Fasciitis
 
 PATIENT QUESTIONS
 
@@ -12,70 +12,88 @@ PATIENT QUESTIONS
 Use these after the candidate finishes their explanation.
 How anxious or questioning you are is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write 6-10 patient questions that would naturally arise during this consent discussion.
-These should be written in everyday language as a real patient would ask.
-
-Examples for carpal tunnel release:
-"Will I be awake during it?"
-"How long does the operation take?"
-"When can I go back to work?"
-"You said there's a risk of infection — how common is that?"
-"Will the numbness definitely go away?"
-"What about the scar — will it be very noticeable?"
-"When do I need to come back to get checked?"
-
-For paediatric scenarios, write questions as a parent:
-"Will my child be in pain afterwards?"
-"How long will the anaesthetic take to wear off?"
-"When can they go back to school?"
-
-END OF AUTHOR NOTE]
+Am I going to lose my leg?
+How dangerous is this infection? Could I die from it?
+What does debridement mean? Are you going to cut a lot of my leg away?
+Will I need to go to intensive care after the operation?
+How did I get this infection from a small scratch?
+How many operations will I need?
+Will I need a skin graft?
+My husband wants to know if this infection is contagious.
 
 MAIN CONSENT DOMAINS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the 4-6 main consent domains being assessed in this scenario.
-
-Example for carpal tunnel release:
-Introduction and patient identification
-Procedure explanation (what will be done, in layman terms)
-Anaesthesia (local vs general, what to expect)
-Post-operative care (dressings, restrictions, follow-up)
-Risks and complications (infection, bleeding, nerve damage, recurrence, scar)
-Recovery and return to activities
-
-END OF AUTHOR NOTE]
+Operative environment and anaesthesia
+Operative technique and extent of surgery
+Post-operative care and further procedures
+Risks and complications
+Urgency and life-threatening nature
 
 ESSENTIAL MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+(Internal reference only. Do not read aloud.)
 
-List the essential marking points, organised by domain.
-These are the minimum requirements for a score of 3 or above.
+Urgency and life-threatening nature
+Explaining clearly and honestly that necrotising fasciitis is a life-threatening emergency. The infection spreads rapidly through the tissue beneath the skin and can cause organ failure if not treated urgently.
+Emphasising that surgery is the most important part of treatment alongside antibiotics. The infection cannot be treated with antibiotics alone.
+Explaining that the operation needs to happen as soon as possible, ideally within hours. Delay worsens the outcome.
+Acknowledging the patient's fear and distress. Being honest about the severity while remaining calm and supportive.
 
-Format:
-Domain Name
-The candidate must explain X in clear, jargon-free language.
-The candidate must mention Y.
+Operative environment and anaesthesia
+Explaining that the procedure is performed under G A. The patient will be put to sleep.
+The anaesthetist will explain the details of the G A including any additional lines or monitoring that may be needed given the patient's current condition.
+Mentioning that the I T U team is involved and the patient may go to intensive care after the operation rather than a normal ward.
 
-END OF AUTHOR NOTE]
+Operative technique and extent of surgery
+Explaining what debridement means in plain language: the surgeon will remove all the dead and infected tissue to stop the infection from spreading. This means cutting away skin, fat, and the tissue layer underneath called the fascia until healthy, bleeding tissue is reached.
+Being honest that the amount of tissue removed may be extensive. It is not possible to know exactly how much needs to be removed until the operation is underway.
+Explaining that the wound will be left open after surgery. It will not be stitched closed today. It will be dressed and covered.
+Mentioning that tissue samples will be sent to the laboratory to identify the bacteria causing the infection.
+Stating that the operation may take 1 to 2 hours but this depends on the extent of the infection.
+
+Post-operative care and further procedures
+Explaining that the patient will almost certainly need to go to intensive care after the operation for close monitoring, I V antibiotics, and organ support if needed.
+Explaining that the patient will need to return to theatre, likely within 24 to 48 hours, for a second look to check that all the infected tissue has been removed. Further debridement may be needed.
+Being honest that multiple operations are often required. Typically 2 to 4 trips to theatre.
+Explaining that once the infection is controlled and the wound is clean, reconstruction will be planned. This may include skin grafts, flaps, or negative pressure wound therapy depending on the size and location of the wound.
+Mentioning that the recovery is prolonged. The patient may be in hospital for weeks.
+
+Risks and complications
+Death: this must be mentioned sensitively. Necrotising fasciitis carries a significant mortality rate, approximately 20 to 30 percent, even with prompt treatment. The risk is higher with delayed diagnosis, older age, and co-morbidities.
+Amputation: if the infection cannot be controlled, amputation of the limb may be necessary as a life-saving measure.
+Extensive tissue loss: the amount of tissue removed may be greater than anticipated, resulting in significant wounds requiring reconstruction.
+Organ failure: sepsis can cause failure of the kidneys, lungs, liver, and heart. The I T U team will manage these.
+Bleeding: significant blood loss may occur. Blood transfusion may be needed.
+Further surgery: multiple returns to theatre are expected, not a complication but an expected part of treatment.
+Scarring: extensive scarring is inevitable given the nature of the surgery.
+Prolonged hospital stay: weeks to months.
+Psychological impact: the experience is traumatic. Psychological support will be offered.
+Functional impairment: depending on the extent of tissue loss, there may be long-term effects on mobility and function.
 
 BONUS MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+(Internal reference only. Do not read aloud.)
 
-List the bonus marking points that distinguish scores of 4 and 5.
-These demonstrate excellent patient communication or detailed knowledge.
+Urgency and life-threatening nature
+Explaining the pathophysiology in simple terms: the bacteria produce toxins that destroy the tissue and spread along the fascia faster than antibiotics can act, which is why surgery is essential.
+Mentioning the LRINEC score as a clinical tool used to assess the likelihood of necrotising fasciitis.
 
-Format:
-Domain Name
-The candidate explains X with a helpful analogy.
-The candidate proactively addresses common patient concerns about Y.
+Operative technique and extent of surgery
+Explaining the finger test: if the tissue separates easily along the fascial plane with minimal resistance, this confirms necrotising fasciitis.
+Mentioning that the dishwater grey appearance of the fascia and lack of bleeding are intraoperative signs of infection.
+Mentioning that tissue may be sent for frozen section if available.
 
-END OF AUTHOR NOTE]
+Post-operative care and further procedures
+Explaining the role of negative pressure wound therapy, such as a V A C dressing, in managing the open wound between debridements.
+Mentioning that hyperbaric oxygen therapy is used in some centres as an adjunct, though evidence is limited.
+Mentioning that the microbiologist will guide antibiotic therapy based on culture and sensitivity results.
+
+Risks and complications
+Mentioning that the infection is not contagious to family members through normal contact.
+Mentioning that risk factors for necrotising fasciitis include diabetes, immunosuppression, peripheral vascular disease, and obesity.
+Discussing the possible need for long-term rehabilitation including physiotherapy and occupational therapy.
+
+These are points a strong candidate would mention but are not required to pass.
 
 END OF SCENARIO CRITERIA
 

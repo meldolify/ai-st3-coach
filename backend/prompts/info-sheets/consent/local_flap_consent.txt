@@ -1,13 +1,4 @@
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the patient/procedure information sheet for this consent scenario.
-
-Include:
-- Patient details (name, age)
-- Procedure (name of planned operation)
-- Context (referral reason, clinic visit, why listed for surgery)
-- Patient Expectations (what the patient understands, any concerns)
-
-No Images field for consent scenarios.
-
-END OF AUTHOR NOTE]
+Patient: Mr George Patterson, 79 years old
+Procedure: Excision of Squamous Cell Carcinoma Right Temple and Local Flap Reconstruction
+Context: Mr Patterson was referred urgently by his G P with a growing, crusting lesion on his right temple. A punch biopsy confirmed a squamous cell carcinoma. He was seen in the plastic surgery clinic two weeks ago and listed for wide local excision with a local flap closure. He has attended today for the operation under local anaesthetic. He has a history of type 2 diabetes, takes metformin, and is otherwise well.
+Patient Expectations: Mr Patterson has been told the lump on his temple is a skin cancer and needs to be cut out with an operation to cover the area. He does not understand what a local flap is and is worried about having surgery on his temple near his eye. He wants to know whether it will affect his vision, how big the scar will be, and whether the cancer could come back.

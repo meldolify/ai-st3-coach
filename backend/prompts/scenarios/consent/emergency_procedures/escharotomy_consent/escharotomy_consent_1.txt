@@ -4,78 +4,96 @@ CLINICAL SCENARIO BLOCK
 
 SCENARIO TITLE
 
-Escharotomy Consent
+Escharotomy
 
 PATIENT QUESTIONS
 
-(Internal reference only. Questions the patient or patient's relative may ask during the consent discussion.
+(Internal reference only. Questions the patient may ask during the consent discussion.
 Use these after the candidate finishes their explanation.
 How anxious or questioning you are is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write 6-10 patient questions that would naturally arise during this consent discussion.
-These should be written in everyday language as a real patient would ask.
-
-Examples for carpal tunnel release:
-"Will I be awake during it?"
-"How long does the operation take?"
-"When can I go back to work?"
-"You said there's a risk of infection — how common is that?"
-"Will the numbness definitely go away?"
-"What about the scar — will it be very noticeable?"
-"When do I need to come back to get checked?"
-
-For paediatric scenarios, write questions as a parent:
-"Will my child be in pain afterwards?"
-"How long will the anaesthetic take to wear off?"
-"When can they go back to school?"
-
-END OF AUTHOR NOTE]
+Why would you cut my skin when it is already burnt? That does not make sense to me.
+Will I feel it? I am already in a lot of pain.
+Will my hands be okay? I can feel my fingers are going tight.
+How long does the operation take?
+Will the cuts need to be stitched up afterwards?
+Am I going to need skin grafts later?
+What happens if you do not do this operation?
+Will I have big scars from the cuts?
 
 MAIN CONSENT DOMAINS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the 4-6 main consent domains being assessed in this scenario.
-
-Example for carpal tunnel release:
-Introduction and patient identification
-Procedure explanation (what will be done, in layman terms)
-Anaesthesia (local vs general, what to expect)
-Post-operative care (dressings, restrictions, follow-up)
-Risks and complications (infection, bleeding, nerve damage, recurrence, scar)
-Recovery and return to activities
-
-END OF AUTHOR NOTE]
+Urgency and rationale for the procedure
+Operative environment and anaesthesia
+Operative technique
+Post-operative care and further treatment
+Risks and complications
 
 ESSENTIAL MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+(Internal reference only. Do not read aloud.)
 
-List the essential marking points, organised by domain.
-These are the minimum requirements for a score of 3 or above.
+Urgency and rationale for the procedure
+Explaining clearly why the procedure is needed: the deep burns have caused the skin to become tight, hard, and inelastic. This is called eschar. As the tissues swell underneath, the tight skin acts like a tourniquet and restricts blood flow to the hands and fingers.
+Explaining that if the blood flow is not restored, the tissues beyond the constriction will die, which could mean loss of fingers or loss of function of the hands.
+Emphasising that this is an emergency and needs to be done now. It cannot wait.
+Explaining that the procedure works by making cuts through the tight burnt skin to release the pressure and allow the blood to flow again.
 
-Format:
-Domain Name
-The candidate must explain X in clear, jargon-free language.
-The candidate must mention Y.
+Operative environment and anaesthesia
+Explaining that the procedure may be performed at the bedside in the burns unit or in theatre, depending on the clinical situation.
+Explaining anaesthesia: this may be performed under G A, sedation, or in some cases with L A or no anaesthesia if the burns are full thickness, as full thickness burns destroy the nerve endings and the patient may not feel the cuts through the burnt skin.
+Being honest that the procedure may be uncomfortable, particularly at the edges of the burn where sensation is preserved, and that pain relief will be given.
+Mentioning that monitoring will be in place throughout.
 
-END OF AUTHOR NOTE]
+Operative technique
+Explaining that the surgeon makes long cuts, called incisions, along the length of the affected forearms through the burnt skin and the tight tissue underneath until the pressure is released.
+Explaining the placement of incisions: along the medial and lateral aspects of the forearm and, if needed, into the hand between the metacarpals.
+Explaining that the incisions only go through the eschar and into the subcutaneous fat. They do not go deep enough to damage the muscles, tendons, or nerves underneath.
+Mentioning that the surgeon will check that blood flow has been restored to the hands and fingers after the cuts are made.
+Explaining that the wounds are not closed. They are left open and covered with dressings.
+Stating that the procedure typically takes 20 to 30 minutes but depends on the extent of burns.
+
+Post-operative care and further treatment
+Explaining that the patient will remain in the burns unit for ongoing monitoring of circulation, fluid resuscitation, and wound care.
+Explaining that the escharotomy wounds and the burns will need regular dressing changes.
+Being honest that the patient is likely to need further surgery. Once the burns have declared their full depth, the dead tissue will need to be excised and skin grafts applied. This typically happens within the first few days.
+Mentioning that the patient may need to go to intensive care for ongoing organ support if the burns are extensive.
+Explaining that rehabilitation including physiotherapy and occupational therapy will begin early to maintain movement and function in the hands.
+Mentioning that the overall hospital stay is likely to be prolonged, potentially weeks to months, depending on the total burn area and recovery.
+
+Risks and complications
+Bleeding: the incisions will bleed once the pressure is released. This is expected and will be controlled.
+Infection: burns are inherently at high risk of infection. The open wounds from the escharotomy add to this risk.
+Incomplete release: if the escharotomy does not adequately release the pressure, further incisions or a fasciotomy may be needed.
+Damage to underlying structures: although care is taken, nerves, tendons, and blood vessels may be at risk, particularly if anatomy is distorted by the burn.
+Scarring: the escharotomy incisions will scar. However, these areas are already burnt and will likely need skin grafting.
+Need for further surgery: skin grafting of the burn and escharotomy wounds is almost always required.
+Loss of function: depending on the depth and extent of the burns, there may be long-term stiffness, contracture, or loss of function in the hands despite the escharotomy.
+Compartment syndrome: if the escharotomy does not adequately decompress the deeper compartments, a fasciotomy may be required.
 
 BONUS MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+(Internal reference only. Do not read aloud.)
 
-List the bonus marking points that distinguish scores of 4 and 5.
-These demonstrate excellent patient communication or detailed knowledge.
+Urgency and rationale for the procedure
+Explaining the concept of intra-compartmental pressure and its measurement using a pressure monitor or clinical signs such as absent capillary refill, reduced oxygen saturations on pulse oximetry of the digits, and tense swelling.
+Mentioning that escharotomy may also be needed for circumferential chest or abdominal burns that restrict breathing or abdominal compliance.
 
-Format:
-Domain Name
-The candidate explains X with a helpful analogy.
-The candidate proactively addresses common patient concerns about Y.
+Operative technique
+Explaining that electrocautery or diathermy is often used to make the incisions to reduce bleeding.
+Describing the anatomical safe corridors: incisions placed along the mid-axial lines to avoid the major neurovascular structures, typically mid-lateral on each side of the limb.
+Mentioning that hand escharotomies follow specific patterns along the dorsal intermetacarpal spaces and may extend into the digits along the mid-axial lines if required.
 
-END OF AUTHOR NOTE]
+Post-operative care and further treatment
+Explaining the Parkland formula for fluid resuscitation in burns and its role in the first 24 hours.
+Mentioning the role of elevation, active exercises, and custom splinting in the prevention of hand contractures.
+Mentioning that multidisciplinary team care including plastic surgeons, burns nurses, physiotherapists, occupational therapists, dietitians, and psychologists is standard.
+
+Risks and complications
+Mentioning that rhabdomyolysis and myoglobinuria can occur in deep burns with muscle damage, requiring monitoring of urine output and renal function.
+Discussing the psychological impact of burn injuries and the availability of psychological support.
+
+These are points a strong candidate would mention but are not required to pass.
 
 END OF SCENARIO CRITERIA
 

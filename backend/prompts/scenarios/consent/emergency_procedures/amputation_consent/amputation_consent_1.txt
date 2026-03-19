@@ -4,7 +4,7 @@ CLINICAL SCENARIO BLOCK
 
 SCENARIO TITLE
 
-Amputation Consent
+Digital Amputation
 
 PATIENT QUESTIONS
 
@@ -12,70 +12,88 @@ PATIENT QUESTIONS
 Use these after the candidate finishes their explanation.
 How anxious or questioning you are is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write 6-10 patient questions that would naturally arise during this consent discussion.
-These should be written in everyday language as a real patient would ask.
-
-Examples for carpal tunnel release:
-"Will I be awake during it?"
-"How long does the operation take?"
-"When can I go back to work?"
-"You said there's a risk of infection — how common is that?"
-"Will the numbness definitely go away?"
-"What about the scar — will it be very noticeable?"
-"When do I need to come back to get checked?"
-
-For paediatric scenarios, write questions as a parent:
-"Will my child be in pain afterwards?"
-"How long will the anaesthetic take to wear off?"
-"When can they go back to school?"
-
-END OF AUTHOR NOTE]
+Is there really no way to save my finger? Can you not stitch it back on?
+Will I be able to work again? I supervise on the factory floor.
+Will I be put to sleep for this?
+What will the end of my hand look like afterwards?
+Will I have pain where the finger used to be? My colleague had phantom pain after losing a toe.
+Can I get a prosthetic finger?
+How long will I be in hospital?
+My wife is very upset. Can she come and see me before the operation?
 
 MAIN CONSENT DOMAINS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the 4-6 main consent domains being assessed in this scenario.
-
-Example for carpal tunnel release:
-Introduction and patient identification
-Procedure explanation (what will be done, in layman terms)
-Anaesthesia (local vs general, what to expect)
-Post-operative care (dressings, restrictions, follow-up)
-Risks and complications (infection, bleeding, nerve damage, recurrence, scar)
-Recovery and return to activities
-
-END OF AUTHOR NOTE]
+Operative environment and anaesthesia
+Operative technique and level of amputation
+Post-operative regime and rehabilitation
+Risks and complications
+Psychological impact and functional expectations
 
 ESSENTIAL MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+(Internal reference only. Do not read aloud.)
 
-List the essential marking points, organised by domain.
-These are the minimum requirements for a score of 3 or above.
+Operative environment and anaesthesia
+Explaining that the procedure may be performed under G A or regional anaesthesia such as an axillary block or wrist block depending on the level of amputation and patient preference.
+If G A: meeting the anaesthetist who will explain the anaesthetic. A drip will be placed and a gas given to go to sleep.
+Describing the sterile theatre environment and the team checking process.
+Mentioning that a tourniquet will be used on the upper arm to control bleeding.
 
-Format:
-Domain Name
-The candidate must explain X in clear, jargon-free language.
-The candidate must mention Y.
+Operative technique and level of amputation
+Explaining clearly and sensitively that the finger cannot be saved due to the extent of the crush injury and loss of blood supply, and that amputation is the safest option to prevent further complications.
+Describing the level of amputation: through the proximal phalanx, preserving as much length as is safely possible.
+Explaining that the surgeon will trim any damaged bone, identify and ligate the blood vessels, and identify and shorten the nerves cleanly to reduce the risk of painful nerve lumps.
+Explaining that the skin will be closed over the stump using available local tissue to create a well-padded, pain-free stump. Absorbable or non-absorbable sutures will be used.
+Explaining that the hand will be dressed with a bulky bandage.
+Stating the approximate duration: 30 to 45 minutes.
 
-END OF AUTHOR NOTE]
+Post-operative regime and rehabilitation
+Explaining that the patient may go home the same day or stay overnight depending on pain control and how they are feeling.
+Advising to keep the hand elevated to reduce swelling and pain.
+Explaining the follow-up: dressing clinic in approximately 5 to 7 days for wound check. Sutures removed at 10 to 14 days if non-absorbable.
+Advising to keep the wound clean and dry. Antibiotics and painkillers will be provided.
+Explaining that a referral to hand therapy will be made to help with grip strengthening, adaptation, and return to function.
+Advising on return to work: light duties from 2 to 3 weeks, heavier work once the wound is fully healed and comfortable, typically 4 to 6 weeks.
+Advising against driving until comfortable gripping the steering wheel, and that insurance implications should be checked.
+
+Psychological impact and functional expectations
+Acknowledging the emotional impact of losing a finger and offering empathy. This is a significant event.
+Explaining that most people adapt well and regain good hand function for daily activities.
+Mentioning that the ring finger is not the most functionally critical digit and that grip and pinch can be preserved well.
+Mentioning that prosthetic options exist, including cosmetic silicone finger prostheses, and a referral can be arranged.
+Offering a referral for psychological support or counselling if needed.
+Mentioning that the patient's wife or family can see them before the operation if time allows.
+
+Risks and complications
+Bleeding: may occur after the tourniquet is released. A haematoma may need drainage.
+Infection: risk with any operation. Signs to watch for include increasing pain, redness, swelling, discharge, or fever.
+Wound breakdown: the skin over the stump may break down, particularly if there is tension. This may require dressing changes or rarely further surgery.
+Phantom sensation or phantom pain: the patient may feel as though the finger is still there, or may experience pain in the missing finger. This is common and usually settles but may require medication.
+Neuroma: a painful lump of nerve tissue at the cut end of the nerve. May require further surgery.
+Stiffness: of the remaining fingers, which should be kept moving.
+Scar sensitivity: the stump may be tender for several weeks.
+Revision surgery: rarely the stump may need to be revised if there are wound problems or a painful neuroma.
+Cold intolerance: the stump may be sensitive to cold weather.
 
 BONUS MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+(Internal reference only. Do not read aloud.)
 
-List the bonus marking points that distinguish scores of 4 and 5.
-These demonstrate excellent patient communication or detailed knowledge.
+Operative technique and level of amputation
+Explaining the principle of preserving maximum length while ensuring healthy, well-vascularised tissue for coverage.
+Mentioning that the remaining metacarpal head is preserved to maintain the width of the palm and prevent objects falling through the gap.
+Mentioning that a ray amputation, removing the entire metacarpal, is sometimes considered but narrows the hand and is not appropriate here.
 
-Format:
-Domain Name
-The candidate explains X with a helpful analogy.
-The candidate proactively addresses common patient concerns about Y.
+Psychological impact and functional expectations
+Discussing the stages of grief and loss that patients may experience.
+Mentioning that occupational therapy can help with workplace adaptations.
+Discussing the Industrial Injuries Disablement Benefit if the injury was work-related.
 
-END OF AUTHOR NOTE]
+Risks and complications
+Mentioning that pre-existing conditions such as diabetes or peripheral vascular disease can impair healing.
+Mentioning D V T and P E as risks of any surgery under G A, though low for this short procedure.
+
+These are points a strong candidate would mention but are not required to pass.
 
 END OF SCENARIO CRITERIA
 

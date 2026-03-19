@@ -1,13 +1,4 @@
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the patient/procedure information sheet for this consent scenario.
-
-Include:
-- Patient details (name, age)
-- Procedure (name of planned operation)
-- Context (referral reason, clinic visit, why listed for surgery)
-- Patient Expectations (what the patient understands, any concerns)
-
-No Images field for consent scenarios.
-
-END OF AUTHOR NOTE]
+Patient: Mr David Chen, 62 years old
+Procedure: Left Radial Forearm Free Flap Reconstruction of Floor of Mouth Defect
+Context: Mr Chen was diagnosed with a squamous cell carcinoma of the floor of the mouth six weeks ago following referral from his dentist. The head and neck multidisciplinary team has recommended excision of the tumour and reconstruction with a radial forearm free flap. He was seen in the plastics pre-assessment clinic two weeks ago and listed for surgery. He has attended today for the operation. He is an ex-smoker, stopped three months ago, and takes medication for high blood pressure. He lives with his wife.
+Patient Expectations: Mr Chen has been told he needs a big operation to remove the cancer and rebuild the area using skin from his arm but does not understand the details. He is anxious about the length of the surgery and the recovery. He wants to know whether his arm will work normally afterwards, how long he will be in hospital, and whether he will be able to eat and speak normally after the operation.

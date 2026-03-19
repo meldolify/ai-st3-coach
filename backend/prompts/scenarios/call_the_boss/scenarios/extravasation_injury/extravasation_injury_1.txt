@@ -12,65 +12,88 @@ PROBING QUESTIONS
 Use these to challenge or guide the candidate after they finish presenting.
 Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write 4-8 probing questions the consultant might ask during the phone call.
-These should test the candidate's clinical knowledge and management plan.
-
-Examples:
-"What were the blood results?"
-"Have you started any treatment so far?"
-"What is your surgical plan?"
-"Talk me through the steps you would take in theatre."
-"Who else have you contacted?"
-"Are you comfortable managing this yourself or do you need me to come in?"
-
-END OF AUTHOR NOTE]
+"What substance was extravasated and why does that matter?"
+"Have you aspirated through the cannula before removing it?"
+"Is there any concern about compartment syndrome in the hand?"
+"Do you know the Goult flush-out technique — would you consider it here?"
+"Have the parents been informed? Do you understand duty of candour?"
+"Has an incident report been filed?"
+"Do you need me to come in tonight or can we manage this conservatively?"
+"What are the options if the skin necroses?"
 
 MAIN COMMUNICATION AND CLINICAL DOMAINS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the 4-6 main domains being assessed in this scenario.
-These should cover both communication skills and clinical knowledge areas.
-
-Example from a burns call:
-Structured clinical presentation (history, examination, observations)
-Burns assessment (TBSA, depth, mechanism)
-Resuscitation and initial management (fluids, analgesia, monitoring)
-Surgical planning (escharotomy, debridement, coverage)
-Escalation and team coordination
-Safety awareness (airway, transfer, ITU)
-
-END OF AUTHOR NOTE]
+Structured clinical presentation including identification of the extravasated substance
+Immediate first aid measures and aspiration through the cannula
+Assessment of skin viability and compartment syndrome
+Management strategy based on the substance properties
+Duty of candour and incident reporting
+Follow-up plan and potential reconstruction
 
 ESSENTIAL MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Structured clinical presentation including identification of the extravasated substance
+The candidate must identify that T P N is a hyperosmolar solution and understand why this is significant — it causes osmotic tissue injury.
+The candidate must present the timeline clearly: when the infusion started, when swelling was noticed, and the estimated volume extravasated.
+The candidate must describe the clinical findings including the blistering, mottled discolouration, and sluggish capillary refill.
 
-List the essential marking points, organised by domain.
-These are the minimum requirements for a score of 3 or above.
+Immediate first aid measures and aspiration through the cannula
+The candidate must state that the infusion was correctly stopped but the cannula should be left in situ initially.
+The candidate must attempt to aspirate as much of the T P N as possible through the cannula before removing it.
+The candidate must remove all splints and tapes that may be constrictive.
+The candidate must elevate the limb.
+The candidate must arrange clinical photography.
 
-Format:
-Domain Name
-The candidate must demonstrate X.
-The candidate must mention Y.
+Assessment of skin viability and compartment syndrome
+The candidate must assess the neurovascular status of the hand and fingers.
+The candidate must assess for compartment syndrome: tense swelling, pain on passive movement, and capillary refill.
+The candidate must recognise that blistering indicates at least partial thickness skin injury, and mottled or dusky discolouration suggests deeper tissue damage.
+The candidate must mention performing a rapid A to E assessment as some extravasated substances may have systemic effects.
 
-END OF AUTHOR NOTE]
+Management strategy based on the substance properties
+The candidate must know the management strategy for T P N extravasation: the Goult flush-out technique should be considered.
+The candidate must describe the Goult technique: under aseptic conditions, four small puncture holes are made around the affected area, hyaluronidase is infiltrated to help disperse the substance, and normal saline is irrigated through the puncture holes until the overlying skin improves.
+The candidate must discuss this with the consultant and determine whether the consultant needs to come in to perform or supervise the procedure.
+The candidate must mention that warm compresses are not appropriate for T P N — cold compresses should be applied.
+
+Duty of candour and incident reporting
+The candidate must recognise the legal and professional obligation to inform the parents of the incident (duty of candour).
+The candidate must ensure a formal clinical incident report (Datix or equivalent) is completed.
+The candidate must mention documenting findings meticulously.
+
+Follow-up plan and potential reconstruction
+The candidate must plan close monitoring of the skin over the coming days as the wound may declare further.
+The candidate must mention that reconstruction of any tissue loss should be performed once the wound has fully declared.
+The candidate must discuss the potential outcomes with the neonatal team and the parents.
 
 BONUS MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Structured clinical presentation including identification of the extravasated substance
+The candidate knows the classification of extravasated substances: irritants, vesicants (D N A binding and non D N A binding), vasoconstrictors, and hyperosmolar solutions.
+The candidate mentions contacting pharmacy for specific guidance on the T P N composition and whether any specific antidote is available.
 
-List the bonus marking points that distinguish scores of 4 and 5.
-These demonstrate advanced knowledge or exceptional communication.
+Immediate first aid measures and aspiration through the cannula
+The candidate mentions dilution with isotonic saline through the cannula before removal to limit damage.
+The candidate mentions marking the extent of swelling and discolouration for serial monitoring.
 
-Format:
-Domain Name
-The candidate discusses X in detail.
-The candidate demonstrates awareness of Y.
+Assessment of skin viability and compartment syndrome
+The candidate recognises that in a neonate the signs of compartment syndrome may be difficult to assess clinically and a low threshold for intervention should be maintained.
+The candidate mentions that fasciotomy may be needed if compartment syndrome is confirmed.
 
-END OF AUTHOR NOTE]
+Management strategy based on the substance properties
+The candidate mentions that early intervention with the Goult technique produces better outcomes than delayed treatment.
+The candidate discusses alternative management strategies for different substances: phentolamine for vasoconstrictor extravasation, warm compresses for non-D N A binding vesicants.
+The candidate mentions specific risks of common neonatal extravasations including calcium, potassium, and sodium bicarbonate.
+
+Duty of candour and incident reporting
+The candidate demonstrates sensitivity and professionalism in discussing the incident with the parents.
+The candidate mentions involving the neonatal consultant in the discussion with the parents.
+
+Follow-up plan and potential reconstruction
+The candidate discusses reconstructive options for neonatal skin loss: secondary intention for small defects, skin grafting, and local flap coverage.
+The candidate mentions that neonatal skin has excellent healing capacity but contractures and scarring may require secondary procedures.
+
+These are points a strong candidate would mention but are not required to pass.
 
 END OF SCENARIO CRITERIA
 

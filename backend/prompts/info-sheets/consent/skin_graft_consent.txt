@@ -1,13 +1,4 @@
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the patient/procedure information sheet for this consent scenario.
-
-Include:
-- Patient details (name, age)
-- Procedure (name of planned operation)
-- Context (referral reason, clinic visit, why listed for surgery)
-- Patient Expectations (what the patient understands, any concerns)
-
-No Images field for consent scenarios.
-
-END OF AUTHOR NOTE]
+Patient: Mrs Dorothy Evans, 82 years old
+Procedure: Excision of Basal Cell Carcinoma Right Lower Leg and Split Thickness Skin Graft
+Context: Mrs Evans was referred by her G P with a non-healing ulcerated lesion on her right shin. Biopsy confirmed a basal cell carcinoma measuring approximately three centimetres. She was seen in the plastic surgery clinic three weeks ago and listed for excision and skin graft under local anaesthetic. She has attended today for the operation. She has a history of well-controlled hypertension and mild osteoarthritis. She lives alone and is independent with activities of daily living.
+Patient Expectations: Mrs Evans has been told the lump on her leg is a slow-growing cancer and needs to be removed. She does not understand why she needs a skin graft and is worried about having skin taken from another part of her body. She wants to know whether she will be able to walk afterwards, how long the dressings need to stay on, and whether she will need any help at home during recovery.

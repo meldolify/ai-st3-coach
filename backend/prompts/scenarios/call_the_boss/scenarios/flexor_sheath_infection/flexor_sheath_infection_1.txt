@@ -12,65 +12,89 @@ PROBING QUESTIONS
 Use these to challenge or guide the candidate after they finish presenting.
 Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write 4-8 probing questions the consultant might ask during the phone call.
-These should test the candidate's clinical knowledge and management plan.
-
-Examples:
-"What were the blood results?"
-"Have you started any treatment so far?"
-"What is your surgical plan?"
-"Talk me through the steps you would take in theatre."
-"Who else have you contacted?"
-"Are you comfortable managing this yourself or do you need me to come in?"
-
-END OF AUTHOR NOTE]
+"What are the Kanavel signs and which ones does this patient have?"
+"Are you worried about a horseshoe abscess? Why?"
+"What antibiotics are you going to use — she is penicillin allergic?"
+"Does this definitely need to go to theatre tonight or can it wait until morning?"
+"Talk me through the surgical approach step by step."
+"Which spaces would you explore in theatre?"
+"What is your post-operative plan?"
+"Do you need me to come in for this or are you comfortable doing it yourself?"
 
 MAIN COMMUNICATION AND CLINICAL DOMAINS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the 4-6 main domains being assessed in this scenario.
-These should cover both communication skills and clinical knowledge areas.
-
-Example from a burns call:
-Structured clinical presentation (history, examination, observations)
-Burns assessment (TBSA, depth, mechanism)
-Resuscitation and initial management (fluids, analgesia, monitoring)
-Surgical planning (escharotomy, debridement, coverage)
-Escalation and team coordination
-Safety awareness (airway, transfer, ITU)
-
-END OF AUTHOR NOTE]
+Structured clinical presentation with recognition of flexor sheath infection as a surgical emergency
+Clinical assessment including Kanavel signs
+Recognition of potential horseshoe abscess and deep space involvement
+Antibiotic strategy in a penicillin-allergic patient
+Surgical planning and technique for flexor sheath washout
+Post-operative care and second look planning
 
 ESSENTIAL MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Structured clinical presentation with recognition of flexor sheath infection as a surgical emergency
+The candidate must identify the diagnosis as flexor sheath infection (flexor tenosynovitis) which is a surgical emergency.
+The candidate must recognise the systemic sepsis with tachycardia, hypotension, pyrexia, raised lactate, and raised inflammatory markers.
+The candidate must convey that this patient needs urgent surgical washout tonight.
+The candidate must mention initiating the Sepsis Six bundle.
 
-List the essential marking points, organised by domain.
-These are the minimum requirements for a score of 3 or above.
+Clinical assessment including Kanavel signs
+The candidate must describe the four Kanavel signs: fusiform swelling of the finger, flexed posture of the finger, pain on passive extension, and tenderness along the flexor sheath.
+The candidate must state that all four Kanavel signs are present in this patient.
+The candidate must mention assessing the neurovascular status of all fingers.
 
-Format:
-Domain Name
-The candidate must demonstrate X.
-The candidate must mention Y.
+Recognition of potential horseshoe abscess and deep space involvement
+The candidate must recognise that the extension of swelling and tenderness into the palm and thenar eminence raises the possibility of a horseshoe abscess.
+The candidate must explain that in a horseshoe abscess, the little finger and thumb flexor sheaths communicate through the ulnar and radial bursae, requiring thorough washout of all connected spaces.
+The candidate must mention the spaces that may be involved: ulnar bursa, radial bursa, midpalmar space, thenar space, and the space of Parona in the distal forearm.
 
-END OF AUTHOR NOTE]
+Antibiotic strategy in a penicillin-allergic patient
+The candidate must recognise that oral flucloxacillin is inadequate and I V antibiotics are required.
+The candidate must know that in a penicillin-allergic patient, alternatives include I V teicoplanin, or clarithromycin, or clindamycin, guided by local trust guidelines.
+The candidate must mention discussing with microbiology for guidance.
+The candidate must mention tetanus prophylaxis.
+
+Surgical planning and technique for flexor sheath washout
+The candidate must describe the surgical approach: general or regional anaesthesia with arm tourniquet without exsanguination.
+The candidate must describe the minimal access approach: incisions over the A1 and A5 pulleys, with washout using saline through a venflon cannula from proximal to distal.
+The candidate must state that if frank pus is found, the incision should be extended using a Brunner or mid-lateral approach.
+The candidate must mention taking microbiology swabs and excising the original puncture wound.
+The candidate must mention exploring the potential spaces including the thenar, hypothenar, midpalmar, web spaces, and the space of Parona if there is any concern about proximal spread.
+
+Post-operative care and second look planning
+The candidate must mention splinting the hand in the position of safe immobilisation.
+The candidate must mention strict hand elevation in a Bradford sling.
+The candidate must continue I V antibiotics and plan a second look in 48 hours.
+The candidate must mention early hand therapy once the infection is controlled.
+The candidate must mention optimising blood glucose control in this diabetic patient.
 
 BONUS MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Structured clinical presentation with recognition of flexor sheath infection as a surgical emergency
+The candidate mentions risk factors for flexor sheath infection in this patient: diabetes, immunocompromise, penetrating thorn injury, and delayed presentation.
+The candidate mentions that the patient is showing signs of sepsis and may need critical care input if she deteriorates.
 
-List the bonus marking points that distinguish scores of 4 and 5.
-These demonstrate advanced knowledge or exceptional communication.
+Clinical assessment including Kanavel signs
+The candidate mentions looking for tracking cellulitis, lymphangitis, and lymphadenopathy as signs of systemic spread.
+The candidate mentions palpating for foreign bodies in the wound.
 
-Format:
-Domain Name
-The candidate discusses X in detail.
-The candidate demonstrates awareness of Y.
+Recognition of potential horseshoe abscess and deep space involvement
+The candidate describes the anatomy of the ulnar and radial bursae and how infection can track between the little finger and thumb sheaths.
+The candidate mentions that a horseshoe abscess carries a significantly worse prognosis than isolated flexor sheath infection.
 
-END OF AUTHOR NOTE]
+Antibiotic strategy in a penicillin-allergic patient
+The candidate discusses common organisms in flexor sheath infection: Staphylococcus aureus, Streptococci, and mixed flora from penetrating injuries, including atypical organisms from soil and plant matter such as Nocardia and atypical Mycobacteria.
+The candidate mentions sending wound cultures and blood cultures and tailoring antibiotics accordingly.
+
+Surgical planning and technique for flexor sheath washout
+The candidate describes the importance of preserving the A2 and A4 pulleys during surgical exposure to prevent bowstringing.
+The candidate discusses the option of placing a catheter in the sheath for continuous post-operative irrigation in severe cases.
+
+Post-operative care and second look planning
+The candidate discusses the potential complications including tendon adhesions, tendon necrosis, digital stiffness, and the risk of amputation in severe cases.
+The candidate mentions the importance of the position of safe immobilisation: wrist in 20 degrees extension, M C P joints in 70 to 90 degrees flexion, I P joints in full extension.
+
+These are points a strong candidate would mention but are not required to pass.
 
 END OF SCENARIO CRITERIA
 

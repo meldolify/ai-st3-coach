@@ -1,13 +1,4 @@
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the patient/procedure information sheet for this consent scenario.
-
-Include:
-- Patient details (name, age)
-- Procedure (name of planned operation)
-- Context (referral reason, clinic visit, why listed for surgery)
-- Patient Expectations (what the patient understands, any concerns)
-
-No Images field for consent scenarios.
-
-END OF AUTHOR NOTE]
+Patient: Mrs Sandra Yeboah, 42 years old
+Procedure: Wound Washout and Debridement of Open Fracture Right Forearm
+Context: Presented to A and E after a fall from a ladder at home three hours ago sustaining a Gustilo grade 3A open fracture of the right radius with a 6 centimetre wound over the volar forearm with exposed bone and contamination with soil. I V antibiotics and tetanus prophylaxis have been given. The wound has been irrigated and dressed with a saline soaked dressing. She has been listed on the emergency trauma list for formal washout and debridement within six hours of injury. She is haemodynamically stable and alert.
+Patient Expectations: Mrs Yeboah knows her arm is broken and can see the wound. She is frightened by the appearance of the injury and in pain. She has been told she needs an urgent operation to clean the wound and fix the bone. She wants to know if she will lose her arm, how many operations she might need, and whether the wound will need a skin graft.

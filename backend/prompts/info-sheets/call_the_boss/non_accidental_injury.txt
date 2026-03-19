@@ -1,15 +1,12 @@
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the patient information sheet for this scenario.
-
-For Call-the-Boss scenarios include:
-- Patient details (name, age, MRN, DOB)
-- Presentation context (who referred, when, where)
-- History of Presenting Complaint
-- Social History
-- PMH, Drug History, Allergies
-- Observations (HR, BP, RR, Temp, Sats)
-- Examination Findings
-- Images: filename.jpg (optional, comma-separated)
-
-END OF AUTHOR NOTE]
+Patient: Amara Johnson, 18 months old, MRN 81432097, DOB 19/09/2024
+Presentation: Brought to A and E at 9pm by her mother's boyfriend with scald burns to both feet
+HPC: The boyfriend reports that the child climbed into the bath while he was running the water and scalded both feet. He states he pulled her out immediately. However, the injury reportedly happened yesterday evening and they have only presented today because "it didn't look that bad at first." The child has been irritable and refusing to weight-bear since the injury. No first aid was administered at the time. The mother is not present — the boyfriend states she is at work.
+Social History: Lives with her mother and the mother's boyfriend. The boyfriend has been the primary carer for the last 3 months. The mother works night shifts. No siblings. The child is not known to social services. No health visitor concerns documented.
+PMH: Born at term, normal development. Immunisations up to date.
+Drug History: Nil. N K D A.
+Last Fed: Had some milk approximately 3 hours ago
+Observations: HR 145 (normal for age), BP 88/52 (normal for age), RR 32, Temp 37.2, Sats 99% on room air, Weight 11.2kg
+Examination: The child is irritable but alert. Both feet have symmetrical scald burns with a clear glove distribution and sharp demarcation line at the ankle level. The burns are circumferential around both feet with a uniform depth — deep partial to full thickness. There are no splash marks. The soles of the feet are relatively spared (consistent with forced immersion against the bottom of the bath). There are additional bruises on the upper arms bilaterally — 4 fingertip-sized bruises on the left upper arm and 3 on the right upper arm, consistent with grip marks. There is also a fading yellow bruise on the left cheek. The rest of the examination is otherwise normal. Estimated T B S A approximately 5 percent.
+Investigations: Not yet performed. Blood glucose 5.1 by bedside testing.
+Current Management: No analgesia has been given. The burns have not been assessed formally or dressed. The boyfriend is in the cubicle with the child and appears agitated, wanting to leave. No safeguarding referral has been made.
+Images: non_accidental_injury_1.jpg

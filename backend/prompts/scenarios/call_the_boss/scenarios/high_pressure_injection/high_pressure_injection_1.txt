@@ -4,7 +4,7 @@ CLINICAL SCENARIO BLOCK
 
 SCENARIO TITLE
 
-High Pressure Injection
+High Pressure Injection Injury
 
 PROBING QUESTIONS
 
@@ -12,65 +12,84 @@ PROBING QUESTIONS
 Use these to challenge or guide the candidate after they finish presenting.
 Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write 4-8 probing questions the consultant might ask during the phone call.
-These should test the candidate's clinical knowledge and management plan.
-
-Examples:
-"What were the blood results?"
-"Have you started any treatment so far?"
-"What is your surgical plan?"
-"Talk me through the steps you would take in theatre."
-"Who else have you contacted?"
-"Are you comfortable managing this yourself or do you need me to come in?"
-
-END OF AUTHOR NOTE]
+"The entry wound is tiny — why are you so concerned about this?"
+"What substance was injected and why does that affect the prognosis?"
+"How far has the material tracked on the X-ray?"
+"Is there any concern about compartment syndrome?"
+"How urgently does this need surgery — within what timeframe?"
+"Talk me through what you would do in theatre."
+"What is the amputation rate for this type of injury?"
+"What would the post-operative plan look like?"
 
 MAIN COMMUNICATION AND CLINICAL DOMAINS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the 4-6 main domains being assessed in this scenario.
-These should cover both communication skills and clinical knowledge areas.
-
-Example from a burns call:
-Structured clinical presentation (history, examination, observations)
-Burns assessment (TBSA, depth, mechanism)
-Resuscitation and initial management (fluids, analgesia, monitoring)
-Surgical planning (escharotomy, debridement, coverage)
-Escalation and team coordination
-Safety awareness (airway, transfer, ITU)
-
-END OF AUTHOR NOTE]
+Structured clinical presentation with recognition of the severity despite the innocuous wound
+Identification of the substance and its prognostic significance
+Assessment for compartment syndrome and extent of tracking
+Urgent surgical management within the recommended timeframe
+Operative technique including extended exploration
+Post-operative care and realistic prognostic counselling
 
 ESSENTIAL MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Structured clinical presentation with recognition of the severity despite the innocuous wound
+The candidate must recognise that a high pressure injection injury is a surgical emergency despite the small entry wound.
+The candidate must convey urgency and request the consultant to come in for theatre tonight.
+The candidate must explain that the injected material tracks along tissue planes causing extensive damage including chemical inflammation, tissue necrosis, and compartment syndrome.
 
-List the essential marking points, organised by domain.
-These are the minimum requirements for a score of 3 or above.
+Identification of the substance and its prognostic significance
+The candidate must establish that grease was the substance injected and know that grease carries a worse prognosis than air or water.
+The candidate must mention the importance of ascertaining the type of substance, the pressure of the device, and the estimated volume injected.
+The candidate must know that organic solvents, paints, and grease carry the worst prognosis.
 
-Format:
-Domain Name
-The candidate must demonstrate X.
-The candidate must mention Y.
+Assessment for compartment syndrome and extent of tracking
+The candidate must assess for compartment syndrome in the finger and hand.
+The candidate must note that the X-ray shows radio-opaque material tracking along the flexor sheath into the palm and carpal tunnel area.
+The candidate must mention that the reduced sensation and delayed capillary refill are concerning for neurovascular compromise.
+The candidate must mention palpating the forearm compartments for tightness.
 
-END OF AUTHOR NOTE]
+Urgent surgical management within the recommended timeframe
+The candidate must state that surgical exploration should be performed within 6 hours of injury — the injury is now approaching 4 hours old.
+The candidate must describe the operative approach: general or regional anaesthesia with arm tourniquet, exploration through extended mid-lateral or Brunner incisions to follow the track of injected material, excision of all contaminated and necrotic tissue, carpal tunnel release if material has tracked proximally, thorough washout, and leaving the wound open.
+The candidate must mention fasciotomy if there is any concern about compartment syndrome.
+
+Operative technique including extended exploration
+The candidate must describe extending the incision from the fingertip proximally into the palm and potentially into the carpal tunnel to follow the material.
+The candidate must mention debridement of all devitalised tissue.
+The candidate must describe thorough washout with warm normal saline.
+The candidate must state the wound should be left open with planned second look at 48 hours.
+
+Post-operative care and realistic prognostic counselling
+The candidate must mention strict hand elevation, I V antibiotics, strong analgesia, and tetanus prophylaxis.
+The candidate must mention regular monitoring of the neurovascular status.
+The candidate must plan further debridements as needed.
+The candidate must counsel the patient realistically that amputation rates for high pressure injection injuries with grease are reported at up to 48 percent.
 
 BONUS MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Structured clinical presentation with recognition of the severity despite the innocuous wound
+The candidate mentions that the outcome is determined by the substance, volume, pressure, and time to surgical exploration.
+The candidate discusses that delayed presentation beyond 6 hours significantly worsens the prognosis.
 
-List the bonus marking points that distinguish scores of 4 and 5.
-These demonstrate advanced knowledge or exceptional communication.
+Identification of the substance and its prognostic significance
+The candidate knows the criteria for conservative management: air or water at low pressure and low volume with intact neurovascular status, admitted for close observation.
+The candidate mentions that there is some evidence that non-steroidal anti-inflammatory drugs may be beneficial.
 
-Format:
-Domain Name
-The candidate discusses X in detail.
-The candidate demonstrates awareness of Y.
+Assessment for compartment syndrome and extent of tracking
+The candidate knows that material can track along tendon sheaths from the finger into the palm and forearm.
+The candidate mentions that the absence of pain does not exclude significant injury as digital nerve damage may mask severity.
+The candidate mentions that a C T scan may occasionally be useful to delineate the extent of tracking in complex cases.
 
-END OF AUTHOR NOTE]
+Urgent surgical management within the recommended timeframe
+The candidate discusses that a mid-lateral incision or Brunner incision should be used and extended as needed.
+The candidate mentions avoiding Esmarch exsanguination due to the risk of driving the material further proximally.
+
+Post-operative care and realistic prognostic counselling
+The candidate mentions that multiple debridements are often required.
+The candidate discusses that outcomes for organic solvent and grease injuries remain poor with high rates of stiffness, chronic pain, and amputation.
+The candidate mentions early hand therapy involvement once the wound is stable.
+
+These are points a strong candidate would mention but are not required to pass.
 
 END OF SCENARIO CRITERIA
 

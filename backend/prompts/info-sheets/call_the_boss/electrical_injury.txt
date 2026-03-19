@@ -1,15 +1,12 @@
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the patient information sheet for this scenario.
-
-For Call-the-Boss scenarios include:
-- Patient details (name, age, MRN, DOB)
-- Presentation context (who referred, when, where)
-- History of Presenting Complaint
-- Social History
-- PMH, Drug History, Allergies
-- Observations (HR, BP, RR, Temp, Sats)
-- Examination Findings
-- Images: filename.jpg (optional, comma-separated)
-
-END OF AUTHOR NOTE]
+Patient: Mr Marcus Thompson, 32 years old, MRN 83042617, DOB 11/04/1993
+Presentation: Brought to A and E by ambulance at 8:30pm following a high voltage electrical injury at work
+HPC: The patient is an industrial electrician who sustained a high voltage electrical contact injury while working on a substation at approximately 6pm. He was found unconscious by colleagues. Paramedics report a brief cardiac arrest at the scene requiring one cycle of C P R and one D C shock before return of spontaneous circulation. He has visible entry wounds on his right hand and exit wounds on his left foot. He was intubated at scene due to reduced G C S. No evidence of flame burns or blast injury. No fall from height.
+Social History: Industrial electrician, right hand dominant. Smokes 5 per day. Drinks 10 units per week. Lives with his wife and young child.
+PMH: Nil significant
+Drug History: Nil regular medications. N K D A. Tetanus up to date.
+Last Ate: Approximately 6 hours ago
+Observations: HR 105, BP 100/65 (post 2 litres I V crystalloid), RR 16 (ventilated), Temp 36.0, Sats 96% on 10L O2, GCS 3T (sedated and intubated)
+Examination: Primary survey — Airway secured (intubated at scene). Breathing — requiring 10L O2 to maintain saturations, chest clear. Circulation — was hypotensive and tachycardic, responding to I V fluid boluses. Disability — sedated, G C S 3T. Secondary survey — Entry wound on the right palm, approximately 3cm, full thickness charred area with surrounding oedema. Exit wound on the left sole of the foot, approximately 2cm, similar appearance. Both forearms appear tense on palpation. Right hand digits are dusky with sluggish capillary refill. No other injuries identified.
+Investigations: E C G shows sinus tachycardia, no arrhythmia currently but there was a V F arrest at scene. Troponin mildly elevated. Bloods: Hb 14.2, WCC 11.8, CRP 15, K 5.8, Cr 112, C K 12,500 (markedly elevated). A B G shows metabolic acidosis with raised lactate 4.1. Urine is dark brown, dipstick positive for blood (myoglobinuria). C T trauma series shows no other injuries.
+Current Management: Intubated and ventilated. I V access x2 large bore. 2 litres I V crystalloid given. Urinary catheter in situ, urine output 20ml in the last hour (dark brown). Continuous E C G monitoring. No fasciotomy performed.
+Images: electrical_injury_1.jpg

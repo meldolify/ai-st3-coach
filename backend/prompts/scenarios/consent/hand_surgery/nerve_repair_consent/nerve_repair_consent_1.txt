@@ -4,78 +4,97 @@ CLINICAL SCENARIO BLOCK
 
 SCENARIO TITLE
 
-Nerve Repair Consent
+Digital Nerve Repair
 
 PATIENT QUESTIONS
 
-(Internal reference only. Questions the patient or patient's relative may ask during the consent discussion.
+(Internal reference only. Questions the patient may ask during the consent discussion.
 Use these after the candidate finishes their explanation.
 How anxious or questioning you are is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write 6-10 patient questions that would naturally arise during this consent discussion.
-These should be written in everyday language as a real patient would ask.
-
-Examples for carpal tunnel release:
-"Will I be awake during it?"
-"How long does the operation take?"
-"When can I go back to work?"
-"You said there's a risk of infection — how common is that?"
-"Will the numbness definitely go away?"
-"What about the scar — will it be very noticeable?"
-"When do I need to come back to get checked?"
-
-For paediatric scenarios, write questions as a parent:
-"Will my child be in pain afterwards?"
-"How long will the anaesthetic take to wear off?"
-"When can they go back to school?"
-
-END OF AUTHOR NOTE]
+But the wound has already been stitched. Why do I need another operation?
+Will the feeling in my finger come back to normal?
+Will I be awake or put to sleep for this?
+How long does the operation take?
+My finger feels fine apart from being numb on one side. Do I really need this?
+Will I be able to play guitar again? I use my right hand to pick the strings.
+How long until I can go back to work? I work in an office.
+What happens if you find something else is damaged when you open it up?
 
 MAIN CONSENT DOMAINS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the 4-6 main consent domains being assessed in this scenario.
-
-Example for carpal tunnel release:
-Introduction and patient identification
-Procedure explanation (what will be done, in layman terms)
-Anaesthesia (local vs general, what to expect)
-Post-operative care (dressings, restrictions, follow-up)
-Risks and complications (infection, bleeding, nerve damage, recurrence, scar)
-Recovery and return to activities
-
-END OF AUTHOR NOTE]
+Operative environment and anaesthesia
+Operative technique and findings
+Post-operative regime and rehabilitation
+Risks and complications
+Sensory recovery expectations
 
 ESSENTIAL MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+(Internal reference only. Do not read aloud.)
 
-List the essential marking points, organised by domain.
-These are the minimum requirements for a score of 3 or above.
+Operative environment and anaesthesia
+Explaining that the procedure is typically performed under L A with a digital nerve block or wrist block, with the patient awake.
+Describing the injection: initial sting that settles, then numbness. Pressure and pulling will be felt but no sharp pain.
+Explaining that the operation is performed under sterile conditions with cleaning solution, drapes, and the hand out on a side table.
+Mentioning that a tourniquet may be used on the finger or upper arm to stop bleeding during the procedure.
 
-Format:
-Domain Name
-The candidate must explain X in clear, jargon-free language.
-The candidate must mention Y.
+Operative technique and findings
+Explaining that the previous wound closure will be opened and the cut extended above and below in a zig-zag fashion to allow proper inspection of all structures.
+Describing that the surgeon will check the tendons, nerves, and arteries on both sides of the finger.
+Explaining the nerve repair: the two cut ends of the nerve are identified and repaired using very fine sutures under magnification with loupe glasses or a microscope. Typically 3 to 4 sutures are placed.
+Mentioning that if a tendon injury is found it will be repaired at the same time. If a complete tendon injury is discovered, a G A may be needed and the plan may change.
+Mentioning that occasionally the nerve may be bruised rather than cut and does not need repair, in which case sensation should recover on its own.
+Explaining that the skin is closed with sutures, either absorbable or non-absorbable.
+Stating the approximate duration: 30 to 45 minutes.
 
-END OF AUTHOR NOTE]
+Post-operative regime and rehabilitation
+Explaining that the patient can go home the same day after the operation.
+Advising a follow-up in the hand therapy clinic in approximately 5 to 7 days for wound check and to begin gentle exercises.
+Advising to keep the hand elevated, clean, and dry for the first week.
+Explaining that antibiotics and painkillers will be given to take home.
+Advising against driving with the operated hand until the wound heals, typically 10 to 14 days.
+Advising 2 weeks off work, and avoiding manual labour, heavy lifting, and swimming for 4 weeks.
+Offering to provide a sick note for the employer.
+
+Sensory recovery expectations
+Explaining clearly that the feeling does not come back immediately after nerve repair.
+Stating that in adults sensory recovery can take 6 to 12 months and the sensation may not return to exactly what it was before.
+Explaining that the recovered sensation may be different: the finger may feel less sensitive than before, or there may be an abnormal tingling quality.
+Mentioning that younger patients tend to have better sensory recovery than older patients.
+
+Risks and complications
+Bleeding and infection.
+Scar: may be longer than the original cut, may be raised, painful, or a different colour to surrounding skin.
+Cold intolerance: the finger may be painful or uncomfortable in cold weather. This is common after nerve injury and repair.
+Neuroma: a painful lump of nerve tissue that can develop at the repair site if the nerve does not heal properly. May require further surgery.
+Complete loss of sensation: if the nerve does not recover, permanent numbness on the affected side of the finger.
+Loss of sweating on the affected side of the finger.
+Damage to adjacent structures: blood vessels, tendons, or the nerve on the other side of the finger.
+Stiffness: of the finger joints, helped by hand therapy.
+Complex Regional Pain Syndrome: rare, persistent pain, swelling, and stiffness requiring specialist referral.
 
 BONUS MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+(Internal reference only. Do not read aloud.)
 
-List the bonus marking points that distinguish scores of 4 and 5.
-These demonstrate excellent patient communication or detailed knowledge.
+Operative environment and anaesthesia
+Offering sedation as an option if the patient is anxious about being awake.
+Explaining that if the injury is more extensive than expected, the procedure may need to be converted to a G A.
 
-Format:
-Domain Name
-The candidate explains X with a helpful analogy.
-The candidate proactively addresses common patient concerns about Y.
+Operative technique and findings
+Mentioning that if there is a gap between the nerve ends, a nerve graft or conduit may be needed, though this is rare for digital nerve injuries.
+Explaining that the quality of the repair depends on a tension-free anastomosis of the nerve ends.
 
-END OF AUTHOR NOTE]
+Sensory recovery expectations
+Explaining the concept of two-point discrimination and that it may not return to normal.
+Mentioning that sensory re-education exercises prescribed by the hand therapist can improve the quality of recovery.
+
+Risks and complications
+Explaining that the original injury itself, not just the surgery, contributes to the final outcome.
+Mentioning that chronic pain and hypersensitivity at the scar site may occur and can be helped with desensitisation exercises.
+
+These are points a strong candidate would mention but are not required to pass.
 
 END OF SCENARIO CRITERIA
 

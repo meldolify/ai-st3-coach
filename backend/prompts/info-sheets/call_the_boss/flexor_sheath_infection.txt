@@ -1,15 +1,12 @@
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the patient information sheet for this scenario.
-
-For Call-the-Boss scenarios include:
-- Patient details (name, age, MRN, DOB)
-- Presentation context (who referred, when, where)
-- History of Presenting Complaint
-- Social History
-- PMH, Drug History, Allergies
-- Observations (HR, BP, RR, Temp, Sats)
-- Examination Findings
-- Images: filename.jpg (optional, comma-separated)
-
-END OF AUTHOR NOTE]
+Patient: Mrs Fatima Al-Hassan, 52 years old, MRN 34891260, DOB 07/12/1973
+Presentation: Referred to A and E at 10pm by her G P with a painful swollen finger
+HPC: The patient is a right hand dominant cleaner who noticed a thorn prick to her left little finger while gardening 3 days ago. She initially dismissed it but over the last 48 hours the finger has become progressively more swollen, red, and painful. She can no longer bend or straighten the finger. Today her G P started oral flucloxacillin but referred her to A and E because the finger appeared significantly worse. She reports feeling generally unwell with fevers and rigors since this morning. The swelling now extends into her palm.
+Social History: Cleaner, right hand dominant. Non-smoker. No alcohol. Lives with her husband. Born in Iraq, moved to the U K 15 years ago.
+PMH: Type 2 diabetes (on insulin), hypertension, chronic kidney disease stage 2
+Drug History: Insulin glargine 18 units at night, metformin 500mg twice daily, ramipril 5mg daily. Penicillin allergy (rash). Tetanus status uncertain.
+Last Ate: Approximately 4 hours ago
+Observations: HR 105, BP 100/62, RR 20, Temp 38.9, Sats 98% on room air, GCS 15
+Examination: The patient appears unwell and flushed. The left little finger is grossly swollen with fusiform swelling. The finger is held in a flexed posture. There is exquisite pain on passive extension of the little finger. There is tenderness along the entire length of the flexor sheath from the fingertip to the palm. The swelling and erythema extend into the palm and there is tenderness over the thenar eminence, suggesting possible spread to the radial bursa (horseshoe abscess). All other fingers have normal neurovascular status and range of movement. There is tracking erythema extending to the wrist with a palpable lymph node in the left epitrochlear region.
+Investigations: Bloods: WCC 18.4, CRP 245, Glucose 19.2, Lactate 2.8, Hb 11.8, Na 133, K 5.1, Cr 125 (baseline 95). Blood cultures taken. X-ray of the left hand shows soft tissue swelling of the little finger and palm. No foreign body visible. No bony abnormality.
+Current Management: I V access obtained. I V fluids commenced. Oral flucloxacillin started by G P (inadequate). Hand elevated in a Bradford sling. Analgesia given (I V paracetamol and morphine). Blood glucose being managed with a sliding scale.
+Images: flexor_sheath_infection_1.jpg

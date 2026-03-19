@@ -4,7 +4,7 @@ CLINICAL SCENARIO BLOCK
 
 SCENARIO TITLE
 
-Free Flap Consent
+Radial Forearm Free Flap Consent
 
 PATIENT QUESTIONS
 
@@ -12,70 +12,89 @@ PATIENT QUESTIONS
 Use these after the candidate finishes their explanation.
 How anxious or questioning you are is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write 6-10 patient questions that would naturally arise during this consent discussion.
-These should be written in everyday language as a real patient would ask.
-
-Examples for carpal tunnel release:
-"Will I be awake during it?"
-"How long does the operation take?"
+"How long will the operation take?"
+"What do you mean you connect the blood vessels — can you explain that more simply?"
+"Will my arm still work properly after you take the skin?"
+"What happens if the flap does not survive?"
+"How long will I be in hospital?"
+"Will I be able to eat and drink normally afterwards?"
+"Will I have a tube in my throat — for how long?"
+"What will the scar on my arm look like?"
 "When can I go back to work?"
-"You said there's a risk of infection — how common is that?"
-"Will the numbness definitely go away?"
-"What about the scar — will it be very noticeable?"
-"When do I need to come back to get checked?"
-
-For paediatric scenarios, write questions as a parent:
-"Will my child be in pain afterwards?"
-"How long will the anaesthetic take to wear off?"
-"When can they go back to school?"
-
-END OF AUTHOR NOTE]
+"How will you check the flap is working after the operation?"
 
 MAIN CONSENT DOMAINS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the 4-6 main consent domains being assessed in this scenario.
-
-Example for carpal tunnel release:
 Introduction and patient identification
-Procedure explanation (what will be done, in layman terms)
-Anaesthesia (local vs general, what to expect)
-Post-operative care (dressings, restrictions, follow-up)
-Risks and complications (infection, bleeding, nerve damage, recurrence, scar)
-Recovery and return to activities
-
-END OF AUTHOR NOTE]
+Procedure explanation including donor site, flap harvest, and microsurgical anastomosis
+Anaesthesia and operative environment
+Post-operative care and flap monitoring
+Risks and complications including flap failure
+Recovery timeline and functional outcomes
 
 ESSENTIAL MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Introduction and patient identification
+Confirming the patient's identity and the planned procedure.
+Establishing rapport and checking the patient's current understanding.
+Sensitivity to the anxiety of a cancer diagnosis and the magnitude of the planned surgery.
 
-List the essential marking points, organised by domain.
-These are the minimum requirements for a score of 3 or above.
+Procedure explanation
+Explaining in lay terms that the operation has two parts: the head and neck surgeons will remove the cancer from the floor of the mouth, and the plastic surgery team will take a piece of skin and underlying tissue from the inner aspect of the forearm to fill the gap.
+Explaining that the blood vessels supplying the forearm skin are carefully divided and then reconnected to blood vessels in the neck using a microscope, called microsurgery, to establish blood flow to the transferred tissue.
+Explaining that before surgery an Allen test will be performed to check the hand has adequate blood supply from the other artery before the radial artery is taken.
+Explaining that the forearm donor site is usually closed with a skin graft taken from the upper thigh.
+Mentioning the approximate duration of surgery, typically six to ten hours with two teams often working at the same time to reduce overall operating time.
 
-Format:
-Domain Name
-The candidate must explain X in clear, jargon-free language.
-The candidate must mention Y.
+Anaesthesia and operative environment
+Explaining that the procedure is performed under general anaesthetic and may require a night in intensive care or high dependency for close monitoring.
+Mentioning that a tracheostomy may be performed to protect the airway in the early post-operative period, and explaining what this means in lay terms.
+Mentioning that a nasogastric tube may be placed for feeding while the mouth heals.
 
-END OF AUTHOR NOTE]
+Post-operative care and monitoring
+Explaining that the flap will be closely monitored every one to two hours for the first 48 to 72 hours, checking colour, warmth, and blood flow.
+Explaining that if a problem with the blood supply is detected, the patient may need to return to theatre urgently to try to save the flap.
+Explaining that drains will be placed in the neck and removed when output is minimal.
+Advising that the patient should expect to be in hospital for approximately seven to fourteen days.
+Explaining that a speech and language therapist and dietician will be involved in the recovery.
+
+Risks and complications
+Mentioning flap failure, either partial or total, where the tissue loses its blood supply and may need to be removed, requiring alternative reconstruction.
+Mentioning bleeding and haematoma in the neck, which can compromise the airway and require urgent return to theatre.
+Mentioning infection at any of the surgical sites.
+Mentioning wound breakdown at the donor site, mouth, or neck.
+Mentioning scarring at the forearm, thigh, and neck.
+Mentioning altered sensation or numbness at the forearm donor site.
+Mentioning weakness in grip strength, usually temporary.
+Mentioning changes to speech, swallowing, and eating, which may be temporary or long-term depending on the extent of the resection.
+Mentioning D V T and P E given the prolonged surgery.
+Mentioning damage to nerves in the neck including the marginal mandibular branch of the facial nerve.
+
+Recovery timeline
+Advising that recovery from this type of surgery is gradual over several weeks to months.
+Explaining that diet will progress from liquid to soft to normal food over several weeks.
+Advising that speech therapy may be needed.
+Mentioning that follow-up will include oncological surveillance as well as monitoring of the reconstruction.
 
 BONUS MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Procedure explanation
+Explaining the concept of the Allen test in lay terms: we check that the other artery in your wrist can keep your hand alive before we use one for the flap.
+Mentioning alternative flap options such as anterolateral thigh flap and explaining why the radial forearm flap was chosen for this defect.
+Explaining the role of the multidisciplinary team including head and neck surgeons, plastic surgeons, anaesthetists, oncologists, speech therapists, and specialist nurses.
 
-List the bonus marking points that distinguish scores of 4 and 5.
-These demonstrate excellent patient communication or detailed knowledge.
+Risks and complications
+Quoting approximate flap failure rates of two to five percent.
+Mentioning the risk of fistula formation between the mouth and the neck.
+Mentioning the possibility of exposed tendons at the forearm donor site if the skin graft does not take fully.
+Discussing the impact of previous radiotherapy or adjuvant radiotherapy on healing.
+Mentioning cold intolerance at the donor forearm.
 
-Format:
-Domain Name
-The candidate explains X with a helpful analogy.
-The candidate proactively addresses common patient concerns about Y.
+Post-operative care
+Explaining the rationale for keeping the patient nil by mouth initially and how nutrition is maintained via the nasogastric tube.
+Mentioning that the tracheostomy is temporary and is usually removed within a few days once the airway swelling has settled.
 
-END OF AUTHOR NOTE]
+These are points a strong candidate would mention but are not required to pass.
 
 END OF SCENARIO CRITERIA
 

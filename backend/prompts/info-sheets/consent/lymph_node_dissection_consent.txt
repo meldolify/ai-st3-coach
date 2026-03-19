@@ -1,13 +1,4 @@
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the patient/procedure information sheet for this consent scenario.
-
-Include:
-- Patient details (name, age)
-- Procedure (name of planned operation)
-- Context (referral reason, clinic visit, why listed for surgery)
-- Patient Expectations (what the patient understands, any concerns)
-
-No Images field for consent scenarios.
-
-END OF AUTHOR NOTE]
+Patient: Mr James Okonkwo, 55 years old
+Procedure: Left Axillary Lymph Node Dissection (Completion Dissection)
+Context: Mr Okonkwo was diagnosed with a malignant melanoma on his left upper back six months ago. He underwent wide local excision and sentinel lymph node biopsy at that time. The sentinel lymph node was positive for melanoma metastasis. After discussion at the skin cancer multidisciplinary team meeting, a completion axillary lymph node dissection has been recommended. He was seen in clinic three weeks ago and listed for surgery. He has attended today for the operation. He is otherwise fit and well with no significant medical history.
+Patient Expectations: Mr Okonkwo has been told he needs an operation to remove the lymph glands under his arm because the cancer has spread there. He is anxious about the word spread and wants to know whether this means the cancer is everywhere. He is worried about his arm swelling afterwards and wants to know how this will affect his job as a delivery driver.

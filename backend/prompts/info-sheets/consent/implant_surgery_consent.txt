@@ -1,13 +1,4 @@
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the patient/procedure information sheet for this consent scenario.
-
-Include:
-- Patient details (name, age)
-- Procedure (name of planned operation)
-- Context (referral reason, clinic visit, why listed for surgery)
-- Patient Expectations (what the patient understands, any concerns)
-
-No Images field for consent scenarios.
-
-END OF AUTHOR NOTE]
+Patient: Mrs Linda Novak, 47 years old
+Procedure: Right Breast Reconstruction with Tissue Expander and Implant
+Context: Mrs Novak had a right mastectomy for breast cancer eight months ago and has completed adjuvant treatment. She was referred to the plastic surgery team for breast reconstruction. After discussion of all options in clinic three weeks ago, she opted for implant-based reconstruction. She has attended today for insertion of a tissue expander as the first stage. She has no other significant medical history. She is a non-smoker with a B M I of 24.
+Patient Expectations: Mrs Novak has been told she will need two operations to rebuild her breast with an implant but does not understand the difference between the expander and the final implant. She is concerned about how natural the result will look compared to her other side, whether she will need the implant replaced in the future, and what happens if her body rejects it. She wants to know how long the whole process will take.

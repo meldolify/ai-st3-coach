@@ -244,8 +244,8 @@ describe('TestScriptGenerator - hasRealContent', () => {
     expect(testScriptGenerator.hasRealContent('../../../etc/passwd')).toBe(false);
   });
 
-  test('returns false for template files with [AUTHOR NOTE] blocks', () => {
-    expect(testScriptGenerator.hasRealContent('clinical/hand_trauma/flexor_tendon_injury')).toBe(
+  test('returns false for nonexistent scenario path', () => {
+    expect(testScriptGenerator.hasRealContent('clinical/hand_trauma/nonexistent_scenario')).toBe(
       false
     );
   });

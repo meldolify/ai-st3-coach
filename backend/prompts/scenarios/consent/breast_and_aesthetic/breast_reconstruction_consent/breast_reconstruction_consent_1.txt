@@ -4,7 +4,7 @@ CLINICAL SCENARIO BLOCK
 
 SCENARIO TITLE
 
-Breast Reconstruction Consent
+Breast Reconstruction with D I E P Flap Consent
 
 PATIENT QUESTIONS
 
@@ -12,70 +12,87 @@ PATIENT QUESTIONS
 Use these after the candidate finishes their explanation.
 How anxious or questioning you are is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write 6-10 patient questions that would naturally arise during this consent discussion.
-These should be written in everyday language as a real patient would ask.
-
-Examples for carpal tunnel release:
-"Will I be awake during it?"
 "How long does the operation take?"
-"When can I go back to work?"
-"You said there's a risk of infection — how common is that?"
-"Will the numbness definitely go away?"
-"What about the scar — will it be very noticeable?"
-"When do I need to come back to get checked?"
-
-For paediatric scenarios, write questions as a parent:
-"Will my child be in pain afterwards?"
-"How long will the anaesthetic take to wear off?"
-"When can they go back to school?"
-
-END OF AUTHOR NOTE]
+"Will the new breast look like my other one?"
+"What do you mean you connect blood vessels — what happens if they block?"
+"Will I have feeling in the new breast?"
+"How long will I be in hospital?"
+"You said you take tissue from my tummy — will that leave a big scar?"
+"Will I need more operations after this one?"
+"When can I go back to my normal activities?"
+"I had radiotherapy on that side — does that affect things?"
+"What is the most serious risk of this operation?"
 
 MAIN CONSENT DOMAINS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the 4-6 main consent domains being assessed in this scenario.
-
-Example for carpal tunnel release:
 Introduction and patient identification
-Procedure explanation (what will be done, in layman terms)
-Anaesthesia (local vs general, what to expect)
-Post-operative care (dressings, restrictions, follow-up)
-Risks and complications (infection, bleeding, nerve damage, recurrence, scar)
-Recovery and return to activities
-
-END OF AUTHOR NOTE]
+Procedure explanation including donor site and microsurgery
+Anaesthesia and operative environment
+Post-operative care and monitoring
+Risks and complications including flap failure
+Recovery timeline and further procedures
 
 ESSENTIAL MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Introduction and patient identification
+Confirming the patient's identity and the planned procedure.
+Establishing rapport and checking the patient's current understanding of the reconstruction.
+Sensitivity to the emotional context of breast cancer and body image.
 
-List the essential marking points, organised by domain.
-These are the minimum requirements for a score of 3 or above.
+Procedure explanation
+Explaining in lay terms that the operation takes skin, fat, and blood vessels from the lower tummy and uses this tissue to create a new breast mound.
+Explaining that the blood vessels from the tummy tissue are connected to blood vessels in the chest using a microscope, which is called microsurgery.
+Explaining that the tummy wound is closed similarly to an abdominoplasty, leaving a low horizontal scar across the lower abdomen.
+Explaining that the belly button will be repositioned.
+Mentioning that the breast will be shaped during the operation but will not look exactly like the other side.
+Explaining the approximate duration of surgery, typically six to eight hours with two surgical teams often working simultaneously.
 
-Format:
-Domain Name
-The candidate must explain X in clear, jargon-free language.
-The candidate must mention Y.
+Anaesthesia and operative environment
+Explaining that the procedure is performed under general anaesthetic and may require a stay in a high dependency area or intensive care overnight for flap monitoring.
+Mentioning the patient will meet the anaesthetist to discuss the anaesthetic and its specific risks.
+Mentioning that an arterial line, urinary catheter, and multiple I V lines will be placed while asleep.
 
-END OF AUTHOR NOTE]
+Post-operative care and monitoring
+Explaining that the new breast will be monitored very closely in the first 24 to 48 hours, including regular checks of the flap colour, temperature, and blood flow using a small probe.
+Explaining that drains will be placed at both the breast and the tummy and will be removed when output is minimal.
+Advising that the patient should expect to stay in hospital for approximately five to seven days.
+Explaining that movement will be restricted initially and mobilisation will be gradual with physiotherapy support.
+
+Risks and complications
+Mentioning the risk of flap failure, either partial or total, where the transferred tissue loses its blood supply and may need to be removed.
+Explaining that if the blood vessels become blocked, the patient may need to return to theatre urgently, sometimes within hours, to try to save the flap.
+Mentioning bleeding and haematoma.
+Mentioning infection at either the breast or the donor site.
+Mentioning wound breakdown at either site.
+Mentioning scarring at both sites.
+Mentioning numbness or altered sensation in the reconstructed breast and the lower abdomen.
+Mentioning D V T and P E given the long operating time.
+Mentioning abdominal wall weakness or hernia at the donor site.
+
+Recovery timeline
+Advising avoidance of heavy lifting for six to eight weeks.
+Advising return to sedentary work at approximately four to six weeks.
+Explaining that the breast shape will continue to change over several months as swelling settles.
+Mentioning that further procedures may be needed, including nipple reconstruction, symmetrisation of the opposite breast, or tattooing of the nipple areola complex.
 
 BONUS MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Procedure explanation
+Explaining the difference between a D I E P flap and a T R A M flap, noting that the D I E P preserves the abdominal muscle and reduces the risk of abdominal wall weakness.
+Mentioning alternative reconstruction options such as implant-based reconstruction or latissimus dorsi flap and briefly explaining why the D I E P was chosen.
+Mentioning that a C T angiogram may have been performed to map the blood vessels in the tummy beforehand.
 
-List the bonus marking points that distinguish scores of 4 and 5.
-These demonstrate excellent patient communication or detailed knowledge.
+Risks and complications
+Quoting approximate flap failure rates of one to five percent for total flap loss.
+Mentioning fat necrosis in the reconstructed breast causing firmness or lumps that may mimic cancer recurrence on imaging.
+Explaining that previous radiotherapy increases the risk of wound complications and may affect the final cosmetic result.
+Mentioning the possibility of asymmetry requiring further surgery to the opposite breast.
 
-Format:
-Domain Name
-The candidate explains X with a helpful analogy.
-The candidate proactively addresses common patient concerns about Y.
+Post-operative care
+Explaining the use of anticoagulation and compression stockings to reduce the risk of D V T and P E.
+Mentioning that the patient should avoid caffeine, nicotine, and constrictive clothing in the early post-operative period as these can affect blood flow to the flap.
 
-END OF AUTHOR NOTE]
+These are points a strong candidate would mention but are not required to pass.
 
 END OF SCENARIO CRITERIA
 

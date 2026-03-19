@@ -4,7 +4,7 @@ CLINICAL SCENARIO BLOCK
 
 SCENARIO TITLE
 
-Bite Wound Hand
+Bite Wound to the Hand — Fight Bite
 
 PROBING QUESTIONS
 
@@ -12,65 +12,79 @@ PROBING QUESTIONS
 Use these to challenge or guide the candidate after they finish presenting.
 Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write 4-8 probing questions the consultant might ask during the phone call.
-These should test the candidate's clinical knowledge and management plan.
-
-Examples:
-"What were the blood results?"
-"Have you started any treatment so far?"
-"What is your surgical plan?"
-"Talk me through the steps you would take in theatre."
-"Who else have you contacted?"
-"Are you comfortable managing this yourself or do you need me to come in?"
-
-END OF AUTHOR NOTE]
+"Why are you suspicious this is a fight bite rather than a fence injury?"
+"What structures are at risk over the M C P joint?"
+"What organisms are you concerned about in a human bite?"
+"Does this patient definitely need to go to theatre or can we just treat with antibiotics?"
+"Talk me through what you would do in theatre."
+"Why must you not close this wound primarily?"
+"Have you considered blood-borne virus risk?"
 
 MAIN COMMUNICATION AND CLINICAL DOMAINS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the 4-6 main domains being assessed in this scenario.
-These should cover both communication skills and clinical knowledge areas.
-
-Example from a burns call:
-Structured clinical presentation (history, examination, observations)
-Burns assessment (TBSA, depth, mechanism)
-Resuscitation and initial management (fluids, analgesia, monitoring)
-Surgical planning (escharotomy, debridement, coverage)
-Escalation and team coordination
-Safety awareness (airway, transfer, ITU)
-
-END OF AUTHOR NOTE]
+Structured clinical presentation with recognition of a fight bite injury
+Assessment for joint involvement and tendon injury
+Antibiotic therapy and organism awareness
+Surgical planning including joint washout
+Post-operative care and follow-up
+Blood-borne virus risk assessment
 
 ESSENTIAL MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Structured clinical presentation with recognition of a fight bite injury
+The candidate must recognise that a wound over the M C P joint is a fight bite until proven otherwise, regardless of the patient's reported history.
+The candidate must present the case clearly including the suspicious mechanism, the 12-hour delay, the signs of early infection, and the location over the M C P J.
+The candidate must convey that this requires urgent surgical assessment.
 
-List the essential marking points, organised by domain.
-These are the minimum requirements for a score of 3 or above.
+Assessment for joint involvement and tendon injury
+The candidate must explain that the wound needs to be examined with the M C P joint in flexion to assess whether it communicates with the joint space, because the skin wound and tendon laceration occur at different levels when the fist is clenched versus extended.
+The candidate must mention assessing the extensor tendon function, the joint capsule integrity, and the neurovascular status of the finger.
+The candidate must mention that even if the wound appears superficial, formal surgical exploration is required if it overlies the M C P J.
 
-Format:
-Domain Name
-The candidate must demonstrate X.
-The candidate must mention Y.
+Antibiotic therapy and organism awareness
+The candidate must start I V antibiotics covering oral flora. Co-amoxiclav is the first-line agent.
+The candidate must know that Eikenella corrodens is the typical culprit organism in human bite injuries, alongside Streptococci, Staphylococci, and anaerobes.
+The candidate must mention tetanus prophylaxis.
 
-END OF AUTHOR NOTE]
+Surgical planning including joint washout
+The candidate must state that this patient requires formal surgical exploration and joint washout, not just antibiotics.
+The candidate must describe the procedure: general or regional anaesthesia with arm tourniquet, extending the wound for adequate exposure, thorough debridement, opening and irrigating the M C P joint with copious saline, taking tissue and fluid samples for microbiology, and leaving the wound open.
+The candidate must state that the wound must not be closed primarily due to the high risk of infection.
+The candidate must mention splinting in the position of safe immobilisation.
+
+Post-operative care and follow-up
+The candidate must mention continued I V antibiotics adjusted based on culture results.
+The candidate must mention strict hand elevation.
+The candidate must plan a second look at 48 hours.
+The candidate must mention early hand therapy once the wound is healing.
+
+Blood-borne virus risk assessment
+The candidate must mention counselling the patient about blood-borne virus risk from the human bite and arranging appropriate testing for H I V and hepatitis B.
 
 BONUS MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Structured clinical presentation with recognition of a fight bite injury
+The candidate discusses that patients often give a misleading history about the mechanism and that the wound location is the most important clue.
+The candidate mentions that a delay in presentation beyond 24 hours significantly increases the risk of established infection.
 
-List the bonus marking points that distinguish scores of 4 and 5.
-These demonstrate advanced knowledge or exceptional communication.
+Assessment for joint involvement and tendon injury
+The candidate discusses the dynamic nature of the injury when the fist is clenched and explains why the tendon injury and joint breach occur at a different level to the skin wound.
+The candidate mentions that the sagittal band and articular cartilage should be inspected for damage.
+The candidate mentions looking for gas in the soft tissues on X-ray as an ominous sign of established infection.
 
-Format:
-Domain Name
-The candidate discusses X in detail.
-The candidate demonstrates awareness of Y.
+Antibiotic therapy and organism awareness
+The candidate knows the difference between organisms in human bites, dog bites, and cat bites.
+The candidate mentions alternative antibiotics for penicillin-allergic patients.
 
-END OF AUTHOR NOTE]
+Surgical planning including joint washout
+The candidate discusses that even a clean-looking wound over the M C P J should be explored formally in theatre.
+The candidate mentions the importance of not performing a simple washout in A and E as a substitute for formal theatre exploration.
+
+Post-operative care and follow-up
+The candidate discusses the complications of fight bite injuries including osteomyelitis, septic arthritis, tendon rupture, and chronic stiffness.
+The candidate mentions documentation for potential medico-legal purposes given the likely assault.
+
+These are points a strong candidate would mention but are not required to pass.
 
 END OF SCENARIO CRITERIA
 

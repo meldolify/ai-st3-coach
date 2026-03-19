@@ -4,78 +4,86 @@ CLINICAL SCENARIO BLOCK
 
 SCENARIO TITLE
 
-Trigger Finger Release Consent
+Trigger Finger Release
 
 PATIENT QUESTIONS
 
-(Internal reference only. Questions the patient or patient's relative may ask during the consent discussion.
+(Internal reference only. Questions the patient may ask during the consent discussion.
 Use these after the candidate finishes their explanation.
 How anxious or questioning you are is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write 6-10 patient questions that would naturally arise during this consent discussion.
-These should be written in everyday language as a real patient would ask.
-
-Examples for carpal tunnel release:
-"Will I be awake during it?"
-"How long does the operation take?"
-"When can I go back to work?"
-"You said there's a risk of infection — how common is that?"
-"Will the numbness definitely go away?"
-"What about the scar — will it be very noticeable?"
-"When do I need to come back to get checked?"
-
-For paediatric scenarios, write questions as a parent:
-"Will my child be in pain afterwards?"
-"How long will the anaesthetic take to wear off?"
-"When can they go back to school?"
-
-END OF AUTHOR NOTE]
+Will I be awake during the operation? I am frightened of needles.
+How long does the operation take?
+I had two steroid injections and they did not work. Why will an operation be any different?
+When can I go back to teaching? I need to write on the board.
+Will my finger click again after the operation?
+Will the injection to numb my hand be very painful?
+Can I drive myself home afterwards?
+What exactly are you releasing? Is it something important?
 
 MAIN CONSENT DOMAINS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the 4-6 main consent domains being assessed in this scenario.
-
-Example for carpal tunnel release:
-Introduction and patient identification
-Procedure explanation (what will be done, in layman terms)
-Anaesthesia (local vs general, what to expect)
-Post-operative care (dressings, restrictions, follow-up)
-Risks and complications (infection, bleeding, nerve damage, recurrence, scar)
-Recovery and return to activities
-
-END OF AUTHOR NOTE]
+Operative environment and anaesthesia
+Operative technique
+Post-operative regime and rehabilitation
+Risks and complications
 
 ESSENTIAL MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+(Internal reference only. Do not read aloud.)
 
-List the essential marking points, organised by domain.
-These are the minimum requirements for a score of 3 or above.
+Operative environment and anaesthesia
+Explaining that the procedure is performed under L A with the patient awake.
+Describing the injection of L A into the palm at the base of the affected finger. It will sting initially but the area will become numb within a minute or two. There should be no sharp pain during the operation, only pressure and pushing.
+Explaining that the operation takes place in a minor operations theatre or main theatres under sterile conditions with cleaning solution and drapes.
+Reassuring the patient that the team will introduce themselves and check details.
 
-Format:
-Domain Name
-The candidate must explain X in clear, jargon-free language.
-The candidate must mention Y.
+Operative technique
+Explaining in simple terms what is being released: a tight tunnel at the base of the finger called the A1 pulley through which the tendon passes. The tendon has a nodule or thickening that catches on this tunnel, causing the clicking and locking.
+Describing that a small incision, approximately 1 to 2 centimetres, is made in the palm at the base of the affected finger.
+Explaining that the surgeon carefully divides the A1 pulley, which releases the tight tunnel and allows the tendon to glide freely.
+Mentioning that the surgeon will ask the patient to bend and straighten the finger during the operation to confirm the triggering has resolved.
+Explaining that the skin is closed with a few non-dissolvable sutures or sometimes adhesive strips.
+Stating the approximate duration: 10 to 15 minutes.
 
-END OF AUTHOR NOTE]
+Post-operative regime and rehabilitation
+Advising the patient they can go home the same day. They should arrange an escort as driving immediately afterwards is not advisable.
+Explaining that the hand should be kept elevated and the fingers should be moved regularly, bending and straightening, to prevent stiffness.
+Advising to keep the wound clean and dry until it is reviewed.
+Explaining the follow-up: dressing check in approximately 5 to 7 days. Sutures are removed at 10 to 14 days by the GP nurse or in clinic.
+Advising that most patients can return to light work within a few days and to manual or gripping work within 2 to 3 weeks.
+Advising against driving until the wound is comfortable and grip strength has returned, typically within 1 to 2 weeks.
+Prescribing antibiotics and painkillers to take home.
+
+Risks and complications
+Bleeding: minor oozing is common and settles. Haematoma is rare.
+Infection: risk is low. Signs to watch for include redness, swelling, discharge, or increasing pain.
+Scar: small scar in the palm. May be tender for a few weeks. Rarely becomes thick or painful.
+Nerve injury: the digital nerves run very close to the A1 pulley. Injury is rare but can cause numbness or tingling in the finger.
+Tendon injury: very rare but possible during the release.
+Stiffness: usually temporary and resolves with exercises. More common if the finger was locked in a bent position before surgery.
+Recurrence: triggering can occasionally recur if the pulley is not fully released. Reoperation may be needed.
+Incomplete release: if triggering persists after surgery, a further procedure may be required.
+Bowstringing: very rare, where the tendon is no longer held close to the bone. Usually not clinically significant for the A1 pulley.
 
 BONUS MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+(Internal reference only. Do not read aloud.)
 
-List the bonus marking points that distinguish scores of 4 and 5.
-These demonstrate excellent patient communication or detailed knowledge.
+Operative technique
+Mentioning that care is taken to avoid the A2 pulley which is critical for finger function and must not be released.
+Explaining the difference between open release and percutaneous needle release, and why the open approach was chosen for this patient.
 
-Format:
-Domain Name
-The candidate explains X with a helpful analogy.
-The candidate proactively addresses common patient concerns about Y.
+Post-operative regime and rehabilitation
+Advising on scar massage once the wound is healed.
+Mentioning that some patients develop a fixed flexion deformity at the P I P joint if the trigger finger has been locked for a prolonged period, and this may not fully resolve after surgery.
 
-END OF AUTHOR NOTE]
+Risks and complications
+Mentioning that diabetic patients have a higher recurrence rate and may have multiple fingers involved.
+Mentioning C R P S as a very rare complication.
+Explaining that the A1 pulley does not need to heal back together and its division does not affect finger function.
+
+These are points a strong candidate would mention but are not required to pass.
 
 END OF SCENARIO CRITERIA
 

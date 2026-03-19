@@ -1,15 +1,12 @@
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the patient information sheet for this scenario.
-
-For Call-the-Boss scenarios include:
-- Patient details (name, age, MRN, DOB)
-- Presentation context (who referred, when, where)
-- History of Presenting Complaint
-- Social History
-- PMH, Drug History, Allergies
-- Observations (HR, BP, RR, Temp, Sats)
-- Examination Findings
-- Images: filename.jpg (optional, comma-separated)
-
-END OF AUTHOR NOTE]
+Patient: Mr Tomasz Kowalski, 30 years old, MRN 42867153, DOB 29/06/1995
+Presentation: You are called at 11pm by the orthopaedic S H O to urgently review a patient on the orthopaedic ward
+HPC: The patient was admitted earlier today following a closed tibial shaft fracture sustained in a motorbike accident. The fracture was reduced under sedation and a full-length above-knee plaster cast was applied approximately 6 hours ago. The orthopaedic S H O is calling because the patient's pain is escalating despite increasing doses of I V morphine. The nursing staff report that the patient is now requiring morphine every 30 minutes and is still in severe pain.
+Social History: Electrician, right hand dominant. Non-smoker. Drinks 8 units of alcohol per week. Lives with his girlfriend.
+PMH: Nil significant
+Drug History: Nil regular medications. N K D A. Tetanus up to date.
+Last Ate: Approximately 7 hours ago
+Observations: HR 98, BP 140/85, RR 20, Temp 36.8, Sats 99% on room air, GCS 15
+Examination: The plaster cast is intact. The orthopaedic S H O has not removed the cast. The toes are visible: they appear slightly dusky with delayed capillary refill of approximately 4 seconds. The patient reports severe pain in the left calf that worsens with passive dorsiflexion of the ankle. The left foot feels cool compared to the right. Sensation to light touch is reduced over the dorsum of the left foot. Dorsalis pedis pulse is still palpable but weak. The patient is extremely distressed.
+Investigations: Post-reduction X-ray showed satisfactory alignment of the tibial fracture. Bloods from admission: Hb 13.4, WCC 9.8, CRP 12, U and Es normal, C K not checked.
+Current Management: The plaster cast has not been split. The patient has received I V morphine 10mg in the last 2 hours. The leg is elevated on a pillow. I V fluids running. Orthopaedic S H O has asked you to attend urgently.
+Images: compartment_syndrome_1.jpg

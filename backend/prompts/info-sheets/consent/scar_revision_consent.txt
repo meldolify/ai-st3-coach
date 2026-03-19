@@ -1,13 +1,4 @@
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the patient/procedure information sheet for this consent scenario.
-
-Include:
-- Patient details (name, age)
-- Procedure (name of planned operation)
-- Context (referral reason, clinic visit, why listed for surgery)
-- Patient Expectations (what the patient understands, any concerns)
-
-No Images field for consent scenarios.
-
-END OF AUTHOR NOTE]
+Patient: Miss Amara Johnson, 24 years old
+Procedure: Scar Revision of Left Forearm
+Context: Miss Johnson sustained a deep laceration to her left forearm in a road traffic accident two years ago. The wound was repaired in the emergency department at the time. She has been left with a wide, raised, and tethered scar measuring approximately twelve centimetres on the volar aspect of her forearm. She was referred by her G P and seen in the plastic surgery clinic eight weeks ago. Conservative measures including silicone sheeting and steroid injections have been tried without satisfactory improvement. She has been listed for scar revision under local anaesthetic. She has attended today for the operation. She is otherwise fit and well.
+Patient Expectations: Miss Johnson is self-conscious about the scar and avoids wearing short sleeves. She wants to know whether the new scar will be less visible, what the operation involves, and how long the recovery will take. She has high expectations and wants reassurance about the cosmetic outcome.

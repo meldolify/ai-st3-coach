@@ -1,15 +1,12 @@
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the patient information sheet for this scenario.
-
-For Call-the-Boss scenarios include:
-- Patient details (name, age, MRN, DOB)
-- Presentation context (who referred, when, where)
-- History of Presenting Complaint
-- Social History
-- PMH, Drug History, Allergies
-- Observations (HR, BP, RR, Temp, Sats)
-- Examination Findings
-- Images: filename.jpg (optional, comma-separated)
-
-END OF AUTHOR NOTE]
+Patient: Mr Pavel Novak, 38 years old, MRN 72514068, DOB 19/07/1987
+Presentation: Self-presented to A and E at 9:45pm with a finger injury sustained at work
+HPC: The patient is a right hand dominant mechanic who was using a grease gun at work at approximately 6pm. The gun misfired and injected grease into the palmar aspect of his left index finger. The entry wound appeared small and he initially continued working, thinking it was a minor injury. Over the last 3 to 4 hours the finger has become progressively more swollen and extremely painful, with the swelling now extending into his palm and possibly toward his wrist. He took ibuprofen at home but it has not helped. He has no information on the exact pressure of the grease gun but states it is an industrial high-pressure model.
+Social History: Mechanic, right hand dominant. Smokes 10 per day. Drinks 12 units per week. Lives with his wife and two children. Originally from the Czech Republic.
+PMH: Nil significant
+Drug History: Nil regular medications. N K D A. Tetanus up to date.
+Last Ate: Approximately 5 hours ago
+Observations: HR 88, BP 138/82, RR 16, Temp 36.8, Sats 99% on room air, GCS 15
+Examination: Primary survey unremarkable. The left index finger is markedly swollen, tense, and erythematous. There is a small puncture wound of approximately 2mm on the palmar aspect of the index fingertip. The finger is held in a semi-flexed position. The finger is extremely tender along its entire length. Capillary refill of the fingertip is delayed at approximately 4 seconds. Sensation is reduced on both the radial and ulnar borders of the index finger. Flexion and extension are limited by pain. The swelling and tenderness extend into the palm, with some tenderness palpable in the thenar eminence and over the carpal tunnel. The forearm compartments are soft.
+Investigations: X-ray of the left hand and forearm: radio-opaque material is visible tracking along the flexor sheath of the index finger, extending into the palm and the carpal tunnel area. No fracture. Bloods: Hb 14.8, WCC 10.4, CRP 22, U and Es normal.
+Current Management: I V access obtained. I V paracetamol and morphine given but pain is still severe (8 out of 10). Hand elevated. No surgical intervention performed.
+Images: high_pressure_injection_1.jpg

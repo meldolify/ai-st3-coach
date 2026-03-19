@@ -1,15 +1,12 @@
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the patient information sheet for this scenario.
-
-For Call-the-Boss scenarios include:
-- Patient details (name, age, MRN, DOB)
-- Presentation context (who referred, when, where)
-- History of Presenting Complaint
-- Social History
-- PMH, Drug History, Allergies
-- Observations (HR, BP, RR, Temp, Sats)
-- Examination Findings
-- Images: filename.jpg (optional, comma-separated)
-
-END OF AUTHOR NOTE]
+Patient: Mrs Ananya Sharma, 42 years old, MRN 71584206, DOB 14/09/1983
+Presentation: Referred by the orthopaedic team at 10:45pm for urgent plastic surgery opinion regarding a pressure area
+HPC: The patient was admitted under the spinal surgery team 6 hours ago with acute onset lower back pain radiating bilaterally to both legs. Over the last 3 hours she has developed saddle anaesthesia, urinary retention requiring catheterisation, and bilateral lower limb weakness. M R I spine performed urgently shows a large central disc prolapse at L4/L5 causing significant cauda equina compression. The spinal team are planning urgent surgical decompression tonight. They have asked plastics to review because she has developed a deep tissue injury over her sacrum, likely from lying on a hard surface before the ambulance arrived.
+Social History: Accountant, lives with her husband and two children. Non-smoker. No alcohol.
+PMH: Hypothyroidism, B M I 34
+Drug History: Levothyroxine 100 micrograms daily. Paracetamol. N K D A.
+Last Ate: Approximately 8 hours ago
+Observations: HR 88, BP 138/82, RR 14, Temp 36.6, Sats 98% on room air, GCS 15
+Examination: The patient has bilateral lower limb weakness, Medical Research Council grade 3 in both legs. Saddle anaesthesia confirmed with absent perianal sensation. Absent anal tone on digital rectal examination. Urinary catheter draining 800ml of residual urine. Over the sacrum there is a 6cm by 4cm area of non-blanchable erythema with a central area of dusky purple discolouration suggestive of deep tissue injury. No skin breakdown. The heels and other pressure areas are intact.
+Investigations: M R I lumbar spine confirms large central disc prolapse at L4/L5 with significant thecal sac compression. Bloods: Hb 12.8, WCC 8.2, CRP 5, U and Es normal, glucose 5.4. Urinary catheter in situ.
+Current Management: The spinal team have consented for urgent L4/L5 discectomy. Anaesthetic review completed. Theatre booked for tonight. Pressure-relieving mattress requested. The spinal team want plastic surgery input regarding the sacral wound and positioning advice for theatre.
+Images: cauda_equina_1.jpg

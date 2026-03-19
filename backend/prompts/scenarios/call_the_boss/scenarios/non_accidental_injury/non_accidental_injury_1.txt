@@ -4,7 +4,7 @@ CLINICAL SCENARIO BLOCK
 
 SCENARIO TITLE
 
-Non Accidental Injury
+Non-Accidental Injury
 
 PROBING QUESTIONS
 
@@ -12,65 +12,91 @@ PROBING QUESTIONS
 Use these to challenge or guide the candidate after they finish presenting.
 Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write 4-8 probing questions the consultant might ask during the phone call.
-These should test the candidate's clinical knowledge and management plan.
-
-Examples:
-"What were the blood results?"
-"Have you started any treatment so far?"
-"What is your surgical plan?"
-"Talk me through the steps you would take in theatre."
-"Who else have you contacted?"
-"Are you comfortable managing this yourself or do you need me to come in?"
-
-END OF AUTHOR NOTE]
+"What specifically about the burn pattern makes you suspect non-accidental injury?"
+"Tell me about the bruises — are they consistent with normal toddler injuries?"
+"Why is the delay in presentation significant?"
+"What safeguarding steps have you taken so far?"
+"Who do you need to contact tonight?"
+"Can you let the boyfriend take the child home?"
+"How would you manage the burn itself?"
+"Have you documented everything including clinical photography?"
 
 MAIN COMMUNICATION AND CLINICAL DOMAINS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the 4-6 main domains being assessed in this scenario.
-These should cover both communication skills and clinical knowledge areas.
-
-Example from a burns call:
-Structured clinical presentation (history, examination, observations)
-Burns assessment (TBSA, depth, mechanism)
-Resuscitation and initial management (fluids, analgesia, monitoring)
-Surgical planning (escharotomy, debridement, coverage)
-Escalation and team coordination
-Safety awareness (airway, transfer, ITU)
-
-END OF AUTHOR NOTE]
+Structured clinical presentation with recognition of non-accidental injury red flags
+Burns assessment and management in a paediatric patient
+Safeguarding procedures and mandatory reporting
+History taking with awareness of inconsistencies
+Head-to-toe examination for other injuries
+Multidisciplinary involvement and the child's immediate safety
 
 ESSENTIAL MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Structured clinical presentation with recognition of non-accidental injury red flags
+The candidate must clearly identify the red flags for non-accidental injury: symmetrical bilateral burns with a glove distribution, sharp demarcation lines with no splash marks, sparing of the soles (consistent with forced immersion against the bath floor), delay in presentation of over 24 hours, inconsistency between the described mechanism and the burn pattern, unexplained bruising, and the carer not being the parent.
+The candidate must state that a child climbing into a bath would typically have splash marks, an irregular margin, and an asymmetrical distribution.
+The candidate must convey that this is a safeguarding emergency alongside a clinical presentation.
 
-List the essential marking points, organised by domain.
-These are the minimum requirements for a score of 3 or above.
+Burns assessment and management in a paediatric patient
+The candidate must assess the burns using E M S B principles adapted for the paediatric patient.
+The candidate must estimate the T B S A using the child's palm or a paediatric Lund and Browder chart — the rule of nines is inaccurate for children.
+The candidate must assess the burn depth — deep partial to full thickness.
+The candidate must give appropriate analgesia, which may include intranasal diamorphine.
+The candidate must keep the child warm as children are more susceptible to hypothermia.
 
-Format:
-Domain Name
-The candidate must demonstrate X.
-The candidate must mention Y.
+Safeguarding procedures and mandatory reporting
+The candidate must know the duty to safeguard the child and that this takes priority alongside clinical management.
+The candidate must contact the paediatric team urgently and request a safeguarding assessment.
+The candidate must contact the hospital safeguarding lead and social services.
+The candidate must document findings meticulously including clinical photography.
+The candidate must state that the child must not be discharged or allowed to leave the department until safeguarding concerns have been addressed — even if the boyfriend wants to leave.
+The candidate must admit the child for both burn management and safeguarding assessment.
 
-END OF AUTHOR NOTE]
+History taking with awareness of inconsistencies
+The candidate must note the inconsistency between the described mechanism (child climbed into the bath) and the burn pattern (symmetrical, no splash marks, sharp tide marks).
+The candidate must note the delay in presentation of over 24 hours and question why.
+The candidate must take a detailed history including who was present at the time, whether the injury was witnessed, and what the child's developmental capability is (can an 18-month-old climb into a bath?).
+The candidate must ask about the family situation and any previous attendances to A and E.
+
+Head-to-toe examination for other injuries
+The candidate must perform a thorough head-to-toe examination looking for other injuries.
+The candidate must identify the bruising on the upper arms as grip marks and the fading bruise on the cheek as suspicious.
+The candidate must know that bruising on a non-mobile infant or in unusual locations is a significant red flag for non-accidental injury.
+
+Multidisciplinary involvement and the child's immediate safety
+The candidate must know the teams that need to be involved: paediatrics, hospital safeguarding team, social services, and potentially the police.
+The candidate must mention that the mother needs to be contacted.
+The candidate must mention that thorough contemporaneous documentation is critical as the records may be used in family court or criminal proceedings.
 
 BONUS MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Structured clinical presentation with recognition of non-accidental injury red flags
+The candidate discusses the typical burn patterns associated with N A I: forced immersion with glove or stocking distribution, contact burns with clearly defined object shapes, and bilateral symmetrical burns.
+The candidate knows that the mechanism can be tested against the child's developmental capability.
 
-List the bonus marking points that distinguish scores of 4 and 5.
-These demonstrate advanced knowledge or exceptional communication.
+Burns assessment and management in a paediatric patient
+The candidate mentions that paediatric fluid resuscitation uses the modified Parkland formula with added maintenance fluids calculated for the child's weight.
+The candidate knows that the urine output target in children is 1 ml per kg per hour.
 
-Format:
-Domain Name
-The candidate discusses X in detail.
-The candidate demonstrates awareness of Y.
+Safeguarding procedures and mandatory reporting
+The candidate knows the legal framework: the Children Act, local safeguarding children board procedures, and the role of the named doctor for child protection.
+The candidate understands that maintaining a therapeutic relationship with the carer should not prevent reporting.
+The candidate mentions that a strategy meeting or child protection conference may be needed.
 
-END OF AUTHOR NOTE]
+History taking with awareness of inconsistencies
+The candidate mentions taking the history from each carer separately to identify inconsistencies.
+The candidate discusses the importance of documenting the exact words used by the carer.
+
+Head-to-toe examination for other injuries
+The candidate mentions that a skeletal survey should be considered for children under 2 years with suspected N A I to look for occult fractures.
+The candidate mentions ophthalmology review for retinal haemorrhages if head injury is suspected.
+The candidate mentions blood tests including a full blood count and clotting screen to exclude a bleeding disorder.
+
+Multidisciplinary involvement and the child's immediate safety
+The candidate mentions that the paediatric team should take over as the primary admitting team with burns input for wound management.
+The candidate discusses the importance of clear, factual, non-judgemental documentation.
+
+These are points a strong candidate would mention but are not required to pass.
 
 END OF SCENARIO CRITERIA
 

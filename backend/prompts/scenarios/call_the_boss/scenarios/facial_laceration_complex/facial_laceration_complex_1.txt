@@ -4,7 +4,7 @@ CLINICAL SCENARIO BLOCK
 
 SCENARIO TITLE
 
-Facial Laceration Complex
+Complex Facial Laceration
 
 PROBING QUESTIONS
 
@@ -12,65 +12,86 @@ PROBING QUESTIONS
 Use these to challenge or guide the candidate after they finish presenting.
 Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write 4-8 probing questions the consultant might ask during the phone call.
-These should test the candidate's clinical knowledge and management plan.
-
-Examples:
-"What were the blood results?"
-"Have you started any treatment so far?"
-"What is your surgical plan?"
-"Talk me through the steps you would take in theatre."
-"Who else have you contacted?"
-"Are you comfortable managing this yourself or do you need me to come in?"
-
-END OF AUTHOR NOTE]
+"Which branches of the facial nerve are affected?"
+"How did you test the facial nerve — did you test all five branches?"
+"You mentioned fluid from the wound — what do you think is injured?"
+"Does this need to go to theatre or can you repair it in A and E?"
+"Talk me through how you would repair the parotid duct."
+"Would you repair the nerve branches? Which ones and why?"
+"The patient has been drinking — how does that affect your consent and management?"
+"What follow-up does this patient need?"
 
 MAIN COMMUNICATION AND CLINICAL DOMAINS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the 4-6 main domains being assessed in this scenario.
-These should cover both communication skills and clinical knowledge areas.
-
-Example from a burns call:
-Structured clinical presentation (history, examination, observations)
-Burns assessment (TBSA, depth, mechanism)
-Resuscitation and initial management (fluids, analgesia, monitoring)
-Surgical planning (escharotomy, debridement, coverage)
-Escalation and team coordination
-Safety awareness (airway, transfer, ITU)
-
-END OF AUTHOR NOTE]
+Structured clinical presentation with accurate anatomical assessment
+Facial nerve examination and identification of injured branches
+Parotid duct and gland injury assessment
+Surgical repair planning in theatre
+Layered repair technique and nerve management
+Post-operative care and medico-legal documentation
 
 ESSENTIAL MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Structured clinical presentation with accurate anatomical assessment
+The candidate must present the case clearly including the mechanism, the location and depth of the laceration, and the structures at risk.
+The candidate must identify that a laceration running from the pre-auricular region across the cheek crosses the territory of the parotid gland, parotid duct, facial nerve branches, and the buccal fat pad.
+The candidate must describe the facial nerve examination findings accurately.
 
-List the essential marking points, organised by domain.
-These are the minimum requirements for a score of 3 or above.
+Facial nerve examination and identification of injured branches
+The candidate must demonstrate that they have tested all five branches of the facial nerve: temporal (eyebrow raise), zygomatic (eye closure), buccal (smile), marginal mandibular (lip depression), and cervical (platysma).
+The candidate must identify that the buccal and marginal mandibular branches are affected.
+The candidate must state that facial nerve examination was documented before any local anaesthetic was given.
 
-Format:
-Domain Name
-The candidate must demonstrate X.
-The candidate must mention Y.
+Parotid duct and gland injury assessment
+The candidate must recognise that the watery discharge from the wound when the patient moves his jaw is saliva, indicating injury to the parotid gland or duct.
+The candidate must know that the parotid duct runs along a line from the tragus to the mid-upper lip, roughly along the middle third of the masseter.
+The candidate must describe checking the intraoral opening of the parotid duct opposite the upper second molar and confirming that saliva is not exiting from its normal location.
 
-END OF AUTHOR NOTE]
+Surgical repair planning in theatre
+The candidate must state that this laceration requires formal exploration and repair in theatre under general anaesthetic, not bedside repair in A and E.
+The candidate must request the consultant to come in to assist with the repair, particularly the nerve and duct work.
+The candidate must mention the need for a microscope, microsurgical instruments, and good lighting.
+The candidate must address the alcohol issue regarding consent — the patient should be assessed for capacity, and if there are concerns, the operation may need to be delayed until sober enough to provide valid consent, provided the wound is not actively deteriorating.
+
+Layered repair technique and nerve management
+The candidate must describe layered closure: muscle repair with absorbable sutures, then skin closure with fine non-absorbable sutures (5-oh or 6-oh).
+The candidate must describe repair of the parotid duct over a stent if it is injured.
+The candidate must know that facial nerve branches posterior to a vertical line from the lateral canthus should be repaired microsurgically with epineural repair, while injuries anterior to this line may recover spontaneously.
+The candidate must mention meticulous alignment of anatomical landmarks, particularly the vermillion border if the lip is involved.
+
+Post-operative care and medico-legal documentation
+The candidate must mention wound care and suture removal at 5 to 7 days.
+The candidate must arrange follow-up to assess facial nerve function recovery.
+The candidate must advise on scar management and sun protection.
+The candidate must mention careful documentation for potential legal proceedings given the assault, including clinical photography.
 
 BONUS MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Structured clinical presentation with accurate anatomical assessment
+The candidate discusses surface anatomy landmarks in detail: parotid duct, marginal mandibular nerve one centimetre below the mandible, and the danger zones of the face.
+The candidate mentions that the buccal fat pad may herniate through a deep cheek laceration and should be replaced.
 
-List the bonus marking points that distinguish scores of 4 and 5.
-These demonstrate advanced knowledge or exceptional communication.
+Facial nerve examination and identification of injured branches
+The candidate knows that the facial nerve exits the stylomastoid foramen, enters the parotid gland, and divides into its five terminal branches.
+The candidate discusses the rich anastomotic network between terminal branches that allows recovery of distal injuries.
 
-Format:
-Domain Name
-The candidate discusses X in detail.
-The candidate demonstrates awareness of Y.
+Parotid duct and gland injury assessment
+The candidate knows that an unrepaired parotid duct injury may result in a salivary fistula or sialocele.
+The candidate discusses that if the duct cannot be repaired, the proximal end can be ligated or re-routed intraorally, or the gland can be allowed to atrophy.
 
-END OF AUTHOR NOTE]
+Surgical repair planning in theatre
+The candidate mentions the need for a C T with contrast if there is concern about vascular injury.
+The candidate discusses that associated dental injuries should be assessed in conjunction with maxillofacial surgery.
+
+Layered repair technique and nerve management
+The candidate discusses the principles of facial wound repair: minimal tissue debridement due to excellent blood supply, and that even wounds presenting late can often be closed primarily on the face.
+The candidate mentions the importance of repairing orbicularis oris if the lip is involved, to restore oral competence.
+
+Post-operative care and medico-legal documentation
+The candidate discusses secondary scar revision after 12 to 18 months if the cosmetic outcome is unsatisfactory.
+The candidate mentions the psychological impact of facial scarring and the importance of appropriate support.
+
+These are points a strong candidate would mention but are not required to pass.
 
 END OF SCENARIO CRITERIA
 

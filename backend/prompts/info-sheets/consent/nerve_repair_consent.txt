@@ -1,13 +1,4 @@
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the patient/procedure information sheet for this consent scenario.
-
-Include:
-- Patient details (name, age)
-- Procedure (name of planned operation)
-- Context (referral reason, clinic visit, why listed for surgery)
-- Patient Expectations (what the patient understands, any concerns)
-
-No Images field for consent scenarios.
-
-END OF AUTHOR NOTE]
+Patient: Mr Aiden Campbell, 28 years old
+Procedure: Right Index Finger Digital Nerve Repair
+Context: Presented to A and E with a laceration to the volar aspect of his right index finger sustained from a broken glass at home three hours ago. Examination in A and E confirmed loss of sensation on the radial side of the index finger distal to the laceration. Flexor tendons intact. Wound irrigated and dressed. He has been listed on the emergency trauma list for exploration and nerve repair today.
+Patient Expectations: Mr Campbell had his wound stitched in A and E but was told the cut may have damaged a nerve and he needs an operation to fix it. He does not understand why he needs another operation when the wound has already been closed. He is anxious about whether the feeling in his finger will come back and wants to know if he will be put to sleep.

@@ -1,13 +1,4 @@
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the patient/procedure information sheet for this consent scenario.
-
-Include:
-- Patient details (name, age)
-- Procedure (name of planned operation)
-- Context (referral reason, clinic visit, why listed for surgery)
-- Patient Expectations (what the patient understands, any concerns)
-
-No Images field for consent scenarios.
-
-END OF AUTHOR NOTE]
+Patient: Mrs Eileen Walsh, 74 years old
+Procedure: Local Flap Reconstruction of Left Nasal Sidewall Defect following Mohs Surgery for Basal Cell Carcinoma
+Context: Mrs Walsh had Mohs micrographic surgery yesterday for a basal cell carcinoma on the left side of her nose. The tumour has been completely excised, leaving a full-thickness defect of the nasal sidewall approximately two centimetres in diameter. She has been referred to the plastic surgery team for reconstruction. She was reviewed today in the day surgery unit and listed for local flap reconstruction under local anaesthetic. She takes warfarin for atrial fibrillation, which was bridged with low molecular weight heparin prior to the Mohs procedure.
+Patient Expectations: Mrs Walsh was told by the Mohs surgeon that the cancer has been removed but she needs another operation to close the hole. She does not understand what a local flap means and is worried about the appearance of her nose afterwards. She wants to know whether she will be awake, how big the scar will be, and when she can restart her warfarin.

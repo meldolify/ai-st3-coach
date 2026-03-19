@@ -1,13 +1,4 @@
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the patient/procedure information sheet for this consent scenario.
-
-Include:
-- Patient details (name, age)
-- Procedure (name of planned operation)
-- Context (referral reason, clinic visit, why listed for surgery)
-- Patient Expectations (what the patient understands, any concerns)
-
-No Images field for consent scenarios.
-
-END OF AUTHOR NOTE]
+Patient: Mrs Sarah Mitchell, 44 years old
+Procedure: Wide Local Excision of Left Calf Melanoma and Sentinel Lymph Node Biopsy
+Context: Mrs Mitchell was referred urgently by her G P with a changing pigmented mole on her left calf. Excision biopsy confirmed a malignant melanoma with a Breslow thickness of 2.1 millimetres. After discussion at the skin cancer multidisciplinary team meeting, she has been listed for wide local excision with a one centimetre margin and sentinel lymph node biopsy of the left groin. She was seen in the plastic surgery clinic two weeks ago and the procedure was outlined. She has attended today for the operation. She is otherwise fit and well.
+Patient Expectations: Mrs Mitchell understands she needs a bigger operation to remove more skin around where the mole was, but she does not understand the sentinel lymph node biopsy. She has looked online and is frightened about the possibility of the cancer having spread. She wants to know what the sentinel node test actually involves, what happens if it is positive, and whether she will need further treatment.

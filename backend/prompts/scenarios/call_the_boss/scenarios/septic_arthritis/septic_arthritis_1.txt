@@ -4,7 +4,7 @@ CLINICAL SCENARIO BLOCK
 
 SCENARIO TITLE
 
-Septic Arthritis
+Septic Arthritis of the Hand
 
 PROBING QUESTIONS
 
@@ -12,65 +12,92 @@ PROBING QUESTIONS
 Use these to challenge or guide the candidate after they finish presenting.
 Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write 4-8 probing questions the consultant might ask during the phone call.
-These should test the candidate's clinical knowledge and management plan.
-
-Examples:
-"What were the blood results?"
-"Have you started any treatment so far?"
-"What is your surgical plan?"
-"Talk me through the steps you would take in theatre."
-"Who else have you contacted?"
-"Are you comfortable managing this yourself or do you need me to come in?"
-
-END OF AUTHOR NOTE]
+"How do you differentiate septic arthritis from a rheumatoid flare in this patient?"
+"Would you aspirate the joint in A and E or wait until theatre?"
+"What would you expect the aspirate to show?"
+"The G P started prednisolone — is that a concern?"
+"He is penicillin allergic — what antibiotics would you use?"
+"Does this need to go to theatre tonight or can it wait?"
+"Should the methotrexate be stopped?"
+"What is your surgical plan for the joint washout?"
 
 MAIN COMMUNICATION AND CLINICAL DOMAINS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the 4-6 main domains being assessed in this scenario.
-These should cover both communication skills and clinical knowledge areas.
-
-Example from a burns call:
-Structured clinical presentation (history, examination, observations)
-Burns assessment (TBSA, depth, mechanism)
-Resuscitation and initial management (fluids, analgesia, monitoring)
-Surgical planning (escharotomy, debridement, coverage)
-Escalation and team coordination
-Safety awareness (airway, transfer, ITU)
-
-END OF AUTHOR NOTE]
+Structured clinical presentation with identification of risk factors
+Clinical assessment and differential diagnosis
+Joint aspiration as a diagnostic step
+Antibiotic strategy in a penicillin-allergic immunosuppressed patient
+Surgical joint washout technique
+Post-operative care and multidisciplinary liaison
 
 ESSENTIAL MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Structured clinical presentation with identification of risk factors
+The candidate must present the case clearly, identifying the key risk factors for septic arthritis: immunosuppression from methotrexate, rheumatoid arthritis, diabetes, and the recent addition of prednisolone by the G P.
+The candidate must convey that this is an urgent case requiring surgical washout.
+The candidate must note that distinguishing a rheumatoid flare from septic arthritis in this patient is critical and that septic arthritis must be excluded urgently.
 
-List the essential marking points, organised by domain.
-These are the minimum requirements for a score of 3 or above.
+Clinical assessment and differential diagnosis
+The candidate must describe the clinical findings: grossly swollen, hot, erythematous M C P J with an effusion, held in flexion, and severe pain on any movement.
+The candidate must discuss the differential diagnosis: septic arthritis, rheumatoid flare, gout, pseudogout, and reactive arthritis.
+The candidate must state that septic arthritis must be excluded urgently as delayed treatment leads to joint destruction.
+The candidate must examine the neurovascular status of the finger and look for other sources of infection.
 
-Format:
-Domain Name
-The candidate must demonstrate X.
-The candidate must mention Y.
+Joint aspiration as a diagnostic step
+The candidate must state that joint aspiration is a critical diagnostic step and should be performed before starting antibiotics if possible.
+The candidate must describe sending the aspirate for Gram stain, microscopy and culture, crystal analysis, and cell count.
+The candidate must know that a purulent aspirate or positive Gram stain confirms the diagnosis and mandates urgent surgical washout.
+The candidate must know that crystal arthropathy may coexist with septic arthritis and one does not exclude the other.
 
-END OF AUTHOR NOTE]
+Antibiotic strategy in a penicillin-allergic immunosuppressed patient
+The candidate must start empirical I V antibiotics after aspiration and blood cultures have been taken.
+The candidate must know that co-amoxiclav is the usual first line but is contraindicated here due to penicillin anaphylaxis.
+The candidate must recommend an alternative such as I V teicoplanin or vancomycin, covering Staphylococcus aureus which is the most common organism.
+The candidate must mention discussing with microbiology, particularly given the immunosuppression.
+
+Surgical joint washout technique
+The candidate must state that confirmed or suspected septic arthritis requires urgent surgical washout.
+The candidate must describe the procedure: general or regional anaesthesia with arm tourniquet, dorsal incision over the M C P J, opening the joint capsule, draining all pus, irrigating with copious saline, taking tissue and fluid samples for microbiology, assessing the articular cartilage, and leaving the wound open or loosely closed over a drain.
+The candidate must mention splinting in the position of safe immobilisation.
+
+Post-operative care and multidisciplinary liaison
+The candidate must mention continued I V antibiotics for a minimum of 2 weeks, followed by oral antibiotics typically for 4 weeks, adjusted based on culture results.
+The candidate must mention strict hand elevation.
+The candidate must plan a second look at 48 hours if there is any concern about ongoing infection.
+The candidate must mention liaising with the rheumatology team regarding the methotrexate — it should be withheld during the acute infection.
+The candidate must mention stopping the prednisolone or discussing with rheumatology, as steroids may mask the signs of infection.
 
 BONUS MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Structured clinical presentation with identification of risk factors
+The candidate discusses that haematogenous spread is the most common route in native joint septic arthritis.
+The candidate mentions asking about intravenous drug use and recent joint injections as risk factors.
+The candidate mentions gonococcal arthritis as a differential in sexually active patients.
 
-List the bonus marking points that distinguish scores of 4 and 5.
-These demonstrate advanced knowledge or exceptional communication.
+Clinical assessment and differential diagnosis
+The candidate mentions Kocher criteria: fever, inability to use the joint, raised E S R or C R P, and raised white cell count.
+The candidate discusses that in rheumatoid patients, a low threshold for aspiration should be maintained as distinguishing a flare from septic arthritis is very difficult.
 
-Format:
-Domain Name
-The candidate discusses X in detail.
-The candidate demonstrates awareness of Y.
+Joint aspiration as a diagnostic step
+The candidate knows that a white cell count greater than 50,000 cells per microlitre in the aspirate is highly suggestive of septic arthritis.
+The candidate describes the aspiration technique for the M C P joint: dorsal approach with the joint in slight flexion.
+The candidate knows that if aspiration is dry or equivocal, surgical exploration may still be warranted.
 
-END OF AUTHOR NOTE]
+Antibiotic strategy in a penicillin-allergic immunosuppressed patient
+The candidate mentions M R S A cover should be considered.
+The candidate knows the recommended duration: 2 weeks I V then 4 weeks oral, guided by clinical response and inflammatory markers.
+
+Surgical joint washout technique
+The candidate mentions that repeated washouts may be necessary if the infection does not settle.
+The candidate discusses that articular cartilage damage is caused by both bacterial enzymes and the host inflammatory response, which is why prompt drainage is critical.
+The candidate mentions ultrasound or M R I as adjuncts to confirm joint effusion if the diagnosis is uncertain.
+
+Post-operative care and multidisciplinary liaison
+The candidate discusses the late complications: joint stiffness, chronic osteomyelitis, and secondary osteoarthritis which may require arthrodesis.
+The candidate mentions monitoring C R P as a marker of response to treatment.
+The candidate discusses early mobilisation and hand therapy once infection is controlled.
+
+These are points a strong candidate would mention but are not required to pass.
 
 END OF SCENARIO CRITERIA
 

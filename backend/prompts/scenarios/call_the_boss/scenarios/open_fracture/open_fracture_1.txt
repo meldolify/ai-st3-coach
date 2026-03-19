@@ -4,7 +4,7 @@ CLINICAL SCENARIO BLOCK
 
 SCENARIO TITLE
 
-Open Fracture
+Open Fracture of the Lower Limb
 
 PROBING QUESTIONS
 
@@ -12,65 +12,86 @@ PROBING QUESTIONS
 Use these to challenge or guide the candidate after they finish presenting.
 Delivery specificity is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write 4-8 probing questions the consultant might ask during the phone call.
-These should test the candidate's clinical knowledge and management plan.
-
-Examples:
-"What were the blood results?"
-"Have you started any treatment so far?"
-"What is your surgical plan?"
-"Talk me through the steps you would take in theatre."
-"Who else have you contacted?"
-"Are you comfortable managing this yourself or do you need me to come in?"
-
-END OF AUTHOR NOTE]
+"What Gustilo-Anderson grade is this?"
+"Does this patient need to go to theatre tonight or can it wait until tomorrow?"
+"What are the B A P R A S lower limb guidelines?"
+"Are the orthopaedic team aware? What are they planning?"
+"Who needs to be present in theatre for this case?"
+"Are you worried about compartment syndrome?"
+"What is your plan for soft tissue coverage?"
+"What would you do in the wound tonight in A and E?"
 
 MAIN COMMUNICATION AND CLINICAL DOMAINS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the 4-6 main domains being assessed in this scenario.
-These should cover both communication skills and clinical knowledge areas.
-
-Example from a burns call:
-Structured clinical presentation (history, examination, observations)
-Burns assessment (TBSA, depth, mechanism)
-Resuscitation and initial management (fluids, analgesia, monitoring)
-Surgical planning (escharotomy, debridement, coverage)
-Escalation and team coordination
-Safety awareness (airway, transfer, ITU)
-
-END OF AUTHOR NOTE]
+Structured clinical presentation covering the polytrauma and the lower limb injury
+Gustilo-Anderson classification and B A P R A S guidelines
+Assessment of neurovascular status and compartment syndrome risk
+Immediate wound management and antibiotic strategy
+Joint ortho-plastic surgical planning
+Soft tissue reconstruction strategy and timeline
 
 ESSENTIAL MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Structured clinical presentation covering the polytrauma and the lower limb injury
+The candidate must present the polytrauma clearly including the pneumothorax and the lower limb injury, distinguishing the life-threatening injuries from the limb-threatening injury.
+The candidate must describe the lower limb injury accurately: location, extent of soft tissue loss, exposed bone, periosteal stripping, and neurovascular status.
+The candidate must inform the consultant and let them know they will need to be available for a joint case with orthopaedics.
 
-List the essential marking points, organised by domain.
-These are the minimum requirements for a score of 3 or above.
+Gustilo-Anderson classification and B A P R A S guidelines
+The candidate must classify this as a Gustilo-Anderson type 3B injury: extensive soft tissue damage with periosteal stripping, exposed bone, and significant soft tissue loss requiring flap coverage.
+The candidate must know the B A P R A S and B O A standards for the management of open lower limb fractures, including the requirement for joint care by orthopaedic and plastic surgery consultants.
+The candidate must know that surgery should be performed by a consultant plastic surgeon and a consultant orthopaedic surgeon.
 
-Format:
-Domain Name
-The candidate must demonstrate X.
-The candidate must mention Y.
+Assessment of neurovascular status and compartment syndrome risk
+The candidate must confirm that pulses are present and the foot is sensate, which is reassuring.
+The candidate must state that the patient needs regular monitoring for evolving compartment syndrome, especially after reduction.
+The candidate must recognise that compartment syndrome cannot be fully excluded at initial assessment.
 
-END OF AUTHOR NOTE]
+Immediate wound management and antibiotic strategy
+The candidate must state that the wound should not be debrided or irrigated in A and E, only covered with a sterile moist dressing or clingfilm after removal of gross contaminants.
+The candidate must commence I V antibiotics: co-amoxiclav is first line (or teicoplanin if penicillin allergic).
+The candidate must give a tetanus booster.
+The candidate must mention medical photography of the wound.
+The candidate must state the wound should not be repeatedly uncovered for viewing.
+
+Joint ortho-plastic surgical planning
+The candidate must state the patient should be admitted under joint care of the orthopaedic and plastic surgery teams.
+The candidate must describe the surgical plan: in theatre, thorough debridement with pulse lavage, removal of devitalised tissue and contaminants, assessment for exposed vessels, and orthopaedic fixation with an external fixator.
+The candidate must plan for V A C dressing after initial debridement.
+The candidate must plan for a return to theatre within 48 hours for a second look.
+
+Soft tissue reconstruction strategy and timeline
+The candidate must know that soft tissue coverage should ideally be achieved within 72 hours, and no later than 7 days (the B A P R A S fix and flap principle).
+The candidate must discuss reconstructive options based on the location of the defect: upper third — gastrocnemius flap, middle third — soleus flap, lower third — free flap.
+The candidate must mention that at the point of definitive soft tissue closure the orthopaedic team would convert to internal fixation.
 
 BONUS MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Structured clinical presentation covering the polytrauma and the lower limb injury
+The candidate discusses whether the patient needs to go to theatre tonight, demonstrating clinical reasoning. In this case, there is no devascularised limb, no heavy contamination, and no compartment syndrome, so the case can be scheduled for a dedicated trauma list tomorrow with consultant presence.
+The candidate mentions the M E S S score (Mangled Extremity Severity Score) as an adjunct for assessing limb salvageability.
 
-List the bonus marking points that distinguish scores of 4 and 5.
-These demonstrate advanced knowledge or exceptional communication.
+Gustilo-Anderson classification and B A P R A S guidelines
+The candidate knows the full Gustilo-Anderson classification including 3A (adequate soft tissue), 3B (requiring flap), and 3C (vascular injury requiring repair).
+The candidate mentions other classification systems such as the A O classification or the Limb Salvage Index.
 
-Format:
-Domain Name
-The candidate discusses X in detail.
-The candidate demonstrates awareness of Y.
+Assessment of neurovascular status and compartment syndrome risk
+The candidate mentions that compartment pressures should be checked after orthopaedic reduction.
+The candidate mentions requesting regular neurovascular observations by nursing staff overnight.
 
-END OF AUTHOR NOTE]
+Immediate wound management and antibiotic strategy
+The candidate mentions that antibiotics should be given within 1 hour of presentation to A and E as per the B A P R A S guidelines.
+The candidate discusses the evidence base for antibiotic choice in open fractures.
+
+Joint ortho-plastic surgical planning
+The candidate mentions the need to optimise the patient for theatre: complete the chest drain, ensure haemodynamic stability, arrange anaesthetic review, and book a dedicated trauma list.
+The candidate discusses the role of pulse lavage versus low-pressure irrigation in theatre.
+
+Soft tissue reconstruction strategy and timeline
+The candidate discusses specific flap options for this mid-shaft tibial defect in more detail, including local muscle flaps and free flaps.
+The candidate mentions the importance of a joint pre-operative planning discussion between the orthopaedic and plastic surgery consultants.
+
+These are points a strong candidate would mention but are not required to pass.
 
 END OF SCENARIO CRITERIA
 

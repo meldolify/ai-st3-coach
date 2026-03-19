@@ -12,70 +12,87 @@ PATIENT QUESTIONS
 Use these after the candidate finishes their explanation.
 How anxious or questioning you are is controlled by the personality layer.)
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write 6-10 patient questions that would naturally arise during this consent discussion.
-These should be written in everyday language as a real patient would ask.
-
-Examples for carpal tunnel release:
-"Will I be awake during it?"
+"Will I be asleep for the whole thing?"
 "How long does the operation take?"
-"When can I go back to work?"
-"You said there's a risk of infection — how common is that?"
-"Will the numbness definitely go away?"
-"What about the scar — will it be very noticeable?"
-"When do I need to come back to get checked?"
-
-For paediatric scenarios, write questions as a parent:
-"Will my child be in pain afterwards?"
-"How long will the anaesthetic take to wear off?"
-"When can they go back to school?"
-
-END OF AUTHOR NOTE]
+"What will the scar look like — will people see it if I wear a bikini?"
+"What happens to my belly button — do you move it?"
+"How long will I be in hospital?"
+"When can I drive again?"
+"When can I go back to work — I have a desk job?"
+"You mentioned drains — what are those and when do they come out?"
+"What if I put weight on again afterwards — will it come back?"
+"What is the worst thing that could go wrong?"
 
 MAIN CONSENT DOMAINS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-List the 4-6 main consent domains being assessed in this scenario.
-
-Example for carpal tunnel release:
 Introduction and patient identification
-Procedure explanation (what will be done, in layman terms)
-Anaesthesia (local vs general, what to expect)
-Post-operative care (dressings, restrictions, follow-up)
-Risks and complications (infection, bleeding, nerve damage, recurrence, scar)
-Recovery and return to activities
-
-END OF AUTHOR NOTE]
+Procedure explanation including skin excision, muscle tightening, and umbilical repositioning
+Anaesthesia and operative environment
+Post-operative care including drains, binder, and restrictions
+Risks and complications
+Recovery timeline and return to activities
 
 ESSENTIAL MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Introduction and patient identification
+Confirming the patient's identity and the planned procedure.
+Establishing rapport and checking the patient's existing understanding before starting the explanation.
+Ensuring privacy and offering a chaperone if the patient would like one for the pre-operative marking.
 
-List the essential marking points, organised by domain.
-These are the minimum requirements for a score of 3 or above.
+Procedure explanation
+Explaining in lay terms that the operation removes excess skin and fat from the lower abdomen through a long cut low across the tummy, usually hidden within the bikini line.
+Explaining that the belly button will need to be repositioned by making a small cut around it and bringing it out through the tightened skin in its new position.
+Mentioning that in some cases the underlying abdominal muscles are tightened with stitches to improve the contour, a procedure called repair of the rectus diastasis.
+Explaining that the removed tissue is weighed but the exact amount cannot be guaranteed beforehand.
+Mentioning that in cases with significant excess skin a vertical scar may also be needed, giving a T-shaped scar.
 
-Format:
-Domain Name
-The candidate must explain X in clear, jargon-free language.
-The candidate must mention Y.
+Anaesthesia and operative environment
+Explaining that the procedure is performed under general anaesthetic and that the patient will meet the anaesthetist beforehand to discuss the anaesthetic and its risks.
+Explaining the sterile theatre environment in a reassuring way.
+Mentioning the approximate duration of surgery, typically two to three hours.
 
-END OF AUTHOR NOTE]
+Post-operative care
+Explaining that one or two drains will be left in place to collect fluid and that these are usually removed before discharge once output is minimal.
+Explaining the abdominal binder or compression garment and how long it should be worn, typically four to six weeks.
+Advising that the patient should expect to stay in hospital for one to two nights.
+Explaining that dressings will be checked at a follow-up appointment in approximately one week.
+Advising the patient to keep wounds clean and dry, avoid smoking, take prescribed antibiotics and painkillers, and avoid heavy lifting.
+
+Risks and complications
+Mentioning bleeding and the possibility of a haematoma requiring return to theatre.
+Mentioning infection.
+Mentioning wound breakdown or delayed healing, particularly at the T-junction if present.
+Mentioning scarring including hypertrophic or keloid scars and explaining the scar will be permanent but should fade over time.
+Mentioning seroma, a collection of fluid under the skin.
+Mentioning altered sensation or numbness of the abdominal skin which may be permanent.
+Mentioning asymmetry or an unsatisfactory cosmetic result.
+Mentioning D V T and P E as risks of a general anaesthetic and prolonged surgery.
+
+Recovery timeline
+Advising return to sedentary work at approximately two weeks.
+Advising no heavy lifting, manual work, or strenuous exercise for approximately six weeks.
+Advising avoidance of driving for a minimum of two weeks.
+Explaining that swelling and bruising will settle gradually over several weeks and the final result will not be apparent for several months.
 
 BONUS MARKING POINTS
 
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
+Procedure explanation
+Explaining the concept of flap undermining and how the blood supply to the remaining skin is preserved, and why smoking increases the risk of skin flap necrosis.
+Mentioning liposuction may be combined with abdominoplasty in some cases to improve contour.
+Explaining the difference between a full abdominoplasty and a mini-abdominoplasty and why the full procedure has been recommended for this patient.
 
-List the bonus marking points that distinguish scores of 4 and 5.
-These demonstrate excellent patient communication or detailed knowledge.
+Risks and complications
+Mentioning fat necrosis and palpable lumps.
+Mentioning the risk of injury to deeper structures including bowel, although extremely rare.
+Mentioning dog ears at the lateral ends of the scar that may require later revision.
+Mentioning the possibility of unsatisfactory belly button appearance requiring revision.
+Discussing V T E prophylaxis measures including T E D stockings, early mobilisation, and pharmacological thromboprophylaxis.
 
-Format:
-Domain Name
-The candidate explains X with a helpful analogy.
-The candidate proactively addresses common patient concerns about Y.
+Recovery timeline
+Advising the patient to start scar massage with moisturiser once the wound is fully healed, usually at around four to six weeks.
+Discussing realistic expectations and that the result may not be perfect or symmetrical.
 
-END OF AUTHOR NOTE]
+These are points a strong candidate would mention but are not required to pass.
 
 END OF SCENARIO CRITERIA
 

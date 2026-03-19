@@ -1,13 +1,4 @@
-[AUTHOR NOTE — DELETE THIS ENTIRE SECTION WHEN FINISHED
-
-Write the patient/procedure information sheet for this consent scenario.
-
-Include:
-- Patient details (name, age)
-- Procedure (name of planned operation)
-- Context (referral reason, clinic visit, why listed for surgery)
-- Patient Expectations (what the patient understands, any concerns)
-
-No Images field for consent scenarios.
-
-END OF AUTHOR NOTE]
+Patient: Mr Derek Okonkwo, 47 years old
+Procedure: Right Ring Finger Amputation at the Level of the Proximal Phalanx
+Context: Admitted via A and E with a severe crush injury to his right ring finger sustained in an industrial press at work six hours ago. X-ray shows comminuted fracture of the proximal and middle phalanges. The finger is devascularised with no capillary refill and both digital arteries are disrupted. The orthopaedic and plastic surgery teams have reviewed and agree the finger is not salvageable. He has been listed for formal amputation on the emergency list. His wife is with him.
+Patient Expectations: Mr Okonkwo has been told his finger cannot be saved and needs to be removed. He is in pain, distressed, and finding it difficult to accept the situation. He wants to know if there is any chance of saving the finger, whether he will have a prosthetic, and how he will manage at work as a factory supervisor.
