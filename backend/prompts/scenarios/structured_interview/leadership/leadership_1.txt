@@ -1,0 +1,105 @@
+STRUCTURED INTERVIEW TOPIC
+
+TOPIC TITLE
+
+Leadership and Management
+
+QUESTION POOL
+
+(Select two to three questions randomly from this pool at the start of the session.
+Ask each selected question in turn, probing the candidate's answer before moving to the next.
+Do not reveal how many questions remain or which questions were selected.)
+
+"What is clinical governance?"
+"Tell me about your experience in clinical governance."
+"Who is responsible for clinical governance?"
+"What is clinical effectiveness?"
+"What is the difference between leadership and management?"
+"What are the different management styles or leadership styles?"
+"What makes a good leader?"
+"How can trainees develop leadership skills?"
+"Tell me about your management experience, for example committees you have been involved in."
+"What problems have you faced in management?"
+"What is the six thinking hats technique?"
+"What are advanced nurse practitioners and what is their role?"
+"Is management important for the N H S?"
+"When is the best time to get training in management?"
+"Should trainees and consultants be involved in management?"
+"In what area should you get management training? Finance, budgets, H R, or making a business case?"
+"How can you improve your management skills?"
+"How can sustainability be achieved in the N H S?"
+"How is funding organised in the N H S?"
+"How can cost be reduced in the N H S without compromising quality?"
+"What is Doctor Foster and what is its role?"
+"What is the National Quality Board and what is its role?"
+"How would you introduce a new device in the N H S?"
+"Tell me about a situation when you demonstrated leadership skills."
+"What do you know about bodies like the B M A?"
+"What is the Joint Doctors Service?"
+"If you were in charge of your unit, what management change would you make?"
+"Tell me about an example when you failed to communicate appropriately."
+"What is H Q I P?"
+"How would you set up a nurse led clinic for pre-tibial lacerations?"
+"Why did you choose plastic surgery?"
+"What is your biggest achievement?"
+"Tell me about an achievement outside of medicine."
+
+GUIDANCE NOTES
+
+(Internal reference only. These help the interviewer probe effectively but are NOT rigid marking criteria.
+There is no single correct answer for most questions. Assess on structure, depth, examples, and reflective practice.
+Some questions have factual anchors noted below which strong candidates should demonstrate knowledge of.)
+
+Clinical Governance
+Key concepts: Clinical governance is a quality assurance framework ensuring that standards of care are maintained and improved, and that the N H S is accountable to the public. It has seven pillars: Clinical Effectiveness and Research, Audit, Risk Management, Education and Training, Patient and Public Involvement (P P I), Using Information and I T, and Staffing and Staff Management. The four most relevant pillars for trainees can be remembered as C A R E (Clinical effectiveness, Audit, Risk management, Education and training).
+Factual anchors: The Scally and Donaldson definition (1998): "A framework through which N H S organisations are accountable for continually improving the quality of their services and safeguarding high standards of care." Candidates should give their own practical definition rather than reciting this. Clinical effectiveness means doing "the right thing to the right person at the right time in the right place." P P I includes patient feedback questionnaires, P A L S (Patient Advice and Liaison Service), national patient surveys, and Foundation Trust Boards of Governors.
+Positive indicators: Gives a clear definition in own words. Names and briefly explains the key pillars (at least the four C A R E pillars). Provides personal examples under each pillar discussed. Demonstrates understanding of how clinical governance applies to daily practice.
+Negative indicators: Regurgitates the textbook definition without understanding. Lists all seven pillars superficially without depth on any. Cannot give personal examples. Treats clinical governance as theoretical rather than practical.
+Example follow-up probes: "Give me an example of how you have practised clinical governance.", "Which pillar do you think is most important and why?", "How does clinical governance affect your daily work?"
+
+Leadership versus Management
+Key concepts: Leadership is about identifying areas of underperformance or opportunity, taking initiative to implement change, directing and developing people towards a new direction, and delivering results. Management is about controlling existing people and resources to achieve results within already established values and principles. Both are essential and complementary. The N H S Leadership Framework (2011) makes leadership a requirement for every doctor.
+Factual anchors: The Darzi review emphasised that clinicians should be practitioners, partners, and leaders. The N H S Leadership Framework identifies seven domains. Different leadership styles include: transformational (inspiring change), transactional (rewards and penalties), servant leadership (serving the team), situational (adapting style to context). De Bono's Six Thinking Hats technique offers a structured approach to group decision-making using six perspectives: White (facts), Red (emotions), Black (caution), Yellow (optimism), Green (creativity), Blue (process).
+Positive indicators: Clearly distinguishes leadership from management. Gives personal examples of both. Names specific leadership styles and when they are appropriate. Understands that leadership is a requirement at all levels, not just for consultants.
+Negative indicators: Uses the terms interchangeably. Cannot give examples of personal leadership. Does not know any leadership frameworks or styles.
+Example follow-up probes: "Tell me about a time you demonstrated leadership.", "Which leadership style do you gravitate towards?", "How do you develop leadership skills as a trainee?"
+
+Trainee Leadership and Management Experience
+Key concepts: Trainees can develop leadership and management skills through: auditing and implementing change, reorganising teaching to address training gaps, coordinating departmental rotas, participating in committees (radiology lead, pathology lead, audit lead, clinical governance lead), serving as trainee representative (B A P R A S trainee lead, P L A S T A committee, deanery committee), involvement outside medicine (charity work, sports captaincy, event organisation). Management experience includes: rota coordination, resource management, committee participation, M D T meetings, and general organisational tasks.
+Positive indicators: Gives specific examples of leadership and management experience. Reflects on what they learned. Identifies strengths and areas for improvement. Has future plans for development.
+Negative indicators: No management experience. Cannot reflect on learning. Does not see management as relevant to a surgical career.
+Example follow-up probes: "What did you learn about yourself from these experiences?", "What management change would you make if you were in charge of your unit?", "What problems did you face and how did you overcome them?"
+
+N H S Structure and Funding
+Key concepts: Understanding how the N H S is organised and funded demonstrates maturity and engagement. Key concepts include: Clinical Commissioning Groups (C C Gs, now replaced by Integrated Care Boards), N H S England, Payment by Results (tariff-based funding), the tension between efficiency and quality, the role of the private sector, and the importance of sustainability.
+Factual anchors: Payment by Results: hospitals paid per activity at nationally set tariffs, incentivising efficiency but potentially at the expense of quality. C Q U I N (Commissioning for Quality and Innovation) rewards enhanced care. Q O F (Quality of Outcomes Framework) incentivises G P quality. The National Quality Board advises ministers on quality priorities. Doctor Foster provides hospital performance data. H Q I P (Healthcare Quality Improvement Partnership) promotes quality improvement through audit and outcome review.
+Positive indicators: Demonstrates understanding of N H S funding mechanisms. Can discuss pros and cons of Payment by Results. Understands the tension between cost and quality. Knows about quality incentive schemes. Practical suggestions for cost reduction without compromising care.
+Negative indicators: No understanding of N H S structure or funding. Cannot discuss how funding affects clinical practice. Unaware of quality incentives.
+Example follow-up probes: "How does Payment by Results affect your department?", "How would you reduce costs in your unit without affecting patient care?", "What is the role of H Q I P?"
+
+Advanced Nurse Practitioners
+Key concepts: Surgical nurse practitioners work as members of the extended surgical team, performing interventions and pre and post-operative care under consultant supervision. They were introduced to fill the void created by the E W T D and increasing service demands.
+Factual anchors: The National Curriculum Framework for Surgical Care Practitioners governs their role. Evidence supports their effectiveness: Stables (2004) found nurse practitioners superior in diagnostic cardiac catheterisation preparation; Easton (2004) showed comparable outcomes to S H Os; Earnshaw (1997) showed satisfactory follow-up breast clinics. However, trainees may see them as a mixed blessing due to competition for consultant sessions, shared training opportunities, and different professional backgrounds.
+Positive indicators: Balanced answer acknowledging benefits (free up time, continuity, can educate juniors) and challenges (competition for training, different training needs, potential skill overlap). Understands the multidisciplinary team approach. Suggests solutions for balancing training needs.
+Negative indicators: One-sided view (either entirely positive or negative). Does not acknowledge training implications. Cannot discuss the evidence.
+Example follow-up probes: "How can training be protected when nurse practitioners are in the team?", "Have you worked alongside nurse practitioners? What was your experience?"
+
+Introducing New Devices and Services
+Key concepts: Introducing a new device in the N H S requires: evidence of clinical effectiveness and cost-effectiveness, risk assessment, stakeholder engagement (clinicians, managers, procurement, patients), business case development, possible N I C E technology appraisal, trust-level governance approval, training for staff, audit of outcomes post-introduction.
+Positive indicators: Systematic approach covering evidence, governance, stakeholder engagement, and audit. Understands the business case process. Considers cost-effectiveness alongside clinical benefit. Plans for training and outcome monitoring.
+Negative indicators: Oversimplified answer. Does not consider governance or cost. No plan for monitoring outcomes after introduction.
+Example follow-up probes: "How would you build a business case?", "Who would you need to convince?", "How would you audit the outcomes?"
+
+Career Motivation and Personal Achievement
+Key concepts: Questions about career choice and achievements test self-awareness, motivation, and ability to reflect. For "Why plastic surgery?": candidates should give multiple genuine reasons with personal experiences, not generic statements. For achievements: should demonstrate qualities valued in a surgeon (determination, leadership, teamwork, creativity). Achievements outside medicine show a well-rounded individual.
+Positive indicators: Genuine, personal reasons with evidence of exploration (taster weeks, courses, electives). Reflects on what the specialty offers and why it suits them. Achievements demonstrate transferable skills. Honest about challenges faced.
+Negative indicators: Generic reasons without personal connection. Cannot articulate why this specialty over others. Achievements are trivial or unsubstantiated.
+Example follow-up probes: "What is it specifically about plastic surgery that appeals to you over other surgical specialties?", "How did this achievement change you?", "What would you like to achieve in the next ten years?"
+
+Communication Failures
+Key concepts: Being asked about a communication failure tests honesty, self-awareness, and capacity to learn. A strong answer includes: the situation, what went wrong, the impact, what was learned, and how behaviour changed afterwards.
+Positive indicators: Honest and specific example. Takes responsibility rather than blaming others. Describes clear learning and behaviour change. Shows insight into communication principles.
+Negative indicators: Claims to have never had a communication failure. Blames others entirely. No evidence of learning or change.
+Example follow-up probes: "What did you learn from this?", "How has your communication changed as a result?", "What systems could prevent this type of failure?"
+
+END OF TOPIC

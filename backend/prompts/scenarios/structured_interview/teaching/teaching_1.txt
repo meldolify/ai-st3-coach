@@ -1,0 +1,79 @@
+STRUCTURED INTERVIEW TOPIC
+
+TOPIC TITLE
+
+Teaching
+
+QUESTION POOL
+
+(Select two to three questions randomly from this pool at the start of the session.
+Ask each selected question in turn, probing the candidate's answer before moving to the next.
+Do not reveal how many questions remain or which questions were selected.)
+
+"Tell me about your teaching experience."
+"Why is teaching important?"
+"What makes a good teacher? How do you know you are one?"
+"What are your strengths and weaknesses as a teacher?"
+"Tell me about a bad teaching experience."
+"If you could design a teaching course, what would it be?"
+"What teaching theories or learning theories do you know?"
+"What teaching methodologies or types do you use?"
+"What is problem based learning? What are its advantages and disadvantages?"
+"What is the importance of feedback? Tell me about feedback you have received."
+"What is Modernising Medical Careers?"
+"What are workplace based assessments?"
+"What is the Medical Certificate of Registration?"
+"What were the Calman reforms of 1993?"
+"What do you know about the new plastic surgery curriculum?"
+"What is the European Working Time Directive? What are its advantages and disadvantages?"
+"Should all trainees do teaching? Should they have a teaching degree?"
+"Is training fit for purpose?"
+"What is simulation based teaching?"
+"What is the importance of assessment in training?"
+
+GUIDANCE NOTES
+
+(Internal reference only. These help the interviewer probe effectively but are NOT rigid marking criteria.
+There is no single correct answer for most questions. Assess on structure, depth, examples, and reflective practice.
+Some questions have factual anchors noted below which strong candidates should demonstrate knowledge of.)
+
+Teaching Experience
+Key concepts: A strong answer goes beyond informal bedside teaching. It should cover: types of teaching (informal, lectures, workshops, simulation, presentations), groups taught (undergraduates, F Ys, S Ts, nurses, G Ps, paramedics, non-medical), teaching methods used (didactic, interactive, simulation, role play), topics taught (clinical knowledge, skills, procedures, history taking, breaking bad news). Higher marks for candidates who have organised teaching sessions, written teaching materials, or shown initiative. Describe how teaching is planned to meet learner needs and how learning is assessed (quizzes, M C Qs at the end).
+Positive indicators: Structured answer covering range of experience. Mentions organising sessions or creating materials, not just delivering them. Discusses teaching courses attended and what was learned. Seeks and uses feedback. Has future teaching plans (e.g. medical education qualification). Shows genuine enthusiasm.
+Negative indicators: Only mentions informal teaching. No evidence of initiative. Has not sought feedback. No teaching courses attended. Cannot reflect on what makes their teaching effective.
+Example follow-up probes: "What feedback have you received about your teaching?", "What teaching courses have you attended?", "How do you assess whether your students have learned?"
+
+Knowing You Are a Good Teacher
+Key concepts: This question is about evidence of effectiveness, not listing qualities. Evidence includes: positive formal feedback (questionnaires, 360-degree feedback, M S F), being re-invited to teach on courses, being asked to become an A L S or similar course instructor, objective outcomes (students passing exams), visible improvement in juniors' clinical performance, level of engagement during sessions.
+Positive indicators: Provides concrete evidence rather than just listing qualities. Uses specific feedback examples. Mentions both formal and informal evidence. Illustrates each point with experience.
+Negative indicators: Lists generic qualities of good teachers without evidence. Cannot provide specific feedback. Confuses "what makes a good teacher" with "how do you know you are one."
+Example follow-up probes: "Can you share specific feedback you have received?", "Has your teaching led to measurable improvement in anyone's performance?"
+
+Teaching Theories and Methods
+Key concepts: Key learning theories include: Miller's Pyramid of Learning (knows, knows how, shows how, does), Kolb's Experiential Learning Cycle (concrete experience, reflective observation, abstract conceptualisation, active experimentation), adult learning principles (self-directed, experience-based, problem-oriented, immediately applicable). Teaching methods: didactic lectures, small group teaching, bedside teaching, simulation, problem-based learning (P B L), flipped classroom, peer-assisted learning.
+Factual anchors: P B L uses clinical scenarios as a starting point for learning; advantages include developing problem-solving skills, teamwork, self-directed learning; disadvantages include time-consuming, resource-intensive, may miss core knowledge if poorly structured, requires trained facilitators. Simulation-based teaching is increasingly accepted as both a training and assessment tool, especially important given reduced clinical exposure under E W T D.
+Positive indicators: Can name and explain at least two learning theories. Understands different teaching methodologies and when to use them. Can discuss P B L critically with both pros and cons. Links theory to personal practice.
+Negative indicators: Cannot name any learning theory. Only uses one teaching method. Cannot discuss advantages and disadvantages of approaches.
+Example follow-up probes: "How does Kolb's cycle apply to surgical training?", "When would you use simulation over bedside teaching?", "How do you adapt your teaching to different learners?"
+
+Workplace Based Assessments
+Key concepts: W B As are formative assessment tools used throughout surgical training. They include: Case Based Discussions (C B Ds), Direct Observation of Procedural Skills (D O P S), Procedure Based Assessments (P B As), Mini Clinical Evaluation Exercise (mini-C E X), 360-degree feedback (M S F), and supervisor reports. They are part of the I S C P curriculum and reviewed at A R C P. Based on established learning models (Miller's Pyramid, Kolb's Cycle).
+Factual anchors: Temple Report (2010) "Time for Training" called for consultant-led service with continuous appraisal. W B As were introduced following reshaping of U K training due to E W T D, shorter training duration, and N H S service pressures. Pereira and Dean (2013) showed trainee perception of W B As has improved over time. Wilkinson (2008) noted W B As are still not a robust method of assessing knowledge directly.
+Positive indicators: Understands the purpose and types of W B As. Can discuss advantages (competency-based training, structured feedback, identifies underperformance) and disadvantages (perceived as tick-box exercise, trainers not adequately trained, competitive trainees only seek assessment when competent, time pressures). Suggests improvements (quality over quantity, train trainers, introduce formative elements, real-time completion).
+Negative indicators: Cannot name types of W B As. Only sees them as a burden. No constructive suggestions for improvement.
+Example follow-up probes: "How can we improve the W B A system?", "Why do some trainees view W B As negatively?", "How should trainers be prepared for delivering W B As?"
+
+Training Reforms and Curriculum
+Key concepts: Modernising Medical Careers (M M C) restructured postgraduate medical training in the U K. The Calman reforms (1993) introduced time-based training with a certificate of completion. The I S C P (Intercollegiate Surgical Curriculum Programme) replaced Calman with competency-based training. The E W T D limited working hours (48 hours per week), with advantages (better work-life balance, patient safety from less fatigued doctors) and disadvantages (reduced training time, reduced clinical exposure, service pressures, difficulty in maintaining continuity of care).
+Factual anchors: E W T D: 48-hour maximum working week. Temple Report (2010) addressed the tension between service and training under reduced hours. Health Education England (H E E) and Local Education and Training Boards (L E T Bs) oversee training. The new plastic surgery curriculum is competency-based with specified index procedures and I S C P milestones.
+Positive indicators: Understands the evolution of surgical training. Can discuss E W T D critically with balanced pros and cons. Aware of current curriculum structure. Relates reforms to their own training experience.
+Negative indicators: No awareness of training reforms. Cannot discuss E W T D beyond basic facts. Does not understand the difference between time-based and competency-based training.
+Example follow-up probes: "How has the E W T D affected your training?", "Is the current curriculum fit for purpose?", "How could training be improved?"
+
+Feedback
+Key concepts: Feedback is essential for learning and improvement. Good feedback is timely, specific, constructive, and actionable. It should be sought formally (questionnaires, structured feedback forms) and informally. Candidates should be able to discuss feedback they have received, both positive and negative, and what they did with it. Giving feedback effectively is equally important (specific, balanced, private for negative feedback, developmental).
+Positive indicators: Actively seeks feedback through formal means. Can describe specific feedback received and actions taken. Understands the characteristics of effective feedback. Can discuss giving feedback to others.
+Negative indicators: Has never sought feedback. Cannot recall specific feedback. Becomes defensive about negative feedback. Does not use feedback to improve.
+Example follow-up probes: "Tell me about negative feedback you received and how you responded.", "How do you give feedback to a junior who is underperforming?"
+
+END OF TOPIC

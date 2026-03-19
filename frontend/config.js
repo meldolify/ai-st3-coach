@@ -43,7 +43,7 @@ const CONFIG = {
     'clinical/emergencies/necrotising_fasciitis',
     'call_the_boss/scenarios/major_burn',
     'consent/hand_surgery/carpal_tunnel_release_consent',
-    'structured_interview/audit/focused_interview'
+    'structured_interview/audit'
   ],
 
   // Specialty mapping — maps top-level scenario folder prefix to subscription specialty

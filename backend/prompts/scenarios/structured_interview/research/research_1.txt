@@ -1,0 +1,113 @@
+STRUCTURED INTERVIEW TOPIC
+
+TOPIC TITLE
+
+Research
+
+QUESTION POOL
+
+(Select two to three questions randomly from this pool at the start of the session.
+Ask each selected question in turn, probing the candidate's answer before moving to the next.
+Do not reveal how many questions remain or which questions were selected.)
+
+"What is research?"
+"Tell me about your research experience."
+"Why is research important?"
+"What is the role of research in plastic surgery?"
+"What are the steps of the research process?"
+"What are the different types of research?"
+"What is a research protocol? How would you write one?"
+"What is the N H S research pathway?"
+"What is the Declaration of Helsinki?"
+"Why is ethics important in research?"
+"What bodies regulate research in the U K?"
+"How would you apply for ethical approval?"
+"How would you get funding for research?"
+"What do you know about the N I H R?"
+"What are the different N I H R funding streams?"
+"Should the U K government be funding research?"
+"What methods or facilities help in research?"
+"Tell me about a problem in your research and how you dealt with it."
+"How can you improve your research?"
+"Tell me about a research project you would like to do."
+"How would you set up a randomised controlled trial?"
+"What is the difference between a systematic review and a meta-analysis?"
+"What are the advantages of laboratory based research?"
+"What is the difference between clinical and laboratory research?"
+"Should all trainees do research?"
+"What recent advances in plastic surgery are you aware of?"
+"Tell me about a paper that changed your practice."
+"Tell me about a bad paper you have read."
+"What is evidence based medicine?"
+"Why is evidence based medicine important?"
+"What are the steps of evidence based medicine?"
+"How do you use evidence based medicine in your practice?"
+"What is the hierarchy of evidence?"
+"Why must a clinician account for their own experience in evidence based medicine?"
+"What is research governance?"
+"Tell me about a clinical trial you know of."
+"How would you create a clinical guideline?"
+"How would you critique a paper?"
+"What are the phases of a clinical trial?"
+"How can you assess the significance of your research?"
+"What is clinical equipoise?"
+
+GUIDANCE NOTES
+
+(Internal reference only. These help the interviewer probe effectively but are NOT rigid marking criteria.
+There is no single correct answer for most questions. Assess on structure, depth, examples, and reflective practice.
+Some questions have factual anchors noted below which strong candidates should demonstrate knowledge of.)
+
+Research Definition and Importance
+Key concepts: Research is the scientific investigation that creates new knowledge to establish new standards of care. Unlike audit (which checks compliance with existing standards), research generates original evidence. Research is fundamental to advancing surgical practice, improving patient outcomes, and developing evidence-based guidelines.
+Positive indicators: Clear definition distinguishing research from audit. Articulates why research matters for clinical practice. Shows genuine enthusiasm rather than treating it as a C V exercise.
+Negative indicators: Confuses research with audit. Cannot explain why research is important beyond "it looks good on the C V." No personal engagement with research concepts.
+Example follow-up probes: "How does research translate into clinical practice?", "Can you give an example of research that changed how plastic surgeons work?"
+
+Personal Research Experience
+Key concepts: Strong answers address: number, type and quality of projects; outcomes including publications and presentations; specific role (recruiting patients, ethical approval, grant applications); research-related skills gained (literature review, critical appraisal, statistics); general skills gained (writing, negotiation, teamwork, time management); relevant courses attended; future research plans. Even candidates with limited experience can discuss literature reviews, case reports, journal club participation, conference attendance, and research courses.
+Positive indicators: Summarises experience clearly then describes one or two projects in depth. Explains their specific role. Discusses publications, presentations, skills gained. Mentions future research aims. Honest about limitations of their experience.
+Negative indicators: Vague or exaggerated claims. Cannot describe their role in detail. No reflection on skills gained. No future research plans.
+Example follow-up probes: "What was your specific contribution to this project?", "What skills did you gain?", "What would you do differently?", "What are your future research interests?"
+
+Research Methods and Study Design
+Key concepts: Types of research include randomised controlled trials (R C Ts), cohort studies, case-control studies, cross-sectional studies, case series, case reports, systematic reviews, meta-analyses, and laboratory-based research. A research protocol should include: background and rationale, aims and objectives, hypothesis, study design, sample size calculation, inclusion and exclusion criteria, methodology, outcome measures, statistical analysis plan, ethical considerations, timeline, and funding.
+Factual anchors: Phases of clinical trials: Phase 1 (safety, small group), Phase 2 (efficacy, larger group), Phase 3 (comparison with standard treatment, large scale), Phase 4 (post-marketing surveillance). The I D E A L framework assists researchers in setting up surgical R C Ts. Clinical equipoise means genuine uncertainty about which treatment is better, required ethically before randomisation.
+Positive indicators: Can describe different study types and when each is appropriate. Understands the components of a protocol. Knows the phases of clinical trials. Can explain clinical equipoise.
+Negative indicators: Cannot differentiate study types. Does not know what a protocol should contain. Unfamiliar with clinical trial phases.
+Example follow-up probes: "When would you choose a cohort study over an R C T?", "What are the challenges of running an R C T in surgery?", "How do you calculate sample size?"
+
+Research Ethics and Governance
+Key concepts: Research governance ensures that research is conducted ethically, scientifically sound, and with proper oversight. The Declaration of Helsinki (1964, updated multiple times) establishes ethical principles for medical research involving human subjects. Key principles include informed consent, minimising harm, independent review, and the right to withdraw. In the U K, research involving N H S patients requires approval from a Research Ethics Committee (R E C) via the Health Research Authority (H R A). Research governance encompasses ethics, science, information, health and safety, and funding.
+Factual anchors: Key regulatory bodies in the U K: Health Research Authority (H R A), Research Ethics Committees (R E Cs), Medicines and Healthcare products Regulatory Agency (M H R A for drug trials), G M C ethical guidance. The N H S research pathway involves: developing the research question, writing a protocol, obtaining ethical approval, R and D department approval, conducting the research, and dissemination.
+Positive indicators: Understands the purpose and principles of research governance. Knows the practical steps for obtaining ethical approval. Can discuss the Declaration of Helsinki. Aware of U K regulatory bodies.
+Negative indicators: Does not understand why ethics approval is needed. Cannot name any regulatory body. Unaware of the Declaration of Helsinki.
+Example follow-up probes: "What would happen if you started research without ethical approval?", "How does research governance protect patients?"
+
+Research Funding and Facilities
+Key concepts: Funding sources include the N I H R (National Institute for Health and Care Research), research charities, Royal College grants, specialty associations, and hospital R and D departments. In plastic surgery specifically: B A P R A S pump primer grants and scholarships, B S S H research funding, R C S Clinical Trials Unit, the Reconstructive Surgery Trials Network (R S T N), and the N I H R (which funds projects like the P R E H E A T study).
+Factual anchors: The N I H R is the major U K government funder of health research, with multiple funding streams including programme grants, project grants, fellowships, and the Clinical Research Network. Local hospital R and D departments support with resources, statistical analysis, and governance. The R S T N is the first plastic and reconstructive surgery research network in the U K. The Association of Medical Research Charities promotes the 3 Rs in animal research: refine, reduce, replace.
+Positive indicators: Names specific funding bodies relevant to plastic surgery. Understands how to apply for funding. Aware of local and national research infrastructure. Practical about the challenges of securing funding.
+Negative indicators: Cannot name any funding source. No idea how research is funded. Unaware of specialty-specific research networks.
+Example follow-up probes: "How would you fund a research project in your department?", "What is the role of the R S T N?"
+
+Should All Trainees Do Research
+Key concepts: This requires balanced debate, not a simple yes or no. Arguments against mandatory formal research (P h D or M D): much research achieves little or goes unpublished; limited funding is best reserved for those with genuine enthusiasm; forced research may be counterproductive; taking time out creates clinical deskilling; M M C recognises this by creating academic track posts. Arguments for understanding research principles: all trainees need critical appraisal skills for evidence-based practice; this can be gained through journal clubs, conferences, courses, smaller ad-hoc projects, and literature searches. The key distinction is between doing formal research and understanding research principles.
+Positive indicators: Debates both sides thoughtfully. Draws on personal experience. Distinguishes between doing research and understanding it. Acknowledges the academic track for those with genuine research interest.
+Negative indicators: Gives a one-sided answer. Says everyone must do research without considering the arguments. Cannot articulate why understanding research matters even without doing it.
+Example follow-up probes: "How can a trainee who has not done formal research still develop research skills?", "What is the value of an academic track?"
+
+Evidence-Based Medicine
+Key concepts: E B M integrates best available research evidence with clinical expertise and patient values to guide clinical decisions. It is not about blindly following guidelines but about combining evidence with judgement and patient preferences.
+Factual anchors: David Sackett's revised definition (2000): "integration of best research evidence with clinical expertise and patient values." The steps of E B M: (1) a clinical question arises, (2) construct a well-defined question (P I C O: Population, Intervention, Comparison, Outcome), (3) search the literature, (4) appraise the evidence for validity and applicability, (5) integrate evidence with clinical expertise and patient preferences, (6) evaluate the outcome with the patient. The hierarchy of evidence: Level Ia (systematic review or meta-analysis of R C Ts), Ib (at least one R C T), IIa (controlled study without randomisation), IIb (quasi-experimental study such as cohort), III (descriptive studies, case-control, case series), IV (expert opinion).
+Positive indicators: Defines E B M in own words. Knows the steps. Can recite or approximate the hierarchy of evidence. Gives a personal example of using E B M. Understands that clinical expertise and patient values are integral, not just the evidence.
+Negative indicators: Cannot define E B M. Conflates E B M with just following guidelines. Does not know the hierarchy of evidence. Cannot give a practical example.
+Example follow-up probes: "Give me an example where guidelines did not fit your patient.", "Why is clinical expertise important alongside the evidence?", "What level of evidence would a case series represent?"
+
+Critical Appraisal
+Key concepts: Critiquing a paper involves assessing: the research question (clear and relevant?), study design (appropriate for the question?), methodology (sample size, selection criteria, bias, confounders), results (statistical significance vs clinical significance, appropriate statistical tests), conclusions (supported by the data?), and applicability to practice. Look for sources of bias: selection bias, performance bias, detection bias, attrition bias, reporting bias.
+Positive indicators: Has a systematic approach to appraising papers. Can identify strengths and weaknesses. Understands the difference between statistical and clinical significance. Can discuss a specific paper they have critiqued.
+Negative indicators: No systematic approach. Cannot identify common biases. Confuses statistical significance with clinical importance.
+Example follow-up probes: "Tell me about a bad paper you have read. What made it bad?", "What is the difference between statistical significance and clinical significance?"
+
+END OF TOPIC

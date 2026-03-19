@@ -1,0 +1,116 @@
+STRUCTURED INTERVIEW TOPIC
+
+TOPIC TITLE
+
+Ethics and Difficult Colleagues
+
+QUESTION POOL
+
+(Select two to three questions randomly from this pool at the start of the session.
+Ask each selected question in turn, probing the candidate's answer before moving to the next.
+Do not reveal how many questions remain or which questions were selected.)
+
+"What are the four ethical principles of biomedical ethics?"
+"Should the N H S fund aesthetic surgery?"
+"What are the principles of the Data Protection Act?"
+"What are the Caldicott principles and who is the Caldicott guardian?"
+"You have a lazy colleague. What do you do?"
+"A consultant wants to compare two different techniques on one patient. What are the issues?"
+"What is the Francis Report?"
+"What is a doctor's duty of candour?"
+"A colleague has refused to treat a patient who insulted him. What do you do?"
+"A nurse has refused to follow your treatment plan. How do you handle this?"
+"A consultant asks you to add his son's name to a paper. His son is about to be on the S T 3 interview panel. What do you do?"
+"One of your colleagues comes to the operating list drunk. What do you do?"
+"A drunk consultant asks you not to mention anything about his condition. What do you do?"
+"A consultant made a mistake and asks you not to report it. What do you do?"
+"You have reported a problem to the clinical director. What is likely to happen?"
+"The clinical director did not respond to your report. What do you do next?"
+"A consultant shouts at you during the ward round in front of patients. How do you handle this?"
+"A consultant is not interested in teaching you. What do you do?"
+"A colleague is watching child pornography in the mess room. What do you do?"
+"A patient has reported an unnecessary breast examination by a colleague. What do you do?"
+"A junior colleague has been late for twenty minutes every day. How do you approach this?"
+"In the mess, a bag of what looks like cocaine dropped from your registrar's pocket. What do you do?"
+"A consultant is managing a patient against guidelines. What do you do?"
+"When is it acceptable to breach patient confidentiality?"
+"A specimen has been lost. What do you do?"
+"A patient is a sex offender. How does this affect your care?"
+
+GUIDANCE NOTES
+
+(Internal reference only. These help the interviewer probe effectively but are NOT rigid marking criteria.
+There is no single correct answer for most questions. Assess on structure, depth, examples, and reflective practice.
+Some questions have factual anchors noted below which strong candidates should demonstrate knowledge of.)
+
+Four Ethical Principles
+Key concepts: The four principles of biomedical ethics (Beauchamp and Childress) are: Beneficence (act in the patient's best interest), Non-maleficence (do no harm, considering the balance between benefit and risk), Autonomy (patient's right to choose, including refusing treatment), and Justice (fair distribution of resources, treating patients equitably). Ethical dilemmas arise when these principles conflict with each other. When a competent patient's autonomy conflicts with beneficence or non-maleficence, autonomy prevails.
+Factual anchors: Beneficence from Latin "bene" (good) + "facere" (to do). Non-maleficence from "male" (bad) + "facere" (to do). Autonomy from Greek "auto" (self) + "nomos" (law). A classic example of conflict: Jehovah's Witness refusing transfusion (autonomy vs beneficence and non-maleficence).
+Positive indicators: Names and explains all four principles. Can give clinical examples of each. Understands how conflicts between principles create ethical dilemmas. Applies principles to scenario questions rather than just listing them.
+Negative indicators: Cannot name all four. Does not understand how they interact. Cannot apply them to clinical scenarios.
+Example follow-up probes: "Give me an example where two principles conflict.", "Which principle takes precedence when a competent patient refuses treatment?", "How does justice apply to N H S resource allocation?"
+
+The S P I E S Framework for Difficult Colleague Scenarios
+Key concepts: The S P I E S framework provides a structured approach to difficult colleague questions: Seek information (understand the situation before acting), Patient safety (ensure patients are not at risk), Initiative (what can you do at your level before escalating), Escalate (involve appropriate senior colleagues when needed), Support (support the colleague and your team). Not every scenario requires the same response: common sense and proportionality are essential. A late junior needs a different approach from a drunk consultant.
+Positive indicators: Uses a structured approach. Considers patient safety first. Shows empathy and proportionality. Explains the how and why, not just the what. Does not jump straight to reporting without trying to understand the situation. Acknowledges the dilemmas involved.
+Negative indicators: Robotic or algorithmic answer without considering context. Jumps straight to "report to the clinical director" for every scenario. Does not consider patient safety. Shows no empathy or support for the colleague. Judgemental and unsupportive.
+Example follow-up probes: "Why did you choose to handle it that way?", "What if the colleague asks you not to say anything?", "What if your senior does not respond?"
+
+Drunk Consultant
+Key concepts: This is a serious scenario requiring immediate action. Objectives: ensure patient safety, ensure the consultant is safe, ensure seniors are aware for preventive action, support the consultant, and handle the situation sensitively. Steps: remove the consultant from the clinical area as quickly and discreetly as possible (speak to them, involve another trusted consultant, involve senior nurse, security as last resort). Once removed: ensure patients seen by the consultant are reviewed, ensure they get home safely, ensure they do not drive. Escalate to clinical director. Cover the consultant's duties. The consultant's behaviour shows lack of insight and poses ongoing risk, so reporting is essential even if they promise it will not happen again.
+Factual anchors: The G M C's Good Medical Practice requires doctors to raise concerns about patient safety. Failure to report could make you complicit. If the clinical director does not respond, escalate to the medical director, then the chief executive, then the G M C if necessary.
+Positive indicators: Patient safety is the immediate priority. Handles the situation sensitively and discreetly. Reports to appropriate senior. Supports the consultant while recognising the seriousness. Would not agree to keep it secret. Ensures patients are reviewed.
+Negative indicators: Does not prioritise patient safety. Agrees to keep it secret. Does not escalate. Handles it insensitively in front of patients. Does not ensure patients previously seen are reviewed.
+Example follow-up probes: "What if the consultant asks you to keep it between you?", "Once you have reported to the clinical director, what is likely to happen?", "What if the clinical director does nothing?"
+
+Late Junior Colleague
+Key concepts: This requires a more measured response than the drunk consultant. Consider possible reasons: personal problems, transport issues, attitude problem, or a temporary situation. Approach the colleague gently to understand the cause. Assess impact on patient safety (missing handovers, carrying crash bleep, rushing work). If temporary and minor, show flexibility and cover briefly while recommending they discuss with a senior. If persistent or affecting patient safety, formally involve a consultant or manager. A contract or transparent arrangement may help.
+Positive indicators: Seeks information before judging. Distinguishes between temporary and persistent problems. Shows flexibility and empathy. Considers patient safety impact. Involves seniors appropriately but does not over-escalate a minor issue. Offers support if personal problems are involved.
+Negative indicators: Immediately reports without trying to understand. No empathy or flexibility. Ignores the problem entirely. Does not consider patient safety implications.
+Example follow-up probes: "What if the colleague says it is a temporary transport problem?", "At what point would you escalate this?", "How would you approach the conversation?"
+
+Consultant Managing Against Guidelines
+Key concepts: Before jumping to conclusions, understand why the consultant is deviating. Evidence-based practice combines guidelines, clinical judgement, and patient values. The consultant may have valid reasons: the guideline may not suit the patient, they may be aware of newer evidence, or the patient may have refused recommended treatment. Approach educationally: "I am trying to understand the rationale for this approach." If still concerned after discussion, raise with another consultant. In an emergency where you cannot discuss, let the consultant proceed but document your disagreement in the patient notes. Never contradict a consultant in front of patients.
+Positive indicators: Seeks to understand before challenging. Recognises that guidelines are not absolute. Approaches the consultant respectfully and educationally. Knows when and how to escalate. Documents appropriately. Uses the situation as a learning opportunity.
+Negative indicators: Immediately confronts the consultant publicly. Blindly assumes the consultant is wrong. Does not seek to understand the reasoning. Does not document disagreement.
+Example follow-up probes: "What if the consultant cannot explain their reasoning?", "How would you handle this in an emergency?", "How would you document your concern?"
+
+Consultant Making Mistakes and Cover-Up
+Key concepts: If a consultant makes a mistake and asks you to alter notes, there is no justification for compliance. This is a serious patient safety and integrity issue. Steps: refuse to alter the notes and explain why it is unethical. Make a written record of the conversation. Ensure the patient is safe and the mistake has been addressed. Report to the clinical director immediately. If the clinical director does not act, escalate to the medical director, then the chief executive.
+Positive indicators: Refuses clearly and explains why. Documents the conversation. Ensures patient safety. Reports promptly to appropriate senior. Does not attempt to handle it alone.
+Negative indicators: Complies with the request. Does not report. Tries to handle it entirely by themselves. Does not document the conversation.
+Example follow-up probes: "What if this is a consultant you have a good relationship with?", "What legal protections exist for you in this situation?"
+
+Bullying Consultant
+Key concepts: Being shouted at in front of patients is unacceptable. However, the response should be proportionate and consider context (is this a pattern or a one-off from a normally pleasant consultant under stress?). Do not escalate in front of patients. After the ward round, speak to the consultant privately to understand the reason. If there were genuine concerns about your performance, discuss how to improve. Remind them that public criticism is never acceptable. Reassure the patient if needed. If this is a pattern, discuss with your educational supervisor, then the clinical director. If the bullying persists, follow your Trust's bullying and harassment policy (usually involving H R or the medical director).
+Positive indicators: Does not escalate in front of patients. Seeks a private conversation. Balances holding the consultant accountable with showing understanding. Knows the escalation pathway. Focuses on the patient impact as well. Shows resilience without being confrontational.
+Negative indicators: Retaliates in front of patients. Does nothing. Does not address the behaviour at all. Immediately goes to H R without trying to resolve locally first.
+Example follow-up probes: "What if this happens repeatedly?", "How would you reassure the patient?", "Where does bullying cross the line from poor behaviour to a formal complaint?"
+
+Confidentiality and When to Breach
+Key concepts: Patient confidentiality is central to the doctor-patient relationship and creates trust. Breaching is appropriate in specific circumstances: sharing with healthcare professionals involved in the patient's care (implied consent), clinical audit purposes (with patient awareness), disclosures required by law (notifiable diseases), court orders, disclosures to regulatory bodies (e.g. G M C), disclosure in the public interest to prevent serious harm or death (e.g. HIV patient knowingly infecting others, epileptic driver, serious abuse), and cases involving incompetent patients (children, adults who lack capacity).
+Factual anchors: Public Health Regulations require notification of communicable diseases. The G M C's Good Medical Practice provides guidance on confidentiality. Caldicott principles govern use of patient-identifiable information. The Caldicott Guardian in each N H S organisation oversees data protection. Whenever possible, discuss the breach with the patient beforehand and obtain their consent.
+Positive indicators: Names multiple legitimate reasons for breaching confidentiality. Understands the principle of involving the patient first. Knows about statutory obligations. Can apply the principles to specific scenarios. Understands the Caldicott principles.
+Negative indicators: Thinks confidentiality can never be breached. Does not know about statutory obligations. Cannot apply principles to scenarios. Unaware of Caldicott principles.
+Example follow-up probes: "A patient with HIV refuses to tell their partner. What do you do?", "An epileptic patient continues to drive against advice. What are your obligations?", "Who is the Caldicott Guardian in your Trust?"
+
+Francis Report
+Key concepts: The Francis Report (2013) was the result of the public inquiry into care failings at Mid-Staffordshire N H S Foundation Trust. It found widespread failures: too much focus on finances and targets rather than patient care, poor nursing standards, lack of accountability, defensiveness and secrecy, failure to listen to patients and families, and doctors failing to speak up. The report made 290 recommendations including: greater focus on compassion in nursing recruitment and training, patient safety as the number one priority, duty to speak up (with potential criminal prosecution for cover-ups), duty of candour on N H S boards, regulation of healthcare assistants, and increased patient involvement.
+Factual anchors: The inquiry was led by Robert Francis Q C. There were two inquiries: the first (2010) focused on failures within the hospital, the second (2013) examined why regulators did not intervene sooner. The Trust had achieved Foundation status during the period of failing care. The government's response included: duty of candour, new hospital inspection ratings, Chief Inspector of Hospitals, managers barred for failures, and nurses spending time as healthcare assistants. The duty of candour requires honesty with patients when things go wrong.
+Positive indicators: Knows the key findings and recommendations. Understands the significance for current practice. Can discuss the duty of candour. Links the Francis Report to their own practice and the importance of speaking up.
+Negative indicators: Has not heard of the Francis Report. Cannot discuss any findings or recommendations. Does not understand the duty of candour.
+Example follow-up probes: "How has the Francis Report changed practice?", "What is the duty of candour?", "How do you ensure you speak up when you see problems?"
+
+N H S Funding Aesthetic Surgery
+Key concepts: This requires balanced debate considering: beneficence (surgery can improve quality of life for congenital deformities), justice (limited N H S resources must be allocated fairly), the distinction between purely cosmetic and reconstructive or functional procedures, C C G guidelines and criteria for accessing surgery, psychosomatic impact on patients, training implications (less N H S cosmetic surgery means less training exposure for trainees).
+Positive indicators: Debates both sides thoughtfully. Distinguishes between cosmetic and reconstructive. Considers resource allocation. Discusses existing guidelines and their limitations. Considers patient welfare and quality of life. Mentions training implications.
+Negative indicators: One-sided answer. Does not consider resource allocation. Cannot distinguish cosmetic from reconstructive. No awareness of existing guidelines.
+Example follow-up probes: "Where do you draw the line between cosmetic and reconstructive?", "How should C C Gs decide who qualifies?", "What about the training implications?"
+
+Comparing Two Techniques on One Patient
+Key concepts: This raises serious ethical and governance issues. Unless part of a properly approved research study with informed consent, this is not acceptable practice. It potentially violates all four ethical principles and research governance requirements (ethics approval, patient information, consent to participate in research, R E C approval). The approach: have an informal conversation with the consultant, determine if this is part of an approved study, explain the ethical and governance concerns, offer to help set up a proper research protocol. If the consultant insists, refuse to participate and escalate to the clinical lead, then the medical director if needed.
+Positive indicators: Identifies the ethical and governance issues immediately. Approaches the consultant respectfully but firmly. Knows what is needed for legitimate research. Offers constructive alternatives. Prioritises patient safety. Would not comply with an unethical approach.
+Negative indicators: Does not see the problem. Complies without question. Does not know about research governance requirements.
+Example follow-up probes: "What if the consultant says it is just their clinical preference?", "What research governance steps would be needed to do this properly?"
+
+END OF TOPIC

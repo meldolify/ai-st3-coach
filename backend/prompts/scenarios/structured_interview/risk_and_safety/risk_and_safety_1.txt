@@ -1,0 +1,107 @@
+STRUCTURED INTERVIEW TOPIC
+
+TOPIC TITLE
+
+Risk and Patient Safety
+
+QUESTION POOL
+
+(Select two to three questions randomly from this pool at the start of the session.
+Ask each selected question in turn, probing the candidate's answer before moving to the next.
+Do not reveal how many questions remain or which questions were selected.)
+
+"What is risk management?"
+"What is the importance of risk management?"
+"What is the risk management process?"
+"Tell me about your experience in risk management or how you practise safe surgery."
+"What is a never event? What is a clinical incident? What is a near miss?"
+"What is Martha's rule?"
+"What are the five steps of safer surgery?"
+"How is risk managed in the N H S?"
+"Tell me about a serious clinical incident you were involved in."
+"What is the difference between a protocol, a guideline, and a checklist?"
+"What are the advantages and disadvantages of using protocols in surgery?"
+"What is the W H O surgical safety checklist? Does it improve patient safety?"
+"What are early warning symptoms?"
+"Do you think whistle blowing should be encouraged?"
+"What are surgical site infection bundles?"
+"What is a care bundle? How does it improve patient safety?"
+"How would you report a clinical incident?"
+"What is the C Q C? Is it important?"
+"Do you agree with revalidation?"
+"What is the difference between revalidation and appraisal?"
+"What do you know of the R C S good surgical practice guidelines?"
+"How is quality defined and maintained in the N H S?"
+"Tell me about a situation where you identified a patient safety issue."
+"How would you investigate a complaint?"
+"Why have healthcare associated infections become a problem?"
+"Tell me about a mistake you made and your action plan."
+"What are the Caldicott principles?"
+
+GUIDANCE NOTES
+
+(Internal reference only. These help the interviewer probe effectively but are NOT rigid marking criteria.
+There is no single correct answer for most questions. Assess on structure, depth, examples, and reflective practice.
+Some questions have factual anchors noted below which strong candidates should demonstrate knowledge of.)
+
+Risk Management Definition and Framework
+Key concepts: Risk management is one of the seven pillars of clinical governance. It involves having robust systems to understand, monitor, and minimise risks to patients and staff, and to learn from mistakes and near misses. It includes: complying with protocols (hand washing, sharps disposal, patient identification), learning from mistakes and near misses, reporting significant adverse events via critical incident forms, assessing risks by likelihood and severity, implementing processes to reduce risk, and promoting a blame-free culture to encourage reporting.
+Factual anchors: The risk management process involves: identify the risk, assess the risk (likelihood and severity), implement controls, monitor and review. Root Cause Analysis (R C A) is used to investigate serious incidents, often using the Five Whys technique.
+Positive indicators: Clear definition linking risk management to clinical governance. Gives practical examples from daily practice. Understands the importance of a blame-free reporting culture. Mentions both patient and staff safety.
+Negative indicators: Cannot define risk management. No personal examples. Does not understand the reporting culture. Focuses only on blame and punishment.
+Example follow-up probes: "How do you practise risk management in your daily work?", "What is Root Cause Analysis?", "Why is a blame-free culture important?"
+
+Never Events and Clinical Incidents
+Key concepts: Never events are serious clinical incidents that should not occur because preventable safety measures exist. A clinical incident is any unintended or unexpected event that caused or could have caused harm. A near miss is an incident that did not reach the patient but had the potential to cause harm. All three should be reported and investigated to prevent recurrence.
+Factual anchors: Surgical never events include: wrong site surgery, wrong implant or prosthesis, retained instruments or foreign bodies, wrong route administration of chemotherapy. The National Patient Safety Agency (now part of N H S England) defines and publishes the never events list. Martha's rule allows patients or families to escalate concerns about deteriorating condition directly if they feel they are not being heard by the clinical team.
+Positive indicators: Clearly distinguishes between never events, clinical incidents, and near misses. Can name specific surgical never events. Understands the importance of reporting all categories. Knows about Martha's rule and its purpose.
+Negative indicators: Cannot distinguish between the terms. Cannot name specific never events. Does not understand reporting requirements.
+Example follow-up probes: "Have you ever reported a clinical incident? What happened?", "How do you prevent never events in your daily practice?", "What is the purpose of Martha's rule?"
+
+Five Steps of Safer Surgery
+Key concepts: The five steps to safer surgery were introduced by the National Patient Safety Agency to reduce perioperative risk.
+Factual anchors: Step 1: Team briefing at the start of the day (discuss complex cases, patient order, equipment needs). Step 2: Sign in (correct patient details, allergies, V T E assessment, anaesthetic concerns). Step 3: Time out (recheck patient identity, confirm procedure, identify surgical, anaesthetic, or equipment concerns). Step 4: Sign out (confirm instrument count is correct at end of each procedure). Step 5: Debriefing (review the day, plan the next list).
+Positive indicators: Names all five steps in order. Explains the purpose of each. Describes how they implement this in their own practice. Understands that the checklist promotes team communication and shared situational awareness.
+Negative indicators: Cannot name the steps. Treats the checklist as a bureaucratic burden rather than a safety tool. Does not implement it consistently.
+Example follow-up probes: "What do you do during the team briefing?", "Has the checklist ever caught an error in your experience?", "Does the W H O checklist actually improve patient safety?"
+
+Protocols, Guidelines, and Checklists
+Key concepts: A protocol is a detailed, step-by-step set of instructions that must be followed (prescriptive). A guideline is a recommendation based on evidence that allows clinical judgement (advisory). A checklist is a verification tool to ensure steps are not missed. Each has advantages and disadvantages.
+Positive indicators: Clearly distinguishes between the three. Understands when each is appropriate. Can discuss pros (standardisation, reduced error, medicolegal protection) and cons (may not suit every patient, can stifle clinical judgement, may become outdated) of protocols in surgery.
+Negative indicators: Uses the terms interchangeably. Cannot discuss advantages and disadvantages. Does not understand the role of clinical judgement alongside protocols.
+Example follow-up probes: "When might you deviate from a protocol?", "How do you balance protocol adherence with individual patient needs?"
+
+Revalidation and Appraisal
+Key concepts: Revalidation ensures doctors' fitness to practise through regular appraisals and portfolio review. It was introduced in December 2012 following the Shipman scandal and the 5th Shipman Report. It has two strands: relicensing (based on G M C Good Medical Practice standards, annual appraisals, multi-source feedback) and recertification (specialist standards set by Royal Colleges). Every five years, a Responsible Officer makes a recommendation to the G M C based on appraisal evidence.
+Factual anchors: Revalidation started 3 December 2012. The portfolio must contain: personal details and scope of work, C P D record, quality improvement activities (audits, case reviews), significant events, colleague and patient feedback, and a statement on probity and health. Appraisal is the annual review process that feeds into revalidation. The 5th Shipman Report criticised the G M C for looking after doctors more than patients. The Better Doctors, Safer Patients report (2006) recommended the twin-track system.
+Positive indicators: Understands the difference between revalidation and appraisal. Knows the origins and purpose. Can discuss pros (formalises good practice, ensures compliance, provides focus) and cons (will not stop another Shipman, may become a once-a-year exercise, time-consuming, data availability issues). Balanced and reflective answer.
+Negative indicators: Confuses revalidation with appraisal. Does not know the background. One-sided answer without considering limitations.
+Example follow-up probes: "Would revalidation have prevented the Shipman case?", "What goes in your revalidation portfolio?", "Is revalidation worth the time investment?"
+
+The C Q C and Quality in the N H S
+Key concepts: The Care Quality Commission is the independent regulator of all health and social care services in England. It inspects hospitals, care homes, G P surgeries, and other care services against national standards of quality and safety. Quality in the N H S is measured across three domains: patient experience, safety, and clinical outcomes.
+Factual anchors: The C Q C replaced the Healthcare Commission following the Darzi review. It has powers for early intervention to combat infections and enforce standards. Quality standards are also maintained through N I C E guidelines, clinical audit, Payment by Results with quality incentives (C Q U I N), and the Friends and Family Test.
+Positive indicators: Knows the C Q C's role and powers. Understands how quality is defined and maintained at multiple levels. Can discuss the broader quality framework including N I C E, audit, and outcome measures.
+Negative indicators: Cannot describe the C Q C's role. No understanding of how quality is maintained in the N H S.
+Example follow-up probes: "How does the C Q C inspection process work?", "What happens when a Trust fails a C Q C inspection?"
+
+Whistleblowing and Reporting Culture
+Key concepts: Whistleblowing is the act of raising concerns about wrongdoing, patient safety issues, or malpractice within an organisation. It should be encouraged because it protects patients and improves care. However, whistleblowers historically face reprisal, which discourages reporting. The Francis Report emphasised the duty to speak up and recommended criminal sanctions for cover-ups. The duty of candour requires organisations and individuals to be honest when things go wrong.
+Positive indicators: Supports whistleblowing as essential for patient safety. Acknowledges the difficulties and risks for whistleblowers. Understands the duty of candour. Can discuss the Francis Report recommendations. Balanced view considering both encouragement and protection.
+Negative indicators: Dismisses whistleblowing or does not understand its importance. Does not know about the duty of candour. Unaware of protections for whistleblowers.
+Example follow-up probes: "Have you ever raised a concern? What happened?", "What protections exist for whistleblowers?", "What is the duty of candour?"
+
+Caldicott Principles
+Key concepts: The Caldicott principles govern the use and sharing of patient-identifiable information. They are overseen by a Caldicott Guardian in each N H S organisation.
+Factual anchors: The seven Caldicott principles are: (1) justify the purpose for using confidential information, (2) only use it when absolutely necessary, (3) use the minimum necessary, (4) access should be on a strict need-to-know basis, (5) everyone should understand their responsibilities, (6) comply with the law, (7) the duty to share can be as important as the duty to protect.
+Positive indicators: Can name or describe most of the principles. Understands their practical application. Knows the role of the Caldicott Guardian.
+Negative indicators: Has never heard of the Caldicott principles. Cannot explain how patient data should be handled.
+Example follow-up probes: "Who is the Caldicott Guardian in your Trust?", "Give an example of when you applied the Caldicott principles."
+
+Mistakes and Learning
+Key concepts: Candidates should be able to discuss a genuine mistake they have made, demonstrating honesty, insight, and a constructive response. A good answer includes: what happened, immediate actions taken to ensure patient safety, how the mistake was reported, what was learned, and what systems or personal changes were implemented to prevent recurrence.
+Positive indicators: Honest and reflective. Focuses on patient safety first. Reports the incident appropriately. Creates an action plan. Shows genuine learning and behaviour change.
+Negative indicators: Claims to have never made a mistake. Blames others. Does not report incidents. No learning or action plan.
+Example follow-up probes: "What did you learn from this?", "How did you report it?", "What would you do differently now?"
+
+END OF TOPIC
