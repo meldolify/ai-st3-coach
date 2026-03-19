@@ -1,0 +1,87 @@
+STRUCTURED INTERVIEW TOPIC
+
+TOPIC TITLE
+
+Consent and Capacity
+
+QUESTION POOL
+
+(Select two to three questions randomly from this pool at the start of the session.
+Ask each selected question in turn, probing the candidate's answer before moving to the next.
+Do not reveal how many questions remain or which questions were selected.)
+
+"What is the difference between competence and capacity?"
+"How would you consent a patient? What is informed consent?"
+"How would you assess if someone has capacity?"
+"What would you do if you are in doubt about a patient's capacity?"
+"Who should seek consent? Who has the responsibility?"
+"An elderly patient on your list for neck dissection is confused. What do you do?"
+"A Muslim child is listed for Biobrane application. How do you handle this?"
+"An elderly patient awaiting melanoma neck dissection cannot consent. The family refuses the operation because of the risks. What do you do?"
+"A fifteen year old is listed for pinnaplasty. The parents want her to have surgery but she refuses. What do you do?"
+"How do you handle consent in emergencies?"
+"How would you handle a blood transfusion in a Jehovah's Witness patient?"
+"Tell me about an example where you had to gain consent from a vulnerable patient."
+"What is Gillick competence and how does it apply to consenting children?"
+"What is the Mental Capacity Act 2005?"
+
+GUIDANCE NOTES
+
+(Internal reference only. These help the interviewer probe effectively but are NOT rigid marking criteria.
+There is no single correct answer for most questions. Assess on structure, depth, examples, and reflective practice.
+Some questions have factual anchors noted below which strong candidates should demonstrate knowledge of.)
+
+Competence versus Capacity
+Key concepts: Competence is a legal judgement: a competent patient understands the information and can make a rational decision. Capacity is a medical judgement: formally assessed by doctors, determining whether a patient can understand, retain, weigh, and communicate a decision. In practice, most doctors use the terms interchangeably because a judge would rule as competent someone with medical capacity. Both are situation-specific and time-specific (a patient may have capacity for one decision but not another).
+Factual anchors: The Mental Capacity Act 2005 governs capacity assessment in England and Wales. A patient has capacity if they can: (1) understand the information provided, (2) retain the information, (3) use and weigh the information, (4) communicate their decision. Every adult is presumed to have capacity unless proven otherwise. A seemingly irrational decision does not imply lack of capacity.
+Positive indicators: Clearly distinguishes the two concepts. Knows the four components of capacity assessment. Understands the presumption of capacity. Recognises that capacity is situation and time specific.
+Negative indicators: Uses the terms without understanding the distinction. Cannot describe how to assess capacity. Assumes elderly or confused patients automatically lack capacity.
+Example follow-up probes: "Can a patient with a mental illness have capacity?", "If a patient makes a decision you disagree with, does that mean they lack capacity?"
+
+Informed Consent Process
+Key concepts: Informed consent is the agreement by a patient to receive treatment in full consideration of the facts and implications. The process involves: establishing capacity, explaining diagnosis and prognosis, presenting all management options (including no treatment), describing risks, benefits, side effects, and success rates, using understandable language, checking understanding, allowing questions, and documenting the discussion. Verbal consent may suffice for simple procedures; written consent is needed for complex procedures, serious risks, procedures affecting employment or personal life, research, or where required by law.
+Factual anchors: The responsibility to seek consent rests with the doctor proposing the treatment or performing the procedure. It can be delegated only to someone suitably trained and qualified with appropriate knowledge. Consent should cover: diagnosis and prognosis, management options, risks and benefits (including serious rare risks and common minor risks), anaesthetic details, alternative treatments, right to second opinion, any experimental elements, and treatments the Trust cannot provide but which may benefit the patient elsewhere.
+Positive indicators: Describes a systematic process. Mentions checking understanding and using appropriate language. Understands who should seek consent and when delegation is appropriate. Discusses both verbal and written consent. Mentions providing information leaflets and visual aids where appropriate.
+Negative indicators: Treats consent as just getting a signature. Does not check understanding. Does not know when written consent is required. Unaware of the doctor's responsibility.
+Example follow-up probes: "When is verbal consent sufficient?", "What would you do if a patient could not understand English?", "Can a junior doctor consent a patient for a consultant's procedure?"
+
+Patients Who Lack Capacity
+Key concepts: When a patient lacks capacity, doctors must act in the patient's best interest. The patient should be involved as much as possible. Considerations include: advance directives, views of legal representatives (Lasting Powers of Attorney), views of people close to the patient, and whether the incapacity is temporary or permanent. Legally, relatives have only an advisory role. Where there is disagreement, seek conflict resolution through negotiation, mediation, more senior colleagues, or ultimately the courts.
+Factual anchors: Consent Form 4 is used for patients who lack capacity. An Independent Mental Capacity Advocate (I M C A) can be appointed for patients who lack capacity and have no one to speak for them. Advance directives (advance decisions to refuse treatment) must be in writing, signed, witnessed, and must explicitly state validity "even if life is at risk" for life-threatening situations. Lasting Powers of Attorney (L P A) allow a patient to appoint someone to make health and welfare decisions if they lose capacity.
+Positive indicators: Understands the best interest principle. Knows about advance directives, L P A, and I M C A. Involves the patient as much as possible. Seeks senior support and legal advice when appropriate. Uses Consent Form 4 appropriately.
+Negative indicators: Defers entirely to family without understanding their advisory role. Does not know about advance directives or I M C A. Does not seek senior input for difficult cases.
+Example follow-up probes: "What if the family disagrees with your clinical decision?", "What is the role of an I M C A?", "When would you seek a court decision?"
+
+Consent in Children and Gillick Competence
+Key concepts: Children aged 16 and over are presumed competent (treated as adults). Children under 16 can consent if deemed Gillick competent, meaning they can understand, retain, use, and weigh the information and its consequences. Even if a child is competent, encourage parental involvement, but parents cannot override consent given by a competent child. In England, Wales, and Northern Ireland, no minor can refuse treatment when consent has been given by someone with parental responsibility or by the court (this is different in Scotland, where children can refuse).
+Factual anchors: Gillick v West Norfolk and Wisbech Area Health Authority (1985): the House of Lords ruled that if a minor is competent, they can consent without parental veto. The ruling applies to all treatments, not just contraception. Fraser guidelines are specific to contraception and abortion, requiring satisfaction that the young person understands the advice, its moral and social implications, cannot be persuaded to involve parents, and that treatment is in their best interest. G M C guidance 0 to 18: in emergencies, doctors can provide treatment without consent to save life or prevent serious deterioration.
+Positive indicators: Clearly explains Gillick competence and distinguishes it from Fraser guidelines. Understands the difference between consent and refusal in minors. Knows the emergency provisions. Encourages parental involvement while respecting the child's autonomy.
+Negative indicators: Confuses Gillick competence with Fraser guidelines. Incorrectly states that children can refuse treatment in England. Does not know about emergency provisions.
+Example follow-up probes: "What would you do if a competent 15-year-old refuses a life-saving operation but the parents consent?", "What is the difference between Gillick competence and Fraser guidelines?"
+
+Consent Scenarios
+Key concepts: Scenario-based questions test the application of consent principles to complex situations. Key scenarios include:
+
+Confused elderly patient for surgery: Differentiate acute from chronic confusion (collateral history, compare M M E scores). If acutely confused, investigate the medical cause before proceeding. If chronically confused and the patient lacks capacity, use Consent Form 4, act in best interest, seek senior opinion, check for advance directives and L P A, involve family in advisory capacity, and consider legal advice for major surgery.
+
+Muslim child needing Biobrane (porcine-derived product): Explain the benefits in simple language, disclose the porcine content, provide information leaflets, note that religious leaders have generally agreed medical use does not breach religious obligations. If parents refuse, in an emergency the doctor can overrule under G M C 0 to 18 guidance to act in the child's best interest. Escalate to consultant and consider legal advice.
+
+Elderly patient for neck dissection whose family refuses: The family has an advisory role only. If the patient lacks capacity, act in best interest considering all views. Seek senior surgical opinion, legal advice, and potentially involve the courts if there is unresolvable disagreement.
+
+Fifteen-year-old refusing pinnaplasty (parents want it): Pinnaplasty is elective, not life-saving. Explore the child's reasons for refusal. Assess Gillick competence. An elective cosmetic procedure should never be forced on a competent refusing child. In England, parents can technically override refusal, but forcing an elective procedure would be ethically wrong and practically harmful. Defer the surgery and offer further discussion.
+
+Jehovah's Witness: A competent adult patient's autonomous decision to refuse blood must be respected even if it results in death (autonomy prevails). Discuss alternatives (cell salvage, tranexamic acid). If the patient is unconscious and no advance directive exists, act in best interest. For Jehovah's Witness children, act in the child's best interest, which may mean transfusion over parental objection with legal support.
+
+Consent in emergencies: If the patient is competent, seek verbal consent. If not competent and wishes cannot be determined, treat without consent, limited to what is immediately necessary to save life or prevent serious deterioration. Treatment should be the least restrictive of future choices. If the patient regains capacity, explain what was done.
+
+Positive indicators: Applies consent principles correctly to the scenario. Considers patient safety first. Seeks senior input and legal advice when appropriate. Balances autonomy, beneficence, and non-maleficence. Shows empathy and cultural sensitivity.
+Negative indicators: Unsafe approach (e.g. proceeding without consent when not an emergency). Does not involve seniors. Ignores cultural or religious considerations. Treats the family as decision-makers rather than advisors.
+Example follow-up probes: "What if the family threatens legal action?", "Would your approach change if this were an emergency?", "How do you balance respecting autonomy with acting in the patient's best interest?"
+
+Mental Capacity Act 2005
+Key concepts: The Act formalises best practice regarding patients who lack capacity and those who make decisions on their behalf. Key provisions: no one is assumed to lack capacity based on medical condition, age, appearance, or behaviour alone; all actions taken on behalf of incapable patients must be in their best interest; those providing care without consent are protected from liability if capacity was properly assessed and care is in best interest; restraint is only permitted to prevent harm; establishes Lasting Powers of Attorney, Court of Protection, and Independent Mental Capacity Advocates.
+Positive indicators: Knows the key provisions. Understands how it applies to daily practice. Can apply it to scenario questions. Understands the concept of best interest and how to determine it.
+Negative indicators: Has not heard of the Act. Cannot describe any of its provisions. Does not understand the best interest principle.
+Example follow-up probes: "How does the Mental Capacity Act protect patients?", "What is the Court of Protection?"
+
+END OF TOPIC

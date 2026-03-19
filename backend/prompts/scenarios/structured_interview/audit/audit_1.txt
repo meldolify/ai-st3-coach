@@ -1,0 +1,82 @@
+STRUCTURED INTERVIEW TOPIC
+
+TOPIC TITLE
+
+Audit
+
+QUESTION POOL
+
+(Select two to three questions randomly from this pool at the start of the session.
+Ask each selected question in turn, probing the candidate's answer before moving to the next.
+Do not reveal how many questions remain or which questions were selected.)
+
+"What is audit?"
+"Describe the audit cycle."
+"Tell me about an audit you have been involved in."
+"Tell me about a bad audit experience."
+"How would you complete an audit started by someone else?"
+"Why is audit important?"
+"What is the difference between audit and a quality improvement project?"
+"What is the difference between audit and research?"
+"What are the problems associated with audit?"
+"How can audit be improved?"
+"How would you encourage trainees to participate in audits?"
+"What are national audits and why are they important? Can you give examples?"
+"What is service evaluation?"
+"Why is service evaluation important?"
+"What is the difference between audit and service evaluation?"
+"What are the different types of audits?"
+
+GUIDANCE NOTES
+
+(Internal reference only. These help the interviewer probe effectively but are NOT rigid marking criteria.
+There is no single correct answer for most questions. Assess on structure, depth, examples, and reflective practice.
+Some questions have factual anchors noted below which strong candidates should demonstrate knowledge of.)
+
+Audit Definition and Cycle
+Key concepts: Audit is a quality improvement process that compares current clinical practice against explicit standards, implements change where needed, and re-audits to confirm improvement. It is one of the seven pillars of clinical governance and a G M C requirement for every doctor.
+Factual anchors: The audit cycle has six steps: (1) identify an issue or problem, (2) identify a standard (e.g. N I C E, Royal College guidelines), (3) collect data on current practice, (4) assess conformity with the standard, (5) implement change, (6) re-audit to close the loop. The most recent N I C E definition (2002) describes audit as "a quality improvement process that seeks to improve patient care and outcomes through systematic review of care against explicit criteria." Closing the loop (re-audit) is the weakest part of the process in practice.
+Positive indicators: Gives a clear definition in own words rather than reciting textbook definitions. Describes all six steps of the cycle without hesitation. Uses personal audit experience to illustrate points. Mentions closing the loop and its importance.
+Negative indicators: Cannot describe the audit cycle. Confuses audit with research. No personal examples. Treats audit as a box-ticking exercise without understanding its purpose.
+Example follow-up probes: "What standard did you use in your audit?", "Did you close the loop? If not, why not?", "What changes were implemented as a result?"
+
+Personal Audit Experience
+Key concepts: The candidate should demonstrate involvement beyond just data collection. Strong answers cover: why the audit was needed, the standard used, data collection method, results, proposals for change, implementation, re-audit, and their specific role. Presenting or publishing an audit adds value. Quality over quantity matters.
+Positive indicators: Describes a specific audit with clear structure following the audit cycle. Explains their role (initiated, designed proforma, collected data, analysed, presented). Discusses what they learned and how it changed practice. Mentions specialty-relevant audit. Can explain what made it interesting or challenging.
+Negative indicators: Vague description with no structure. Cannot explain their role. No reflection on what was learned. Chose audit for convenience rather than clinical importance.
+Example follow-up probes: "What was your specific role in this audit?", "Was it presented or published?", "Do you think this audit is sustainable? Why or why not?", "If you could do it again, what would you change?"
+
+Problems with Audit
+Key concepts: Problems fall into two categories: general problems and junior-doctor-specific problems. General: audits are local and may not transfer to other Trusts; often based on retrospective data with missing information; identifying solutions can be harder than identifying non-compliance; clinicians doing audits are inexperienced and have many other responsibilities; topics may not be chosen by priority. Junior-doctor problems: frequent rotation means they leave before re-audit; audits may not be completed or taken to implementation; juniors may lack authority to drive change; tendency to choose easy, short audits that are box-ticking exercises.
+Factual anchors: Re-audit (closing the loop) is the most commonly missed step. Change implementation can face resistance from team members. Cross-boundary audits (e.g. between I C U and ward) are particularly challenging.
+Positive indicators: Identifies multiple problems from both categories. Uses personal experience to illustrate. Suggests solutions for the problems identified. Acknowledges that audit can demotivate staff if poorly handled.
+Negative indicators: Only identifies one or two superficial problems. No personal reflection. Cannot suggest improvements.
+Example follow-up probes: "How would you address the problem of junior doctor rotation?", "Have you experienced any of these problems yourself?", "How can audit sustainability be improved?"
+
+Audit versus Research
+Key concepts: Audit compares practice against existing standards; research creates new knowledge to establish new standards. Audit is practice-driven and cyclical; research is theory-driven and a one-off process. Audit results are local; research results can be generalised. Research requires ethical approval; audit rarely does. Research involves hypothesis testing and may involve experimentation; audit is purely observational data-gathering. Research requires strict patient selection and validated sample sizes; audit does not.
+Factual anchors: Research establishes best practice; audit checks best practice is being applied. Many audits on C Vs are actually pseudo-research projects. Research requires ethical approval from a Research Ethics Committee. Audit ethical issues mainly revolve around confidentiality and data collection.
+Positive indicators: Clearly articulates the fundamental difference. Gives examples of each. Can identify when a project crosses from audit into research territory. Uses own experience to illustrate.
+Negative indicators: Confuses the two or cannot clearly distinguish them. Cannot give examples. Does not mention ethical approval differences.
+Example follow-up probes: "Can you give me an example of a project that was labelled an audit but was actually research?", "When would an audit require ethical approval?"
+
+Service Evaluation
+Key concepts: Service evaluation measures efficiency and effectiveness of a service without comparing to a gold standard (otherwise it would be audit). Usually initiated by managers or department leads. May lead to service redesign and reconfiguration. Does not require ethical approval. Should be carried out alongside audit to ensure clinical standards are maintained during any service changes.
+Positive indicators: Clearly distinguishes service evaluation from audit. Understands the complementary relationship between the two. Can give practical examples.
+Negative indicators: Cannot distinguish from audit. No understanding of when service evaluation is appropriate.
+Example follow-up probes: "Can you give an example of a service evaluation?", "Should service evaluation projects be carried out alongside audits? Why?"
+
+National Audits
+Key concepts: National audits allow benchmarking across multiple centres and provide data for national standards. They have greater statistical power and can drive policy change.
+Factual anchors: National audits in plastic surgery include: the Burns National Database, the C R A N E audit (Cleft Registry and Audit Network for cleft lip and palate), D A H N O (Data for Head and Neck Oncology), and the National Mastectomy and Breast Reconstruction Audit.
+Positive indicators: Names specific national audits relevant to plastic surgery. Understands their purpose and how they differ from local audits. Can discuss involvement or awareness of national audit data.
+Negative indicators: Cannot name any national audits. Does not understand their purpose.
+Example follow-up probes: "Have you been involved in any national audits?", "How do national audit findings influence local practice?"
+
+Improving Audit and Trainee Participation
+Key concepts: Improving audit requires senior buy-in, departmental strategy for prioritising topics, better support from audit departments, ensuring re-audit happens through handover processes. Encouraging trainees: make it part of induction, provide mentorship, choose clinically meaningful topics, involve trainees in the full cycle, present results at departmental meetings, value quality over quantity.
+Positive indicators: Practical suggestions rooted in experience. Addresses both systemic and individual-level improvements. Understands the importance of sustainability measures (e.g. incorporating into departmental handbook, senior consultant involvement, M D T integration).
+Negative indicators: Vague or unrealistic suggestions. No consideration of barriers to implementation.
+Example follow-up probes: "How would you ensure an audit you started continues after you rotate?", "What makes an audit sustainable?"
+
+END OF TOPIC
