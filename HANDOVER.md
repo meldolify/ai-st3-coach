@@ -24,33 +24,29 @@ backend at **wss://api.reviva.live** (Render). Subscriptions via Stripe
 
 Pre-launch. Mostly working.
 
-### Who this doc is for and what's expected
+### Context for whoever's reading this
 
-You're picking this up as a freelance developer, likely your first or
-second professional codebase. **That's fine.** The product owner is not
-expecting you to refactor everything or rewrite the voice pipeline. The
-realistic scope is:
+The product owner is non-technical. The codebase was built with
+AI-assisted coding (Claude Code) over the course of several months and
+now needs a real engineer to take over polish, optimisation, ongoing
+maintenance, and launch-day bugs. You'll have more coding context than
+the owner does — assume technical decisions are yours to make and that
+"check with the owner" applies to product/UX/scope, not to architecture
+or implementation choices.
 
-- **Fix bugs as users report them at launch.** This is the main job.
-- **Build the missing public pages** — privacy policy, terms of service,
-  contact, help, FAQ. These are mostly content + simple React components.
-- **Add basic monitoring** so you can actually see what's breaking in
-  production (Sentry — install instructions in §7).
-- **Small polish**: copy tweaks, layout fixes, mobile bugs.
+Two consequences worth flagging up front:
 
-There are deeper improvements possible (see §8) but **don't attempt them
-before talking to the owner**. They involve subtle parts of the realtime
-audio pipeline and are easy to break in ways that aren't obvious until a
-user complains. When in doubt, ask.
+- **The codebase has the fingerprints of AI-assisted development.** Some
+  conventions are unusually detailed (see `CLAUDE.md`), some patterns
+  are over-engineered, others under-engineered. Treat existing code as
+  a starting point, not gospel.
+- **`CLAUDE.md` is dense reference material**, written for AI agents
+  picking up tasks without prior context. It's accurate as of the last
+  edit but it's not a tutorial — read it for "where does X live" rather
+  than "how does this work".
 
-The codebase is bigger than it needs to be in places (one 1,200-line file,
-in particular). Don't feel pressure to clean it up. Make the change you
-need, leave the rest alone. The product owner can decide together with
-you what's worth refactoring later.
-
-**Read order for your first week:** this file → `CLAUDE.md` (denser
-reference) → poke around `frontend-react/src/` for the page you're working
-on. You don't need to understand the whole backend to be productive.
+§7 is the practical backlog. §8 is deeper perf work to think about
+later. Everything else is reference.
 
 ---
 
@@ -252,143 +248,90 @@ tiers provide longer retention. There is no manual backup automation.
 
 ---
 
-## 7. The backlog — what to pick up, and in what order
+## 7. Backlog
 
-Honest list of what's wrong, fragile, or unfinished. Each item is tagged
-with a difficulty so you can pick what fits.
+### Launch blockers
 
-**Tags:**
-- 🟢 **easy** — straightforward, doable on day 1-2.
-- 🟡 **moderate** — needs some thought; ask the owner if you get stuck.
-- 🔴 **deep** — touches a subtle part of the codebase. **Don't start
-  these without talking to the owner first.** They're listed here so you
-  know they exist, not so you tackle them solo.
+1. **Privacy policy, terms of service, contact, help, FAQ pages.**
+   Footer links to all five are dead. UK consumer launch with paid subs
+   and audio recording needs GDPR-compliant T&Cs and a privacy notice.
+   [Termly](https://termly.io/) or [Iubenda](https://www.iubenda.com/)
+   for the legal text; React routes pattern off
+   `Profile/ProfilePage.jsx`.
 
-### Launch blockers (do these first)
-
-1. 🟢 **Build the privacy policy, terms of service, contact, help, and FAQ
-   pages.** Footer links to `/privacy`, `/terms`, `/contact`, `/help`,
-   `/faq` are dead. UK consumer launch with paid subscriptions and audio
-   recording legally requires a GDPR-compliant privacy notice and T&Cs.
-   Don't write these from scratch — use a generator like
-   [Termly](https://termly.io/) or [Iubenda](https://www.iubenda.com/),
-   or copy a template from a similar UK SaaS, then have the product owner
-   review. The pages themselves are simple React components — copy the
-   shape of an existing page like `Profile/ProfilePage.jsx` and add the
-   route in `App.jsx`. **Don't launch without these.**
-
-2. 🟢 **Add Sentry for error tracking.** Right now if something breaks in
-   production, nobody finds out until a user emails. Sentry's free tier
-   covers >5,000 events/month — plenty for this scale. Two installs:
-   - Frontend: follow Sentry's React quickstart, then call
-     `Sentry.captureException` from
-     [`ErrorBoundary.jsx`](./frontend-react/src/components/ErrorBoundary.jsx)
-     in the existing `componentDidCatch`.
-   - Backend: follow Sentry's Node quickstart, then call
-     `Sentry.captureException` from the existing `unhandledRejection` and
-     `uncaughtException` handlers near the top of
+2. **Sentry — frontend and backend.** No remote error tracking; prod
+   issues only surface via user email.
+   - Frontend: hook into the existing `componentDidCatch` in
+     [`ErrorBoundary.jsx`](./frontend-react/src/components/ErrorBoundary.jsx).
+   - Backend: hook into the existing `unhandledRejection` /
+     `uncaughtException` handlers at the top of
      [`server.js`](./backend/server.js).
 
-3. 🟡 **Set up uptime monitoring.** Free tools:
-   [UptimeRobot](https://uptimerobot.com/) or
-   [Better Stack](https://betterstack.com/). Have it ping
-   `https://api.reviva.live/health` every minute and email you if it
-   fails. Takes ~10 minutes to set up.
+3. **Uptime ping** on `https://api.reviva.live/health` —
+   UptimeRobot / Better Stack, free tier.
 
-4. 🟡 **WebSocket reconnection.** If a user's connection drops
-   mid-interview (mobile signal blip, server restart), they currently
-   have to leave the page and come back. The simplest fix is **not**
-   automatic reconnection — it's showing a clear UI banner that says
-   "Connection lost — click to reconnect" and starting a fresh session
-   when they click. The relevant file is
-   [`frontend-react/src/hooks/useSession.js`](./frontend-react/src/hooks/useSession.js)
-   — the `ws.onclose` handler. **If you've never worked with WebSockets,
-   ask the owner before starting** — there are some subtleties around
-   not double-counting an interview session.
+4. **WebSocket reconnect UX.** `ws.onclose` in
+   [`useSession.js`](./frontend-react/src/hooks/useSession.js) just
+   sets `isConnected=false` — user has to navigate away and back. Server
+   discards session state on disconnect, so a "Reconnect?" banner that
+   starts a fresh session is probably the right shape; full session
+   resume would be a bigger change.
 
-### Soon after launch (when you have breathing room)
+### Soon after launch
 
-5. 🟢 **Save the Supabase database schema to git.** In Supabase Dashboard
-   → Database → look for an export option, or use
-   `pg_dump --schema-only --no-owner > db/schema.sql` if you have psql
-   access. Commit the file. This makes future schema changes reviewable.
-6. 🟢 **The Jest test suite emits a warning** about an unclosed test
-   handle (`Force exiting Jest`). It's harmless but should be cleaned up
-   — likely a missing `await` or `afterAll` in
+5. **Commit the Supabase schema** (`pg_dump --schema-only --no-owner`)
+   so future schema diffs are reviewable.
+6. **Jest open-handle warning** (`Force exiting Jest`) — likely an
+   unclosed WS in
    [`websocket-integration.test.js`](./backend/__tests__/websocket-integration.test.js).
-7. 🟢 **The landing page bundle is large** (`LandingPage` chunk is
-   656 KB, mostly Three.js + GSAP). First-paint on slow mobile is slow.
-   Add `loading="lazy"` to images, and ask the owner if it's OK to
-   dynamic-import (lazy-load) the Three.js scene only after the page
-   is interactive. Mid-difficulty change.
-8. 🟢 **Add a `LICENSE` file.** Pick whatever the owner prefers (likely
-   "All Rights Reserved" since this is commercial).
+7. **`LandingPage` chunk is 656 KB** (Three.js + GSAP). Lazy-load the
+   scene; `loading="lazy"` on images.
+8. **`LICENSE` file.**
 
-### Things to know exist but don't tackle solo
+### Larger items
 
-These are real issues, but they touch the realtime audio pipeline or
-payment flow and are easy to break subtly. **Discuss with the owner
-before attempting any of these:**
+9. **Stripe webhook idempotency** —
+   `customer.subscription.updated`/`deleted` aren't deduped on
+   `event.id`. Low real risk at current scale.
+10. **Structured logging** — 145 `console.*` calls; swap for pino or
+    similar.
+11. **Split `backend/server.js`** (1,231 lines, mixed concerns). The
+    per-session promise lock is the subtle bit.
+12. **Realtime pipeline tuning.** See §8.
 
-9. 🔴 **Stripe webhook isn't strictly idempotent.** If Stripe retries an
-   event, `customer.subscription.updated` / `deleted` can race. Real
-   risk is low at current scale but worth fixing eventually. Path:
-   dedupe by `event.id`. Code:
-   [`backend/server.js` Stripe webhook handler](./backend/server.js).
-10. 🔴 **Replace `console.*` logs with structured logging** (e.g. `pino`).
-    The backend has 145 ad-hoc `console.log` calls. Big cleanup;
-    coordinate timing with the owner.
-11. 🔴 **`backend/server.js` is 1,231 lines** mixing WebSocket handlers,
-    Express routes, and middleware. A split into `src/websocket/`,
-    `src/routes/`, `src/middleware/` would help maintainability —
-    **but the per-session promise lock inside is subtle and easy to
-    break**. Don't refactor without the owner's go-ahead and a
-    careful test pass.
-12. 🔴 **TTS pipeline tuning** — see §8 for details. Skip this section
-    until you've been working on the codebase for at least a few weeks
-    and the basic launch issues are stable.
+### Known incomplete
 
-### Half-finished / known incomplete
-
-13. 🟡 **Full mock-exam flow is half-built.** There are TODOs in
+13. **Full mock-exam flow.** TODOs in
     [`ScenarioFlow.jsx`](./frontend-react/src/pages/Scenarios/ScenarioFlow.jsx)
-    around line 94 and 170. Right now the button is clickable but goes
-    nowhere useful. The product owner can decide whether you finish the
-    flow or hide the button. **Ask before doing either.**
-14. ℹ️ **Most scenario prompt content is placeholder.** Only
+    near lines 94 / 170 — entry exists but the flow falls through.
+14. **Most scenario prompts are placeholder.** Only
     `clinical/emergencies/necrotising_fasciitis` and
-    `clinical/microsurgery/replantation` have full content; the other
-    ~163 use a template marked with `[AUTHOR NOTE — DELETE THIS ENTIRE
-    SECTION]`. **This is the product owner's job, not yours.** They're
-    written by a clinical expert. If a user reports an interview "feels
-    weird" or "the AI doesn't know about X", that's why — it's the
-    template, not a bug.
+    `clinical/microsurgery/replantation` are authored; the other ~163
+    use a `[AUTHOR NOTE — DELETE THIS ENTIRE SECTION]` template. Owner
+    authors content — "the AI doesn't know about X" reports on
+    placeholder scenarios aren't code bugs.
 
-### Already done in the handover commit (don't worry about these)
+### Already done in the handover commit
 
-- Two committed credentials removed from tracking; `.gitignore` updated.
-  (Owner is rotating the keys themselves.)
-- 13 stale top-level docs deleted.
-- Orphaned vanilla-JS source dirs removed.
-- Backend `.env.example` corrected.
-- `JSON.parse` in `useSession.js` is now wrapped in try/catch.
-- Feedback failure no longer shows a falsely-positive "score 3" — modal
-  now shows "Unavailable / —".
+- Two committed credentials removed from tracking; `.gitignore` updated
+  (keys are rotated).
+- 13 stale top-level docs deleted; orphaned vanilla-JS dirs removed.
+- `backend/.env.example` corrected.
+- `JSON.parse` in `useSession.js` wrapped in try/catch.
+- Feedback failure now returns `score: null` and renders as "Unavailable"
+  instead of a falsely-positive "3".
 
 ---
 
-## 8. (Advanced) LLM-latency tuning — read later, not now
+## 8. Realtime pipeline tuning
 
-Skip this section on day 1. Come back to it after you've been in the
-codebase for a few weeks and feel comfortable. Then, only with the
-owner's agreement, you can start experimenting.
+The metric that matters is "user finishes speaking → first word of AI
+reply audible". Architecture is in decent shape (parallel TTS,
+sentence-level streaming); the gains are in constants and serialisation.
 
-**The thing to optimise** is "user finishes speaking → first word of AI
-reply audible". The architecture is already good (parallel TTS,
-sentence-level streaming); the issue is constants and serialisation.
-
-**Diagnostic logs already exist.** Watch the Render log stream during a
-test interview and you'll see:
+`server.js` already emits `[PERF]` lines per turn — capture a baseline
+from a few sample interviews on the Render log stream before changing
+anything:
 
 ```
 [VAD] Speech ended for <id>, <ms>ms audio, VAD held <ms>ms
@@ -399,55 +342,54 @@ test interview and you'll see:
 [PERF] Pipeline total: <ms>ms
 ```
 
-Before changing anything, capture these numbers from 5-10 sample
-interviews so you can prove a tuning change actually helped.
+Levers, roughly in order of expected impact:
 
-**Levers, in rough order of expected impact:**
-
-1. **Whisper STT is sequential** — one round trip after each user turn
-   (~600-1500 ms). Could be parallelised by transcribing in the
-   background while the user is still speaking. Hardest one.
+1. **Whisper STT is sequential** — one round trip after speech end
+   (~600-1500 ms). Parallelising it (background transcription while the
+   user still speaks) is the biggest win and the hardest change. The
+   `onIncrementalAudio` path already exists for >15 s utterances; could
+   be generalised.
 2. **Global TTS queue** — `GeminiTTSService._queue` serialises all TTS
-   across all sessions. Under any concurrency this becomes a bottleneck.
-3. **Sentence buffer threshold** — first TTS chunk waits for ≥20 chars
-   ending in a sentence boundary. Lowering this lets the AI start
-   speaking sooner.
-4. **Gemini TTS retry policy** — currently waits 500 ms before falling
-   back to Cloud TTS on first error. Skip the wait; fall over faster.
-5. **Long TTS style prompts** — each call prepends ~120-180 tokens of
-   "director's notes" (in `backend/src/config/index.js`). Trimming saves
-   bill time.
-6. **`ScriptProcessorNode`** is deprecated; AudioWorklet is the modern
-   replacement. Doesn't change latency much, but improves stability on
-   backgrounded tabs.
-7. **AudioPlayer** uses HTML5 `Audio` + Blob URLs with a 10-second
-   magic-number timeout. Web Audio API would be more accurate. Minor.
+   across all sessions. Under any concurrency this is a hard bottleneck.
+   Move per-session or drop entirely.
+3. **`SentenceBuffer` threshold** — first TTS chunk waits for ≥20 chars
+   ending at a sentence boundary
+   ([`server.js:149`](./backend/server.js#L149)). Lower → starts
+   speaking sooner, slightly choppier prosody. Worth A/B-ing.
+4. **Gemini TTS retry policy** —
+   [`server.js:121-128`](./backend/server.js#L121-L128) waits 500 ms
+   before failing over to Cloud TTS. Fail over immediately on the first
+   failure; only retry on specific transient codes.
+5. **TTS style prompts** —
+   [`config/index.js:62-71`](./backend/src/config/index.js#L62-L71)
+   prepends ~120-180 tokens of "director's notes" to every TTS call.
+   Trim or cache.
+6. **`ScriptProcessorNode` → AudioWorklet**
+   ([`AudioStreamer.js:40`](./frontend-react/src/lib/AudioStreamer.js#L40)).
+   Stability win on backgrounded tabs more than a latency win.
+7. **AudioPlayer** uses HTML5 `Audio` + Blob URL with a 10-second
+   magic-number timeout
+   ([`AudioPlayer.js:79-84`](./frontend-react/src/lib/AudioPlayer.js#L79-L84)).
+   Web Audio API decode is more accurate.
 
-Each of these is a 1-3 day investigation + tuning task on its own. Don't
-batch them — change one thing, measure, decide.
+Change one thing at a time and measure against the baseline.
 
 ---
 
-## 9. When something breaks in production — where to look
+## 9. Production debugging map
 
-Until Sentry is set up (§7 #2), you find out about problems when users
-email. Here's where to look in each case:
+Until Sentry is wired up:
 
-| Problem | Where to look |
+| Symptom | First place to look |
 |---|---|
-| Site down / slow | Render dashboard → Logs (tail in real-time). Visit `https://api.reviva.live/health` — should return `{"status":"ok"}`. |
-| Frontend won't load | Vercel dashboard → Deployments → most recent build's logs. |
-| User can't log in | Supabase dashboard → Logs → Auth. Filter by user email. |
-| Subscription / payment problem | Stripe dashboard → Events (search by customer email). Then cross-reference Render logs for lines starting with `[STRIPE WEBHOOK]` or `[STRIPE]`. |
-| User says "the AI never speaks" | Open Render logs and search for the user's `userId` (it appears in the `[CLIENT]` connection line). Look for these lines in order: `[VAD] Speech ended` (mic detection worked?) → `[TIMING] Whisper STT` (transcription worked?) → `[PERF] LLM first token` (AI started responding?) → `[PERF] First chunk sent` (audio left the server?). Whichever line is missing tells you which stage broke. |
-| API rate limit | Look for `[<model>] Rate limited` lines in logs. After 3 retries the user gets a `RATE_LIMITED` error. Usually means we're hitting Gemini's free-tier quota — talk to the owner about upgrading. |
-| Supabase keep-alive workflow failing | GitHub Actions → "Supabase Keep-Alive". If it fails for >7 days, Supabase auto-pauses the database on the free tier. |
-| Prompt Lab change didn't deploy | Backend auto-deploy is **off** intentionally. After saving a Prompt Lab edit, manually trigger a deploy in the Render dashboard. |
-
-**If you can't tell what's wrong**, take a screenshot of the user's
-report, copy the relevant Render log lines, and message the owner. Don't
-guess at fixes for the realtime audio pipeline — you'll likely make it
-worse.
+| Site slow / down | Render → Logs (live tail). `/health` returns `{"status":"ok"}` if the backend's up. |
+| Frontend won't load | Vercel → Deployments → recent build logs. |
+| Auth failing | Supabase → Logs → Auth, filter by email. |
+| Payment / subscription issue | Stripe → Events (by customer email), cross-reference Render logs for `[STRIPE WEBHOOK]` / `[STRIPE]`. |
+| "AI never speaks" | Render logs filtered to the user's `userId` (in the `[CLIENT]` connection line). Trace `[VAD] Speech ended` → `[TIMING] Whisper STT` → `[PERF] LLM first token` → `[PERF] First chunk sent`. The missing line is the broken stage. |
+| API rate-limited | `[<model>] Rate limited` lines; 3 retries before the client gets `RATE_LIMITED`. Usually free-tier quota. |
+| Supabase keep-alive failing | GitHub Actions → "Supabase Keep-Alive". >7 days of failure auto-pauses the free-tier project. |
+| Prompt Lab edit didn't deploy | Backend auto-deploy is intentionally off. Manual deploy via Render after a Prompt Lab save. |
 
 ---
 
@@ -475,112 +417,72 @@ The "Force exiting Jest" warning is a known issue (see §7 P1 #9).
 
 ---
 
-## 11. Accounts you'll need access to
+## 11. External accounts
 
-The product owner will invite you to each of these. Most are obvious; a
-few notes:
+The owner invites you to each:
 
-| Account | What you'll do there | Access level |
-|---|---|---|
-| GitHub repo | Read code, push fixes | Collaborator |
-| Vercel | Frontend deploys + logs | Member |
-| Render | Backend deploys + logs | Member of the team |
-| Supabase | Database, auth logs | Developer role is enough |
-| Stripe | Debug payment issues | Read role is enough |
-| Sentry (once set up, §7 #2) | See production errors | Member |
-| Google Cloud (`st3-coach-v4`) | Only if needed; ask first | Viewer |
-| OpenAI / Google AI Studio | API keys are shared via env vars on Render — you generally don't need direct console access | — |
+| Account | Purpose |
+|---|---|
+| GitHub repo | Code |
+| Vercel | Frontend deploys + logs |
+| Render | Backend deploys + logs |
+| Supabase | Database + auth logs |
+| Stripe | Payment debugging |
+| Google Cloud (`st3-coach-v4`) | Service account for Cloud TTS fallback |
+| OpenAI | Whisper API key (configured via Render env) |
+| Google AI Studio | Gemini API key (configured via Render env) |
+| Sentry | After setup, §7 #2 |
 
-**You don't need owner-level access on anything.** If a tool's UI says
-you don't have permission to do something, ask — don't escalate
-yourself.
-
-### About the credentials in git history
-
-Two credentials were previously committed to this repo and are in
-`git log` history. The owner has rotated both, which makes the leaked
-values useless. You don't need to do anything about this.
+Two credentials were previously committed to git history; both rotated,
+the leaked values are inert.
 
 ---
 
-## 12. House rules — small things that matter
+## 12. Repo conventions
 
-A few quirks of this codebase. Skim once, refer back when you hit them.
+Quirks worth knowing:
 
-- **Commit straight to `main` and push.** No feature branches, no PRs.
-  Once you're settled in, you and the owner can decide if you'd prefer
-  a PR-based workflow. Either is fine.
-- **`git pull --rebase` runs automatically before every push.** This is
-  set up in a Husky hook. The reason: the production server can make its
-  own commits via the Prompt Lab tool, and we need to pull those before
-  pushing yours. If a push fails because of this, just rebase and retry
-  — **don't use `--no-verify` to skip hooks**.
-- **Image paths must be lowercase.** `/images/foo/bar.png`, never
-  `/Images/Foo/Bar.PNG`. Vercel runs on Linux which is case-sensitive
-  and we got bitten by this once.
-- **Render's auto-deploy is intentionally off** for the backend (because
-  Prompt Lab edits would otherwise trigger a redeploy on every save).
-  Backend deploys are manual via the Render dashboard. The frontend
-  *does* auto-deploy from `main` on Vercel.
-- **Three files share two configs.** `FREE_TIER_SCENARIOS` (which
-  scenarios are free vs paid) and `SPECIALTY_MAP` (which specialty each
-  scenario belongs to) live in three places that must agree:
-  `backend/src/config/index.js`, `frontend-react/src/config.js`, and
-  `frontend/config.js`. There's a test (`config-sync.test.js`) that
-  fails if they drift. If you ever add a free scenario, edit all three.
-- **Most "scenarios" are placeholder content.** See §7 #14 — not
-  your problem.
-- **The Prompt Lab** at `/prompt-lab` is a tool for the product owner to
-  edit AI prompts without redeploying. Don't worry about it unless they
-  ask. It auto-commits its changes to GitHub.
+- **Commit straight to `main`.** No PRs in current workflow; introduce
+  one if you'd prefer.
+- **Husky pre-push runs `git pull --rebase`.** The production server
+  occasionally commits via the Prompt Lab tool, so a rebase-before-push
+  is required. Don't bypass with `--no-verify`.
+- **Render backend auto-deploy is off** (otherwise every Prompt Lab
+  save would trigger a redeploy). Manual deploy via Render. Vercel
+  frontend auto-deploys from `main`.
+- **Lowercase image paths** — Linux/Vercel case sensitivity bit us once.
+- **Three-file config sync.** `FREE_TIER_SCENARIOS` and `SPECIALTY_MAP`
+  live in `backend/src/config/index.js`,
+  `frontend-react/src/config.js`, and `frontend/config.js`.
+  `config-sync.test.js` enforces parity. The third copy
+  (`frontend/config.js`) is vestigial post-React-migration but the test
+  still references it — delete the test if you delete the file.
+- **Prompt Lab** at `/prompt-lab` is the owner's prompt-editing tool;
+  auto-commits to GitHub on save.
 
 ---
 
-## 13. If you get stuck
+## 13. Code map
 
-**Asking is faster than guessing.** This codebase has a few subtle parts
-(the WebSocket session lock, the audio pipeline timing, the Stripe
-webhook). Spending 30 minutes confused is normal; spending half a day
-silently confused is not.
+Top-of-mind files when you hit a related task:
 
-When you ask the owner, include:
-- What you were trying to do
-- What you tried
-- What happened (error message, screenshot, log lines)
-- Your current best guess at the cause (it's fine to be wrong)
+**Frontend** (`frontend-react/src/`):
+- `App.jsx` — routes
+- `pages/` — page components
+- `components/` — shared UI
+- `hooks/useSession.js` — the interview WebSocket orchestrator
+- `hooks/useAuth.js` — Supabase session hydration
+- `stores/` — Zustand stores
+- `lib/AudioStreamer.js`, `lib/AudioPlayer.js`, `lib/OrbVisualizer.js` —
+  realtime audio plumbing
 
-Things you don't need to know on day 1:
-- The Server VAD internals (Silero ONNX, frame buffering, redemption
-  frames)
-- The per-session promise lock in `backend/server.js`
-- Why Gemini TTS is queued globally vs per-session
-- Modular prompt assembly internals
-
-Things worth understanding in your first week:
-- How auth flows from browser → backend (read `useAuth.js` then the
-  WebSocket auth check at the top of `backend/server.js`)
-- How a single user turn flows through the system (read §3, then run an
-  interview locally with the dev tools open)
-- The deploy process for both frontend (auto) and backend (manual)
-- How to read Render logs
-
-### Files worth knowing about
-
-You don't need to read all of these. Open them when a task points you
-there.
-
-**Frontend (mostly where you'll work):**
-- [`frontend-react/src/App.jsx`](./frontend-react/src/App.jsx) — routes
-- [`frontend-react/src/components/`](./frontend-react/src/components/) — UI components
-- [`frontend-react/src/pages/`](./frontend-react/src/pages/) — top-level pages
-- [`frontend-react/src/hooks/useSession.js`](./frontend-react/src/hooks/useSession.js) — the interview WebSocket orchestrator (touch carefully)
-- [`frontend-react/src/hooks/useAuth.js`](./frontend-react/src/hooks/useAuth.js) — session restore
-- [`frontend-react/src/stores/`](./frontend-react/src/stores/) — Zustand stores
-
-**Backend (touch with more care):**
-- [`backend/server.js`](./backend/server.js) — the big file. WebSocket + Express in one place.
-- [`backend/src/config/index.js`](./backend/src/config/index.js) — env vars, `FREE_TIER_SCENARIOS`, `SPECIALTY_MAP`
-- [`backend/src/services/`](./backend/src/services/) — LLM, TTS, VAD wrappers
-- [`backend/prompts/`](./backend/prompts/) — the AI prompts (owner's territory)
-
-Welcome aboard.
+**Backend** (`backend/`):
+- `server.js` — WebSocket + Express, all in one
+- `src/config/index.js` — env, `FREE_TIER_SCENARIOS`, `SPECIALTY_MAP`
+- `src/services/` — `OpenAIService`, `GeminiTTSService`, `TTSService`,
+  `ServerVAD`, `PromptLabService`
+- `src/utils/` — prompt assembly, audio helpers, sentence/feedback
+  buffers
+- `src/routes/promptLab.js` — Prompt Lab REST endpoints
+- `prompts/` — AI prompt content (owner-authored)
+- `__tests__/` — Jest suite
