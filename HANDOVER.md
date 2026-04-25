@@ -22,9 +22,35 @@ Live at **<https://www.reviva.live>** (Vercel) with the realtime voice
 backend at **wss://api.reviva.live** (Render). Subscriptions via Stripe
 (£14.99/month, £99.99/year). Auth + subscription state in Supabase.
 
-Pre-launch. Mostly working. The contractor scope is **maintenance,
-launch-day bug fixes, observability/reliability hardening, and tuning the
-voice-pipeline latency**.
+Pre-launch. Mostly working.
+
+### Who this doc is for and what's expected
+
+You're picking this up as a freelance developer, likely your first or
+second professional codebase. **That's fine.** The product owner is not
+expecting you to refactor everything or rewrite the voice pipeline. The
+realistic scope is:
+
+- **Fix bugs as users report them at launch.** This is the main job.
+- **Build the missing public pages** — privacy policy, terms of service,
+  contact, help, FAQ. These are mostly content + simple React components.
+- **Add basic monitoring** so you can actually see what's breaking in
+  production (Sentry — install instructions in §7).
+- **Small polish**: copy tweaks, layout fixes, mobile bugs.
+
+There are deeper improvements possible (see §8) but **don't attempt them
+before talking to the owner**. They involve subtle parts of the realtime
+audio pipeline and are easy to break in ways that aren't obvious until a
+user complains. When in doubt, ask.
+
+The codebase is bigger than it needs to be in places (one 1,200-line file,
+in particular). Don't feel pressure to clean it up. Make the change you
+need, leave the rest alone. The product owner can decide together with
+you what's worth refactoring later.
+
+**Read order for your first week:** this file → `CLAUDE.md` (denser
+reference) → poke around `frontend-react/src/` for the page you're working
+on. You don't need to understand the whole backend to be productive.
 
 ---
 
@@ -93,10 +119,11 @@ this; no horizontal scaling story exists yet (see §7 P2).
 6. Browser plays each chunk through `AudioPlayer` (queued).
 7. After the final chunk: `ai_response_end`, mic re-opens.
 
-`backend/server.js` contains the WS connection handler, the per-session
-`processingLock` promise chain, and all REST routes. It's 1,231 lines
-across five concerns and is the single biggest refactor candidate
-(see §7 P3).
+`backend/server.js` is one big file (~1,200 lines) that contains the
+WebSocket connection handler, the per-session message router, and all
+the Express routes (Stripe, health check, etc.) in one place. It's the
+biggest file in the codebase and it works — don't feel pressure to
+split it up unless the owner asks.
 
 **Three files must stay in sync** for `FREE_TIER_SCENARIOS` and
 `SPECIALTY_MAP`:
@@ -225,134 +252,143 @@ tiers provide longer retention. There is no manual backup automation.
 
 ---
 
-## 7. Where the bodies are buried (and the prioritised backlog)
+## 7. The backlog — what to pick up, and in what order
 
-Honest list of what's wrong, fragile, or unfinished. Ordered roughly P0
-(must-fix before / at launch) → P3 (cleanup, eventually).
+Honest list of what's wrong, fragile, or unfinished. Each item is tagged
+with a difficulty so you can pick what fits.
 
-### P0 — launch blockers
+**Tags:**
+- 🟢 **easy** — straightforward, doable on day 1-2.
+- 🟡 **moderate** — needs some thought; ask the owner if you get stuck.
+- 🔴 **deep** — touches a subtle part of the codebase. **Don't start
+  these without talking to the owner first.** They're listed here so you
+  know they exist, not so you tackle them solo.
 
-1. **Privacy policy and terms of service pages don't exist.** Footer links
-   to `/privacy` and `/terms` are dead. UK consumer launch with paid
-   subscriptions and audio recording requires a GDPR-compliant privacy
-   notice and T&Cs. **Do not launch without these.**
-2. **No remote error tracking.** 145 unstructured `console.*` calls in the
-   backend; the frontend `ErrorBoundary` only logs to the browser console.
-   At launch you'll have zero visibility into prod errors. **Add Sentry**
-   (free tier covers >5k events/month) on both Node and React. Wire it
-   into `process.on('unhandledRejection'...)` in `server.js` and the
-   `componentDidCatch` of `frontend-react/src/components/ErrorBoundary.jsx`.
-3. **WebSocket has no client-side reconnection.** If the connection drops
-   mid-interview (mobile signal blip, Render cold-start, server restart),
-   the user has to navigate away and back. Add exponential-backoff
-   reconnect in `frontend-react/src/hooks/useSession.js` (the `ws.onclose`
-   handler currently just flips `setIsConnected(false)`). Add a UI banner
-   showing reconnect status. Server-side: the session is destroyed on
-   close (`sessions.delete`), so reconnection requires re-establishing the
-   session — the easiest path is "show user a 'Reconnect?' button that
-   restarts from scratch".
+### Launch blockers (do these first)
 
-### P1 — reliability and observability
+1. 🟢 **Build the privacy policy, terms of service, contact, help, and FAQ
+   pages.** Footer links to `/privacy`, `/terms`, `/contact`, `/help`,
+   `/faq` are dead. UK consumer launch with paid subscriptions and audio
+   recording legally requires a GDPR-compliant privacy notice and T&Cs.
+   Don't write these from scratch — use a generator like
+   [Termly](https://termly.io/) or [Iubenda](https://www.iubenda.com/),
+   or copy a template from a similar UK SaaS, then have the product owner
+   review. The pages themselves are simple React components — copy the
+   shape of an existing page like `Profile/ProfilePage.jsx` and add the
+   route in `App.jsx`. **Don't launch without these.**
 
-4. **Stripe webhook isn't idempotent.** Stripe retries the same `event.id`
-   on transient failure. `checkout.session.completed` is safe (uses
-   `upsert` keyed on `user_id`), but `customer.subscription.updated` and
-   `customer.subscription.deleted` can race if delivered out of order.
-   Dedupe by `event.id` (small Postgres table or in-memory LRU).
-   See [`backend/server.js:1058-1117`](./backend/server.js).
-5. **Structured logging.** Replace `console.*` with `pino` (Render parses
-   JSON logs). Add log levels, scrub PII (transcripts contain patient
-   demographics in scenario text — keep them out of logs).
-6. **Database schema not checked in.** See §6 — first task: dump and
-   commit.
-7. **Frontend `JSON.parse` was unguarded** — fixed in this handover commit.
-8. **Feedback failure fallback used `score: 3`** which silently presented
-   an error as a "Good" review — fixed in this handover commit; modal now
-   shows "Unavailable / —".
-9. **Jest reports `Force exiting Jest: --detectOpenHandles?`.** A test is
-   leaving an unclosed handle (likely
-   [`websocket-integration.test.js`](./backend/__tests__/websocket-integration.test.js)).
-   Find and clean up.
+2. 🟢 **Add Sentry for error tracking.** Right now if something breaks in
+   production, nobody finds out until a user emails. Sentry's free tier
+   covers >5,000 events/month — plenty for this scale. Two installs:
+   - Frontend: follow Sentry's React quickstart, then call
+     `Sentry.captureException` from
+     [`ErrorBoundary.jsx`](./frontend-react/src/components/ErrorBoundary.jsx)
+     in the existing `componentDidCatch`.
+   - Backend: follow Sentry's Node quickstart, then call
+     `Sentry.captureException` from the existing `unhandledRejection` and
+     `uncaughtException` handlers near the top of
+     [`server.js`](./backend/server.js).
 
-### P2 — performance and architecture
+3. 🟡 **Set up uptime monitoring.** Free tools:
+   [UptimeRobot](https://uptimerobot.com/) or
+   [Better Stack](https://betterstack.com/). Have it ping
+   `https://api.reviva.live/health` every minute and email you if it
+   fails. Takes ~10 minutes to set up.
 
-10. **`backend/server.js` is 1,231 lines** mixing five concerns (WS auth,
-    session lifecycle, message router, Express middleware, Stripe routes).
-    Split into `src/websocket/`, `src/routes/stripe.js`,
-    `src/middleware/`. The per-session `_processingLock` promise chain is
-    the subtlest bit — read it carefully before refactoring.
-11. **`GeminiTTSService._queue` serialises all TTS calls globally**
-    ([line 13](./backend/src/services/GeminiTTSService.js#L13)). Under any
-    multi-user concurrency this turns parallel TTS into serial. The voice
-    is set per call so the comment's "voice consistency" rationale is
-    suspect. Either move serialisation per-session or remove it entirely.
-12. **Deprecated `ScriptProcessorNode` for mic capture**
-    ([`AudioStreamer.js:40`](./frontend-react/src/lib/AudioStreamer.js#L40)).
-    Functionally fine today but Chrome has been threatening removal for
-    years and on backgrounded tabs it stutters. Migrate to `AudioWorklet`.
-13. **`AudioPlayer` uses HTML5 `Audio` + Blob URL with a 10-second
-    magic-number safety timeout**
-    ([`AudioPlayer.js:79-84`](./frontend-react/src/lib/AudioPlayer.js#L79-L84)).
-    The estimated-duration math `bytes / 4000` is wrong for both Gemini
-    WAV (48 KB/s) and Cloud MP3 (variable). Web Audio API decoding gives
-    exact duration and lower start-of-playback latency.
-14. **Bundle: `LandingPage` chunk is 656 KB** (Three.js + GSAP). Lazy-load
-    the 3D scene only after the LCP hero is painted, or dynamic-import
-    the Three.js bits. Largest single perf win on landing.
-15. **Test coverage on production paths is uneven**:
-    [`promptLab.js`](./backend/src/routes/promptLab.js) 35.6%,
-    [`GeminiTTSService.js`](./backend/src/services/GeminiTTSService.js) 39%.
-    Add behavioural tests (not mock-wiring).
+4. 🟡 **WebSocket reconnection.** If a user's connection drops
+   mid-interview (mobile signal blip, server restart), they currently
+   have to leave the page and come back. The simplest fix is **not**
+   automatic reconnection — it's showing a clear UI banner that says
+   "Connection lost — click to reconnect" and starting a fresh session
+   when they click. The relevant file is
+   [`frontend-react/src/hooks/useSession.js`](./frontend-react/src/hooks/useSession.js)
+   — the `ws.onclose` handler. **If you've never worked with WebSockets,
+   ask the owner before starting** — there are some subtleties around
+   not double-counting an interview session.
 
-### P3 — feature completion and polish
+### Soon after launch (when you have breathing room)
 
-16. **Full-mock-exam flow is half-built.** TODOs at
-    [`ScenarioFlow.jsx:94, :170`](./frontend-react/src/pages/Scenarios/ScenarioFlow.jsx).
-    The button is reachable but the flow falls through to the regular
-    interview path. Either finish the flow (results page,
-    multi-station timer, summary) or hide the entry point.
-17. **~163 of 165 scenario prompt files use the placeholder template.**
-    Only `clinical/emergencies/necrotising_fasciitis` and
-    `clinical/microsurgery/replantation` have fully-authored content. The
-    template uses `[AUTHOR NOTE — DELETE THIS ENTIRE SECTION]` blocks with
-    nec-fasc examples. Author content lives in
-    `backend/prompts/scenarios/{domain}/{subcategory}/{topic}/{topic}_1.txt`.
-    `TestScriptGenerator.hasRealContent()` correctly refuses to generate
-    test scripts for placeholder content.
-18. **Dead links** in the footer: `/contact`, `/help`, `/faq`, `/terms`,
-    `/privacy`. Build the routes.
-19. **No license file.**
-20. **TTS style prompts are long** (~120-180 tokens prepended to every TTS
-    call). See [`config/index.js:62-71`](./backend/src/config/index.js).
-    Trim or cache.
-21. **Idle session cleanup is on a 5-min sweep**
-    ([`server.js:283-299`](./backend/server.js#L283-L299)). Fine for
-    current scale, will need eviction policy under load.
+5. 🟢 **Save the Supabase database schema to git.** In Supabase Dashboard
+   → Database → look for an export option, or use
+   `pg_dump --schema-only --no-owner > db/schema.sql` if you have psql
+   access. Commit the file. This makes future schema changes reviewable.
+6. 🟢 **The Jest test suite emits a warning** about an unclosed test
+   handle (`Force exiting Jest`). It's harmless but should be cleaned up
+   — likely a missing `await` or `afterAll` in
+   [`websocket-integration.test.js`](./backend/__tests__/websocket-integration.test.js).
+7. 🟢 **The landing page bundle is large** (`LandingPage` chunk is
+   656 KB, mostly Three.js + GSAP). First-paint on slow mobile is slow.
+   Add `loading="lazy"` to images, and ask the owner if it's OK to
+   dynamic-import (lazy-load) the Three.js scene only after the page
+   is interactive. Mid-difficulty change.
+8. 🟢 **Add a `LICENSE` file.** Pick whatever the owner prefers (likely
+   "All Rights Reserved" since this is commercial).
 
-### Already addressed in this handover commit
+### Things to know exist but don't tackle solo
 
-- Two committed credentials (`google-tts-key.json`, `client_secret_*.json`)
-  removed from tracking; `.gitignore` updated. **You must still rotate
-  both** — see §11.
-- 13 stale top-level docs deleted (`README.md`, `DEPLOYMENT.md`,
-  `INTEGRATION_GUIDE.md`, `ARCHITECTURE_AND_DATABASE.md` etc.).
-- `backend/server.js.backup` and orphaned vanilla-JS dirs (`frontend/js/`,
-  `frontend/css/`, `frontend/styles/`, `frontend/tools/`) removed.
-- 4 tracked dev-screenshot PNGs removed from repo root.
-- `backend/.env.example` rewritten — was wrong about which keys are
-  required.
-- `JSON.parse` guard in `useSession.js`.
-- Feedback-failure fallback no longer returns a falsely-positive `score: 3`.
+These are real issues, but they touch the realtime audio pipeline or
+payment flow and are easy to break subtly. **Discuss with the owner
+before attempting any of these:**
+
+9. 🔴 **Stripe webhook isn't strictly idempotent.** If Stripe retries an
+   event, `customer.subscription.updated` / `deleted` can race. Real
+   risk is low at current scale but worth fixing eventually. Path:
+   dedupe by `event.id`. Code:
+   [`backend/server.js` Stripe webhook handler](./backend/server.js).
+10. 🔴 **Replace `console.*` logs with structured logging** (e.g. `pino`).
+    The backend has 145 ad-hoc `console.log` calls. Big cleanup;
+    coordinate timing with the owner.
+11. 🔴 **`backend/server.js` is 1,231 lines** mixing WebSocket handlers,
+    Express routes, and middleware. A split into `src/websocket/`,
+    `src/routes/`, `src/middleware/` would help maintainability —
+    **but the per-session promise lock inside is subtle and easy to
+    break**. Don't refactor without the owner's go-ahead and a
+    careful test pass.
+12. 🔴 **TTS pipeline tuning** — see §8 for details. Skip this section
+    until you've been working on the codebase for at least a few weeks
+    and the basic launch issues are stable.
+
+### Half-finished / known incomplete
+
+13. 🟡 **Full mock-exam flow is half-built.** There are TODOs in
+    [`ScenarioFlow.jsx`](./frontend-react/src/pages/Scenarios/ScenarioFlow.jsx)
+    around line 94 and 170. Right now the button is clickable but goes
+    nowhere useful. The product owner can decide whether you finish the
+    flow or hide the button. **Ask before doing either.**
+14. ℹ️ **Most scenario prompt content is placeholder.** Only
+    `clinical/emergencies/necrotising_fasciitis` and
+    `clinical/microsurgery/replantation` have full content; the other
+    ~163 use a template marked with `[AUTHOR NOTE — DELETE THIS ENTIRE
+    SECTION]`. **This is the product owner's job, not yours.** They're
+    written by a clinical expert. If a user reports an interview "feels
+    weird" or "the AI doesn't know about X", that's why — it's the
+    template, not a bug.
+
+### Already done in the handover commit (don't worry about these)
+
+- Two committed credentials removed from tracking; `.gitignore` updated.
+  (Owner is rotating the keys themselves.)
+- 13 stale top-level docs deleted.
+- Orphaned vanilla-JS source dirs removed.
+- Backend `.env.example` corrected.
+- `JSON.parse` in `useSession.js` is now wrapped in try/catch.
+- Feedback failure no longer shows a falsely-positive "score 3" — modal
+  now shows "Unavailable / —".
 
 ---
 
-## 8. The LLM-latency tuning playbook
+## 8. (Advanced) LLM-latency tuning — read later, not now
 
-The user-perceived latency you're trying to reduce is **utterance end →
-first word audible** (call it `T_first`). The architecture is good; the
-constants and serialisation are what to tune.
+Skip this section on day 1. Come back to it after you've been in the
+codebase for a few weeks and feel comfortable. Then, only with the
+owner's agreement, you can start experimenting.
 
-**You already have instrumentation.** `server.js` emits these per turn:
+**The thing to optimise** is "user finishes speaking → first word of AI
+reply audible". The architecture is already good (parallel TTS,
+sentence-level streaming); the issue is constants and serialisation.
+
+**Diagnostic logs already exist.** Watch the Render log stream during a
+test interview and you'll see:
 
 ```
 [VAD] Speech ended for <id>, <ms>ms audio, VAD held <ms>ms
@@ -360,68 +396,58 @@ constants and serialisation are what to tune.
 [PERF] LLM first token: <ms>ms
 [PERF] First sentence ready: <ms>ms
 [PERF] First chunk sent: <ms>ms
-[PERF] Pipeline total: <ms>ms, <N> chunks
+[PERF] Pipeline total: <ms>ms
 ```
 
-Capture these from a couple of sample sessions on Render's log stream
-before touching anything. Then attack the levers in this order:
+Before changing anything, capture these numbers from 5-10 sample
+interviews so you can prove a tuning change actually helped.
 
-1. **VAD `redemptionFrames`** — currently 6 frames (≈576 ms) of trailing
-   silence before declaring speech-end
-   ([`ServerVAD.js:50`](./backend/src/services/ServerVAD.js#L50)). Lower
-   = faster turn-around but more false speech-ends mid-sentence. The
-   adaptive `_getRedemptionFrames` already widens for longer utterances;
-   consider tightening the short-utterance branch to 4-5 frames.
-2. **Whisper STT round trip** — sequential, one round trip after speech
-   end. Two options: (a) start Whisper on the partial audio at the
-   speech-still-going boundary (already exists for >15 s utterances via
-   `onIncrementalAudio`; extend to all utterances by exporting at
-   ~1.5 s intervals), or (b) trial Gemini's native audio input to skip
-   Whisper entirely.
-3. **`SentenceBuffer` minSentenceLength = 20 chars**
-   ([`server.js:149`](./backend/server.js#L149)). The first TTS chunk
-   can't fire until the LLM emits ≥20 chars terminated by a sentence
-   boundary. Lowering to 10-12 starts speech sooner with marginal prosody
-   cost. Worth A/B-ing.
-4. **Gemini TTS retry policy**: today, on the first failure we wait
-   500 ms and retry, then fall through to Cloud TTS
-   ([`server.js:121-128`](./backend/server.js#L121-L128)). On a flaky day
-   that's a guaranteed extra 500 ms. Switch to "fail over immediately on
-   first failure, only retry on specific transient codes (5xx)".
-5. **`GeminiTTSService._queue` global serialisation** (P2 #11). Under
-   concurrency this is a hard bottleneck.
-6. **TTS style prompt length** (P3 #20). Each TTS call prepends ~120-180
-   tokens of director's notes — billed time.
-7. **`AudioPlayer`** — switch to Web Audio API decoding (P2 #13). Removes
-   the 10-second safety timeout and gets a few hundred ms back at
-   playback start.
+**Levers, in rough order of expected impact:**
 
-The biggest wins, in order of expected impact: **(2) parallel/streaming
-Whisper**, **(11) drop the global TTS queue**, **(3) lower sentence
-threshold**.
+1. **Whisper STT is sequential** — one round trip after each user turn
+   (~600-1500 ms). Could be parallelised by transcribing in the
+   background while the user is still speaking. Hardest one.
+2. **Global TTS queue** — `GeminiTTSService._queue` serialises all TTS
+   across all sessions. Under any concurrency this becomes a bottleneck.
+3. **Sentence buffer threshold** — first TTS chunk waits for ≥20 chars
+   ending in a sentence boundary. Lowering this lets the AI start
+   speaking sooner.
+4. **Gemini TTS retry policy** — currently waits 500 ms before falling
+   back to Cloud TTS on first error. Skip the wait; fall over faster.
+5. **Long TTS style prompts** — each call prepends ~120-180 tokens of
+   "director's notes" (in `backend/src/config/index.js`). Trimming saves
+   bill time.
+6. **`ScriptProcessorNode`** is deprecated; AudioWorklet is the modern
+   replacement. Doesn't change latency much, but improves stability on
+   backgrounded tabs.
+7. **AudioPlayer** uses HTML5 `Audio` + Blob URLs with a 10-second
+   magic-number timeout. Web Audio API would be more accurate. Minor.
+
+Each of these is a 1-3 day investigation + tuning task on its own. Don't
+batch them — change one thing, measure, decide.
 
 ---
 
-## 9. Debugging a production incident today
+## 9. When something breaks in production — where to look
 
-You don't have Sentry, log aggregation, or uptime monitoring (yet — see
-§7 P0/P1). Here's what you do have:
+Until Sentry is set up (§7 #2), you find out about problems when users
+email. Here's where to look in each case:
 
-| Symptom | Where to look |
+| Problem | Where to look |
 |---|---|
-| Backend down / slow | Render dashboard → Logs (live tail). `/health` returns 200 if up. |
-| Frontend down | Vercel dashboard → Deployments → most recent → "View build logs" |
-| Auth broken | Supabase dashboard → Logs → Auth |
-| Subscription / payment issue | Stripe dashboard → Events (search by customer email or subscription ID); cross-reference Render logs for `[STRIPE WEBHOOK]` and `[STRIPE]` lines |
-| User reports "AI never speaks" | Render logs around the user's session — search for their `userId` (in the connection's `[CLIENT]` line). Look for `[VAD] Speech ended` (did VAD fire?) → `[TIMING] Whisper STT` (did Whisper return?) → `[PERF] LLM first token` (did Gemini stream?) → `[PERF] First chunk sent`. Whichever line is missing tells you which stage broke. |
-| Rate limits | OpenAI / Gemini error 429 surfaces as `[<model>] Rate limited` with retry attempts. After 3 retries the client receives `code: 'RATE_LIMITED'`. |
-| Supabase keep-alive failed | GitHub Actions → "Supabase Keep-Alive" workflow. If broken for >7 days, free-tier Supabase auto-pauses the project. |
-| Prompt Lab edits not deploying | Production Render auto-deploy is **off**. Manual deploy via Render dashboard after a Prompt Lab save. Or check that the pre-push `git pull --rebase` hook ran (it merges in production-side commits). |
+| Site down / slow | Render dashboard → Logs (tail in real-time). Visit `https://api.reviva.live/health` — should return `{"status":"ok"}`. |
+| Frontend won't load | Vercel dashboard → Deployments → most recent build's logs. |
+| User can't log in | Supabase dashboard → Logs → Auth. Filter by user email. |
+| Subscription / payment problem | Stripe dashboard → Events (search by customer email). Then cross-reference Render logs for lines starting with `[STRIPE WEBHOOK]` or `[STRIPE]`. |
+| User says "the AI never speaks" | Open Render logs and search for the user's `userId` (it appears in the `[CLIENT]` connection line). Look for these lines in order: `[VAD] Speech ended` (mic detection worked?) → `[TIMING] Whisper STT` (transcription worked?) → `[PERF] LLM first token` (AI started responding?) → `[PERF] First chunk sent` (audio left the server?). Whichever line is missing tells you which stage broke. |
+| API rate limit | Look for `[<model>] Rate limited` lines in logs. After 3 retries the user gets a `RATE_LIMITED` error. Usually means we're hitting Gemini's free-tier quota — talk to the owner about upgrading. |
+| Supabase keep-alive workflow failing | GitHub Actions → "Supabase Keep-Alive". If it fails for >7 days, Supabase auto-pauses the database on the free tier. |
+| Prompt Lab change didn't deploy | Backend auto-deploy is **off** intentionally. After saving a Prompt Lab edit, manually trigger a deploy in the Render dashboard. |
 
-A short, recommended P0 incident-response improvement: install
-[**Better Stack**](https://betterstack.com/) or
-[**UptimeRobot**](https://uptimerobot.com/) (both free) to ping
-`https://api.reviva.live/health` every minute. Free Sentry covers the rest.
+**If you can't tell what's wrong**, take a screenshot of the user's
+report, copy the relevant Render log lines, and message the owner. Don't
+guess at fixes for the realtime audio pipeline — you'll likely make it
+worse.
 
 ---
 
@@ -449,94 +475,112 @@ The "Force exiting Jest" warning is a known issue (see §7 P1 #9).
 
 ---
 
-## 11. Account and credential transfer
+## 11. Accounts you'll need access to
 
-**You (the owner) must rotate these immediately**, regardless of whether
-the contractor starts today. The two credentials below were committed to
-the repo's git history and must be assumed compromised:
+The product owner will invite you to each of these. Most are obvious; a
+few notes:
 
-1. **Google Cloud service-account key** for project `st3-coach-v4` —
-   GCP Console → IAM & Admin → Service Accounts → (the TTS service
-   account) → Keys → "Add key" (new), then delete the old key. Update
-   `GOOGLE_APPLICATION_CREDENTIALS_JSON` env var on Render with the new
-   JSON.
-2. **Google OAuth web-client secret** (`GOCSPX-…`, used for Supabase
-   Google sign-in) — GCP Console → APIs & Services → Credentials →
-   (the OAuth 2.0 client) → "Reset Secret". Then in Supabase Dashboard
-   → Authentication → Providers → Google, paste the new secret.
+| Account | What you'll do there | Access level |
+|---|---|---|
+| GitHub repo | Read code, push fixes | Collaborator |
+| Vercel | Frontend deploys + logs | Member |
+| Render | Backend deploys + logs | Member of the team |
+| Supabase | Database, auth logs | Developer role is enough |
+| Stripe | Debug payment issues | Read role is enough |
+| Sentry (once set up, §7 #2) | See production errors | Member |
+| Google Cloud (`st3-coach-v4`) | Only if needed; ask first | Viewer |
+| OpenAI / Google AI Studio | API keys are shared via env vars on Render — you generally don't need direct console access | — |
 
-The repository's working tree no longer has the files (they're in
-`.gitignore` now), but **they remain accessible via `git log`/`git show`**
-until you purge history with `git filter-repo` and force-push. Once you
-rotate the keys, the leaked values are inert, so leaving them in history
-is acceptable risk if force-pushing isn't desirable.
+**You don't need owner-level access on anything.** If a tool's UI says
+you don't have permission to do something, ask — don't escalate
+yourself.
 
-**Accounts the contractor will need access to** (decide read-only vs admin
-per account):
+### About the credentials in git history
 
-| Account | Owner action |
-|---|---|
-| Vercel | Add contractor as Member (free tier supports this) |
-| Render | Add to team in dashboard |
-| Supabase | Add as project member (Developer role for read-only-ish) |
-| Stripe | Add as user; **Read** role is enough for debugging |
-| Google Cloud (project `st3-coach-v4`) | IAM → Add: Viewer + Cloud TTS API User (avoid Owner) |
-| OpenAI | Org → Add member (Reader) |
-| Google AI Studio (Gemini) | Personal API key — share key, not account |
-| GitHub repo | Add as collaborator |
-| Domain registrar (`reviva.live`) | Decide whether to transfer or grant DNS-only access |
-| Cloudflare/DNS provider (if separate) | Add as member with DNS edit |
-
-There is no formal long-term ownership-transfer plan documented; create
-one when the contractor relationship moves beyond "maintenance".
+Two credentials were previously committed to this repo and are in
+`git log` history. The owner has rotated both, which makes the leaked
+values useless. You don't need to do anything about this.
 
 ---
 
-## 12. Conventions worth preserving
+## 12. House rules — small things that matter
 
-- **Three-file `FREE_TIER_SCENARIOS` and `SPECIALTY_MAP` sync** — see §3.
-  Adding a new free-tier scenario or specialty means editing all three
-  files. The `config-sync.test.js` test will fail if you forget.
-- **Modular prompt assembly.** The production prompt for any session is
-  built from three files (`core_<domain>_interview.txt`,
-  `<difficulty>_interview_personality.txt`,
-  `scenarios/<topicFolder>/<topic>_1.txt`) by
-  [`promptAssembler.buildInterviewPrompt`](./backend/src/utils/promptAssembler.js).
-  Don't reintroduce monolithic per-difficulty prompt files — the legacy
-  ones in `backend/prompts/_legacy/` are kept only for the Prompt Lab's
-  fallback path.
-- **Scenario topic-folder format** is consistent everywhere:
-  `clinical/emergencies/necrotising_fasciitis` — used in WS query string,
-  `sessionStorage`, frontend scenarios data, and prompt directory layout.
-- **Husky pre-push runs `git pull --rebase`** to merge in any commits the
-  production server made via Prompt Lab auto-commit. **Don't disable
-  this.** If a push fails because of this, resolve and try again — don't
-  use `--no-verify`.
-- **Image paths must be lowercase** for Linux/Vercel case sensitivity.
-- **Render auto-deploy is OFF** intentionally so that Prompt Lab commits
-  don't trigger redeploys. Backend deploys are manual; frontend deploys
-  are automatic on push to `main`.
-- **Commit + push directly to `main`** — single-developer workflow, no
-  PRs. The contractor may want to introduce a PR-based workflow once
-  there's more than one engineer; that's fine.
+A few quirks of this codebase. Skim once, refer back when you hit them.
+
+- **Commit straight to `main` and push.** No feature branches, no PRs.
+  Once you're settled in, you and the owner can decide if you'd prefer
+  a PR-based workflow. Either is fine.
+- **`git pull --rebase` runs automatically before every push.** This is
+  set up in a Husky hook. The reason: the production server can make its
+  own commits via the Prompt Lab tool, and we need to pull those before
+  pushing yours. If a push fails because of this, just rebase and retry
+  — **don't use `--no-verify` to skip hooks**.
+- **Image paths must be lowercase.** `/images/foo/bar.png`, never
+  `/Images/Foo/Bar.PNG`. Vercel runs on Linux which is case-sensitive
+  and we got bitten by this once.
+- **Render's auto-deploy is intentionally off** for the backend (because
+  Prompt Lab edits would otherwise trigger a redeploy on every save).
+  Backend deploys are manual via the Render dashboard. The frontend
+  *does* auto-deploy from `main` on Vercel.
+- **Three files share two configs.** `FREE_TIER_SCENARIOS` (which
+  scenarios are free vs paid) and `SPECIALTY_MAP` (which specialty each
+  scenario belongs to) live in three places that must agree:
+  `backend/src/config/index.js`, `frontend-react/src/config.js`, and
+  `frontend/config.js`. There's a test (`config-sync.test.js`) that
+  fails if they drift. If you ever add a free scenario, edit all three.
+- **Most "scenarios" are placeholder content.** See §7 #14 — not
+  your problem.
+- **The Prompt Lab** at `/prompt-lab` is a tool for the product owner to
+  edit AI prompts without redeploying. Don't worry about it unless they
+  ask. It auto-commits its changes to GitHub.
 
 ---
 
-## 13. Pointers into the code
+## 13. If you get stuck
 
-The shortest path to understanding the codebase:
+**Asking is faster than guessing.** This codebase has a few subtle parts
+(the WebSocket session lock, the audio pipeline timing, the Stripe
+webhook). Spending 30 minutes confused is normal; spending half a day
+silently confused is not.
 
-| Where to start | Why |
-|---|---|
-| [`CLAUDE.md`](./CLAUDE.md) | Dense reference — read after this file |
-| [`backend/server.js`](./backend/server.js) | One file, one process, all five concerns. Start with the WS `connection` handler at line 306. |
-| [`backend/src/services/OpenAIService.js`](./backend/src/services/OpenAIService.js) | Gemini LLM streaming + Whisper STT. ~190 lines. |
-| [`backend/src/services/GeminiTTSService.js`](./backend/src/services/GeminiTTSService.js) | Primary TTS. The `_queue` here is the global-serialisation footgun. |
-| [`backend/src/services/ServerVAD.js`](./backend/src/services/ServerVAD.js) | Silero v4. The `_getRedemptionFrames` adaptive logic is the main latency knob on the input side. |
-| [`backend/src/utils/promptAssembler.js`](./backend/src/utils/promptAssembler.js) | Modular prompt assembly. |
-| [`frontend-react/src/hooks/useSession.js`](./frontend-react/src/hooks/useSession.js) | The interview orchestrator. WS lifecycle, message routing, audio control. |
-| [`frontend-react/src/lib/AudioStreamer.js`](./frontend-react/src/lib/AudioStreamer.js) | Mic capture (`ScriptProcessorNode`). |
-| [`frontend-react/src/lib/AudioPlayer.js`](./frontend-react/src/lib/AudioPlayer.js) | TTS playback queue. |
-| [`frontend-react/src/components/SimulationRoom.jsx`](./frontend-react/src/components/SimulationRoom.jsx) | The interview UI. 607 lines, two layouts (desktop + mobile) in one component. |
+When you ask the owner, include:
+- What you were trying to do
+- What you tried
+- What happened (error message, screenshot, log lines)
+- Your current best guess at the cause (it's fine to be wrong)
 
-Welcome. Open issues against any of the §7 items as you pick them up.
+Things you don't need to know on day 1:
+- The Server VAD internals (Silero ONNX, frame buffering, redemption
+  frames)
+- The per-session promise lock in `backend/server.js`
+- Why Gemini TTS is queued globally vs per-session
+- Modular prompt assembly internals
+
+Things worth understanding in your first week:
+- How auth flows from browser → backend (read `useAuth.js` then the
+  WebSocket auth check at the top of `backend/server.js`)
+- How a single user turn flows through the system (read §3, then run an
+  interview locally with the dev tools open)
+- The deploy process for both frontend (auto) and backend (manual)
+- How to read Render logs
+
+### Files worth knowing about
+
+You don't need to read all of these. Open them when a task points you
+there.
+
+**Frontend (mostly where you'll work):**
+- [`frontend-react/src/App.jsx`](./frontend-react/src/App.jsx) — routes
+- [`frontend-react/src/components/`](./frontend-react/src/components/) — UI components
+- [`frontend-react/src/pages/`](./frontend-react/src/pages/) — top-level pages
+- [`frontend-react/src/hooks/useSession.js`](./frontend-react/src/hooks/useSession.js) — the interview WebSocket orchestrator (touch carefully)
+- [`frontend-react/src/hooks/useAuth.js`](./frontend-react/src/hooks/useAuth.js) — session restore
+- [`frontend-react/src/stores/`](./frontend-react/src/stores/) — Zustand stores
+
+**Backend (touch with more care):**
+- [`backend/server.js`](./backend/server.js) — the big file. WebSocket + Express in one place.
+- [`backend/src/config/index.js`](./backend/src/config/index.js) — env vars, `FREE_TIER_SCENARIOS`, `SPECIALTY_MAP`
+- [`backend/src/services/`](./backend/src/services/) — LLM, TTS, VAD wrappers
+- [`backend/prompts/`](./backend/prompts/) — the AI prompts (owner's territory)
+
+Welcome aboard.
