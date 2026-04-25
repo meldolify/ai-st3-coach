@@ -15,6 +15,11 @@ yarn-error.log*
 credentials.json
 *-credentials.json
 service-account*.json
+google-tts-key.json
+backend/google-tts-key.json
+
+# Google OAuth client secrets (NEVER commit!)
+client_secret_*.json
 
 # API keys and secrets
 *.key

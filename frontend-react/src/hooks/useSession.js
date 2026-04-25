@@ -264,7 +264,13 @@ export function useSession({ orbVisualizerRef }) {
         }
 
         ws.onmessage = (event) => {
-          const msg = JSON.parse(event.data)
+          let msg
+          try {
+            msg = JSON.parse(event.data)
+          } catch (err) {
+            console.warn('[useSession] Ignoring malformed server message:', err.message)
+            return
+          }
           handleMessage(msg)
         }
 

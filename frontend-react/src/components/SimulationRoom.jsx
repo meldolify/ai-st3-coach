@@ -542,15 +542,17 @@ export default function SimulationRoom() {
                 <div
                   className={cn(
                     'w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold text-white',
+                    feedbackData.score == null ? 'bg-text-muted' :
                     feedbackData.score >= 4 ? 'bg-listening' :
                     feedbackData.score >= 2 ? 'bg-speaking' : 'bg-error'
                   )}
                 >
-                  {feedbackData.score}/5
+                  {feedbackData.score == null ? '—' : `${feedbackData.score}/5`}
                 </div>
                 <div>
                   <p className="text-[15px] font-medium text-text-primary">
-                    {feedbackData.score >= 4 ? 'Excellent' :
+                    {feedbackData.score == null ? 'Unavailable' :
+                     feedbackData.score >= 4 ? 'Excellent' :
                      feedbackData.score >= 3 ? 'Good' :
                      feedbackData.score >= 2 ? 'Adequate' : 'Needs Improvement'}
                   </p>

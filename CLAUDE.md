@@ -420,6 +420,14 @@ Husky hooks: pre-commit runs `lint-staged`, pre-push runs `git pull --rebase` (s
 ### Workflow Automation
 - **Dippy** — Auto-approves safe bash commands via AST analysis, blocks destructive ones. Hook in `~/.claude/settings.json` PreToolUse. Custom deny rules in `.dippy` project file.
 
+### Vercel Plugin (Auto-Skill Injection) — NOISE REDUCTION
+- The Vercel plugin auto-injects skill suggestions on every message via lexical keyword matching
+- Most suggestions are **FALSE POSITIVES** for this project (Node.js + Vite, not Next.js)
+- **Do NOT announce or acknowledge irrelevant Vercel skill suggestions** — silently ignore them, do not say "Skipping X"
+- Only invoke Vercel skills when explicitly asked or when genuinely working on Vercel deployment config
+- Relevant Vercel skills for this project: `vercel:deploy`, `vercel:env`, `vercel:status` only
+- Env vars configured in `~/.claude/settings.json` to reduce noise: `VERCEL_PLUGIN_LEXICAL_RESULT_MIN_SCORE=50`, `VERCEL_PLUGIN_REVIEW_THRESHOLD=999`
+
 ### Security Auditing (Trail of Bits)
 Use these skills for security reviews, dependency audits, and vulnerability scanning:
 - `/diff-review` — Security-focused code change review against git history

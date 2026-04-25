@@ -904,14 +904,15 @@ wss.on('connection', (ws, req) => {
                       JSON.stringify({
                         type: 'feedback_summary',
                         feedback: {
-                          score: 3,
-                          overallImpression: 'Session completed',
+                          score: null,
+                          unavailable: true,
+                          overallImpression: 'Feedback unavailable',
                           clinicalKnowledge: {
                             diagnosis: 'Feedback generation error',
                             management: 'Feedback generation error'
                           },
-                          strengths: ['Session completed'],
-                          improvements: ['Feedback generation encountered an error'],
+                          strengths: [],
+                          improvements: [],
                           summary: 'Unable to generate detailed feedback. Please try again.'
                         }
                       })
