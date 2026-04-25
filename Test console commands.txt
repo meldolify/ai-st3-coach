@@ -1,9 +1,0 @@
-Tier Testing Mode - Added console commands for testing:
-
-
-setTestTier('unlogged')  // Test Tier 1 - all locked
-setTestTier('free')      // Test Tier 2 - free scenarios only
-setTestTier('premium')   // Test Tier 3 - full access
-setTestTier('off')       // Return to real auth
-
-Open browser console (F12) and type these commands.
