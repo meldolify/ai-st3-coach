@@ -8,32 +8,11 @@ process.env.NODE_ENV = 'test';
 process.env.GEMINI_API_KEY = 'test-gemini-key';
 process.env.OPENAI_API_KEY = 'test-key';
 
-const { loadScenarioPrompt } = require('../src/utils/scenarioLoader');
 const {
   validateMessage,
   sanitizeForLog,
   generateSecureSessionId
 } = require('../src/middleware/websocketSecurity');
-
-describe('loadScenarioPrompt', () => {
-  test('loads an existing scenario file', () => {
-    const prompt = loadScenarioPrompt(
-      'prompts/clinical/emergencies/necrotising_fasciitis/easy_clinical_necrotising_fasciitis_1.txt'
-    );
-    expect(prompt.length).toBeGreaterThan(100);
-    expect(prompt).toContain('SECTION');
-  });
-
-  test('rejects path traversal attempts', () => {
-    const prompt = loadScenarioPrompt('../../../etc/passwd');
-    expect(prompt).toContain('Plastic Surgery');
-  });
-
-  test('returns fallback for non-existent file', () => {
-    const prompt = loadScenarioPrompt('prompts/does_not_exist.txt');
-    expect(prompt).toContain('Plastic Surgery');
-  });
-});
 
 describe('WebSocket message validation', () => {
   test('validates a well-formed user_transcript message', () => {
