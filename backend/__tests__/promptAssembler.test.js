@@ -1,6 +1,6 @@
 /**
  * Prompt Assembler Tests
- * Tests modular prompt assembly and legacy fallback behaviour.
+ * Tests modular prompt assembly.
  */
 
 const fs = require('fs');
@@ -16,8 +16,6 @@ const {
   extractDomain,
   validateInputs,
   resolveScenarioPath,
-  loadLegacyInterviewPrompt,
-  loadLegacyFeedbackPrompt,
   PROMPTS_DIR,
   VALID_DOMAINS,
   VALID_DIFFICULTIES
@@ -184,32 +182,6 @@ describe('buildFeedbackPrompt - modular assembly', () => {
     const prompt = buildFeedbackPrompt('easy', 'clinical/nonexistent/fake_topic');
     expect(prompt).toContain('plastic surgery');
     expect(prompt.length).toBeGreaterThan(50);
-  });
-});
-
-describe('loadLegacyInterviewPrompt', () => {
-  test('loads existing legacy nec fasc prompt', () => {
-    const prompt = loadLegacyInterviewPrompt('clinical/emergencies/necrotising_fasciitis', 'easy');
-    expect(prompt.length).toBeGreaterThan(100);
-    expect(prompt).toContain('SECTION');
-  });
-
-  test('returns fallback for non-existent legacy file', () => {
-    const prompt = loadLegacyInterviewPrompt('clinical/nonexistent/topic', 'easy');
-    expect(prompt).toContain('Plastic Surgery');
-  });
-});
-
-describe('loadLegacyFeedbackPrompt', () => {
-  test('loads existing legacy nec fasc feedback prompt', () => {
-    const prompt = loadLegacyFeedbackPrompt('clinical/emergencies/necrotising_fasciitis', 'easy');
-    // Should find either difficulty-prefixed or generic clinical_ file
-    expect(prompt.length).toBeGreaterThan(50);
-  });
-
-  test('returns fallback for non-existent scenario', () => {
-    const prompt = loadLegacyFeedbackPrompt('clinical/nonexistent/topic', 'easy');
-    expect(prompt.length).toBeGreaterThan(10);
   });
 });
 

@@ -1,4 +1,4 @@
-// Frontend configuration — mirrors frontend/config.js for React app
+// Frontend configuration. Kept in sync with backend/src/config/index.js.
 
 const hostname = window.location.hostname
 const isLocal = ['localhost', '127.0.0.1', '0.0.0.0'].includes(hostname) || import.meta.env.DEV
@@ -23,7 +23,7 @@ export const CONFIG = {
   ],
 
   // Specialty mapping — maps top-level scenario folder prefix to subscription specialty
-  // Keep in sync with backend/src/config/index.js and frontend/config.js
+  // Keep in sync with backend/src/config/index.js
   SPECIALTY_MAP: {
     'clinical': 'plastic-surgery',
     'call_the_boss': 'plastic-surgery',

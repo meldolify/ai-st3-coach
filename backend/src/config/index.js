@@ -97,7 +97,7 @@ Director's notes: Brisk, purposeful delivery with tight pacing and minimal pause
   DEBUG_VAD: process.env.DEBUG_VAD === 'true',
 
   // Free tier scenarios - topicFolder paths accessible without subscription
-  // Keep in sync with frontend/config.js FREE_TIER_SCENARIOS
+  // Keep in sync with frontend-react/src/config.js FREE_TIER_SCENARIOS
   // All 3 difficulties are implicitly included per topic
   FREE_TIER_SCENARIOS: [
     'clinical/emergencies/necrotising_fasciitis',
@@ -107,7 +107,7 @@ Director's notes: Brisk, purposeful delivery with tight pacing and minimal pause
   ],
 
   // Specialty mapping — maps top-level scenario folder prefix to subscription specialty
-  // Keep in sync with frontend/config.js and frontend-react/src/config.js
+  // Keep in sync with frontend-react/src/config.js
   SPECIALTY_MAP: {
     clinical: 'plastic-surgery',
     call_the_boss: 'plastic-surgery',
