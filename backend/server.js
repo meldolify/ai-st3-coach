@@ -29,7 +29,6 @@ const {
 } = require('./src/utils/promptAssembler');
 const { parseFeedbackResponse } = require('./src/utils/feedbackParser');
 const { FeedbackSectionBuffer } = require('./src/utils/feedbackSectionBuffer');
-const SentenceBuffer = require('./src/utils/sentenceBuffer');
 const { RateLimitError } = require('openai');
 
 // Import security middleware
@@ -106,21 +105,18 @@ const VOICE_FALLBACK_MAP = {
 };
 
 /**
- * Synthesize TTS for a session — tries Gemini TTS with style prompt first,
+ * Synthesize TTS for a session — tries Gemini TTS with style tag first,
  * falls back to Cloud TTS with SSML on error.
  * @param {string} plainText - Plain text to speak
  * @param {Object} session - Session object (needs session.voice, session.difficulty)
  * @returns {Promise<Buffer>} - Audio data (WAV from Gemini, MP3 from Cloud TTS)
  */
-async function ttsForSession(plainText, session, { parallel = false } = {}) {
+async function ttsForSession(plainText, session) {
   const stylePrompt = config.TTS_STYLE_PROMPTS?.[session.difficulty];
-  const synthesizeFn = parallel
-    ? geminiTTSService.synthesizeDirect.bind(geminiTTSService)
-    : geminiTTSService.synthesize.bind(geminiTTSService);
   if (stylePrompt) {
     for (let attempt = 0; attempt < 2; attempt++) {
       try {
-        return await synthesizeFn(plainText, session.voice, { stylePrompt });
+        return await geminiTTSService.synthesize(plainText, session.voice, { stylePrompt });
       } catch (error) {
         if (attempt === 0) {
           console.warn('[TTS] Gemini attempt 1 failed, retrying:', error.message);
@@ -138,92 +134,65 @@ async function ttsForSession(plainText, session, { parallel = false } = {}) {
 }
 
 /**
- * Stream GPT response with sentence-level TTS to client.
- * Sends ai_response_start, then ai_response_chunk per sentence, then ai_response_end.
+ * Stream LLM response, then synthesize the full turn as a single TTS call.
+ * Sends ai_response_start, then one ai_response_chunk with the complete audio,
+ * then ai_response_end.
+ *
+ * One TTS call per turn (not per sentence) — gives consistent prosody across
+ * the whole response. Per-sentence chunking caused voice drift on 2.5-era
+ * models and is intentionally not used here.
+ *
  * @param {Object} session - Session object from sessions Map
  * @param {WebSocket} ws - WebSocket connection
  * @param {Array} history - Conversation history (user message already pushed)
- * @param {Object} options - GPT options (optional)
+ * @param {Object} options - LLM options (optional)
  */
 async function streamResponseToClient(session, ws, history, options = {}) {
-  const sentenceBuffer = new SentenceBuffer(1, 20);
   let fullText = '';
-  let chunkIndex = 0;
   const t0 = Date.now();
   let firstTokenAt = 0;
-  let firstSentenceAt = 0;
-  let firstChunkSentAt = 0;
 
   session.isAISpeaking = true;
   ws.send(JSON.stringify({ type: 'ai_response_start' }));
 
-  // Parallel TTS: fire TTS immediately as sentences emerge, send in order
-  const ttsQueue = []; // Array of { text, ttsPromise }
-
-  function enqueueTTS(text) {
-    if (!firstSentenceAt) {
-      firstSentenceAt = Date.now();
-      console.log(`[PERF] First sentence ready: ${firstSentenceAt - t0}ms`);
-    }
-    const ttsPromise = ttsForSession(text, session);
-    ttsQueue.push({ text, ttsPromise });
-  }
-
   try {
+    // 1. Stream LLM tokens, accumulate full text
     for await (const token of openaiService.generateResponseStream(history, options)) {
       if (!firstTokenAt) {
         firstTokenAt = Date.now();
         console.log(`[PERF] LLM first token: ${firstTokenAt - t0}ms`);
       }
-
-      // Abort if user interrupted
       if (!session.isAISpeaking) {
-        console.log('[STREAM] Aborted — user interrupted');
+        console.log('[STREAM] Aborted during LLM stream — user interrupted');
         break;
       }
-
       fullText += token;
-      const sentences = sentenceBuffer.addToken(token);
-
-      for (const sentence of sentences) {
-        if (!session.isAISpeaking) {
-          break;
-        }
-        enqueueTTS(sentence);
-      }
-    }
-
-    // Flush remaining text
-    const remaining = sentenceBuffer.flush();
-    if (remaining && session.isAISpeaking) {
-      enqueueTTS(remaining);
-    }
-
-    // Send all TTS results in order (TTS calls already running in parallel)
-    for (const { text, ttsPromise } of ttsQueue) {
-      if (!session.isAISpeaking) {
-        break;
-      }
-      const audio = await ttsPromise;
-      if (!firstChunkSentAt) {
-        firstChunkSentAt = Date.now();
-        console.log(`[PERF] First chunk sent: ${firstChunkSentAt - t0}ms`);
-      }
-      ws.send(
-        JSON.stringify({
-          type: 'ai_response_chunk',
-          text,
-          audio: audio.toString('base64'),
-          chunkIndex: chunkIndex++
-        })
-      );
     }
 
     const wasInterrupted = !session.isAISpeaking;
+    const tLLMEnd = Date.now();
+    console.log(`[PERF] LLM stream complete: ${tLLMEnd - t0}ms`);
+
+    // 2. One TTS call for the whole turn (skip if no content or if interrupted)
+    if (fullText && !wasInterrupted) {
+      const audio = await ttsForSession(fullText, session);
+      const tTTSEnd = Date.now();
+      console.log(`[PERF] TTS complete: ${tTTSEnd - tLLMEnd}ms`);
+
+      if (session.isAISpeaking) {
+        ws.send(
+          JSON.stringify({
+            type: 'ai_response_chunk',
+            text: fullText,
+            audio: audio.toString('base64'),
+            chunkIndex: 0
+          })
+        );
+      }
+    }
+
     const tEnd = Date.now();
-    console.log(
-      `[PERF] Pipeline total: ${tEnd - t0}ms, ${chunkIndex} chunks${wasInterrupted ? ' (interrupted)' : ''}`
-    );
+    console.log(`[PERF] Pipeline total: ${tEnd - t0}ms${wasInterrupted ? ' (interrupted)' : ''}`);
     console.log('[AI] ' + fullText);
 
     // Only push complete responses to history; interrupted fragments corrupt LLM context
@@ -765,9 +734,7 @@ wss.on('connection', (ws, req) => {
                     const completedSections = sectionBuffer.addToken(token);
                     for (const sectionText of completedSections) {
                       console.log(`[FEEDBACK] Section ${ttsQueue.length + 1} detected, firing TTS`);
-                      const ttsPromise = ttsForSession(sectionText, session, {
-                        parallel: true
-                      }).catch(err => {
+                      const ttsPromise = ttsForSession(sectionText, session).catch(err => {
                         console.warn('[FEEDBACK] TTS failed:', err.message);
                         return null;
                       });
@@ -779,12 +746,10 @@ wss.on('connection', (ws, req) => {
                   const flushed = sectionBuffer.flush();
                   if (flushed && sectionBuffer.sectionStarted) {
                     console.log(`[FEEDBACK] Flushed final section ${ttsQueue.length + 1}`);
-                    const ttsPromise = ttsForSession(flushed, session, { parallel: true }).catch(
-                      err => {
-                        console.warn('[FEEDBACK] TTS failed:', err.message);
-                        return null;
-                      }
-                    );
+                    const ttsPromise = ttsForSession(flushed, session).catch(err => {
+                      console.warn('[FEEDBACK] TTS failed:', err.message);
+                      return null;
+                    });
                     ttsQueue.push({ text: flushed, ttsPromise });
                   }
 
@@ -856,12 +821,10 @@ wss.on('connection', (ws, req) => {
                   // 6. If stream detection missed sections, fire TTS now as fallback (parallel)
                   if (ttsQueue.length === 0 && parsed.sections.length > 0) {
                     for (const text of parsed.sections) {
-                      const ttsPromise = ttsForSession(text, session, { parallel: true }).catch(
-                        err => {
-                          console.warn('[FEEDBACK] TTS failed:', err.message);
-                          return null;
-                        }
-                      );
+                      const ttsPromise = ttsForSession(text, session).catch(err => {
+                        console.warn('[FEEDBACK] TTS failed:', err.message);
+                        return null;
+                      });
                       ttsQueue.push({ text, ttsPromise });
                     }
                   }

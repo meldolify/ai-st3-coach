@@ -102,9 +102,9 @@ Node.js server combining WebSocket (interview sessions) + Express HTTP (Stripe, 
 2. Client sends `audio_chunk` via WebSocket
 3. `ServerVAD` (Silero v4 ONNX) detects speech boundaries
 4. Accumulated audio → Whisper STT → transcript text
-5. Gemini 2.5 Flash generates response (streaming, sentence-level chunking)
-6. Gemini TTS synthesizes each sentence → WAV base64 (Google Cloud TTS fallback → MP3)
-7. Client receives `ai_response` chunks, plays audio, mic pauses during AI speech
+5. Gemini 2.5 Flash generates response (full turn buffered before TTS)
+6. Gemini TTS synthesizes the whole turn in one call → WAV base64 (Google Cloud TTS fallback → MP3)
+7. Client receives one `ai_response_chunk` with full audio, plays it, mic pauses during AI speech
 
 ### WebSocket Message Types
 
@@ -138,13 +138,14 @@ Error codes: 4001 (Unauthorized), 4002 (Validation), 4003 (Subscription required
 ### TTS Configuration
 
 **Primary: Gemini TTS** (`src/services/GeminiTTSService.js`)
-- Model: `gemini-2.5-flash-preview-tts`
+- Model: `gemini-3.1-flash-tts-preview`
 - Voices per difficulty: `Fenrir` (easy), `Kore` (medium), `Charon` (strict)
-- Style prompts in `config.TTS_STYLE_PROMPTS` control vocal delivery per difficulty
-- Output: WAV (PCM), queue-serialized for consistent voice
+- Style tags in `config.TTS_STYLE_PROMPTS` (e.g. `[firm, brisk]`) prepended to spoken text per Gemini 3.1 audio-tag guidance
+- One TTS call per full LLM turn (not per sentence) — keeps prosody consistent across the response
+- Output: WAV (24 kHz mono 16-bit PCM with 44-byte header)
 
 **Fallback: Google Cloud TTS** (`src/services/TTSService.js`)
-- Used when Gemini TTS fails
+- Used when Gemini TTS fails twice
 - SSML processing: `buildNaturalSSML(text)` adds pauses at punctuation
 - Output: MP3
 
@@ -222,7 +223,6 @@ backend/
 │       ├── audioHelpers.js             # Noise filtering, SSML builder
 │       ├── feedbackParser.js           # Parse structured feedback
 │       ├── feedbackSectionBuffer.js    # Buffer feedback into 6 sections
-│       ├── sentenceBuffer.js           # Buffer streaming tokens into sentences
 │       └── scenarioLoader.js           # Load and validate scenario files
 ├── prompts/
 │   ├── shared/interview/              # Core + personality files (7 files)
@@ -257,7 +257,7 @@ npm run test:watch                  # Auto-run on changes
 npx jest __tests__/scenario-loader.test.js  # Specific file
 ```
 
-317 tests across 18 suites. Coverage thresholds: 55% branches, 60% functions, 65% lines/statements. Tests focus on behavioral verification ("does this feature work?"), not mock wiring.
+294 tests across 17 suites. Coverage thresholds: 55% branches, 60% functions, 65% lines/statements. Tests focus on behavioral verification ("does this feature work?"), not mock wiring.
 
 Key test files:
 - `behavioral.test.js` (31) — Prompt assembly, noise filtering, feedback parsing, subscription enforcement, session management, error handling
@@ -267,6 +267,7 @@ Key test files:
 - `test-script-generator.test.js` (37) — Content detection
 - `server-vad.test.js` (22) — ONNX mock, state machine, WAV headers
 - `websocket-integration.test.js` (24) — Real WebSocket connections
+- `gemini-tts-service.test.js` (6) — Tag injection, voice config, WAV header
 - `prompt-lab-routes.test.js` (13) — One smoke test per endpoint + security
 
 ### E2E Tests (Playwright)

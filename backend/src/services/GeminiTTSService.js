@@ -1,7 +1,11 @@
 /**
  * Gemini TTS Service
- * Uses the @google/genai SDK for context-aware, style-prompted text-to-speech.
- * Returns WAV audio (PCM 24kHz mono 16-bit with 44-byte header).
+ * Uses the @google/genai SDK with Gemini 3.1 Flash TTS for tag-controlled
+ * text-to-speech. Returns WAV audio (PCM 24kHz mono 16-bit with 44-byte header).
+ *
+ * Style is controlled via inline audio tags (e.g. "[firm, brisk]") prepended
+ * to the spoken text. Each call is one full LLM turn — per-sentence chunking
+ * caused voice drift on 2.5-era models and is intentionally not used here.
  */
 
 const { GoogleGenAI } = require('@google/genai');
@@ -10,7 +14,6 @@ const config = require('../config');
 class GeminiTTSService {
   constructor() {
     this.client = null;
-    this._queue = Promise.resolve(); // Serialization chain — one TTS call at a time
   }
 
   _ensureClient() {
@@ -22,38 +25,22 @@ class GeminiTTSService {
 
   /**
    * Synthesize speech from text using Gemini TTS.
-   * Serialized via internal queue to prevent concurrent API calls
-   * from returning inconsistent voice characteristics.
    * @param {string} text - Plain text to speak
    * @param {string} voiceName - Gemini voice name (e.g. 'Fenrir', 'Kore', 'Charon')
    * @param {Object} options - Optional parameters
-   * @param {string} options.stylePrompt - Style instruction for tone/emotion control
+   * @param {string} options.stylePrompt - Inline audio tag(s) e.g. "[firm, brisk]"
    * @returns {Promise<Buffer>} - WAV audio data as Buffer
    */
   async synthesize(text, voiceName, options = {}) {
-    const result = this._queue.then(() => this._doSynthesize(text, voiceName, options));
-    this._queue = result.catch(() => {}); // Prevent chain breakage on errors
-    return result;
-  }
-
-  /**
-   * Synthesize without queue serialization — runs immediately in parallel.
-   * Use for batch operations (e.g. feedback sections) where all calls share
-   * the same voice/style and will be concatenated into a single playback.
-   */
-  async synthesizeDirect(text, voiceName, options = {}) {
-    return this._doSynthesize(text, voiceName, options);
-  }
-
-  async _doSynthesize(text, voiceName, options = {}) {
     const client = this._ensureClient();
 
-    console.log('[Gemini TTS] Voice:', voiceName, options.stylePrompt ? '(styled)' : '');
+    console.log(
+      '[Gemini TTS] Voice:',
+      voiceName,
+      options.stylePrompt ? `(${options.stylePrompt})` : ''
+    );
 
-    // Style prompts must be embedded in the text content (systemInstruction not supported for TTS)
-    const styledText = options.stylePrompt
-      ? `${options.stylePrompt}\n\nNow say the following:\n${text}`
-      : text;
+    const styledText = options.stylePrompt ? `${options.stylePrompt} ${text}` : text;
 
     try {
       const response = await client.models.generateContent({

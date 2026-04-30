@@ -90,10 +90,10 @@ this; no horizontal scaling story exists yet (see §7 P2).
 │                                                                                │
 │  ServerVAD (Silero v4 ONNX) ─► onSpeechEnd ─► OpenAI Whisper STT               │
 │                                                                                │
-│  Streaming chat ─► Gemini 2.5 Flash ─► SentenceBuffer                          │
+│  Streaming chat ─► Gemini 2.5 Flash ─► buffer full turn                        │
 │                                                                                │
-│  Per sentence ─► Gemini TTS (style-prompted)                                   │
-│                ─► (fallback) Google Cloud TTS Neural2 SSML                     │
+│  Whole turn ─► Gemini 3.1 Flash TTS (inline audio tags, e.g. [firm, brisk])    │
+│             ─► (fallback) Google Cloud TTS Neural2 SSML                        │
 │                                                                                │
 │  end_interview / request_feedback ─► dedicated feedback prompt                 │
 │                                    ─► 6 spoken sections + JSON summary         │
@@ -108,12 +108,17 @@ this; no horizontal scaling story exists yet (see §7 P2).
 1. User speaks → `AudioStreamer` ships PCM via `audio_chunk`.
 2. `ServerVAD` detects speech end after silence.
 3. `OpenAIService.transcribeAudio()` → Whisper round trip (~600-1500 ms).
-4. `streamResponseToClient()` opens a Gemini stream, buffers tokens into
-   sentences (`SentenceBuffer`).
-5. As each sentence emerges, fire Gemini TTS in parallel; ship audio chunks
-   in order via `ai_response_chunk`.
-6. Browser plays each chunk through `AudioPlayer` (queued).
-7. After the final chunk: `ai_response_end`, mic re-opens.
+4. `streamResponseToClient()` opens a Gemini stream, accumulates tokens into
+   the full turn text.
+5. When the LLM stream ends, fire ONE Gemini TTS call for the whole turn;
+   ship the resulting WAV via a single `ai_response_chunk`.
+6. Browser plays the chunk through `AudioPlayer`.
+7. After the chunk plays out: `ai_response_end`, mic re-opens.
+
+Note: per-sentence TTS chunking was removed because Gemini 2.5-era TTS
+models drift in voice characteristics across calls (documented Google AI
+forum issue). One call per turn keeps prosody consistent across the
+response.
 
 `backend/server.js` is one big file (~1,200 lines) that contains the
 WebSocket connection handler, the per-session message router, and all
@@ -326,8 +331,9 @@ tiers provide longer retention. There is no manual backup automation.
 ## 8. Realtime pipeline tuning
 
 The metric that matters is "user finishes speaking → first word of AI
-reply audible". Architecture is in decent shape (parallel TTS,
-sentence-level streaming); the gains are in constants and serialisation.
+reply audible". Current architecture trades latency for voice consistency:
+one TTS call per full turn (not per sentence), so the user waits for the
+whole LLM response + one TTS round trip before any audio plays.
 
 `server.js` already emits `[PERF]` lines per turn — capture a baseline
 from a few sample interviews on the Render log stream before changing
@@ -337,26 +343,24 @@ anything:
 [VAD] Speech ended for <id>, <ms>ms audio, VAD held <ms>ms
 [TIMING] Whisper STT: <ms>ms
 [PERF] LLM first token: <ms>ms
-[PERF] First sentence ready: <ms>ms
-[PERF] First chunk sent: <ms>ms
+[PERF] LLM stream complete: <ms>ms
+[PERF] TTS complete: <ms>ms
 [PERF] Pipeline total: <ms>ms
 ```
 
 Levers, roughly in order of expected impact:
 
 1. **Whisper STT is sequential** — one round trip after speech end
-   (~600-1500 ms). Parallelising it (background transcription while the
-   user still speaks) is the biggest win and the hardest change. The
-   `onIncrementalAudio` path already exists for >15 s utterances; could
-   be generalised.
-2. **Global TTS queue** — `GeminiTTSService._queue` serialises all TTS
-   across all sessions. Under any concurrency this is a hard bottleneck.
-   Move per-session or drop entirely.
-3. **`SentenceBuffer` threshold** — first TTS chunk waits for ≥20 chars
-   ending at a sentence boundary
-   ([`server.js:149`](./backend/server.js#L149)). Lower → starts
-   speaking sooner, slightly choppier prosody. Worth A/B-ing.
-4. **Gemini TTS retry policy** —
+   (~600-1500 ms). The biggest unaddressed latency. Migrating to a
+   streaming STT (e.g. Deepgram Flux) emits transcripts as the user
+   talks; combined with native end-of-turn detection it removes both
+   Whisper and ServerVAD. See `~/.claude/plans/hi-we-re-going-to-sparkling-moler.md`
+   Workstream 2 for a sketch.
+2. **Per-turn TTS round trip** — `streamResponseToClient` waits for the
+   full LLM response, then ONE Gemini TTS call. Streaming TTS providers
+   (Cartesia Sonic-3, ElevenLabs Flash) emit audio bytes as they
+   generate, dropping time-to-first-audio from ~600 ms to ~100 ms.
+3. **Gemini TTS retry policy** —
    [`server.js:121-128`](./backend/server.js#L121-L128) waits 500 ms
    before failing over to Cloud TTS. Fail over immediately on the first
    failure; only retry on specific transient codes.

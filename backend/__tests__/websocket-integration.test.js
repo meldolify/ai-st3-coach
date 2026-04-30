@@ -345,7 +345,7 @@ describe('Message flow - user_transcript', () => {
       const messages = await collectMessages(ws, 3, 10000);
       expect(messages[0].type).toBe('ai_response_start');
       expect(messages[1].type).toBe('ai_response_chunk');
-      expect(messages[1].text).toBe('Good morning.');
+      expect(messages[1].text).toBe('Good morning. ');
       expect(messages[1].audio).toBeDefined();
       expect(messages[1].chunkIndex).toBe(0);
       expect(messages[2].type).toBe('ai_response_end');
@@ -438,8 +438,8 @@ describe('Message flow - user_transcript', () => {
     }
   });
 
-  test('multi-sentence response produces multiple chunks', async () => {
-    // First sentence must be >= 20 chars to avoid minFirstLength batching
+  test('multi-sentence response produces a single chunk for the full turn', async () => {
+    // One TTS call per turn: full text is synthesized as a single audio buffer.
     mockStreamingResponse(['Hello there my friend. ', 'How are you doing today? ']);
     ttsService.client.synthesizeSpeech.mockResolvedValue([
       {
@@ -459,14 +459,14 @@ describe('Message flow - user_transcript', () => {
         })
       );
 
-      // ai_response_start + 2 chunks + ai_response_end
-      const messages = await collectMessages(ws, 4);
+      // ai_response_start + 1 chunk + ai_response_end
+      const messages = await collectMessages(ws, 3);
       expect(messages[0].type).toBe('ai_response_start');
       expect(messages[1].type).toBe('ai_response_chunk');
       expect(messages[1].chunkIndex).toBe(0);
-      expect(messages[2].type).toBe('ai_response_chunk');
-      expect(messages[2].chunkIndex).toBe(1);
-      expect(messages[3].type).toBe('ai_response_end');
+      expect(messages[1].text).toBe('Hello there my friend. How are you doing today? ');
+      expect(messages[2].type).toBe('ai_response_end');
+      expect(messages[2].fullText).toBe('Hello there my friend. How are you doing today? ');
     } finally {
       ws.close();
     }
