@@ -33,6 +33,7 @@ export function useSession({ orbVisualizerRef }) {
   const [inFeedbackMode, setInFeedbackMode] = useState(false)
   const [interviewEnded, setInterviewEnded] = useState(false)
   const [feedbackRequested, setFeedbackRequested] = useState(false)
+  const [isPaused, setIsPaused] = useState(false)
   const [scenarioMeta, setScenarioMeta] = useState(null) // { domain, infoSheet, prepTime }
 
   // Transcript messages: { id, speaker: 'user' | 'ai', text, timestamp }
@@ -308,6 +309,24 @@ export function useSession({ orbVisualizerRef }) {
     setStatusText('Listening')
   }, [handleResponseComplete])
 
+  /**
+   * pauseListening — stop emitting microphone audio_chunks to the server
+   * while keeping the WebSocket open. Server-side VAD goes silent; AI does
+   * not respond until resumeListening() is called.
+   */
+  const pauseListening = useCallback(() => {
+    audioStreamerRef.current.pause()
+    setIsPaused(true)
+    setStatusText('Paused')
+  }, [])
+
+  const resumeListening = useCallback(() => {
+    audioStreamerRef.current.resume()
+    setIsPaused(false)
+    setOrbState('listening')
+    setStatusText('Listening')
+  }, [])
+
   const sendInterrupt = useCallback(() => {
     if (!audioPlayerRef.current.isPlaying) return
     audioPlayerRef.current.interrupt()
@@ -375,8 +394,12 @@ export function useSession({ orbVisualizerRef }) {
     inFeedbackMode,
     interviewEnded,
     feedbackRequested,
+    isPaused,
+    audioPlayer: audioPlayerRef.current,
     connect,
     startListening,
+    pauseListening,
+    resumeListening,
     sendInterrupt,
     sendEndInterview,
     requestFeedback,

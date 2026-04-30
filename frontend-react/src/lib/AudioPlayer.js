@@ -5,13 +5,20 @@
 export class AudioPlayer {
   constructor() {
     this.audio = new Audio()
+    this.audio.crossOrigin = 'anonymous'
     this.isPlaying = false
     this.onStart = null
     this.onEnd = null
     this.playbackTimeout = null
 
-    // Orb visualizer integration
+    // Orb visualizer integration (legacy fallback path)
     this.orbVisualizer = null
+
+    // Web Audio analyser (lazily created on first ensureAnalyser() call)
+    this._audioContext = null
+    this._mediaSource = null
+    this._analyser = null
+    this._freqData = null
 
     // Audio queue for streamed sentence chunks
     this._queue = []
@@ -21,6 +28,63 @@ export class AudioPlayer {
 
   setOrbVisualizer(visualizer) {
     this.orbVisualizer = visualizer
+  }
+
+  /**
+   * ensureAnalyser — lazily create the Web Audio graph on first call.
+   * `createMediaElementSource()` may only be called once per audio element,
+   * so this is idempotent.
+   *
+   * Returns the AnalyserNode, or null if creation failed (e.g. AudioContext
+   * blocked before user gesture). Audio still plays normally either way.
+   */
+  ensureAnalyser() {
+    if (this._analyser) return this._analyser
+    try {
+      const Ctx = window.AudioContext || window.webkitAudioContext
+      if (!Ctx) return null
+      const ctx = new Ctx()
+      const source = ctx.createMediaElementSource(this.audio)
+      const analyser = ctx.createAnalyser()
+      analyser.fftSize = 64 // 32 frequency bins
+      analyser.smoothingTimeConstant = 0.7
+      source.connect(analyser)
+      analyser.connect(ctx.destination)
+      this._audioContext = ctx
+      this._mediaSource = source
+      this._analyser = analyser
+      this._freqData = new Uint8Array(analyser.frequencyBinCount)
+      // Resume the context defensively (user gesture should already have unblocked it)
+      if (ctx.state === 'suspended') {
+        ctx.resume().catch(() => {})
+      }
+      return analyser
+    } catch (err) {
+      // Most common failure: audio element source already attached to another
+      // graph, or AudioContext blocked. Silently return null — audio still plays.
+      return null
+    }
+  }
+
+  /**
+   * getFrequencyBands — sample N evenly-distributed amplitude bands from
+   * the current analyser snapshot. Returns Float32 array of values in [0, 1].
+   */
+  getFrequencyBands(numBands = 5) {
+    const empty = new Array(numBands).fill(0)
+    if (!this._analyser || !this._freqData) return empty
+    this._analyser.getByteFrequencyData(this._freqData)
+    const binCount = this._freqData.length
+    const bandSize = Math.max(1, Math.floor(binCount / numBands))
+    const bands = new Array(numBands)
+    for (let i = 0; i < numBands; i++) {
+      let sum = 0
+      const start = i * bandSize
+      const end = Math.min(binCount, start + bandSize)
+      for (let j = start; j < end; j++) sum += this._freqData[j]
+      bands[i] = sum / (end - start) / 255
+    }
+    return bands
   }
 
   queueBase64Audio(base64Audio) {
