@@ -20,6 +20,7 @@ const openaiService = require('./src/services/OpenAIService');
 const ttsService = require('./src/services/TTSService');
 const geminiTTSService = require('./src/services/GeminiTTSService');
 const { ServerVAD, float32ToWavBuffer } = require('./src/services/ServerVAD');
+const { FluxSTTService } = require('./src/services/FluxSTTService');
 const { isNoiseTranscript, buildNaturalSSML } = require('./src/utils/audioHelpers');
 const {
   buildInterviewPrompt,
@@ -258,6 +259,7 @@ const idleCleanupInterval = setInterval(
           `[CLEANUP] Removing idle session: ${id} (idle ${Math.round((now - session.lastActivity) / 60000)}min)`
         );
         session.vad?.destroy();
+        session.flux?.destroy();
         session.ws?.terminate();
         sessions.delete(id);
         wsRateLimiter.removeClient(id);
@@ -388,18 +390,36 @@ wss.on('connection', (ws, req) => {
     const scenarioPrompt = buildInterviewPrompt(difficulty, scenarioFile);
     const sessionId = generateSecureSessionId();
 
-    // Create server-side VAD instance for this session
-    const vadInstance = new ServerVAD();
-    try {
-      await vadInstance.initialize();
-    } catch (vadError) {
-      console.error('[VAD] Failed to initialize:', vadError.message);
-      ws.send(JSON.stringify({ type: 'error', message: 'Server VAD initialization failed' }));
-      ws.close(1011, 'VAD initialization failed');
-      return;
+    // STT path: Deepgram Flux (streaming, model-integrated turn detection) or
+    // ServerVAD + Whisper (legacy). Selected by USE_FLUX_STT env var; the
+    // missing-key path falls back to ServerVAD per validateConfig() warning.
+    const useFlux = config.USE_FLUX_STT && !!config.DEEPGRAM_API_KEY;
+    let vadInstance = null;
+    let fluxInstance = null;
+
+    if (useFlux) {
+      fluxInstance = new FluxSTTService();
+      try {
+        await fluxInstance.initialize();
+      } catch (fluxError) {
+        console.error('[Flux] Failed to initialize:', fluxError.message);
+        ws.send(JSON.stringify({ type: 'error', message: 'STT initialization failed' }));
+        ws.close(1011, 'STT initialization failed');
+        return;
+      }
+    } else {
+      vadInstance = new ServerVAD();
+      try {
+        await vadInstance.initialize();
+      } catch (vadError) {
+        console.error('[VAD] Failed to initialize:', vadError.message);
+        ws.send(JSON.stringify({ type: 'error', message: 'Server VAD initialization failed' }));
+        ws.close(1011, 'VAD initialization failed');
+        return;
+      }
     }
 
-    // Per-session incremental Whisper state
+    // Per-session incremental Whisper state (only used in ServerVAD path)
     const incrementalState = {
       latestTranscript: '', // Most recent cumulative transcript
       pendingTranscription: null, // Promise for in-flight Whisper call
@@ -418,132 +438,186 @@ wss.on('connection', (ws, req) => {
       interviewEnded: false,
       feedbackCount: 0,
       vad: vadInstance,
+      flux: fluxInstance,
       incrementalState,
       lastActivity: Date.now(),
       _processingLock: Promise.resolve()
     });
 
-    // Wire up VAD callbacks
-    vadInstance.onSpeechStart = () => {
-      console.log(`[VAD] Speech started for ${sessionId}`);
-      // Reset incremental state for new utterance
-      incrementalState.latestTranscript = '';
-      incrementalState.pendingTranscription = null;
-      incrementalState.exportCount = 0;
-      if (ws.readyState === WebSocket.OPEN) {
-        ws.send(JSON.stringify({ type: 'vad_speech_start' }));
-      }
-    };
-
-    // Incremental Whisper: transcribe cumulative audio every ~15s during long speech
-    vadInstance.onIncrementalAudio = async (audioSnapshot, frameIndex) => {
-      const session = sessions.get(sessionId);
-      if (!session || session.interviewEnded) {
-        return;
-      }
-
-      if (incrementalState.pendingTranscription) {
-        await incrementalState.pendingTranscription;
-      }
-      incrementalState.exportCount++;
-      console.log(
-        `[INCREMENTAL] Export #${incrementalState.exportCount} at frame ${frameIndex}, ${Math.round(audioSnapshot.length / 16000)}s audio`
-      );
-
-      incrementalState.pendingTranscription = (async () => {
-        try {
-          const wavBuffer = float32ToWavBuffer(audioSnapshot, 16000);
-          const transcript = await openaiService.transcribeAudio(wavBuffer, sessionId, 'wav');
-          incrementalState.latestTranscript = transcript;
-          console.log(`[INCREMENTAL] Transcript: "${transcript.substring(0, 80)}..."`);
-        } catch (err) {
-          console.error('[INCREMENTAL] Whisper error:', err.message);
-        }
-      })();
-    };
-
-    vadInstance.onSpeechEnd = async (audioFloat32, hadIncrementalExports, audioSinceExport) => {
+    // Shared transcript pipeline: noise filter → display → push to history → LLM stream.
+    // Used by both ServerVAD (after Whisper) and Flux (transcript already in hand).
+    async function processFinalTranscript(transcript) {
       const session = sessions.get(sessionId);
       if (!session || ws.readyState !== WebSocket.OPEN) {
         return;
       }
-
-      // Don't process buffered audio after interview ended
       if (session.interviewEnded) {
-        console.log('[VAD] Ignoring buffered audio after interview ended');
+        console.log('[STT] Ignoring transcript after interview ended');
         return;
       }
-
-      const t0 = Date.now();
-      const durationMs = (audioFloat32.length / 16000) * 1000;
-      const vadLatency = vadInstance.speechStartTime ? t0 - vadInstance.speechStartTime : 0;
-      console.log(
-        `[VAD] Speech ended for ${sessionId}, ${Math.round(durationMs)}ms audio, VAD held ${vadLatency}ms`
-      );
-
-      // Skip very short utterances (< 300ms) — likely noise
-      if (audioFloat32.length < 4800) {
-        console.log('[VAD] Too short, skipping');
+      if (isNoiseTranscript(transcript)) {
+        console.log('[STT] Filtered as noise');
         return;
       }
+      ws.send(JSON.stringify({ type: 'user_transcript_display', text: transcript }));
+      session.history.push({ role: 'user', content: transcript });
+      await streamResponseToClient(session, ws, session.history, { temperature: 0.5 });
+    }
 
-      try {
-        let transcript;
-        const tWav = Date.now();
-
-        if (hadIncrementalExports && incrementalState.exportCount > 0) {
-          // Long utterance: use incremental transcript + transcribe only final segment
-          if (incrementalState.pendingTranscription) {
-            await incrementalState.pendingTranscription;
-          }
-
-          // audioSinceExport is pre-computed by ServerVAD before clearing buffers.
-          // If final segment is too short (< 0.1s = 1600 samples), skip Whisper and use incremental transcript as-is.
-          if (audioSinceExport && audioSinceExport.length >= 1600) {
-            const finalWav = float32ToWavBuffer(audioSinceExport, 16000);
-            console.log(
-              `[TIMING] Incremental: ${incrementalState.exportCount} exports, final segment ${Math.round(audioSinceExport.length / 16000)}s (${finalWav.length} bytes)`
-            );
-            const finalTranscript = await openaiService.transcribeAudio(finalWav, sessionId, 'wav');
-            transcript = (incrementalState.latestTranscript + ' ' + finalTranscript).trim();
-          } else {
-            console.log(
-              `[TIMING] Incremental: ${incrementalState.exportCount} exports, final segment too short (${audioSinceExport?.length || 0} samples) — using incremental transcript`
-            );
-            transcript = incrementalState.latestTranscript;
-          }
-
-          const tWhisper = Date.now();
-          console.log(
-            `[TIMING] Whisper STT (incremental): ${tWhisper - tWav}ms → "${transcript.substring(0, 100)}..."`
-          );
-        } else {
-          // Short utterance: standard full transcription
-          const wavBuffer = float32ToWavBuffer(audioFloat32, 16000);
-          console.log(`[TIMING] WAV encode: ${Date.now() - t0}ms (${wavBuffer.length} bytes)`);
-
-          transcript = await openaiService.transcribeAudio(wavBuffer, sessionId, 'wav');
-          const tWhisper = Date.now();
-          console.log(`[TIMING] Whisper STT: ${tWhisper - tWav}ms → "${transcript}"`);
+    if (useFlux) {
+      // ── Deepgram Flux path ──────────────────────────────────────────────
+      fluxInstance.onSpeechStart = () => {
+        const session = sessions.get(sessionId);
+        if (!session) {
+          return;
         }
+        console.log(`[Flux] StartOfTurn for ${sessionId}`);
+        // Real barge-in: if the AI is mid-response, stop it.
+        if (session.isAISpeaking) {
+          session.isAISpeaking = false;
+          if (ws.readyState === WebSocket.OPEN) {
+            ws.send(JSON.stringify({ type: 'interrupt' }));
+          }
+        }
+        if (ws.readyState === WebSocket.OPEN) {
+          ws.send(JSON.stringify({ type: 'vad_speech_start' }));
+        }
+      };
 
-        // Filter noise transcripts
-        if (isNoiseTranscript(transcript)) {
-          console.log('[VAD] Filtered as noise');
+      fluxInstance.onTranscript = async transcript => {
+        console.log(`[Flux] EndOfTurn → "${transcript}"`);
+        try {
+          await processFinalTranscript(transcript);
+        } catch (error) {
+          console.error('[Flux] Pipeline error:', error.message);
+          if (ws.readyState === WebSocket.OPEN) {
+            ws.send(JSON.stringify({ type: 'error', message: 'Processing failed' }));
+          }
+        }
+      };
+
+      fluxInstance.onError = err => {
+        console.error('[Flux] Surface error to client:', err?.message || err);
+        if (ws.readyState === WebSocket.OPEN) {
+          ws.send(JSON.stringify({ type: 'error', message: 'Speech recognition error' }));
+        }
+      };
+    } else {
+      // ── Legacy ServerVAD + Whisper path ─────────────────────────────────
+      vadInstance.onSpeechStart = () => {
+        console.log(`[VAD] Speech started for ${sessionId}`);
+        // Reset incremental state for new utterance
+        incrementalState.latestTranscript = '';
+        incrementalState.pendingTranscription = null;
+        incrementalState.exportCount = 0;
+        if (ws.readyState === WebSocket.OPEN) {
+          ws.send(JSON.stringify({ type: 'vad_speech_start' }));
+        }
+      };
+
+      // Incremental Whisper: transcribe cumulative audio every ~15s during long speech
+      vadInstance.onIncrementalAudio = async (audioSnapshot, frameIndex) => {
+        const session = sessions.get(sessionId);
+        if (!session || session.interviewEnded) {
           return;
         }
 
-        // Send transcript to client for display
-        ws.send(JSON.stringify({ type: 'user_transcript_display', text: transcript }));
+        if (incrementalState.pendingTranscription) {
+          await incrementalState.pendingTranscription;
+        }
+        incrementalState.exportCount++;
+        console.log(
+          `[INCREMENTAL] Export #${incrementalState.exportCount} at frame ${frameIndex}, ${Math.round(audioSnapshot.length / 16000)}s audio`
+        );
 
-        // Process with streaming GPT → sentence-level TTS
-        session.history.push({ role: 'user', content: transcript });
-        await streamResponseToClient(session, ws, session.history, { temperature: 0.5 });
-      } catch (error) {
-        console.error('[VAD] Pipeline error:', error.message);
-        ws.send(JSON.stringify({ type: 'error', message: 'Processing failed' }));
-      }
-    };
+        incrementalState.pendingTranscription = (async () => {
+          try {
+            const wavBuffer = float32ToWavBuffer(audioSnapshot, 16000);
+            const transcript = await openaiService.transcribeAudio(wavBuffer, sessionId, 'wav');
+            incrementalState.latestTranscript = transcript;
+            console.log(`[INCREMENTAL] Transcript: "${transcript.substring(0, 80)}..."`);
+          } catch (err) {
+            console.error('[INCREMENTAL] Whisper error:', err.message);
+          }
+        })();
+      };
+
+      vadInstance.onSpeechEnd = async (audioFloat32, hadIncrementalExports, audioSinceExport) => {
+        const session = sessions.get(sessionId);
+        if (!session || ws.readyState !== WebSocket.OPEN) {
+          return;
+        }
+
+        // Don't process buffered audio after interview ended
+        if (session.interviewEnded) {
+          console.log('[VAD] Ignoring buffered audio after interview ended');
+          return;
+        }
+
+        const t0 = Date.now();
+        const durationMs = (audioFloat32.length / 16000) * 1000;
+        const vadLatency = vadInstance.speechStartTime ? t0 - vadInstance.speechStartTime : 0;
+        console.log(
+          `[VAD] Speech ended for ${sessionId}, ${Math.round(durationMs)}ms audio, VAD held ${vadLatency}ms`
+        );
+
+        // Skip very short utterances (< 300ms) — likely noise
+        if (audioFloat32.length < 4800) {
+          console.log('[VAD] Too short, skipping');
+          return;
+        }
+
+        try {
+          let transcript;
+          const tWav = Date.now();
+
+          if (hadIncrementalExports && incrementalState.exportCount > 0) {
+            // Long utterance: use incremental transcript + transcribe only final segment
+            if (incrementalState.pendingTranscription) {
+              await incrementalState.pendingTranscription;
+            }
+
+            // audioSinceExport is pre-computed by ServerVAD before clearing buffers.
+            // If final segment is too short (< 0.1s = 1600 samples), skip Whisper and use incremental transcript as-is.
+            if (audioSinceExport && audioSinceExport.length >= 1600) {
+              const finalWav = float32ToWavBuffer(audioSinceExport, 16000);
+              console.log(
+                `[TIMING] Incremental: ${incrementalState.exportCount} exports, final segment ${Math.round(audioSinceExport.length / 16000)}s (${finalWav.length} bytes)`
+              );
+              const finalTranscript = await openaiService.transcribeAudio(
+                finalWav,
+                sessionId,
+                'wav'
+              );
+              transcript = (incrementalState.latestTranscript + ' ' + finalTranscript).trim();
+            } else {
+              console.log(
+                `[TIMING] Incremental: ${incrementalState.exportCount} exports, final segment too short (${audioSinceExport?.length || 0} samples) — using incremental transcript`
+              );
+              transcript = incrementalState.latestTranscript;
+            }
+
+            const tWhisper = Date.now();
+            console.log(
+              `[TIMING] Whisper STT (incremental): ${tWhisper - tWav}ms → "${transcript.substring(0, 100)}..."`
+            );
+          } else {
+            // Short utterance: standard full transcription
+            const wavBuffer = float32ToWavBuffer(audioFloat32, 16000);
+            console.log(`[TIMING] WAV encode: ${Date.now() - t0}ms (${wavBuffer.length} bytes)`);
+
+            transcript = await openaiService.transcribeAudio(wavBuffer, sessionId, 'wav');
+            const tWhisper = Date.now();
+            console.log(`[TIMING] Whisper STT: ${tWhisper - tWav}ms → "${transcript}"`);
+          }
+
+          await processFinalTranscript(transcript);
+        } catch (error) {
+          console.error('[VAD] Pipeline error:', error.message);
+          ws.send(JSON.stringify({ type: 'error', message: 'Processing failed' }));
+        }
+      };
+    }
 
     const domain = extractDomain(scenarioFile);
     const infoSheet = loadInfoSheet(scenarioFile);
@@ -601,18 +675,27 @@ wss.on('connection', (ws, req) => {
       // Audio chunks are high-frequency and don't mutate history — process without lock
       if (msg.type === 'audio_chunk') {
         try {
-          if (session.isAISpeaking || session.inFeedbackMode || session.interviewEnded) {
+          // In Flux path, AI-speaking does NOT block ingestion: barge-in needs Flux
+          // to see the user start talking. ServerVAD path keeps the legacy mute.
+          if (session.inFeedbackMode || session.interviewEnded) {
+            return;
+          }
+          if (!session.flux && session.isAISpeaking) {
             return;
           }
           const pcmData = Buffer.from(msg.audio, 'base64');
-          const alignedBuffer = pcmData.buffer.slice(
-            pcmData.byteOffset,
-            pcmData.byteOffset + pcmData.byteLength
-          );
-          const int16Array = new Int16Array(alignedBuffer);
-          await session.vad.processChunk(int16Array);
+          if (session.flux) {
+            session.flux.processChunk(pcmData);
+          } else {
+            const alignedBuffer = pcmData.buffer.slice(
+              pcmData.byteOffset,
+              pcmData.byteOffset + pcmData.byteLength
+            );
+            const int16Array = new Int16Array(alignedBuffer);
+            await session.vad.processChunk(int16Array);
+          }
         } catch (error) {
-          console.error('[VAD] Chunk processing error:', error.message);
+          console.error('[STT] Chunk processing error:', error.message);
         }
         return;
       }
@@ -680,7 +763,8 @@ wss.on('connection', (ws, req) => {
                 console.log('[INTERVIEW] End interview requested for session:', sessionId);
                 session.interviewEnded = true;
                 session.isAISpeaking = false;
-                session.vad.reset(); // Clear stale audio buffers
+                session.vad?.reset(); // Clear stale audio buffers
+                session.flux?.reset();
                 ws.send(JSON.stringify({ type: 'interview_ended', sessionId }));
                 break;
 
@@ -699,7 +783,8 @@ wss.on('connection', (ws, req) => {
                 console.log('[FEEDBACK] Starting streaming feedback flow');
                 session.inFeedbackMode = true;
                 session.interviewEnded = true;
-                session.vad.reset(); // Clear stale audio buffers
+                session.vad?.reset(); // Clear stale audio buffers
+                session.flux?.reset();
                 try {
                   // 1. Serialize full conversation into transcript
                   const transcript = serializeTranscript(session.history);
@@ -902,9 +987,8 @@ wss.on('connection', (ws, req) => {
 
     ws.on('close', () => {
       const session = sessions.get(sessionId);
-      if (session?.vad) {
-        session.vad.destroy();
-      }
+      session?.vad?.destroy();
+      session?.flux?.destroy();
       sessions.delete(sessionId);
       wsRateLimiter.removeClient(sessionId);
       console.log(`[CLIENT] Disconnected: ${sessionId}`);

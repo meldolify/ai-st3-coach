@@ -100,11 +100,12 @@ Node.js server combining WebSocket (interview sessions) + Express HTTP (Stripe, 
 
 1. Browser `AudioStreamer` (ScriptProcessorNode, 4096 buffer) → 16kHz mono Int16 PCM → base64
 2. Client sends `audio_chunk` via WebSocket
-3. `ServerVAD` (Silero v4 ONNX) detects speech boundaries
-4. Accumulated audio → Whisper STT → transcript text
-5. Gemini 2.5 Flash generates response (full turn buffered before TTS)
-6. Gemini TTS synthesizes the whole turn in one call → WAV base64 (Google Cloud TTS fallback → MP3)
-7. Client receives one `ai_response_chunk` with full audio, plays it, mic pauses during AI speech
+3. STT path (one of two, selected by `USE_FLUX_STT` env var):
+   - **Flux (default when `USE_FLUX_STT=true` + `DEEPGRAM_API_KEY` set)**: Deepgram Flux streaming WebSocket; `EndOfTurn` event delivers final transcript with model-integrated turn detection. `StartOfTurn` triggers automatic barge-in.
+   - **Legacy**: `ServerVAD` (Silero v4 ONNX) → Whisper STT one-shot.
+4. Gemini 2.5 Flash generates response (full turn buffered before TTS)
+5. Gemini TTS synthesizes the whole turn in one call → WAV base64 (Google Cloud TTS fallback → MP3)
+6. Client receives one `ai_response_chunk` with full audio, plays it, mic pauses during AI speech (legacy STT only — Flux path keeps the mic open for barge-in)
 
 ### WebSocket Message Types
 
@@ -149,11 +150,19 @@ Error codes: 4001 (Unauthorized), 4002 (Validation), 4003 (Subscription required
 - SSML processing: `buildNaturalSSML(text)` adds pauses at punctuation
 - Output: MP3
 
-### Server-Side VAD
+### STT — Deepgram Flux (default) and ServerVAD (legacy)
 
-Silero VAD v4 ONNX (`backend/models/silero_vad_v4.onnx` ~1.72MB). Frame=1536 samples@16kHz (~96ms). Thresholds: pos=0.3, neg=0.2. Pre-speech buffer=10 frames (~960ms). v5 model did NOT work — v4 reliably returns 0.7-0.96 for speech.
+**Flux path** (`src/services/FluxSTTService.js`) — active when `USE_FLUX_STT=true` and `DEEPGRAM_API_KEY` is set:
+- Streaming WebSocket via `@deepgram/sdk` v5 → `client.listen.v2.connect({ model: 'flux-general-en', encoding: 'linear16', sample_rate: 16000 })`.
+- `audio_chunk` PCM forwarded via `connection.sendMedia(buffer)`.
+- `TurnInfo` events: `StartOfTurn` (fires automatic barge-in if AI is speaking), `EndOfTurn` (final transcript ready).
+- Replaces both ServerVAD and Whisper one-shot in this path; no Silero ONNX, no Whisper round-trip.
 
-Audio pipeline: AudioStreamer (ScriptProcessorNode, bufferSize=4096) → 16kHz mono Int16 PCM (~1365 samples/chunk) → base64 → WS `audio_chunk`. Gain normalization: quiet audio boosted up to 50x for VAD, original sent to Whisper.
+**Legacy path** (`src/services/ServerVAD.js`) — active when `USE_FLUX_STT=false` (default) or `DEEPGRAM_API_KEY` missing:
+- Silero VAD v4 ONNX (`backend/models/silero_vad_v4.onnx` ~1.72MB). Frame=1536 samples@16kHz (~96ms). Thresholds: pos=0.3, neg=0.2. Pre-speech buffer=10 frames (~960ms).
+- Audio: AudioStreamer (ScriptProcessorNode, bufferSize=4096) → 16kHz mono Int16 PCM (~1365 samples/chunk) → base64 → WS `audio_chunk`. Gain normalization: quiet audio boosted up to 50x for VAD, original sent to Whisper.
+- `onSpeechEnd` → Whisper STT (model `whisper-1`) → transcript.
+- Incremental Whisper exports during long utterances (every ~15s) keep latency bounded for long answers.
 
 ### Noise Filtering
 
@@ -211,7 +220,8 @@ backend/
 │   │   ├── OpenAIService.js           # Gemini 2.5 Flash chat + Whisper STT (OpenAI-compatible)
 │   │   ├── GeminiTTSService.js        # Gemini TTS with style prompts (primary)
 │   │   ├── TTSService.js              # Google Cloud TTS (fallback)
-│   │   ├── ServerVAD.js               # Silero VAD v4 ONNX
+│   │   ├── ServerVAD.js               # Silero VAD v4 ONNX (legacy STT path)
+│   │   ├── FluxSTTService.js          # Deepgram Flux streaming STT (default when USE_FLUX_STT=true)
 │   │   ├── PromptLabService.js        # Prompt Lab sessions/chat/feedback/tests
 │   │   ├── GitHubService.js           # Auto-commit Prompt Lab edits
 │   │   └── TestScriptGenerator.js     # Generate test scripts via Gemini
@@ -257,7 +267,7 @@ npm run test:watch                  # Auto-run on changes
 npx jest __tests__/scenario-loader.test.js  # Specific file
 ```
 
-294 tests across 17 suites. Coverage thresholds: 55% branches, 60% functions, 65% lines/statements. Tests focus on behavioral verification ("does this feature work?"), not mock wiring.
+306 tests across 18 suites. Coverage thresholds: 55% branches, 60% functions, 65% lines/statements. Tests focus on behavioral verification ("does this feature work?"), not mock wiring.
 
 Key test files:
 - `behavioral.test.js` (31) — Prompt assembly, noise filtering, feedback parsing, subscription enforcement, session management, error handling
@@ -268,6 +278,7 @@ Key test files:
 - `server-vad.test.js` (22) — ONNX mock, state machine, WAV headers
 - `websocket-integration.test.js` (24) — Real WebSocket connections
 - `gemini-tts-service.test.js` (6) — Tag injection, voice config, WAV header
+- `flux-stt-service.test.js` (12) — Deepgram Flux event mapping, lifecycle, error path
 - `prompt-lab-routes.test.js` (13) — One smoke test per endpoint + security
 
 ### E2E Tests (Playwright)
@@ -319,7 +330,7 @@ npm run format        # Prettier
 
 ### Render Environment Variables
 
-`GEMINI_API_KEY` (required), `OPENAI_API_KEY` (optional, Whisper STT only), `GOOGLE_APPLICATION_CREDENTIALS_JSON` (JSON string, not file path), `SUPABASE_URL`, `SUPABASE_SERVICE_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_ID_MONTHLY`, `STRIPE_PRICE_ID_ANNUAL`, `FRONTEND_URL=https://www.reviva.live`, `PROMPT_LAB_ENABLED=true`
+`GEMINI_API_KEY` (required), `OPENAI_API_KEY` (optional, only used by legacy ServerVAD path), `DEEPGRAM_API_KEY` (optional, required for Flux STT path), `USE_FLUX_STT=true|false` (default false; flip to roll Flux out), `GOOGLE_APPLICATION_CREDENTIALS_JSON` (JSON string, not file path), `SUPABASE_URL`, `SUPABASE_SERVICE_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_ID_MONTHLY`, `STRIPE_PRICE_ID_ANNUAL`, `FRONTEND_URL=https://www.reviva.live`, `PROMPT_LAB_ENABLED=true`
 
 ### Local Environment (`backend/.env`)
 
@@ -328,8 +339,12 @@ npm run format        # Prettier
 GEMINI_API_KEY=...
 GOOGLE_APPLICATION_CREDENTIALS=./google-tts-key.json
 
-# Optional (Whisper STT)
+# Optional (legacy STT path: Whisper)
 OPENAI_API_KEY=sk-...
+
+# Optional (Flux STT path — flip both to enable Deepgram Flux)
+DEEPGRAM_API_KEY=...
+USE_FLUX_STT=true
 
 # Optional (Auth & Payments)
 PORT=8080
