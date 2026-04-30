@@ -1,20 +1,18 @@
-import { forwardRef, useImperativeHandle } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { cn } from '../../lib/utils'
 
 /**
- * VoiceOrbSimple — minimal 5-layer ring spinner that replaces the old
- * 5-layer SVG VoiceOrb. Adapted from 21st.dev (CoreSpinLoader). The original
- * was a one-state loader; this version is state-aware:
+ * VoiceOrbSimple — minimal concentric-ring spinner. Adapted from 21st.dev
+ * (CoreSpinLoader). The original was a one-state loader; this version is
+ * state-aware:
  *
  *   idle      → copper, slow rotation
  *   listening → teal,   medium rotation
  *   thinking  → indigo, fast rotation
  *   speaking  → amber,  fastest rotation
  *
- * The ref forwards a no-op stub so legacy callsites that do
- * `audioPlayer.setOrbVisualizer(orbRef.current)` keep working without nulls.
- * Audio reactivity now lives in the separate AudioVisualiser component.
+ * No audio reactivity here — that lives in the separate AudioVisualiser
+ * component, which taps a Web Audio AnalyserNode on AudioPlayer's <Audio>.
  */
 
 const STATE_STYLES = {
@@ -64,24 +62,7 @@ const STATE_STYLES = {
   },
 }
 
-const NOOP_REF = {
-  setState() {},
-  fadeOutPulse() {},
-  fadeInPulse() {},
-  interrupt() {},
-  playWithVisualization() {},
-  destroy() {},
-}
-
-export const VoiceOrbSimple = forwardRef(function VoiceOrbSimple(
-  { state = 'idle', size = 100, statusText = '', className },
-  ref
-) {
-  // Legacy compat: `audioPlayer.setOrbVisualizer(orbRef.current)` calls this
-  // ref's methods. We expose no-ops since audio reactivity now lives in
-  // <AudioVisualiser />.
-  useImperativeHandle(ref, () => NOOP_REF, [])
-
+export function VoiceOrbSimple({ state = 'idle', size = 100, statusText = '', className }) {
   const styles = STATE_STYLES[state] || STATE_STYLES.idle
 
   return (
@@ -145,4 +126,4 @@ export const VoiceOrbSimple = forwardRef(function VoiceOrbSimple(
       </div>
     </div>
   )
-})
+}
