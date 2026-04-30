@@ -2,9 +2,6 @@
  * Feedback Section Buffer
  * Detects ===SECTION_N=== and ===JSON_SUMMARY=== delimiters in a streaming
  * token stream, emitting complete section texts as they are detected.
- *
- * Similar to SentenceBuffer but splits on section delimiters instead of
- * sentence-ending punctuation.
  */
 
 class FeedbackSectionBuffer {

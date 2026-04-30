@@ -54,20 +54,15 @@ const config = {
 
   // TTS Configuration
   TTS_VOICE: process.env.TTS_VOICE || 'Fenrir',
-  TTS_MODEL_NAME: process.env.TTS_MODEL_NAME || 'gemini-2.5-flash-preview-tts',
+  TTS_MODEL_NAME: process.env.TTS_MODEL_NAME || 'gemini-3.1-flash-tts-preview',
 
-  // Gemini TTS style prompts — keyed by difficulty level
-  // Controls vocal delivery: tone, emotion, pacing, prosody (NOT conversational behaviour)
+  // Gemini TTS style tags — keyed by difficulty level
+  // Inline audio tags per Gemini 3.1 Flash TTS guidance. Voice choice does the
+  // heavy lifting; tags nudge tone without competing with the spoken content.
   TTS_STYLE_PROMPTS: {
-    easy: `Audio profile: Warm, reassuring male British voice with gentle resonance and a slight smile in the tone.
-Scene: A calm, supportive clinical teaching environment. The atmosphere is relaxed and encouraging.
-Director's notes: Speak with genuine warmth and patience. Natural conversational pace — not rushed, but not drawn out. Brief natural pauses after questions. Soft emphasis on key words rather than sharp stress. Light upward inflection on questions to sound inviting. Let encouragement come through in vocal colour — a slight lift in pitch when acknowledging good points. Breathe naturally between phrases.`,
-    medium: `Audio profile: Professional, composed female British voice with clear articulation and neutral warmth.
-Scene: A formal but fair examination room. The tone is businesslike and measured.
-Director's notes: Even, steady pacing throughout — neither rushed nor lingering. Crisp consonants, clean vowel sounds. Keep emotional colouring minimal and neutral. Brief natural pauses between topic transitions. Questions delivered with level intonation — clinical precision without coldness. Maintain consistent vocal energy from start to finish. Slight downward inflection at the end of statements, slight rise on questions.`,
-    strict: `Audio profile: Authoritative, crisp male British voice with commanding low-register presence and gravitas.
-Scene: A high-stakes examination room. The atmosphere is intense and focused.
-Director's notes: Brisk, purposeful delivery with tight pacing and minimal pauses between phrases. Clipped consonants, firm emphasis on key terminology. Downward inflection conveys weight and seriousness. No vocal warmth — keep tone dry and matter-of-fact. Slightly faster tempo than conversational speech. When asking questions, deliver them with a direct, expectant tone. Let silences after questions feel deliberate and pressuring.`
+    easy: '[warm, conversational]',
+    medium: '[professional, measured]',
+    strict: '[firm, brisk, formal]'
   },
 
   // Paths
