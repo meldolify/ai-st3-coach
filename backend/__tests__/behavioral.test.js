@@ -363,33 +363,22 @@ describe('Subscription Enforcement', () => {
 // Uses the same monkey-patch pattern as websocket-integration.test.js
 // ============================================================================
 
-// Track VAD instances for session management tests
-const vadInstances = [];
+// Track Flux instances for session management tests
+const fluxInstances = [];
 
-jest.mock('../src/services/ServerVAD', () => {
-  function MockServerVAD() {
+jest.mock('../src/services/FluxSTTService', () => {
+  function MockFluxSTTService() {
     this.initialize = jest.fn(() => Promise.resolve());
-    this.processChunk = jest.fn(() => Promise.resolve());
+    this.processChunk = jest.fn();
     this.destroy = jest.fn();
     this.reset = jest.fn();
     this.onSpeechStart = null;
-    this.onSpeechEnd = null;
-    this.onIncrementalAudio = null;
-    this.speechStartTime = null;
-    vadInstances.push(this);
+    this.onTranscript = null;
+    this.onError = null;
+    fluxInstances.push(this);
   }
-  return {
-    ServerVAD: MockServerVAD,
-    float32ToWavBuffer: jest.fn(() => Buffer.from('fake-wav'))
-  };
+  return { FluxSTTService: MockFluxSTTService };
 });
-
-jest.mock('onnxruntime-node', () => ({
-  InferenceSession: {
-    create: jest.fn(() => Promise.resolve({ run: jest.fn(() => Promise.resolve({})) }))
-  },
-  Tensor: jest.fn()
-}));
 
 const WebSocket = require('ws');
 const http = require('http');
@@ -499,11 +488,12 @@ beforeAll(async () => {
   openaiService.llmClient = {
     chat: { completions: { create: jest.fn() } }
   };
-  openaiService.whisperClient = {
-    audio: { transcriptions: { create: jest.fn() } }
-  };
   ttsService.client = { synthesizeSpeech: jest.fn() };
   geminiTTSService.synthesize = jest.fn().mockResolvedValue(Buffer.from('fake-wav-audio'));
+  // streamResponseToClient uses synthesizeStream; provide an async generator yielding one chunk.
+  geminiTTSService.synthesizeStream = jest.fn(async function* () {
+    yield Buffer.from('fake-wav-audio');
+  });
 
   const origCreateServer = http.createServer;
   http.createServer = function (...args) {
@@ -536,6 +526,9 @@ afterAll(async () => {
 beforeEach(() => {
   jest.clearAllMocks();
   geminiTTSService.synthesize = jest.fn().mockResolvedValue(Buffer.from('fake-wav-audio'));
+  geminiTTSService.synthesizeStream = jest.fn(async function* () {
+    yield Buffer.from('fake-wav-audio');
+  });
   mockStreamingResponse(['Hello. ']);
   ttsService.client.synthesizeSpeech.mockResolvedValue([
     { audioContent: Buffer.from('fake-mp3-audio') }

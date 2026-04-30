@@ -40,16 +40,13 @@ if (process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON) {
 }
 
 const config = {
-  // Required — Gemini for LLM, OpenAI for Whisper STT
+  // Required — Gemini for LLM
   GEMINI_API_KEY: process.env.GEMINI_API_KEY,
-  OPENAI_API_KEY: process.env.OPENAI_API_KEY,
   GOOGLE_APPLICATION_CREDENTIALS: process.env.GOOGLE_APPLICATION_CREDENTIALS,
 
-  // Deepgram Flux (streaming STT with model-integrated turn detection).
-  // Set USE_FLUX_STT=true to route a session through Flux instead of ServerVAD + Whisper.
-  // Default false so production keeps current ServerVAD + Whisper path.
+  // Deepgram Flux: streaming STT with model-integrated turn detection.
+  // Required — this is the only STT path.
   DEEPGRAM_API_KEY: process.env.DEEPGRAM_API_KEY,
-  USE_FLUX_STT: process.env.USE_FLUX_STT === 'true',
 
   // LLM Configuration
   LLM_MODEL: process.env.LLM_MODEL || 'gemini-2.5-flash',
@@ -62,13 +59,14 @@ const config = {
   TTS_VOICE: process.env.TTS_VOICE || 'Fenrir',
   TTS_MODEL_NAME: process.env.TTS_MODEL_NAME || 'gemini-3.1-flash-tts-preview',
 
-  // Gemini TTS style tags — keyed by difficulty level
-  // Inline audio tags per Gemini 3.1 Flash TTS guidance. Voice choice does the
-  // heavy lifting; tags nudge tone without competing with the spoken content.
+  // Gemini TTS style tags — keyed by difficulty level.
+  // Per Gemini 3.1 Flash TTS guidance: voices default to American English, so
+  // the British accent has to be specified explicitly via the tag. Tone is
+  // calibrated for an OSCE-style examiner (calm/neutral/firm — never friendly).
   TTS_STYLE_PROMPTS: {
-    easy: '[warm, conversational]',
-    medium: '[professional, measured]',
-    strict: '[firm, brisk, formal]'
+    easy: '[British accent, calm, supportive examiner tone]',
+    medium: '[British accent, professional, neutral examiner tone, measured pace]',
+    strict: '[British accent, firm, formal examiner tone, no warmth, brisk pace]'
   },
 
   // Paths
@@ -140,19 +138,14 @@ function validateConfig() {
     console.error('ERROR: GEMINI_API_KEY not found in .env file');
     process.exit(1);
   }
-  if (!config.OPENAI_API_KEY) {
-    console.warn('WARNING: OPENAI_API_KEY not found — Whisper STT will not work');
-  }
-  if (config.USE_FLUX_STT && !config.DEEPGRAM_API_KEY) {
-    console.warn(
-      'WARNING: USE_FLUX_STT=true but DEEPGRAM_API_KEY not set — sessions will fall back to ServerVAD + Whisper'
-    );
+  if (!config.DEEPGRAM_API_KEY) {
+    console.error('ERROR: DEEPGRAM_API_KEY not found in .env file (required for STT)');
+    process.exit(1);
   }
 
   console.log(`[CONFIG] LLM model: ${config.LLM_MODEL}`);
-  console.log(
-    `[CONFIG] STT path: ${config.USE_FLUX_STT ? 'Deepgram Flux' : 'ServerVAD + Whisper'}`
-  );
+  console.log(`[CONFIG] TTS model: ${config.TTS_MODEL_NAME}`);
+  console.log('[CONFIG] STT: Deepgram Flux');
 
   // Log optional service status
   if (config.isStripeEnabled) {

@@ -11,48 +11,33 @@
 
 process.env.NODE_ENV = 'test';
 process.env.GEMINI_API_KEY = 'test-gemini-key';
-process.env.OPENAI_API_KEY = 'test-api-key';
+process.env.DEEPGRAM_API_KEY = 'test-deepgram-key';
 // Ensure DEV_BYPASS_AUTH is set so we don't need Supabase
 process.env.DEV_BYPASS_AUTH = 'true';
-// Pin to legacy ServerVAD path; FluxSTTService has its own test suite.
-process.env.USE_FLUX_STT = 'false';
 
 // ============================================================================
 // MOCKS — must be declared before any require() of server.js
 // ============================================================================
 
-// Track all VAD instances created for test assertions
-const vadInstances = [];
+// Track all Flux instances created for test assertions
+const fluxInstances = [];
 
-// Mock ServerVAD BEFORE it's imported by server.js.
-// IMPORTANT: Must use a real constructor (this.xxx =) not jest.fn(factory),
-// because jest.fn() used with `new` ignores the factory return value.
-jest.mock('../src/services/ServerVAD', () => {
-  function MockServerVAD() {
+// Mock FluxSTTService BEFORE it's imported by server.js.
+// Uses a real constructor (this.xxx = ...) so `new MockFluxSTTService()`
+// returns a populated instance.
+jest.mock('../src/services/FluxSTTService', () => {
+  function MockFluxSTTService() {
     this.initialize = jest.fn(() => Promise.resolve());
-    this.processChunk = jest.fn(() => Promise.resolve());
+    this.processChunk = jest.fn();
     this.destroy = jest.fn();
     this.reset = jest.fn();
     this.onSpeechStart = null;
-    this.onSpeechEnd = null;
-    this.onIncrementalAudio = null;
-    this.speechStartTime = null;
-    vadInstances.push(this);
+    this.onTranscript = null;
+    this.onError = null;
+    fluxInstances.push(this);
   }
-
-  return {
-    ServerVAD: MockServerVAD,
-    float32ToWavBuffer: jest.fn(() => Buffer.from('fake-wav'))
-  };
+  return { FluxSTTService: MockFluxSTTService };
 });
-
-// Mock onnxruntime-node to prevent native module loading
-jest.mock('onnxruntime-node', () => ({
-  InferenceSession: {
-    create: jest.fn(() => Promise.resolve({ run: jest.fn(() => Promise.resolve({})) }))
-  },
-  Tensor: jest.fn()
-}));
 
 // ============================================================================
 // IMPORTS and SERVER CAPTURE
@@ -199,9 +184,6 @@ beforeAll(async () => {
   openaiService.llmClient = {
     chat: { completions: { create: jest.fn() } }
   };
-  openaiService.whisperClient = {
-    audio: { transcriptions: { create: jest.fn() } }
-  };
 
   ttsService.client = {
     synthesizeSpeech: jest.fn()
@@ -209,6 +191,9 @@ beforeAll(async () => {
 
   // Mock GeminiTTSService to prevent real Gemini API calls
   geminiTTSService.synthesize = jest.fn().mockResolvedValue(Buffer.from('fake-wav-audio'));
+  geminiTTSService.synthesizeStream = jest.fn(async function* () {
+    yield Buffer.from('fake-wav-audio');
+  });
 
   // 2. Monkey-patch http.createServer to capture the server reference
   const origCreateServer = http.createServer;
@@ -247,8 +232,11 @@ afterAll(async () => {
 beforeEach(() => {
   jest.clearAllMocks();
 
-  // Re-set Gemini TTS mock (resetMocks: true wipes it before each test)
+  // Re-set Gemini TTS mocks (resetMocks: true wipes them before each test)
   geminiTTSService.synthesize = jest.fn().mockResolvedValue(Buffer.from('fake-wav-audio'));
+  geminiTTSService.synthesizeStream = jest.fn(async function* () {
+    yield Buffer.from('fake-wav-audio');
+  });
 
   // Default mocks
   mockStreamingResponse(['Hello. ']);
@@ -476,7 +464,7 @@ describe('Message flow - user_transcript', () => {
 });
 
 describe('Message flow - audio_chunk', () => {
-  test('sending audio_chunk is accepted without error', async () => {
+  test('sending audio_chunk forwards PCM to Flux', async () => {
     const ws = await connectWS(`scenario=${FREE_SCENARIO}`);
     try {
       const initMsg = await waitForMessage(ws);
@@ -494,21 +482,16 @@ describe('Message flow - audio_chunk', () => {
 
       await new Promise(resolve => setTimeout(resolve, 300));
 
-      // VAD processChunk should have been called
-      const lastInstance = vadInstances[vadInstances.length - 1];
+      const lastInstance = fluxInstances[fluxInstances.length - 1];
       expect(lastInstance.processChunk).toHaveBeenCalled();
     } finally {
       ws.close();
     }
   });
 
-  test('audio_chunk is ignored when AI is speaking', async () => {
+  test('audio_chunk continues to be forwarded while AI is speaking (enables barge-in)', async () => {
     mockStreamingResponse(['Hello. ']);
-    ttsService.client.synthesizeSpeech.mockResolvedValue([
-      {
-        audioContent: Buffer.from('audio')
-      }
-    ]);
+    ttsService.client.synthesizeSpeech.mockResolvedValue([{ audioContent: Buffer.from('audio') }]);
 
     const ws = await connectWS(`scenario=${FREE_SCENARIO}`);
     try {
@@ -525,11 +508,10 @@ describe('Message flow - audio_chunk', () => {
       );
       await collectMessages(ws, 3);
 
-      // AI is now speaking. Get the VAD instance and clear it.
-      const lastInstance = vadInstances[vadInstances.length - 1];
+      // AI is now speaking. Mic stays open so Flux can detect StartOfTurn.
+      const lastInstance = fluxInstances[fluxInstances.length - 1];
       lastInstance.processChunk.mockClear();
 
-      // Send audio while AI speaking
       const samples = new Int16Array(1365);
       ws.send(
         JSON.stringify({
@@ -540,7 +522,7 @@ describe('Message flow - audio_chunk', () => {
       );
 
       await new Promise(resolve => setTimeout(resolve, 300));
-      expect(lastInstance.processChunk).not.toHaveBeenCalled();
+      expect(lastInstance.processChunk).toHaveBeenCalled();
     } finally {
       ws.close();
     }
@@ -815,8 +797,12 @@ describe('Session management', () => {
     const customVoice = 'en-GB-Neural2-B';
     mockStreamingResponse(['Test. ']);
 
-    // Force Gemini TTS to fail so it falls through to Cloud TTS
-    geminiTTSService.synthesize = jest.fn().mockRejectedValue(new Error('Gemini TTS unavailable'));
+    // Force Gemini TTS streaming to fail so the live path falls back to Cloud TTS
+    geminiTTSService.synthesizeStream = jest.fn(async function* () {
+      throw new Error('Gemini TTS unavailable');
+      // eslint-disable-next-line no-unreachable
+      yield;
+    });
     ttsService.client.synthesizeSpeech.mockResolvedValue([
       {
         audioContent: Buffer.from('audio')
