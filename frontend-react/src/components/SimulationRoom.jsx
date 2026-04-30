@@ -293,7 +293,7 @@ export default function SimulationRoom() {
   return (
     <motion.div
       data-testid="sim-room"
-      className="min-h-screen flex bg-organic-cream relative overflow-hidden"
+      className="h-screen flex bg-organic-cream relative overflow-hidden"
       animate={isExiting ? { scale: 0.94, opacity: 0, filter: 'blur(6px)' } : { scale: 1, opacity: 1, filter: 'blur(0px)' }}
       transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
     >
@@ -308,7 +308,7 @@ export default function SimulationRoom() {
       />
 
       {/* Main content area */}
-      <div className="flex-1 flex flex-col min-h-screen relative z-10 lg:ml-16 p-3 sm:p-4 lg:p-5 gap-3 lg:gap-5">
+      <div className="flex-1 flex flex-col min-h-0 relative z-10 lg:ml-16 p-4 lg:p-6 gap-4 lg:gap-7">
         {/* Header */}
         <motion.div initial={reveal.header.initial} animate={reveal.header.animate} transition={reveal.header.transition}>
           <Header
@@ -327,7 +327,7 @@ export default function SimulationRoom() {
         <main
           className={cn(
             'flex-1 grid min-h-0',
-            'gap-3 lg:gap-5',
+            'gap-4 lg:gap-7',
             'grid-cols-1 lg:grid-cols-[minmax(220px,1fr)_minmax(320px,1.4fr)_minmax(220px,1fr)]',
             'auto-rows-min lg:grid-rows-[minmax(280px,1.6fr)_minmax(220px,1fr)]'
           )}
