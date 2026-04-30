@@ -10,7 +10,8 @@ export class AudioStreamer {
     this.sourceNode = null
     this.websocket = null
     this.isStreaming = false
-    this.isPaused = false
+    this.isPaused = false       // gated by AI speaking (echo prevention)
+    this._userPaused = false    // gated by explicit user Pause button
     this._initialized = false
     this._sessionId = null
   }
@@ -40,7 +41,7 @@ export class AudioStreamer {
     this.scriptProcessor = this.audioContext.createScriptProcessor(4096, 1, 1)
 
     this.scriptProcessor.onaudioprocess = (event) => {
-      if (!this.isStreaming || this.isPaused) return
+      if (!this.isStreaming || this.isPaused || this._userPaused) return
 
       const input = event.inputBuffer.getChannelData(0)
       const pcm16k = this._downsample(input, this.audioContext.sampleRate, 16000)
@@ -75,9 +76,26 @@ export class AudioStreamer {
     this.isPaused = speaking
   }
 
+  /**
+   * pause / resume — explicit user-initiated pause. Independent of the
+   * AI-speaking pause (`isPaused`) so the two don't fight.
+   */
+  pause() {
+    this._userPaused = true
+  }
+
+  resume() {
+    this._userPaused = false
+  }
+
+  isUserPaused() {
+    return this._userPaused
+  }
+
   destroy() {
     this.isStreaming = false
     this.isPaused = false
+    this._userPaused = false
 
     if (this.scriptProcessor) {
       this.scriptProcessor.disconnect()

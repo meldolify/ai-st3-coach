@@ -18,41 +18,42 @@ import { motion, useMotionValue, useSpring } from 'framer-motion'
  * @param {boolean} [props.mobile=false] — When true, renders 2 smaller blobs instead of 4.
  */
 
+// Organic palette: forest #2D5A3D, amber #D4943A, sand #E8D5B5
 const DESKTOP_BLOBS = [
   {
     size: 500, blur: 120,
-    color: 'rgba(74, 93, 76, 0.12)',
+    color: 'rgba(45, 90, 61, 0.10)',  // forest
     x: '10%', y: '20%',
     driftX: [-30, 30], driftY: [-20, 20],
     rotate: 360, scale: [1, 1, 1],
-    opacity: [0.6, 0.9, 0.6],
+    opacity: [0.5, 0.8, 0.5],
     duration: 25,
   },
   {
     size: 400, blur: 100,
-    color: 'rgba(184, 155, 120, 0.10)',
+    color: 'rgba(212, 148, 58, 0.08)', // amber
     x: '60%', y: '50%',
     driftX: [-20, 20], driftY: [0, 0],
     rotate: 0, scale: [1, 1.1, 1],
-    opacity: [0.5, 0.8, 0.5],
+    opacity: [0.5, 0.75, 0.5],
     duration: 10,
   },
   {
     size: 550, blur: 140,
-    color: 'rgba(110, 190, 180, 0.08)',
+    color: 'rgba(232, 213, 181, 0.20)', // sand
     x: '30%', y: '70%',
     driftX: [20, -20], driftY: [0, 0],
     rotate: -360, scale: [1, 1, 1],
-    opacity: [0.5, 0.8, 0.5],
+    opacity: [0.4, 0.7, 0.4],
     duration: 30,
   },
   {
     size: 350, blur: 100,
-    color: 'rgba(130, 130, 200, 0.08)',
+    color: 'rgba(212, 148, 58, 0.06)', // amber accent
     x: '75%', y: '15%',
     driftX: [0, 0], driftY: [-25, 25],
     rotate: 0, scale: [1, 1.05, 1],
-    opacity: [0.4, 0.7, 0.4],
+    opacity: [0.4, 0.65, 0.4],
     duration: 20,
   },
 ]
@@ -60,7 +61,7 @@ const DESKTOP_BLOBS = [
 const MOBILE_BLOBS = [
   {
     size: 350, blur: 100,
-    color: 'rgba(74, 93, 76, 0.08)',
+    color: 'rgba(45, 90, 61, 0.07)', // forest
     x: '20%', y: '30%',
     driftX: [-15, 15], driftY: [0, 0],
     rotate: 360, scale: [1, 1, 1],
@@ -69,7 +70,7 @@ const MOBILE_BLOBS = [
   },
   {
     size: 300, blur: 80,
-    color: 'rgba(184, 155, 120, 0.06)',
+    color: 'rgba(212, 148, 58, 0.05)', // amber
     x: '60%', y: '60%',
     driftX: [0, 0], driftY: [0, 0],
     rotate: 0, scale: [1, 1.05, 1],

@@ -75,7 +75,7 @@ export default function Sidebar({
         onMouseLeave={() => setIsHovered(false)}
         className={cn(
           'fixed top-0 left-0 bottom-0 z-40',
-          'bg-white/80 backdrop-blur-xl border-r border-black/[0.06]',
+          'bg-organic-cream/95 backdrop-blur-xl border-r border-organic-stone',
           'flex flex-col overflow-hidden',
           'hidden lg:flex',
           isOpen && '!flex'
@@ -99,8 +99,8 @@ export default function Sidebar({
                   className={cn(
                     'w-full flex items-center gap-3 px-4 py-2.5',
                     'text-left transition-colors duration-150',
-                    'hover:bg-black/[0.04]',
-                    isActiveCat && 'border-l-3 border-accent'
+                    'hover:bg-organic-sand/60',
+                    isActiveCat && 'border-l-[3px] border-organic-amber bg-organic-amber/10'
                   )}
                   title={cat.name}
                   aria-label={cat.name}
@@ -116,9 +116,9 @@ export default function Sidebar({
                         transition={{ delay: 0.1 }}
                         className="flex items-center justify-between flex-1 min-w-0"
                       >
-                        <span className="text-[13px] font-medium text-text-primary truncate">{cat.name}</span>
+                        <span className="text-[13px] font-medium text-organic-bark truncate">{cat.name}</span>
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-                          className={cn('text-text-muted transition-transform duration-200 shrink-0', isCatExpanded && 'rotate-90')}>
+                          className={cn('text-organic-bark/40 transition-transform duration-200 shrink-0', isCatExpanded && 'rotate-90')}>
                           <path d="M9 18l6-6-6-6" />
                         </svg>
                       </motion.div>
@@ -146,15 +146,15 @@ export default function Sidebar({
                               onClick={() => toggleSubcategory(sub.id)}
                               className={cn(
                                 'w-full flex items-center gap-2 pl-12 pr-4 py-2',
-                                'text-left transition-colors hover:bg-black/[0.04]'
+                                'text-left transition-colors hover:bg-organic-sand/50'
                               )}
                               aria-label={sub.name}
                               aria-expanded={isSubExpanded}
                             >
                               <span className="text-[13px] shrink-0">{sub.icon}</span>
-                              <span className="text-[12px] text-text-secondary truncate flex-1">{sub.name}</span>
+                              <span className="text-[12px] text-organic-bark/75 truncate flex-1">{sub.name}</span>
                               <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-                                className={cn('text-text-muted transition-transform duration-200 shrink-0', isSubExpanded && 'rotate-90')}>
+                                className={cn('text-organic-bark/40 transition-transform duration-200 shrink-0', isSubExpanded && 'rotate-90')}>
                                 <path d="M9 18l6-6-6-6" />
                               </svg>
                             </button>
@@ -176,8 +176,8 @@ export default function Sidebar({
                                         'w-full text-left pl-16 pr-4 py-1.5',
                                         'text-[12px] transition-colors',
                                         promptFile === currentPromptFile
-                                          ? 'text-accent font-medium border-l-2 border-accent bg-accent/10'
-                                          : 'text-text-secondary hover:text-text-primary hover:bg-black/[0.03]'
+                                          ? 'text-organic-forest font-semibold border-l-2 border-organic-amber bg-organic-amber/10'
+                                          : 'text-organic-bark/70 hover:text-organic-forest hover:bg-organic-sand/40'
                                       )}
                                     >
                                       {name}

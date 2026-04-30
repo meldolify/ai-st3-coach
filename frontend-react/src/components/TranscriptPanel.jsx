@@ -86,12 +86,15 @@ export default memo(function TranscriptPanel({ messages, personaName = 'Examiner
       )}
     >
       {/* Panel header */}
-      <div className="flex items-center justify-between px-5 py-3 border-b border-black/[0.06]">
-        <h2 className="text-[13px] font-medium text-text-secondary uppercase tracking-wider">
+      <div className="flex items-center justify-between px-5 py-3 border-b border-organic-stone">
+        <h2
+          className="text-[12px] text-organic-forest uppercase tracking-[0.2em]"
+          style={{ fontFamily: 'var(--font-organic-display)', fontWeight: 600 }}
+        >
           Transcript
         </h2>
-        <span className="text-[12px] text-text-muted">
-          {messages.length} messages
+        <span className="text-[11px] text-organic-bark/55">
+          {messages.length} {messages.length === 1 ? 'message' : 'messages'}
         </span>
       </div>
 
@@ -104,7 +107,7 @@ export default memo(function TranscriptPanel({ messages, personaName = 'Examiner
       >
         {messages.length === 0 && (
           <div className="flex items-center justify-center h-full">
-            <p className="text-text-muted text-sm">
+            <p className="text-organic-bark/45 text-sm italic text-center max-w-[240px]">
               Conversation will appear here once the session starts.
             </p>
           </div>
@@ -129,10 +132,10 @@ export default memo(function TranscriptPanel({ messages, personaName = 'Examiner
                   group.speaker === 'user' ? 'flex-row-reverse' : ''
                 )}
               >
-                <span className="text-[11px] font-medium text-text-muted">
+                <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-organic-bark/55">
                   {group.speaker === 'user' ? 'You' : personaName}
                 </span>
-                <span className="text-[11px] text-text-muted">
+                <span className="text-[10px] text-organic-bark/40">
                   {formatRelativeTime(group.timestamp)}
                 </span>
               </div>
@@ -153,10 +156,10 @@ export default memo(function TranscriptPanel({ messages, personaName = 'Examiner
                     key={msg.id}
                     aria-label={`${msg.speaker === 'user' ? 'You' : personaName}: ${msg.text}`}
                     className={cn(
-                      'max-w-[85%] rounded-lg px-4 py-2.5 mb-1 text-[15px] leading-relaxed',
+                      'max-w-[85%] rounded-lg px-4 py-2.5 mb-1 text-[14px] leading-relaxed',
                       group.speaker === 'user'
-                        ? 'bg-accent text-white ml-auto'
-                        : 'bg-black/[0.04] text-text-primary border-l-2 border-accent/30'
+                        ? 'bg-organic-forest text-organic-cream ml-auto shadow-sm'
+                        : 'bg-organic-cream-deep text-organic-bark border-l-2 border-organic-amber'
                     )}
                   >
                     <AnimatedMessage text={msg.text} animate={shouldAnimate} />
