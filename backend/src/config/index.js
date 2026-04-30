@@ -45,6 +45,12 @@ const config = {
   OPENAI_API_KEY: process.env.OPENAI_API_KEY,
   GOOGLE_APPLICATION_CREDENTIALS: process.env.GOOGLE_APPLICATION_CREDENTIALS,
 
+  // Deepgram Flux (streaming STT with model-integrated turn detection).
+  // Set USE_FLUX_STT=true to route a session through Flux instead of ServerVAD + Whisper.
+  // Default false so production keeps current ServerVAD + Whisper path.
+  DEEPGRAM_API_KEY: process.env.DEEPGRAM_API_KEY,
+  USE_FLUX_STT: process.env.USE_FLUX_STT === 'true',
+
   // LLM Configuration
   LLM_MODEL: process.env.LLM_MODEL || 'gemini-2.5-flash',
 
@@ -137,8 +143,16 @@ function validateConfig() {
   if (!config.OPENAI_API_KEY) {
     console.warn('WARNING: OPENAI_API_KEY not found — Whisper STT will not work');
   }
+  if (config.USE_FLUX_STT && !config.DEEPGRAM_API_KEY) {
+    console.warn(
+      'WARNING: USE_FLUX_STT=true but DEEPGRAM_API_KEY not set — sessions will fall back to ServerVAD + Whisper'
+    );
+  }
 
   console.log(`[CONFIG] LLM model: ${config.LLM_MODEL}`);
+  console.log(
+    `[CONFIG] STT path: ${config.USE_FLUX_STT ? 'Deepgram Flux' : 'ServerVAD + Whisper'}`
+  );
 
   // Log optional service status
   if (config.isStripeEnabled) {

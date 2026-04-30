@@ -14,6 +14,8 @@ process.env.GEMINI_API_KEY = 'test-gemini-key';
 process.env.OPENAI_API_KEY = 'test-api-key';
 // Ensure DEV_BYPASS_AUTH is set so we don't need Supabase
 process.env.DEV_BYPASS_AUTH = 'true';
+// Pin to legacy ServerVAD path; FluxSTTService has its own test suite.
+process.env.USE_FLUX_STT = 'false';
 
 // ============================================================================
 // MOCKS — must be declared before any require() of server.js
