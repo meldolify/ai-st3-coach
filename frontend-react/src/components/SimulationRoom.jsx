@@ -32,7 +32,6 @@ export default function SimulationRoom() {
   const authLoading = useAuthStore((s) => s.authLoading)
   const navigate = useNavigate()
   const { params } = useSimulationParams()
-  const orbRef = useRef(null)
   const imageCloseRef = useRef(null)
   const feedbackContinueRef = useRef(null)
   const [isConnecting, setIsConnecting] = useState(false)
@@ -73,7 +72,7 @@ export default function SimulationRoom() {
     sendEndInterview,
     requestFeedback,
     disconnect,
-  } = useSession({ orbVisualizerRef: orbRef })
+  } = useSession({})
 
   const domain = scenarioMeta?.domain || 'clinical'
   const isAISpeaking = orbState === 'speaking'
@@ -257,7 +256,6 @@ export default function SimulationRoom() {
       <div className="relative z-10 flex flex-col items-center justify-center gap-3 h-full p-4">
         <AudioVisualiser audioPlayer={audioPlayer} isAISpeaking={isAISpeaking} />
         <VoiceOrbSimple
-          ref={orbRef}
           state={prepPhase ? 'idle' : orbState}
           size={120}
           statusText={prepPhase ? '' : statusText}
