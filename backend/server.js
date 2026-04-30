@@ -19,7 +19,6 @@ const server = http.createServer(app);
 const openaiService = require('./src/services/OpenAIService');
 const ttsService = require('./src/services/TTSService');
 const geminiTTSService = require('./src/services/GeminiTTSService');
-const { ServerVAD, float32ToWavBuffer } = require('./src/services/ServerVAD');
 const { FluxSTTService } = require('./src/services/FluxSTTService');
 const { isNoiseTranscript, buildNaturalSSML } = require('./src/utils/audioHelpers');
 const {
@@ -106,11 +105,11 @@ const VOICE_FALLBACK_MAP = {
 };
 
 /**
- * Synthesize TTS for a session — tries Gemini TTS with style tag first,
- * falls back to Cloud TTS with SSML on error.
- * @param {string} plainText - Plain text to speak
- * @param {Object} session - Session object (needs session.voice, session.difficulty)
- * @returns {Promise<Buffer>} - Audio data (WAV from Gemini, MP3 from Cloud TTS)
+ * One-shot TTS for a session — used by the feedback flow (discrete sections).
+ * Tries Gemini TTS with style tag first, falls back to Cloud TTS on error.
+ * @param {string} plainText
+ * @param {Object} session - needs session.voice, session.difficulty
+ * @returns {Promise<Buffer>} - WAV (Gemini) or MP3 (Cloud TTS fallback)
  */
 async function ttsForSession(plainText, session) {
   const stylePrompt = config.TTS_STYLE_PROMPTS?.[session.difficulty];
@@ -124,14 +123,39 @@ async function ttsForSession(plainText, session) {
           await new Promise(r => setTimeout(r, 500));
         } else {
           console.warn('[TTS] Gemini failed twice, falling back to Cloud TTS:', error.message);
-          console.warn('[TTS] Voice will differ — Cloud TTS fallback for:', plainText.slice(0, 50));
         }
       }
     }
   }
-  // Fallback: Cloud TTS with SSML (map Gemini voice names to Cloud equivalents, pass through others)
   const cloudVoice = VOICE_FALLBACK_MAP[session.voice] || session.voice;
   return googleTTS(buildNaturalSSML(plainText), cloudVoice);
+}
+
+/**
+ * Streaming TTS for a session — yields WAV chunks as Gemini emits them so
+ * the client starts playing in ~500-1000ms instead of waiting for the full
+ * turn (which is 4-9s of dead air on Gemini 3.1 Flash TTS).
+ * Falls back to a single Cloud TTS chunk on Gemini error.
+ * @param {string} plainText
+ * @param {Object} session - needs session.voice, session.difficulty
+ * @yields {Buffer} WAV chunk
+ */
+async function* ttsStreamForSession(plainText, session) {
+  const stylePrompt = config.TTS_STYLE_PROMPTS?.[session.difficulty];
+  if (stylePrompt) {
+    try {
+      for await (const chunk of geminiTTSService.synthesizeStream(plainText, session.voice, {
+        stylePrompt
+      })) {
+        yield chunk;
+      }
+      return;
+    } catch (error) {
+      console.warn('[TTS] Gemini stream failed, falling back to Cloud TTS:', error.message);
+    }
+  }
+  const cloudVoice = VOICE_FALLBACK_MAP[session.voice] || session.voice;
+  yield await googleTTS(buildNaturalSSML(plainText), cloudVoice);
 }
 
 /**
@@ -152,6 +176,7 @@ async function streamResponseToClient(session, ws, history, options = {}) {
   let fullText = '';
   const t0 = Date.now();
   let firstTokenAt = 0;
+  let firstChunkSentAt = 0;
 
   session.isAISpeaking = true;
   ws.send(JSON.stringify({ type: 'ai_response_start' }));
@@ -174,22 +199,33 @@ async function streamResponseToClient(session, ws, history, options = {}) {
     const tLLMEnd = Date.now();
     console.log(`[PERF] LLM stream complete: ${tLLMEnd - t0}ms`);
 
-    // 2. One TTS call for the whole turn (skip if no content or if interrupted)
+    // 2. Streaming TTS — ship each WAV chunk to the client as it arrives so
+    //    playback starts within ~500-1000ms instead of waiting 4-9s for the
+    //    full turn (one-shot generateContent latency on Gemini 3.1 Flash TTS).
     if (fullText && !wasInterrupted) {
-      const audio = await ttsForSession(fullText, session);
-      const tTTSEnd = Date.now();
-      console.log(`[PERF] TTS complete: ${tTTSEnd - tLLMEnd}ms`);
-
-      if (session.isAISpeaking) {
-        ws.send(
-          JSON.stringify({
-            type: 'ai_response_chunk',
-            text: fullText,
-            audio: audio.toString('base64'),
-            chunkIndex: 0
-          })
-        );
+      let chunkIndex = 0;
+      try {
+        for await (const wavChunk of ttsStreamForSession(fullText, session)) {
+          if (!session.isAISpeaking) {
+            break;
+          }
+          if (!firstChunkSentAt) {
+            firstChunkSentAt = Date.now();
+            console.log(`[PERF] TTS first chunk sent: ${firstChunkSentAt - tLLMEnd}ms`);
+          }
+          ws.send(
+            JSON.stringify({
+              type: 'ai_response_chunk',
+              text: chunkIndex === 0 ? fullText : '',
+              audio: wavChunk.toString('base64'),
+              chunkIndex: chunkIndex++
+            })
+          );
+        }
+      } catch (ttsError) {
+        console.error('[TTS] Stream failed entirely:', ttsError.message);
       }
+      console.log(`[PERF] TTS stream complete: ${Date.now() - tLLMEnd}ms (${chunkIndex} chunks)`);
     }
 
     const tEnd = Date.now();
@@ -201,7 +237,6 @@ async function streamResponseToClient(session, ws, history, options = {}) {
       if (fullText.length > 50) {
         history.push({ role: 'assistant', content: fullText + ' [interrupted]' });
       }
-      // Very short fragments are discarded entirely
     } else {
       history.push({ role: 'assistant', content: fullText });
     }
@@ -209,7 +244,6 @@ async function streamResponseToClient(session, ws, history, options = {}) {
     ws.send(JSON.stringify({ type: 'ai_response_end', fullText }));
   } catch (error) {
     console.error('[STREAM] Error:', error.message);
-    // Don't push partial text on error — it corrupts LLM context
     const isRateLimit = error instanceof RateLimitError || error.isRateLimit;
     ws.send(
       JSON.stringify({
@@ -258,7 +292,6 @@ const idleCleanupInterval = setInterval(
         console.log(
           `[CLEANUP] Removing idle session: ${id} (idle ${Math.round((now - session.lastActivity) / 60000)}min)`
         );
-        session.vad?.destroy();
         session.flux?.destroy();
         session.ws?.terminate();
         sessions.delete(id);
@@ -390,41 +423,17 @@ wss.on('connection', (ws, req) => {
     const scenarioPrompt = buildInterviewPrompt(difficulty, scenarioFile);
     const sessionId = generateSecureSessionId();
 
-    // STT path: Deepgram Flux (streaming, model-integrated turn detection) or
-    // ServerVAD + Whisper (legacy). Selected by USE_FLUX_STT env var; the
-    // missing-key path falls back to ServerVAD per validateConfig() warning.
-    const useFlux = config.USE_FLUX_STT && !!config.DEEPGRAM_API_KEY;
-    let vadInstance = null;
-    let fluxInstance = null;
-
-    if (useFlux) {
-      fluxInstance = new FluxSTTService();
-      try {
-        await fluxInstance.initialize();
-      } catch (fluxError) {
-        console.error('[Flux] Failed to initialize:', fluxError.message);
-        ws.send(JSON.stringify({ type: 'error', message: 'STT initialization failed' }));
-        ws.close(1011, 'STT initialization failed');
-        return;
-      }
-    } else {
-      vadInstance = new ServerVAD();
-      try {
-        await vadInstance.initialize();
-      } catch (vadError) {
-        console.error('[VAD] Failed to initialize:', vadError.message);
-        ws.send(JSON.stringify({ type: 'error', message: 'Server VAD initialization failed' }));
-        ws.close(1011, 'VAD initialization failed');
-        return;
-      }
+    // STT: Deepgram Flux (streaming WebSocket, model-integrated turn detection
+    // and barge-in via StartOfTurn). DEEPGRAM_API_KEY is validated at startup.
+    const fluxInstance = new FluxSTTService();
+    try {
+      await fluxInstance.initialize();
+    } catch (fluxError) {
+      console.error('[Flux] Failed to initialize:', fluxError.message);
+      ws.send(JSON.stringify({ type: 'error', message: 'STT initialization failed' }));
+      ws.close(1011, 'STT initialization failed');
+      return;
     }
-
-    // Per-session incremental Whisper state (only used in ServerVAD path)
-    const incrementalState = {
-      latestTranscript: '', // Most recent cumulative transcript
-      pendingTranscription: null, // Promise for in-flight Whisper call
-      exportCount: 0
-    };
 
     sessions.set(sessionId, {
       history: [{ role: 'system', content: scenarioPrompt }],
@@ -437,15 +446,12 @@ wss.on('connection', (ws, req) => {
       inFeedbackMode: false,
       interviewEnded: false,
       feedbackCount: 0,
-      vad: vadInstance,
       flux: fluxInstance,
-      incrementalState,
       lastActivity: Date.now(),
       _processingLock: Promise.resolve()
     });
 
-    // Shared transcript pipeline: noise filter → display → push to history → LLM stream.
-    // Used by both ServerVAD (after Whisper) and Flux (transcript already in hand).
+    // Transcript pipeline: noise filter → display → push to history → LLM stream.
     async function processFinalTranscript(transcript) {
       const session = sessions.get(sessionId);
       if (!session || ws.readyState !== WebSocket.OPEN) {
@@ -464,160 +470,42 @@ wss.on('connection', (ws, req) => {
       await streamResponseToClient(session, ws, session.history, { temperature: 0.5 });
     }
 
-    if (useFlux) {
-      // ── Deepgram Flux path ──────────────────────────────────────────────
-      fluxInstance.onSpeechStart = () => {
-        const session = sessions.get(sessionId);
-        if (!session) {
-          return;
-        }
-        console.log(`[Flux] StartOfTurn for ${sessionId}`);
-        // Real barge-in: if the AI is mid-response, stop it.
-        if (session.isAISpeaking) {
-          session.isAISpeaking = false;
-          if (ws.readyState === WebSocket.OPEN) {
-            ws.send(JSON.stringify({ type: 'interrupt' }));
-          }
-        }
+    fluxInstance.onSpeechStart = () => {
+      const session = sessions.get(sessionId);
+      if (!session) {
+        return;
+      }
+      console.log(`[Flux] StartOfTurn for ${sessionId}`);
+      // Real barge-in: if the AI is mid-response, stop it.
+      if (session.isAISpeaking) {
+        session.isAISpeaking = false;
         if (ws.readyState === WebSocket.OPEN) {
-          ws.send(JSON.stringify({ type: 'vad_speech_start' }));
+          ws.send(JSON.stringify({ type: 'interrupt' }));
         }
-      };
+      }
+      if (ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({ type: 'vad_speech_start' }));
+      }
+    };
 
-      fluxInstance.onTranscript = async transcript => {
-        console.log(`[Flux] EndOfTurn → "${transcript}"`);
-        try {
-          await processFinalTranscript(transcript);
-        } catch (error) {
-          console.error('[Flux] Pipeline error:', error.message);
-          if (ws.readyState === WebSocket.OPEN) {
-            ws.send(JSON.stringify({ type: 'error', message: 'Processing failed' }));
-          }
-        }
-      };
-
-      fluxInstance.onError = err => {
-        console.error('[Flux] Surface error to client:', err?.message || err);
+    fluxInstance.onTranscript = async transcript => {
+      console.log(`[Flux] EndOfTurn → "${transcript}"`);
+      try {
+        await processFinalTranscript(transcript);
+      } catch (error) {
+        console.error('[Flux] Pipeline error:', error.message);
         if (ws.readyState === WebSocket.OPEN) {
-          ws.send(JSON.stringify({ type: 'error', message: 'Speech recognition error' }));
-        }
-      };
-    } else {
-      // ── Legacy ServerVAD + Whisper path ─────────────────────────────────
-      vadInstance.onSpeechStart = () => {
-        console.log(`[VAD] Speech started for ${sessionId}`);
-        // Reset incremental state for new utterance
-        incrementalState.latestTranscript = '';
-        incrementalState.pendingTranscription = null;
-        incrementalState.exportCount = 0;
-        if (ws.readyState === WebSocket.OPEN) {
-          ws.send(JSON.stringify({ type: 'vad_speech_start' }));
-        }
-      };
-
-      // Incremental Whisper: transcribe cumulative audio every ~15s during long speech
-      vadInstance.onIncrementalAudio = async (audioSnapshot, frameIndex) => {
-        const session = sessions.get(sessionId);
-        if (!session || session.interviewEnded) {
-          return;
-        }
-
-        if (incrementalState.pendingTranscription) {
-          await incrementalState.pendingTranscription;
-        }
-        incrementalState.exportCount++;
-        console.log(
-          `[INCREMENTAL] Export #${incrementalState.exportCount} at frame ${frameIndex}, ${Math.round(audioSnapshot.length / 16000)}s audio`
-        );
-
-        incrementalState.pendingTranscription = (async () => {
-          try {
-            const wavBuffer = float32ToWavBuffer(audioSnapshot, 16000);
-            const transcript = await openaiService.transcribeAudio(wavBuffer, sessionId, 'wav');
-            incrementalState.latestTranscript = transcript;
-            console.log(`[INCREMENTAL] Transcript: "${transcript.substring(0, 80)}..."`);
-          } catch (err) {
-            console.error('[INCREMENTAL] Whisper error:', err.message);
-          }
-        })();
-      };
-
-      vadInstance.onSpeechEnd = async (audioFloat32, hadIncrementalExports, audioSinceExport) => {
-        const session = sessions.get(sessionId);
-        if (!session || ws.readyState !== WebSocket.OPEN) {
-          return;
-        }
-
-        // Don't process buffered audio after interview ended
-        if (session.interviewEnded) {
-          console.log('[VAD] Ignoring buffered audio after interview ended');
-          return;
-        }
-
-        const t0 = Date.now();
-        const durationMs = (audioFloat32.length / 16000) * 1000;
-        const vadLatency = vadInstance.speechStartTime ? t0 - vadInstance.speechStartTime : 0;
-        console.log(
-          `[VAD] Speech ended for ${sessionId}, ${Math.round(durationMs)}ms audio, VAD held ${vadLatency}ms`
-        );
-
-        // Skip very short utterances (< 300ms) — likely noise
-        if (audioFloat32.length < 4800) {
-          console.log('[VAD] Too short, skipping');
-          return;
-        }
-
-        try {
-          let transcript;
-          const tWav = Date.now();
-
-          if (hadIncrementalExports && incrementalState.exportCount > 0) {
-            // Long utterance: use incremental transcript + transcribe only final segment
-            if (incrementalState.pendingTranscription) {
-              await incrementalState.pendingTranscription;
-            }
-
-            // audioSinceExport is pre-computed by ServerVAD before clearing buffers.
-            // If final segment is too short (< 0.1s = 1600 samples), skip Whisper and use incremental transcript as-is.
-            if (audioSinceExport && audioSinceExport.length >= 1600) {
-              const finalWav = float32ToWavBuffer(audioSinceExport, 16000);
-              console.log(
-                `[TIMING] Incremental: ${incrementalState.exportCount} exports, final segment ${Math.round(audioSinceExport.length / 16000)}s (${finalWav.length} bytes)`
-              );
-              const finalTranscript = await openaiService.transcribeAudio(
-                finalWav,
-                sessionId,
-                'wav'
-              );
-              transcript = (incrementalState.latestTranscript + ' ' + finalTranscript).trim();
-            } else {
-              console.log(
-                `[TIMING] Incremental: ${incrementalState.exportCount} exports, final segment too short (${audioSinceExport?.length || 0} samples) — using incremental transcript`
-              );
-              transcript = incrementalState.latestTranscript;
-            }
-
-            const tWhisper = Date.now();
-            console.log(
-              `[TIMING] Whisper STT (incremental): ${tWhisper - tWav}ms → "${transcript.substring(0, 100)}..."`
-            );
-          } else {
-            // Short utterance: standard full transcription
-            const wavBuffer = float32ToWavBuffer(audioFloat32, 16000);
-            console.log(`[TIMING] WAV encode: ${Date.now() - t0}ms (${wavBuffer.length} bytes)`);
-
-            transcript = await openaiService.transcribeAudio(wavBuffer, sessionId, 'wav');
-            const tWhisper = Date.now();
-            console.log(`[TIMING] Whisper STT: ${tWhisper - tWav}ms → "${transcript}"`);
-          }
-
-          await processFinalTranscript(transcript);
-        } catch (error) {
-          console.error('[VAD] Pipeline error:', error.message);
           ws.send(JSON.stringify({ type: 'error', message: 'Processing failed' }));
         }
-      };
-    }
+      }
+    };
+
+    fluxInstance.onError = err => {
+      console.error('[Flux] Surface error to client:', err?.message || err);
+      if (ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({ type: 'error', message: 'Speech recognition error' }));
+      }
+    };
 
     const domain = extractDomain(scenarioFile);
     const infoSheet = loadInfoSheet(scenarioFile);
@@ -652,8 +540,7 @@ wss.on('connection', (ws, req) => {
         return;
       }
 
-      const messageType =
-        msg.type === 'whisper_audio' || msg.type === 'audio_chunk' ? 'audio' : 'other';
+      const messageType = msg.type === 'audio_chunk' ? 'audio' : 'other';
       const rateCheck = wsRateLimiter.checkLimit(msg.sessionId, messageType);
       if (!rateCheck.allowed) {
         console.warn(
@@ -672,28 +559,15 @@ wss.on('connection', (ws, req) => {
       // Track activity for idle session cleanup
       session.lastActivity = Date.now();
 
-      // Audio chunks are high-frequency and don't mutate history — process without lock
+      // Audio chunks are high-frequency and don't mutate history — process without lock.
+      // Mic stays open during AI speech so Flux can detect barge-in via StartOfTurn.
       if (msg.type === 'audio_chunk') {
         try {
-          // In Flux path, AI-speaking does NOT block ingestion: barge-in needs Flux
-          // to see the user start talking. ServerVAD path keeps the legacy mute.
           if (session.inFeedbackMode || session.interviewEnded) {
             return;
           }
-          if (!session.flux && session.isAISpeaking) {
-            return;
-          }
           const pcmData = Buffer.from(msg.audio, 'base64');
-          if (session.flux) {
-            session.flux.processChunk(pcmData);
-          } else {
-            const alignedBuffer = pcmData.buffer.slice(
-              pcmData.byteOffset,
-              pcmData.byteOffset + pcmData.byteLength
-            );
-            const int16Array = new Int16Array(alignedBuffer);
-            await session.vad.processChunk(int16Array);
-          }
+          session.flux.processChunk(pcmData);
         } catch (error) {
           console.error('[STT] Chunk processing error:', error.message);
         }
@@ -706,43 +580,6 @@ wss.on('connection', (ws, req) => {
         .then(async () => {
           try {
             switch (msg.type) {
-              case 'whisper_audio':
-                // Handle Whisper API transcription for browsers without Web Speech API
-                try {
-                  const audioBuffer = Buffer.from(msg.audio, 'base64');
-                  const audioFormat = msg.format || 'webm'; // Support WAV from Silero VAD
-                  const t1 = Date.now();
-
-                  // Transcribe using OpenAI service
-                  const transcriptionText = await openaiService.transcribeAudio(
-                    audioBuffer,
-                    msg.sessionId,
-                    audioFormat
-                  );
-
-                  const t2 = Date.now();
-                  console.log('[WHISPER STT] ' + transcriptionText);
-                  console.log(`[TIMING] Whisper: ${t2 - t1}ms`);
-
-                  // Filter noise transcripts (important for VAD mode)
-                  if (isNoiseTranscript(transcriptionText)) {
-                    console.log('[WHISPER] Filtered as noise, not sending to frontend');
-                    break;
-                  }
-
-                  // Send transcript back to frontend
-                  ws.send(
-                    JSON.stringify({
-                      type: 'whisper_transcript',
-                      text: transcriptionText
-                    })
-                  );
-                } catch (error) {
-                  console.error('[WHISPER ERROR]', error.message);
-                  ws.send(JSON.stringify({ type: 'error', message: 'Transcription failed' }));
-                }
-                break;
-
               case 'user_transcript':
                 if (session.interviewEnded) {
                   break;
@@ -763,7 +600,6 @@ wss.on('connection', (ws, req) => {
                 console.log('[INTERVIEW] End interview requested for session:', sessionId);
                 session.interviewEnded = true;
                 session.isAISpeaking = false;
-                session.vad?.reset(); // Clear stale audio buffers
                 session.flux?.reset();
                 ws.send(JSON.stringify({ type: 'interview_ended', sessionId }));
                 break;
@@ -783,7 +619,6 @@ wss.on('connection', (ws, req) => {
                 console.log('[FEEDBACK] Starting streaming feedback flow');
                 session.inFeedbackMode = true;
                 session.interviewEnded = true;
-                session.vad?.reset(); // Clear stale audio buffers
                 session.flux?.reset();
                 try {
                   // 1. Serialize full conversation into transcript
@@ -987,7 +822,6 @@ wss.on('connection', (ws, req) => {
 
     ws.on('close', () => {
       const session = sessions.get(sessionId);
-      session?.vad?.destroy();
       session?.flux?.destroy();
       sessions.delete(sessionId);
       wsRateLimiter.removeClient(sessionId);

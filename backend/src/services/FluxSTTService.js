@@ -1,21 +1,17 @@
 /**
  * Deepgram Flux STT Service
  *
- * Streaming speech-to-text with model-integrated turn detection. Replaces
- * ServerVAD + Whisper one-shot. Speech-end is signalled by Flux's
- * `EndOfTurn` event with the final transcript already in hand —
- * no additional STT round-trip needed.
+ * Streaming speech-to-text with model-integrated turn detection. Speech-end
+ * is signalled by Flux's `EndOfTurn` event with the final transcript already
+ * in hand — no separate STT round-trip needed. `StartOfTurn` is used by the
+ * server to fire automatic barge-in (interrupt the AI when user starts speaking).
  *
- * Lifecycle mirrors ServerVAD so server.js wiring stays parallel:
- *   initialize() / processChunk() / reset() / destroy()
+ * Lifecycle: initialize() / processChunk() / reset() / destroy()
  *
  * Callbacks (assigned by caller after construction):
  *   onSpeechStart()         — fires on Flux StartOfTurn
  *   onTranscript(text)      — fires on Flux EndOfTurn with final transcript
  *   onError(error)          — fires on connection or SDK errors
- *
- * The barge-in decision (interrupt AI when user starts talking) lives in
- * server.js; this service just surfaces the StartOfTurn signal.
  */
 
 const { DeepgramClient } = require('@deepgram/sdk');

@@ -1,11 +1,10 @@
 /**
  * AI Service
- * Handles Gemini 2.5 Flash chat completions (via OpenAI-compatible API)
- * and OpenAI Whisper transcription
+ * Handles Gemini 2.5 Flash chat completions via the OpenAI-compatible endpoint.
+ * (Whisper transcription was removed — STT now goes through Deepgram Flux.)
  */
 
 const OpenAI = require('openai');
-const { toFile } = require('openai');
 const { RateLimitError } = require('openai');
 const config = require('../config');
 
@@ -18,7 +17,6 @@ const RETRY_DEFAULTS = {
 class OpenAIService {
   constructor() {
     this.llmClient = null;
-    this.whisperClient = null;
   }
 
   /**
@@ -32,16 +30,6 @@ class OpenAIService {
       });
     }
     return this.llmClient;
-  }
-
-  /**
-   * Initialize the Whisper client (OpenAI)
-   */
-  _ensureWhisperClient() {
-    if (!this.whisperClient) {
-      this.whisperClient = new OpenAI({ apiKey: config.OPENAI_API_KEY });
-    }
-    return this.whisperClient;
   }
 
   _isRetryableError(error) {
@@ -120,44 +108,6 @@ class OpenAIService {
     } catch (error) {
       console.error(`[${config.LLM_MODEL}] Error:`, error.message);
       throw error;
-    }
-  }
-
-  /**
-   * Transcribe audio using Whisper API (in-memory, no temp files)
-   * @param {Buffer} audioBuffer - Audio data as Buffer
-   * @param {string} sessionId - Session ID (unused, kept for API compat)
-   * @param {string} format - Audio format: 'wav' or 'webm' (default: 'webm')
-   * @returns {Promise<string>} - The transcribed text
-   */
-  async transcribeAudio(audioBuffer, sessionId, format = 'webm') {
-    const client = this._ensureWhisperClient();
-
-    const isWav = audioBuffer.length >= 4 && audioBuffer.slice(0, 4).toString() === 'RIFF';
-    const extension = isWav || format === 'wav' ? 'wav' : 'webm';
-
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 30000);
-
-    try {
-      console.log(`[WHISPER] Processing ${extension} audio, size: ${audioBuffer.length} bytes`);
-
-      const file = await toFile(audioBuffer, `audio.${extension}`);
-      const transcription = await client.audio.transcriptions.create(
-        { file, model: 'whisper-1', language: 'en' },
-        { signal: controller.signal }
-      );
-
-      return transcription.text;
-    } catch (error) {
-      if (error.name === 'AbortError') {
-        console.error('[WHISPER] Timed out after 30s');
-        throw new Error('Whisper transcription timed out');
-      }
-      console.error('[WHISPER] Error:', error.message);
-      throw error;
-    } finally {
-      clearTimeout(timeout);
     }
   }
 

@@ -99,17 +99,15 @@ Node.js server combining WebSocket (interview sessions) + Express HTTP (Stripe, 
 ### Message Flow
 
 1. Browser `AudioStreamer` (ScriptProcessorNode, 4096 buffer) → 16kHz mono Int16 PCM → base64
-2. Client sends `audio_chunk` via WebSocket
-3. STT path (one of two, selected by `USE_FLUX_STT` env var):
-   - **Flux (default when `USE_FLUX_STT=true` + `DEEPGRAM_API_KEY` set)**: Deepgram Flux streaming WebSocket; `EndOfTurn` event delivers final transcript with model-integrated turn detection. `StartOfTurn` triggers automatic barge-in.
-   - **Legacy**: `ServerVAD` (Silero v4 ONNX) → Whisper STT one-shot.
-4. Gemini 2.5 Flash generates response (full turn buffered before TTS)
-5. Gemini TTS synthesizes the whole turn in one call → WAV base64 (Google Cloud TTS fallback → MP3)
-6. Client receives one `ai_response_chunk` with full audio, plays it, mic pauses during AI speech (legacy STT only — Flux path keeps the mic open for barge-in)
+2. Client sends `audio_chunk` via WebSocket (mic stays open during AI speech for barge-in)
+3. **STT — Deepgram Flux**: streaming WebSocket. `StartOfTurn` triggers automatic barge-in (interrupt the AI mid-response). `EndOfTurn` delivers the final transcript via model-integrated turn detection.
+4. **LLM — Gemini 2.5 Flash**: streams tokens, `streamResponseToClient` accumulates the full turn before TTS.
+5. **TTS — Gemini 3.1 Flash TTS** via `generateContentStream`: yields WAV chunks as the model decodes them. Each chunk is shipped to the client as a separate `ai_response_chunk` so first audio plays ~500–1000 ms after LLM stream end (vs ~5 s for non-streaming).
+6. Client receives `ai_response_start`, then N × `ai_response_chunk`, then `ai_response_end`. `AudioPlayer` queues and plays chunks in order.
 
 ### WebSocket Message Types
 
-**Client → Server:** `audio_chunk` (raw PCM for server VAD), `user_transcript` (speech text), `whisper_audio` (audio blob fallback), `user_speaking` (triggers interrupt), `ai_finished` (playback done), `request_feedback`, `end_interview`
+**Client → Server:** `audio_chunk` (raw 16kHz PCM, forwarded to Flux), `user_transcript` (speech text), `user_speaking` (manual interrupt), `ai_finished` (playback done), `request_feedback`, `end_interview`
 
 **Server → Client:** `scenario_loaded` (session init), `ai_response` / `ai_response_start` / `ai_response_chunk` / `ai_response_end` (streaming responses), `user_transcript_display` (VAD detected speech), `vad_speech_start`, `feedback_processing` / `feedback_response` / `feedback_summary`, `interrupt` (stop playback), `error`
 
@@ -141,28 +139,25 @@ Error codes: 4001 (Unauthorized), 4002 (Validation), 4003 (Subscription required
 **Primary: Gemini TTS** (`src/services/GeminiTTSService.js`)
 - Model: `gemini-3.1-flash-tts-preview`
 - Voices per difficulty: `Fenrir` (easy), `Kore` (medium), `Charon` (strict)
-- Style tags in `config.TTS_STYLE_PROMPTS` (e.g. `[firm, brisk]`) prepended to spoken text per Gemini 3.1 audio-tag guidance
-- One TTS call per full LLM turn (not per sentence) — keeps prosody consistent across the response
-- Output: WAV (24 kHz mono 16-bit PCM with 44-byte header)
+- Style tags in `config.TTS_STYLE_PROMPTS` prepended to spoken text. Default voices are American — British accent must be specified explicitly in the tag (e.g. `[British accent, professional, neutral examiner tone]`).
+- Two paths:
+  - `synthesizeStream()` — async generator yielding WAV chunks as Gemini emits them. Used by the live interview path so first audio plays ~500–1000 ms after the call (vs ~5 s for non-streaming). Each chunk is one `ai_response_chunk` to the client.
+  - `synthesize()` — one-shot, used by the feedback flow (discrete sections).
+- Output: 24 kHz mono 16-bit WAV with 44-byte header per chunk.
 
 **Fallback: Google Cloud TTS** (`src/services/TTSService.js`)
-- Used when Gemini TTS fails twice
-- SSML processing: `buildNaturalSSML(text)` adds pauses at punctuation
-- Output: MP3
+- Used when Gemini TTS fails (one fallback chunk for streaming, two retries for one-shot).
+- SSML processing: `buildNaturalSSML(text)` adds pauses at punctuation.
+- Output: MP3.
 
-### STT — Deepgram Flux (default) and ServerVAD (legacy)
+### STT — Deepgram Flux
 
-**Flux path** (`src/services/FluxSTTService.js`) — active when `USE_FLUX_STT=true` and `DEEPGRAM_API_KEY` is set:
+`src/services/FluxSTTService.js` — only STT path, required at startup.
 - Streaming WebSocket via `@deepgram/sdk` v5 → `client.listen.v2.connect({ model: 'flux-general-en', encoding: 'linear16', sample_rate: 16000 })`.
 - `audio_chunk` PCM forwarded via `connection.sendMedia(buffer)`.
-- `TurnInfo` events: `StartOfTurn` (fires automatic barge-in if AI is speaking), `EndOfTurn` (final transcript ready).
-- Replaces both ServerVAD and Whisper one-shot in this path; no Silero ONNX, no Whisper round-trip.
-
-**Legacy path** (`src/services/ServerVAD.js`) — active when `USE_FLUX_STT=false` (default) or `DEEPGRAM_API_KEY` missing:
-- Silero VAD v4 ONNX (`backend/models/silero_vad_v4.onnx` ~1.72MB). Frame=1536 samples@16kHz (~96ms). Thresholds: pos=0.3, neg=0.2. Pre-speech buffer=10 frames (~960ms).
-- Audio: AudioStreamer (ScriptProcessorNode, bufferSize=4096) → 16kHz mono Int16 PCM (~1365 samples/chunk) → base64 → WS `audio_chunk`. Gain normalization: quiet audio boosted up to 50x for VAD, original sent to Whisper.
-- `onSpeechEnd` → Whisper STT (model `whisper-1`) → transcript.
-- Incremental Whisper exports during long utterances (every ~15s) keep latency bounded for long answers.
+- Mic stays open during AI speech so Flux can detect `StartOfTurn` for barge-in.
+- `TurnInfo` events: `StartOfTurn` (fires automatic interrupt if `session.isAISpeaking`), `EndOfTurn` (final transcript ready). `EagerEndOfTurn` and `TurnResumed` are logged-only (prefetch deferred).
+- Audio: AudioStreamer (ScriptProcessorNode, bufferSize=4096) → 16kHz mono Int16 PCM → base64 → WS `audio_chunk`.
 
 ### Noise Filtering
 
@@ -217,11 +212,10 @@ backend/
 ├── src/
 │   ├── config/index.js                # Centralized config with validation
 │   ├── services/
-│   │   ├── OpenAIService.js           # Gemini 2.5 Flash chat + Whisper STT (OpenAI-compatible)
-│   │   ├── GeminiTTSService.js        # Gemini TTS with style prompts (primary)
+│   │   ├── OpenAIService.js           # Gemini 2.5 Flash chat (OpenAI-compatible wrapper)
+│   │   ├── GeminiTTSService.js        # Gemini 3.1 TTS, streaming + one-shot
 │   │   ├── TTSService.js              # Google Cloud TTS (fallback)
-│   │   ├── ServerVAD.js               # Silero VAD v4 ONNX (legacy STT path)
-│   │   ├── FluxSTTService.js          # Deepgram Flux streaming STT (default when USE_FLUX_STT=true)
+│   │   ├── FluxSTTService.js          # Deepgram Flux streaming STT (only STT path)
 │   │   ├── PromptLabService.js        # Prompt Lab sessions/chat/feedback/tests
 │   │   ├── GitHubService.js           # Auto-commit Prompt Lab edits
 │   │   └── TestScriptGenerator.js     # Generate test scripts via Gemini
@@ -239,7 +233,6 @@ backend/
 │   ├── shared/feedback/               # Feedback core + personality files (7 files)
 │   ├── scenarios/                     # ~166 modular scenario files (topicFolder structure)
 │   └── _legacy/                       # Legacy monolithic prompts (Prompt Lab fallback)
-├── models/silero_vad_v4.onnx         # Silero VAD model (~1.72MB)
 ├── test-scripts/                      # Automated test definitions (7 JSON files)
 ├── __tests__/                         # 23 test files, 653 tests
 └── package.json
@@ -267,7 +260,7 @@ npm run test:watch                  # Auto-run on changes
 npx jest __tests__/scenario-loader.test.js  # Specific file
 ```
 
-306 tests across 18 suites. Coverage thresholds: 55% branches, 60% functions, 65% lines/statements. Tests focus on behavioral verification ("does this feature work?"), not mock wiring.
+281 tests across 16 suites. Coverage thresholds: 55% branches, 60% functions, 65% lines/statements. Tests focus on behavioral verification ("does this feature work?"), not mock wiring.
 
 Key test files:
 - `behavioral.test.js` (31) — Prompt assembly, noise filtering, feedback parsing, subscription enforcement, session management, error handling
@@ -275,9 +268,8 @@ Key test files:
 - `promptAssembler.test.js` (26) — Core prompt assembly logic
 - `prompt-parser.test.js` (26) — Prompt parsing
 - `test-script-generator.test.js` (37) — Content detection
-- `server-vad.test.js` (22) — ONNX mock, state machine, WAV headers
-- `websocket-integration.test.js` (24) — Real WebSocket connections
-- `gemini-tts-service.test.js` (6) — Tag injection, voice config, WAV header
+- `websocket-integration.test.js` (24) — Real WebSocket connections (Flux mocked)
+- `gemini-tts-service.test.js` (11) — One-shot + streaming TTS, tag injection, WAV header
 - `flux-stt-service.test.js` (12) — Deepgram Flux event mapping, lifecycle, error path
 - `prompt-lab-routes.test.js` (13) — One smoke test per endpoint + security
 
@@ -330,21 +322,15 @@ npm run format        # Prettier
 
 ### Render Environment Variables
 
-`GEMINI_API_KEY` (required), `OPENAI_API_KEY` (optional, only used by legacy ServerVAD path), `DEEPGRAM_API_KEY` (optional, required for Flux STT path), `USE_FLUX_STT=true|false` (default false; flip to roll Flux out), `GOOGLE_APPLICATION_CREDENTIALS_JSON` (JSON string, not file path), `SUPABASE_URL`, `SUPABASE_SERVICE_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_ID_MONTHLY`, `STRIPE_PRICE_ID_ANNUAL`, `FRONTEND_URL=https://www.reviva.live`, `PROMPT_LAB_ENABLED=true`
+`GEMINI_API_KEY` (required), `DEEPGRAM_API_KEY` (required), `GOOGLE_APPLICATION_CREDENTIALS_JSON` (JSON string, not file path), `SUPABASE_URL`, `SUPABASE_SERVICE_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_ID_MONTHLY`, `STRIPE_PRICE_ID_ANNUAL`, `FRONTEND_URL=https://www.reviva.live`, `PROMPT_LAB_ENABLED=true`
 
 ### Local Environment (`backend/.env`)
 
 ```bash
 # Required
 GEMINI_API_KEY=...
-GOOGLE_APPLICATION_CREDENTIALS=./google-tts-key.json
-
-# Optional (legacy STT path: Whisper)
-OPENAI_API_KEY=sk-...
-
-# Optional (Flux STT path — flip both to enable Deepgram Flux)
 DEEPGRAM_API_KEY=...
-USE_FLUX_STT=true
+GOOGLE_APPLICATION_CREDENTIALS=./google-tts-key.json
 
 # Optional (Auth & Payments)
 PORT=8080
