@@ -54,6 +54,17 @@ class FluxSTTService {
         this.onError(err);
       }
     });
+    this.connection.on('close', event => {
+      const code = event?.code;
+      const reason = event?.reason;
+      console.warn(`[Flux] Connection closed (code=${code}, reason="${reason || ''}")`);
+    });
+
+    // V2Client.connect() resolves before the WebSocket handshake completes —
+    // sendMedia() asserts readyState === OPEN, so we must await it ourselves.
+    if (typeof this.connection.waitForOpen === 'function') {
+      await this.connection.waitForOpen();
+    }
 
     console.log('[Flux] Connection ready');
   }
