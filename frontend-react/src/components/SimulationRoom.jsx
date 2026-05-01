@@ -18,6 +18,9 @@ import AnimatedBackground from './AnimatedBackground'
 import ConfirmModal from './ConfirmModal'
 import { PersonaCard } from './PersonaCard'
 import { StatusPanel } from './StatusPanel'
+import { StatusPill } from './StatusPill'
+import { ControlPinwheel } from './ControlPinwheel'
+import { MobileTranscriptDrawer } from './MobileTranscriptDrawer'
 import { GlowCard } from './ui/spotlight-card'
 import { CpuArchitecture } from './ui/cpu-architecture'
 import { VoiceOrbSimple } from './ui/voice-orb-simple'
@@ -41,6 +44,7 @@ export default function SimulationRoom() {
   const [feedbackData, setFeedbackData] = useState(null)
   const [confirmModal, setConfirmModal] = useState(null)
   const [prepPhase, setPrepPhase] = useState(null) // { prepTime } | null
+  const [mobileTranscriptOpen, setMobileTranscriptOpen] = useState(false)
 
   const rawScenario = params?.scenario || {
     title: 'No scenario selected',
@@ -323,13 +327,90 @@ export default function SimulationRoom() {
           />
         </motion.div>
 
-        {/* Main grid — single tree, reflows from 3-col desktop to 1-col mobile */}
+        {/* ════════ MOBILE LAYOUT (<lg) ════════
+            Image-hero + compact strip + sticky pinwheel dock. Transcript
+            opens as a bottom-sheet drawer triggered from the strip.
+            Desktop layout below mirrors this data into the 3-col grid. */}
+        <main className="lg:hidden flex-1 flex flex-col min-h-0 gap-3">
+          {/* Hero — clinical image (or info sheet during prep) */}
+          <motion.div
+            initial={reveal.image.initial}
+            animate={reveal.image.animate}
+            transition={reveal.image.transition}
+            className="organic-card relative flex-1 min-h-0 overflow-hidden"
+          >
+            {centerInner}
+          </motion.div>
+
+          {/* Compact strip — mini orb + audio bars + status pill + transcript trigger */}
+          <motion.div
+            initial={reveal.status.initial}
+            animate={reveal.status.animate}
+            transition={reveal.status.transition}
+            className="organic-card flex items-center gap-2.5 px-3 py-2 shrink-0"
+          >
+            <VoiceOrbSimple
+              state={prepPhase ? 'idle' : orbState}
+              size={44}
+              statusText=""
+              className="shrink-0"
+            />
+            <AudioVisualiser
+              audioPlayer={audioPlayer}
+              isAISpeaking={isAISpeaking}
+              className="flex-1 min-w-0"
+            />
+            <StatusPill
+              orbState={orbState}
+              statusText={statusText}
+              prepPhase={prepPhase}
+              isPaused={isPaused}
+              isConnected={isConnected}
+              compact
+              className="shrink-0"
+            />
+            <button
+              type="button"
+              onClick={() => setMobileTranscriptOpen(true)}
+              aria-label={`Open transcript${messages.length > 0 ? ` — ${messages.length} messages` : ''}`}
+              className="flex items-center gap-1 px-2 py-1.5 rounded-md text-organic-bark/70 hover:text-organic-bark hover:bg-organic-cream-deep transition-colors shrink-0"
+            >
+              <span className="text-[11px] font-semibold tabular-nums">{messages.length}</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M18 15l-6-6-6 6" />
+              </svg>
+            </button>
+          </motion.div>
+
+          {/* Bottom dock — pinwheel sticky at viewport bottom */}
+          <motion.div
+            initial={reveal.dock?.initial || { opacity: 0, y: 30 }}
+            animate={reveal.dock?.animate || { opacity: 1, y: 0 }}
+            transition={reveal.dock?.transition || { duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.65 }}
+            className="organic-card flex items-center justify-center pt-4 pb-[calc(12px+env(safe-area-inset-bottom))] shrink-0"
+          >
+            <ControlPinwheel
+              isConnected={isConnected}
+              isConnecting={isConnecting}
+              isPaused={isPaused}
+              interviewEnded={interviewEnded}
+              feedbackRequested={feedbackRequested}
+              onStart={handleConnect}
+              onPause={pauseListening}
+              onResume={resumeListening}
+              onStop={handleStop}
+              onFeedback={handleRequestFeedback}
+            />
+          </motion.div>
+        </main>
+
+        {/* ════════ DESKTOP LAYOUT (≥lg) ════════ */}
         <main
           className={cn(
-            'flex-1 grid min-h-0',
+            'hidden lg:grid flex-1 min-h-0',
             'gap-4 lg:gap-7',
-            'grid-cols-1 lg:grid-cols-[minmax(220px,1fr)_minmax(320px,1.4fr)_minmax(220px,1fr)]',
-            'auto-rows-min lg:grid-rows-[minmax(280px,1.6fr)_minmax(220px,1fr)]'
+            'lg:grid-cols-[minmax(220px,1fr)_minmax(320px,1.4fr)_minmax(220px,1fr)]',
+            'lg:grid-rows-[minmax(280px,1.6fr)_minmax(220px,1fr)]'
           )}
         >
           {/* ─── Voice orb panel (left col, top row) ─── */}
@@ -369,14 +450,7 @@ export default function SimulationRoom() {
                 difficulty={difficulty}
                 domain={domain}
                 compact={false}
-                className="hidden lg:flex h-full"
-              />
-              <PersonaCard
-                persona={persona}
-                difficulty={difficulty}
-                domain={domain}
-                compact
-                className="lg:hidden"
+                className="h-full"
               />
             </GlowCard>
           </motion.div>
@@ -420,6 +494,14 @@ export default function SimulationRoom() {
           </motion.div>
         </main>
       </div>
+
+      {/* ============= Mobile transcript drawer ============= */}
+      <MobileTranscriptDrawer
+        open={mobileTranscriptOpen}
+        onClose={() => setMobileTranscriptOpen(false)}
+        messages={messages}
+        personaName={persona.name}
+      />
 
       {/* ============= Modals ============= */}
 
