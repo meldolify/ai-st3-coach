@@ -391,7 +391,9 @@ Strategy: Use VS Code debugger instead of console.log. Breakpoints in server.js 
 
 ### Git Workflow
 
-Main branch: `main` (stable, production-ready). Commit and push directly — no feature branches or PRs.
+`main` is production. Active work happens on **feature branches** — currently `Pipework-voice` for the voice-loop work.
+
+**At the start of every session, ASK which branch to push to before any commit reaches a remote.** Never auto-push to `main`. The user will name the branch (e.g. `Pipework-voice`); only that one is the target until they say otherwise. If unsure, ask again rather than guess.
 
 Rollback tags: `pre-full-react-migration`, `pre-react-migration`, `pre-dev-environment-setup`.
 
