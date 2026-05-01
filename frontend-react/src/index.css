@@ -872,6 +872,17 @@ body {
 .pinwheel__card--bl { border-radius: 5px 5px 5px 90px; }
 .pinwheel__card--br { border-radius: 5px 5px 90px 5px; }
 
+/* Each card has one outward-rounded corner; visual centre of the visible
+   "L-shape" is offset from the geometric centre. Shift the icon toward
+   the diagonally opposite corner so it sits in the visible mass.
+   The hover scale lives on the button, so transforming the inner svg
+   keeps the offset stable through the hover scale. */
+.pinwheel__card > svg { transition: transform 0.2s ease-in-out; }
+.pinwheel__card--tl > svg { transform: translate(11px, 11px); }
+.pinwheel__card--tr > svg { transform: translate(-11px, 11px); }
+.pinwheel__card--bl > svg { transform: translate(11px, -11px); }
+.pinwheel__card--br > svg { transform: translate(-11px, -11px); }
+
 .pinwheel__card:not(:disabled):hover {
   transform: scale(1.1);
   color: white;

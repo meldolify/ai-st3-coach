@@ -15,17 +15,19 @@ import { cn } from '../lib/utils'
  * to SessionToggle + FeedbackButton.
  */
 
+const ICON_SIZE = 36
+
 function StartIcon() {
   return (
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <circle cx="12" cy="12" r="6" />
+    <svg width={ICON_SIZE} height={ICON_SIZE} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <circle cx="12" cy="12" r="5.5" />
     </svg>
   )
 }
 
 function PauseIcon() {
   return (
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <svg width={ICON_SIZE} height={ICON_SIZE} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
       <rect x="7" y="6" width="3.5" height="12" rx="1" />
       <rect x="13.5" y="6" width="3.5" height="12" rx="1" />
     </svg>
@@ -34,7 +36,7 @@ function PauseIcon() {
 
 function ResumeIcon() {
   return (
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <svg width={ICON_SIZE} height={ICON_SIZE} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
       <path d="M8 5v14l11-7z" />
     </svg>
   )
@@ -42,15 +44,15 @@ function ResumeIcon() {
 
 function StopIcon() {
   return (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <rect x="6" y="6" width="12" height="12" rx="1.5" />
+    <svg width={ICON_SIZE} height={ICON_SIZE} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <rect x="6.5" y="6.5" width="11" height="11" rx="1.5" />
     </svg>
   )
 }
 
 function FeedbackIcon() {
   return (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg width={ICON_SIZE} height={ICON_SIZE} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <rect x="6" y="4" width="12" height="16" rx="1.5" />
       <path d="M9 3h6v3H9z" fill="currentColor" stroke="none" />
       <path d="M9 11l2 2 4-4" />
