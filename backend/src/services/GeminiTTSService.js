@@ -41,6 +41,9 @@ class GeminiTTSService {
       config: {
         responseModalities: ['AUDIO'],
         speechConfig: {
+          // Locks the locale (and therefore the accent) — without this, Gemini
+          // defaults to en-US regardless of voice ID or style tags.
+          languageCode: config.TTS_LANGUAGE_CODE,
           voiceConfig: {
             prebuiltVoiceConfig: { voiceName }
           }
@@ -90,14 +93,18 @@ class GeminiTTSService {
    * @param {string} voiceName
    * @param {Object} [options]
    * @param {string} [options.stylePrompt]
+   * @param {(name: string) => void} [options.onTimingMark] — invoked at key
+   *   stream lifecycle points: 'tts_first_chunk_received', 'tts_last_chunk_received'
    * @yields {Buffer} WAV chunk
    */
   async *synthesizeStream(text, voiceName, options = {}) {
     const client = this._ensureClient();
     console.log(
-      `[Gemini TTS] (stream) ${config.TTS_MODEL_NAME} voice=${voiceName}`,
+      `[Gemini TTS] (stream) ${config.TTS_MODEL_NAME} voice=${voiceName} lang=${config.TTS_LANGUAGE_CODE}`,
       options.stylePrompt ? `tags=${options.stylePrompt}` : ''
     );
+
+    const mark = options.onTimingMark || (() => {});
 
     let stream;
     try {
@@ -131,6 +138,9 @@ class GeminiTTSService {
         if (pcm.length === 0) {
           continue;
         }
+        if (chunkCount === 0) {
+          mark('tts_first_chunk_received');
+        }
         chunkCount++;
         totalBytes += pcm.length;
         yield this._pcmToWav(pcm, TTS_SAMPLE_RATE, TTS_CHANNELS, TTS_BITS_PER_SAMPLE);
@@ -140,6 +150,7 @@ class GeminiTTSService {
       throw error;
     }
 
+    mark('tts_last_chunk_received');
     console.log(`[Gemini TTS] Stream complete: ${chunkCount} chunks, ${totalBytes} PCM bytes`);
   }
 

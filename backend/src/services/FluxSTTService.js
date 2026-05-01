@@ -9,9 +9,11 @@
  * Lifecycle: initialize() / processChunk() / reset() / destroy()
  *
  * Callbacks (assigned by caller after construction):
- *   onSpeechStart()         — fires on Flux StartOfTurn
- *   onTranscript(text)      — fires on Flux EndOfTurn with final transcript
- *   onError(error)          — fires on connection or SDK errors
+ *   onSpeechStart()                 — fires on Flux StartOfTurn
+ *   onTranscript(text, endOfTurnAt) — fires on Flux EndOfTurn. endOfTurnAt is
+ *                                     Date.now() captured the instant the event
+ *                                     arrived; used as t0 for per-turn timing.
+ *   onError(error)                  — fires on connection or SDK errors
  */
 
 const { DeepgramClient } = require('@deepgram/sdk');
@@ -112,9 +114,10 @@ class FluxSTTService {
         break;
 
       case 'EndOfTurn': {
+        const endOfTurnAt = Date.now();
         const transcript = (msg.transcript || '').trim();
         if (transcript && this.onTranscript) {
-          this.onTranscript(transcript);
+          this.onTranscript(transcript, endOfTurnAt);
         }
         break;
       }

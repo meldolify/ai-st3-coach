@@ -93,6 +93,32 @@ function serializeTranscript(history) {
     .join('\n');
 }
 
+/**
+ * Per-turn latency tracker. Records named timestamps relative to a t0 (typically
+ * the instant Flux declared EndOfTurn) and emits a single formatted summary
+ * line at turn end. Used to pinpoint exactly which stage is slow.
+ * @param {string} label - identifier for the log line (e.g. session id)
+ * @param {number} t0 - reference timestamp (Date.now() ms)
+ */
+function createTurnTimeline(label, t0) {
+  const marks = [];
+  return {
+    mark(name) {
+      marks.push({ name, at: Date.now() - t0 });
+    },
+    log() {
+      const segments = marks
+        .map((m, i) => {
+          const prev = i === 0 ? 0 : marks[i - 1].at;
+          return `${m.name}=+${m.at - prev}ms`;
+        })
+        .join(' · ');
+      const total = marks.length ? marks[marks.length - 1].at : 0;
+      console.log(`[TIMING] turn=${label} total=${total}ms | ${segments}`);
+    }
+  };
+}
+
 async function googleTTS(text, voiceName, options = {}) {
   return ttsService.synthesize(text, voiceName, options);
 }
@@ -140,12 +166,13 @@ async function ttsForSession(plainText, session) {
  * @param {Object} session - needs session.voice, session.difficulty
  * @yields {Buffer} WAV chunk
  */
-async function* ttsStreamForSession(plainText, session) {
+async function* ttsStreamForSession(plainText, session, options = {}) {
   const stylePrompt = config.TTS_STYLE_PROMPTS?.[session.difficulty];
   if (stylePrompt) {
     try {
       for await (const chunk of geminiTTSService.synthesizeStream(plainText, session.voice, {
-        stylePrompt
+        stylePrompt,
+        onTimingMark: options.onTimingMark
       })) {
         yield chunk;
       }
@@ -174,19 +201,21 @@ async function* ttsStreamForSession(plainText, session) {
  */
 async function streamResponseToClient(session, ws, history, options = {}) {
   let fullText = '';
-  const t0 = Date.now();
-  let firstTokenAt = 0;
-  let firstChunkSentAt = 0;
+  const timeline = options.timeline; // optional createTurnTimeline instance
+  const mark = name => timeline && timeline.mark(name);
 
   session.isAISpeaking = true;
+  mark('stream_invoked');
   ws.send(JSON.stringify({ type: 'ai_response_start' }));
+  mark('ai_response_start_sent');
 
   try {
-    // 1. Stream LLM tokens, accumulate full text
+    mark('llm_open');
+    let llmFirstTokenMarked = false;
     for await (const token of openaiService.generateResponseStream(history, options)) {
-      if (!firstTokenAt) {
-        firstTokenAt = Date.now();
-        console.log(`[PERF] LLM first token: ${firstTokenAt - t0}ms`);
+      if (!llmFirstTokenMarked) {
+        mark('llm_first_token');
+        llmFirstTokenMarked = true;
       }
       if (!session.isAISpeaking) {
         console.log('[STREAM] Aborted during LLM stream — user interrupted');
@@ -196,22 +225,18 @@ async function streamResponseToClient(session, ws, history, options = {}) {
     }
 
     const wasInterrupted = !session.isAISpeaking;
-    const tLLMEnd = Date.now();
-    console.log(`[PERF] LLM stream complete: ${tLLMEnd - t0}ms`);
+    mark('llm_stream_end');
 
-    // 2. Streaming TTS — ship each WAV chunk to the client as it arrives so
-    //    playback starts within ~500-1000ms instead of waiting 4-9s for the
-    //    full turn (one-shot generateContent latency on Gemini 3.1 Flash TTS).
+    // Streaming TTS — ship each WAV chunk to the client as it arrives.
     if (fullText && !wasInterrupted) {
       let chunkIndex = 0;
+      mark('tts_open');
       try {
-        for await (const wavChunk of ttsStreamForSession(fullText, session)) {
+        for await (const wavChunk of ttsStreamForSession(fullText, session, {
+          onTimingMark: mark
+        })) {
           if (!session.isAISpeaking) {
             break;
-          }
-          if (!firstChunkSentAt) {
-            firstChunkSentAt = Date.now();
-            console.log(`[PERF] TTS first chunk sent: ${firstChunkSentAt - tLLMEnd}ms`);
           }
           ws.send(
             JSON.stringify({
@@ -221,18 +246,19 @@ async function streamResponseToClient(session, ws, history, options = {}) {
               chunkIndex: chunkIndex++
             })
           );
+          if (chunkIndex === 1) {
+            mark('tts_first_chunk_sent');
+          }
         }
       } catch (ttsError) {
         console.error('[TTS] Stream failed entirely:', ttsError.message);
       }
-      console.log(`[PERF] TTS stream complete: ${Date.now() - tLLMEnd}ms (${chunkIndex} chunks)`);
+      mark('tts_last_chunk_sent');
+      console.log(`[TTS] ${chunkIndex} chunks sent`);
     }
 
-    const tEnd = Date.now();
-    console.log(`[PERF] Pipeline total: ${tEnd - t0}ms${wasInterrupted ? ' (interrupted)' : ''}`);
     console.log('[AI] ' + fullText);
 
-    // Only push complete responses to history; interrupted fragments corrupt LLM context
     if (wasInterrupted) {
       if (fullText.length > 50) {
         history.push({ role: 'assistant', content: fullText + ' [interrupted]' });
@@ -242,6 +268,10 @@ async function streamResponseToClient(session, ws, history, options = {}) {
     }
 
     ws.send(JSON.stringify({ type: 'ai_response_end', fullText }));
+    mark('ai_response_end_sent');
+    if (timeline) {
+      timeline.log();
+    }
   } catch (error) {
     console.error('[STREAM] Error:', error.message);
     const isRateLimit = error instanceof RateLimitError || error.isRateLimit;
@@ -452,7 +482,7 @@ wss.on('connection', (ws, req) => {
     });
 
     // Transcript pipeline: noise filter → display → push to history → LLM stream.
-    async function processFinalTranscript(transcript) {
+    async function processFinalTranscript(transcript, timeline) {
       const session = sessions.get(sessionId);
       if (!session || ws.readyState !== WebSocket.OPEN) {
         return;
@@ -467,7 +497,10 @@ wss.on('connection', (ws, req) => {
       }
       ws.send(JSON.stringify({ type: 'user_transcript_display', text: transcript }));
       session.history.push({ role: 'user', content: transcript });
-      await streamResponseToClient(session, ws, session.history, { temperature: 0.5 });
+      await streamResponseToClient(session, ws, session.history, {
+        temperature: 0.5,
+        timeline
+      });
     }
 
     fluxInstance.onSpeechStart = () => {
@@ -488,10 +521,12 @@ wss.on('connection', (ws, req) => {
       }
     };
 
-    fluxInstance.onTranscript = async transcript => {
+    fluxInstance.onTranscript = async (transcript, endOfTurnAt) => {
       console.log(`[Flux] EndOfTurn → "${transcript}"`);
+      const timeline = createTurnTimeline(sessionId, endOfTurnAt || Date.now());
+      timeline.mark('flux_endofturn');
       try {
-        await processFinalTranscript(transcript);
+        await processFinalTranscript(transcript, timeline);
       } catch (error) {
         console.error('[Flux] Pipeline error:', error.message);
         if (ws.readyState === WebSocket.OPEN) {

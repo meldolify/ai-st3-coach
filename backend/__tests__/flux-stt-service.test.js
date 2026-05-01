@@ -76,19 +76,26 @@ describe('FluxSTTService', () => {
     expect(onSpeechStart).toHaveBeenCalledTimes(1);
   });
 
-  test('EndOfTurn fires onTranscript with trimmed text', async () => {
+  test('EndOfTurn fires onTranscript with trimmed text and an endOfTurnAt timestamp', async () => {
     const flux = new FluxSTTService();
     await flux.initialize();
     const onTranscript = jest.fn();
     flux.onTranscript = onTranscript;
 
+    const before = Date.now();
     mockHandlers.message({
       type: 'TurnInfo',
       event: 'EndOfTurn',
       transcript: '  Hello there.  '
     });
+    const after = Date.now();
 
-    expect(onTranscript).toHaveBeenCalledWith('Hello there.');
+    expect(onTranscript).toHaveBeenCalledTimes(1);
+    const [text, endOfTurnAt] = onTranscript.mock.calls[0];
+    expect(text).toBe('Hello there.');
+    expect(typeof endOfTurnAt).toBe('number');
+    expect(endOfTurnAt).toBeGreaterThanOrEqual(before);
+    expect(endOfTurnAt).toBeLessThanOrEqual(after);
   });
 
   test('EndOfTurn with empty transcript does not fire onTranscript', async () => {
