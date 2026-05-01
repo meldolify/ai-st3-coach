@@ -58,6 +58,9 @@ const config = {
   // TTS Configuration
   TTS_VOICE: process.env.TTS_VOICE || 'Fenrir',
   TTS_MODEL_NAME: process.env.TTS_MODEL_NAME || 'gemini-3.1-flash-tts-preview',
+  // Locale passed to speechConfig.languageCode. Without this, voices default
+  // to en-US regardless of style tags. en-GB locks British English delivery.
+  TTS_LANGUAGE_CODE: process.env.TTS_LANGUAGE_CODE || 'en-GB',
 
   // Gemini TTS style tags — keyed by difficulty level.
   // Per Gemini 3.1 Flash TTS guidance: voices default to American English, so

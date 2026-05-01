@@ -110,6 +110,8 @@ export class AudioPlayer {
   queueBase64Audio(base64Audio) {
     this._queue.push(base64Audio)
     if (!this._isPlayingChunk) {
+      this._firstAudibleLogged = false
+      this._queueStartedAt = performance.now()
       this._playNextInQueue()
     }
   }
@@ -158,6 +160,13 @@ export class AudioPlayer {
     }
 
     this.audio.src = url
+    this.audio.onplay = () => {
+      if (!this._firstAudibleLogged && this._queueStartedAt) {
+        const elapsed = Math.round(performance.now() - this._queueStartedAt)
+        console.log(`[CLIENT TIMING] first audio audible +${elapsed}ms after first chunk queued`)
+        this._firstAudibleLogged = true
+      }
+    }
     this.audio.play()
 
     const estimatedDurationMs = (bytes.length / 4000) * 1000

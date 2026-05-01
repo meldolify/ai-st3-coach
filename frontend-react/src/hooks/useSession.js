@@ -51,6 +51,7 @@ export function useSession({ orbVisualizerRef }) {
   const messageIdRef = useRef(0)
   const sessionIdRef = useRef(null)
   const inFeedbackModeRef = useRef(false)
+  const turnStartAtRef = useRef(null)
 
   // Clean up on unmount
   useEffect(() => {
@@ -137,13 +138,18 @@ export function useSession({ orbVisualizerRef }) {
 
         case 'ai_response_start':
           serverStreamActiveRef.current = true
+          turnStartAtRef.current = performance.now()
           audioStreamerRef.current.setAISpeaking(true)
           streamedFullTextRef.current = ''
           setOrbState('speaking')
           setStatusText('Speaking')
+          console.log('[CLIENT TIMING] ai_response_start received')
           break
 
         case 'ai_response_chunk': {
+          const t0 = turnStartAtRef.current
+          const elapsed = t0 ? Math.round(performance.now() - t0) : 0
+          console.log(`[CLIENT TIMING] ai_response_chunk #${msg.chunkIndex} received +${elapsed}ms`)
           if (msg.chunkIndex === 0) {
             audioPlayerRef.current.onStart?.()
           }
@@ -155,6 +161,9 @@ export function useSession({ orbVisualizerRef }) {
         }
 
         case 'ai_response_end': {
+          const t0 = turnStartAtRef.current
+          const elapsed = t0 ? Math.round(performance.now() - t0) : 0
+          console.log(`[CLIENT TIMING] ai_response_end received +${elapsed}ms`)
           serverStreamActiveRef.current = false
           const fullText =
             msg.fullText || (streamedFullTextRef.current || '').trim()
