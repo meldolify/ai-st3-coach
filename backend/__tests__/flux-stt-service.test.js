@@ -30,7 +30,8 @@ beforeEach(() => {
       mockHandlers[event] = handler;
     }),
     sendMedia: jest.fn(),
-    sendCloseStream: jest.fn()
+    sendCloseStream: jest.fn(),
+    waitForOpen: jest.fn().mockResolvedValue(undefined)
   };
   DeepgramClient.mockImplementation(() => ({
     listen: {
@@ -42,11 +43,13 @@ beforeEach(() => {
 });
 
 describe('FluxSTTService', () => {
-  test('initialize() opens a connection and attaches message + error listeners', async () => {
+  test('initialize() opens a connection and attaches message + error + close listeners, and awaits waitForOpen', async () => {
     const flux = new FluxSTTService();
     await flux.initialize();
     expect(mockConnection.on).toHaveBeenCalledWith('message', expect.any(Function));
     expect(mockConnection.on).toHaveBeenCalledWith('error', expect.any(Function));
+    expect(mockConnection.on).toHaveBeenCalledWith('close', expect.any(Function));
+    expect(mockConnection.waitForOpen).toHaveBeenCalledTimes(1);
   });
 
   test('processChunk forwards the buffer via sendMedia', async () => {
