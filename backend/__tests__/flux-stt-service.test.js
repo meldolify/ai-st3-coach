@@ -1,18 +1,18 @@
 /**
  * FluxSTTService unit tests
- * Verifies turn-event mapping, audio forwarding, and lifecycle.
+ * Verifies turn-event mapping, audio forwarding, lifecycle, and the
+ * handshake-race in initialize() (open / close-before-open / error / timeout).
  * The @deepgram/sdk client is mocked; no real network calls.
  */
 
-// Capture handlers attached to the mock connection so tests can fire events
 let mockConnection;
-let mockHandlers;
+let mockHandlers; // event name -> handler registered via connection.on()
+let socketHandlers; // event name -> array of handlers registered via connection.socket.addEventListener()
 
 jest.mock('@deepgram/sdk', () => ({
   DeepgramClient: jest.fn()
 }));
 
-// Provide a minimal config with the API key set
 jest.mock('../src/config', () => ({
   DEEPGRAM_API_KEY: 'test-key',
   USE_FLUX_STT: true,
@@ -23,15 +23,22 @@ const { DeepgramClient } = require('@deepgram/sdk');
 const { FluxSTTService } = require('../src/services/FluxSTTService');
 
 beforeEach(() => {
-  // resetMocks:true wipes mockImplementation between tests, so re-establish here.
   mockHandlers = {};
+  socketHandlers = {};
   mockConnection = {
+    socket: {
+      addEventListener: jest.fn((event, handler) => {
+        if (!socketHandlers[event]) {
+          socketHandlers[event] = [];
+        }
+        socketHandlers[event].push(handler);
+      })
+    },
     on: jest.fn((event, handler) => {
       mockHandlers[event] = handler;
     }),
     sendMedia: jest.fn(),
-    sendCloseStream: jest.fn(),
-    waitForOpen: jest.fn().mockResolvedValue(undefined)
+    sendCloseStream: jest.fn()
   };
   DeepgramClient.mockImplementation(() => ({
     listen: {
@@ -42,35 +49,94 @@ beforeEach(() => {
   }));
 });
 
-describe('FluxSTTService', () => {
-  test('initialize() opens a connection and attaches message + error + close listeners, and awaits waitForOpen', async () => {
-    const flux = new FluxSTTService();
-    await flux.initialize();
+function fireOpen() {
+  (socketHandlers.open || []).forEach(h => h());
+}
+function fireClose(code, reason) {
+  (socketHandlers.close || []).forEach(h => h({ code, reason }));
+}
+function fireSocketError(err) {
+  (socketHandlers.error || []).forEach(h => h(err));
+}
+
+// Helper: kick off initialize() and fire 'open' on next tick so the race
+// resolves. Most tests just need a fully-initialized FluxSTTService.
+async function initFlux() {
+  const flux = new FluxSTTService();
+  const initPromise = flux.initialize();
+  setImmediate(fireOpen);
+  await initPromise;
+  return flux;
+}
+
+describe('FluxSTTService — initialize() handshake race', () => {
+  test('resolves when the socket fires open + attaches message/error/close listeners', async () => {
+    const flux = await initFlux();
     expect(mockConnection.on).toHaveBeenCalledWith('message', expect.any(Function));
     expect(mockConnection.on).toHaveBeenCalledWith('error', expect.any(Function));
     expect(mockConnection.on).toHaveBeenCalledWith('close', expect.any(Function));
-    expect(mockConnection.waitForOpen).toHaveBeenCalledTimes(1);
+    expect(mockConnection.socket.addEventListener).toHaveBeenCalledWith(
+      'open',
+      expect.any(Function)
+    );
+    expect(mockConnection.socket.addEventListener).toHaveBeenCalledWith(
+      'close',
+      expect.any(Function)
+    );
+    expect(mockConnection.socket.addEventListener).toHaveBeenCalledWith(
+      'error',
+      expect.any(Function)
+    );
+    expect(flux).toBeDefined();
   });
 
-  test('processChunk forwards the buffer via sendMedia', async () => {
+  test('rejects with the close code+reason when the socket closes before opening', async () => {
     const flux = new FluxSTTService();
-    await flux.initialize();
+    const initPromise = flux.initialize();
+    setImmediate(() => fireClose(4001, 'Unauthorized'));
+    await expect(initPromise).rejects.toThrow(/code=4001.*Unauthorized/);
+  });
+
+  test('rejects with the error when the socket errors before opening', async () => {
+    const flux = new FluxSTTService();
+    const initPromise = flux.initialize();
+    setImmediate(() => fireSocketError(new Error('handshake exploded')));
+    await expect(initPromise).rejects.toThrow(/handshake exploded/);
+  });
+
+  test('rejects with a timeout error when neither open nor close fires', async () => {
+    jest.useFakeTimers();
+    try {
+      const flux = new FluxSTTService();
+      const initPromise = flux.initialize();
+      // Allow connect()'s microtasks to settle so the listeners are attached.
+      await Promise.resolve();
+      await Promise.resolve();
+      jest.advanceTimersByTime(5000);
+      await expect(initPromise).rejects.toThrow(/timed out after 5000ms/);
+    } finally {
+      jest.useRealTimers();
+    }
+  });
+});
+
+describe('FluxSTTService — runtime behaviour', () => {
+  test('processChunk forwards the buffer via sendMedia', async () => {
+    const flux = await initFlux();
     const buf = Buffer.from([0, 1, 2, 3, 4, 5]);
     flux.processChunk(buf);
     expect(mockConnection.sendMedia).toHaveBeenCalledWith(buf);
   });
 
   test('processChunk is a no-op after destroy', async () => {
-    const flux = new FluxSTTService();
-    await flux.initialize();
+    const flux = await initFlux();
     flux.destroy();
     flux.processChunk(Buffer.from([1, 2, 3]));
     expect(mockConnection.sendMedia).not.toHaveBeenCalled();
   });
 
   test('StartOfTurn fires onSpeechStart', async () => {
-    const flux = new FluxSTTService();
-    await flux.initialize();
+    const flux = await initFlux();
     const onSpeechStart = jest.fn();
     flux.onSpeechStart = onSpeechStart;
 
@@ -80,8 +146,7 @@ describe('FluxSTTService', () => {
   });
 
   test('EndOfTurn fires onTranscript with trimmed text and an endOfTurnAt timestamp', async () => {
-    const flux = new FluxSTTService();
-    await flux.initialize();
+    const flux = await initFlux();
     const onTranscript = jest.fn();
     flux.onTranscript = onTranscript;
 
@@ -102,8 +167,7 @@ describe('FluxSTTService', () => {
   });
 
   test('EndOfTurn with empty transcript does not fire onTranscript', async () => {
-    const flux = new FluxSTTService();
-    await flux.initialize();
+    const flux = await initFlux();
     const onTranscript = jest.fn();
     flux.onTranscript = onTranscript;
 
@@ -113,8 +177,7 @@ describe('FluxSTTService', () => {
   });
 
   test('EagerEndOfTurn and TurnResumed do not fire any callback', async () => {
-    const flux = new FluxSTTService();
-    await flux.initialize();
+    const flux = await initFlux();
     const onSpeechStart = jest.fn();
     const onTranscript = jest.fn();
     flux.onSpeechStart = onSpeechStart;
@@ -128,8 +191,7 @@ describe('FluxSTTService', () => {
   });
 
   test('non-TurnInfo messages are ignored', async () => {
-    const flux = new FluxSTTService();
-    await flux.initialize();
+    const flux = await initFlux();
     const onTranscript = jest.fn();
     flux.onTranscript = onTranscript;
 
@@ -140,8 +202,7 @@ describe('FluxSTTService', () => {
   });
 
   test('connection error fires onError callback', async () => {
-    const flux = new FluxSTTService();
-    await flux.initialize();
+    const flux = await initFlux();
     const onError = jest.fn();
     flux.onError = onError;
 
@@ -152,8 +213,7 @@ describe('FluxSTTService', () => {
   });
 
   test('destroy() closes the stream and clears callbacks', async () => {
-    const flux = new FluxSTTService();
-    await flux.initialize();
+    const flux = await initFlux();
     flux.onSpeechStart = jest.fn();
     flux.onTranscript = jest.fn();
     flux.onError = jest.fn();
@@ -167,8 +227,7 @@ describe('FluxSTTService', () => {
   });
 
   test('reset() is a no-op (Flux holds turn state server-side)', async () => {
-    const flux = new FluxSTTService();
-    await flux.initialize();
+    const flux = await initFlux();
     expect(() => flux.reset()).not.toThrow();
     expect(mockConnection.sendCloseStream).not.toHaveBeenCalled();
   });

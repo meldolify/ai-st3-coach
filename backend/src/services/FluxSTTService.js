@@ -22,6 +22,7 @@ const config = require('../config');
 const FLUX_MODEL = 'flux-general-en';
 const SAMPLE_RATE = 16000;
 const ENCODING = 'linear16';
+const HANDSHAKE_TIMEOUT_MS = 5000;
 
 class FluxSTTService {
   constructor() {
@@ -60,13 +61,64 @@ class FluxSTTService {
       console.warn(`[Flux] Connection closed (code=${code}, reason="${reason || ''}")`);
     });
 
-    // V2Client.connect() resolves before the WebSocket handshake completes —
-    // sendMedia() asserts readyState === OPEN, so we must await it ourselves.
-    if (typeof this.connection.waitForOpen === 'function') {
-      await this.connection.waitForOpen();
+    // V2Client.connect() resolves while the underlying WebSocket is still
+    // CONNECTING — sendMedia() asserts readyState === OPEN, so we must wait
+    // for the actual handshake. The SDK's waitForOpen() only listens for
+    // 'open' and 'error', so a close-during-handshake (auth rejection,
+    // permission denied, etc.) hangs it forever. Race all four outcomes
+    // ourselves with a hard timeout so initialize() either resolves cleanly
+    // or throws within HANDSHAKE_TIMEOUT_MS.
+    await this._waitForReady();
+    console.log('[Flux] Connection ready');
+  }
+
+  _waitForReady() {
+    const socket = this.connection?.socket;
+    if (!socket || typeof socket.addEventListener !== 'function') {
+      // Defensive: if the SDK shape changes, fall back to assuming the
+      // connection is already ready.
+      return Promise.resolve();
     }
 
-    console.log('[Flux] Connection ready');
+    return new Promise((resolve, reject) => {
+      let settled = false;
+      const settle = (fn, arg) => {
+        if (settled) {
+          return;
+        }
+        settled = true;
+        clearTimeout(timer);
+        fn(arg);
+      };
+
+      const timer = setTimeout(
+        () =>
+          settle(reject, new Error(`Flux WS handshake timed out after ${HANDSHAKE_TIMEOUT_MS}ms`)),
+        HANDSHAKE_TIMEOUT_MS
+      );
+
+      socket.addEventListener('open', () => settle(resolve, undefined));
+      socket.addEventListener('close', event => {
+        if (settled) {
+          return;
+        }
+        const code = event?.code;
+        const reason = event?.reason;
+        settle(
+          reject,
+          new Error(`Flux WS closed during handshake (code=${code}, reason="${reason || ''}")`)
+        );
+      });
+      socket.addEventListener('error', err => {
+        if (settled) {
+          return;
+        }
+        settle(
+          reject,
+          err instanceof Error ? err : new Error(err?.message || 'Flux WS error during handshake')
+        );
+      });
+    });
   }
 
   /**
