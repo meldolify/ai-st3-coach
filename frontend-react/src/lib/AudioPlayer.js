@@ -46,8 +46,10 @@ export class AudioPlayer {
       const ctx = new Ctx()
       const source = ctx.createMediaElementSource(this.audio)
       const analyser = ctx.createAnalyser()
-      analyser.fftSize = 64 // 32 frequency bins
-      analyser.smoothingTimeConstant = 0.7
+      // 256 bins gives ~94 Hz resolution at 24 kHz sample rate, enough to
+      // distribute speech-band frequencies (60–6000 Hz) across 5 bars.
+      analyser.fftSize = 512
+      analyser.smoothingTimeConstant = 0.55
       source.connect(analyser)
       analyser.connect(ctx.destination)
       this._audioContext = ctx
@@ -67,22 +69,40 @@ export class AudioPlayer {
   }
 
   /**
-   * getFrequencyBands — sample N evenly-distributed amplitude bands from
-   * the current analyser snapshot. Returns Float32 array of values in [0, 1].
+   * getFrequencyBands — sample N exponentially-spaced bands across the
+   * speech range (60–6000 Hz). Returns array of values in [0, 1].
+   *
+   * Uses peak (not mean) per band so transient sibilants register, and
+   * sqrt-compresses the result so loud bands don't pin to 1.0 and quiet
+   * bands aren't lost in the floor.
    */
   getFrequencyBands(numBands = 5) {
     const empty = new Array(numBands).fill(0)
-    if (!this._analyser || !this._freqData) return empty
+    if (!this._analyser || !this._freqData || !this._audioContext) return empty
     this._analyser.getByteFrequencyData(this._freqData)
     const binCount = this._freqData.length
-    const bandSize = Math.max(1, Math.floor(binCount / numBands))
+    const nyquist = this._audioContext.sampleRate / 2
+    const hzPerBin = nyquist / binCount
+
+    const minHz = 60
+    const maxHz = 6000
+    const ratio = Math.pow(maxHz / minHz, 1 / numBands)
+
     const bands = new Array(numBands)
     for (let i = 0; i < numBands; i++) {
-      let sum = 0
-      const start = i * bandSize
-      const end = Math.min(binCount, start + bandSize)
-      for (let j = start; j < end; j++) sum += this._freqData[j]
-      bands[i] = sum / (end - start) / 255
+      const lowHz = minHz * Math.pow(ratio, i)
+      const highHz = minHz * Math.pow(ratio, i + 1)
+      let startBin = Math.floor(lowHz / hzPerBin)
+      let endBin = Math.min(binCount, Math.ceil(highHz / hzPerBin))
+      if (endBin <= startBin) endBin = startBin + 1
+      let peak = 0
+      for (let j = startBin; j < endBin; j++) {
+        if (this._freqData[j] > peak) peak = this._freqData[j]
+      }
+      // Subtract a small noise floor (~12/255), then sqrt-compress to spread
+      // the dynamic range so quiet syllables still produce visible motion.
+      const normalized = Math.max(0, (peak - 12) / 243)
+      bands[i] = Math.sqrt(normalized)
     }
     return bands
   }
