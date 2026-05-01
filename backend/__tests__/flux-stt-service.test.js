@@ -37,6 +37,7 @@ beforeEach(() => {
     on: jest.fn((event, handler) => {
       mockHandlers[event] = handler;
     }),
+    connect: jest.fn(),
     sendMedia: jest.fn(),
     sendCloseStream: jest.fn()
   };
@@ -70,7 +71,7 @@ async function initFlux() {
 }
 
 describe('FluxSTTService — initialize() handshake race', () => {
-  test('resolves when the socket fires open + attaches message/error/close listeners', async () => {
+  test('resolves when the socket fires open + calls connection.connect() + attaches all listeners', async () => {
     const flux = await initFlux();
     expect(mockConnection.on).toHaveBeenCalledWith('message', expect.any(Function));
     expect(mockConnection.on).toHaveBeenCalledWith('error', expect.any(Function));
@@ -87,6 +88,9 @@ describe('FluxSTTService — initialize() handshake race', () => {
       'error',
       expect.any(Function)
     );
+    // Critical: SDK's startClosed:true means the socket doesn't begin
+    // handshaking until connect() is explicitly invoked.
+    expect(mockConnection.connect).toHaveBeenCalledTimes(1);
     expect(flux).toBeDefined();
   });
 
@@ -112,8 +116,8 @@ describe('FluxSTTService — initialize() handshake race', () => {
       // Allow connect()'s microtasks to settle so the listeners are attached.
       await Promise.resolve();
       await Promise.resolve();
-      jest.advanceTimersByTime(5000);
-      await expect(initPromise).rejects.toThrow(/timed out after 5000ms/);
+      jest.advanceTimersByTime(15000);
+      await expect(initPromise).rejects.toThrow(/timed out after 15000ms/);
     } finally {
       jest.useRealTimers();
     }
