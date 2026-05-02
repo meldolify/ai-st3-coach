@@ -6,7 +6,7 @@ import LoggedInBand from './LoggedInBand'
 import SectionA_Frustration from './sections/SectionA_Frustration'
 import SectionB_AIInterviewer from './sections/SectionB_AIInterviewer'
 import SectionC_Difference from './sections/SectionC_Difference'
-import ProofSection from './ProofSection'
+import SectionD_Signature from './sections/SectionD_Signature'
 import ActionSection from './ActionSection'
 import FooterSection from './FooterSection'
 import ThreeBackground from './ThreeBackground'
@@ -50,8 +50,10 @@ export default function LandingPage() {
       {/* §C — What Makes It Different */}
       <SectionC_Difference />
 
-      {/* Still-existing sections being replaced in Phases 4-5 */}
-      <ProofSection />
+      {/* §D — Signature Moment */}
+      <SectionD_Signature />
+
+      {/* Still-existing section being replaced in Phase 5 */}
       <ActionSection isLoggedIn={isLoggedIn} isPremium={isPremium} />
 
       {/* Footer */}
