@@ -56,15 +56,15 @@ export default function SectionA_Frustration() {
 
       <div className="section-a__inner relative w-full max-w-[1500px] mx-auto px-6 sm:px-10 py-24 md:py-32 md:min-h-[150vh] flex flex-col gap-16 md:block">
 
-        {/* Photographic subject — Unsplash (medical study / isolation vibe).
-            Sits behind the headline, peeking through the line break.
-            Search: "studying alone night books" on Unsplash to swap. */}
+        {/* Photographic subject — late-night solo study scene.
+            Anchors the right half of the section, top-to-bottom, masked at edges. */}
         <img
-          src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&w=1200&q=80"
+          src="/images/landing/a-isolation.png"
           alt=""
           aria-hidden="true"
           loading="lazy"
           className="section-a__photo"
+          onError={(e) => { e.currentTarget.style.display = 'none' }}
         />
 
         {/* Pop-in accents — absolute on md+, stacked on mobile.

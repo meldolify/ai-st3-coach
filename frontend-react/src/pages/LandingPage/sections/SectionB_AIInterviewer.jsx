@@ -78,7 +78,7 @@ export default function SectionB_AIInterviewer() {
       data-testid="section-b"
     >
       {/* Intro band */}
-      <div className="section-b__intro max-w-7xl mx-auto px-6 sm:px-10 pt-24 md:pt-32 pb-12 md:pb-16 text-center">
+      <div className="section-b__intro max-w-7xl mx-auto px-6 sm:px-10 pt-24 md:pt-32 pb-6 md:pb-8 text-center">
         <p className="font-display italic text-organic-forest text-[1.1rem] md:text-[1.25rem] mb-3">
           ( the interviewer )
         </p>
@@ -110,14 +110,17 @@ export default function SectionB_AIInterviewer() {
         </div>
       </div>
 
-      {/* Walkthrough — tall container, sticky frame on desktop, stacked on mobile */}
+      {/* Walkthrough — tall container, sticky frame on desktop, stacked on mobile.
+          Frame side does NOT set h-[80vh] — that constrained the sticky containing
+          block to a single viewport, making the frame disappear during steps 2-4.
+          With grid stretch + sticky-top, the frame stays pinned through all 4 steps. */}
       <div
         ref={containerRef}
         className="section-b__walkthrough relative px-6 sm:px-10 pb-24 md:pb-32"
       >
         <div className="max-w-7xl mx-auto md:grid md:grid-cols-2 md:gap-12 lg:gap-20">
           {/* Sticky frame side */}
-          <div className="section-b__frame-side md:sticky md:top-[12vh] md:h-[80vh] md:flex md:items-center md:justify-center md:self-start">
+          <div className="section-b__frame-side md:sticky md:top-[18vh] md:self-start md:flex md:justify-center">
             <DeviceFrame currentStep={currentStep} mode={mode} />
           </div>
 
@@ -127,7 +130,7 @@ export default function SectionB_AIInterviewer() {
               <div
                 key={i}
                 className={cn(
-                  'section-b__desc min-h-[60vh] md:min-h-screen flex flex-col justify-center py-10',
+                  'section-b__desc min-h-[60vh] md:min-h-[80vh] flex flex-col justify-center py-10',
                   currentStep === i ? 'opacity-100' : 'opacity-50'
                 )}
                 style={{ transition: 'opacity 0.4s ease' }}

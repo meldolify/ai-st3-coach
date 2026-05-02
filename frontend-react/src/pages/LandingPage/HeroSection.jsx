@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import { useAuthStore, selectIsLoggedIn } from '../../stores/authStore'
 
 /**
  * HeroSection — screaming-scale wordmark + photographic subject overlap.
@@ -8,13 +9,17 @@ import { useNavigate } from 'react-router-dom'
  *   - A doctor portrait sits on the right, *overlapping* the wordmark
  *   - Tiny italic-serif annotations in the corners ( EST. 2026 ),
  *     ( 166 STATIONS · UK ), ( hand-crafted · ai-powered )
- *   - Single soft CTA bottom-left near the wordmark base
+ *   - Single CTA bottom-left near the wordmark base — toggles between
+ *     "Try a free station" (logged-out) and "Go to Dashboard" (logged-in).
+ *     The CTA state IS the logged-in shortcut now (the separate
+ *     LoggedInBand was removed for being redundant chrome).
  *
  * The Three.js icosahedron stays as low-opacity ambient atmosphere
  * (set globally in ThreeBackground); the photo+type carry the hero now.
  */
 export default function HeroSection() {
   const navigate = useNavigate()
+  const isLoggedIn = useAuthStore(selectIsLoggedIn)
 
   return (
     <section className="section-hero section--light" id="sectionHero" data-testid="hero-section">
@@ -26,17 +31,17 @@ export default function HeroSection() {
           <span>( 166 stations · UK )</span>
         </div>
 
-        {/* Photographic subject — Unsplash, free for commercial use.
-            Image ref: portrait of a doctor / medical professional with simple
-            background that composites cleanly against cream.
-            Search "doctor portrait white coat" on Unsplash to swap. */}
+        {/* Hero portrait — confident surgical trainee, transparent PNG cutout.
+            Sits to the right, masked at the leading edge so it overlaps the
+            right side of the REVIVA wordmark. */}
         <img
-          src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=1200&q=85"
+          src="/images/landing/hero-doctor.png"
           alt=""
           aria-hidden="true"
           loading="eager"
           fetchPriority="high"
           className="hero-photo"
+          onError={(e) => { e.currentTarget.style.display = 'none' }}
         />
 
         {/* The wordmark — screaming scale. Each letter is a span so the
@@ -58,7 +63,7 @@ export default function HeroSection() {
               className="btn-amber btn-amber--lg magnetic-btn"
               onClick={() => navigate('/scenarios', { state: { fresh: true } })}
             >
-              Try a free station &rarr;
+              {isLoggedIn ? 'Go to Dashboard' : 'Try a free station'} &rarr;
             </button>
           </div>
         </div>
