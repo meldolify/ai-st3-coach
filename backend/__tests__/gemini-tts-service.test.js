@@ -197,4 +197,51 @@ describe('GeminiTTSService.synthesizeStream', () => {
     const gen = geminiTTSService.synthesizeStream('Test.', 'Fenrir');
     await expect(gen.next()).rejects.toThrow(/Auth failed/);
   });
+
+  test('logs DIAG output when stream completes with zero audio chunks (W5 Phase 1)', async () => {
+    // Mock a stream that yields parts with NO inlineData — e.g. a text-only
+    // candidate followed by a finishReason=STOP marker. Reproduces the
+    // production "0 chunks, 0 PCM bytes" failure case.
+    const stream = (async function* () {
+      yield {
+        candidates: [
+          {
+            content: { parts: [{ text: 'reasoning trace, not audio' }] }
+          }
+        ]
+      };
+      yield {
+        candidates: [
+          {
+            content: { parts: [] },
+            finishReason: 'STOP'
+          }
+        ]
+      };
+    })();
+    mockGenerateContentStream.mockResolvedValueOnce(stream);
+
+    const logSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+    try {
+      const chunks = [];
+      for await (const wav of geminiTTSService.synthesizeStream("That's okay.", 'Fenrir', {
+        stylePrompt: '[British accent, calm]'
+      })) {
+        chunks.push(wav);
+      }
+      expect(chunks).toHaveLength(0);
+
+      const messages = logSpy.mock.calls.map(args => args.join(' '));
+      // Sent-text + stylePrompt diagnostic
+      expect(messages.some(m => /DIAG: Sent text=.*That's okay/.test(m))).toBe(true);
+      expect(messages.some(m => /British accent, calm/.test(m))).toBe(true);
+      // Parts-received count
+      expect(messages.some(m => /DIAG: Received 2 stream parts/.test(m))).toBe(true);
+      // Per-part dump (one line each)
+      expect(messages.some(m => /\[0\].*reasoning trace, not audio/.test(m))).toBe(true);
+      expect(messages.some(m => /\[1\].*finishReason.*STOP/.test(m))).toBe(true);
+    } finally {
+      logSpy.mockRestore();
+    }
+  });
 });
