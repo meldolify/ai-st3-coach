@@ -23,10 +23,6 @@ const FLUX_MODEL = 'flux-general-en';
 const SAMPLE_RATE = 16000;
 const ENCODING = 'linear16';
 const HANDSHAKE_TIMEOUT_MS = 15000;
-// Send a KeepAlive control frame every 5s. Deepgram closes idle Flux sockets
-// at ~9-10s; 5s is a comfortable margin. KeepAlive is JSON, NOT audio, so
-// has no impact on the per-minute audio billing meter.
-const KEEP_ALIVE_INTERVAL_MS = 5000;
 
 class FluxSTTService {
   constructor() {
@@ -35,7 +31,6 @@ class FluxSTTService {
     this.onTranscript = null;
     this.onError = null;
     this._destroyed = false;
-    this._keepAliveTimer = null;
   }
 
   /**
@@ -92,25 +87,6 @@ class FluxSTTService {
     // so a server-side rejection during handshake would hang it forever.
     await this._waitForReady();
     console.log('[Flux] Connection ready');
-
-    // Start the keep-alive heartbeat. Deepgram drops idle Flux sockets at
-    // ~9-10s; this prevents the constant reconnect churn we were seeing.
-    // .unref() so the timer doesn't keep the Node process (or Jest worker)
-    // alive on its own — the WS connection holds the loop in production.
-    this._keepAliveTimer = setInterval(() => {
-      try {
-        const sock = this.connection?.socket;
-        // ReconnectingWebSocket.OPEN === 1
-        if (sock && sock.readyState === 1) {
-          sock.send(JSON.stringify({ type: 'KeepAlive' }));
-        }
-      } catch (_err) {
-        // Best-effort; the SDK's auto-reconnect handles transient send failures.
-      }
-    }, KEEP_ALIVE_INTERVAL_MS);
-    if (typeof this._keepAliveTimer.unref === 'function') {
-      this._keepAliveTimer.unref();
-    }
   }
 
   _waitForReady() {
@@ -223,10 +199,6 @@ class FluxSTTService {
    */
   destroy() {
     this._destroyed = true;
-    if (this._keepAliveTimer) {
-      clearInterval(this._keepAliveTimer);
-      this._keepAliveTimer = null;
-    }
     if (this.connection) {
       try {
         this.connection.sendCloseStream({ type: 'CloseStream' });
