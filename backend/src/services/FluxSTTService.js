@@ -45,8 +45,7 @@ class FluxSTTService {
     this.connection = await client.listen.v2.connect({
       model: FLUX_MODEL,
       encoding: ENCODING,
-      sample_rate: SAMPLE_RATE,
-      debug: true
+      sample_rate: SAMPLE_RATE
     });
 
     // Diagnostic: confirm the socket exists and log its url so we know
