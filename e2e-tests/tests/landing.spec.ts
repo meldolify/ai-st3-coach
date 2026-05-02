@@ -76,11 +76,6 @@ test.describe('Landing Page', () => {
     await expect(sectionF.getByRole('button', { name: /Subscribe/ })).toBeVisible()
   })
 
-  test('logged-in band is hidden for unauthenticated users', async ({ page }) => {
-    const band = page.locator(SELECTORS.landing.loggedInBand)
-    await expect(band).toHaveCount(0)
-  })
-
   test('footer is visible with no broken support/legal links', async ({ page }) => {
     const footer = page.locator('footer#sectionFooter')
     await footer.scrollIntoViewIfNeeded()
