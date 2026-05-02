@@ -131,33 +131,6 @@ const VOICE_FALLBACK_MAP = {
 };
 
 /**
- * One-shot TTS for a session — used by the feedback flow (discrete sections).
- * Tries Gemini TTS with style tag first, falls back to Cloud TTS on error.
- * @param {string} plainText
- * @param {Object} session - needs session.voice, session.difficulty
- * @returns {Promise<Buffer>} - WAV (Gemini) or MP3 (Cloud TTS fallback)
- */
-async function ttsForSession(plainText, session) {
-  const stylePrompt = config.TTS_STYLE_PROMPTS?.[session.difficulty];
-  if (stylePrompt) {
-    for (let attempt = 0; attempt < 2; attempt++) {
-      try {
-        return await geminiTTSService.synthesize(plainText, session.voice, { stylePrompt });
-      } catch (error) {
-        if (attempt === 0) {
-          console.warn('[TTS] Gemini attempt 1 failed, retrying:', error.message);
-          await new Promise(r => setTimeout(r, 500));
-        } else {
-          console.warn('[TTS] Gemini failed twice, falling back to Cloud TTS:', error.message);
-        }
-      }
-    }
-  }
-  const cloudVoice = VOICE_FALLBACK_MAP[session.voice] || session.voice;
-  return googleTTS(buildNaturalSSML(plainText), cloudVoice);
-}
-
-/**
  * Streaming TTS for a session — yields WAV chunks as Gemini emits them so
  * the client starts playing in ~500-1000ms instead of waiting for the full
  * turn (which is 4-9s of dead air on Gemini 3.1 Flash TTS).
@@ -183,6 +156,65 @@ async function* ttsStreamForSession(plainText, session, options = {}) {
   }
   const cloudVoice = VOICE_FALLBACK_MAP[session.voice] || session.voice;
   yield await googleTTS(buildNaturalSSML(plainText), cloudVoice);
+}
+
+/**
+ * Fire ttsStreamForSession eagerly and buffer chunks as they arrive. Returns
+ * an entry with `text` and a `drain()` async iterator that yields chunks in
+ * order — even if the consumer is slower than the producer (chunks are
+ * buffered) or faster (drain awaits the next chunk).
+ *
+ * Used by the feedback flow so all 6 sections' streams run in parallel
+ * (saving wall-clock time) but the WS sends them in 1→6 order.
+ *
+ * @param {string} text - Full section text
+ * @param {Object} session
+ * @returns {{ text: string, drain: () => AsyncGenerator<Buffer> }}
+ */
+function startBufferedSectionTTS(text, session) {
+  const buffer = [];
+  let done = false;
+  let resolveNext;
+  let nextPromise = new Promise(r => {
+    resolveNext = r;
+  });
+  const notifyNew = () => {
+    const r = resolveNext;
+    nextPromise = new Promise(rr => {
+      resolveNext = rr;
+    });
+    r();
+  };
+
+  (async () => {
+    try {
+      for await (const wav of ttsStreamForSession(text, session)) {
+        buffer.push(wav);
+        notifyNew();
+      }
+    } catch (err) {
+      console.warn('[FEEDBACK] TTS stream failed:', err?.message || err);
+    } finally {
+      done = true;
+      notifyNew();
+    }
+  })().catch(() => {});
+
+  return {
+    text,
+    async *drain() {
+      let idx = 0;
+      while (true) {
+        while (idx < buffer.length) {
+          yield buffer[idx++];
+        }
+        if (done) {
+          return;
+        }
+        await nextPromise;
+      }
+    }
+  };
 }
 
 /**
@@ -685,15 +717,13 @@ wss.on('connection', (ws, req) => {
                   })) {
                     fullText += token;
 
-                    // Detect completed sections and fire TTS immediately (parallel, no queue)
+                    // Detect completed sections and start streaming TTS immediately
+                    // (parallel buffering — all sections' streams run concurrently;
+                    // the dispatch loop later drains them in order).
                     const completedSections = sectionBuffer.addToken(token);
                     for (const sectionText of completedSections) {
                       console.log(`[FEEDBACK] Section ${ttsQueue.length + 1} detected, firing TTS`);
-                      const ttsPromise = ttsForSession(sectionText, session).catch(err => {
-                        console.warn('[FEEDBACK] TTS failed:', err.message);
-                        return null;
-                      });
-                      ttsQueue.push({ text: sectionText, ttsPromise });
+                      ttsQueue.push(startBufferedSectionTTS(sectionText, session));
                     }
                   }
 
@@ -701,11 +731,7 @@ wss.on('connection', (ws, req) => {
                   const flushed = sectionBuffer.flush();
                   if (flushed && sectionBuffer.sectionStarted) {
                     console.log(`[FEEDBACK] Flushed final section ${ttsQueue.length + 1}`);
-                    const ttsPromise = ttsForSession(flushed, session).catch(err => {
-                      console.warn('[FEEDBACK] TTS failed:', err.message);
-                      return null;
-                    });
-                    ttsQueue.push({ text: flushed, ttsPromise });
+                    ttsQueue.push(startBufferedSectionTTS(flushed, session));
                   }
 
                   const t2 = Date.now();
@@ -773,34 +799,39 @@ wss.on('connection', (ws, req) => {
                   );
                   console.log('[FEEDBACK] Summary sent');
 
-                  // 6. If stream detection missed sections, fire TTS now as fallback (parallel)
+                  // 6. If stream detection missed sections, fire streaming TTS now as fallback
                   if (ttsQueue.length === 0 && parsed.sections.length > 0) {
                     for (const text of parsed.sections) {
-                      const ttsPromise = ttsForSession(text, session).catch(err => {
-                        console.warn('[FEEDBACK] TTS failed:', err.message);
-                        return null;
-                      });
-                      ttsQueue.push({ text, ttsPromise });
+                      ttsQueue.push(startBufferedSectionTTS(text, session));
                     }
                   }
 
-                  // 7. Dispatch TTS in order — send each section as its audio completes
-                  // TTS calls are already running in parallel, so early sections resolve fast
+                  // 7. Dispatch in order — for each section, drain its buffered chunks
+                  // and send one feedback_response per WAV chunk. text only on the first
+                  // chunk (frontend gates addMessage on chunkIndex===0). Parallel buffering
+                  // means later sections are mostly ready by the time their turn comes.
                   for (let i = 0; i < ttsQueue.length; i++) {
                     if (ws.readyState !== WebSocket.OPEN) {
                       break;
                     }
-                    const audio = await ttsQueue[i].ttsPromise;
+                    const sectionEntry = ttsQueue[i];
+                    let chunkIndex = 0;
+                    for await (const wavChunk of sectionEntry.drain()) {
+                      if (ws.readyState !== WebSocket.OPEN) {
+                        break;
+                      }
+                      ws.send(
+                        JSON.stringify({
+                          type: 'feedback_response',
+                          text: chunkIndex === 0 ? sectionEntry.text : '',
+                          audio: wavChunk.toString('base64'),
+                          section: i + 1,
+                          totalSections: ttsQueue.length,
+                          chunkIndex: chunkIndex++
+                        })
+                      );
+                    }
                     session.feedbackCount = i + 1;
-                    ws.send(
-                      JSON.stringify({
-                        type: 'feedback_response',
-                        text: ttsQueue[i].text,
-                        audio: audio ? audio.toString('base64') : '',
-                        section: i + 1,
-                        totalSections: ttsQueue.length
-                      })
-                    );
                   }
 
                   const t3 = Date.now();
