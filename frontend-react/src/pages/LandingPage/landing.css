@@ -701,6 +701,13 @@
   color: var(--organic-amber);
 }
 
+.landing-page .footer-grid .footer-pending {
+  display: block;
+  color: var(--text-muted-dark);
+  opacity: 0.55;
+  font-size: 0.875rem;
+}
+
 .landing-page .footer-grid h4 {
   margin-bottom: 12px;
   color: var(--text-on-dark);
