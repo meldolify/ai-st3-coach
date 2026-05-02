@@ -5,6 +5,20 @@ import Lenis from 'lenis'
 
 gsap.registerPlugin(ScrollTrigger)
 
+/**
+ * Landing-page animation hook.
+ *
+ * Slimmed down post-redesign to three concerns:
+ *   - Lenis smooth scroll (page-wide)
+ *   - Hero entrance: REVIVA char-scramble reveal + subtitle + CTA stagger
+ *   - Hero transition: scrub the hero content out as the user scrolls past
+ *   - Magnetic buttons: tasteful hover deflection on .magnetic-btn elements
+ *
+ * Per-section animations now live inside each section component (using
+ * framer-motion's whileInView and useScroll). The old per-section blocks
+ * for Who/Why/Trust/Services/Proof/Action were removed in Phase 6 along
+ * with those sections.
+ */
 export function useLandingAnimations() {
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -115,276 +129,6 @@ export function useLandingAnimations() {
     }
 
     // ============================================================
-    // SECTION WHO
-    // ============================================================
-    function initSectionWho() {
-      if (prefersReducedMotion) {
-        gsap.set('.section-who', { clipPath: 'none' })
-        return
-      }
-
-      if (isTouch) {
-        gsap.set('.section-who', { clipPath: 'none' })
-        gsap.from('.section-who .display-line, .section-who .who-body, .who-photo-wrapper', {
-          opacity: 0, y: 30, duration: 0.8, stagger: 0.1,
-          scrollTrigger: { trigger: '.section-who', start: 'top 100%', toggleActions: 'play none none none' },
-        })
-        return
-      }
-
-      gsap.fromTo('.section-who',
-        { clipPath: 'circle(0% at 50% 50%)' },
-        {
-          clipPath: 'circle(150% at 50% 50%)',
-          scrollTrigger: {
-            trigger: '.section-who',
-            start: 'top 80%',
-            end: 'top 20%',
-            scrub: 0.5,
-          },
-        },
-      )
-
-      gsap.from('.section-who .display-line', {
-        opacity: 0, x: -60, duration: 0.8, stagger: 0.15, ease: 'power3.out',
-        scrollTrigger: { trigger: '.section-who', start: 'top 40%', toggleActions: 'play none none none' },
-      })
-
-      gsap.from('.section-who .who-body', {
-        opacity: 0, y: 30, duration: 0.8, stagger: 0.15, ease: 'power2.out',
-        scrollTrigger: { trigger: '.section-who .who-body', start: 'top 80%', toggleActions: 'play none none none' },
-      })
-
-      gsap.from('.who-photo-wrapper', {
-        opacity: 0, scale: 0.95, y: 30, duration: 0.8, ease: 'power2.out',
-        scrollTrigger: { trigger: '.who-photo-wrapper', start: 'top 85%', toggleActions: 'play none none none' },
-      })
-    }
-
-    // ============================================================
-    // SECTION WHY
-    // ============================================================
-    function initSectionWhy() {
-      if (prefersReducedMotion) return
-
-      const section = document.querySelector('.section-why')
-      if (!section) return
-
-      const phases = section.querySelectorAll('.why-phase')
-      if (phases.length < 3) return
-
-      if (isTouch) {
-        phases.forEach((phase) => {
-          gsap.from(phase, {
-            opacity: 0, y: 30, duration: 0.8,
-            scrollTrigger: { trigger: phase, start: 'top 100%', toggleActions: 'play none none none' },
-          })
-        })
-        return
-      }
-
-      gsap.set(phases[1], { opacity: 0, y: 30 })
-      gsap.set(phases[2], { opacity: 0, y: 30 })
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: '.section-why',
-          pin: true,
-          pinType: 'transform',
-          start: 'top top',
-          end: '+=200%',
-          scrub: 0.5,
-        },
-      })
-
-      tl.fromTo('.why-display', { scale: 0.9, opacity: 0.6 }, { scale: 1, opacity: 1, duration: 0.2 }, 0)
-      tl.to(phases[0], { opacity: 0, y: -30, duration: 0.15 }, 0.25)
-      tl.to(phases[1], { opacity: 1, y: 0, duration: 0.15 }, 0.30)
-      tl.to(phases[1], { opacity: 0, y: -30, duration: 0.15 }, 0.58)
-      tl.to(phases[2], { opacity: 1, y: 0, duration: 0.15 }, 0.63)
-      tl.to('.section-why', { backgroundColor: '#EBF0F5', duration: 0.20 }, 0.25)
-      tl.to('.section-why', { backgroundColor: '#F5F0E5', duration: 0.20 }, 0.55)
-      tl.fromTo('.why-progress-line', { scaleY: 0 }, { scaleY: 1, duration: 1 }, 0)
-    }
-
-    // ============================================================
-    // SECTION TRUST
-    // ============================================================
-    function initSectionTrust() {
-      if (prefersReducedMotion) return
-
-      if (isTouch) {
-        gsap.from('.trust-card', {
-          opacity: 0, y: 40, duration: 0.6, stagger: 0.1,
-          scrollTrigger: { trigger: '.trust-cards', start: 'top 100%', toggleActions: 'play none none none' },
-        })
-        return
-      }
-
-      gsap.to('.trust-strip', {
-        x: '-30%',
-        scrollTrigger: {
-          trigger: '.section-trust',
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: 0.3,
-        },
-      })
-
-      // Word-by-word reveal (without SplitType — use CSS word animation instead)
-      gsap.from('.trust-display', {
-        opacity: 0, y: 30, duration: 1.0,
-        scrollTrigger: {
-          trigger: '.trust-display',
-          start: 'top 70%',
-          toggleActions: 'play none none none',
-        },
-      })
-
-      gsap.from('.trust-card', {
-        opacity: 0, y: 60, rotation: -5, duration: 0.8, stagger: 0.15, ease: 'power2.out',
-        scrollTrigger: { trigger: '.trust-cards', start: 'top 80%', toggleActions: 'play none none none' },
-      })
-    }
-
-    // ============================================================
-    // SECTION SERVICES
-    // ============================================================
-    function initSectionServices() {
-      if (prefersReducedMotion) return
-
-      if (isTouch) {
-        gsap.from('.service-card', {
-          opacity: 0, y: 30, duration: 0.6, stagger: 0.1,
-          scrollTrigger: { trigger: '.services-grid', start: 'top 100%', toggleActions: 'play none none none' },
-        })
-        return
-      }
-
-      gsap.from('.services-title', {
-        clipPath: 'inset(0 100% 0 0)',
-        scrollTrigger: {
-          trigger: '.services-title',
-          start: 'top 85%',
-          end: 'top 60%',
-          scrub: 0.5,
-        },
-      })
-
-      gsap.from('.services-title .display-line', {
-        opacity: 0, scale: 0.9, y: 30, stagger: 0.1, duration: 0.8, ease: 'power2.out',
-        scrollTrigger: { trigger: '.services-title', start: 'top 80%', toggleActions: 'play none none none' },
-      })
-
-      const clipDirections = [
-        'inset(0 100% 100% 0)',
-        'inset(0 0 100% 100%)',
-        'inset(100% 100% 0 0)',
-        'inset(100% 0 0 100%)',
-        'inset(50% 50% 50% 50%)',
-        'inset(50% 50% 50% 50%)',
-      ]
-
-      document.querySelectorAll('.service-card').forEach((card, i) => {
-        gsap.from(card, {
-          clipPath: clipDirections[i] || clipDirections[4],
-          scrollTrigger: {
-            trigger: card,
-            start: 'top 85%',
-            end: 'top 55%',
-            scrub: 0.5,
-          },
-        })
-      })
-    }
-
-    // ============================================================
-    // SECTION PROOF
-    // ============================================================
-    function initSectionProof() {
-      if (prefersReducedMotion) return
-
-      if (isTouch) {
-        gsap.from('.section-proof-content', {
-          opacity: 0, y: 30, duration: 0.8,
-          scrollTrigger: { trigger: '.section-proof', start: 'top 100%', toggleActions: 'play none none none' },
-        })
-        return
-      }
-
-      gsap.from('.section-proof-content', {
-        scale: 0.8, opacity: 0.5,
-        scrollTrigger: {
-          trigger: '.section-proof',
-          start: 'top 70%',
-          end: 'top 10%',
-          scrub: 0.8,
-        },
-      })
-    }
-
-    // ============================================================
-    // SECTION ACTION + FOOTER
-    // ============================================================
-    function initSectionAction() {
-      if (prefersReducedMotion) return
-
-      if (isTouch) {
-        gsap.from('.action-left, .action-right, .action-premium', {
-          opacity: 0, y: 30, duration: 0.8, stagger: 0.1,
-          scrollTrigger: { trigger: '.section-action', start: 'top 100%', toggleActions: 'play none none none' },
-        })
-        gsap.from('.section-footer .footer-grid, .section-footer .footer-bottom', {
-          opacity: 0, y: 30, duration: 0.8, stagger: 0.15,
-          scrollTrigger: { trigger: '.section-footer', start: 'top 100%', toggleActions: 'play none none none' },
-        })
-        return
-      }
-
-      gsap.from('.action-left', {
-        x: -80, opacity: 0,
-        scrollTrigger: { trigger: '.section-action', start: 'top 70%', end: 'top 30%', scrub: 0.5 },
-      })
-
-      gsap.from('.action-right', {
-        x: 80, opacity: 0,
-        scrollTrigger: { trigger: '.section-action', start: 'top 65%', end: 'top 25%', scrub: 0.5 },
-      })
-
-      gsap.from('.action-premium', {
-        y: 40, opacity: 0,
-        scrollTrigger: { trigger: '.action-premium', start: 'top 80%', toggleActions: 'play none none none' },
-      })
-
-      gsap.from('.section-footer .footer-grid, .section-footer .footer-bottom', {
-        opacity: 0, y: 30, duration: 0.8, stagger: 0.15,
-        scrollTrigger: { trigger: '.section-footer', start: 'top 85%', toggleActions: 'play none none none' },
-      })
-
-      gsap.from('.section-footer .footer-grid', {
-        y: 40,
-        scrollTrigger: { trigger: '.section-footer', start: 'top bottom', end: 'top 50%', scrub: 0.5 },
-      })
-    }
-
-    // ============================================================
-    // DIVIDERS
-    // ============================================================
-    function initDividers() {
-      if (prefersReducedMotion || isTouch) return
-
-      gsap.to('#dividerLine34', {
-        width: '90%',
-        scrollTrigger: {
-          trigger: '#dividerLine34',
-          start: 'top 80%',
-          end: 'top 40%',
-          scrub: 0.5,
-        },
-      })
-    }
-
-    // ============================================================
     // MAGNETIC BUTTONS
     // ============================================================
     function initMagneticButtons() {
@@ -422,47 +166,13 @@ export function useLandingAnimations() {
     }
 
     // ============================================================
-    // CARD TILT
-    // ============================================================
-    function initCardTilt() {
-      if (window.matchMedia('(hover: none)').matches || prefersReducedMotion) return
-
-      document.querySelectorAll('.service-card').forEach((card) => {
-        const handleMove = (e) => {
-          const rect = card.getBoundingClientRect()
-          const x = (e.clientX - rect.left) / rect.width - 0.5
-          const y = (e.clientY - rect.top) / rect.height - 0.5
-          card.style.transform = `perspective(800px) rotateY(${x * 10}deg) rotateX(${y * -10}deg)`
-        }
-
-        const handleLeave = () => {
-          gsap.to(card, {
-            rotateX: 0, rotateY: 0, duration: 0.4, ease: 'power2.out',
-            clearProps: 'transform',
-          })
-        }
-
-        trackListener(card, 'mousemove', handleMove)
-        trackListener(card, 'mouseleave', handleLeave)
-      })
-    }
-
-    // ============================================================
     // INIT ALL
     // ============================================================
     // Small delay to ensure DOM is painted
     const timer = setTimeout(() => {
       initHeroEntrance()
       initHeroTransition()
-      initSectionWho()
-      initSectionWhy()
-      initSectionTrust()
-      initSectionServices()
-      initSectionProof()
-      initSectionAction()
-      initDividers()
       initMagneticButtons()
-      initCardTilt()
     }, 50)
 
     // ============================================================
