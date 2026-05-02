@@ -20,7 +20,7 @@ const MODES = [
     sublabel: 'For focused drilling',
     tagline: 'Take your time. Learn at your pace.',
     body: 'Choose any scenario. No timer, no pressure. Build confidence one station at a time.',
-    photo: 'https://images.unsplash.com/photo-1532153975070-2e9ab71f1b14?auto=format&fit=crop&w=1200&q=80',
+    photo: '/images/landing/e-mode-practice.png',
   },
   {
     id: 'mock-station',
@@ -29,7 +29,7 @@ const MODES = [
     sublabel: 'Single timed station',
     tagline: 'Examiner-style pressure, one station at a time.',
     body: 'Pick a station, full pressure, full scoring. Calibrate before the day.',
-    photo: 'https://images.unsplash.com/photo-1501139083538-0139583c060f?auto=format&fit=crop&w=1200&q=80',
+    photo: '/images/landing/e-mode-mock-station.png',
   },
   {
     id: 'full-mock',
@@ -38,7 +38,7 @@ const MODES = [
     sublabel: 'End-to-end circuit',
     tagline: 'The whole circuit. As it really runs.',
     body: 'All four station types in a continuous run. Same pacing as the real day.',
-    photo: 'https://images.unsplash.com/photo-1497486751825-1233686d5d80?auto=format&fit=crop&w=1200&q=80',
+    photo: '/images/landing/e-mode-full-mock.png',
   },
   {
     id: 'progress',
@@ -47,7 +47,7 @@ const MODES = [
     sublabel: 'Watch yourself improve',
     tagline: 'Session history, score trends, category insights.',
     body: 'See where you started, where you are, and where you’re still weak.',
-    photo: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80',
+    photo: '/images/landing/e-mode-progress.png',
   },
   {
     id: 'feedback',
@@ -56,7 +56,7 @@ const MODES = [
     sublabel: 'Marking-criteria graded',
     tagline: 'Section-by-section, line-by-line.',
     body: 'Clinical knowledge, communication, decision-making, professionalism — scored, with what to fix.',
-    photo: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=1200&q=80',
+    photo: '/images/landing/e-mode-feedback.png',
   },
 ]
 
@@ -95,11 +95,11 @@ export default function SectionE_Modes() {
                   isActive ? 'w-10 bg-organic-amber' : 'w-5 bg-organic-bark/25'
                 )}
               />
-              <div className="flex-1">
-                <div className="flex items-baseline gap-3">
+              <div className="flex-1 min-w-0">
+                <div className="flex items-baseline gap-2.5">
                   <span
                     className={cn(
-                      'font-display italic text-[1rem] transition-colors duration-300',
+                      'font-display italic text-[0.95rem] flex-shrink-0 transition-colors duration-300',
                       isActive ? 'text-organic-amber' : 'text-organic-bark/40'
                     )}
                   >
@@ -107,16 +107,16 @@ export default function SectionE_Modes() {
                   </span>
                   <h3
                     className={cn(
-                      'font-organic-display leading-[0.95] transition-all duration-300',
+                      'font-organic-display leading-[1.02] transition-all duration-300 min-w-0',
                       isActive
-                        ? 'text-organic-bark font-bold text-[clamp(2rem,4vw,3.25rem)]'
-                        : 'text-organic-bark/35 font-normal text-[clamp(1.65rem,3.2vw,2.5rem)]'
+                        ? 'text-organic-bark font-bold text-[clamp(1.65rem,3vw,2.5rem)]'
+                        : 'text-organic-bark/35 font-normal text-[clamp(1.4rem,2.4vw,2rem)]'
                     )}
                   >
                     {mode.name}
                   </h3>
                 </div>
-                <p className="mt-1 ml-0 text-[0.8125rem] font-medium uppercase tracking-[0.25em] text-organic-bark/45">
+                <p className="mt-1.5 ml-0 text-[0.8125rem] font-medium uppercase tracking-[0.25em] text-organic-bark/45">
                   {mode.sublabel}
                 </p>
               </div>

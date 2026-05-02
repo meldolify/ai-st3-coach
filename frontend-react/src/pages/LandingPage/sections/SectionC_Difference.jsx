@@ -34,20 +34,20 @@ export default function SectionC_Difference() {
     >
       <span className="section-c__annotation">( the difference )</span>
 
-      <div className="section-c__inner relative max-w-[1500px] mx-auto px-6 sm:px-10 py-24 md:py-36">
+      <div className="section-c__inner relative max-w-[1500px] mx-auto px-6 sm:px-10 py-16 md:py-24">
 
         {/* MASSIVE watermark — fills the section */}
         <span className="section-c__watermark" aria-hidden="true">166</span>
 
-        {/* Photographic subject — Unsplash (hand annotating notebook).
-            Sits in front of part of the watermark, breaking it up.
-            Search: "writing notebook hand" on Unsplash to swap. */}
+        {/* Photographic subject — hand-crafted artefact (notebook annotation).
+            Sits in front of part of the 166 watermark, slightly rotated. */}
         <img
-          src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=1000&q=80"
+          src="/images/landing/c-handcraft.png"
           alt=""
           aria-hidden="true"
           loading="lazy"
           className="section-c__photo"
+          onError={(e) => { e.currentTarget.style.display = 'none' }}
         />
 
         {/* Headline — sits at top, regular bold above the watermark */}
@@ -56,7 +56,7 @@ export default function SectionC_Difference() {
         </h2>
 
         {/* Two-column comparison */}
-        <div className="section-c__spread relative z-10 grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 lg:gap-24 mt-16 md:mt-24">
+        <div className="section-c__spread relative z-10 grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-14 lg:gap-20 mt-10 md:mt-14">
           {/* Other AI tools — light weight, muted */}
           <div className="section-c__col section-c__col--other">
             <h3 className="section-c__col-label section-c__col-label--other">
@@ -95,7 +95,7 @@ export default function SectionC_Difference() {
         </blockquote>
 
         {/* Bottom row of numerals + annotations */}
-        <div className="section-c__numbers relative z-10 mt-20 md:mt-28 grid grid-cols-2 gap-8 max-w-3xl mx-auto text-center">
+        <div className="section-c__numbers relative z-10 mt-12 md:mt-18 grid grid-cols-2 gap-8 max-w-3xl mx-auto text-center">
           <div>
             <div className="section-c__num">166</div>
             <div className="section-c__num-caption">
