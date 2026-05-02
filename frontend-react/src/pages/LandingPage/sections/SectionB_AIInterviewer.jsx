@@ -124,26 +124,38 @@ export default function SectionB_AIInterviewer() {
             <DeviceFrame currentStep={currentStep} mode={mode} />
           </div>
 
-          {/* Scrolling descriptions side */}
+          {/* Scrolling descriptions side — each step is a relative container
+              so we can layer a giant numeral watermark behind the type. */}
           <div className="section-b__desc-side mt-12 md:mt-0">
             {steps.map((step, i) => (
               <div
                 key={i}
                 className={cn(
-                  'section-b__desc min-h-[60vh] md:min-h-[80vh] flex flex-col justify-center py-10',
-                  currentStep === i ? 'opacity-100' : 'opacity-50'
+                  'section-b__desc relative min-h-[55vh] md:min-h-[65vh] flex flex-col justify-center py-8',
+                  currentStep === i ? 'opacity-100' : 'opacity-45'
                 )}
                 style={{ transition: 'opacity 0.4s ease' }}
               >
-                <span className="text-[11px] font-medium uppercase tracking-[0.3em] text-organic-amber mb-3">
-                  {step.label}
+                {/* Giant numeral watermark behind the description */}
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute -top-4 -left-4 md:-left-8 select-none font-organic-display font-normal leading-none text-organic-amber/8"
+                  style={{ fontSize: 'clamp(8rem, 14vw, 14rem)' }}
+                >
+                  {String(i + 1).padStart(2, '0')}
                 </span>
-                <h3 className="font-organic-display text-[clamp(1.75rem,4vw,2.75rem)] leading-tight mb-4">
-                  {step.title}
-                </h3>
-                <p className="text-[1.05rem] leading-relaxed text-organic-bark/75 max-w-[42ch]">
-                  {step.body}
-                </p>
+
+                <div className="relative z-10">
+                  <span className="font-display italic text-organic-amber text-[1rem] tracking-wide block mb-3">
+                    ( {step.label.toLowerCase()} )
+                  </span>
+                  <h3 className="font-organic-display text-[clamp(1.85rem,4.2vw,3rem)] leading-[1.05] tracking-[-0.015em] mb-4 font-bold">
+                    {step.title}
+                  </h3>
+                  <p className="text-[1.05rem] leading-relaxed text-organic-bark/75 max-w-[44ch]">
+                    {step.body}
+                  </p>
+                </div>
               </div>
             ))}
           </div>

@@ -6,35 +6,15 @@ import { cn } from '../../../lib/utils'
  *
  * Light restage of the original ActionSection — same offer, same routing
  * logic, lighter chrome. Removes the shimmer ::before that read as
- * AI-template. Conditional swap on `isPremium` preserved: premium users
- * see "Your journey continues" with a dashboard CTA, everyone else sees
- * the Free vs Premium comparison.
+ * AI-template.
+ *
+ * The pricing cards always render regardless of auth/subscription state —
+ * earlier versions hid them for premium users, but that made the bottom
+ * of the page feel empty for them. The hero CTA already toggles to
+ * "Go to Dashboard" for logged-in users; pricing cards stay informational.
  */
-export default function SectionF_Pricing({ isPremium }) {
+export default function SectionF_Pricing() {
   const navigate = useNavigate()
-
-  if (isPremium) {
-    return (
-      <section
-        id="section-f"
-        className="section-f section-f--premium relative bg-organic-canopy text-organic-cream"
-        data-testid="section-f"
-      >
-        <div className="max-w-3xl mx-auto px-6 sm:px-10 py-24 md:py-32 text-center">
-          <h2 className="font-organic-display uppercase leading-[0.95] text-[clamp(2.5rem,8vw,6rem)] mb-8">
-            Your journey<br />continues.
-          </h2>
-          <button
-            type="button"
-            onClick={() => navigate('/scenarios', { state: { fresh: true } })}
-            className="inline-flex items-center gap-2 px-7 py-4 rounded-full bg-organic-amber text-organic-bark text-[15px] font-semibold tracking-wide uppercase hover:-translate-y-[1px] transition-transform"
-          >
-            Go to Dashboard <span aria-hidden="true">&rarr;</span>
-          </button>
-        </div>
-      </section>
-    )
-  }
 
   return (
     <section
