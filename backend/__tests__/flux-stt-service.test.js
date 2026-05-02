@@ -32,6 +32,12 @@ beforeEach(() => {
           socketHandlers[event] = [];
         }
         socketHandlers[event].push(handler);
+      }),
+      removeEventListener: jest.fn((event, handler) => {
+        if (!socketHandlers[event]) {
+          return;
+        }
+        socketHandlers[event] = socketHandlers[event].filter(h => h !== handler);
       })
     },
     on: jest.fn((event, handler) => {
