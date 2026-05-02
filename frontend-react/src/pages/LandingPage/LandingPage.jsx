@@ -7,7 +7,8 @@ import SectionA_Frustration from './sections/SectionA_Frustration'
 import SectionB_AIInterviewer from './sections/SectionB_AIInterviewer'
 import SectionC_Difference from './sections/SectionC_Difference'
 import SectionD_Signature from './sections/SectionD_Signature'
-import ActionSection from './ActionSection'
+import SectionE_Modes from './sections/SectionE_Modes'
+import SectionF_Pricing from './sections/SectionF_Pricing'
 import FooterSection from './FooterSection'
 import ThreeBackground from './ThreeBackground'
 import GrainOverlay from './GrainOverlay'
@@ -53,8 +54,11 @@ export default function LandingPage() {
       {/* §D — Signature Moment */}
       <SectionD_Signature />
 
-      {/* Still-existing section being replaced in Phase 5 */}
-      <ActionSection isLoggedIn={isLoggedIn} isPremium={isPremium} />
+      {/* §E — The Modes */}
+      <SectionE_Modes />
+
+      {/* §F — Sign Up + Pricing */}
+      <SectionF_Pricing isPremium={isPremium} />
 
       {/* Footer */}
       <FooterSection />

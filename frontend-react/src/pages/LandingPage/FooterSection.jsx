@@ -19,24 +19,48 @@ export default function FooterSection() {
         </div>
         <div className="footer-column">
           <h4>Product</h4>
-          <a href="#" onClick={(e) => { e.preventDefault(); navigate('/scenarios', { state: { fresh: true } }); }}>Practice Mode</a>
-          <a href="#" onClick={(e) => { e.preventDefault(); navigate('/scenarios', { state: { fresh: true } }); }}>Mock Exams</a>
-          <a href="#pricingSection" onClick={(e) => { e.preventDefault(); document.getElementById('pricingSection')?.scrollIntoView({ behavior: 'smooth' }); }}>Pricing</a>
+          <a
+            href="#"
+            onClick={(e) => {
+              e.preventDefault()
+              navigate('/scenarios', { state: { fresh: true } })
+            }}
+          >
+            Practice Mode
+          </a>
+          <a
+            href="#"
+            onClick={(e) => {
+              e.preventDefault()
+              navigate('/scenarios', { state: { fresh: true } })
+            }}
+          >
+            Mock Exams
+          </a>
+          <a
+            href="#pricingSection"
+            onClick={(e) => {
+              e.preventDefault()
+              document.getElementById('pricingSection')?.scrollIntoView({ behavior: 'smooth' })
+            }}
+          >
+            Pricing
+          </a>
         </div>
         <div className="footer-column">
           <h4>Support</h4>
-          <a href="#">Contact Us</a>
-          <a href="#">Help</a>
-          <a href="#">FAQ</a>
+          <span className="footer-pending">Contact &middot; coming soon</span>
+          <span className="footer-pending">Help &middot; coming soon</span>
+          <span className="footer-pending">FAQ &middot; coming soon</span>
         </div>
         <div className="footer-column">
           <h4>Legal</h4>
-          <a href="#">Terms &amp; Conditions</a>
-          <a href="#">Privacy Policy</a>
+          <span className="footer-pending">Terms &amp; Conditions &middot; coming soon</span>
+          <span className="footer-pending">Privacy Policy &middot; coming soon</span>
         </div>
       </div>
       <div className="footer-bottom">
-        <p>&copy; 2025 ReViva. All rights reserved.</p>
+        <p>&copy; 2026 ReViva. All rights reserved.</p>
       </div>
     </footer>
   )
