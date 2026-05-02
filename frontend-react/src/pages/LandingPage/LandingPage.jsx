@@ -1,4 +1,4 @@
-import { useAuthStore, selectIsLoggedIn, selectIsPremium } from '../../stores/authStore'
+import { useAuthStore, selectIsLoggedIn } from '../../stores/authStore'
 import { useLandingAnimations } from './useLandingAnimations'
 import LandingNav from './LandingNav'
 import HeroSection from './HeroSection'
@@ -16,7 +16,6 @@ import './landing.css'
 
 export default function LandingPage() {
   const isLoggedIn = useAuthStore(selectIsLoggedIn)
-  const isPremium = useAuthStore(selectIsPremium)
 
   // Initialize all GSAP + Lenis scroll animations
   useLandingAnimations()
@@ -56,7 +55,7 @@ export default function LandingPage() {
       <SectionE_Modes />
 
       {/* §F — Sign Up + Pricing */}
-      <SectionF_Pricing isPremium={isPremium} />
+      <SectionF_Pricing />
 
       {/* Footer */}
       <FooterSection />

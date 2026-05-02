@@ -22,7 +22,7 @@ const TRANSITION = { duration: 0.3, ease: [0.22, 1, 0.36, 1] }
  */
 export function DeviceFrame({ currentStep = 0, mode = 'practice' }) {
   return (
-    <div className="device-frame relative w-full max-w-[440px] mx-auto rounded-2xl bg-organic-canopy text-organic-cream shadow-[0_24px_60px_rgba(26,58,42,0.25)] overflow-hidden">
+    <div className="device-frame relative w-full max-w-[560px] mx-auto rounded-2xl bg-organic-canopy text-organic-cream shadow-[0_24px_60px_rgba(26,58,42,0.25)] overflow-hidden">
       {/* Window chrome */}
       <div className="device-frame__chrome flex items-center gap-2 px-4 py-3 bg-organic-bark/80 border-b border-organic-stone/10">
         <div className="flex items-center gap-1.5">
