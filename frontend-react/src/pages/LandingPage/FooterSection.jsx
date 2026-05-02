@@ -16,6 +16,9 @@ export default function FooterSection() {
             <img src="/images/logo/logo-md.png" alt="ReViva" className="logo-img logo-img--footer" style={{ height: '32px', marginBottom: '12px' }} />
           </Link>
           <p>AI-powered interview preparation for surgical trainees. Practice smarter, not harder.</p>
+          <p className="footer-tagline">
+            <em>( hand-crafted in the UK · est. 2026 )</em>
+          </p>
         </div>
         <div className="footer-column">
           <h4>Product</h4>

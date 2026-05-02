@@ -2,7 +2,6 @@ import { useAuthStore, selectIsLoggedIn, selectIsPremium } from '../../stores/au
 import { useLandingAnimations } from './useLandingAnimations'
 import LandingNav from './LandingNav'
 import HeroSection from './HeroSection'
-import LoggedInBand from './LoggedInBand'
 import SectionA_Frustration from './sections/SectionA_Frustration'
 import SectionB_AIInterviewer from './sections/SectionB_AIInterviewer'
 import SectionC_Difference from './sections/SectionC_Difference'
@@ -36,11 +35,10 @@ export default function LandingPage() {
       {/* Navigation */}
       <LandingNav isLoggedIn={isLoggedIn} />
 
-      {/* Hero — single confident moment */}
+      {/* Hero — single confident moment.
+          The hero CTA toggles between "Try a free station" and "Go to Dashboard"
+          based on auth state — so the LoggedInBand was removed. */}
       <HeroSection />
-
-      {/* Logged-in shortcut band — renders nothing if logged out */}
-      <LoggedInBand />
 
       {/* §A — The Frustration */}
       <SectionA_Frustration />

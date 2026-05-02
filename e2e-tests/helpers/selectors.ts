@@ -11,7 +11,6 @@ export const SELECTORS = {
     navLogin: '[data-testid="nav-login"]',
     navSignup: '[data-testid="nav-signup"]',
     // Post-redesign section IDs
-    loggedInBand: '[data-testid="logged-in-band"]',
     sectionB: '[data-testid="section-b"]',
     sectionD: '[data-testid="section-d"]',
     sectionE: '[data-testid="section-e"]',
