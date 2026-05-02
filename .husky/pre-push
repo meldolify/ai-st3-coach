@@ -1,2 +1,6 @@
-# Auto-pull to sync Prompt Lab remote edits before pushing
-git pull --rebase || { echo "Pull failed — resolve conflicts before pushing"; exit 1; }
+# Auto-pull to sync Prompt Lab remote edits before pushing.
+# Skip when the current branch has no upstream yet — typically the first push
+# of a new feature branch, where there's nothing remote to sync from.
+if git rev-parse --abbrev-ref --symbolic-full-name "@{u}" >/dev/null 2>&1; then
+  git pull --rebase || { echo "Pull failed — resolve conflicts before pushing"; exit 1; }
+fi
