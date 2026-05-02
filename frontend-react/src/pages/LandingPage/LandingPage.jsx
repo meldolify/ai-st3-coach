@@ -2,12 +2,13 @@ import { useAuthStore, selectIsLoggedIn, selectIsPremium } from '../../stores/au
 import { useLandingAnimations } from './useLandingAnimations'
 import LandingNav from './LandingNav'
 import HeroSection from './HeroSection'
-import WhoSection from './WhoSection'
-import WhySection from './WhySection'
-import TrustSection from './TrustSection'
-import ServicesSection from './ServicesSection'
-import ProofSection from './ProofSection'
-import ActionSection from './ActionSection'
+import LoggedInBand from './LoggedInBand'
+import SectionA_Frustration from './sections/SectionA_Frustration'
+import SectionB_AIInterviewer from './sections/SectionB_AIInterviewer'
+import SectionC_Difference from './sections/SectionC_Difference'
+import SectionD_Signature from './sections/SectionD_Signature'
+import SectionE_Modes from './sections/SectionE_Modes'
+import SectionF_Pricing from './sections/SectionF_Pricing'
 import FooterSection from './FooterSection'
 import ThreeBackground from './ThreeBackground'
 import GrainOverlay from './GrainOverlay'
@@ -29,37 +30,37 @@ export default function LandingPage() {
       {/* SVG Grain Overlay */}
       <GrainOverlay />
 
-      {/* Three.js Canvas Container */}
+      {/* Three.js Canvas Container — global ambient backdrop */}
       <ThreeBackground />
 
       {/* Navigation */}
       <LandingNav isLoggedIn={isLoggedIn} />
 
-      {/* Section 1: Hero */}
-      <HeroSection isLoggedIn={isLoggedIn} />
+      {/* Hero — single confident moment */}
+      <HeroSection />
 
-      {/* Section 2: Who */}
-      <WhoSection />
+      {/* Logged-in shortcut band — renders nothing if logged out */}
+      <LoggedInBand />
 
-      {/* Section 3: Why (pinned scroll) */}
-      <WhySection />
+      {/* §A — The Frustration */}
+      <SectionA_Frustration />
 
-      {/* Animated divider line between sections 3 and 4 */}
-      <div className="section-divider-line" id="dividerLine34" aria-hidden="true" />
+      {/* §B — The AI Interviewer */}
+      <SectionB_AIInterviewer />
 
-      {/* Section 4: Trust */}
-      <TrustSection />
+      {/* §C — What Makes It Different */}
+      <SectionC_Difference />
 
-      {/* Section 5: Services */}
-      <ServicesSection />
+      {/* §D — Signature Moment */}
+      <SectionD_Signature />
 
-      {/* Section 6: Proof */}
-      <ProofSection />
+      {/* §E — The Modes */}
+      <SectionE_Modes />
 
-      {/* Section 7: Action / Pricing */}
-      <ActionSection isLoggedIn={isLoggedIn} isPremium={isPremium} />
+      {/* §F — Sign Up + Pricing */}
+      <SectionF_Pricing isPremium={isPremium} />
 
-      {/* Section 8: Footer */}
+      {/* Footer */}
       <FooterSection />
     </div>
   )

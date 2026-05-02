@@ -10,6 +10,12 @@ export const SELECTORS = {
     navExplore: '[data-testid="nav-explore"]',
     navLogin: '[data-testid="nav-login"]',
     navSignup: '[data-testid="nav-signup"]',
+    // Post-redesign section IDs
+    loggedInBand: '[data-testid="logged-in-band"]',
+    sectionB: '[data-testid="section-b"]',
+    sectionD: '[data-testid="section-d"]',
+    sectionE: '[data-testid="section-e"]',
+    sectionF: '[data-testid="section-f"]',
   },
   auth: {
     page: '[data-testid="auth-page"]',

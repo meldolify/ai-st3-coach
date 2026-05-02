@@ -83,13 +83,43 @@ void main() {
 }
 `
 
+/**
+ * Visibility curve for the icosahedron.
+ *
+ * - Hero / §A-§C: full visibility, gentle linear taper from 0.5 → 0.18.
+ * - §D Signature: fades to 0 while #section-d is on-screen, so the
+ *   SignatureOrb's circuit-line composition has the centre stage.
+ * - §E-§F: returns at ~0.15 for ambient continuity.
+ *
+ * Section visibility is read from the DOM each frame via getBoundingClientRect
+ * (cheap; rect reads are sub-millisecond). The element reference is cached
+ * once found so we only pay one getElementById on first hit.
+ */
+let sectionDCache = null
+
+function findSectionD() {
+  if (sectionDCache && sectionDCache.isConnected) return sectionDCache
+  sectionDCache = document.getElementById('section-d')
+  return sectionDCache
+}
+
 function getTargetOpacity(progress) {
-  if (progress < 0.12) return 0.5
-  if (progress < 0.25) return 0.12
-  if (progress < 0.45) return 0.35
-  if (progress < 0.6) return 0.12
-  if (progress < 0.75) return 0.25
-  return 0.15
+  // Default linear curve (hero → end).
+  let base
+  if (progress < 0.15) base = 0.5
+  else if (progress > 0.78) base = 0.15
+  else base = 0.5 - ((progress - 0.15) / 0.63) * 0.35
+
+  // §D override — hard fade while the orb section dominates the viewport.
+  const sectionD = findSectionD()
+  if (sectionD) {
+    const rect = sectionD.getBoundingClientRect()
+    const vh = window.innerHeight
+    if (rect.top < vh * 0.85 && rect.bottom > vh * 0.15) {
+      return 0
+    }
+  }
+  return base
 }
 
 export default function ThreeBackground() {

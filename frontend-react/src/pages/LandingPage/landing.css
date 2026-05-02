@@ -1,6 +1,14 @@
 /* ==========================================================================
-   Landing Page — "Organic meets Technology"
-   Ported from frontend/css/landing-redesign.css for React migration.
+   Landing Page — "Organic" aesthetic
+   Post-redesign, this stylesheet covers only:
+     - Hero (logo wordmark, single CTA, content wrapper)
+     - LoggedInBand (welcome-back band)
+     - Footer (sticky, wave divider, link grid, "coming soon" placeholders)
+     - Page-level chrome: grain overlay, three.js canvas, nav, cursor follower
+     - Buttons (.btn-amber, .btn-outline, .btn-amber--lg, .btn-amber--sm)
+   Section-specific styles for §A-§F live inside their section components
+   (Tailwind utilities). Old per-section blocks for Who/Why/Trust/Services/
+   Proof/Action were pruned in Phase 6 of the landing redesign.
    All selectors scoped under .landing-page
    ========================================================================== */
 
@@ -43,22 +51,6 @@
 /* --------------------------------------------------------------------------
    3. Typography Utility Classes
    -------------------------------------------------------------------------- */
-.landing-page .landing-display {
-  font-family: var(--font-landing-display);
-  font-weight: 600;
-  font-size: clamp(2.5rem, 6vw, 5rem);
-  text-transform: uppercase;
-  line-height: 1.05;
-}
-
-.landing-page .hero-display {
-  font-family: var(--font-landing-display);
-  font-weight: 700;
-  font-size: clamp(3.5rem, 10vw, 8rem);
-  text-transform: uppercase;
-  line-height: 1.0;
-}
-
 .landing-page .landing-body {
   font-family: var(--font-landing-body);
   font-weight: 400;
@@ -79,11 +71,6 @@
   font-family: var(--font-landing-body);
   font-weight: 400;
   font-size: 0.875rem;
-}
-
-.landing-page .display-line {
-  display: block;
-  font-kerning: none;
 }
 
 /* --------------------------------------------------------------------------
@@ -132,7 +119,7 @@
 }
 
 .landing-page .landing-nav-new .logo-img--nav {
-  height: 48px; /* Fix 5: logo enlarged from 36px to 48px */
+  height: 48px;
   width: auto;
 }
 
@@ -198,10 +185,8 @@
 }
 
 /* --------------------------------------------------------------------------
-   8. Section-Specific Layouts
+   8. Hero
    -------------------------------------------------------------------------- */
-
-/* ---- Section 1: Hero ---- */
 .landing-page .section-hero {
   min-height: 100vh;
   display: flex;
@@ -214,8 +199,7 @@
   overflow: hidden;
 }
 
-.landing-page .hero-logged-out,
-.landing-page .hero-logged-in {
+.landing-page .hero-content {
   max-width: 1000px;
   margin: 0 auto;
   position: relative;
@@ -228,12 +212,6 @@
   color: var(--text-on-light);
 }
 
-@media (min-width: 768px) {
-  .landing-page .hero-subtitle {
-    color: #FFFFFF;
-  }
-}
-
 .landing-page .hero-ctas {
   display: flex;
   gap: 16px;
@@ -241,7 +219,6 @@
   margin-top: 2.5rem;
 }
 
-/* ---- Hero Brand "REVIVA" ---- */
 .landing-page .hero-brand {
   font-family: var(--font-landing-display);
   font-weight: 700;
@@ -261,441 +238,74 @@
   will-change: transform, opacity;
 }
 
-/* ---- Hero Knowledge Tableau ---- */
-.landing-page .hero-tableau {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.landing-page .hero-asset {
-  position: absolute;
-  will-change: transform;
-  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.12));
-}
-
-.landing-page .hero-asset--textbook {
-  width: clamp(220px, 26vw, 380px);
-  top: 1%;
-  left: -1%;
-  transform: rotate(-12deg);
-}
-
-.landing-page .hero-asset--scalpel {
-  width: clamp(150px, 18vw, 260px);
-  bottom: 4%;
-  left: 12%;
-  transform: rotate(32deg);
-}
-
-.landing-page .hero-asset--penlight {
-  width: clamp(140px, 17vw, 240px);
-  top: 42%;
-  right: 1%;
-  transform: rotate(-20deg);
-}
-
-.landing-page .hero-asset--reflex-hammer {
-  width: clamp(180px, 20vw, 300px);
-  top: 3%;
-  right: 3%;
-  transform: rotate(15deg);
-}
-
-.landing-page .hero-asset--tablet {
-  width: clamp(210px, 24vw, 370px);
-  bottom: 1%;
-  right: 3%;
-  transform: rotate(-3deg);
-}
-
-.landing-page .hero-asset--stethoscope {
-  width: clamp(200px, 22vw, 330px);
-  top: 48%;
-  left: -2%;
-  transform: rotate(8deg);
-}
-
-/* Text readability over animated background */
 .landing-page .hero-brand,
-.landing-page .section-hero .landing-overline,
 .landing-page .hero-subtitle {
   text-shadow: 0 2px 20px rgba(255, 255, 255, 0.6);
 }
 
-/* ---- Botanical Leaf Overlays ---- */
-.landing-page .hero-leaf {
-  position: absolute;
-  pointer-events: none;
-  z-index: 2;
-  will-change: transform;
-  opacity: 0.7;
-}
-
-.landing-page .hero-leaf--1 {
-  width: clamp(120px, 18vw, 260px);
-  top: 8%;
-  left: 2%;
-  transform: rotate(-15deg);
-}
-
-.landing-page .hero-leaf--2 {
-  width: clamp(80px, 12vw, 180px);
-  bottom: 15%;
-  right: 3%;
-  transform: rotate(20deg);
-}
-
-.landing-page .hero-leaf--3 {
-  width: clamp(100px, 14vw, 200px);
-  top: 55%;
-  left: 70%;
-  transform: rotate(-8deg);
-  opacity: 0.5;
-}
-
-/* ---- Section 2: Who ---- */
-.landing-page .section-who {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-}
-
-.landing-page .who-inner {
-  display: grid;
-  grid-template-columns: 55% 45%;
-  gap: 64px;
-  width: 100%;
-}
-
-.landing-page .who-body {
-  color: var(--text-muted-dark);
-  max-width: 500px;
-}
-
-.landing-page .who-photo-wrapper {
-  margin-top: 2.5rem;
-  position: relative;
-}
-
-.landing-page .who-photo {
-  width: 100%;
-  max-width: 360px;
-  height: auto;
-  border-radius: 16px;
-  mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
-  transition: transform 0.4s ease;
-}
-
-@media (hover: hover) {
-  .landing-page .who-photo:hover {
-    transform: scale(1.02);
-  }
-}
-
-/* ---- Section 3: Why (pinned) ---- */
-.landing-page .section-why {
-  min-height: 100vh;
-  display: grid;
-  grid-template-columns: 40% 60%;
-  align-items: center;
-}
-
-.landing-page .why-phases {
-  position: relative;
-  overflow: hidden;
-}
-
-.landing-page .why-phase {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 40px;
-  padding: 40px;
-}
-
-.landing-page .why-phase:first-child {
-  position: relative;
-}
-
-.landing-page .why-phase-text {
-  flex: 1;
-}
-
-.landing-page .why-phase-img {
-  width: clamp(200px, 28vw, 400px);
-  height: auto;
-  filter: drop-shadow(0 12px 32px rgba(0, 0, 0, 0.10));
-  flex-shrink: 0;
-}
-
-.landing-page .why-progress-line {
-  position: absolute;
-  right: 0;
-  top: 10%;
-  width: 2px;
-  height: 80%;
-  background: var(--organic-amber);
-  transform-origin: top;
-  transform: scaleY(0);
-}
-
-.landing-page .why-phase .landing-overline {
-  margin-bottom: 1rem;
-}
-
-.landing-page .why-phase h3 {
-  margin-bottom: 1.25rem;
-}
-
-.landing-page .why-phase .landing-body {
-  line-height: 1.8;
-}
-
-/* ---- Section 4: Trust ---- */
-.landing-page .section-trust {
-  overflow: hidden;
-}
-
-.landing-page .trust-strip {
-  font-family: var(--font-landing-display);
-  font-size: clamp(4rem, 8vw, 6rem);
-  font-weight: 700;
-  color: var(--organic-forest);
-  opacity: 0.15;
-  white-space: nowrap;
-  position: absolute;
-  top: 10%;
-  left: 0;
-  pointer-events: none;
-}
-
-.landing-page .trust-content {
-  position: relative;
-  max-width: 900px;
-  margin: 0 auto;
-  text-align: center;
-}
-
-.landing-page .trust-cards {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  margin-top: 64px;
-}
-
-.landing-page .trust-card {
-  background: rgba(26, 58, 42, 0.5);
-  border: 1px solid rgba(214, 209, 201, 0.1);
-  border-radius: 16px;
-  padding: 32px;
-  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.landing-page .trust-card:hover {
-  transform: scale(1.03);
-  border-color: var(--organic-amber);
-}
-
-.landing-page .trust-card h3 {
-  font-family: var(--font-landing-display);
-  font-weight: 600;
-  font-size: 1.25rem;
-  margin-bottom: 12px;
-}
-
-.landing-page .trust-card p {
-  font-family: var(--font-landing-body);
-  font-weight: 400;
-  font-size: 0.9375rem;
-  color: var(--text-muted-dark);
-}
-
-/* ---- Section 5: Services ---- */
-.landing-page .section-services {
-  background: var(--organic-cream);
-}
-
-.landing-page .services-title {
-  margin-bottom: 64px;
-}
-
-.landing-page .services-grid {
-  display: grid;
-  grid-template-columns: 3fr 2fr;
-  gap: 24px;
-}
-
-.landing-page .service-card {
-  background: var(--organic-sand);
-  border: 1px solid var(--organic-stone);
-  border-radius: 16px;
-  padding: 40px;
-  will-change: clip-path;
-  transition: box-shadow 0.3s ease, border-color 0.3s ease;
-}
-
-@media (hover: hover) {
-  .landing-page .service-card:hover {
-    box-shadow: 0 8px 32px rgba(42, 37, 32, 0.08);
-    border-color: var(--organic-amber);
-  }
-}
-
-.landing-page .service-card h3 {
-  font-family: var(--font-landing-display);
-  font-weight: 600;
-  font-size: 1.25rem;
-  color: var(--organic-forest);
-  margin-bottom: 8px;
-}
-
-.landing-page .service-card .card-overline {
-  font-family: var(--font-landing-body);
-  font-weight: 600;
-  font-size: 0.8125rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--organic-amber);
-  margin-bottom: 16px;
-  display: block;
-}
-
-.landing-page .service-card p {
-  font-family: var(--font-landing-body);
-  font-weight: 400;
-  font-size: 1rem;
-  color: var(--text-muted-light);
-}
-
-.landing-page .card-icon {
-  width: 40px;
-  height: 40px;
-  color: var(--organic-forest);
-  opacity: 0.35;
-  margin-bottom: 16px;
-}
-
-/* ---- Section 6: Proof ---- */
-.landing-page .section-proof {
-  background: var(--organic-forest);
-  min-height: 80vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  margin-top: -80px;
-  border-radius: 40px 40px 0 0;
+/* --------------------------------------------------------------------------
+   9. Logged-in band
+   -------------------------------------------------------------------------- */
+.landing-page .logged-in-band {
   position: relative;
   z-index: 2;
+  padding: clamp(20px, 2.5vw, 36px) clamp(24px, 4vw, 64px);
+  background: rgba(245, 241, 235, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(212, 148, 58, 0.18);
+  border-bottom: 1px solid rgba(212, 148, 58, 0.18);
 }
 
-.landing-page .section-proof-content {
-  max-width: 800px;
-}
-
-.landing-page .btn-amber.btn-amber--lg {
-  padding: 20px 48px;
-  border-radius: 60px;
-  font-size: 1.125rem;
-  position: relative;
-  animation: cta-pulse 3s ease-in-out infinite;
-}
-
-.landing-page .btn-amber.btn-amber--lg::before {
-  content: '';
-  position: absolute;
-  inset: -16px;
-  border-radius: 80px;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(212, 148, 58, 0.2) 0%,
-    transparent 70%
-  );
-  z-index: -1;
-  pointer-events: none;
-}
-
-/* ---- Section 7: Action ---- */
-.landing-page .section-action {
-  background: linear-gradient(to bottom, var(--organic-cream), var(--organic-canopy));
-  min-height: 80vh;
-  display: flex;
-  align-items: center;
-  margin-top: -60px;
-  margin-bottom: 320px;
-  position: relative;
-  z-index: 3;
-}
-
-.landing-page .action-with-pricing {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 64px;
+.landing-page .logged-in-band__inner {
   max-width: 1100px;
   margin: 0 auto;
-}
-
-.landing-page .action-left {
   display: flex;
-  flex-direction: column;
+  align-items: center;
   justify-content: center;
+  flex-wrap: wrap;
+  gap: 14px 22px;
+  font-family: var(--font-landing-body);
 }
 
-.landing-page .action-right {
-  display: flex;
-  gap: 24px;
+.landing-page .logged-in-band__greeting {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--organic-bark);
 }
 
-.landing-page .pricing-card-new {
-  border-radius: 16px;
-  padding: 40px;
-  flex: 1;
+.landing-page .logged-in-band__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--organic-amber);
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: rgba(212, 148, 58, 0.35);
+  text-underline-offset: 4px;
+  transition: text-decoration-color 0.2s ease, color 0.2s ease;
 }
 
-.landing-page .pricing-card-new--free {
-  background: var(--organic-sand);
-  border: 1px solid var(--organic-stone);
+.landing-page .logged-in-band__cta:hover {
+  color: #c0852f;
+  text-decoration-color: var(--organic-amber);
 }
 
-.landing-page .pricing-card-new--premium {
-  background: var(--organic-canopy);
-  border: 1px solid var(--organic-amber);
-  color: var(--text-on-dark);
-  box-shadow: 0 0 40px rgba(212, 148, 58, 0.15);
-  position: relative;
-  overflow: hidden;
+.landing-page .logged-in-band__hint {
+  font-size: 0.8125rem;
+  color: var(--text-muted-light);
+  font-style: italic;
 }
 
-.landing-page .pricing-card-new--premium::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(212, 148, 58, 0.08) 40%,
-    rgba(212, 148, 58, 0.15) 50%,
-    rgba(212, 148, 58, 0.08) 60%,
-    transparent 100%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 4s ease-in-out infinite;
-  pointer-events: none;
-  border-radius: inherit;
-}
-
-.landing-page .action-premium {
-  text-align: center;
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-/* ---- Section 8: Footer ---- */
+/* --------------------------------------------------------------------------
+   10. Footer
+   -------------------------------------------------------------------------- */
 .landing-page .section-footer {
   position: sticky;
   bottom: 0;
@@ -732,6 +342,13 @@
   color: var(--organic-amber);
 }
 
+.landing-page .footer-grid .footer-pending {
+  display: block;
+  color: var(--text-muted-dark);
+  opacity: 0.55;
+  font-size: 0.875rem;
+}
+
 .landing-page .footer-grid h4 {
   margin-bottom: 12px;
   color: var(--text-on-dark);
@@ -747,28 +364,8 @@
   opacity: 0.6;
 }
 
-/* ---- Section Dividers ---- */
-.landing-page .section-divider {
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  width: 100%;
-  height: 80px;
-  z-index: 2;
-}
-
-.landing-page .section-divider-line {
-  width: 0%;
-  max-width: 90%;
-  height: 1px;
-  background: var(--organic-amber);
-  margin: 0 auto;
-  position: relative;
-  z-index: 5;
-}
-
 /* --------------------------------------------------------------------------
-   9. Button Styles
+   11. Buttons
    -------------------------------------------------------------------------- */
 .landing-page .btn-amber {
   display: inline-flex;
@@ -798,6 +395,30 @@
   border-radius: 8px;
 }
 
+/* The page's only pulsing CTA — used by the hero. Other large CTAs through
+   the page (Acts/Pricing) intentionally do NOT use --lg, per plan §6. */
+.landing-page .btn-amber.btn-amber--lg {
+  padding: 20px 48px;
+  border-radius: 60px;
+  font-size: 1.125rem;
+  position: relative;
+  animation: cta-pulse 3s ease-in-out infinite;
+}
+
+.landing-page .btn-amber.btn-amber--lg::before {
+  content: '';
+  position: absolute;
+  inset: -16px;
+  border-radius: 80px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(212, 148, 58, 0.2) 0%,
+    transparent 70%
+  );
+  z-index: -1;
+  pointer-events: none;
+}
+
 .landing-page .btn-outline {
   display: inline-flex;
   align-items: center;
@@ -820,7 +441,7 @@
 }
 
 /* --------------------------------------------------------------------------
-   10. Accessibility — Focus Outlines
+   12. Accessibility — Focus Outlines
    -------------------------------------------------------------------------- */
 .landing-page :focus-visible {
   outline: 2px solid var(--organic-amber);
@@ -828,7 +449,7 @@
 }
 
 /* --------------------------------------------------------------------------
-   11. Reduced Motion
+   13. Reduced Motion
    -------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
   .landing-page *,
@@ -837,10 +458,6 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
-  }
-
-  .landing-page .section-who {
-    clip-path: none !important;
   }
 
   .landing-page .grain-overlay {
@@ -853,7 +470,7 @@
 }
 
 /* --------------------------------------------------------------------------
-   12. Mobile Responsive (< 768px)
+   14. Mobile Responsive (< 768px)
    -------------------------------------------------------------------------- */
 @media (max-width: 767px) {
   .landing-page section {
@@ -864,80 +481,13 @@
     min-height: 90vh;
   }
 
-  .landing-page .hero-display {
-    font-size: clamp(2.5rem, 12vw, 4rem);
-  }
-
-  .landing-page .landing-display {
-    font-size: clamp(2rem, 8vw, 3rem);
-  }
-
   .landing-page .hero-ctas {
     flex-direction: column;
     align-items: center;
   }
 
-  .landing-page .hero-leaf { display: none; }
-  .landing-page .hero-brand { font-size: clamp(3rem, 16vw, 5rem); }
-
-  /* Mobile: show only textbook, scalpel, tablet */
-  .landing-page .hero-asset--penlight,
-  .landing-page .hero-asset--reflex-hammer,
-  .landing-page .hero-asset--stethoscope {
-    display: none;
-  }
-
-  .landing-page .hero-asset--textbook {
-    width: clamp(140px, 32vw, 200px);
-    top: 3%;
-    left: -2%;
-  }
-
-  .landing-page .hero-asset--scalpel {
-    width: clamp(100px, 22vw, 150px);
-    bottom: 8%;
-    left: 2%;
-  }
-
-  .landing-page .hero-asset--tablet {
-    width: clamp(140px, 32vw, 200px);
-    bottom: 5%;
-    right: -1%;
-  }
-
-  .landing-page .who-inner {
-    grid-template-columns: 1fr;
-    gap: 40px;
-  }
-
-  .landing-page .section-why {
-    grid-template-columns: 1fr;
-  }
-
-  .landing-page .why-phase {
-    flex-direction: column;
-  }
-
-  .landing-page .why-phase-img {
-    width: clamp(160px, 50vw, 280px);
-    order: -1;
-  }
-
-  .landing-page .trust-cards {
-    grid-template-columns: 1fr;
-  }
-
-  .landing-page .services-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .landing-page .action-with-pricing {
-    grid-template-columns: 1fr;
-    gap: 40px;
-  }
-
-  .landing-page .action-right {
-    flex-direction: column;
+  .landing-page .hero-brand {
+    font-size: clamp(3rem, 16vw, 5rem);
   }
 
   .landing-page .footer-grid {
@@ -950,43 +500,13 @@
     height: 64px;
   }
 
-  .landing-page .trust-strip {
-    font-size: clamp(2rem, 6vw, 3rem);
-  }
-
   .landing-canvas {
     display: none;
   }
-
-  .landing-page .section-proof {
-    min-height: 60vh;
-    padding: 80px 20px;
-  }
 }
 
 /* --------------------------------------------------------------------------
-   13. Tablet Responsive (768px - 1023px)
-   -------------------------------------------------------------------------- */
-@media (min-width: 768px) and (max-width: 1023px) {
-  .landing-page .who-inner {
-    gap: 40px;
-  }
-
-  .landing-page .section-why {
-    gap: 40px;
-  }
-
-  .landing-page .services-grid {
-    gap: 16px;
-  }
-
-  .landing-page .action-with-pricing {
-    gap: 40px;
-  }
-}
-
-/* --------------------------------------------------------------------------
-   14. CTA Pulse Keyframe
+   15. CTA Pulse Keyframe — used by .btn-amber.btn-amber--lg (hero only)
    -------------------------------------------------------------------------- */
 @keyframes cta-pulse {
   0%, 100% { transform: scale(1); }
@@ -994,7 +514,7 @@
 }
 
 /* --------------------------------------------------------------------------
-   15. Cursor Follower
+   16. Cursor Follower
    -------------------------------------------------------------------------- */
 .landing-page .cursor-follower {
   position: fixed;
@@ -1024,7 +544,9 @@
 }
 
 @media (hover: none) {
-  .landing-page .cursor-follower { display: none; }
+  .landing-page .cursor-follower {
+    display: none;
+  }
 
   .landing-canvas {
     display: none;
@@ -1033,22 +555,4 @@
   .landing-page .section-hero {
     background: radial-gradient(circle at 50% 50%, rgba(74, 93, 76, 0.12) 0%, rgba(74, 93, 76, 0.04) 40%, transparent 65%);
   }
-
-  /* On touch devices, why-phases must stack vertically (not overlay) */
-  .landing-page .why-phase {
-    position: relative;
-    inset: auto;
-  }
-
-  .landing-page .why-phases {
-    overflow: visible;
-  }
-}
-
-/* --------------------------------------------------------------------------
-   16. Premium Card Shimmer
-   -------------------------------------------------------------------------- */
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
 }
