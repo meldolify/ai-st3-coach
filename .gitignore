@@ -82,4 +82,17 @@ tmpclaude-*-cwd
 !frontend/**/*.png
 !frontend-react/**/*.png
 
+# Vite build-output mirrors of frontend-react/public/.
+# Sources live in frontend-react/public/{audio,images}/ and are committed there.
+# Anything copied to frontend/{audio,images/landing}/ at build time should not
+# be tracked. Untracked legacy assets in frontend/images/landing/ (doctor-portrait,
+# hero-{penlight,reflex-hammer,scalpel,stethoscope,tablet,textbook}, leaf-{1..3},
+# why-{gap,problem,solution}) are kept on disk for possible future reuse but
+# stay out of the changes list. Already-tracked files (hero-centerpiece.png,
+# hero-marble-bg.jpg) are unaffected — gitignore doesn't untrack tracked files.
+frontend/audio/
+frontend/images/landing/*
+!frontend/images/landing/hero-centerpiece.png
+!frontend/images/landing/hero-marble-bg.jpg
+
 nul
