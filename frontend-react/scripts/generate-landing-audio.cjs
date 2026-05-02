@@ -53,22 +53,22 @@ async function main() {
     process.exit(1)
   }
 
-  // Resolve the backend service from this script's location.
+  // Resolve the backend service. The module exports a singleton instance,
+  // not the class — call methods on it directly.
   const servicePath = path.join(BACKEND_DIR, 'src', 'services', 'GeminiTTSService.js')
   if (!fs.existsSync(servicePath)) {
     console.error('Could not find GeminiTTSService at', servicePath)
     process.exit(1)
   }
-  const { GeminiTTSService } = require(servicePath)
+  const ttsService = require(servicePath)
 
   const text = 'Hello. Welcome to your ST3 interview. Are you ready to begin?'
   const voiceName = 'Charon'
   const stylePrompt = '[British accent, professional, neutral examiner tone]'
 
-  const service = new GeminiTTSService()
   console.log(`[gen-audio] voice=${voiceName} text="${text}"`)
 
-  const wavBuffer = await service.synthesize(text, voiceName, { stylePrompt })
+  const wavBuffer = await ttsService.synthesize(text, voiceName, { stylePrompt })
 
   const outDir = path.resolve(__dirname, '..', 'public', 'audio')
   fs.mkdirSync(outDir, { recursive: true })
