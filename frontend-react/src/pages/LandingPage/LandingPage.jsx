@@ -2,6 +2,7 @@ import { useAuthStore, selectIsLoggedIn, selectIsPremium } from '../../stores/au
 import { useLandingAnimations } from './useLandingAnimations'
 import LandingNav from './LandingNav'
 import HeroSection from './HeroSection'
+import LoggedInBand from './LoggedInBand'
 import WhoSection from './WhoSection'
 import WhySection from './WhySection'
 import TrustSection from './TrustSection'
@@ -29,37 +30,28 @@ export default function LandingPage() {
       {/* SVG Grain Overlay */}
       <GrainOverlay />
 
-      {/* Three.js Canvas Container */}
+      {/* Three.js Canvas Container — global ambient backdrop */}
       <ThreeBackground />
 
       {/* Navigation */}
       <LandingNav isLoggedIn={isLoggedIn} />
 
-      {/* Section 1: Hero */}
-      <HeroSection isLoggedIn={isLoggedIn} />
+      {/* Hero — single confident moment */}
+      <HeroSection />
 
-      {/* Section 2: Who */}
+      {/* Logged-in shortcut band — renders nothing if logged out */}
+      <LoggedInBand />
+
+      {/* Sections being progressively replaced (Phases 2-5) */}
       <WhoSection />
-
-      {/* Section 3: Why (pinned scroll) */}
       <WhySection />
-
-      {/* Animated divider line between sections 3 and 4 */}
       <div className="section-divider-line" id="dividerLine34" aria-hidden="true" />
-
-      {/* Section 4: Trust */}
       <TrustSection />
-
-      {/* Section 5: Services */}
       <ServicesSection />
-
-      {/* Section 6: Proof */}
       <ProofSection />
-
-      {/* Section 7: Action / Pricing */}
       <ActionSection isLoggedIn={isLoggedIn} isPremium={isPremium} />
 
-      {/* Section 8: Footer */}
+      {/* Footer */}
       <FooterSection />
     </div>
   )

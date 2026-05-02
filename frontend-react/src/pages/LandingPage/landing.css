@@ -214,8 +214,7 @@
   overflow: hidden;
 }
 
-.landing-page .hero-logged-out,
-.landing-page .hero-logged-in {
+.landing-page .hero-content {
   max-width: 1000px;
   margin: 0 auto;
   position: relative;
@@ -261,98 +260,68 @@
   will-change: transform, opacity;
 }
 
-/* ---- Hero Knowledge Tableau ---- */
-.landing-page .hero-tableau {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.landing-page .hero-asset {
-  position: absolute;
-  will-change: transform;
-  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.12));
-}
-
-.landing-page .hero-asset--textbook {
-  width: clamp(220px, 26vw, 380px);
-  top: 1%;
-  left: -1%;
-  transform: rotate(-12deg);
-}
-
-.landing-page .hero-asset--scalpel {
-  width: clamp(150px, 18vw, 260px);
-  bottom: 4%;
-  left: 12%;
-  transform: rotate(32deg);
-}
-
-.landing-page .hero-asset--penlight {
-  width: clamp(140px, 17vw, 240px);
-  top: 42%;
-  right: 1%;
-  transform: rotate(-20deg);
-}
-
-.landing-page .hero-asset--reflex-hammer {
-  width: clamp(180px, 20vw, 300px);
-  top: 3%;
-  right: 3%;
-  transform: rotate(15deg);
-}
-
-.landing-page .hero-asset--tablet {
-  width: clamp(210px, 24vw, 370px);
-  bottom: 1%;
-  right: 3%;
-  transform: rotate(-3deg);
-}
-
-.landing-page .hero-asset--stethoscope {
-  width: clamp(200px, 22vw, 330px);
-  top: 48%;
-  left: -2%;
-  transform: rotate(8deg);
-}
-
 /* Text readability over animated background */
 .landing-page .hero-brand,
-.landing-page .section-hero .landing-overline,
 .landing-page .hero-subtitle {
   text-shadow: 0 2px 20px rgba(255, 255, 255, 0.6);
 }
 
-/* ---- Botanical Leaf Overlays ---- */
-.landing-page .hero-leaf {
-  position: absolute;
-  pointer-events: none;
+/* ---- Logged-in band ---- */
+.landing-page .logged-in-band {
+  position: relative;
   z-index: 2;
-  will-change: transform;
-  opacity: 0.7;
+  padding: clamp(20px, 2.5vw, 36px) clamp(24px, 4vw, 64px);
+  background: rgba(245, 241, 235, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(212, 148, 58, 0.18);
+  border-bottom: 1px solid rgba(212, 148, 58, 0.18);
 }
 
-.landing-page .hero-leaf--1 {
-  width: clamp(120px, 18vw, 260px);
-  top: 8%;
-  left: 2%;
-  transform: rotate(-15deg);
+.landing-page .logged-in-band__inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 14px 22px;
+  font-family: var(--font-landing-body);
 }
 
-.landing-page .hero-leaf--2 {
-  width: clamp(80px, 12vw, 180px);
-  bottom: 15%;
-  right: 3%;
-  transform: rotate(20deg);
+.landing-page .logged-in-band__greeting {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--organic-bark);
 }
 
-.landing-page .hero-leaf--3 {
-  width: clamp(100px, 14vw, 200px);
-  top: 55%;
-  left: 70%;
-  transform: rotate(-8deg);
-  opacity: 0.5;
+.landing-page .logged-in-band__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--organic-amber);
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: rgba(212, 148, 58, 0.35);
+  text-underline-offset: 4px;
+  transition: text-decoration-color 0.2s ease, color 0.2s ease;
+}
+
+.landing-page .logged-in-band__cta:hover {
+  color: #c0852f;
+  text-decoration-color: var(--organic-amber);
+}
+
+.landing-page .logged-in-band__hint {
+  font-size: 0.8125rem;
+  color: var(--text-muted-light);
+  font-style: italic;
 }
 
 /* ---- Section 2: Who ---- */
@@ -877,33 +846,7 @@
     align-items: center;
   }
 
-  .landing-page .hero-leaf { display: none; }
   .landing-page .hero-brand { font-size: clamp(3rem, 16vw, 5rem); }
-
-  /* Mobile: show only textbook, scalpel, tablet */
-  .landing-page .hero-asset--penlight,
-  .landing-page .hero-asset--reflex-hammer,
-  .landing-page .hero-asset--stethoscope {
-    display: none;
-  }
-
-  .landing-page .hero-asset--textbook {
-    width: clamp(140px, 32vw, 200px);
-    top: 3%;
-    left: -2%;
-  }
-
-  .landing-page .hero-asset--scalpel {
-    width: clamp(100px, 22vw, 150px);
-    bottom: 8%;
-    left: 2%;
-  }
-
-  .landing-page .hero-asset--tablet {
-    width: clamp(140px, 32vw, 200px);
-    bottom: 5%;
-    right: -1%;
-  }
 
   .landing-page .who-inner {
     grid-template-columns: 1fr;

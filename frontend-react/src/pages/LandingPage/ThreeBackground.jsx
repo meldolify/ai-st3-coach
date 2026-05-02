@@ -83,13 +83,19 @@ void main() {
 }
 `
 
+/**
+ * Visibility curve for the icosahedron.
+ *
+ * Phase 1: simple linear falloff — full at hero, gentle taper through page.
+ * Phase 5 will replace this with a section-aware curve that fades to 0 around
+ * §D entry (so the SignatureOrb composition takes the centre stage) and
+ * returns at ~0.15 for §E-§F.
+ *
+ * Kept as a pure function so Phase 5 can swap the curve without touching
+ * the render loop.
+ */
 function getTargetOpacity(progress) {
-  if (progress < 0.12) return 0.5
-  if (progress < 0.25) return 0.12
-  if (progress < 0.45) return 0.35
-  if (progress < 0.6) return 0.12
-  if (progress < 0.75) return 0.25
-  return 0.15
+  return Math.max(0.15, 0.5 - progress * 0.35)
 }
 
 export default function ThreeBackground() {

@@ -45,14 +45,14 @@ export function useLandingAnimations() {
     // ============================================================
     function initHeroEntrance() {
       if (prefersReducedMotion) {
-        gsap.set('#sectionHero .hero-brand-char, #sectionHero .landing-overline, #sectionHero .hero-subtitle, #sectionHero .hero-ctas > *, #sectionHero .hero-asset, #sectionHero .hero-leaf', {
+        gsap.set('#sectionHero .hero-brand-char, #sectionHero .hero-subtitle, #sectionHero .hero-ctas > *', {
           opacity: 1, y: 0, scale: 1, filter: 'blur(0px)',
         })
         return
       }
 
-      const activeHero = document.getElementById('heroLoggedOut') || document.getElementById('heroLoggedIn')
-      if (!activeHero) return
+      const heroContent = document.getElementById('heroContent')
+      if (!heroContent) return
 
       const tl = gsap.timeline({ delay: 0.2 })
 
@@ -60,7 +60,7 @@ export function useLandingAnimations() {
       tl.from('#landingNav', { opacity: 0, y: -20, duration: 0.6, ease: 'power2.out' }, 0)
 
       // REVIVA brand — scramble-style character reveal
-      const brandChars = activeHero.querySelectorAll('.hero-brand-char')
+      const brandChars = heroContent.querySelectorAll('.hero-brand-char')
       const scrambleChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
       if (brandChars.length) {
         brandChars.forEach((charEl, i) => {
@@ -83,83 +83,26 @@ export function useLandingAnimations() {
         })
       }
 
-      // Overline fade up
-      const overline = activeHero.querySelector('.landing-overline')
-      if (overline) {
-        tl.from(overline, { opacity: 0, y: 20, duration: 0.5, ease: 'power2.out' }, 1.0)
-      }
-
-      // Hero tableau assets — staggered blur-to-sharp entrance
-      gsap.utils.toArray('.hero-asset').forEach((asset, i) => {
-        tl.fromTo(asset,
-          { opacity: 0, scale: 1.15, filter: 'blur(12px)' },
-          { opacity: 1, scale: 1, filter: 'blur(0px)', duration: 1.0, ease: 'power3.out' },
-          0.8 + i * 0.2,
-        )
-      })
-
       // Subtitle fade up
-      const subtitle = activeHero.querySelector('.hero-subtitle')
+      const subtitle = heroContent.querySelector('.hero-subtitle')
       if (subtitle) {
-        tl.from(subtitle, { opacity: 0, y: 20, duration: 0.8, ease: 'power2.out' }, 1.8)
+        tl.from(subtitle, { opacity: 0, y: 20, duration: 0.8, ease: 'power2.out' }, 1.0)
       }
 
-      // CTA buttons slide up
-      const ctas = activeHero.querySelectorAll('.hero-ctas > *')
+      // CTA button slide up
+      const ctas = heroContent.querySelectorAll('.hero-ctas > *')
       if (ctas.length) {
-        tl.from(ctas, { opacity: 0, y: 40, duration: 0.6, stagger: 0.1, ease: 'power2.out' }, 2.0)
+        tl.from(ctas, { opacity: 0, y: 40, duration: 0.6, stagger: 0.1, ease: 'power2.out' }, 1.3)
       }
-
-      // Botanical leaves drift in from edges
-      tl.from('.hero-leaf--1', { opacity: 0, x: -60, rotation: -30, duration: 1.2, ease: 'power2.out' }, 0.8)
-      tl.from('.hero-leaf--2', { opacity: 0, x: 60, rotation: 40, duration: 1.2, ease: 'power2.out' }, 1.0)
-      tl.from('.hero-leaf--3', { opacity: 0, y: 40, rotation: -20, duration: 1.2, ease: 'power2.out' }, 1.2)
     }
 
     // ============================================================
-    // HERO PARALLAX
-    // ============================================================
-    function initHeroParallax() {
-      if (prefersReducedMotion || isTouch) return
-
-      document.querySelectorAll('.hero-leaf').forEach((leaf) => {
-        const speed = parseFloat(leaf.dataset.speed) || 0.5
-        gsap.to(leaf, {
-          y: () => window.innerHeight * speed * 0.5,
-          rotation: '+=' + (speed * 20),
-          scrollTrigger: {
-            trigger: '#sectionHero',
-            start: 'top top',
-            end: 'bottom top',
-            scrub: 0.3,
-          },
-        })
-      })
-
-      document.querySelectorAll('.hero-asset').forEach((asset) => {
-        const speed = parseFloat(asset.dataset.speed) || 0.15
-        const drift = parseFloat(asset.dataset.drift) || 0
-        gsap.to(asset, {
-          y: () => window.innerHeight * speed * 0.5,
-          x: () => window.innerWidth * drift * 0.3,
-          rotation: '+=' + (speed * 25),
-          scrollTrigger: {
-            trigger: '#sectionHero',
-            start: 'top top',
-            end: 'bottom top',
-            scrub: true,
-          },
-        })
-      })
-    }
-
-    // ============================================================
-    // HERO TRANSITION
+    // HERO TRANSITION (scroll out)
     // ============================================================
     function initHeroTransition() {
       if (prefersReducedMotion || isTouch) return
 
-      gsap.to('#sectionHero .hero-logged-out, #sectionHero .hero-logged-in, #sectionHero .hero-tableau', {
+      gsap.to('#heroContent', {
         y: -100,
         opacity: 0,
         scrollTrigger: {
@@ -510,7 +453,6 @@ export function useLandingAnimations() {
     // Small delay to ensure DOM is painted
     const timer = setTimeout(() => {
       initHeroEntrance()
-      initHeroParallax()
       initHeroTransition()
       initSectionWho()
       initSectionWhy()
