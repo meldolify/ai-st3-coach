@@ -4,11 +4,8 @@ import LandingNav from './LandingNav'
 import HeroSection from './HeroSection'
 import LoggedInBand from './LoggedInBand'
 import SectionA_Frustration from './sections/SectionA_Frustration'
+import SectionB_AIInterviewer from './sections/SectionB_AIInterviewer'
 import SectionC_Difference from './sections/SectionC_Difference'
-import WhoSection from './WhoSection'
-import WhySection from './WhySection'
-import TrustSection from './TrustSection'
-import ServicesSection from './ServicesSection'
 import ProofSection from './ProofSection'
 import ActionSection from './ActionSection'
 import FooterSection from './FooterSection'
@@ -47,16 +44,13 @@ export default function LandingPage() {
       {/* §A — The Frustration */}
       <SectionA_Frustration />
 
-      {/* Sections being progressively replaced (Phases 3-5) */}
-      <WhoSection />
-      <WhySection />
-      <div className="section-divider-line" id="dividerLine34" aria-hidden="true" />
-      <TrustSection />
+      {/* §B — The AI Interviewer */}
+      <SectionB_AIInterviewer />
 
       {/* §C — What Makes It Different */}
       <SectionC_Difference />
 
-      <ServicesSection />
+      {/* Still-existing sections being replaced in Phases 4-5 */}
       <ProofSection />
       <ActionSection isLoggedIn={isLoggedIn} isPremium={isPremium} />
 
