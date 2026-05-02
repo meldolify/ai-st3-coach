@@ -3,6 +3,8 @@ import { useLandingAnimations } from './useLandingAnimations'
 import LandingNav from './LandingNav'
 import HeroSection from './HeroSection'
 import LoggedInBand from './LoggedInBand'
+import SectionA_Frustration from './sections/SectionA_Frustration'
+import SectionC_Difference from './sections/SectionC_Difference'
 import WhoSection from './WhoSection'
 import WhySection from './WhySection'
 import TrustSection from './TrustSection'
@@ -42,11 +44,18 @@ export default function LandingPage() {
       {/* Logged-in shortcut band — renders nothing if logged out */}
       <LoggedInBand />
 
-      {/* Sections being progressively replaced (Phases 2-5) */}
+      {/* §A — The Frustration */}
+      <SectionA_Frustration />
+
+      {/* Sections being progressively replaced (Phases 3-5) */}
       <WhoSection />
       <WhySection />
       <div className="section-divider-line" id="dividerLine34" aria-hidden="true" />
       <TrustSection />
+
+      {/* §C — What Makes It Different */}
+      <SectionC_Difference />
+
       <ServicesSection />
       <ProofSection />
       <ActionSection isLoggedIn={isLoggedIn} isPremium={isPremium} />
