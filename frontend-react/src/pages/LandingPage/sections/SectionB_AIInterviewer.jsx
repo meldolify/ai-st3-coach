@@ -79,11 +79,11 @@ export default function SectionB_AIInterviewer() {
     >
       {/* Intro band */}
       <div className="section-b__intro max-w-7xl mx-auto px-6 sm:px-10 pt-24 md:pt-32 pb-12 md:pb-16 text-center">
-        <p className="text-[12px] font-medium uppercase tracking-[0.3em] text-organic-forest mb-5">
-          What does it do?
+        <p className="font-display italic text-organic-forest text-[1.1rem] md:text-[1.25rem] mb-3">
+          ( the interviewer )
         </p>
-        <h2 className="font-organic-display uppercase leading-[0.95] text-[clamp(2.5rem,8vw,6.5rem)] mb-6">
-          The AI Interviewer.
+        <h2 className="font-organic-display uppercase leading-[0.92] text-[clamp(2.75rem,9vw,7.5rem)] tracking-[-0.025em] mb-6 font-bold">
+          The AI <em className="font-display italic font-normal text-organic-amber lowercase tracking-[-0.01em]">Interviewer.</em>
         </h2>
         <p className="max-w-xl mx-auto text-[1.05rem] leading-relaxed text-organic-bark/75 mb-10">
           Simulates the real interview. 24/7. Adapts to you.
