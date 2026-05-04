@@ -6,7 +6,7 @@ CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-This is a 7 year old child who has been brought to the emergency department after trapping his right ring finger in a door at home about two hours ago. The finger is swollen, bruised with a lcaeration extending under the nail plate. You have been asked to assess and manage this patient.
+This is a 7 year old child who has been brought to the emergency department after trapping his right ring finger in a door at home about two hours ago. The finger is swollen, bruised, and there is blood under the nail. You have been asked to assess and manage this patient.
 
 STAGE PROMPT QUESTIONS
 
@@ -23,7 +23,7 @@ Investigations
 
 Initial Management
 "How would you manage this patient initially?"
-"When are you going to list the patient for surgery?"
+"What analgesia would you give?"
 
 Definitive Management
 "What surgical procedure does this patient need?"
@@ -37,6 +37,7 @@ MAIN CLINICAL DOMAINS
 History and mechanism of injury
 Examination of the injured finger
 Investigations
+Diagnosis and classification
 Surgical management and nail bed repair
 Post-operative care
 
@@ -45,32 +46,36 @@ ESSENTIAL MARKING POINTS
 (Internal reference only. Do not read aloud.)
 
 History and mechanism of injury
-Establishing the mechanism of injury: crush injury from a door in a 7 year old child.
-Asking about hand dominance, vaccination history and medical hisotory any allergies.
+Establishing the mechanism of injury: crush injury from a door.
+Asking about hand dominance, tetanus status, and any allergies.
+Taking a brief medical history from the parent including any bleeding disorders.
+Noting the time of injury.
 
 Examination of the injured finger
 Examining the finger for swelling, deformity, and subungual haematoma.
 Assessing the neurovascular status of the finger including capillary refill and sensation.
 Assessing flexor and extensor tendon function if the child is cooperative.
 Examining the nail plate for disruption and the nail fold for lacerations.
+Assessing the geometry of any soft tissue defect if present: volar oblique, transverse, or dorsal oblique, as this guides management.
 Assessing the viability of the distal skin.
 
 Investigations
 Requesting an X-ray of the finger to assess for an underlying distal phalanx fracture.
 Knowing that a nail bed injury with a distal phalanx fracture is classified as an open fracture.
 
-Timing of surgery: in the next available trauma list.
+Diagnosis and classification
+Recognising a subungual haematoma with likely underlying nail bed laceration.
+Knowing the indications for nail bed exploration: subungual haematoma involving more than fifty percent of the nail, displaced nail plate, nail fold disruption, or an associated distal phalanx fracture.
 
 Surgical management and nail bed repair
-The surgery will be under general anaesthesia
+Under general anaesthesia
 Removing the nail plate carefully using blunt dissection to expose the nail bed.
-Rule of Seymour fracture
-Washout the distal phalanx fracture
 Repairing the nail bed laceration under magnification using fine absorbable sutures such as six-oh or seven-oh Vicryl Rapide.
-The nail bed repair acts as indirect reduction and stabilisation of the tuft fracture.
+Replacing the nail plate or using a foil substitute under the nail fold as a splint to prevent adhesion of the eponychial fold to the nail bed.
+If there is an associated distal phalanx fracture, the nail bed repair acts as indirect reduction and stabilisation.
 
 Post-operative care
-Appropriate dressings.
+Appropriate dressings and splintage.
 Analgesia and wound care advice to the parents.
 Follow up to monitor healing.
 
