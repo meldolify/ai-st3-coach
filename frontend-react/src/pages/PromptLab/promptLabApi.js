@@ -50,8 +50,8 @@ export const saveManualTranscript = (sessionId) =>
 export const getPrompts = (difficulty, topic) =>
   api(`/prompts/${difficulty}?topic=${encodeURIComponent(topic)}`)
 
-export const savePrompts = (difficulty, sections) =>
-  api(`/prompts/${difficulty}`, {
+export const savePrompts = (difficulty, sections, topic) =>
+  api(`/prompts/${difficulty}?topic=${encodeURIComponent(topic)}`, {
     method: 'PUT',
     body: JSON.stringify({ sections }),
   })
@@ -61,8 +61,8 @@ export const savePrompts = (difficulty, sections) =>
 export const getFeedbackPrompt = (difficulty, topic) =>
   api(`/feedback-prompt/${difficulty}?topic=${encodeURIComponent(topic)}`)
 
-export const saveFeedbackPrompt = (difficulty, content, personalityContent) =>
-  api(`/feedback-prompt/${difficulty}`, {
+export const saveFeedbackPrompt = (difficulty, content, personalityContent, topic) =>
+  api(`/feedback-prompt/${difficulty}?topic=${encodeURIComponent(topic)}`, {
     method: 'PUT',
     body: JSON.stringify({ content, personalityContent }),
   })
