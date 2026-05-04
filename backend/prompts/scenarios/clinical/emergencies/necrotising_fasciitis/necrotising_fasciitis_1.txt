@@ -1,12 +1,12 @@
 SCENARIO TITLE
 
-Necrotising Fasciitis
+Nail Bed Injury
 
 CASE INTRODUCTION
 
 (Read verbatim in the Case Introduction state.)
 
-This is a 64 year old man who is currently on the medical ward for management of poorly controlled diabetes. You are on call and have been asked to review him because he has developed a rash that has been spreading rapidly over the last four hours.
+This is a 7 year old child who has been brought to the emergency department after trapping his right ring finger in a door at home about two hours ago. The finger is swollen, bruised with a lcaeration extending under the nail plate. You have been asked to assess and manage this patient.
 
 STAGE PROMPT QUESTIONS
 
@@ -14,111 +14,99 @@ STAGE PROMPT QUESTIONS
 Use these to guide prompting. Delivery specificity is controlled by the personality layer.)
 
 Assessment
-"What would you expect to find on examination of this patient?"
-"Can you describe the A B C D E approach for this case?"
-"What in the history would concern you most?"
+"How would you assess this child?"
+"What are the important points in the history?"
+"What would you look for on examination?"
 
 Investigations
-"What blood tests would you want to send?"
-"Are there any scoring systems that might be relevant here?"
+"What investigations would you request?"
 
 Initial Management
-"How would you stabilise this patient initially?"
-"What antibiotics would you consider and why?"
-"What other teams would you involve at this stage?"
+"How would you manage this patient initially?"
+"When are you going to list the patient for surgery?"
 
 Definitive Management
-"What surgical intervention does this patient need?"
-"Can you walk me through the key steps of the operation?"
+"What surgical procedure does this patient need?"
+"Can you walk me through the repair?"
 "What would your post-operative plan look like?"
 
 MAIN CLINICAL DOMAINS
 
 (Internal reference only. Do not read aloud.)
 
-Diagnosis and urgency
-Assessment, either through A B C D E approach or history and examination
+History and mechanism of injury
+Examination of the injured finger
 Investigations
-Initial management
-Definitive management
-Surgical steps
+Surgical management and nail bed repair
 Post-operative care
 
 ESSENTIAL MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-Diagnosis and urgency
-Necrotising fasciitis which is a clinical emergency.
+History and mechanism of injury
+Establishing the mechanism of injury: crush injury from a door in a 7 year old child.
+Asking about hand dominance, vaccination history and medical hisotory any allergies.
 
-Assessment, either through A B C D E approach or history and examination
-Must include vital status, rapid progression or spread, and poorly controlled diabetes.
+Examination of the injured finger
+Examining the finger for swelling, deformity, and subungual haematoma.
+Assessing the neurovascular status of the finger including capillary refill and sensation.
+Assessing flexor and extensor tendon function if the child is cooperative.
+Examining the nail plate for disruption and the nail fold for lacerations.
+Assessing the viability of the distal skin.
 
 Investigations
-Blood tests including lactate level.
+Requesting an X-ray of the finger to assess for an underlying distal phalanx fracture.
+Knowing that a nail bed injury with a distal phalanx fracture is classified as an open fracture.
 
-Initial management
-Stabilisation and resuscitation with I V fluids, and antibiotics as per the guidelines.
+Timing of surgery: in the next available trauma list.
 
-Definitive management
-Urgent surgery for debridement.
-
-Surgical steps
-Surgical debridement of all unhealthy tissue.
+Surgical management and nail bed repair
+The surgery will be under general anaesthesia
+Removing the nail plate carefully using blunt dissection to expose the nail bed.
+Rule of Seymour fracture
+Washout the distal phalanx fracture
+Repairing the nail bed laceration under magnification using fine absorbable sutures such as six-oh or seven-oh Vicryl Rapide.
+The nail bed repair acts as indirect reduction and stabilisation of the tuft fracture.
 
 Post-operative care
-I T U post-operatively, and arranging for a potential second look within forty eight hours.
+Appropriate dressings.
+Analgesia and wound care advice to the parents.
+Follow up to monitor healing.
 
 BONUS MARKING POINTS
 
 (Internal reference only. Do not read aloud.)
 
-Diagnosis and urgency
-Differential diagnosis including cellulitis, but treating this as necrotising fasciitis until proven otherwise.
-Stating that necrotising fasciitis is a clinical diagnosis and or a life-threatening emergency.
+History and mechanism of injury
+Considering the possibility of non-accidental injury, particularly in young children with inconsistent history or delay in presentation.
+Asking about the child's general health and any safeguarding concerns.
 
-Assessment, either through A B C D E approach or history and examination
-Mentioning Sepsis six.
-Taking a thorough history.
-Examination of spread of erythema beyond previous markings.
-Blistering as a late sign of advanced disease.
-Mentioning the finger sweep test if clinically unsure of the diagnosis, with clarification that this would be discussed with the consultant on call before performing the test.
+Examination of the injured finger
+Examining the adjacent fingers for associated injuries.
+Assessing the nail fold for germinal matrix injury which may affect future nail growth.
 
 Investigations
-Using L R I N E C score criteria.
-Checking H B A one C level.
-Arranging group and save and cross-matched bloods.
+Knowing that an A P and lateral X-ray should be requested.
+Knowing that a Seymour fracture is a juxta-epiphyseal fracture of the distal phalanx in a child with nail bed injury and is effectively an open physeal fracture requiring urgent washout and fixation.
 
-Initial management
-Detailed explanation of the resuscitative measures.
-Mentioning triple antibiotics including Benzyl penicillin, Metronidazole, and Vancomycin, or different antibiotics supported by stating that this is per trust guidelines.
+Diagnosis and classification
+Knowing the different types of nail bed injury: simple laceration, stellate laceration, crush injury, and avulsion.
+Knowing that germinal matrix injury carries a worse prognosis for nail regrowth.
 
-Definitive management
-Arranging for surgery by informing the consultant plastic surgeon on call.
-Informing the on call anaesthetist.
-Informing C E P O D and theatre staff.
-Consenting the patient, or completing consent form four if the patient is unable to consent.
-Informing the next of kin.
-Informing the on call microbiologist to prepare for urgent gram stain samples.
-
-Surgical steps
-General anaesthetic.
-Patient positioning, supine in this case.
-Surgical excision starting from the point of finger sweep test.
-Confirming the diagnosis with dish water fluid which is pathognomonic.
-Circumferential excision of skin and fascial layers.
-Continuing aggressive excision of all infected tissue with a low threshold for excising unhealthy layers.
-Continuous haemostasis.
-Taking tissue samples for both microbiology and histology.
-Copious washout of the wound using warm saline.
-Dressing the wounds using occlusive dressing or V A C therapy.
+Surgical management and nail bed repair
+Describing the technique of nail plate removal using fine scissors or a freer elevator inserted between the nail plate and the nail bed.
+Knowing that the nail bed should be inspected under loupe magnification or an operating microscope for accurate repair.
+Knowing that sterile foil from a suture packet can be used as a nail plate substitute if the original nail is too damaged to replace.
+Knowing that K-wire fixation of the distal phalanx may be needed for unstable fractures.
+Managing a Seymour fracture with washout, reduction, nail bed repair, and antibiotics.
 
 Post-operative care
-Arranging post-operative I T U care.
-Ensuring clear handover.
-Continuous monitoring of vital status.
-Continuation of antibiotics and tailoring once gram stain and microbiology results are available.
-Planning further surgery within forty eight hours, or earlier if the patient deteriorates as there may be residual infected foci.
+Advising the parents that it takes approximately three to four months for a new nail to grow.
+Knowing the potential complications including nail ridging, split nail, non-adherent nail, and hook nail deformity.
+Advising on wound care and signs of infection to watch for.
+
+These are points a strong candidate would mention but are not required to pass.
 
 END OF SCENARIO CRITERIA
 
