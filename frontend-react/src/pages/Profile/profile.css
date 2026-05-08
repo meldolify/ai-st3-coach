@@ -63,7 +63,7 @@
 }
 
 .profile-section h3 {
-  font-family: var(--font-display, 'Instrument Serif', serif);
+  font-family: var(--font-display, 'Newsreader', Georgia, serif);
   font-size: 1.25rem;
   color: #1e293b;
   margin: 0 0 20px 0;
@@ -240,7 +240,7 @@
 }
 
 .profile-progress-panel h3 {
-  font-family: var(--font-display, 'Instrument Serif', serif);
+  font-family: var(--font-display, 'Newsreader', Georgia, serif);
   font-size: 1.25rem;
   color: #1e293b;
   margin: 0 0 24px 0;
@@ -391,7 +391,7 @@
 }
 
 .upgrade-modal h2 {
-  font-family: var(--font-display, 'Instrument Serif', serif);
+  font-family: var(--font-display, 'Newsreader', Georgia, serif);
   font-size: 1.5rem;
   color: #1e293b;
   margin: 0 0 8px 0;

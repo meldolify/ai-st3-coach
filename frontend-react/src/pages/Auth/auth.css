@@ -2,10 +2,11 @@
    Auth Page — Split Panel Overlay
    ============================================ */
 
-/* Design system variables */
+/* Design system variables — fonts intentionally not redeclared so Auth
+   inherits Newsreader from index.css @theme. Local --font-body kept only
+   to override with Outfit if a future ask wants Auth distinct. */
 :root {
-  --font-display: 'Instrument Serif', Georgia, serif;
-  --font-body: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Newsreader', Georgia, serif;
   --brand-primary: #4A5D4C;
   --brand-dark: #3A4A3C;
   --brand-sage-light: #5C7260;
