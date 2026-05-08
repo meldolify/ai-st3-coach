@@ -118,44 +118,38 @@ export default function SectionB_AIInterviewer() {
         ref={containerRef}
         className="section-b__walkthrough relative px-6 sm:px-10 pb-24 md:pb-32"
       >
-        {/* Topographical contour-line backdrop — inline SVG, vector so it
-            scales without pixelation. Fills the left half of the walkthrough
-            on desktop; mobile keeps the original stacked layout. Forest
-            stroke at low opacity reads as quiet atmospheric texture behind
-            the DeviceFrame on top. */}
+        {/* Perspective-ripple backdrop — a single concentric-ellipse cluster
+            radiating outward from a focal point near the bottom-centre of
+            the visible canvas. The very flat ry/rx ratio (1:6) creates the
+            "looking down at ripples on water" perspective. Inline SVG,
+            vector so it scales without pixelation. Fills the left half of
+            the walkthrough on desktop; mobile keeps the original stacked
+            layout. */}
         <svg
           className="section-b__backdrop"
-          viewBox="0 0 400 1200"
+          viewBox="0 0 800 800"
           preserveAspectRatio="xMidYMid slice"
+          overflow="visible"
           aria-hidden="true"
         >
-          <g fill="none" stroke="var(--organic-forest)" strokeWidth="0.5">
-            {/* Three stacked contour clusters, each a set of concentric
-                ellipses suggesting topographical bands. */}
-            {/* Cluster 1 — upper */}
-            <ellipse cx="200" cy="220" rx="220" ry="78" opacity="0.28" />
-            <ellipse cx="200" cy="220" rx="190" ry="68" opacity="0.26" />
-            <ellipse cx="200" cy="220" rx="160" ry="58" opacity="0.24" />
-            <ellipse cx="200" cy="220" rx="130" ry="48" opacity="0.22" />
-            <ellipse cx="200" cy="220" rx="100" ry="38" opacity="0.20" />
-            <ellipse cx="200" cy="220" rx="72" ry="28" opacity="0.18" />
-            <ellipse cx="200" cy="220" rx="46" ry="18" opacity="0.16" />
-            {/* Cluster 2 — centre */}
-            <ellipse cx="200" cy="600" rx="240" ry="92" opacity="0.30" />
-            <ellipse cx="200" cy="600" rx="206" ry="80" opacity="0.28" />
-            <ellipse cx="200" cy="600" rx="172" ry="68" opacity="0.26" />
-            <ellipse cx="200" cy="600" rx="140" ry="56" opacity="0.24" />
-            <ellipse cx="200" cy="600" rx="110" ry="44" opacity="0.22" />
-            <ellipse cx="200" cy="600" rx="80" ry="32" opacity="0.20" />
-            <ellipse cx="200" cy="600" rx="52" ry="20" opacity="0.18" />
-            {/* Cluster 3 — lower */}
-            <ellipse cx="200" cy="980" rx="220" ry="78" opacity="0.28" />
-            <ellipse cx="200" cy="980" rx="190" ry="68" opacity="0.26" />
-            <ellipse cx="200" cy="980" rx="160" ry="58" opacity="0.24" />
-            <ellipse cx="200" cy="980" rx="130" ry="48" opacity="0.22" />
-            <ellipse cx="200" cy="980" rx="100" ry="38" opacity="0.20" />
-            <ellipse cx="200" cy="980" rx="72" ry="28" opacity="0.18" />
-            <ellipse cx="200" cy="980" rx="46" ry="18" opacity="0.16" />
+          <g
+            fill="none"
+            stroke="var(--organic-forest)"
+            strokeWidth="0.6"
+            opacity="0.50"
+          >
+            {/* All ellipses share the same focal point (cx 400, cy 620).
+                rx grows; ry stays low (rx / ~6) for the flat perspective. */}
+            <ellipse cx="400" cy="620" rx="50" ry="9" />
+            <ellipse cx="400" cy="620" rx="100" ry="17" />
+            <ellipse cx="400" cy="620" rx="160" ry="27" />
+            <ellipse cx="400" cy="620" rx="230" ry="38" />
+            <ellipse cx="400" cy="620" rx="310" ry="52" />
+            <ellipse cx="400" cy="620" rx="400" ry="66" />
+            <ellipse cx="400" cy="620" rx="500" ry="83" />
+            <ellipse cx="400" cy="620" rx="610" ry="101" />
+            <ellipse cx="400" cy="620" rx="730" ry="121" />
+            <ellipse cx="400" cy="620" rx="860" ry="143" />
           </g>
         </svg>
 
