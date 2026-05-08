@@ -1,6 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');
-@import url('https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap');
-@import url('https://api.fontshare.com/v2/css?f[]=clash-display@600,700&f[]=general-sans@400,500,600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,300;1,6..72,400;1,6..72,500;1,6..72,600;1,6..72,700&display=swap');
+@import url('https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600&display=swap');
 @import "tailwindcss";
 
 /* ============================================================================
@@ -30,9 +29,11 @@
   --color-thinking: #6366F1;
   --color-error: #DC2626;
 
-  /* Fonts */
-  --font-display: 'Instrument Serif', Georgia, serif;
-  --font-body: 'Satoshi', -apple-system, BlinkMacSystemFont, sans-serif;
+  /* Fonts — Newsreader unified (display + body + italic accents).
+     General Sans only for small UI labels, eyebrows, status pills (--font-ui). */
+  --font-display: 'Newsreader', Georgia, serif;
+  --font-body: 'Newsreader', Georgia, serif;
+  --font-ui: 'General Sans', -apple-system, BlinkMacSystemFont, sans-serif;
 
   /* Border radius */
   --radius-sm: 6px;
@@ -75,9 +76,11 @@
   --color-organic-bark: #2A2520;
   --color-organic-cream-deep: #ECE5D6;
 
-  /* Organic typography */
-  --font-organic-display: 'Clash Display', 'Arial Black', sans-serif;
-  --font-organic-body: 'General Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  /* Organic typography — also unified to Newsreader. The landing surface
+     was previously Clash Display + General Sans; now the whole site uses
+     one editorial family for visual cohesion. */
+  --font-organic-display: 'Newsreader', Georgia, serif;
+  --font-organic-body: 'Newsreader', Georgia, serif;
 }
 
 /* ============================================================================
