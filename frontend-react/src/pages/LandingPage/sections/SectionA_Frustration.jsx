@@ -1,108 +1,73 @@
-import { motion, useReducedMotion } from 'framer-motion'
-import { NarrativeScene } from '../NarrativeScene'
-import { cn } from '../../../lib/utils'
-
-const MotionDiv = motion.div
-
 /**
- * §A — The Frustration. Why do you need this?
+ * §A — Three things you couldn't do before today.
  *
- * Aesthetic pass (plan §12):
- *   - Headline scales to fill the section: "PRACTICE PARTNERS / DON'T EXIST."
- *     clamp(5rem, 16vw, 14rem). The whole section is the type.
- *   - A photographic subject (Unsplash) sits composited into the line break,
- *     overlapping the type — z-layered, not adjacent.
- *   - Three accent cards stay, each backed by a giant numeral watermark
- *     (01 / 02 / 03) at low opacity.
- *   - Italic-serif annotation top-left: ( the daily reality ).
+ * Replaces the previous dark-canopy "Practice partners don't exist." treatment.
+ * This is the cream "three things" 3-card layout from the v1 design kit
+ * (`reviva-design-system/project/ui_kits/landing/v1.html` lines 359-380),
+ * which the user preferred over the grim canopy version.
+ *
+ * Layout:
+ *   - Headline: "THREE THINGS YOU COULDN'T DO before today." (no eyebrow)
+ *   - 3 cream `.organic-card`s in a `repeat(3, 1fr)` grid, each with an
+ *     italic-serif `( 0X )` numeral, h3 in Newsreader 700, body prose.
+ *
+ * Design copy is a near-verbatim port of v1.html's "what you can do" section,
+ * with card 3's "166 real stations" softened to drop the count (per the
+ * locked rule that we don't bake station-count numbers into marketing copy).
  */
-const ACCENTS = [
+const CARDS = [
   {
-    id: 'consultants',
+    id: 'speak',
     numeral: '01',
-    overline: 'Reality 01',
-    title: 'Consultants are too busy.',
-    body: 'They have lists, on-calls, families. Begging an hour from them works once. Maybe twice.',
-    desktopClass: 'md:absolute md:top-[8%] md:left-[6%] md:max-w-[300px]',
+    title: 'Speak it out loud',
+    body: 'The voice orb listens, the AI examiner pushes back. Your answer is judged on what you actually said, not what you wish you’d said.',
   },
   {
-    id: 'friends',
+    id: 'marked',
     numeral: '02',
-    overline: 'Reality 02',
-    title: 'Friends get tired.',
-    body: 'They run out of questions. They start nodding through every answer. They’re not the examiner.',
-    desktopClass: 'md:absolute md:top-[28%] md:right-[6%] md:max-w-[320px]',
+    title: 'Marked the way they mark',
+    body: 'Section-by-section feedback aligned to the published marking criteria. Not vibes. Not platitudes. The thing the panel is looking for.',
   },
   {
-    id: 'books',
+    id: 'real',
     numeral: '03',
-    overline: 'Reality 03',
-    title: 'Books can’t push back.',
-    body: 'Reading the answer is not defending it under pressure. The interview is a conversation, not a recall test.',
-    desktopClass: 'md:absolute md:top-[52%] md:left-[18%] md:max-w-[340px]',
+    title: 'Hand-crafted by trainees',
+    body: 'Every station is hand-written by trainees who sat the interview. Reviewed by consultants. Refreshed every cycle. You practise the exam you’re about to take.',
   },
 ]
 
 export default function SectionA_Frustration() {
-  const prefersReducedMotion = useReducedMotion()
-
   return (
-    <NarrativeScene
+    <section
       id="section-a"
-      className="section-a relative bg-organic-canopy text-organic-cream"
+      className="section-a relative bg-organic-cream text-organic-bark"
+      data-testid="section-a"
     >
-      {/* Italic-serif eyebrow — top-left annotation */}
-      <span className="section-a__annotation">( the daily reality )</span>
-
-      <div className="section-a__inner relative w-full max-w-[1500px] mx-auto px-6 sm:px-10 py-24 md:py-32 md:min-h-[150vh] flex flex-col gap-16 md:block">
-
-        {/* Photographic subject — late-night solo study scene.
-            Anchors the right half of the section, top-to-bottom, masked at edges. */}
-        <img
-          src="/images/landing/a-isolation.png"
-          alt=""
-          aria-hidden="true"
-          loading="lazy"
-          className="section-a__photo"
-          onError={(e) => { e.currentTarget.style.display = 'none' }}
-        />
-
-        {/* Pop-in accents — absolute on md+, stacked on mobile.
-            Each card has a giant numeral watermark behind it. */}
-        {ACCENTS.map((accent, i) => (
-          <MotionDiv
-            key={accent.id}
-            className={cn('section-a__accent relative z-10', accent.desktopClass)}
-            initial={prefersReducedMotion ? false : { opacity: 0, scale: 0 }}
-            whileInView={prefersReducedMotion ? undefined : { opacity: 1, scale: 1 }}
-            viewport={{ once: true, margin: '-15% 0px' }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: i * 0.1 }}
-          >
-            {/* Giant numeral watermark — sits behind the card text */}
-            <span className="section-a__accent-numeral" aria-hidden="true">
-              {accent.numeral}
-            </span>
-
-            <span className="section-a__accent-overline">{accent.overline}</span>
-            <h3 className="font-organic-display text-[1.5rem] md:text-[1.75rem] leading-[1.05] mt-2 mb-3 font-bold">
-              {accent.title}
-            </h3>
-            <p className="text-[0.95rem] leading-relaxed text-organic-cream/85">
-              {accent.body}
-            </p>
-          </MotionDiv>
-        ))}
-
-        {/* Screaming-scale headline — fills the bottom of the section */}
-        <h2 className="section-a__headline">
-          <span className="section-a__headline-line section-a__headline-line--top">
-            Practice partners
-          </span>
-          <span className="section-a__headline-line section-a__headline-line--bottom">
-            don&rsquo;t exist.
-          </span>
+      <div className="max-w-7xl mx-auto px-6 sm:px-10 py-24 md:py-32">
+        <h2 className="font-organic-display uppercase font-bold text-[clamp(2.5rem,5vw,4.5rem)] leading-[0.95] tracking-[-0.025em] mb-12 md:mb-14 max-w-[24ch]">
+          Three things you couldn&rsquo;t<br />
+          do <em className="font-display italic font-normal text-organic-amber lowercase tracking-[-0.01em]">before today.</em>
         </h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+          {CARDS.map((card) => (
+            <article
+              key={card.id}
+              className="organic-card-cream relative flex flex-col rounded-2xl bg-organic-sand/60 border border-organic-stone p-7 md:p-8"
+            >
+              <span className="font-display italic text-organic-amber text-[1rem] tracking-wide block mb-4">
+                ( {card.numeral} )
+              </span>
+              <h3 className="font-organic-display uppercase font-bold text-[clamp(1.25rem,1.6vw,1.5rem)] leading-[1.15] mb-4">
+                {card.title}
+              </h3>
+              <p className="text-[0.95rem] leading-relaxed text-organic-bark/75">
+                {card.body}
+              </p>
+            </article>
+          ))}
+        </div>
       </div>
-    </NarrativeScene>
+    </section>
   )
 }

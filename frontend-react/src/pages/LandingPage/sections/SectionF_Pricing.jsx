@@ -24,9 +24,6 @@ export default function SectionF_Pricing() {
     >
       <div className="max-w-7xl mx-auto px-6 sm:px-10 py-24 md:py-32">
         <div className="text-center mb-12 md:mb-16">
-          <p className="font-display italic text-organic-forest text-[1.1rem] md:text-[1.25rem] mb-3">
-            ( how to get it )
-          </p>
           <h2 className="font-organic-display uppercase leading-[0.92] text-[clamp(2.75rem,9vw,7.5rem)] tracking-[-0.025em] font-bold">
             Ready to <em className="font-display italic font-normal text-organic-amber lowercase tracking-[-0.01em]">start?</em>
           </h2>

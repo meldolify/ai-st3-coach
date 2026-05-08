@@ -2,20 +2,22 @@ import { useNavigate } from 'react-router-dom'
 import { useAuthStore, selectIsLoggedIn } from '../../stores/authStore'
 
 /**
- * HeroSection — screaming-scale wordmark + photographic subject + drifting leaves.
+ * HeroSection — screaming wordmark + doctor portrait + slow-spinning icosahedron SVG.
  *
- * Composition (per design package v2 — `ui_kits/landing/index.html` lines 318-360):
+ * Composition:
  *   - Marble bg + cream gradient via `.section-hero` ::before/::after layers (CSS).
- *   - Three real leaf PNGs drift over the composition, each parallaxes at its own
- *     speed (--py CSS var driven by the parallax loop in useLandingAnimations).
+ *   - A wireframe icosahedron SVG slow-rotates behind the wordmark — gives the
+ *     "floating animated background" the user wanted preserved. Lightweight,
+ *     pure CSS animation, no Three.js dependency.
  *   - Doctor portrait (real PNG cutout) sits to the right, masked at the bottom.
  *   - REVIVA wordmark fills the screen, character-scrambles on entrance.
  *   - Single CTA toggles "Try a free station" (logged-out) ↔ "Go to Dashboard" (logged-in).
  *   - Italic-serif corner annotations: ( est. 2026 ) / ( surgical interview · UK )
  *     top-right, ( hand-crafted · ai-powered ) bottom-left.
  *
- * Three.js icosahedron continues to render globally via <ThreeBackground />,
- * sitting behind everything at low opacity for ambient motion.
+ * Three.js still renders globally via <ThreeBackground /> sitting behind
+ * everything; this CSS SVG is the on-page visible-motion piece (the Three.js
+ * mesh is too low-opacity to be obvious).
  */
 export default function HeroSection() {
   const navigate = useNavigate()
@@ -23,15 +25,20 @@ export default function HeroSection() {
 
   return (
     <section className="section-hero section--light" id="sectionHero" data-testid="hero-section">
-      {/* Three drifting leaves — each parallaxes via --py (set by scroll loop). */}
-      <div className="hero-leaf hero-leaf--l1" aria-hidden="true">
-        <img src="/images/landing/leaf-1.png" alt="" loading="eager" />
-      </div>
-      <div className="hero-leaf hero-leaf--l2" aria-hidden="true">
-        <img src="/images/landing/leaf-2.png" alt="" loading="lazy" />
-      </div>
-      <div className="hero-leaf hero-leaf--l3" aria-hidden="true">
-        <img src="/images/landing/leaf-3.png" alt="" loading="lazy" />
+      {/* Wireframe icosahedron — pure CSS slow-spin, sits behind the type */}
+      <div className="hero-icosa" aria-hidden="true">
+        <svg viewBox="0 0 200 200">
+          <g transform="translate(100 100)">
+            <path d="M0,-90 L78,-45 L78,45 L0,90 L-78,45 L-78,-45 Z" />
+            <path d="M0,-90 L0,90" />
+            <path d="M-78,-45 L78,45" />
+            <path d="M-78,45 L78,-45" />
+            <circle r="90" />
+            <ellipse rx="90" ry="45" />
+            <ellipse rx="45" ry="90" />
+            <path d="M0,-90 L40,-22 L78,-45 M0,-90 L-40,-22 L-78,-45 M0,90 L40,22 L78,45 M0,90 L-40,22 L-78,45" />
+          </g>
+        </svg>
       </div>
 
       <div className="hero-content" id="heroContent">
