@@ -175,6 +175,10 @@ class GeminiTTSService {
       );
       console.log(`[Gemini TTS] DIAG: Received ${partSummaries.length} stream parts`);
       partSummaries.forEach((s, i) => console.log(`  [${i}] ${s}`));
+      // Throw so the existing Cloud TTS fallback in ttsStreamForSession kicks
+      // in. Without this the generator returns silently with 0 yields and
+      // the user hears nothing for short responses Gemini refuses to voice.
+      throw new Error('Gemini stream produced 0 audio chunks');
     }
   }
 

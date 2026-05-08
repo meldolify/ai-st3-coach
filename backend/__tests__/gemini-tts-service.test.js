@@ -198,7 +198,7 @@ describe('GeminiTTSService.synthesizeStream', () => {
     await expect(gen.next()).rejects.toThrow(/Auth failed/);
   });
 
-  test('logs DIAG output when stream completes with zero audio chunks (W5 Phase 1)', async () => {
+  test('throws when stream produces zero audio chunks, after logging DIAG output (W9)', async () => {
     // Mock a stream that yields parts with NO inlineData — e.g. a text-only
     // candidate followed by a finishReason=STOP marker. Reproduces the
     // production "0 chunks, 0 PCM bytes" failure case.
@@ -224,20 +224,28 @@ describe('GeminiTTSService.synthesizeStream', () => {
     const logSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
     try {
       const chunks = [];
-      for await (const wav of geminiTTSService.synthesizeStream("That's okay.", 'Fenrir', {
-        stylePrompt: '[British accent, calm]'
-      })) {
-        chunks.push(wav);
+      let thrown = null;
+      try {
+        for await (const wav of geminiTTSService.synthesizeStream("That's okay.", 'Fenrir', {
+          stylePrompt: '[British accent, calm]'
+        })) {
+          chunks.push(wav);
+        }
+      } catch (err) {
+        thrown = err;
       }
+      // No chunks yielded, but a throw at end so ttsStreamForSession's
+      // catch block triggers the Cloud TTS fallback.
       expect(chunks).toHaveLength(0);
+      expect(thrown).toBeInstanceOf(Error);
+      expect(thrown.message).toMatch(/0 audio chunks/);
 
+      // DIAG output still fires before the throw — preserves W5 Phase 1
+      // diagnostic value for identifying the model-side cause.
       const messages = logSpy.mock.calls.map(args => args.join(' '));
-      // Sent-text + stylePrompt diagnostic
       expect(messages.some(m => /DIAG: Sent text=.*That's okay/.test(m))).toBe(true);
       expect(messages.some(m => /British accent, calm/.test(m))).toBe(true);
-      // Parts-received count
       expect(messages.some(m => /DIAG: Received 2 stream parts/.test(m))).toBe(true);
-      // Per-part dump (one line each)
       expect(messages.some(m => /\[0\].*reasoning trace, not audio/.test(m))).toBe(true);
       expect(messages.some(m => /\[1\].*finishReason.*STOP/.test(m))).toBe(true);
     } finally {
