@@ -593,11 +593,12 @@
   overflow: hidden;
 }
 
-/* §B walkthrough — abstract topographical contour-line backdrop fills
-   the left half of the sticky walkthrough, behind the DeviceFrame.
-   Inline SVG (forest stroke at low opacity), so it scales without
-   pixelation. Desktop only; mobile keeps the original stacked layout.
-   Parallax binding in useLandingAnimations.js for subtle drift. */
+/* §B walkthrough — gloss-gradient backdrop fills the left half of the
+   sticky walkthrough, behind the DeviceFrame. Mirrors the persona-card
+   treatment: forest→canopy linear base + two soft highlights at top-left
+   and top-right + a subtle bottom-right vignette. Desktop only; mobile
+   keeps the original stacked layout. Parallax binding in
+   useLandingAnimations.js for subtle drift. */
 .landing-page .section-b__backdrop {
   display: none;
 }
@@ -614,24 +615,53 @@
     z-index: 0;
     pointer-events: none;
     will-change: transform;
-    /* Soft top + bottom fade so the contour cluster doesn't read as
-       starting + ending abruptly. */
+    border-radius: 18px;
+    background:
+      /* Top-left soft white highlight (the dominant gloss) */
+      radial-gradient(
+        circle at 22% 14%,
+        rgba(255, 255, 255, 0.22) 0%,
+        rgba(255, 255, 255, 0.08) 25%,
+        transparent 50%
+      ),
+      /* Top-right secondary highlight */
+      radial-gradient(
+        circle at 78% 22%,
+        rgba(255, 255, 255, 0.10) 0%,
+        transparent 38%
+      ),
+      /* Bottom-right vignette */
+      radial-gradient(
+        circle at 82% 92%,
+        rgba(0, 0, 0, 0.30) 0%,
+        transparent 55%
+      ),
+      /* Base linear forest → canopy diagonal */
+      linear-gradient(
+        135deg,
+        var(--organic-forest) 0%,
+        var(--organic-canopy) 100%
+      );
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.18),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+    /* Soft top + bottom fade so the panel doesn't end abruptly */
     -webkit-mask-image: linear-gradient(
       to bottom,
       transparent 0%,
-      rgba(0, 0, 0, 0.6) 6%,
-      rgba(0, 0, 0, 0.95) 18%,
-      rgba(0, 0, 0, 0.95) 80%,
-      rgba(0, 0, 0, 0.6) 94%,
+      rgba(0, 0, 0, 0.6) 5%,
+      rgba(0, 0, 0, 0.95) 14%,
+      rgba(0, 0, 0, 0.95) 86%,
+      rgba(0, 0, 0, 0.6) 95%,
       transparent 100%
     );
     mask-image: linear-gradient(
       to bottom,
       transparent 0%,
-      rgba(0, 0, 0, 0.6) 6%,
-      rgba(0, 0, 0, 0.95) 18%,
-      rgba(0, 0, 0, 0.95) 80%,
-      rgba(0, 0, 0, 0.6) 94%,
+      rgba(0, 0, 0, 0.6) 5%,
+      rgba(0, 0, 0, 0.95) 14%,
+      rgba(0, 0, 0, 0.95) 86%,
+      rgba(0, 0, 0, 0.6) 95%,
       transparent 100%
     );
   }

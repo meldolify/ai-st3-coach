@@ -118,40 +118,12 @@ export default function SectionB_AIInterviewer() {
         ref={containerRef}
         className="section-b__walkthrough relative px-6 sm:px-10 pb-24 md:pb-32"
       >
-        {/* Perspective-ripple backdrop — a single concentric-ellipse cluster
-            radiating outward from a focal point near the bottom-centre of
-            the visible canvas. The very flat ry/rx ratio (1:6) creates the
-            "looking down at ripples on water" perspective. Inline SVG,
-            vector so it scales without pixelation. Fills the left half of
-            the walkthrough on desktop; mobile keeps the original stacked
-            layout. */}
-        <svg
-          className="section-b__backdrop"
-          viewBox="0 0 800 800"
-          preserveAspectRatio="xMidYMid slice"
-          overflow="visible"
-          aria-hidden="true"
-        >
-          <g
-            fill="none"
-            stroke="var(--organic-forest)"
-            strokeWidth="0.6"
-            opacity="0.50"
-          >
-            {/* All ellipses share the same focal point (cx 400, cy 620).
-                rx grows; ry stays low (rx / ~6) for the flat perspective. */}
-            <ellipse cx="400" cy="620" rx="50" ry="9" />
-            <ellipse cx="400" cy="620" rx="100" ry="17" />
-            <ellipse cx="400" cy="620" rx="160" ry="27" />
-            <ellipse cx="400" cy="620" rx="230" ry="38" />
-            <ellipse cx="400" cy="620" rx="310" ry="52" />
-            <ellipse cx="400" cy="620" rx="400" ry="66" />
-            <ellipse cx="400" cy="620" rx="500" ry="83" />
-            <ellipse cx="400" cy="620" rx="610" ry="101" />
-            <ellipse cx="400" cy="620" rx="730" ry="121" />
-            <ellipse cx="400" cy="620" rx="860" ry="143" />
-          </g>
-        </svg>
+        {/* Gloss-gradient backdrop — forest→canopy linear base, with two
+            soft highlights at top-left + top-right and a subtle bottom
+            vignette stacked via CSS. Mirrors the persona card's glossy
+            treatment. Fills the left half of the walkthrough on desktop;
+            mobile keeps the original stacked layout. */}
+        <div className="section-b__backdrop" aria-hidden="true" />
 
         <div className="max-w-7xl mx-auto md:grid md:grid-cols-2 md:gap-12 lg:gap-20 relative">
           {/* Sticky frame side — z-10 keeps it above the backdrop image */}
