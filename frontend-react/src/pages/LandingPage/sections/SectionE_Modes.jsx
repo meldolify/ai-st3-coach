@@ -1,16 +1,19 @@
 import { useNavigate } from 'react-router-dom'
-import { HoverPair } from '../HoverPair'
-import { cn } from '../../../lib/utils'
 
 /**
  * §E — The Modes. What can I do?
  *
- * Aesthetic pass (plan §12):
- *   - Mode list (left) gets bigger type — clamp(2rem, 4vw, 3.5rem) per name,
- *     active mode in Clash Display 700 + amber, inactive in 400 + bark/40.
- *   - Visual panel (right) gets a photographic header per mode — full-width
- *     image at the top of the card. Sourced from Unsplash.
- *   - Italic-serif annotation on each mode panel: "( 01 ) (02) ..."
+ * Composition (per design package v2 — `ui_kits/landing/index.html` lines
+ * 500-551):
+ *   - Italic-serif eyebrow `( five modes · one product )` centred
+ *   - h2 `Five modes. <em>One product.</em>` centred
+ *   - 3-col grid of canopy mode cards (5 cards total — row 1 holds three,
+ *     row 2 holds two, the 6th column is intentionally empty)
+ *   - Each card: photo header (16/10) with gradient-to-canopy mask + a
+ *     `( 0X )` italic-serif numeral in the top-right · body block with
+ *     amber tracked sublabel + h3 + body + amber try-it pill
+ *   - Photos parallax via the `.section-e .mode-photo img` selector wired
+ *     in useLandingAnimations.js
  */
 const MODES = [
   {
@@ -18,7 +21,6 @@ const MODES = [
     numeral: '01',
     name: 'Practice',
     sublabel: 'For focused drilling',
-    tagline: 'Take your time. Learn at your pace.',
     body: 'Choose any scenario. No timer, no pressure. Build confidence one station at a time.',
     photo: '/images/landing/e-mode-practice.png',
   },
@@ -27,7 +29,6 @@ const MODES = [
     numeral: '02',
     name: 'Mock by Station',
     sublabel: 'Single timed station',
-    tagline: 'Examiner-style pressure, one station at a time.',
     body: 'Pick a station, full pressure, full scoring. Calibrate before the day.',
     photo: '/images/landing/e-mode-mock-station.png',
   },
@@ -36,7 +37,6 @@ const MODES = [
     numeral: '03',
     name: 'Full Mock Exam',
     sublabel: 'End-to-end circuit',
-    tagline: 'The whole circuit. As it really runs.',
     body: 'All four station types in a continuous run. Same pacing as the real day.',
     photo: '/images/landing/e-mode-full-mock.png',
   },
@@ -45,8 +45,7 @@ const MODES = [
     numeral: '04',
     name: 'Progress Tracking',
     sublabel: 'Watch yourself improve',
-    tagline: 'Session history, score trends, category insights.',
-    body: 'See where you started, where you are, and where you’re still weak.',
+    body: 'Session history, score trends, category insights. See where you started, where you are.',
     photo: '/images/landing/e-mode-progress.png',
   },
   {
@@ -54,8 +53,7 @@ const MODES = [
     numeral: '05',
     name: 'Tailored Feedback',
     sublabel: 'Marking-criteria graded',
-    tagline: 'Section-by-section, line-by-line.',
-    body: 'Clinical knowledge, communication, decision-making, professionalism — scored, with what to fix.',
+    body: 'Section-by-section, line-by-line. Clinical knowledge, communication, decision-making, professionalism.',
     photo: '/images/landing/e-mode-feedback.png',
   },
 ]
@@ -73,8 +71,8 @@ export default function SectionE_Modes() {
       <span className="section-e__annotation">( what you can do )</span>
 
       <div className="section-e__inner max-w-[1500px] mx-auto px-6 sm:px-10 py-24 md:py-36">
-        <div className="text-center mb-20 md:mb-28">
-          <p className="font-display italic text-organic-forest text-[1.1rem] md:text-[1.25rem] mb-3">
+        <div className="text-center mb-16 md:mb-20">
+          <p className="font-display italic text-organic-forest text-[clamp(1rem,1.1vw,1.2rem)] mb-3">
             ( five modes · one product )
           </p>
           <h2 className="section-e__title">
@@ -83,79 +81,43 @@ export default function SectionE_Modes() {
           </h2>
         </div>
 
-        <HoverPair
-          items={MODES}
-          defaultActiveId="practice"
-          renderListItem={(mode, { isActive }) => (
-            <div className="flex items-center gap-5 py-4">
-              <span
-                aria-hidden="true"
-                className={cn(
-                  'inline-block h-[8px] rounded-[3px] flex-shrink-0 transition-all duration-300',
-                  isActive ? 'w-10 bg-organic-amber' : 'w-5 bg-organic-bark/25'
-                )}
-              />
-              <div className="flex-1 min-w-0">
-                <div className="flex items-baseline gap-2.5">
-                  <span
-                    className={cn(
-                      'font-display italic text-[0.95rem] flex-shrink-0 transition-colors duration-300',
-                      isActive ? 'text-organic-amber' : 'text-organic-bark/40'
-                    )}
-                  >
-                    ( {mode.numeral} )
-                  </span>
-                  <h3
-                    className={cn(
-                      'font-organic-display leading-[1.02] transition-all duration-300 min-w-0',
-                      isActive
-                        ? 'text-organic-bark font-bold text-[clamp(1.65rem,3vw,2.5rem)]'
-                        : 'text-organic-bark/35 font-normal text-[clamp(1.4rem,2.4vw,2rem)]'
-                    )}
-                  >
-                    {mode.name}
-                  </h3>
-                </div>
-                <p className="mt-1.5 ml-0 text-[0.8125rem] font-medium uppercase tracking-[0.25em] text-organic-bark/45">
-                  {mode.sublabel}
-                </p>
-              </div>
-            </div>
-          )}
-          renderVisual={(mode) => (
-            <div className="section-e__visual relative rounded-2xl bg-organic-canopy text-organic-cream min-h-[560px] overflow-hidden shadow-[0_24px_60px_rgba(26,58,42,0.18)] flex flex-col">
-              {/* Photo header */}
-              <div className="relative w-full aspect-[16/10] overflow-hidden">
+        <div className="modes-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {MODES.map((mode) => (
+            <article
+              key={mode.id}
+              className="mode-card flex flex-col rounded-2xl overflow-hidden bg-organic-canopy text-organic-cream border border-organic-amber/30 shadow-[0_24px_60px_rgba(26,58,42,0.18)]"
+            >
+              <div className="mode-photo relative aspect-[16/10] overflow-hidden bg-organic-canopy">
                 <img
-                  key={mode.photo}
                   src={mode.photo}
                   alt=""
                   aria-hidden="true"
                   loading="lazy"
                   className="w-full h-full object-cover"
                   style={{ filter: 'grayscale(0.25) contrast(1.05)' }}
+                  onError={(e) => { e.currentTarget.style.display = 'none' }}
                 />
-                {/* Gradient overlay so type-on-photo is legible */}
-                <div className="absolute inset-0 bg-gradient-to-t from-organic-canopy via-transparent to-transparent" />
-                {/* Numeral overlay top-right */}
-                <span className="absolute top-4 right-5 font-display italic text-organic-amber/90 text-[1.05rem]">
+                {/* gradient-to-canopy mask at the bottom so the card body composites cleanly */}
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-0 pointer-events-none"
+                  style={{ background: 'linear-gradient(180deg, transparent 50%, var(--organic-canopy) 100%)' }}
+                />
+                {/* italic-serif numeral, top-right of the photo */}
+                <span className="absolute top-3 right-4 font-display italic text-organic-amber/95 text-[1rem]">
                   ( {mode.numeral} )
                 </span>
               </div>
-
-              {/* Body */}
-              <div className="flex-1 p-8 md:p-10 flex flex-col justify-between gap-5">
-                <div>
-                  <span className="text-[11px] font-medium uppercase tracking-[0.28em] text-organic-amber">
-                    {mode.sublabel}
-                  </span>
-                  <h3 className="mt-3 font-organic-display text-[clamp(1.65rem,2.8vw,2.25rem)] leading-[1.1] font-bold">
-                    {mode.tagline}
-                  </h3>
-                  <p className="mt-4 text-[0.95rem] text-organic-cream/80 leading-relaxed max-w-md">
-                    {mode.body}
-                  </p>
-                </div>
+              <div className="mode-body flex-1 p-7 md:p-8 flex flex-col gap-4">
+                <span className="text-[11px] font-medium uppercase tracking-[0.28em] text-organic-amber">
+                  {mode.sublabel}
+                </span>
+                <h3 className="font-organic-display text-[1.45rem] leading-tight font-bold text-white">
+                  {mode.name}
+                </h3>
+                <p className="text-[0.95rem] text-organic-cream/80 leading-relaxed flex-1">
+                  {mode.body}
+                </p>
                 <button
                   type="button"
                   onClick={goExplore}
@@ -164,38 +126,9 @@ export default function SectionE_Modes() {
                   Try it <span aria-hidden="true">&rarr;</span>
                 </button>
               </div>
-            </div>
-          )}
-          renderMobileCard={(mode) => (
-            <div className="rounded-2xl bg-organic-canopy text-organic-cream overflow-hidden shadow-[0_12px_40px_rgba(26,58,42,0.15)]">
-              <div className="relative w-full aspect-[16/10] overflow-hidden">
-                <img
-                  src={mode.photo}
-                  alt=""
-                  aria-hidden="true"
-                  loading="lazy"
-                  className="w-full h-full object-cover"
-                  style={{ filter: 'grayscale(0.25) contrast(1.05)' }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-organic-canopy/80 via-transparent to-transparent" />
-                <span className="absolute top-3 right-4 font-display italic text-organic-amber/90 text-[0.95rem]">
-                  ( {mode.numeral} )
-                </span>
-              </div>
-              <div className="p-6">
-                <span className="text-[10px] font-medium uppercase tracking-[0.25em] text-organic-amber">
-                  {mode.sublabel}
-                </span>
-                <h3 className="mt-2 font-organic-display text-[1.45rem] leading-tight font-bold">
-                  {mode.name}
-                </h3>
-                <p className="mt-3 text-[0.9rem] text-organic-cream/80 leading-relaxed">
-                  {mode.body}
-                </p>
-              </div>
-            </div>
-          )}
-        />
+            </article>
+          ))}
+        </div>
       </div>
     </section>
   )

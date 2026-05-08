@@ -136,10 +136,12 @@ export default function SectionB_AIInterviewer() {
                 )}
                 style={{ transition: 'opacity 0.4s ease' }}
               >
-                {/* Giant numeral watermark behind the description */}
+                {/* Giant numeral watermark behind the description.
+                    Forest/15 reads cleanly on cream — amber/8 was
+                    near-invisible on the light section bg. */}
                 <span
                   aria-hidden="true"
-                  className="pointer-events-none absolute -top-4 -left-4 md:-left-8 select-none font-organic-display font-normal leading-none text-organic-amber/8"
+                  className="pointer-events-none absolute -top-4 -left-4 md:-left-8 select-none font-organic-display font-normal leading-none text-organic-forest/15"
                   style={{ fontSize: 'clamp(8rem, 14vw, 14rem)' }}
                 >
                   {String(i + 1).padStart(2, '0')}

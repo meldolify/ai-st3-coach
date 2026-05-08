@@ -166,6 +166,69 @@ export function useLandingAnimations() {
     }
 
     // ============================================================
+    // PARALLAX (leaves, doctor, photos, mode tiles)
+    //
+    // Each registered element gets a `speed` factor. Negative = drifts upward
+    // as the section enters; positive = drifts downward. Leaves use the
+    // `--py` CSS var (so the leaf's static rotate/scale stays intact); other
+    // elements get a direct transform.
+    // ============================================================
+    let parallaxRaf = null
+    const parallaxCleanup = []
+
+    function initParallax() {
+      if (prefersReducedMotion || isTouch) return
+
+      const targets = []
+      function add(selector, speed, opts = {}) {
+        document.querySelectorAll(selector).forEach((el) => {
+          targets.push({ el, speed, ...opts })
+        })
+      }
+
+      // Hero leaves drive --py so their fixed rotate/scale stays intact
+      add('.hero-leaf--l1', -0.32, { cssVar: 'py' })
+      add('.hero-leaf--l2', 0.20, { cssVar: 'py' })
+      add('.hero-leaf--l3', -0.45, { cssVar: 'py' })
+      // Doctor + section photos translate directly
+      add('#sectionHero .hero-photo', 0.10)
+      add('.section-a__photo', 0.10)
+      add('.section-c__photo', -0.12)
+      // Mode tiles get a tiny parallax + sustained scale to feel alive
+      document.querySelectorAll('.section-e .mode-photo img').forEach((img, i) => {
+        targets.push({ el: img, speed: 0.06 + i * 0.015, scaleHold: 1.06 })
+      })
+
+      if (!targets.length) return
+
+      function tick() {
+        const vh = window.innerHeight
+        targets.forEach((t) => {
+          if (!t.el || !t.el.isConnected) return
+          const r = t.el.getBoundingClientRect()
+          const mid = (r.top + r.bottom) / 2 - vh / 2
+          const off = (mid * t.speed).toFixed(1)
+          if (t.cssVar) {
+            t.el.style.setProperty(`--${t.cssVar}`, off)
+          } else if (t.scaleHold) {
+            t.el.style.transform = `translate3d(0, ${off}px, 0) scale(${t.scaleHold})`
+          } else {
+            t.el.style.transform = `translate3d(0, ${off}px, 0)`
+          }
+        })
+        parallaxRaf = null
+      }
+
+      function onScroll() {
+        if (!parallaxRaf) parallaxRaf = requestAnimationFrame(tick)
+      }
+
+      window.addEventListener('scroll', onScroll, { passive: true })
+      parallaxCleanup.push(() => window.removeEventListener('scroll', onScroll))
+      tick()
+    }
+
+    // ============================================================
     // INIT ALL
     // ============================================================
     // Small delay to ensure DOM is painted
@@ -173,6 +236,7 @@ export function useLandingAnimations() {
       initHeroEntrance()
       initHeroTransition()
       initMagneticButtons()
+      initParallax()
     }, 50)
 
     // ============================================================
@@ -181,6 +245,8 @@ export function useLandingAnimations() {
     return () => {
       clearTimeout(timer)
       listenerCleanups.forEach((fn) => fn())
+      parallaxCleanup.forEach((fn) => fn())
+      if (parallaxRaf) cancelAnimationFrame(parallaxRaf)
       if (lenisTickerFn) {
         gsap.ticker.remove(lenisTickerFn)
       }

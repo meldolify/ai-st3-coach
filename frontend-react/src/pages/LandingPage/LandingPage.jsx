@@ -11,7 +11,6 @@ import SectionF_Pricing from './sections/SectionF_Pricing'
 import FooterSection from './FooterSection'
 import ThreeBackground from './ThreeBackground'
 import GrainOverlay from './GrainOverlay'
-import CursorFollower from './CursorFollower'
 import './landing.css'
 
 export default function LandingPage() {
@@ -22,9 +21,6 @@ export default function LandingPage() {
 
   return (
     <div className="landing-page">
-      {/* Custom cursor follower (desktop only) */}
-      <CursorFollower />
-
       {/* SVG Grain Overlay */}
       <GrainOverlay />
 

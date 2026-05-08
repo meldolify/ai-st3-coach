@@ -30,10 +30,6 @@ export default function SectionD_Signature() {
         </p>
 
         <SignatureOrb />
-
-        <p className="font-display italic text-organic-bark/55 text-[0.95rem] mt-10">
-          ( recorded · British examiner voice )
-        </p>
       </div>
     </section>
   )
