@@ -82,6 +82,6 @@ test.describe('Landing Page', () => {
     await expect(footer).toBeVisible()
     // Coming-soon placeholders replace href="#" dead links
     await expect(footer.getByText(/Contact .* coming soon/)).toBeVisible()
-    await expect(footer.getByText(/Privacy Policy .* coming soon/)).toBeVisible()
+    await expect(footer.getByText(/Privacy .* coming soon/)).toBeVisible()
   })
 })

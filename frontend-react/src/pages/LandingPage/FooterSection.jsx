@@ -15,9 +15,8 @@ export default function FooterSection() {
           <Link to="/">
             <img src="/images/logo/logo-md.png" alt="ReViva" className="logo-img logo-img--footer" style={{ height: '32px', marginBottom: '12px' }} />
           </Link>
-          <p>AI-powered interview preparation for surgical trainees. Practice smarter, not harder.</p>
-          <p className="footer-tagline">
-            <em>( hand-crafted in the UK · est. 2026 )</em>
+          <p className="footer-tag">
+            <em>Hand-crafted, AI-powered prep for the trainees who&rsquo;d rather rehearse than panic.</em>
           </p>
         </div>
         <div className="footer-column">
@@ -29,7 +28,7 @@ export default function FooterSection() {
               navigate('/scenarios', { state: { fresh: true } })
             }}
           >
-            Practice Mode
+            Practice
           </a>
           <a
             href="#"
@@ -38,32 +37,36 @@ export default function FooterSection() {
               navigate('/scenarios', { state: { fresh: true } })
             }}
           >
-            Mock Exams
+            Mock by Station
           </a>
           <a
-            href="#pricingSection"
+            href="#"
             onClick={(e) => {
               e.preventDefault()
-              document.getElementById('pricingSection')?.scrollIntoView({ behavior: 'smooth' })
+              navigate('/scenarios', { state: { fresh: true } })
             }}
           >
-            Pricing
+            Full Mock Exam
           </a>
+          <span className="footer-pending">Mentor mode &middot; coming soon</span>
         </div>
         <div className="footer-column">
-          <h4>Support</h4>
-          <span className="footer-pending">Contact &middot; coming soon</span>
-          <span className="footer-pending">Help &middot; coming soon</span>
+          <h4>Resources</h4>
+          <span className="footer-pending">Marking criteria &middot; coming soon</span>
           <span className="footer-pending">FAQ &middot; coming soon</span>
+          <span className="footer-pending">Blog &middot; coming soon</span>
+          <span className="footer-pending">Contact &middot; coming soon</span>
         </div>
         <div className="footer-column">
           <h4>Legal</h4>
-          <span className="footer-pending">Terms &amp; Conditions &middot; coming soon</span>
-          <span className="footer-pending">Privacy Policy &middot; coming soon</span>
+          <span className="footer-pending">Terms &middot; coming soon</span>
+          <span className="footer-pending">Privacy &middot; coming soon</span>
+          <span className="footer-pending">Cookies &middot; coming soon</span>
         </div>
       </div>
       <div className="footer-bottom">
-        <p>&copy; 2026 ReViva. All rights reserved.</p>
+        <span>&copy; 2026 ReViva Ltd. Made with care in the UK.</span>
+        <em className="footer-bottom__est">( est. 2026 )</em>
       </div>
     </footer>
   )

@@ -1,13 +1,12 @@
 /* ==========================================================================
    Landing Page — "Organic" aesthetic
-   Post-redesign, this stylesheet covers only:
-     - Hero (logo wordmark, single CTA, content wrapper)
-     - LoggedInBand (welcome-back band)
-     - Footer (sticky, wave divider, link grid, "coming soon" placeholders)
-     - Page-level chrome: grain overlay, three.js canvas, nav, cursor follower
+   Post-design-v2 implementation, this stylesheet covers:
+     - Hero (wordmark, marble bg, leaves, CTA, content wrapper, annotations)
+     - Section §A-§E specific rules (annotation pills, watermarks, headlines)
+     - Footer (sticky-bottom, wave divider, link grid, est. annotation)
+     - Page-level chrome: grain overlay, three.js canvas, nav
      - Buttons (.btn-amber, .btn-outline, .btn-amber--lg, .btn-amber--sm)
-   Section-specific styles for §A-§F live inside their section components
-   (Tailwind utilities). Old per-section blocks for Who/Why/Trust/Services/
+   Old per-section blocks for Who/Why/Trust/Services/
    Proof/Action were pruned in Phase 6 of the landing redesign.
    All selectors scoped under .landing-page
    ========================================================================== */
@@ -30,9 +29,10 @@
   --text-muted-light: #6B635A;
   --text-muted-dark: #A89F94;
 
-  /* Typography */
-  --font-landing-display: 'Clash Display', 'Arial Black', sans-serif;
-  --font-landing-body: 'General Sans', 'Helvetica Neue', sans-serif;
+  /* Typography — unified Newsreader (per design package v2 + index.css tokens).
+     Body line-height bumped to 1.6 for serif read. */
+  --font-landing-display: 'Newsreader', Georgia, serif;
+  --font-landing-body: 'Newsreader', Georgia, serif;
 }
 
 /* --------------------------------------------------------------------------
@@ -45,7 +45,7 @@
   color: var(--text-on-light);
   font-family: var(--font-landing-body);
   font-size: 1.125rem;
-  line-height: 1.75;
+  line-height: 1.6;
 }
 
 /* --------------------------------------------------------------------------
@@ -55,7 +55,7 @@
   font-family: var(--font-landing-body);
   font-weight: 400;
   font-size: 1.125rem;
-  line-height: 1.75;
+  line-height: 1.6;
 }
 
 .landing-page .landing-overline {
@@ -185,7 +185,7 @@
 }
 
 /* --------------------------------------------------------------------------
-   8. Hero — screaming-scale wordmark + photographic subject overlap
+   8. Hero — screaming wordmark + doctor portrait + drifting leaves + marble bg
    -------------------------------------------------------------------------- */
 .landing-page .section-hero {
   min-height: 100vh;
@@ -194,9 +194,84 @@
   justify-content: stretch;
   flex-direction: column;
   position: relative;
-  background: transparent;
+  background: var(--organic-cream);
   overflow: hidden;
   padding: 0;
+}
+
+/* Marble texture layer — sits as the section's background atmosphere. */
+.landing-page .section-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("/images/landing/hero-marble-bg.jpg") center/cover no-repeat;
+  opacity: 0.32;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Cream gradient over the marble — fades the texture so type stays legible. */
+.landing-page .section-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(245, 241, 235, 0.4) 0%, rgba(245, 241, 235, 0.85) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Drifting leaves — three real PNGs scattered around the composition,
+   each parallaxes via --py (set in useLandingAnimations.js scroll loop).
+   --rot/--sc are static fixed values per leaf. */
+.landing-page .hero-leaf {
+  position: absolute;
+  pointer-events: none;
+  z-index: 2;
+  will-change: transform;
+  transform: translate3d(0, calc(var(--py, 0) * 1px), 0)
+    rotate(var(--rot, 0deg))
+    scale(var(--sc, 1));
+  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.18));
+}
+
+.landing-page .hero-leaf img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.landing-page .hero-leaf--l1 {
+  top: 14%;
+  left: 4%;
+  width: clamp(140px, 16vw, 240px);
+  --rot: -18deg;
+}
+
+.landing-page .hero-leaf--l2 {
+  top: 58%;
+  right: 5%;
+  width: clamp(120px, 13vw, 200px);
+  --rot: 32deg;
+  --sc: 0.95;
+}
+
+.landing-page .hero-leaf--l3 {
+  bottom: 6%;
+  left: 14%;
+  width: clamp(110px, 11vw, 180px);
+  --rot: -48deg;
+  --sc: 0.85;
+}
+
+@media (max-width: 767px) {
+  .landing-page .hero-leaf--l1 {
+    width: clamp(80px, 22vw, 130px);
+  }
+  .landing-page .hero-leaf--l2,
+  .landing-page .hero-leaf--l3 {
+    display: none;
+  }
 }
 
 .landing-page .hero-content {
@@ -298,7 +373,7 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
-  font-family: 'Instrument Serif', Georgia, serif;
+  font-family: var(--font-display);
   font-style: italic;
   font-size: clamp(0.8125rem, 1vw, 1rem);
   color: var(--organic-bark);
@@ -387,7 +462,7 @@
   position: absolute;
   top: clamp(32px, 4vh, 56px);
   left: clamp(20px, 4vw, 64px);
-  font-family: 'Instrument Serif', Georgia, serif;
+  font-family: var(--font-display);
   font-style: italic;
   font-size: clamp(0.875rem, 1vw, 1.05rem);
   color: var(--organic-cream);
@@ -481,7 +556,7 @@
   font-weight: 700;
   color: var(--organic-cream);
   font-style: italic;
-  font-family: 'Instrument Serif', Georgia, serif;
+  font-family: var(--font-display);
   letter-spacing: -0.01em;
   text-transform: none;
 }
@@ -507,7 +582,7 @@
 }
 
 .landing-page .section-a__accent-overline {
-  font-family: 'Instrument Serif', Georgia, serif;
+  font-family: var(--font-display);
   font-style: italic;
   font-size: 1.05rem;
   letter-spacing: 0.02em;
@@ -526,7 +601,7 @@
   position: absolute;
   top: clamp(32px, 4vh, 56px);
   left: clamp(20px, 4vw, 64px);
-  font-family: 'Instrument Serif', Georgia, serif;
+  font-family: var(--font-display);
   font-style: italic;
   font-size: clamp(0.875rem, 1vw, 1.05rem);
   color: var(--organic-amber);
@@ -535,26 +610,7 @@
   z-index: 5;
 }
 
-/* Massive 166 watermark behind everything */
-.landing-page .section-c__watermark {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-family: var(--font-landing-display);
-  font-weight: 700;
-  font-size: clamp(15rem, 38vw, 42rem);
-  line-height: 0.85;
-  color: var(--organic-amber);
-  opacity: 0.06;
-  z-index: 0;
-  pointer-events: none;
-  user-select: none;
-  letter-spacing: -0.04em;
-  white-space: nowrap;
-}
-
-/* Photographic subject — sits in front of part of the watermark.
+/* Photographic subject — tilted polaroid (c-handcraft.png).
    Desktop only; mobile hides to keep watermark legible. */
 .landing-page .section-c__photo {
   display: none;
@@ -596,7 +652,7 @@
 }
 
 .landing-page .section-c__title em {
-  font-family: 'Instrument Serif', Georgia, serif;
+  font-family: var(--font-display);
   font-style: italic;
   font-weight: 400;
   text-transform: lowercase;
@@ -605,7 +661,7 @@
 }
 
 .landing-page .section-c__col-label {
-  font-family: 'Instrument Serif', Georgia, serif;
+  font-family: var(--font-display);
   font-size: clamp(1.5rem, 2.4vw, 2.25rem);
   letter-spacing: 0;
 }
@@ -627,7 +683,7 @@
 .landing-page .section-c__quote {
   position: relative;
   z-index: 10;
-  font-family: 'Instrument Serif', Georgia, serif;
+  font-family: var(--font-display);
   font-size: clamp(1.5rem, 3.4vw, 2.75rem);
   line-height: 1.2;
   text-align: center;
@@ -643,29 +699,6 @@
   font-style: italic;
 }
 
-.landing-page .section-c__num {
-  font-family: var(--font-landing-display);
-  font-weight: 700;
-  font-size: clamp(3.5rem, 8vw, 7rem);
-  line-height: 0.92;
-  letter-spacing: -0.025em;
-  color: var(--organic-cream);
-}
-
-.landing-page .section-c__num--amber {
-  color: var(--organic-amber);
-}
-
-.landing-page .section-c__num-caption {
-  font-family: 'Instrument Serif', Georgia, serif;
-  font-style: italic;
-  font-size: 0.95rem;
-  color: var(--organic-cream);
-  opacity: 0.6;
-  margin-top: 8px;
-  letter-spacing: 0.02em;
-}
-
 /* --------------------------------------------------------------------------
    8d. §E Modes — italic eyebrow, screaming title, photo-header cards
    -------------------------------------------------------------------------- */
@@ -677,7 +710,7 @@
   position: absolute;
   top: clamp(32px, 4vh, 56px);
   left: clamp(20px, 4vw, 64px);
-  font-family: 'Instrument Serif', Georgia, serif;
+  font-family: var(--font-display);
   font-style: italic;
   font-size: clamp(0.875rem, 1vw, 1.05rem);
   color: var(--organic-forest);
@@ -698,7 +731,7 @@
 }
 
 .landing-page .section-e__title em {
-  font-family: 'Instrument Serif', Georgia, serif;
+  font-family: var(--font-display);
   font-style: italic;
   font-weight: 400;
   text-transform: lowercase;
@@ -752,29 +785,50 @@
   font-size: 0.875rem;
 }
 
+/* New v2 tagline class. Kept .footer-tagline rule below so any callers
+   that still reference it don't break (no orphan styles). */
+.landing-page .footer-tag,
 .landing-page .footer-tagline {
-  font-family: 'Instrument Serif', Georgia, serif;
+  font-family: var(--font-display);
   font-style: italic;
-  font-size: 0.95rem;
+  font-size: 1.05rem;
+  line-height: 1.5;
+  max-width: 280px;
   color: var(--organic-amber);
-  opacity: 0.8;
+  opacity: 0.85;
   margin-top: 12px;
   letter-spacing: 0.02em;
 }
 
 .landing-page .footer-grid h4 {
   margin-bottom: 12px;
-  color: var(--text-on-dark);
+  color: var(--organic-amber);
   font-weight: 600;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
 }
 
 .landing-page .footer-bottom {
   border-top: 1px solid rgba(240, 237, 231, 0.1);
-  margin-top: 40px;
+  margin: 40px auto 0;
   padding-top: 24px;
-  text-align: center;
-  font-size: 0.75rem;
+  max-width: 1200px;
+  font-size: 0.8rem;
   opacity: 0.6;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.landing-page .footer-bottom__est {
+  font-family: var(--font-display);
+  font-style: italic;
+  letter-spacing: 0.02em;
+  color: var(--organic-amber);
+  opacity: 0.75;
 }
 
 /* --------------------------------------------------------------------------
@@ -809,13 +863,15 @@
 }
 
 /* The page's only pulsing CTA — used by the hero. Other large CTAs through
-   the page (Acts/Pricing) intentionally do NOT use --lg, per plan §6. */
+   the page (Acts/Pricing) intentionally do NOT use --lg, per plan §6.
+   The pulse runs on the ::before halo's opacity (not the button's
+   transform) so Playwright's click-stability check doesn't time out
+   and assistive-tech focus rings don't drift. */
 .landing-page .btn-amber.btn-amber--lg {
   padding: 20px 48px;
   border-radius: 60px;
   font-size: 1.125rem;
   position: relative;
-  animation: cta-pulse 3s ease-in-out infinite;
 }
 
 .landing-page .btn-amber.btn-amber--lg::before {
@@ -830,6 +886,7 @@
   );
   z-index: -1;
   pointer-events: none;
+  animation: cta-pulse 3s ease-in-out infinite;
 }
 
 .landing-page .btn-outline {
@@ -919,48 +976,18 @@
 }
 
 /* --------------------------------------------------------------------------
-   15. CTA Pulse Keyframe — used by .btn-amber.btn-amber--lg (hero only)
+   15. CTA Pulse Keyframe — applied to the ::before halo on the hero CTA.
+   Opacity-only so the button itself stays click-stable for tests + a11y.
    -------------------------------------------------------------------------- */
 @keyframes cta-pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.015); }
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
 }
 
 /* --------------------------------------------------------------------------
-   16. Cursor Follower
+   16. Touch-mode hides
    -------------------------------------------------------------------------- */
-.landing-page .cursor-follower {
-  position: fixed;
-  width: 16px;
-  height: 16px;
-  background: var(--organic-forest);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 10000;
-  opacity: 0;
-  filter: blur(2px);
-  transition: width 0.3s ease, height 0.3s ease, opacity 0.3s ease, background 0.3s ease, filter 0.3s ease;
-  transform: translate(-50%, -50%);
-  mix-blend-mode: difference;
-}
-
-.landing-page .cursor-follower.active {
-  opacity: 0.6;
-}
-
-.landing-page .cursor-follower.hovering {
-  width: 48px;
-  height: 48px;
-  background: var(--organic-amber);
-  filter: blur(8px);
-  opacity: 0.4;
-}
-
 @media (hover: none) {
-  .landing-page .cursor-follower {
-    display: none;
-  }
-
   .landing-canvas {
     display: none;
   }

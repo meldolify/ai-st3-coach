@@ -48,11 +48,12 @@ export default function SectionF_Pricing() {
             onClick={() => navigate('/scenarios', { state: { fresh: true } })}
           />
 
-          {/* Premium tier */}
+          {/* Premium tier — title intentionally non-numeric so the
+              copy doesn't go stale as the scenario library grows. */}
           <PriceCard
             tone="canopy"
             overline="Premium ★"
-            title="All 166 Scenarios"
+            title="All Scenarios"
             features={['Full feedback + scoring', 'Mock exams', 'Progress tracking']}
             price="From £8.33/mo"
             priceCaption="£99.99/year (save £80)"

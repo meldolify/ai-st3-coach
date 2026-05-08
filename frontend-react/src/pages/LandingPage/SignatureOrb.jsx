@@ -38,6 +38,7 @@ export function SignatureOrb() {
 
   const [audioAvailable, setAudioAvailable] = useState(null) // null=probing, true|false
   const [isPlaying, setIsPlaying] = useState(false)
+  const [hasPlayed, setHasPlayed] = useState(false)
   const [revealedCount, setRevealedCount] = useState(0)
 
   // Probe audio availability once.
@@ -153,6 +154,7 @@ export function SignatureOrb() {
 
   function reset() {
     setIsPlaying(false)
+    setHasPlayed(true)
     setRevealedCount(0)
     stopFakeAmplitude()
     wordTimersRef.current.forEach((t) => clearTimeout(t))
@@ -199,6 +201,22 @@ export function SignatureOrb() {
   const orbState = isPlaying ? 'speaking' : 'idle'
   const orbStatus = 'Examiner'
 
+  // CTA copy + status copy track three lifecycle states (per design v2):
+  //   1. fresh (never played)  → "Press to hear the examiner →" / "( recorded · British examiner voice )"
+  //   2. playing               → "Listening…"                    / "( examiner is speaking )"
+  //   3. finished (played once)→ "Play again →"                  / "( press play to hear it again )"
+  const ctaText = isPlaying
+    ? 'Listening…'
+    : hasPlayed
+      ? 'Play again'
+      : 'Press to hear the examiner'
+
+  const statusText = isPlaying
+    ? '( examiner is speaking )'
+    : hasPlayed
+      ? '( press play to hear it again )'
+      : '( recorded · British examiner voice )'
+
   return (
     <div className="signature-orb relative w-full max-w-3xl mx-auto aspect-[16/10] flex items-center justify-center">
       {/* Circuit lines backdrop — pure decoration */}
@@ -234,16 +252,21 @@ export function SignatureOrb() {
           ))}
         </div>
 
-        {/* Play button */}
+        {/* Play button — copy cycles fresh → playing → finished */}
         <button
           type="button"
           onClick={handlePlay}
           disabled={isPlaying}
           className="signature-orb__cta inline-flex items-center gap-2 px-6 py-3 rounded-full bg-organic-canopy text-organic-cream text-[14px] font-medium tracking-wide uppercase transition-transform hover:-translate-y-[1px] disabled:opacity-50 disabled:cursor-default"
         >
-          {isPlaying ? 'Listening…' : 'Press to hear the examiner'}
+          {ctaText}
           {!isPlaying && <span aria-hidden="true">&rarr;</span>}
         </button>
+
+        {/* Italic-serif status — same lifecycle as the CTA */}
+        <p className="signature-orb__status font-display italic text-[0.95rem] text-organic-bark/55 text-center mt-1">
+          {statusText}
+        </p>
 
         {audioAvailable === false && (
           <p className="text-[11px] text-organic-bark/55 text-center max-w-xs leading-snug">

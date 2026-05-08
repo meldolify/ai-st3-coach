@@ -3,14 +3,14 @@ import { NarrativeScene } from '../NarrativeScene'
 /**
  * §C — What Makes It Different. Why isn't this just another AI tool?
  *
- * Aesthetic pass (plan §12):
- *   - Massive "166" watermark dominates the section — the conversion peak's
- *     emotional anchor.
- *   - A photographic subject (Unsplash) composites in front of part of "166"
- *     — z-layered, not adjacent.
- *   - Two-column comparison stays but with stronger weight contrast.
- *   - Pull-quote in big Instrument Serif italic between the columns and
- *     the numeric anchors.
+ * Composition (per design package v2 lines 159-179, 425-454, with the
+ * "166" watermark + bottom numbers row dropped per user direction
+ * 2026-05-08 — scenario count changes over time, baking specific numbers
+ * into marketing copy locks us into stale figures):
+ *   - Tilted polaroid photo (c-handcraft.png) sits absolutely on the right,
+ *     2deg rotation, deep shadow. Parallax binding via useLandingAnimations.
+ *   - Centred headline above a 2-column comparison spread.
+ *   - Pull-quote closes the section.
  */
 const OTHER_NEGATIVES = [
   'Hallucinates clinical scenarios',
@@ -22,7 +22,7 @@ const OTHER_NEGATIVES = [
 const REVIVA_POSITIVES = [
   'Hand-crafted by current trainees',
   'Verified against the real interview',
-  'Updated every cycle, every year',
+  'Refreshed every interview cycle',
   'Pushes back exactly like the real thing',
 ]
 
@@ -36,11 +36,8 @@ export default function SectionC_Difference() {
 
       <div className="section-c__inner relative max-w-[1500px] mx-auto px-6 sm:px-10 py-16 md:py-24">
 
-        {/* MASSIVE watermark — fills the section */}
-        <span className="section-c__watermark" aria-hidden="true">166</span>
-
-        {/* Photographic subject — hand-crafted artefact (notebook annotation).
-            Sits in front of part of the 166 watermark, slightly rotated. */}
+        {/* Tilted polaroid photo — c-handcraft.png. Parallax binds in
+            useLandingAnimations (.section-c__photo gets translateY scrub). */}
         <img
           src="/images/landing/c-handcraft.png"
           alt=""
@@ -50,7 +47,7 @@ export default function SectionC_Difference() {
           onError={(e) => { e.currentTarget.style.display = 'none' }}
         />
 
-        {/* Headline — sits at top, regular bold above the watermark */}
+        {/* Headline */}
         <h2 className="section-c__title">
           Not just <em>another</em><br />AI tool.
         </h2>
@@ -88,27 +85,11 @@ export default function SectionC_Difference() {
           </div>
         </div>
 
-        {/* Pull-quote — big italic serif */}
+        {/* Pull-quote — big italic serif (Newsreader italic via --font-display) */}
         <blockquote className="section-c__quote">
           “Built by trainees who took the same exam<br />
           <em>— last cycle.</em>”
         </blockquote>
-
-        {/* Bottom row of numerals + annotations */}
-        <div className="section-c__numbers relative z-10 mt-12 md:mt-18 grid grid-cols-2 gap-8 max-w-3xl mx-auto text-center">
-          <div>
-            <div className="section-c__num">166</div>
-            <div className="section-c__num-caption">
-              <em>( hand-crafted stations )</em>
-            </div>
-          </div>
-          <div>
-            <div className="section-c__num section-c__num--amber">2026</div>
-            <div className="section-c__num-caption">
-              <em>( verified · current cycle )</em>
-            </div>
-          </div>
-        </div>
       </div>
     </NarrativeScene>
   )
