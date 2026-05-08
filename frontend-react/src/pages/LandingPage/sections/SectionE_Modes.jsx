@@ -68,13 +68,8 @@ export default function SectionE_Modes() {
       className="section-e relative bg-organic-cream text-organic-bark overflow-hidden"
       data-testid="section-e"
     >
-      <span className="section-e__annotation">( what you can do )</span>
-
       <div className="section-e__inner max-w-[1500px] mx-auto px-6 sm:px-10 py-24 md:py-36">
         <div className="text-center mb-16 md:mb-20">
-          <p className="font-display italic text-organic-forest text-[clamp(1rem,1.1vw,1.2rem)] mb-3">
-            ( five modes · one product )
-          </p>
           <h2 className="section-e__title">
             Five modes.<br />
             <em>One product.</em>

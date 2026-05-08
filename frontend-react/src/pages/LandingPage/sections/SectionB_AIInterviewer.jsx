@@ -118,9 +118,21 @@ export default function SectionB_AIInterviewer() {
         ref={containerRef}
         className="section-b__walkthrough relative px-6 sm:px-10 pb-24 md:pb-32"
       >
-        <div className="max-w-7xl mx-auto md:grid md:grid-cols-2 md:gap-12 lg:gap-20">
-          {/* Sticky frame side */}
-          <div className="section-b__frame-side md:sticky md:top-[18vh] md:self-start md:flex md:justify-center">
+        {/* Tall photographic backdrop, left half only, fills the walkthrough.
+            DeviceFrame sits sticky on top via z-10. Desktop only — mobile
+            stacks the frame above the descriptions normally. */}
+        <img
+          src="/images/landing/a-isolation.png"
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          className="section-b__backdrop"
+          onError={(e) => { e.currentTarget.style.display = 'none' }}
+        />
+
+        <div className="max-w-7xl mx-auto md:grid md:grid-cols-2 md:gap-12 lg:gap-20 relative">
+          {/* Sticky frame side — z-10 keeps it above the backdrop image */}
+          <div className="section-b__frame-side relative z-10 md:sticky md:top-[18vh] md:self-start md:flex md:justify-center">
             <DeviceFrame currentStep={currentStep} mode={mode} />
           </div>
 

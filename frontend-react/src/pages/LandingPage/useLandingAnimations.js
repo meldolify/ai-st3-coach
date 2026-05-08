@@ -166,12 +166,10 @@ export function useLandingAnimations() {
     }
 
     // ============================================================
-    // PARALLAX (leaves, doctor, photos, mode tiles)
+    // PARALLAX (doctor, section photos, §B backdrop, §C polaroid, mode tiles)
     //
     // Each registered element gets a `speed` factor. Negative = drifts upward
-    // as the section enters; positive = drifts downward. Leaves use the
-    // `--py` CSS var (so the leaf's static rotate/scale stays intact); other
-    // elements get a direct transform.
+    // as the section enters; positive = drifts downward.
     // ============================================================
     let parallaxRaf = null
     const parallaxCleanup = []
@@ -186,14 +184,11 @@ export function useLandingAnimations() {
         })
       }
 
-      // Hero leaves drive --py so their fixed rotate/scale stays intact
-      add('.hero-leaf--l1', -0.32, { cssVar: 'py' })
-      add('.hero-leaf--l2', 0.20, { cssVar: 'py' })
-      add('.hero-leaf--l3', -0.45, { cssVar: 'py' })
-      // Doctor + section photos translate directly
+      // Hero doctor + §A photo + §B backdrop + §C polaroid translate directly
       add('#sectionHero .hero-photo', 0.10)
       add('.section-a__photo', 0.10)
-      add('.section-c__photo', -0.12)
+      add('.section-b__backdrop', 0.08)
+      add('.section-c__polaroid', -0.12)
       // Mode tiles get a tiny parallax + sustained scale to feel alive
       document.querySelectorAll('.section-e .mode-photo img').forEach((img, i) => {
         targets.push({ el: img, speed: 0.06 + i * 0.015, scaleHold: 1.06 })
