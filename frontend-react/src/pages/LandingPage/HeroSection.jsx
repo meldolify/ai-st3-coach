@@ -5,29 +5,24 @@ import { useAuthStore, selectIsLoggedIn } from '../../stores/authStore'
  * HeroSection — solid-colour block composition + REVIVA wordmark overlaid +
  * scroll-driven parallax handoff.
  *
- * Direction (per design package v2 + xshack.app source analysis, locked
- * 2026-05-08): port the xshack centrepiece-with-overlaid-text pattern
- * using SOLID-COLOUR DIVS instead of photographic assets, so we get the
- * cinematic choreography without an asset-generation pass.
- *
  * Layout:
  *   - Section background: --organic-bark (dark) so cream type reads cleanly.
- *   - Centrepiece: vertical 2:3 forest-green block, max-width 56vw, with a
- *     canopy-tinted overlay div that fades on scroll past the hero (the
- *     tonal-shift equivalent of xshack's grayscale→colour reveal).
- *   - Side blocks: small flanking amber + sand panels at low opacity,
- *     parallax at differing speeds (`--py` CSS var driven by the scroll
- *     loop in useLandingAnimations.js).
+ *   - Centrepiece: vertical 2:3 forest-green block with a canopy-tinted
+ *     shade overlay that fades on scroll past the hero (the tonal-shift
+ *     equivalent of xshack's grayscale→colour reveal).
+ *   - Side blocks: small flanking amber + sand panels, parallax at
+ *     differing speeds (`--py` CSS var driven by useLandingAnimations.js).
  *   - Bottom block: wider canopy panel beneath the centrepiece.
- *   - Wireframe icosahedron (CSS-only spinning SVG) sits behind the
- *     composition for ambient motion.
+ *   - Wireframe icosahedron (CSS-only spinning SVG) sits behind it all.
  *   - REVIVA wordmark (cream) absolute-centred over the centrepiece.
- *   - Subtitle + CTA stack below the wordmark, also overlaid.
- *   - Italic-serif corner annotations: cream/0.7 over the dark bg.
+ *   - Subtitle + CTA stack below the wordmark.
+ *   - Black mask reveal entrance.
+ *
+ * Italic-serif corner annotations were removed 2026-05-08 (user feedback:
+ * "floating small texts, pointless and distracting").
  *
  * Three.js `<ThreeBackground />` continues to render globally behind
- * everything. The CSS hexagon and the side colour blocks are the on-page
- * visible-motion pieces.
+ * everything.
  */
 export default function HeroSection() {
   const navigate = useNavigate()
@@ -67,12 +62,6 @@ export default function HeroSection() {
 
       <div className="hero-content" id="heroContent">
 
-        {/* Top-right italic annotations */}
-        <div className="hero-annotations hero-annotations--top-right" aria-hidden="true">
-          <span>( est. 2026 )</span>
-          <span>( surgical interview · UK )</span>
-        </div>
-
         {/* The wordmark — screaming scale, cream over dark. Each letter is
             a span so the entrance animation in useLandingAnimations.js
             (REVIVA char scramble) drives them individually. */}
@@ -95,11 +84,6 @@ export default function HeroSection() {
               {isLoggedIn ? 'Go to Dashboard' : 'Try a free station'} &rarr;
             </button>
           </div>
-        </div>
-
-        {/* Bottom-left italic annotation */}
-        <div className="hero-annotations hero-annotations--bottom-left" aria-hidden="true">
-          <span>( hand-crafted · ai-powered )</span>
         </div>
       </div>
 
