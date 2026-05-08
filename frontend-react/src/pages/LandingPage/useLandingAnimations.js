@@ -111,11 +111,12 @@ export function useLandingAnimations() {
     }
 
     // ============================================================
-    // HERO TRANSITION (scroll out)
+    // HERO TRANSITION (scroll out + centrepiece scale + shade-fade)
     // ============================================================
     function initHeroTransition() {
       if (prefersReducedMotion || isTouch) return
 
+      // Hero content fades + lifts as user scrolls past
       gsap.to('#heroContent', {
         y: -100,
         opacity: 0,
@@ -125,6 +126,46 @@ export function useLandingAnimations() {
           end: 'bottom top',
           scrub: true,
         },
+      })
+
+      // Centrepiece block scales 1 → 0.56 over the full hero scroll range —
+      // the cinematic handoff lifted from xshack's .image-full pattern.
+      gsap.to('.hero-centrepiece', {
+        scale: 0.56,
+        scrollTrigger: {
+          trigger: '#sectionHero',
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 1,
+        },
+      })
+
+      // Canopy shade overlay fades out — tonal-shift equivalent of xshack's
+      // grayscale → colour reveal. Forest underneath becomes "louder" as user
+      // scrolls into the hero.
+      gsap.to('.hero-centrepiece__shade', {
+        opacity: 0,
+        scrollTrigger: {
+          trigger: '#sectionHero',
+          start: 'top top',
+          end: 'bottom 80%',
+          scrub: 1,
+        },
+      })
+    }
+
+    // ============================================================
+    // HERO MASK REVEAL — black bark panel slides off on entrance
+    // ============================================================
+    function initHeroMaskReveal() {
+      if (prefersReducedMotion) return
+      const mask = document.querySelector('.hero-mask-reveal')
+      if (!mask) return
+      // Trigger on next frame so the initial clip-path renders, then animates
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          mask.classList.add('in')
+        })
       })
     }
 
@@ -184,7 +225,14 @@ export function useLandingAnimations() {
         })
       }
 
-      // Hero doctor + §A photo + §B backdrop + §C polaroid translate directly
+      // Hero side blocks drive --py so their fixed positioning stays intact
+      add('.hero-side--l1', -0.32, { cssVar: 'py' })
+      add('.hero-side--l2', 0.20, { cssVar: 'py' })
+      add('.hero-side--r1', -0.45, { cssVar: 'py' })
+      add('.hero-side--r2', 0.15, { cssVar: 'py' })
+      add('.hero-bottom-block', 0.12, { cssVar: 'py' })
+      // Hero doctor (left over for backwards compat — currently unused) +
+      // section photos translate directly
       add('#sectionHero .hero-photo', 0.10)
       add('.section-a__photo', 0.10)
       add('.section-b__backdrop', 0.08)
@@ -230,6 +278,7 @@ export function useLandingAnimations() {
     const timer = setTimeout(() => {
       initHeroEntrance()
       initHeroTransition()
+      initHeroMaskReveal()
       initMagneticButtons()
       initParallax()
     }, 50)

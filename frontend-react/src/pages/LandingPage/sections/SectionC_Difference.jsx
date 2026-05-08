@@ -38,12 +38,13 @@ export default function SectionC_Difference() {
               </em>
             </h2>
             <p className="text-[1.125rem] leading-relaxed text-organic-bark/85 max-w-[52ch]">
-              Other AI tools write you essays. We don&rsquo;t. ReViva is a
-              real-time spoken interview &mdash; not a chatbot, not a flashcard
-              deck. You answer out loud, in the same eight-minute window the
-              examiner gives you. The orb is silent until it isn&rsquo;t.{' '}
+              Other AI tools generate random responses. ReViva doesn&rsquo;t.
+              Every station is hand-crafted by trainees who sat the exam,
+              verified for clinical accuracy, and built to simulate the real
+              interview &mdash; right down to the 5-minute clock. Practise as
+              many times as you want, anytime.{' '}
               <em className="font-display italic text-organic-amber">
-                That&rsquo;s the whole point.
+                That&rsquo;s what makes it different.
               </em>
             </p>
           </div>

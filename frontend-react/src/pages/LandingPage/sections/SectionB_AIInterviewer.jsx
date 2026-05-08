@@ -118,17 +118,46 @@ export default function SectionB_AIInterviewer() {
         ref={containerRef}
         className="section-b__walkthrough relative px-6 sm:px-10 pb-24 md:pb-32"
       >
-        {/* Tall photographic backdrop, left half only, fills the walkthrough.
-            DeviceFrame sits sticky on top via z-10. Desktop only — mobile
-            stacks the frame above the descriptions normally. */}
-        <img
-          src="/images/landing/a-isolation.png"
-          alt=""
-          aria-hidden="true"
-          loading="lazy"
+        {/* Topographical contour-line backdrop — inline SVG, vector so it
+            scales without pixelation. Fills the left half of the walkthrough
+            on desktop; mobile keeps the original stacked layout. Forest
+            stroke at low opacity reads as quiet atmospheric texture behind
+            the DeviceFrame on top. */}
+        <svg
           className="section-b__backdrop"
-          onError={(e) => { e.currentTarget.style.display = 'none' }}
-        />
+          viewBox="0 0 400 1200"
+          preserveAspectRatio="xMidYMid slice"
+          aria-hidden="true"
+        >
+          <g fill="none" stroke="var(--organic-forest)" strokeWidth="0.5">
+            {/* Three stacked contour clusters, each a set of concentric
+                ellipses suggesting topographical bands. */}
+            {/* Cluster 1 — upper */}
+            <ellipse cx="200" cy="220" rx="220" ry="78" opacity="0.28" />
+            <ellipse cx="200" cy="220" rx="190" ry="68" opacity="0.26" />
+            <ellipse cx="200" cy="220" rx="160" ry="58" opacity="0.24" />
+            <ellipse cx="200" cy="220" rx="130" ry="48" opacity="0.22" />
+            <ellipse cx="200" cy="220" rx="100" ry="38" opacity="0.20" />
+            <ellipse cx="200" cy="220" rx="72" ry="28" opacity="0.18" />
+            <ellipse cx="200" cy="220" rx="46" ry="18" opacity="0.16" />
+            {/* Cluster 2 — centre */}
+            <ellipse cx="200" cy="600" rx="240" ry="92" opacity="0.30" />
+            <ellipse cx="200" cy="600" rx="206" ry="80" opacity="0.28" />
+            <ellipse cx="200" cy="600" rx="172" ry="68" opacity="0.26" />
+            <ellipse cx="200" cy="600" rx="140" ry="56" opacity="0.24" />
+            <ellipse cx="200" cy="600" rx="110" ry="44" opacity="0.22" />
+            <ellipse cx="200" cy="600" rx="80" ry="32" opacity="0.20" />
+            <ellipse cx="200" cy="600" rx="52" ry="20" opacity="0.18" />
+            {/* Cluster 3 — lower */}
+            <ellipse cx="200" cy="980" rx="220" ry="78" opacity="0.28" />
+            <ellipse cx="200" cy="980" rx="190" ry="68" opacity="0.26" />
+            <ellipse cx="200" cy="980" rx="160" ry="58" opacity="0.24" />
+            <ellipse cx="200" cy="980" rx="130" ry="48" opacity="0.22" />
+            <ellipse cx="200" cy="980" rx="100" ry="38" opacity="0.20" />
+            <ellipse cx="200" cy="980" rx="72" ry="28" opacity="0.18" />
+            <ellipse cx="200" cy="980" rx="46" ry="18" opacity="0.16" />
+          </g>
+        </svg>
 
         <div className="max-w-7xl mx-auto md:grid md:grid-cols-2 md:gap-12 lg:gap-20 relative">
           {/* Sticky frame side — z-10 keeps it above the backdrop image */}
