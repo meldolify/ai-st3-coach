@@ -195,15 +195,24 @@ export function useSession({ orbVisualizerRef }) {
           setStatusText(getRandomProcessingMessage())
           break
 
-        case 'feedback_response':
+        case 'feedback_response': {
+          // Streaming feedback: each section arrives as N WAV chunks, one
+          // feedback_response per chunk. text + status update only on the
+          // first chunk of each section (chunkIndex===0); audio always
+          // queued. Backwards-compat: if chunkIndex is missing (legacy
+          // one-shot), treat it as chunkIndex 0.
+          const isFirstChunk = msg.chunkIndex == null || msg.chunkIndex === 0
           inFeedbackModeRef.current = true
           setInFeedbackMode(true)
           audioStreamerRef.current.setAISpeaking(true)
-          addMessage('ai', `Feedback: ${msg.text}`)
+          if (isFirstChunk && msg.text) {
+            addMessage('ai', `Feedback: ${msg.text}`)
+            setStatusText(`Feedback (${msg.section}/${msg.totalSections})`)
+          }
           audioPlayerRef.current.queueBase64Audio(msg.audio)
           setOrbState('speaking')
-          setStatusText(`Feedback (${msg.section}/${msg.totalSections})`)
           break
+        }
 
         case 'feedback_summary':
           if (feedbackResolveRef.current) {

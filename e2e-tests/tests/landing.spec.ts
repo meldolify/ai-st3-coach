@@ -21,19 +21,11 @@ test.describe('Landing Page', () => {
     await expect(brand).toHaveText('REVIVA')
   })
 
-  test('"Try Free Samples" CTA navigates to /scenarios', async ({ page }) => {
-    const cta = page.getByRole('button', { name: 'Try Free Samples' })
+  test('"Try a free station" hero CTA navigates to /scenarios', async ({ page }) => {
+    const cta = page.getByRole('button', { name: /Try a free station/ })
     await expect(cta).toBeVisible()
     await cta.click()
     await expect(page).toHaveURL(/\/scenarios/)
-  })
-
-  test('"Sign Up" hero CTA navigates to /login', async ({ page }) => {
-    // The hero has a "Sign Up" button (btn-outline) distinct from the nav one
-    const heroSignUp = page.locator('.hero-ctas').getByRole('button', { name: 'Sign Up' })
-    await expect(heroSignUp).toBeVisible()
-    await heroSignUp.click()
-    await expect(page).toHaveURL(/\/login/)
   })
 
   test('nav has Explore, Log In, and Sign Up buttons', async ({ page }) => {
@@ -46,11 +38,9 @@ test.describe('Landing Page', () => {
   })
 
   test('Pricing link scrolls to pricing section', async ({ page }) => {
-    // Click the Pricing nav link
     const pricingLink = page.locator(SELECTORS.landing.nav).getByText('Pricing')
     await pricingLink.click()
 
-    // The pricing section should be scrolled into view
     const pricingSection = page.locator(SELECTORS.landing.pricingSection)
     await expect(pricingSection).toBeInViewport({ timeout: 5000 })
   })
@@ -60,10 +50,38 @@ test.describe('Landing Page', () => {
     await expect(page).toHaveURL(/\/scenarios/)
   })
 
-  test('footer is visible', async ({ page }) => {
+  test('§B AI Interviewer section renders with Practice/Mock toggle', async ({ page }) => {
+    const sectionB = page.locator(SELECTORS.landing.sectionB)
+    await sectionB.scrollIntoViewIfNeeded()
+    await expect(sectionB).toBeVisible()
+    // The toggle pill renders both labels
+    await expect(sectionB.getByRole('button', { name: 'Practice Mode' })).toBeVisible()
+    await expect(sectionB.getByRole('button', { name: 'Mock Exam' })).toBeVisible()
+  })
+
+  test('§D Signature section renders with the orb CTA', async ({ page }) => {
+    const sectionD = page.locator(SELECTORS.landing.sectionD)
+    await sectionD.scrollIntoViewIfNeeded()
+    await expect(sectionD).toBeVisible()
+    await expect(
+      sectionD.getByRole('button', { name: /Press to hear the examiner|Listening/ })
+    ).toBeVisible()
+  })
+
+  test('§F pricing renders Free and Premium for unauthenticated visitors', async ({ page }) => {
+    const sectionF = page.locator(SELECTORS.landing.sectionF)
+    await sectionF.scrollIntoViewIfNeeded()
+    await expect(sectionF).toBeVisible()
+    await expect(sectionF.getByRole('button', { name: /Explore Free/ })).toBeVisible()
+    await expect(sectionF.getByRole('button', { name: /Subscribe/ })).toBeVisible()
+  })
+
+  test('footer is visible with no broken support/legal links', async ({ page }) => {
     const footer = page.locator('footer#sectionFooter')
-    // Scroll to footer since it is below the fold
     await footer.scrollIntoViewIfNeeded()
     await expect(footer).toBeVisible()
+    // Coming-soon placeholders replace href="#" dead links
+    await expect(footer.getByText(/Contact .* coming soon/)).toBeVisible()
+    await expect(footer.getByText(/Privacy .* coming soon/)).toBeVisible()
   })
 })

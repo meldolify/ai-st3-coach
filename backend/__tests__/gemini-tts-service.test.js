@@ -197,4 +197,59 @@ describe('GeminiTTSService.synthesizeStream', () => {
     const gen = geminiTTSService.synthesizeStream('Test.', 'Fenrir');
     await expect(gen.next()).rejects.toThrow(/Auth failed/);
   });
+
+  test('throws when stream produces zero audio chunks, after logging DIAG output (W9)', async () => {
+    // Mock a stream that yields parts with NO inlineData — e.g. a text-only
+    // candidate followed by a finishReason=STOP marker. Reproduces the
+    // production "0 chunks, 0 PCM bytes" failure case.
+    const stream = (async function* () {
+      yield {
+        candidates: [
+          {
+            content: { parts: [{ text: 'reasoning trace, not audio' }] }
+          }
+        ]
+      };
+      yield {
+        candidates: [
+          {
+            content: { parts: [] },
+            finishReason: 'STOP'
+          }
+        ]
+      };
+    })();
+    mockGenerateContentStream.mockResolvedValueOnce(stream);
+
+    const logSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+    try {
+      const chunks = [];
+      let thrown = null;
+      try {
+        for await (const wav of geminiTTSService.synthesizeStream("That's okay.", 'Fenrir', {
+          stylePrompt: '[British accent, calm]'
+        })) {
+          chunks.push(wav);
+        }
+      } catch (err) {
+        thrown = err;
+      }
+      // No chunks yielded, but a throw at end so ttsStreamForSession's
+      // catch block triggers the Cloud TTS fallback.
+      expect(chunks).toHaveLength(0);
+      expect(thrown).toBeInstanceOf(Error);
+      expect(thrown.message).toMatch(/0 audio chunks/);
+
+      // DIAG output still fires before the throw — preserves W5 Phase 1
+      // diagnostic value for identifying the model-side cause.
+      const messages = logSpy.mock.calls.map(args => args.join(' '));
+      expect(messages.some(m => /DIAG: Sent text=.*That's okay/.test(m))).toBe(true);
+      expect(messages.some(m => /British accent, calm/.test(m))).toBe(true);
+      expect(messages.some(m => /DIAG: Received 2 stream parts/.test(m))).toBe(true);
+      expect(messages.some(m => /\[0\].*reasoning trace, not audio/.test(m))).toBe(true);
+      expect(messages.some(m => /\[1\].*finishReason.*STOP/.test(m))).toBe(true);
+    } finally {
+      logSpy.mockRestore();
+    }
+  });
 });

@@ -119,8 +119,23 @@ class GeminiTTSService {
     let chunkCount = 0;
     let totalBytes = 0;
     let pending = null;
+
+    // W5 Phase 1 diagnostics — capture the shape of every stream part so we
+    // can identify why Gemini sometimes emits 0 audio chunks for short inputs.
+    // Replaces inlineData.data payloads with their byte length so logs stay
+    // readable. Dumped only when chunkCount === 0 at end of stream.
+    const partSummaries = [];
+    const summarizePart = part =>
+      JSON.stringify(part, (key, value) => {
+        if (key === 'data' && typeof value === 'string') {
+          return `<base64:${value.length}b>`;
+        }
+        return value;
+      });
+
     try {
       for await (const part of stream) {
+        partSummaries.push(summarizePart(part));
         const audioData = part.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
         if (!audioData) {
           continue;
@@ -152,6 +167,19 @@ class GeminiTTSService {
 
     mark('tts_last_chunk_received');
     console.log(`[Gemini TTS] Stream complete: ${chunkCount} chunks, ${totalBytes} PCM bytes`);
+
+    if (chunkCount === 0) {
+      const styledText = options.stylePrompt ? `${options.stylePrompt} ${text}` : text;
+      console.log(
+        `[Gemini TTS] DIAG: Sent text=${JSON.stringify(text)} stylePrompt=${JSON.stringify(options.stylePrompt || null)} styledLen=${styledText.length}`
+      );
+      console.log(`[Gemini TTS] DIAG: Received ${partSummaries.length} stream parts`);
+      partSummaries.forEach((s, i) => console.log(`  [${i}] ${s}`));
+      // Throw so the existing Cloud TTS fallback in ttsStreamForSession kicks
+      // in. Without this the generator returns silently with 0 yields and
+      // the user hears nothing for short responses Gemini refuses to voice.
+      throw new Error('Gemini stream produced 0 audio chunks');
+    }
   }
 
   /**

@@ -284,7 +284,7 @@ export default function PromptLab() {
         if (dirtySections.has('core')) sectionsToSave.core = promptSections.core
         if (dirtySections.has('difficulty')) sectionsToSave.difficulty = promptSections.difficulty
         if (dirtySections.has('clinical')) sectionsToSave.clinical = promptSections.clinical
-        await api.savePrompts(difficulty, sectionsToSave)
+        await api.savePrompts(difficulty, sectionsToSave, topic)
       }
 
       // Save feedback sections if any dirty
@@ -294,6 +294,7 @@ export default function PromptLab() {
           difficulty,
           dirtySections.has('feedback') ? feedbackPrompt : undefined,
           dirtySections.has('feedbackPersonality') ? feedbackPersonality : undefined,
+          topic,
         )
       }
 
@@ -319,7 +320,7 @@ export default function PromptLab() {
     } finally {
       setLoading(false)
     }
-  }, [dirtySections, promptSections, feedbackPrompt, feedbackPersonality, difficulty, githubEnabled])
+  }, [dirtySections, promptSections, feedbackPrompt, feedbackPersonality, difficulty, topic, githubEnabled])
 
   const handleCreatePR = useCallback(async () => {
     setLoading(true)
