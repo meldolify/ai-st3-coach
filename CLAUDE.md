@@ -226,8 +226,7 @@ backend/
 │       ├── promptParser.js             # Parse/combine 3-section prompt format
 │       ├── audioHelpers.js             # Noise filtering, SSML builder
 │       ├── feedbackParser.js           # Parse structured feedback
-│       ├── feedbackSectionBuffer.js    # Buffer feedback into 6 sections
-│       └── scenarioLoader.js           # Load and validate scenario files
+│       └── feedbackSectionBuffer.js    # Buffer feedback into 6 sections
 ├── prompts/
 │   ├── shared/interview/              # Core + personality files (7 files)
 │   ├── shared/feedback/               # Feedback core + personality files (7 files)

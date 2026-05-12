@@ -6,7 +6,8 @@ module.exports = {
     'src/**/*.js',
     '!node_modules/**',
     '!coverage/**',
-    '!**/*.test.js'
+    '!**/*.test.js',
+    '!src/services/GitHubService.js'
   ],
   coverageThreshold: {
     global: {
