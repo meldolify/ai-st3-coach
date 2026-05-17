@@ -59,3 +59,32 @@ jobs:
       - name: Run ESLint
         working-directory: backend
         run: npm run lint
+
+  secret-scan:
+    name: Secret Scan (gitleaks)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  npm-audit:
+    name: npm audit (advisory only)
+    runs-on: ubuntu-latest
+    # Non-blocking: vulnerabilities in transitive deps shouldn't block merges,
+    # but the report should be visible in the Actions tab so we notice them.
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install dependencies
+        working-directory: backend
+        run: npm install
+      - name: Audit (high severity and above)
+        working-directory: backend
+        run: npm audit --omit=dev --audit-level=high

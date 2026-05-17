@@ -39,6 +39,16 @@ function isValidTranscriptId(id) {
   );
 }
 
+// Session ids are produced by PromptLabService.createSession() as
+// `pl_${crypto.randomUUID()}`. Match that exact shape to reject anything
+// that looks like a forged or path-traversing id.
+const SESSION_ID_REGEX = /^pl_[A-Za-z0-9-]+$/;
+function isValidSessionId(id) {
+  return typeof id === 'string' && id.length > 3 && id.length <= 100 && SESSION_ID_REGEX.test(id);
+}
+
+const MAX_CHAT_MESSAGE_LENGTH = 10_000;
+
 /**
  * Commit saved files to GitHub main branch (if configured).
  * Non-blocking — returns result but doesn't throw on failure.
@@ -113,6 +123,14 @@ router.post('/chat', async (req, res) => {
     const { sessionId, message } = req.body;
     if (!sessionId || !message) {
       return res.status(400).json({ error: 'sessionId and message required' });
+    }
+    if (!isValidSessionId(sessionId)) {
+      return res.status(400).json({ error: 'Invalid sessionId' });
+    }
+    if (typeof message !== 'string' || message.length > MAX_CHAT_MESSAGE_LENGTH) {
+      return res
+        .status(400)
+        .json({ error: `message must be a string ≤ ${MAX_CHAT_MESSAGE_LENGTH} chars` });
     }
     const result = await promptLabService.chat(sessionId, message);
     res.json(result);

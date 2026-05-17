@@ -157,6 +157,47 @@ function validateConfig() {
   if (config.isSupabaseEnabled) {
     console.log('[CONFIG] Supabase database connection enabled');
   }
+
+  // Production-only guardrails. These don't crash dev workflows; they catch
+  // common misconfigurations that have caused real outages (CORS broken when
+  // FRONTEND_URL is missing, Prompt Lab returning 503 when admin allowlist
+  // isn't set, DEV_BYPASS_AUTH accidentally left on in prod, etc.).
+  if (config.isProduction) {
+    if (!process.env.FRONTEND_URL) {
+      console.error(
+        'ERROR: FRONTEND_URL must be set in production (CORS allow-list depends on it)'
+      );
+      process.exit(1);
+    }
+    if (config.DEV_BYPASS_AUTH) {
+      console.error('FATAL: DEV_BYPASS_AUTH=true in production — refusing to start');
+      process.exit(1);
+    }
+    if (
+      process.env.PROMPT_LAB_ENABLED === 'true' &&
+      !(process.env.PROMPT_LAB_ADMIN_EMAILS || '').trim()
+    ) {
+      console.warn(
+        '[CONFIG] WARNING: PROMPT_LAB_ENABLED=true but PROMPT_LAB_ADMIN_EMAILS is unset — Prompt Lab will return 503 for every request'
+      );
+    }
+    // Partial Stripe config means checkout silently breaks. Warn loudly.
+    const stripeVars = ['STRIPE_SECRET_KEY', 'STRIPE_WEBHOOK_SECRET', 'STRIPE_PRICE_ID_MONTHLY'];
+    const stripeSet = stripeVars.filter(k => process.env[k]).length;
+    if (stripeSet > 0 && stripeSet < stripeVars.length) {
+      console.warn(
+        `[CONFIG] WARNING: Stripe is partially configured (${stripeSet}/${stripeVars.length} keys set) — payments will fail`
+      );
+    }
+    // Same for Supabase
+    const supabaseVars = ['SUPABASE_URL', 'SUPABASE_SERVICE_KEY'];
+    const supabaseSet = supabaseVars.filter(k => process.env[k]).length;
+    if (supabaseSet > 0 && supabaseSet < supabaseVars.length) {
+      console.warn(
+        '[CONFIG] WARNING: Supabase is partially configured — auth/subscription checks will silently fail'
+      );
+    }
+  }
 }
 
 // Run validation on load (unless in test environment)

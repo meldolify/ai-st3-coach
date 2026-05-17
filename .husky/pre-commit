@@ -1,1 +1,17 @@
+# Fast local secret-pattern scan on staged files. High-precision patterns only —
+# the legit Supabase anon key (eyJ...) lives in frontend-react/src/config.js, so
+# we deliberately don't flag generic JWT shapes. To override on a confirmed FP,
+# use `git commit --no-verify` (last resort) or refine the patterns here.
+staged=$(git diff --cached --name-only --diff-filter=ACMR 2>/dev/null | grep -vE '(^|/)(node_modules|coverage|\.git)/' || true)
+if [ -n "$staged" ]; then
+  matched=$(printf '%s\n' "$staged" | xargs -I{} sh -c '[ -f "$1" ] && grep -Hl -E "(sk_(live|test)_[A-Za-z0-9]{20,}|AKIA[A-Z0-9]{16}|ghp_[A-Za-z0-9]{36}|gho_[A-Za-z0-9]{36}|AIza[A-Za-z0-9_-]{35}|GOCSPX-[A-Za-z0-9_-]{20,}|ntn_[A-Za-z0-9]{20,}|-----BEGIN [A-Z ]*PRIVATE KEY-----)" "$1" 2>/dev/null' _ {} | head -5)
+  if [ -n "$matched" ]; then
+    echo "$matched"
+    echo ""
+    echo "❌ pre-commit: potential secret detected in staged files (see paths above)."
+    echo "   Remove the secret, then re-stage. If this is a false positive, update .husky/pre-commit."
+    exit 1
+  fi
+fi
+
 npx lint-staged

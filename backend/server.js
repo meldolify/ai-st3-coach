@@ -320,9 +320,61 @@ async function streamResponseToClient(session, ws, history, options = {}) {
   }
 }
 
+// Per-IP WebSocket connection-rate limiter. Per-session limits already exist
+// in WebSocketRateLimiter, but nothing throttles fresh connections from a
+// single IP — without this, one source could open thousands of sessions at
+// once and exhaust the SUPABASE auth.getUser() rate budget.
+const WS_CONNECT_WINDOW_MS = 60 * 1000;
+const WS_MAX_CONNECTS_PER_MIN = 20;
+const wsConnectAttempts = new Map();
+
+function getClientIp(req) {
+  const fwd = req.headers['x-forwarded-for'];
+  if (fwd) {
+    return fwd.toString().split(',')[0].trim();
+  }
+  return (req.socket && req.socket.remoteAddress) || 'unknown';
+}
+
+function isWsConnectRateLimited(req) {
+  // Bypass in test mode — Jest suites open many concurrent WS connections from
+  // the same loopback address and would trip the per-IP cap.
+  if (process.env.NODE_ENV === 'test') {
+    return false;
+  }
+  const ip = getClientIp(req);
+  const now = Date.now();
+  const fresh = (wsConnectAttempts.get(ip) || []).filter(t => now - t < WS_CONNECT_WINDOW_MS);
+  if (fresh.length >= WS_MAX_CONNECTS_PER_MIN) {
+    return true;
+  }
+  fresh.push(now);
+  wsConnectAttempts.set(ip, fresh);
+  return false;
+}
+
+setInterval(
+  () => {
+    const now = Date.now();
+    for (const [ip, attempts] of wsConnectAttempts.entries()) {
+      const fresh = attempts.filter(t => now - t < WS_CONNECT_WINDOW_MS);
+      if (fresh.length === 0) {
+        wsConnectAttempts.delete(ip);
+      } else {
+        wsConnectAttempts.set(ip, fresh);
+      }
+    }
+  },
+  5 * 60 * 1000
+);
+
 const wss = new WebSocket.Server({
   server, // Attach to shared HTTP server (same port for REST + WebSocket)
   verifyClient: info => {
+    if (isWsConnectRateLimited(info.req)) {
+      console.warn(`[WS] Rejected: connection rate limit for ${getClientIp(info.req)}`);
+      return false;
+    }
     if (config.isProduction) {
       const origin = info.origin || info.req.headers.origin;
       return origin === config.FRONTEND_URL;
@@ -952,20 +1004,46 @@ app.use((req, res, next) => {
   next();
 });
 
-// Rate limiting for payment endpoints
+// Global rate limiter — applies to every HTTP request except /health (Render's
+// uptime probe must never get 429'd). Specific routes layer additional limits
+// on top of this (payments, prompt-lab) for tighter caps.
+const globalLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 120, // 120 req/min/IP — generous default; specific limiters layer on top
+  message: { error: 'Too many requests. Please slow down.' },
+  standardHeaders: true,
+  legacyHeaders: false,
+  skip: req => req.path === '/health'
+});
+app.use(globalLimiter);
+
+// Payment endpoints — single human checkout flow, so tight cap matches the
+// "auth route" guidance: 5 attempts per 15 min per IP is plenty for a real user.
 const paymentLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 10, // 10 requests per window per IP
+  windowMs: 15 * 60 * 1000,
+  max: 5,
   message: { error: 'Too many payment requests. Please try again later.' },
   standardHeaders: true,
   legacyHeaders: false
 });
 
-// General API rate limiter
+// Stripe webhook — Stripe may burst-retry events; keep this generous.
 const apiLimiter = rateLimit({
-  windowMs: 60 * 1000, // 1 minute
-  max: 60, // 60 requests per minute
+  windowMs: 60 * 1000,
+  max: 60,
   message: { error: 'Too many requests. Please slow down.' }
+});
+
+// Prompt Lab — tighter than the global default so a leaked bearer or brute
+// force is throttled, but generous enough for a real admin editing session
+// (load topics, edit, save, run tests = many small requests). Combined with
+// promptLabAuth (Supabase Bearer + email allowlist) this is defense in depth.
+const promptLabLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 30,
+  message: { error: 'Too many Prompt Lab requests. Try again later.' },
+  standardHeaders: true,
+  legacyHeaders: false
 });
 
 // Apply rate limiters
@@ -981,97 +1059,109 @@ app.get('/health', (req, res) => {
 // Prompt Lab routes (text-only prompt testing environment).
 // Gated by PROMPT_LAB_ENABLED in production; protected by promptLabAuth on
 // every request (Supabase Bearer token + PROMPT_LAB_ADMIN_EMAILS allowlist).
+// Json parser is bumped to 256kb because prompt sections can legitimately be
+// 30-50KB; everything else stays at the default (100KB via express).
 if (process.env.PROMPT_LAB_ENABLED === 'true' || !config.isProduction) {
   const promptLabRoutes = require('./src/routes/promptLab');
   const { promptLabAuth } = require('./src/middleware/promptLabAuth');
-  app.use('/prompt-lab/api', promptLabAuth, express.json(), promptLabRoutes);
+  app.use(
+    '/prompt-lab/api',
+    promptLabLimiter,
+    promptLabAuth,
+    express.json({ limit: '256kb' }),
+    promptLabRoutes
+  );
   console.log('[PROMPT LAB] Routes enabled at /prompt-lab/api (auth required)');
 }
 
 // Stripe webhook endpoint (must use raw body)
-app.post('/stripe-webhook', express.raw({ type: 'application/json' }), async (req, res) => {
-  if (!stripe || !supabaseAdmin) {
-    return res.status(503).json({ error: 'Payment processing not configured' });
-  }
-
-  const sig = req.headers['stripe-signature'];
-  let event;
-
-  try {
-    event = stripe.webhooks.constructEvent(req.body, sig, config.STRIPE_WEBHOOK_SECRET);
-  } catch (err) {
-    console.error('[STRIPE WEBHOOK] Signature verification failed:', err.message);
-    return res.status(400).send('Webhook processing failed');
-  }
-
-  console.log('[STRIPE WEBHOOK] Event received:', event.type);
-
-  try {
-    switch (event.type) {
-      case 'checkout.session.completed': {
-        const session = event.data.object;
-        const userId = session.metadata?.userId;
-        const customerId = session.customer;
-        const subscriptionId = session.subscription;
-        const priceType = session.metadata?.priceType || 'monthly';
-        const specialty = session.metadata?.specialty || 'plastic-surgery';
-
-        if (userId) {
-          // Use upsert to create or update the subscription record
-          await supabaseAdmin.from('subscriptions').upsert(
-            {
-              user_id: userId,
-              stripe_customer_id: customerId,
-              stripe_subscription_id: subscriptionId,
-              status: 'active',
-              price_type: priceType,
-              specialty: specialty,
-              created_at: new Date().toISOString()
-            },
-            {
-              onConflict: 'user_id'
-            }
-          );
-
-          console.log('[STRIPE] Subscription activated for user:', userId);
-        }
-        break;
-      }
-
-      case 'customer.subscription.updated': {
-        const subscription = event.data.object;
-        const status = subscription.status === 'active' ? 'active' : 'past_due';
-
-        await supabaseAdmin
-          .from('subscriptions')
-          .update({
-            status,
-            current_period_end: new Date(subscription.current_period_end * 1000).toISOString()
-          })
-          .eq('stripe_subscription_id', subscription.id);
-
-        console.log('[STRIPE] Subscription updated:', subscription.id, status);
-        break;
-      }
-
-      case 'customer.subscription.deleted': {
-        const subscription = event.data.object;
-
-        await supabaseAdmin
-          .from('subscriptions')
-          .update({ status: 'cancelled' })
-          .eq('stripe_subscription_id', subscription.id);
-
-        console.log('[STRIPE] Subscription cancelled:', subscription.id);
-        break;
-      }
+app.post(
+  '/stripe-webhook',
+  express.raw({ type: 'application/json', limit: '64kb' }),
+  async (req, res) => {
+    if (!stripe || !supabaseAdmin) {
+      return res.status(503).json({ error: 'Payment processing not configured' });
     }
-  } catch (error) {
-    console.error('[STRIPE WEBHOOK] Error processing event:', error);
-  }
 
-  res.json({ received: true });
-});
+    const sig = req.headers['stripe-signature'];
+    let event;
+
+    try {
+      event = stripe.webhooks.constructEvent(req.body, sig, config.STRIPE_WEBHOOK_SECRET);
+    } catch (err) {
+      console.error('[STRIPE WEBHOOK] Signature verification failed:', err.message);
+      return res.status(400).send('Webhook processing failed');
+    }
+
+    console.log('[STRIPE WEBHOOK] Event received:', event.type);
+
+    try {
+      switch (event.type) {
+        case 'checkout.session.completed': {
+          const session = event.data.object;
+          const userId = session.metadata?.userId;
+          const customerId = session.customer;
+          const subscriptionId = session.subscription;
+          const priceType = session.metadata?.priceType || 'monthly';
+          const specialty = session.metadata?.specialty || 'plastic-surgery';
+
+          if (userId) {
+            // Use upsert to create or update the subscription record
+            await supabaseAdmin.from('subscriptions').upsert(
+              {
+                user_id: userId,
+                stripe_customer_id: customerId,
+                stripe_subscription_id: subscriptionId,
+                status: 'active',
+                price_type: priceType,
+                specialty: specialty,
+                created_at: new Date().toISOString()
+              },
+              {
+                onConflict: 'user_id'
+              }
+            );
+
+            console.log('[STRIPE] Subscription activated for user:', userId);
+          }
+          break;
+        }
+
+        case 'customer.subscription.updated': {
+          const subscription = event.data.object;
+          const status = subscription.status === 'active' ? 'active' : 'past_due';
+
+          await supabaseAdmin
+            .from('subscriptions')
+            .update({
+              status,
+              current_period_end: new Date(subscription.current_period_end * 1000).toISOString()
+            })
+            .eq('stripe_subscription_id', subscription.id);
+
+          console.log('[STRIPE] Subscription updated:', subscription.id, status);
+          break;
+        }
+
+        case 'customer.subscription.deleted': {
+          const subscription = event.data.object;
+
+          await supabaseAdmin
+            .from('subscriptions')
+            .update({ status: 'cancelled' })
+            .eq('stripe_subscription_id', subscription.id);
+
+          console.log('[STRIPE] Subscription cancelled:', subscription.id);
+          break;
+        }
+      }
+    } catch (error) {
+      console.error('[STRIPE WEBHOOK] Error processing event:', error);
+    }
+
+    res.json({ received: true });
+  }
+);
 
 // Create Stripe checkout session with input validation
 app.post(
