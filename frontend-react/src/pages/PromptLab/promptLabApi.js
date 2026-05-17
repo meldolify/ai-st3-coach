@@ -1,5 +1,5 @@
 import { CONFIG } from '../../config'
-import { supabase } from '../../lib/supabase'
+import { supabaseClient } from '../../lib/supabase'
 
 const BASE = `${CONFIG.HTTP_BACKEND_URL}/prompt-lab/api`
 
@@ -7,7 +7,7 @@ async function getBearerHeaders() {
   // Backend gates /prompt-lab/api/* with a Supabase Bearer token + admin
   // email allowlist. Grab the current session's access token if we have one.
   try {
-    const { data: { session } } = await supabase.auth.getSession()
+    const { data: { session } } = await supabaseClient.auth.getSession()
     return session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}
   } catch {
     return {}
