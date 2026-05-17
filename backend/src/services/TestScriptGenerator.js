@@ -53,7 +53,44 @@ const UNIVERSAL_ASSERTIONS = {
 // PATH HELPERS
 // ──────────────────────────────────────────
 
+function assertSafeTopicPath(topicPath) {
+  if (
+    !topicPath ||
+    typeof topicPath !== 'string' ||
+    topicPath.includes('..') ||
+    topicPath.startsWith('/') ||
+    !/^[a-z0-9_/]+$/.test(topicPath)
+  ) {
+    throw new Error('Invalid topic path');
+  }
+}
+
+// Path-safe filename: blocks traversal characters and separators. Used for
+// reads where any pre-existing test-script id is legitimate.
+function assertSafeFilename(name) {
+  if (
+    !name ||
+    typeof name !== 'string' ||
+    name.length > 200 ||
+    name.includes('..') ||
+    name.includes('/') ||
+    name.includes('\\')
+  ) {
+    throw new Error('Invalid filename');
+  }
+}
+
+// Stricter check: testType must be one of the LLM-generatable categories.
+// Used on the WRITE path only (cacheScript), where unrestricted attacker
+// content lands in a cache file the system later reads as a script.
+function assertGeneratableTestType(testType) {
+  if (!GENERATABLE_TEST_TYPES.includes(testType)) {
+    throw new Error('Invalid test type');
+  }
+}
+
 function getPromptPath(topicPath, difficulty) {
+  assertSafeTopicPath(topicPath);
   const parts = topicPath.split('/');
   const category = parts[0];
   const folderName = parts[parts.length - 1];
@@ -62,6 +99,8 @@ function getPromptPath(topicPath, difficulty) {
 }
 
 function getCachePath(topicPath, testType) {
+  assertSafeTopicPath(topicPath);
+  assertSafeFilename(testType);
   const folderName = topicPath.split('/').pop();
   return path.join(GENERATED_CACHE_DIR, folderName, `${testType}.json`);
 }
@@ -91,6 +130,9 @@ function getCachedScript(topicPath, testType) {
 }
 
 function cacheScript(topicPath, testType, script) {
+  // The write path is more dangerous than the read path (attacker-controlled
+  // bytes land on disk), so it must also be one of the generatable categories.
+  assertGeneratableTestType(testType);
   const cachePath = getCachePath(topicPath, testType);
   const dir = path.dirname(cachePath);
   if (!fs.existsSync(dir)) {
@@ -102,8 +144,19 @@ function cacheScript(topicPath, testType, script) {
 }
 
 function clearCache(topicPath) {
+  assertSafeTopicPath(topicPath);
   const folderName = topicPath.split('/').pop();
   const dir = path.join(GENERATED_CACHE_DIR, folderName);
+  // Path-confinement: ensure dir stays inside GENERATED_CACHE_DIR even if a
+  // future validator regression lets traversal characters through.
+  const resolvedDir = path.resolve(dir);
+  const resolvedRoot = path.resolve(GENERATED_CACHE_DIR);
+  if (resolvedDir !== resolvedRoot && !resolvedDir.startsWith(resolvedRoot + path.sep)) {
+    throw new Error('Invalid cache path');
+  }
+  if (resolvedDir === resolvedRoot) {
+    throw new Error('Refusing to clear the entire generated cache root');
+  }
   if (fs.existsSync(dir)) {
     fs.readdirSync(dir).forEach(f => fs.unlinkSync(path.join(dir, f)));
     fs.rmdirSync(dir);

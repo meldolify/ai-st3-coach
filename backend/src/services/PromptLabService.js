@@ -53,6 +53,17 @@ function validateTopicPath(topicPath) {
 }
 
 /**
+ * Validate a transcript id to prevent path traversal in /transcripts/:id.
+ * Transcript ids are produced by generateTranscriptId() and look like
+ * "20260512_134523_excellent_candidate" — strictly [A-Za-z0-9_-].
+ */
+function validateTranscriptId(id) {
+  if (!id || typeof id !== 'string' || id.length > 200 || !/^[A-Za-z0-9_-]+$/.test(id)) {
+    throw new Error('Invalid transcript id');
+  }
+}
+
+/**
  * Get the 3 modular file paths for a topic + difficulty.
  * Uses the same path resolution as production (promptAssembler.js).
  * @param {string} topicPath - e.g., "clinical/emergencies/necrotising_fasciitis"
@@ -534,6 +545,17 @@ function clearModifiedFiles() {
 function listTestScripts(topicFolderName, topicPath) {
   const results = [];
   const existingIds = new Set();
+
+  // Defense-in-depth: the route handler validates topic, but reject anything
+  // that would let us escape TEST_SCRIPTS_DIR here too.
+  if (
+    topicFolderName &&
+    (topicFolderName.includes('..') ||
+      topicFolderName.includes('/') ||
+      topicFolderName.includes('\\'))
+  ) {
+    throw new Error('Invalid topic folder name');
+  }
 
   // 1. Pre-made topic-specific scripts (gold standard)
   const topicDir = path.join(TEST_SCRIPTS_DIR, topicFolderName || '');
@@ -1060,6 +1082,7 @@ function listTranscripts() {
 }
 
 function loadTranscript(id) {
+  validateTranscriptId(id);
   const filePath = path.join(TEST_RESULTS_DIR, `${id}.json`);
   if (!fs.existsSync(filePath)) {
     throw new Error(`Transcript not found: ${id}`);
@@ -1068,6 +1091,7 @@ function loadTranscript(id) {
 }
 
 function deleteTranscript(id) {
+  validateTranscriptId(id);
   const filePath = path.join(TEST_RESULTS_DIR, `${id}.json`);
   if (!fs.existsSync(filePath)) {
     throw new Error(`Transcript not found: ${id}`);

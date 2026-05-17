@@ -978,11 +978,14 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// Prompt Lab routes (text-only prompt testing environment)
+// Prompt Lab routes (text-only prompt testing environment).
+// Gated by PROMPT_LAB_ENABLED in production; protected by promptLabAuth on
+// every request (Supabase Bearer token + PROMPT_LAB_ADMIN_EMAILS allowlist).
 if (process.env.PROMPT_LAB_ENABLED === 'true' || !config.isProduction) {
   const promptLabRoutes = require('./src/routes/promptLab');
-  app.use('/prompt-lab/api', express.json(), promptLabRoutes);
-  console.log('[PROMPT LAB] Routes enabled at /prompt-lab/api');
+  const { promptLabAuth } = require('./src/middleware/promptLabAuth');
+  app.use('/prompt-lab/api', promptLabAuth, express.json(), promptLabRoutes);
+  console.log('[PROMPT LAB] Routes enabled at /prompt-lab/api (auth required)');
 }
 
 // Stripe webhook endpoint (must use raw body)

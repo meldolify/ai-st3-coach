@@ -25,6 +25,15 @@ client_secret_*.json
 *.key
 *.pem
 
+# Ad-hoc credential dumps (NEVER commit raw secrets to plaintext files!)
+# These patterns catch the kind of file that triggered the 2026-05-17 audit.
+**/supabase information.txt
+**/supabase-information.txt
+*supabase*information*
+*secrets*.txt
+*credentials*.txt
+*password*.txt
+
 # OS files
 .DS_Store
 Thumbs.db

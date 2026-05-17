@@ -15,6 +15,30 @@ const { RateLimitError } = require('openai');
 const DEFAULT_TOPIC = 'clinical/emergencies/necrotising_fasciitis';
 const BACKEND_DIR = path.join(__dirname, '..', '..');
 
+// Topic paths look like "clinical/emergencies/necrotising_fasciitis" — strictly
+// lowercase letters, digits, underscores, and forward slashes. Anything outside
+// this set (including `..`, leading `/`, or backslashes) is rejected.
+const TOPIC_REGEX = /^[a-z0-9_/]+$/;
+function isValidTopic(topic) {
+  return (
+    typeof topic === 'string' &&
+    topic.length > 0 &&
+    topic.length <= 200 &&
+    !topic.includes('..') &&
+    !topic.startsWith('/') &&
+    TOPIC_REGEX.test(topic)
+  );
+}
+
+// Transcript ids are produced by PromptLabService.generateTranscriptId() —
+// "20260512_134523_label" style. Reject anything with path-traversal characters.
+const TRANSCRIPT_ID_REGEX = /^[A-Za-z0-9_-]+$/;
+function isValidTranscriptId(id) {
+  return (
+    typeof id === 'string' && id.length > 0 && id.length <= 200 && TRANSCRIPT_ID_REGEX.test(id)
+  );
+}
+
 /**
  * Commit saved files to GitHub main branch (if configured).
  * Non-blocking — returns result but doesn't throw on failure.
@@ -269,6 +293,9 @@ router.put('/feedback-prompt/:difficulty', async (req, res) => {
 router.get('/tests', (req, res) => {
   try {
     const topic = req.query.topic || DEFAULT_TOPIC;
+    if (!isValidTopic(topic)) {
+      return res.status(400).json({ error: 'Invalid topic' });
+    }
     const topicFolderName = topic.split('/').pop();
     const tests = promptLabService.listTestScripts(topicFolderName, topic);
     res.json({ tests });
@@ -288,6 +315,12 @@ router.post('/generate-test', async (req, res) => {
     if (!testType || !topic) {
       return res.status(400).json({ error: 'testType and topic required' });
     }
+    if (!isValidTopic(topic)) {
+      return res.status(400).json({ error: 'Invalid topic' });
+    }
+    if (!testScriptGenerator.GENERATABLE_TEST_TYPES.includes(testType)) {
+      return res.status(400).json({ error: 'Invalid testType' });
+    }
     const script = await testScriptGenerator.generateTestScript(testType, topic);
     testScriptGenerator.cacheScript(topic, testType, script);
     res.json({ script, cached: true });
@@ -306,6 +339,9 @@ router.delete('/generated-tests', (req, res) => {
     const topic = req.query.topic;
     if (!topic) {
       return res.status(400).json({ error: 'topic query param required' });
+    }
+    if (!isValidTopic(topic)) {
+      return res.status(400).json({ error: 'Invalid topic' });
     }
     testScriptGenerator.clearCache(topic);
     res.json({ success: true });
@@ -400,6 +436,9 @@ router.get('/transcripts', (req, res) => {
  */
 router.get('/transcripts/:id', (req, res) => {
   try {
+    if (!isValidTranscriptId(req.params.id)) {
+      return res.status(400).json({ error: 'Invalid transcript id' });
+    }
     const transcript = promptLabService.loadTranscript(req.params.id);
     res.json(transcript);
   } catch (err) {
@@ -414,6 +453,9 @@ router.get('/transcripts/:id', (req, res) => {
  */
 router.delete('/transcripts/:id', (req, res) => {
   try {
+    if (!isValidTranscriptId(req.params.id)) {
+      return res.status(400).json({ error: 'Invalid transcript id' });
+    }
     promptLabService.deleteTranscript(req.params.id);
     res.json({ success: true });
   } catch (err) {
