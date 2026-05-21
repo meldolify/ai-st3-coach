@@ -12,7 +12,6 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
-const { body, validationResult } = require('express-validator');
 const WebSocket = require('ws');
 const path = require('path');
 const url = require('url');
@@ -1158,6 +1157,11 @@ app.use('/create-checkout-session', paymentLimiter);
 app.use('/create-portal-session', paymentLimiter);
 app.use('/stripe-webhook', apiLimiter);
 
+// Stripe Checkout + Customer Portal endpoints. Both require a Supabase Bearer
+// token (userAuth) and ignore body identifiers — see backend/src/routes/payments.js
+// for the rationale (audit findings HIGH-01 + HIGH-02, 2026-05-21).
+app.use(require('./src/routes/payments'));
+
 // Account endpoints — tight limiter. Delete is one-shot per user; export
 // shouldn't be hammered. 5/15min stops a stolen-token-driven export farm.
 const accountLimiter = rateLimit({
@@ -1281,104 +1285,8 @@ app.post(
   }
 );
 
-// Create Stripe checkout session with input validation
-app.post(
-  '/create-checkout-session',
-  express.json(),
-  [
-    body('userId').isString().isLength({ min: 1, max: 100 }).trim().escape(),
-    body('email').isEmail().normalizeEmail(),
-    body('priceType').optional().isIn(['monthly', 'annual']),
-    body('specialty').optional().isString().isLength({ max: 50 }).trim().escape()
-  ],
-  async (req, res) => {
-    if (!stripe) {
-      return res.status(503).json({ error: 'Payment processing not configured' });
-    }
-
-    // Check validation results
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      console.error('[STRIPE] Validation errors:', errors.array());
-      return res.status(400).json({ error: 'Invalid input', details: errors.array() });
-    }
-
-    try {
-      const { userId, email, priceType = 'monthly', specialty = 'plastic-surgery' } = req.body;
-
-      // Select price ID based on plan type
-      const priceId =
-        priceType === 'annual' ? config.STRIPE_PRICE_ID_ANNUAL : config.STRIPE_PRICE_ID_MONTHLY;
-
-      // Verify price ID is configured
-      if (!priceId) {
-        console.error('[STRIPE] Price ID not configured for:', sanitizeForLog(priceType));
-        return res.status(500).json({ error: 'Payment configuration error' });
-      }
-
-      const session = await stripe.checkout.sessions.create({
-        customer_email: email,
-        line_items: [
-          {
-            price: priceId,
-            quantity: 1
-          }
-        ],
-        mode: 'subscription',
-        success_url: `${config.FRONTEND_URL}?payment=success`,
-        cancel_url: `${config.FRONTEND_URL}?payment=cancelled`,
-        metadata: { userId, priceType, specialty }
-      });
-
-      console.log(
-        '[STRIPE] Checkout session created for:',
-        sanitizeForLog(email),
-        'plan:',
-        sanitizeForLog(priceType),
-        'specialty:',
-        sanitizeForLog(specialty)
-      );
-      res.json({ url: session.url });
-    } catch (error) {
-      console.error('[STRIPE] Error creating checkout session:', error);
-      res.status(500).json({ error: 'Failed to create checkout session' });
-    }
-  }
-);
-
-// Create Stripe customer portal session with input validation
-app.post(
-  '/create-portal-session',
-  express.json(),
-  [body('customerId').isString().isLength({ min: 1, max: 100 }).trim().escape()],
-  async (req, res) => {
-    if (!stripe) {
-      return res.status(503).json({ error: 'Payment processing not configured' });
-    }
-
-    // Check validation results
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      console.error('[STRIPE] Portal validation errors:', errors.array());
-      return res.status(400).json({ error: 'Invalid input', details: errors.array() });
-    }
-
-    try {
-      const { customerId } = req.body;
-
-      const session = await stripe.billingPortal.sessions.create({
-        customer: customerId,
-        return_url: `${config.FRONTEND_URL}?page=profile`
-      });
-
-      console.log('[STRIPE] Portal session created for customer:', sanitizeForLog(customerId));
-      res.json({ url: session.url });
-    } catch (error) {
-      console.error('[STRIPE] Error creating portal session:', error);
-      res.status(500).json({ error: 'Failed to create portal session' });
-    }
-  }
-);
+// Stripe Checkout + Customer Portal handlers moved to ./src/routes/payments.js.
+// See the app.use(require('./src/routes/payments')) mount above.
 
 // Start shared HTTP + WebSocket server on single port
 if (config.NODE_ENV !== 'test') {

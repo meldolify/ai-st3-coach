@@ -207,6 +207,14 @@ function validateConfig() {
         `[CONFIG] WARNING: Stripe is partially configured (${stripeSet}/${stripeVars.length} keys set) — payments will fail`
       );
     }
+    // Stripe in test mode while NODE_ENV=production silently no-ops live billing.
+    // Audit 2026-05-21 §MED-04: caught this during the audit when live probing
+    // returned `cs_test_*` checkout URLs from production. Fail-loud on next deploy.
+    if ((process.env.STRIPE_SECRET_KEY || '').startsWith('sk_test_')) {
+      console.warn(
+        '[CONFIG] WARNING: Stripe is in TEST mode (sk_test_*) but NODE_ENV=production — checkout will not bill real cards. Flip to a sk_live_ key before launch.'
+      );
+    }
     // Same for Supabase
     const supabaseVars = ['SUPABASE_URL', 'SUPABASE_SERVICE_KEY'];
     const supabaseSet = supabaseVars.filter(k => process.env[k]).length;

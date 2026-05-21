@@ -1,5 +1,6 @@
 import { CONFIG } from '../config'
 import { useAuthStore } from '../stores/authStore'
+import { supabaseClient } from './supabase'
 
 /**
  * Defense-in-depth check for full-page redirects sourced from our own backend.
@@ -20,6 +21,19 @@ function isSafeRedirectUrl(url) {
   } catch {
     return false
   }
+}
+
+/**
+ * Fetch the current Supabase session and return an Authorization header value.
+ * The backend Stripe routes require this on every call (audit 2026-05-21
+ * findings HIGH-01 + HIGH-02). Throws if no session — caller is expected to
+ * already be logged in.
+ */
+async function getBearerHeader() {
+  const { data } = await supabaseClient.auth.getSession()
+  const token = data?.session?.access_token
+  if (!token) throw new Error('Not signed in.')
+  return { Authorization: `Bearer ${token}` }
 }
 
 /**
@@ -62,6 +76,9 @@ export function isPremiumUser() {
 
 /**
  * startCheckout — Redirect to Stripe Checkout for subscription purchase.
+ *
+ * The backend derives userId + email from the Supabase Bearer token, so we
+ * only send the plan choice. See audit 2026-05-21 §HIGH-02.
  */
 export async function startCheckout(plan = 'monthly') {
   const { currentUser } = useAuthStore.getState()
@@ -70,15 +87,11 @@ export async function startCheckout(plan = 'monthly') {
     throw new Error('Please sign in to subscribe.')
   }
 
+  const authHeader = await getBearerHeader()
   const response = await fetch(`${CONFIG.HTTP_BACKEND_URL}/create-checkout-session`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      userId: currentUser.id,
-      email: currentUser.email,
-      priceType: plan,
-      specialty: 'plastic-surgery',
-    }),
+    headers: { 'Content-Type': 'application/json', ...authHeader },
+    body: JSON.stringify({ priceType: plan }),
   })
 
   if (!response.ok) throw new Error('Failed to create checkout session')
@@ -92,6 +105,10 @@ export async function startCheckout(plan = 'monthly') {
 
 /**
  * openCustomerPortal — Redirect to Stripe Customer Portal for subscription management.
+ *
+ * The backend looks up the caller's stripe_customer_id from their own
+ * subscriptions row using the Supabase Bearer token; the client no longer
+ * sends a customerId. See audit 2026-05-21 §HIGH-01.
  */
 export async function openCustomerPortal() {
   const { userSubscription } = useAuthStore.getState()
@@ -100,12 +117,10 @@ export async function openCustomerPortal() {
     throw new Error('No active subscription found.')
   }
 
+  const authHeader = await getBearerHeader()
   const response = await fetch(`${CONFIG.HTTP_BACKEND_URL}/create-portal-session`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      customerId: userSubscription.stripe_customer_id,
-    }),
+    headers: { 'Content-Type': 'application/json', ...authHeader },
   })
 
   if (!response.ok) throw new Error('Failed to create portal session')
