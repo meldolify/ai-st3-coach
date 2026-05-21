@@ -10,6 +10,12 @@ const ScenarioFlow = lazy(() => import('./pages/Scenarios/ScenarioFlow'))
 const SimulationRoom = lazy(() => import('./components/SimulationRoom'))
 const ProfilePage = lazy(() => import('./pages/Profile/ProfilePage'))
 const PromptLab = lazy(() => import('./pages/PromptLab/PromptLab'))
+const PrivacyPolicy = lazy(() => import('./pages/Legal/PrivacyPolicy'))
+const TermsOfService = lazy(() => import('./pages/Legal/TermsOfService'))
+const CookiePolicy = lazy(() => import('./pages/Legal/CookiePolicy'))
+const ContactPage = lazy(() => import('./pages/Contact/ContactPage'))
+const HelpPage = lazy(() => import('./pages/Help/HelpPage'))
+const AboutPage = lazy(() => import('./pages/About/AboutPage'))
 
 function LoadingFallback() {
   return (
@@ -33,6 +39,13 @@ function AppRoutes() {
         <Route path="/simulation" element={<SimulationRoom />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/prompt-lab" element={<PromptLab />} />
+        <Route path="/privacy" element={<PrivacyPolicy />} />
+        <Route path="/terms" element={<TermsOfService />} />
+        <Route path="/cookies" element={<CookiePolicy />} />
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/help" element={<HelpPage />} />
+        <Route path="/faq" element={<Navigate to="/help" replace />} />
+        <Route path="/about" element={<AboutPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Suspense>

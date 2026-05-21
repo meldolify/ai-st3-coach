@@ -52,16 +52,16 @@ export default function FooterSection() {
         </div>
         <div className="footer-column">
           <h4>Resources</h4>
-          <span className="footer-pending">Marking criteria &middot; coming soon</span>
-          <span className="footer-pending">FAQ &middot; coming soon</span>
+          <Link to="/about">About</Link>
+          <Link to="/help">Help &amp; FAQ</Link>
           <span className="footer-pending">Blog &middot; coming soon</span>
-          <span className="footer-pending">Contact &middot; coming soon</span>
+          <Link to="/contact">Contact</Link>
         </div>
         <div className="footer-column">
           <h4>Legal</h4>
-          <span className="footer-pending">Terms &middot; coming soon</span>
-          <span className="footer-pending">Privacy &middot; coming soon</span>
-          <span className="footer-pending">Cookies &middot; coming soon</span>
+          <Link to="/terms">Terms</Link>
+          <Link to="/privacy">Privacy</Link>
+          <Link to="/cookies">Cookies</Link>
         </div>
       </div>
       <div className="footer-bottom">
