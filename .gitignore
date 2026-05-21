@@ -77,6 +77,16 @@ test-results/
 # Claude Code cache
 .claude/
 
+# Static analysis output (CodeQL databases, SARIF, semgrep, etc.)
+# CodeQL databases are huge (~200MB / ~3k files) and per-machine.
+# Re-create with: codeql database create ...
+static_analysis_codeql_*/
+static_analysis_semgrep_*/
+*.sarif
+*.bqrs
+codeql-bundle-*.tar.gz
+codeql-bundle-*.tar.zst
+
 # Claude temporary working directories
 tmpclaude-*-cwd
 

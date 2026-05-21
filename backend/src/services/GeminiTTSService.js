@@ -16,6 +16,7 @@
 
 const { GoogleGenAI } = require('@google/genai');
 const config = require('../config');
+const { sanitizeForLog } = require('../middleware/websocketSecurity');
 
 const TTS_SAMPLE_RATE = 24000;
 const TTS_CHANNELS = 1;
@@ -100,8 +101,8 @@ class GeminiTTSService {
   async *synthesizeStream(text, voiceName, options = {}) {
     const client = this._ensureClient();
     console.log(
-      `[Gemini TTS] (stream) ${config.TTS_MODEL_NAME} voice=${voiceName} lang=${config.TTS_LANGUAGE_CODE}`,
-      options.stylePrompt ? `tags=${options.stylePrompt}` : ''
+      `[Gemini TTS] (stream) ${config.TTS_MODEL_NAME} voice=${sanitizeForLog(voiceName)} lang=${config.TTS_LANGUAGE_CODE}`,
+      options.stylePrompt ? `tags=${sanitizeForLog(options.stylePrompt)}` : ''
     );
 
     const mark = options.onTimingMark || (() => {});

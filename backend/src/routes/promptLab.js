@@ -11,6 +11,7 @@ const promptLabService = require('../services/PromptLabService');
 const testScriptGenerator = require('../services/TestScriptGenerator');
 const gitHubService = require('../services/GitHubService');
 const { RateLimitError } = require('openai');
+const { sanitizeForLog } = require('../middleware/websocketSecurity');
 
 const DEFAULT_TOPIC = 'clinical/emergencies/necrotising_fasciitis';
 const BACKEND_DIR = path.join(__dirname, '..', '..');
@@ -68,7 +69,7 @@ async function autoCommitToGitHub(savedPaths) {
     const result = await gitHubService.commitToMain(files);
     return { committed: true, commitUrl: result.commitUrl };
   } catch (err) {
-    console.error('[PROMPT LAB] GitHub auto-commit failed:', err.message);
+    console.error('[PROMPT LAB] GitHub auto-commit failed:', sanitizeForLog(err.message));
     return { committed: false, commitError: err.message };
   }
 }
@@ -85,7 +86,7 @@ router.get('/topics', (req, res) => {
     const topics = promptLabService.listTopics();
     res.json({ topics });
   } catch (err) {
-    console.error('[PROMPT LAB] List topics error:', err.message);
+    console.error('[PROMPT LAB] List topics error:', sanitizeForLog(err.message));
     res.status(500).json({ error: err.message });
   }
 });
@@ -109,7 +110,7 @@ router.post('/session', (req, res) => {
     const result = promptLabService.createSession(promptSections, metadata);
     res.json(result);
   } catch (err) {
-    console.error('[PROMPT LAB] Session create error:', err.message);
+    console.error('[PROMPT LAB] Session create error:', sanitizeForLog(err.message));
     res.status(500).json({ error: err.message });
   }
 });
@@ -135,7 +136,7 @@ router.post('/chat', async (req, res) => {
     const result = await promptLabService.chat(sessionId, message);
     res.json(result);
   } catch (err) {
-    console.error('[PROMPT LAB] Chat error:', err.message);
+    console.error('[PROMPT LAB] Chat error:', sanitizeForLog(err.message));
     if (err instanceof RateLimitError || err.isRateLimit) {
       return res.status(429).json({
         error: 'API rate limit reached. Please wait a moment and try again.',
@@ -164,7 +165,7 @@ router.post('/feedback', async (req, res) => {
     );
     res.json(result);
   } catch (err) {
-    console.error('[PROMPT LAB] Feedback error:', err.message);
+    console.error('[PROMPT LAB] Feedback error:', sanitizeForLog(err.message));
     if (err instanceof RateLimitError || err.isRateLimit) {
       return res.status(429).json({
         error:
@@ -190,7 +191,7 @@ router.post('/save-manual', (req, res) => {
     const transcriptId = promptLabService.saveManualTranscript(sessionId);
     res.json({ transcriptId });
   } catch (err) {
-    console.error('[PROMPT LAB] Save manual error:', err.message);
+    console.error('[PROMPT LAB] Save manual error:', sanitizeForLog(err.message));
     res.status(500).json({ error: err.message });
   }
 });
@@ -213,7 +214,7 @@ router.get('/prompts/:difficulty', (req, res) => {
     const result = promptLabService.loadPrompt(topic, difficulty);
     res.json(result);
   } catch (err) {
-    console.error('[PROMPT LAB] Load prompt error:', err.message);
+    console.error('[PROMPT LAB] Load prompt error:', sanitizeForLog(err.message));
     const status = err.message.includes('not found') ? 404 : 500;
     res.status(status).json({ error: err.message });
   }
@@ -241,7 +242,7 @@ router.put('/prompts/:difficulty', async (req, res) => {
     const commitResult = await autoCommitToGitHub(result.paths);
     res.json({ ...result, ...commitResult });
   } catch (err) {
-    console.error('[PROMPT LAB] Save prompt error:', err.message);
+    console.error('[PROMPT LAB] Save prompt error:', sanitizeForLog(err.message));
     res.status(500).json({ error: err.message });
   }
 });
@@ -260,7 +261,7 @@ router.get('/feedback-prompt/:difficulty', (req, res) => {
     const result = promptLabService.loadFeedbackPromptFile(topic, difficulty);
     res.json(result);
   } catch (err) {
-    console.error('[PROMPT LAB] Load feedback prompt error:', err.message);
+    console.error('[PROMPT LAB] Load feedback prompt error:', sanitizeForLog(err.message));
     const status = err.message.includes('not found') ? 404 : 500;
     res.status(status).json({ error: err.message });
   }
@@ -295,7 +296,7 @@ router.put('/feedback-prompt/:difficulty', async (req, res) => {
     );
     res.json({ ...result, ...commitResult });
   } catch (err) {
-    console.error('[PROMPT LAB] Save feedback prompt error:', err.message);
+    console.error('[PROMPT LAB] Save feedback prompt error:', sanitizeForLog(err.message));
     res.status(500).json({ error: err.message });
   }
 });
@@ -318,7 +319,7 @@ router.get('/tests', (req, res) => {
     const tests = promptLabService.listTestScripts(topicFolderName, topic);
     res.json({ tests });
   } catch (err) {
-    console.error('[PROMPT LAB] List tests error:', err.message);
+    console.error('[PROMPT LAB] List tests error:', sanitizeForLog(err.message));
     res.status(500).json({ error: err.message });
   }
 });
@@ -343,7 +344,7 @@ router.post('/generate-test', async (req, res) => {
     testScriptGenerator.cacheScript(topic, testType, script);
     res.json({ script, cached: true });
   } catch (err) {
-    console.error('[PROMPT LAB] Generate test error:', err.message);
+    console.error('[PROMPT LAB] Generate test error:', sanitizeForLog(err.message));
     res.status(500).json({ error: err.message });
   }
 });
@@ -364,7 +365,7 @@ router.delete('/generated-tests', (req, res) => {
     testScriptGenerator.clearCache(topic);
     res.json({ success: true });
   } catch (err) {
-    console.error('[PROMPT LAB] Clear generated tests error:', err.message);
+    console.error('[PROMPT LAB] Clear generated tests error:', sanitizeForLog(err.message));
     res.status(500).json({ error: err.message });
   }
 });
@@ -387,7 +388,7 @@ router.post('/run-test', async (req, res) => {
     );
     res.json(result);
   } catch (err) {
-    console.error('[PROMPT LAB] Run test error:', err.message);
+    console.error('[PROMPT LAB] Run test error:', sanitizeForLog(err.message));
     if (err instanceof RateLimitError || err.isRateLimit) {
       return res.status(429).json({
         error:
@@ -424,7 +425,7 @@ router.post('/run-difficulty-comparison', async (req, res) => {
     }
     res.json({ results });
   } catch (err) {
-    console.error('[PROMPT LAB] Difficulty comparison error:', err.message);
+    console.error('[PROMPT LAB] Difficulty comparison error:', sanitizeForLog(err.message));
     if (err instanceof RateLimitError || err.isRateLimit) {
       return res.status(429).json({ error: 'API rate limit reached.', code: 'RATE_LIMITED' });
     }
@@ -444,7 +445,7 @@ router.get('/transcripts', (req, res) => {
     const transcripts = promptLabService.listTranscripts();
     res.json({ transcripts });
   } catch (err) {
-    console.error('[PROMPT LAB] List transcripts error:', err.message);
+    console.error('[PROMPT LAB] List transcripts error:', sanitizeForLog(err.message));
     res.status(500).json({ error: err.message });
   }
 });
@@ -460,7 +461,7 @@ router.get('/transcripts/:id', (req, res) => {
     const transcript = promptLabService.loadTranscript(req.params.id);
     res.json(transcript);
   } catch (err) {
-    console.error('[PROMPT LAB] Load transcript error:', err.message);
+    console.error('[PROMPT LAB] Load transcript error:', sanitizeForLog(err.message));
     const status = err.message.includes('not found') ? 404 : 500;
     res.status(status).json({ error: err.message });
   }
@@ -477,7 +478,7 @@ router.delete('/transcripts/:id', (req, res) => {
     promptLabService.deleteTranscript(req.params.id);
     res.json({ success: true });
   } catch (err) {
-    console.error('[PROMPT LAB] Delete transcript error:', err.message);
+    console.error('[PROMPT LAB] Delete transcript error:', sanitizeForLog(err.message));
     const status = err.message.includes('not found') ? 404 : 500;
     res.status(status).json({ error: err.message });
   }
@@ -495,7 +496,7 @@ router.get('/changes', (req, res) => {
     const files = promptLabService.getModifiedFiles();
     res.json({ files, count: files.length });
   } catch (err) {
-    console.error('[PROMPT LAB] List changes error:', err.message);
+    console.error('[PROMPT LAB] List changes error:', sanitizeForLog(err.message));
     res.status(500).json({ error: err.message });
   }
 });
@@ -541,7 +542,7 @@ router.post('/create-pr', async (req, res) => {
     promptLabService.clearModifiedFiles();
     res.json(result);
   } catch (err) {
-    console.error('[PROMPT LAB] Create PR error:', err.message);
+    console.error('[PROMPT LAB] Create PR error:', sanitizeForLog(err.message));
     res.status(500).json({ error: err.message });
   }
 });

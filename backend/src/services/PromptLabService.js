@@ -11,7 +11,9 @@ const { parsePromptSections } = require('../utils/promptParser');
 const {
   buildFeedbackPrompt,
   extractDomain,
-  resolveScenarioPath
+  resolveScenarioPath,
+  safeResolveIn,
+  safeResolveInPromptsDir
 } = require('../utils/promptAssembler');
 const { parseFeedbackResponse } = require('../utils/feedbackParser');
 const testScriptGenerator = require('./TestScriptGenerator');
@@ -42,6 +44,13 @@ const modifiedFiles = new Set();
  * @param {string} topicPath - e.g., "clinical/emergencies/necrotising_fasciitis"
  */
 function validateTopicPath(topicPath) {
+  // Type guard first — Array.prototype.includes('..') and .startsWith on
+  // an array have different semantics than the string versions, so the
+  // ad-hoc traversal checks below would be silently bypassed if an
+  // attacker supplied an array (e.g. via ?topic=a&topic=b).
+  if (typeof topicPath !== 'string') {
+    throw new Error('Invalid topic path: must be a string');
+  }
   if (
     !topicPath ||
     topicPath.includes('..') ||
@@ -73,9 +82,8 @@ function validateTranscriptId(id) {
 function getModularPaths(topicPath, difficulty) {
   const domain = extractDomain(topicPath);
   return {
-    core: path.join(PROMPTS_DIR, 'shared/interview', `core_${domain}_interview.txt`),
-    difficulty: path.join(
-      PROMPTS_DIR,
+    core: safeResolveInPromptsDir('shared/interview', `core_${domain}_interview.txt`),
+    difficulty: safeResolveInPromptsDir(
       'shared/interview',
       `${difficulty}_interview_personality.txt`
     ),
@@ -92,9 +100,8 @@ function getModularPaths(topicPath, difficulty) {
 function getModularFeedbackPaths(topicPath, difficulty) {
   const domain = extractDomain(topicPath);
   return {
-    core: path.join(PROMPTS_DIR, 'shared/feedback', `core_${domain}_feedback.txt`),
-    personality: path.join(
-      PROMPTS_DIR,
+    core: safeResolveInPromptsDir('shared/feedback', `core_${domain}_feedback.txt`),
+    personality: safeResolveInPromptsDir(
       'shared/feedback',
       `${difficulty}_feedback_personality.txt`
     ),
@@ -111,7 +118,7 @@ function getLegacyPromptPath(topicPath, difficulty) {
   const category = parts[0];
   const folderName = parts[parts.length - 1];
   const filename = `${difficulty}_${category}_${folderName}_1.txt`;
-  return path.join(LEGACY_DIR, topicPath, filename);
+  return safeResolveInPromptsDir('_legacy', topicPath, filename);
 }
 
 /**
@@ -272,20 +279,23 @@ function loadFeedbackPromptAssembled(topicPath, difficulty) {
     // Fallback: legacy feedback files
     const { category, folderName } = getFeedbackParts(topicPath);
 
-    const difficultyFile = path.join(
-      FEEDBACK_DIR,
+    const difficultyFile = safeResolveInPromptsDir(
+      '_legacy/feedback',
       `${difficulty}_${category}_${folderName}_feedback.txt`
     );
     if (fs.existsSync(difficultyFile)) {
       return fs.readFileSync(difficultyFile, 'utf8');
     }
 
-    const genericTopicFile = path.join(FEEDBACK_DIR, `${category}_${folderName}_feedback.txt`);
+    const genericTopicFile = safeResolveInPromptsDir(
+      '_legacy/feedback',
+      `${category}_${folderName}_feedback.txt`
+    );
     if (fs.existsSync(genericTopicFile)) {
       return fs.readFileSync(genericTopicFile, 'utf8');
     }
 
-    const genericFile = path.join(FEEDBACK_DIR, 'generic_feedback.txt');
+    const genericFile = safeResolveInPromptsDir('_legacy/feedback', 'generic_feedback.txt');
     if (fs.existsSync(genericFile)) {
       return fs.readFileSync(genericFile, 'utf8');
     }
@@ -558,7 +568,9 @@ function listTestScripts(topicFolderName, topicPath) {
   }
 
   // 1. Pre-made topic-specific scripts (gold standard)
-  const topicDir = path.join(TEST_SCRIPTS_DIR, topicFolderName || '');
+  const topicDir = topicFolderName
+    ? safeResolveIn(TEST_SCRIPTS_DIR, topicFolderName)
+    : TEST_SCRIPTS_DIR;
   if (topicFolderName && fs.existsSync(topicDir)) {
     const files = fs.readdirSync(topicDir).filter(f => f.endsWith('.json'));
     for (const f of files) {
@@ -610,7 +622,7 @@ function listTestScripts(topicFolderName, topicPath) {
 
   // 3. Cached LLM-generated scripts
   if (topicFolderName) {
-    const generatedDir = path.join(TEST_SCRIPTS_DIR, '_generated', topicFolderName);
+    const generatedDir = safeResolveIn(TEST_SCRIPTS_DIR, '_generated', topicFolderName);
     if (fs.existsSync(generatedDir)) {
       const files = fs.readdirSync(generatedDir).filter(f => f.endsWith('.json'));
       for (const f of files) {
@@ -671,13 +683,13 @@ function listTestScripts(topicFolderName, topicPath) {
 
 async function loadTestScript(topicFolderName, testId, topicPath) {
   // 1. Pre-made topic-specific
-  const premadePath = path.join(TEST_SCRIPTS_DIR, topicFolderName, `${testId}.json`);
+  const premadePath = safeResolveIn(TEST_SCRIPTS_DIR, topicFolderName, `${testId}.json`);
   if (fs.existsSync(premadePath)) {
     return JSON.parse(fs.readFileSync(premadePath, 'utf8'));
   }
 
   // 2. Generic behavioral
-  const genericPath = path.join(TEST_SCRIPTS_DIR, '_generic', `${testId}.json`);
+  const genericPath = safeResolveIn(TEST_SCRIPTS_DIR, '_generic', `${testId}.json`);
   if (fs.existsSync(genericPath)) {
     return JSON.parse(fs.readFileSync(genericPath, 'utf8'));
   }
@@ -1024,7 +1036,7 @@ function ensureTestResultsDir() {
 
 function saveTranscript(result) {
   ensureTestResultsDir();
-  const filePath = path.join(TEST_RESULTS_DIR, `${result.id}.json`);
+  const filePath = safeResolveIn(TEST_RESULTS_DIR, `${result.id}.json`);
   fs.writeFileSync(filePath, JSON.stringify(result, null, 2), 'utf8');
   return result.id;
 }
@@ -1083,7 +1095,7 @@ function listTranscripts() {
 
 function loadTranscript(id) {
   validateTranscriptId(id);
-  const filePath = path.join(TEST_RESULTS_DIR, `${id}.json`);
+  const filePath = safeResolveIn(TEST_RESULTS_DIR, `${id}.json`);
   if (!fs.existsSync(filePath)) {
     throw new Error(`Transcript not found: ${id}`);
   }
@@ -1092,7 +1104,7 @@ function loadTranscript(id) {
 
 function deleteTranscript(id) {
   validateTranscriptId(id);
-  const filePath = path.join(TEST_RESULTS_DIR, `${id}.json`);
+  const filePath = safeResolveIn(TEST_RESULTS_DIR, `${id}.json`);
   if (!fs.existsSync(filePath)) {
     throw new Error(`Transcript not found: ${id}`);
   }

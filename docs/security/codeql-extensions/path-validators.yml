@@ -1,0 +1,31 @@
+# CodeQL data extension: model the project's path-sanitizer helpers so the
+# JavaScript path-injection query stops flagging values that pass through them.
+#
+# Helpers covered:
+#   - safeResolveIn(root, ...segments)             — fail-closed path resolver
+#   - safeResolveInPromptsDir(...segments)         — same, fixed root = PROMPTS_DIR
+#   - validateTopicPath(topicPath)                 — string-only allowlist regex
+#   - validateInputs(difficulty, topicFolder)      — enum + path.normalize check
+#   - validateTranscriptId(id)                     — strict [A-Za-z0-9_-]+ allowlist
+#
+# Apply with:
+#   codeql database analyze <db> --additional-packs=<path-to-this-dir> -- <suite>
+extensions:
+  - addsTo:
+      pack: codeql/javascript-all
+      extensible: sanitizerModel
+    data:
+      # safeResolveIn / safeResolveInPromptsDir — return values are guaranteed
+      # to stay inside the supplied root; tag them sanitized for path-injection.
+      - ["backend/src/utils/promptAssembler.js", "Member[safeResolveIn]", "ReturnValue", "path-injection"]
+      - ["backend/src/utils/promptAssembler.js", "Member[safeResolveInPromptsDir]", "ReturnValue", "path-injection"]
+      # validateInputs throws on bad input; if it returns, the topicFolder
+      # arg has passed the allowlist + path.normalize + isAbsolute checks.
+      - ["backend/src/utils/promptAssembler.js", "Member[validateInputs]", "Argument[1]", "path-injection"]
+      # validateTopicPath: throws on bad input; arg is sanitized after the call.
+      - ["backend/src/services/PromptLabService.js", "Member[validateTopicPath]", "Argument[0]", "path-injection"]
+      # validateTranscriptId: same shape.
+      - ["backend/src/services/PromptLabService.js", "Member[validateTranscriptId]", "Argument[0]", "path-injection"]
+      # sanitizeForLog strips control chars and truncates — neutralizes
+      # log-injection (CWE-117). Tag its return value as sanitized.
+      - ["backend/src/middleware/websocketSecurity.js", "Member[sanitizeForLog]", "ReturnValue", "log-injection"]

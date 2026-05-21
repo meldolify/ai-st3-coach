@@ -10,6 +10,7 @@
  */
 
 const config = require('../config');
+const { extractBearerToken } = require('../utils/auth');
 
 let supabaseAdmin = null;
 function getSupabase() {
@@ -41,12 +42,10 @@ async function promptLabAuth(req, res, next) {
       .json({ error: 'Prompt Lab admin allowlist not configured on the server' });
   }
 
-  const auth = req.headers.authorization || '';
-  const match = auth.match(/^Bearer\s+(.+)$/i);
-  if (!match) {
+  const token = extractBearerToken(req.headers.authorization);
+  if (!token) {
     return res.status(401).json({ error: 'Authorization Bearer token required' });
   }
-  const token = match[1];
 
   const supabase = getSupabase();
   if (!supabase) {

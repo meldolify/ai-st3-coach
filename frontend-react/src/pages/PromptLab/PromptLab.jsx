@@ -577,7 +577,9 @@ export default function PromptLab() {
   }, [])
 
   // --- Group topics for optgroups ---
-  const topicGroups = {}
+  // Use a null-prototype object so a topic named "__proto__" or "constructor"
+  // (from a malicious API response) can't poison Object.prototype.
+  const topicGroups = Object.create(null)
   for (const t of topics) {
     if (!topicGroups[t.group]) topicGroups[t.group] = []
     topicGroups[t.group].push(t)

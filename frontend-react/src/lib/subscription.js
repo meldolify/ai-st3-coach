@@ -2,6 +2,27 @@ import { CONFIG } from '../config'
 import { useAuthStore } from '../stores/authStore'
 
 /**
+ * Defense-in-depth check for full-page redirects sourced from our own backend.
+ * Even though the URL is returned by api.reviva.live (which we control), a
+ * compromised or misconfigured backend response could otherwise hand us a
+ * `javascript:`-scheme URL — assigning that to `window.location.href` would
+ * execute attacker JS in our origin with the current user's session.
+ */
+function isSafeRedirectUrl(url) {
+  try {
+    const u = new URL(url)
+    if (u.protocol !== 'https:') return false
+    return (
+      u.hostname === 'checkout.stripe.com' ||
+      u.hostname === 'billing.stripe.com' ||
+      u.hostname.endsWith('.stripe.com')
+    )
+  } catch {
+    return false
+  }
+}
+
+/**
  * canAccessScenario — Three-tier access control for scenario paths.
  *
  * Unlogged → all locked. Free → FREE_TIER_SCENARIOS only. Premium → all allowed.
@@ -63,6 +84,9 @@ export async function startCheckout(plan = 'monthly') {
   if (!response.ok) throw new Error('Failed to create checkout session')
 
   const { url } = await response.json()
+  if (!isSafeRedirectUrl(url)) {
+    throw new Error('Unsafe redirect URL returned by checkout endpoint')
+  }
   window.location.href = url
 }
 
@@ -87,5 +111,8 @@ export async function openCustomerPortal() {
   if (!response.ok) throw new Error('Failed to create portal session')
 
   const { url } = await response.json()
+  if (!isSafeRedirectUrl(url)) {
+    throw new Error('Unsafe redirect URL returned by portal endpoint')
+  }
   window.location.href = url
 }

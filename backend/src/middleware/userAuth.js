@@ -12,6 +12,7 @@
  */
 
 const config = require('../config');
+const { extractBearerToken } = require('../utils/auth');
 
 let supabaseAdmin = null;
 function getSupabase() {
@@ -29,12 +30,10 @@ async function userAuth(req, res, next) {
     return next();
   }
 
-  const auth = req.headers.authorization || '';
-  const match = auth.match(/^Bearer\s+(.+)$/i);
-  if (!match) {
+  const token = extractBearerToken(req.headers.authorization);
+  if (!token) {
     return res.status(401).json({ error: 'Authorization Bearer token required' });
   }
-  const token = match[1];
 
   const supabase = getSupabase();
   if (!supabase) {

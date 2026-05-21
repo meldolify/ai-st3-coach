@@ -7,7 +7,11 @@
 const fs = require('fs');
 const path = require('path');
 const openaiService = require('./OpenAIService');
-const { resolveScenarioPath } = require('../utils/promptAssembler');
+const {
+  resolveScenarioPath,
+  safeResolveIn,
+  safeResolveInPromptsDir
+} = require('../utils/promptAssembler');
 const { parsePromptSections } = require('../utils/promptParser');
 
 const BACKEND_DIR = path.join(__dirname, '..', '..');
@@ -95,14 +99,14 @@ function getPromptPath(topicPath, difficulty) {
   const category = parts[0];
   const folderName = parts[parts.length - 1];
   const filename = `${difficulty}_${category}_${folderName}_1.txt`;
-  return path.join(LEGACY_DIR, topicPath, filename);
+  return safeResolveInPromptsDir('_legacy', topicPath, filename);
 }
 
 function getCachePath(topicPath, testType) {
   assertSafeTopicPath(topicPath);
   assertSafeFilename(testType);
   const folderName = topicPath.split('/').pop();
-  return path.join(GENERATED_CACHE_DIR, folderName, `${testType}.json`);
+  return safeResolveIn(GENERATED_CACHE_DIR, folderName, `${testType}.json`);
 }
 
 // ──────────────────────────────────────────
@@ -146,15 +150,10 @@ function cacheScript(topicPath, testType, script) {
 function clearCache(topicPath) {
   assertSafeTopicPath(topicPath);
   const folderName = topicPath.split('/').pop();
-  const dir = path.join(GENERATED_CACHE_DIR, folderName);
-  // Path-confinement: ensure dir stays inside GENERATED_CACHE_DIR even if a
-  // future validator regression lets traversal characters through.
-  const resolvedDir = path.resolve(dir);
-  const resolvedRoot = path.resolve(GENERATED_CACHE_DIR);
-  if (resolvedDir !== resolvedRoot && !resolvedDir.startsWith(resolvedRoot + path.sep)) {
-    throw new Error('Invalid cache path');
-  }
-  if (resolvedDir === resolvedRoot) {
+  // safeResolveIn enforces path-confinement (rejects traversal); reject the
+  // bare-root case ourselves so we never blow away every cached script.
+  const dir = safeResolveIn(GENERATED_CACHE_DIR, folderName);
+  if (dir === path.resolve(GENERATED_CACHE_DIR)) {
     throw new Error('Refusing to clear the entire generated cache root');
   }
   if (fs.existsSync(dir)) {

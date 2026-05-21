@@ -6,6 +6,7 @@
 
 const textToSpeech = require('@google-cloud/text-to-speech');
 const config = require('../config');
+const { sanitizeForLog } = require('../middleware/websocketSecurity');
 
 class TTSService {
   constructor() {
@@ -36,7 +37,7 @@ class TTSService {
     const client = this._ensureClient();
     voiceName = voiceName || config.TTS_VOICE;
 
-    console.log('[Cloud TTS] Using voice:', voiceName);
+    console.log('[Cloud TTS] Using voice:', sanitizeForLog(voiceName));
 
     // Determine gender based on voice name
     const femaleVoices = ['-F', '-A', '-C'];

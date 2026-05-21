@@ -16,10 +16,48 @@ const {
   extractDomain,
   validateInputs,
   resolveScenarioPath,
+  safeResolveIn,
+  safeResolveInPromptsDir,
   PROMPTS_DIR,
   VALID_DOMAINS,
   VALID_DIFFICULTIES
 } = require('../src/utils/promptAssembler');
+
+describe('safeResolveIn / safeResolveInPromptsDir', () => {
+  const tmp = require('os').tmpdir();
+
+  test('resolves a child segment under the root', () => {
+    const out = safeResolveIn(tmp, 'sub', 'file.txt');
+    expect(out).toBe(path.resolve(tmp, 'sub', 'file.txt'));
+  });
+
+  test('returns the root itself when no segments given', () => {
+    const out = safeResolveIn(tmp);
+    expect(out).toBe(path.resolve(tmp));
+  });
+
+  test('throws when a single segment escapes the root', () => {
+    expect(() => safeResolveIn(tmp, '../etc/passwd')).toThrow(/escapes/);
+  });
+
+  test('throws on absolute path that escapes the root', () => {
+    expect(() => safeResolveIn(tmp, 'C:\\Windows\\System32')).toThrow(/escapes/);
+    expect(() => safeResolveIn(tmp, '/etc/passwd')).toThrow(/escapes/);
+  });
+
+  test('throws when chained traversal escapes after a valid segment', () => {
+    expect(() => safeResolveIn(tmp, 'sub', '..', '..', 'etc')).toThrow(/escapes/);
+  });
+
+  test('safeResolveInPromptsDir resolves under PROMPTS_DIR', () => {
+    const out = safeResolveInPromptsDir('shared', 'interview', 'x.txt');
+    expect(out).toBe(path.resolve(PROMPTS_DIR, 'shared', 'interview', 'x.txt'));
+  });
+
+  test('safeResolveInPromptsDir rejects traversal', () => {
+    expect(() => safeResolveInPromptsDir('..', 'outside.txt')).toThrow(/escapes/);
+  });
+});
 
 describe('extractDomain', () => {
   test('extracts clinical domain', () => {

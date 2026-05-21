@@ -7,6 +7,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { sanitizeForLog } = require('../middleware/websocketSecurity');
 
 const BACKEND_DIR = path.join(__dirname, '../../');
 const PROMPTS_DIR = path.join(BACKEND_DIR, 'prompts');
@@ -45,6 +46,37 @@ function validateInputs(difficulty, topicFolder) {
 }
 
 /**
+ * Resolve a path under a fixed root and refuse anything that escapes the
+ * root. Replaces ad-hoc `path.join + normalize + startsWith` checks that
+ * CodeQL can't see through.
+ *
+ * @param {string} root - Absolute base directory the result must stay inside
+ * @param  {...string} segments - Path segments to join under root
+ * @returns {string} Absolute resolved path, guaranteed to be under root
+ */
+function safeResolveIn(root, ...segments) {
+  const baseAbs = path.resolve(root);
+  const resolved = path.resolve(baseAbs, ...segments);
+  const baseWithSep = baseAbs.endsWith(path.sep) ? baseAbs : baseAbs + path.sep;
+  if (resolved !== baseAbs && !resolved.startsWith(baseWithSep)) {
+    throw new Error('Path escapes allowed directory');
+  }
+  return resolved;
+}
+
+/**
+ * Resolve a path under PROMPTS_DIR. Curried form of safeResolveIn for the
+ * most common caller. Use this for any path built from scenario / topic /
+ * difficulty inputs.
+ *
+ * @param  {...string} segments - Path segments under PROMPTS_DIR
+ * @returns {string} Absolute resolved path inside PROMPTS_DIR
+ */
+function safeResolveInPromptsDir(...segments) {
+  return safeResolveIn(PROMPTS_DIR, ...segments);
+}
+
+/**
  * Check if all given file paths exist.
  * @param {...string} files
  * @returns {boolean}
@@ -70,7 +102,7 @@ function readFile(filePath) {
  */
 function resolveScenarioPath(topicFolder, variant = 1) {
   const topicName = topicFolder.split('/').pop();
-  return path.join(PROMPTS_DIR, 'scenarios', topicFolder, `${topicName}_${variant}.txt`);
+  return safeResolveInPromptsDir('scenarios', topicFolder, `${topicName}_${variant}.txt`);
 }
 
 /**
@@ -86,21 +118,24 @@ function buildInterviewPrompt(difficulty, topicFolder, variant = 1) {
   validateInputs(difficulty, topicFolder);
   const domain = extractDomain(topicFolder);
 
-  const coreFile = path.join(PROMPTS_DIR, 'shared/interview', `core_${domain}_interview.txt`);
-  const personalityFile = path.join(
-    PROMPTS_DIR,
+  const coreFile = safeResolveInPromptsDir('shared/interview', `core_${domain}_interview.txt`);
+  const personalityFile = safeResolveInPromptsDir(
     'shared/interview',
     `${difficulty}_interview_personality.txt`
   );
   const clinicalFile = resolveScenarioPath(topicFolder, variant);
 
   if (allExist(coreFile, personalityFile, clinicalFile)) {
-    console.log(`[PROMPT] Assembled modular interview: ${domain}/${difficulty}/${topicFolder}`);
+    console.log(
+      `[PROMPT] Assembled modular interview: ${sanitizeForLog(domain)}/${sanitizeForLog(difficulty)}/${sanitizeForLog(topicFolder)}`
+    );
     return [readFile(coreFile), readFile(personalityFile), readFile(clinicalFile)].join('\n\n');
   }
 
   // Fallback: legacy monolithic file
-  console.log(`[PROMPT] Falling back to legacy for: ${topicFolder}/${difficulty}`);
+  console.log(
+    `[PROMPT] Falling back to legacy for: ${sanitizeForLog(topicFolder)}/${sanitizeForLog(difficulty)}`
+  );
   return loadLegacyInterviewPrompt(topicFolder, difficulty);
 }
 
@@ -117,21 +152,24 @@ function buildFeedbackPrompt(difficulty, topicFolder, variant = 1) {
   validateInputs(difficulty, topicFolder);
   const domain = extractDomain(topicFolder);
 
-  const coreFile = path.join(PROMPTS_DIR, 'shared/feedback', `core_${domain}_feedback.txt`);
-  const personalityFile = path.join(
-    PROMPTS_DIR,
+  const coreFile = safeResolveInPromptsDir('shared/feedback', `core_${domain}_feedback.txt`);
+  const personalityFile = safeResolveInPromptsDir(
     'shared/feedback',
     `${difficulty}_feedback_personality.txt`
   );
   const clinicalFile = resolveScenarioPath(topicFolder, variant);
 
   if (allExist(coreFile, personalityFile, clinicalFile)) {
-    console.log(`[PROMPT] Assembled modular feedback: ${domain}/${difficulty}/${topicFolder}`);
+    console.log(
+      `[PROMPT] Assembled modular feedback: ${sanitizeForLog(domain)}/${sanitizeForLog(difficulty)}/${sanitizeForLog(topicFolder)}`
+    );
     return [readFile(coreFile), readFile(personalityFile), readFile(clinicalFile)].join('\n\n');
   }
 
   // Fallback: legacy feedback file
-  console.log(`[PROMPT] Falling back to legacy feedback for: ${topicFolder}/${difficulty}`);
+  console.log(
+    `[PROMPT] Falling back to legacy feedback for: ${sanitizeForLog(topicFolder)}/${sanitizeForLog(difficulty)}`
+  );
   return loadLegacyFeedbackPrompt(topicFolder, difficulty);
 }
 
@@ -148,21 +186,16 @@ function loadLegacyInterviewPrompt(topicFolder, difficulty) {
     const folderName = topicFolder.split('/').pop();
     const heading = topicFolder.split('/')[0];
     const fileName = `${difficulty}_${heading}_${folderName}_1.txt`;
-    const filePath = path.join(PROMPTS_DIR, '_legacy', topicFolder, fileName);
-
-    const normalizedPath = path.normalize(filePath);
-    if (!normalizedPath.startsWith(path.normalize(PROMPTS_DIR))) {
-      throw new Error('Invalid scenario file path');
-    }
+    const filePath = safeResolveInPromptsDir('_legacy', topicFolder, fileName);
 
     if (fs.existsSync(filePath)) {
-      console.log(`[PROMPT] Legacy loaded: ${fileName}`);
+      console.log(`[PROMPT] Legacy loaded: ${sanitizeForLog(fileName)}`);
       return readFile(filePath);
     }
 
-    console.warn(`[PROMPT] Legacy file not found: ${fileName}`);
+    console.warn(`[PROMPT] Legacy file not found: ${sanitizeForLog(fileName)}`);
   } catch (err) {
-    console.error(`[PROMPT] Legacy load error: ${err.message}`);
+    console.error(`[PROMPT] Legacy load error: ${sanitizeForLog(err.message)}`);
   }
 
   return 'You are a Plastic Surgery ST3 interview examiner. Conduct a professional interview.';
@@ -181,22 +214,22 @@ function loadLegacyFeedbackPrompt(topicFolder, difficulty) {
 
   // Try difficulty-prefixed feedback file first
   const difficultyFileName = `${difficulty}_clinical_${scenarioDir}_feedback.txt`;
-  const difficultyPath = path.join(PROMPTS_DIR, '_legacy/feedback', difficultyFileName);
+  const difficultyPath = safeResolveInPromptsDir('_legacy/feedback', difficultyFileName);
   if (fs.existsSync(difficultyPath)) {
-    console.log(`[PROMPT] Legacy feedback loaded: ${difficultyFileName}`);
+    console.log(`[PROMPT] Legacy feedback loaded: ${sanitizeForLog(difficultyFileName)}`);
     return readFile(difficultyPath);
   }
 
   // Try generic (no difficulty prefix) - matches old loadFeedbackPrompt() behaviour
   const genericFileName = `clinical_${scenarioDir}_feedback.txt`;
-  const genericPath = path.join(PROMPTS_DIR, '_legacy/feedback', genericFileName);
+  const genericPath = safeResolveInPromptsDir('_legacy/feedback', genericFileName);
   if (fs.existsSync(genericPath)) {
-    console.log(`[PROMPT] Legacy feedback loaded (generic): ${genericFileName}`);
+    console.log(`[PROMPT] Legacy feedback loaded (generic): ${sanitizeForLog(genericFileName)}`);
     return readFile(genericPath);
   }
 
   // Last resort
-  const fallbackPath = path.join(PROMPTS_DIR, '_legacy/feedback', 'generic_feedback.txt');
+  const fallbackPath = safeResolveInPromptsDir('_legacy/feedback', 'generic_feedback.txt');
   if (fs.existsSync(fallbackPath)) {
     console.log('[PROMPT] Using generic feedback prompt');
     return readFile(fallbackPath);
@@ -225,7 +258,7 @@ function loadInfoSheet(topicFolder) {
   }
 
   const scenarioName = topicFolder.split('/').pop();
-  const infoSheetPath = path.join(PROMPTS_DIR, 'info-sheets', domain, `${scenarioName}.txt`);
+  const infoSheetPath = safeResolveInPromptsDir('info-sheets', domain, `${scenarioName}.txt`);
 
   if (!fs.existsSync(infoSheetPath)) {
     return null;
@@ -241,6 +274,8 @@ module.exports = {
   extractDomain,
   validateInputs,
   resolveScenarioPath,
+  safeResolveIn,
+  safeResolveInPromptsDir,
   loadInfoSheet,
   loadLegacyInterviewPrompt,
   loadLegacyFeedbackPrompt,

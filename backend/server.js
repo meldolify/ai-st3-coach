@@ -501,9 +501,9 @@ wss.on('connection', (ws, req) => {
 
   console.log(
     '[CLIENT] Requested scenario: ' +
-      scenarioFile +
-      (difficulty ? ' (difficulty: ' + difficulty + ')' : '') +
-      (voice ? ' (voice: ' + voice + ')' : '')
+      sanitizeForLog(scenarioFile) +
+      (difficulty ? ' (difficulty: ' + sanitizeForLog(difficulty) + ')' : '') +
+      (voice ? ' (voice: ' + sanitizeForLog(voice) + ')' : '')
   );
 
   // Async IIFE for access validation
@@ -724,7 +724,7 @@ wss.on('connection', (ws, req) => {
 
       const validation = validateMessage(msg);
       if (!validation.valid) {
-        console.warn(`[SECURITY] Invalid message rejected: ${validation.error}`);
+        console.warn(`[SECURITY] Invalid message rejected: ${sanitizeForLog(validation.error)}`);
         ws.send(JSON.stringify({ type: 'error', message: validation.error }));
         return;
       }
@@ -733,7 +733,7 @@ wss.on('connection', (ws, req) => {
       const rateCheck = wsRateLimiter.checkLimit(msg.sessionId, messageType);
       if (!rateCheck.allowed) {
         console.warn(
-          `[SECURITY] Rate limit exceeded for session ${msg.sessionId}: ${rateCheck.reason}`
+          `[SECURITY] Rate limit exceeded for session ${sanitizeForLog(msg.sessionId)}: ${sanitizeForLog(rateCheck.reason)}`
         );
         ws.send(JSON.stringify({ type: 'error', message: rateCheck.reason }));
         return;
@@ -771,7 +771,7 @@ wss.on('connection', (ws, req) => {
             if (!capCheck.allowed) {
               session.audioCapHit = true;
               console.warn(
-                `[USAGE] Audio cap hit for user ${session.userId} (${capCheck.minutesUsed.toFixed(1)}/${capCheck.capMinutes} min)`
+                `[USAGE] Audio cap hit for user ${sanitizeForLog(session.userId)} (${capCheck.minutesUsed.toFixed(1)}/${capCheck.capMinutes} min)`
               );
               ws.send(JSON.stringify({ type: 'error', message: capCheck.reason }));
               return;
@@ -987,7 +987,7 @@ wss.on('connection', (ws, req) => {
                   console.log(`[TIMING] Feedback total (stream + TTS + delivery): ${t3 - t1}ms`);
                   session.inFeedbackMode = false;
                 } catch (error) {
-                  console.error('[FEEDBACK ERROR]', error.message);
+                  console.error('[FEEDBACK ERROR]', sanitizeForLog(error.message));
                   const isRateLimit = error instanceof RateLimitError || error.isRateLimit;
                   if (isRateLimit) {
                     ws.send(
@@ -1053,10 +1053,20 @@ wss.on('connection', (ws, req) => {
 // Serve static frontend files
 app.use(express.static(path.join(__dirname, '../frontend')));
 
-// Enable CORS for frontend
+// Enable CORS for frontend.
+// Production: only FRONTEND_URL (env var). If not set, CORS is disabled (false).
+// Dev: tighten to localhost dev-server ports — the wildcard was flagged by
+// CodeQL (js/cors-permissive-configuration, sev 6.0) and we never need it.
+const DEV_CORS_ORIGINS = [
+  'http://localhost:3001',
+  'http://localhost:8080',
+  'http://127.0.0.1:3001'
+];
 app.use(
   cors({
-    origin: config.FRONTEND_URL || (config.isProduction ? false : '*'),
+    origin: config.isProduction
+      ? config.FRONTEND_URL || false
+      : config.FRONTEND_URL || DEV_CORS_ORIGINS,
     methods: ['POST', 'GET', 'DELETE', 'PUT', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'stripe-signature']
   })
@@ -1302,7 +1312,7 @@ app.post(
 
       // Verify price ID is configured
       if (!priceId) {
-        console.error('[STRIPE] Price ID not configured for:', priceType);
+        console.error('[STRIPE] Price ID not configured for:', sanitizeForLog(priceType));
         return res.status(500).json({ error: 'Payment configuration error' });
       }
 
@@ -1322,11 +1332,11 @@ app.post(
 
       console.log(
         '[STRIPE] Checkout session created for:',
-        email,
+        sanitizeForLog(email),
         'plan:',
-        priceType,
+        sanitizeForLog(priceType),
         'specialty:',
-        specialty
+        sanitizeForLog(specialty)
       );
       res.json({ url: session.url });
     } catch (error) {
@@ -1361,7 +1371,7 @@ app.post(
         return_url: `${config.FRONTEND_URL}?page=profile`
       });
 
-      console.log('[STRIPE] Portal session created for customer:', customerId);
+      console.log('[STRIPE] Portal session created for customer:', sanitizeForLog(customerId));
       res.json({ url: session.url });
     } catch (error) {
       console.error('[STRIPE] Error creating portal session:', error);
