@@ -74,14 +74,52 @@ describe('WebSocket Security Middleware', () => {
   describe('validateMessage', () => {
     it('accepts valid message types', () => {
       expect(
-        validateMessage({ type: 'user_transcript', sessionId: 'session_123', text: 'Hello' }).valid
+        validateMessage({
+          type: 'user_transcript',
+          sessionId: 'session_550e8400-e29b-41d4-a716-446655440000_lzz1pm6',
+          text: 'Hello'
+        }).valid
       ).toBe(true);
       expect(
-        validateMessage({ type: 'whisper_audio', sessionId: 'session_123', audio: 'base64data' })
-          .valid
+        validateMessage({
+          type: 'user_speaking',
+          sessionId: 'session_550e8400-e29b-41d4-a716-446655440000_lzz1pm6'
+        }).valid
       ).toBe(true);
-      expect(validateMessage({ type: 'user_speaking', sessionId: 'session_123' }).valid).toBe(true);
-      expect(validateMessage({ type: 'ai_finished', sessionId: 'session_123' }).valid).toBe(true);
+      expect(
+        validateMessage({
+          type: 'ai_finished',
+          sessionId: 'session_550e8400-e29b-41d4-a716-446655440000_lzz1pm6'
+        }).valid
+      ).toBe(true);
+    });
+
+    // Audit 2026-05-21 §LOW-04: whisper_audio schema was removed
+    it('rejects the removed whisper_audio type as unknown', () => {
+      const result = validateMessage({
+        type: 'whisper_audio',
+        sessionId: 'session_550e8400-e29b-41d4-a716-446655440000_lzz1pm6',
+        audio: 'x'
+      });
+      expect(result.valid).toBe(false);
+      expect(result.error).toMatch(/Unknown message type/i);
+    });
+
+    // Audit 2026-05-21 §LOW-05: strict sessionId pattern is enforced
+    it('rejects malformed sessionId (defence in depth)', () => {
+      const bad = [
+        'session_abc123',
+        'session_',
+        'session__lzz1pm6',
+        'session_550e8400-e29b-41d4-a716-446655440000_', // missing timestamp
+        'evil_550e8400-e29b-41d4-a716-446655440000_lzz1pm6', // wrong prefix
+        'session_NOT-HEX!-e29b-41d4-a716-446655440000_lzz1pm6'
+      ];
+      for (const sid of bad) {
+        const result = validateMessage({ type: 'user_speaking', sessionId: sid });
+        expect(result.valid).toBe(false);
+        expect(result.error).toMatch(/invalid format/i);
+      }
     });
 
     it('rejects invalid message formats', () => {
@@ -91,22 +129,26 @@ describe('WebSocket Security Middleware', () => {
     });
 
     it('rejects messages missing required fields', () => {
-      const result = validateMessage({ type: 'user_transcript', sessionId: 'session_123' });
+      const result = validateMessage({
+        type: 'user_transcript',
+        sessionId: 'session_550e8400-e29b-41d4-a716-446655440000_lzz1pm6'
+      });
       expect(result.valid).toBe(false);
     });
 
     it('enforces message size limits', () => {
       const textResult = validateMessage({
         type: 'user_transcript',
-        sessionId: 'session_123',
+        sessionId: 'session_550e8400-e29b-41d4-a716-446655440000_lzz1pm6',
         text: 'x'.repeat(10001)
       });
       expect(textResult.valid).toBe(false);
 
+      // audio_chunk is the live STT path (Deepgram). 32 KB base64 cap.
       const audioResult = validateMessage({
-        type: 'whisper_audio',
-        sessionId: 'session_123',
-        audio: 'x'.repeat(5 * 1024 * 1024 + 1)
+        type: 'audio_chunk',
+        sessionId: 'session_550e8400-e29b-41d4-a716-446655440000_lzz1pm6',
+        audio: 'x'.repeat(32 * 1024 + 1)
       });
       expect(audioResult.valid).toBe(false);
     });

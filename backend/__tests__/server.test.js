@@ -18,7 +18,7 @@ describe('WebSocket message validation', () => {
   test('validates a well-formed user_transcript message', () => {
     const result = validateMessage({
       type: 'user_transcript',
-      sessionId: 'session_abc123',
+      sessionId: 'session_550e8400-e29b-41d4-a716-446655440000_lzz1pm6',
       text: 'Hello, I would like to discuss the case.'
     });
     expect(result.valid).toBe(true);

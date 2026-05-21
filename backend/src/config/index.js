@@ -223,6 +223,14 @@ function validateConfig() {
         '[CONFIG] WARNING: Supabase is partially configured — auth/subscription checks will silently fail'
       );
     }
+    // Global LLM kill-switch — defense-in-depth against sock-puppet
+    // free-tier cap evasion (audit 2026-05-21 §LOW-01). Unset/0 means
+    // unlimited, which is the wrong default for a production deploy.
+    if (!config.MAX_DAILY_LLM_CALLS || config.MAX_DAILY_LLM_CALLS <= 0) {
+      console.warn(
+        '[CONFIG] WARNING: MAX_DAILY_LLM_CALLS is unset/0 in production — there is no daily ceiling on LLM cost. Recommend 500 (see .env.example).'
+      );
+    }
   }
 }
 

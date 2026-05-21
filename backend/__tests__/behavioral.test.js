@@ -797,7 +797,7 @@ describe('Error Handling', () => {
       ws.send(
         JSON.stringify({
           type: 'user_speaking',
-          sessionId: 'session_bogus_12345'
+          sessionId: 'session_550e8400-e29b-41d4-a716-446655440000_bogusid'
         })
       );
       const errorMsg = await waitForMessage(ws);

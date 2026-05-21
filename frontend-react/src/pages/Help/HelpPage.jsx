@@ -92,7 +92,7 @@ const FAQ_GROUPS = [
   },
   {
     id: 'account-and-billing',
-    title: 'Account &amp; billing',
+    title: 'Account & billing',
     questions: [
       {
         q: 'How do I cancel my subscription?',
@@ -133,7 +133,7 @@ const FAQ_GROUPS = [
   },
   {
     id: 'privacy-and-data',
-    title: 'Privacy &amp; data',
+    title: 'Privacy & data',
     questions: [
       {
         q: 'Is my voice recorded?',
@@ -211,7 +211,7 @@ function FAQItem({ q, a }) {
 
 export default function HelpPage() {
   return (
-    <PageLayout title="Help &amp; FAQ" lastUpdated={null}>
+    <PageLayout title="Help & FAQ" lastUpdated={null}>
       <p>
         Most questions are covered below. If you can&rsquo;t find what
         you&rsquo;re after, drop us a line on the{' '}
@@ -220,7 +220,7 @@ export default function HelpPage() {
 
       {FAQ_GROUPS.map((group) => (
         <section key={group.id} className="faq-group">
-          <h2 dangerouslySetInnerHTML={{ __html: group.title }} />
+          <h2>{group.title}</h2>
           {group.questions.map((item, idx) => (
             <FAQItem key={`${group.id}-${idx}`} q={item.q} a={item.a} />
           ))}

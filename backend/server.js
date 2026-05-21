@@ -349,16 +349,31 @@ async function streamResponseToClient(session, ws, history, options = {}) {
 // in WebSocketRateLimiter, but nothing throttles fresh connections from a
 // single IP — without this, one source could open thousands of sessions at
 // once and exhaust the SUPABASE auth.getUser() rate budget.
+//
+// IP resolution uses proxy-addr with `trust proxy: 1`, the same lib + config
+// Express uses for req.ip. This mirrors the HTTP-route semantics so a
+// spoofed X-Forwarded-For (e.g. `X-Forwarded-For: 1.1.1.1`) does NOT bypass
+// the per-IP cap — Render appends its own trusted view as the rightmost
+// entry, and proxy-addr strips one trusted hop before returning the client
+// IP. Audit 2026-05-21 §LOW-02.
+const proxyaddr = require('proxy-addr');
 const WS_CONNECT_WINDOW_MS = 60 * 1000;
 const WS_MAX_CONNECTS_PER_MIN = 20;
+// Trust 1 hop from the right. Mirrors what Express does internally when
+// `app.set('trust proxy', 1)` — proxy-addr.compile doesn't accept a bare
+// number (only strings/arrays/functions), so we pass the function form.
+// (addr, i) => i < 1 means: walk addresses right-to-left, the first
+// (i=0) is the trusted hop (Render's appended view), return the next one
+// (the actual client IP Render saw).
+const WS_TRUST_PROXY = (_addr, i) => i < 1;
 const wsConnectAttempts = new Map();
 
-function getClientIp(req) {
-  const fwd = req.headers['x-forwarded-for'];
-  if (fwd) {
-    return fwd.toString().split(',')[0].trim();
+function getWsClientIp(req) {
+  try {
+    return proxyaddr(req, WS_TRUST_PROXY) || 'unknown';
+  } catch {
+    return (req.socket && req.socket.remoteAddress) || 'unknown';
   }
-  return (req.socket && req.socket.remoteAddress) || 'unknown';
 }
 
 function isWsConnectRateLimited(req) {
@@ -367,7 +382,7 @@ function isWsConnectRateLimited(req) {
   if (process.env.NODE_ENV === 'test') {
     return false;
   }
-  const ip = getClientIp(req);
+  const ip = getWsClientIp(req);
   const now = Date.now();
   const fresh = (wsConnectAttempts.get(ip) || []).filter(t => now - t < WS_CONNECT_WINDOW_MS);
   if (fresh.length >= WS_MAX_CONNECTS_PER_MIN) {
@@ -407,7 +422,7 @@ const wss = new WebSocket.Server({
   handleProtocols: protocols => (protocols.has(AUTH_SUBPROTOCOL) ? AUTH_SUBPROTOCOL : false),
   verifyClient: info => {
     if (isWsConnectRateLimited(info.req)) {
-      console.warn(`[WS] Rejected: connection rate limit for ${getClientIp(info.req)}`);
+      console.warn(`[WS] Rejected: connection rate limit for ${getWsClientIp(info.req)}`);
       return false;
     }
     if (config.isProduction) {
@@ -1081,7 +1096,9 @@ app.use(
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
-        scriptSrc: ["'self'", 'https://cdn.jsdelivr.net', 'https://js.stripe.com'],
+        // cdn.jsdelivr.net dropped 2026-05-21 — was used by the legacy vanilla
+        // frontend; React SPA ships everything from /assets/ (audit §LOW-03).
+        scriptSrc: ["'self'", 'https://js.stripe.com'],
         styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
         fontSrc: ["'self'", 'https://fonts.gstatic.com'],
         connectSrc: [

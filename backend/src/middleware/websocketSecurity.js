@@ -108,37 +108,46 @@ class WebSocketRateLimiter {
 // MESSAGE VALIDATION
 // ============================================================================
 
+// Strict sessionId format. Matches generateSecureSessionId() above:
+//   `session_${randomUUID}_${timestampBase36}`
+//
+// Defence in depth (audit 2026-05-21 §LOW-05) — the per-message session
+// ownership check already rejects unknown ids with a generic error, so this
+// pattern is fail-fast: a non-matching id bounces before reaching the
+// sessions Map lookup. UUID v4 + a 6–12 base36 timestamp is what the
+// generator produces; anything else is either a bug or a probe.
+const SESSION_ID_PATTERN =
+  /^session_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}_[a-z0-9]{6,12}$/i;
+const sessionIdField = { type: 'string', maxLength: 100, pattern: SESSION_ID_PATTERN };
+
 const MESSAGE_SCHEMAS = {
   audio_chunk: {
     required: ['sessionId', 'audio'],
-    sessionId: { type: 'string', maxLength: 100 },
+    sessionId: sessionIdField,
     audio: { type: 'string', maxLength: 32 * 1024 } // ~16KB base64 per 250ms chunk at 16kHz mono
   },
   user_transcript: {
     required: ['sessionId', 'text'],
-    sessionId: { type: 'string', maxLength: 100 },
+    sessionId: sessionIdField,
     text: { type: 'string', maxLength: 10000 }
   },
-  whisper_audio: {
-    required: ['sessionId', 'audio'],
-    sessionId: { type: 'string', maxLength: 100 },
-    audio: { type: 'string', maxLength: 5 * 1024 * 1024 } // 5MB base64 limit (~3.75MB audio)
-  },
+  // whisper_audio schema removed 2026-05-21 — Deepgram Flux is the only STT
+  // path; no handler in server.js was consuming this type. (audit §LOW-04)
   user_speaking: {
     required: ['sessionId'],
-    sessionId: { type: 'string', maxLength: 100 }
+    sessionId: sessionIdField
   },
   ai_finished: {
     required: ['sessionId'],
-    sessionId: { type: 'string', maxLength: 100 }
+    sessionId: sessionIdField
   },
   request_feedback: {
     required: ['sessionId'],
-    sessionId: { type: 'string', maxLength: 100 }
+    sessionId: sessionIdField
   },
   end_interview: {
     required: ['sessionId'],
-    sessionId: { type: 'string', maxLength: 100 }
+    sessionId: sessionIdField
   }
 };
 
@@ -195,6 +204,20 @@ function validateMessage(message) {
       return {
         valid: false,
         error: `Field ${field} exceeds maximum length (${value.length} > ${constraints.maxLength})`
+      };
+    }
+
+    // Pattern check — for fields with a strict format (e.g. sessionId).
+    // Defence in depth on top of the per-message ownership check (audit
+    // 2026-05-21 §LOW-05).
+    if (
+      constraints.pattern instanceof RegExp &&
+      typeof value === 'string' &&
+      !constraints.pattern.test(value)
+    ) {
+      return {
+        valid: false,
+        error: `Field ${field} has invalid format`
       };
     }
   }

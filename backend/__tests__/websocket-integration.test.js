@@ -787,7 +787,7 @@ describe('Error handling', () => {
       ws.send(
         JSON.stringify({
           type: 'user_speaking',
-          sessionId: 'session_nonexistent_12345'
+          sessionId: 'session_550e8400-e29b-41d4-a716-446655440000_dne1234'
         })
       );
 
