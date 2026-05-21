@@ -51,7 +51,7 @@ export default function SectionC_Difference() {
             <figure className="section-c__polaroid">
               <div className="section-c__polaroid-photo">
                 <img
-                  src="/images/landing/c-handcraft.png"
+                  src="/images/landing/c-handcraft.webp"
                   alt=""
                   aria-hidden="true"
                   loading="lazy"

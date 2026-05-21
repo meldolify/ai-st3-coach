@@ -56,15 +56,24 @@ export function DeviceFrame({ persona }) {
             <img
               src={persona.imageWide}
               alt={persona.name}
-              loading="lazy"
+              loading="eager"
+              decoding="async"
+              fetchpriority="high"
               className="w-full h-full object-cover"
               onError={(e) => { e.currentTarget.style.display = 'none' }}
             />
           </div>
 
-          {/* Orb */}
+          {/* Orb — state varies per persona (easy=idle, medium=listening,
+              strict=thinking). Key forces a clean remount so the CSS
+              spin animations restart at zero on persona switch. */}
           <div className="flex justify-center pt-6 pb-2">
-            <VoiceOrbSimple state="listening" size={88} statusText={firstName} />
+            <VoiceOrbSimple
+              key={persona.name}
+              state={persona.orbState || 'listening'}
+              size={88}
+              statusText={firstName}
+            />
           </div>
 
           {/* Name + role + description */}

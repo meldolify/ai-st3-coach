@@ -5,19 +5,19 @@ const CARDS = [
     id: 'time-limited',
     numeral: '01',
     title: 'And when you find one, their time is limited.',
-    body: "Real practice for the national interviews isn't easy to come by. The seniors who'd help you are busy. Mock circuits are weeks apart. You end up rehearsing in your head, which is never the same thing.",
+    body: "The seniors who'd help are busy. Mock circuits are weeks apart. You end up rehearsing in your head, which is never the same thing.",
   },
   {
     id: 'always-on',
     numeral: '02',
     title: "So we built one that's always on.",
-    body: "It's not an AI hallucinating cases. Every scenario is hand-crafted from actual interview material. The AI is there to give you the experience of the interview. Whenever you want.",
+    body: 'Not an AI hallucinating cases. Every scenario is hand-crafted from real interview material. Whenever you want.',
   },
   {
     id: 'by-trainees',
     numeral: '03',
     title: 'Designed by top-ranking trainees who have been through it all before.',
-    body: "Top-ranking trainees wrote and tested every station. It's what you actually need for the interview. A great way to start your prep before later on refining with colleagues.",
+    body: 'Top-ranking trainees wrote and tested every station. A great way to start your prep before refining with colleagues.',
   },
 ]
 

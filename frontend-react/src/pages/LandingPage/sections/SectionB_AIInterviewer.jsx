@@ -118,11 +118,13 @@ export default function SectionB_AIInterviewer() {
                 )}
                 style={{ transition: 'opacity 0.4s ease' }}
               >
-                {/* Giant numeral watermark behind the description */}
+                {/* Giant numeral watermark behind the description. Anchored at
+                    the step's top-left so it doesn't bleed past the column
+                    edge into the device frame area. */}
                 <span
                   aria-hidden="true"
-                  className="pointer-events-none absolute -top-4 -left-4 md:-left-8 select-none font-organic-display font-normal leading-none text-organic-forest/45"
-                  style={{ fontSize: 'clamp(8rem, 14vw, 14rem)' }}
+                  className="pointer-events-none absolute top-0 left-0 select-none font-organic-display font-normal leading-none text-organic-forest/45"
+                  style={{ fontSize: 'clamp(7rem, 11vw, 12rem)' }}
                 >
                   {String(i + 1).padStart(2, '0')}
                 </span>

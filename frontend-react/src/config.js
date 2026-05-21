@@ -68,10 +68,11 @@ export const PERSONA_CONFIG = {
     roleLabel: 'Easy Examiner',
     description:
       'Your friendly neighborhood consultant who remembers being a trainee. Warm encouragement, generous hints, and celebrates your wins.',
-    image: '/images/interviewer_persona_john.png',
-    imageWide: '/images/interviewer_persona_john_wide.png',
+    image: '/images/interviewer_persona_john.webp',
+    imageWide: '/images/interviewer_persona_john_wide.webp',
     voice: 'Fenrir',
     accentColor: '#10B981',
+    orbState: 'idle',
   },
   medium: {
     name: 'Miss Elliot',
@@ -79,10 +80,11 @@ export const PERSONA_CONFIG = {
     roleLabel: 'Balanced Examiner',
     description:
       'Fair and balanced. The real ST3 interview experience. Straight-shooting feedback with occasional nudges.',
-    image: '/images/interviewer_persona_elliot.png',
-    imageWide: '/images/interviewer_persona_elliot_wide.png',
+    image: '/images/interviewer_persona_elliot.webp',
+    imageWide: '/images/interviewer_persona_elliot_wide.webp',
     voice: 'Kore',
     accentColor: '#F59E0B',
+    orbState: 'listening',
   },
   strict: {
     name: 'Mr Perry',
@@ -90,9 +92,10 @@ export const PERSONA_CONFIG = {
     roleLabel: 'Strict Examiner',
     description:
       "No nonsense. High standards. Expects excellence or you'll hear about it. Brutally honest with sky-high expectations.",
-    image: '/images/interviewer_persona_perry.png',
-    imageWide: '/images/interviewer_persona_perry_wide.png',
+    image: '/images/interviewer_persona_perry.webp',
+    imageWide: '/images/interviewer_persona_perry_wide.webp',
     voice: 'Charon',
     accentColor: '#EF4444',
+    orbState: 'thinking',
   },
 }
