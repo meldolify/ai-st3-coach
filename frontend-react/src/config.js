@@ -15,6 +15,11 @@ export const CONFIG = {
   SUPABASE_URL: 'https://vsdiovgjnbziwwukpvqo.supabase.co',
   SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZzZGlvdmdqbmJ6aXd3dWtwdnFvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzMjkxOTUsImV4cCI6MjA4MzkwNTE5NX0.iTanR6urX6H7-818YEWAN6jn0rXQBny8VANRJ-6qdBk',
 
+  // Sentry DSN — set via VITE_SENTRY_DSN in Vercel env vars (one for preview,
+  // one for production). Leave blank in local dev — the SDK no-ops when
+  // unset so nothing leaks from your laptop into the prod Sentry quota.
+  SENTRY_DSN: import.meta.env.VITE_SENTRY_DSN || '',
+
   FREE_TIER_SCENARIOS: [
     'clinical/emergencies/necrotising_fasciitis',
     'call_the_boss/scenarios/major_burn',

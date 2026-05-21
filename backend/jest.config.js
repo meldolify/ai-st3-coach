@@ -7,7 +7,10 @@ module.exports = {
     '!node_modules/**',
     '!coverage/**',
     '!**/*.test.js',
-    '!src/services/GitHubService.js'
+    '!src/services/GitHubService.js',
+    // Pure side-effect bootstrap: Sentry.init() driven by env var. No
+    // exported logic worth unit-testing; runs once at server start.
+    '!src/sentry-init.js'
   ],
   coverageThreshold: {
     global: {

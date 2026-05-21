@@ -98,6 +98,11 @@ const config = {
   // Debug flags
   DEBUG_VAD: process.env.DEBUG_VAD === 'true',
 
+  // Sentry error tracking. When set, server.js initialises @sentry/node
+  // BEFORE any other require so auto-instrumentation can patch http/express.
+  // When unset, Sentry calls no-op and nothing is reported.
+  SENTRY_DSN: process.env.SENTRY_DSN,
+
   // Free tier scenarios - topicFolder paths accessible without subscription
   // Keep in sync with frontend-react/src/config.js FREE_TIER_SCENARIOS
   // All 3 difficulties are implicitly included per topic

@@ -1,4 +1,5 @@
 import { Component } from 'react'
+import { Sentry } from '../lib/sentry'
 
 export default class ErrorBoundary extends Component {
   constructor(props) {
@@ -12,6 +13,13 @@ export default class ErrorBoundary extends Component {
 
   componentDidCatch(error, info) {
     console.error('[ErrorBoundary]', error, info.componentStack)
+    // Report to Sentry. captureException no-ops when Sentry isn't init'd
+    // (VITE_SENTRY_DSN unset), so this is safe even in local dev.
+    Sentry.captureException(error, {
+      contexts: {
+        react: { componentStack: info.componentStack },
+      },
+    })
   }
 
   render() {

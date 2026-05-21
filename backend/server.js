@@ -1,3 +1,9 @@
+// Sentry MUST init before any other require so its auto-instrumentation
+// can patch http/express/etc. via Node's diagnostics_channel. No-op when
+// SENTRY_DSN is unset.
+require('./src/sentry-init');
+const Sentry = require('@sentry/node');
+
 // Load configuration first (handles env vars, validation, and Google Cloud credentials)
 const config = require('./src/config');
 
@@ -65,9 +71,11 @@ if (config.isSupabaseEnabled) {
 
 process.on('unhandledRejection', (reason, _promise) => {
   console.error('[FATAL] Unhandled Rejection:', reason);
+  Sentry.captureException(reason);
 });
 process.on('uncaughtException', error => {
   console.error('[FATAL] Uncaught Exception:', error);
+  Sentry.captureException(error);
 });
 
 console.log('API clients initialized');
