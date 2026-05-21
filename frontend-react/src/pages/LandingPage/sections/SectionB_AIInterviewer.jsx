@@ -118,13 +118,13 @@ export default function SectionB_AIInterviewer() {
                 )}
                 style={{ transition: 'opacity 0.4s ease' }}
               >
-                {/* Giant numeral watermark behind the description. Anchored at
-                    the step's top-left so it doesn't bleed past the column
-                    edge into the device frame area. */}
+                {/* Giant numeral watermark — anchored top-right so the title
+                    + body flow uninterrupted on the left. The numeral sits in
+                    the right-side negative space of each step, magazine-style. */}
                 <span
                   aria-hidden="true"
-                  className="pointer-events-none absolute top-0 left-0 select-none font-organic-display font-normal leading-none text-organic-forest/45"
-                  style={{ fontSize: 'clamp(7rem, 11vw, 12rem)' }}
+                  className="pointer-events-none absolute top-0 right-0 select-none font-organic-display font-normal leading-[0.85] text-organic-forest/30"
+                  style={{ fontSize: 'clamp(6rem, 10vw, 11rem)' }}
                 >
                   {String(i + 1).padStart(2, '0')}
                 </span>
@@ -133,7 +133,9 @@ export default function SectionB_AIInterviewer() {
                   <span className="font-display italic text-organic-amber text-[1rem] tracking-wide block mb-3">
                     ( {step.label.toLowerCase()} )
                   </span>
-                  <h3 className="font-organic-display text-[clamp(1.85rem,4.2vw,3rem)] leading-[1.05] tracking-[-0.015em] mb-4 font-bold">
+                  {/* Title constrained so it doesn't bleed under the right-side
+                      numeral watermark. Body keeps its own max-w-[44ch]. */}
+                  <h3 className="font-organic-display text-[clamp(1.85rem,4.2vw,3rem)] leading-[1.05] tracking-[-0.015em] mb-4 font-bold max-w-[18ch]">
                     {step.title}
                   </h3>
                   <p className="text-[1.05rem] leading-relaxed text-organic-bark/75 max-w-[44ch]">
