@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react'
 import { startCheckout } from '../lib/subscription'
+import { PRICING } from '../config'
 
 const overlayStyle = {
   position: 'fixed',
@@ -186,10 +187,10 @@ export default function UpgradeModal({ onClose, title, message }) {
 
         {/* Pricing */}
         <div>
-          <span style={priceAmountStyle}>{isAnnual ? '£99.99' : '£14.99'}</span>
-          <span style={pricePeriodStyle}>{isAnnual ? '/year' : '/month'}</span>
+          <span style={priceAmountStyle}>{isAnnual ? PRICING.annual.amount : PRICING.monthly.amount}</span>
+          <span style={pricePeriodStyle}>{isAnnual ? PRICING.annual.period : PRICING.monthly.period}</span>
           <div style={savingsStyle}>
-            {isAnnual ? 'Save £80 compared to monthly!' : '\u00A0'}
+            {isAnnual ? `Save ${PRICING.annual.savings} compared to monthly!` : '\u00A0'}
           </div>
         </div>
 

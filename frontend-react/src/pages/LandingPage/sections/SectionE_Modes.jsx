@@ -1,60 +1,49 @@
 import { useNavigate } from 'react-router-dom'
 
 /**
- * §E — The Modes. What can I do?
+ * §E — Pick your path. Practise on your terms.
  *
- * Composition (per design package v2 — `ui_kits/landing/index.html` lines
- * 500-551):
- *   - Italic-serif eyebrow `( five modes · one product )` centred
- *   - h2 `Five modes. <em>One product.</em>` centred
- *   - 3-col grid of canopy mode cards (5 cards total — row 1 holds three,
- *     row 2 holds two, the 6th column is intentionally empty)
- *   - Each card: photo header (16/10) with gradient-to-canopy mask + a
- *     `( 0X )` italic-serif numeral in the top-right · body block with
- *     amber tracked sublabel + h3 + body + amber try-it pill
- *   - Photos parallax via the `.section-e .mode-photo img` selector wired
- *     in useLandingAnimations.js
+ * Five cards in a 3-column grid. Each card has a photo header (16/10) with
+ * gradient-to-canopy mask + numeral, title, body, and a "Try it" pill. No
+ * sublabel row — the title sits directly beneath the photo.
+ *
+ * Photos parallax via `.section-e .mode-photo img` (useLandingAnimations.js).
  */
 const MODES = [
   {
     id: 'practice',
     numeral: '01',
-    name: 'Practice',
-    sublabel: 'For focused drilling',
-    body: 'Choose any scenario. No timer, no pressure. Build confidence one station at a time.',
+    name: 'Practice mode',
+    body: "For focused drilling. Choose any scenario. No timer, no pressure. Use it to study a topic, or to practise what you've already studied.",
     photo: '/images/landing/e-mode-practice.png',
   },
   {
     id: 'mock-station',
     numeral: '02',
-    name: 'Mock by Station',
-    sublabel: 'Single timed station',
-    body: 'Pick a station, full pressure, full scoring. Calibrate before the day.',
+    name: 'Single timed station',
+    body: "Struggling with Call the Boss scenarios? Drill just that type. You won't know the diagnosis, but you can hammer your weak spots. Timer optional.",
     photo: '/images/landing/e-mode-mock-station.png',
   },
   {
     id: 'full-mock',
     numeral: '03',
-    name: 'Full Mock Exam',
-    sublabel: 'End-to-end circuit',
-    body: 'All four station types in a continuous run. Same pacing as the real day.',
+    name: 'Full Mock exam mode',
+    body: 'End-to-end circuit. All four station types in a continuous run. Same pacing as the real day. Timer and everything.',
     photo: '/images/landing/e-mode-full-mock.png',
   },
   {
-    id: 'progress',
+    id: 'feedback',
     numeral: '04',
-    name: 'Progress Tracking',
-    sublabel: 'Watch yourself improve',
-    body: 'Session history, score trends, category insights. See where you started, where you are.',
-    photo: '/images/landing/e-mode-progress.png',
+    name: 'Real Feedback',
+    body: "Didn't mention LRINEC? The examiner will tell you. Disorganised exam? It won't slide by. Every station is scored against standardised marking criteria, so the feedback is actually useful.",
+    photo: '/images/landing/e-mode-feedback.png',
   },
   {
-    id: 'feedback',
+    id: 'progress',
     numeral: '05',
-    name: 'Tailored Feedback',
-    sublabel: 'Marking-criteria graded',
-    body: 'Section-by-section, line-by-line. Clinical knowledge, communication, decision-making, professionalism.',
-    photo: '/images/landing/e-mode-feedback.png',
+    name: 'Keep track of your progress',
+    body: "Every station is scored. You'll see how you're doing and how you're improving, in real time.",
+    photo: '/images/landing/e-mode-progress.png',
   },
 ]
 
@@ -71,8 +60,8 @@ export default function SectionE_Modes() {
       <div className="section-e__inner max-w-[1500px] mx-auto px-6 sm:px-10 py-24 md:py-36">
         <div className="text-center mb-16 md:mb-20">
           <h2 className="section-e__title">
-            Five modes.<br />
-            <em>One product.</em>
+            Pick your path.<br />
+            <em>Practise on your terms.</em>
           </h2>
         </div>
 
@@ -104,9 +93,6 @@ export default function SectionE_Modes() {
                 </span>
               </div>
               <div className="mode-body flex-1 p-7 md:p-8 flex flex-col gap-4">
-                <span className="text-[11px] font-medium uppercase tracking-[0.28em] text-organic-amber">
-                  {mode.sublabel}
-                </span>
                 <h3 className="font-organic-display text-[1.45rem] leading-tight font-bold text-white">
                   {mode.name}
                 </h3>

@@ -247,7 +247,7 @@ backend/
 
 **Specialty-scoped subscriptions:** Each subscription has a `specialty` column (default: `'plastic-surgery'`). Premium access only grants scenarios matching the subscription's specialty. `SPECIALTY_MAP` in config maps folder prefixes to specialties. Currently all 4 domains map to `'plastic-surgery'` — when new specialties are added, update the map.
 
-**Pricing:** Monthly £14.99/month, Annual £99.99/year (save £80).
+**Pricing:** Monthly £19.99/month, Annual £119.99/year (save £120). Displayed prices live in `frontend-react/src/config.js` (`PRICING` constant) — single source of truth, consumed by `SectionF_Pricing`, `UpgradeModal`, `TermsOfService`. Stripe Price IDs are separate (env vars `STRIPE_PRICE_ID_MONTHLY` / `STRIPE_PRICE_ID_ANNUAL` on Render).
 
 **Database tables:** `profiles` (extends auth.users), `subscriptions` (user_id PK, status, specialty, price_type, stripe IDs), `session_history` (analytics). RLS enabled on all tables.
 

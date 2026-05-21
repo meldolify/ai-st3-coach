@@ -118,9 +118,23 @@
   -webkit-backdrop-filter: blur(20px);
 }
 
+.landing-page .landing-nav-new .nav-logo--home {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  transition: transform 0.25s ease, filter 0.25s ease;
+  cursor: pointer;
+}
+
+.landing-page .landing-nav-new .nav-logo--home:hover {
+  transform: translateY(-1px) scale(1.03);
+  filter: drop-shadow(0 4px 12px rgba(212, 148, 58, 0.25));
+}
+
 .landing-page .landing-nav-new .logo-img--nav {
-  height: 48px;
+  height: 60px;
   width: auto;
+  display: block;
 }
 
 .landing-page .landing-nav-new .nav-links {
@@ -132,13 +146,14 @@
 
 .landing-page .landing-nav-new .nav-link {
   position: relative;
-  font-family: var(--font-landing-body);
+  font-family: 'General Sans', sans-serif;
   font-weight: 500;
-  font-size: 0.9375rem;
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
   color: var(--text-on-light);
   text-decoration: none;
   padding: 4px 0;
-  transition: color 0.2s ease;
+  transition: color 0.2s ease, transform 0.2s ease;
   background: none;
   border: none;
   cursor: pointer;
@@ -163,6 +178,21 @@
 
 .landing-page .landing-nav-new .nav-link:hover::after {
   transform: scaleX(1);
+}
+
+/* Sign Up button keeps its amber-pill identity but its hover is unified
+   with the other nav links: just a subtle lift, no bg-color flip or
+   box-shadow blast. The text-link underline accent is suppressed too
+   (it would look odd under a pill). */
+.landing-page .landing-nav-new .nav-link.btn-amber:hover {
+  background: var(--organic-amber);
+  box-shadow: none;
+  transform: translateY(-1px);
+  color: var(--organic-bark);
+}
+
+.landing-page .landing-nav-new .nav-link.btn-amber::after {
+  display: none;
 }
 
 /* --------------------------------------------------------------------------
@@ -192,7 +222,13 @@
 .landing-page .section-hero {
   min-height: 100vh;
   position: relative;
-  background: var(--organic-bark);
+  background:
+    radial-gradient(
+      ellipse 90% 70% at 50% 45%,
+      color-mix(in srgb, var(--organic-forest) 32%, var(--organic-bark)) 0%,
+      var(--organic-bark) 78%
+    ),
+    var(--organic-bark);
   color: var(--organic-cream);
   overflow: hidden;
   display: grid;
@@ -207,10 +243,10 @@
   top: 28%;
   left: 50%;
   transform: translateX(-50%);
-  width: clamp(280px, 36vw, 520px);
-  height: clamp(280px, 36vw, 520px);
+  width: clamp(360px, 62vw, 800px);
+  height: clamp(360px, 62vw, 800px);
   z-index: 1;
-  opacity: 0.40;
+  opacity: 0.55;
   pointer-events: none;
   animation: hero-icosa-spin 90s linear infinite;
   will-change: transform;
@@ -227,7 +263,7 @@
 .landing-page .hero-icosa ellipse {
   fill: none;
   stroke: var(--organic-cream);
-  stroke-width: 1.4;
+  stroke-width: 1.6;
   opacity: 0.7;
 }
 
@@ -238,9 +274,9 @@
 @media (max-width: 767px) {
   .landing-page .hero-icosa {
     top: 22%;
-    width: clamp(220px, 60vw, 340px);
-    height: clamp(220px, 60vw, 340px);
-    opacity: 0.32;
+    width: clamp(280px, 90vw, 480px);
+    height: clamp(280px, 90vw, 480px);
+    opacity: 0.45;
   }
 }
 
@@ -278,52 +314,90 @@
   transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* Side decorative blocks — small flanking panels, parallax via --py.
-   Sand + amber tints at low opacity so the composition reads as a layered
-   architectural arrangement, not just one tile. */
-.landing-page .hero-side {
+/* Floating decorative shapes — mixed forms with depth-graded shadows.
+   Sharp + tight shadow = "near", large + soft + blurred shadow = "far".
+   Parallax via --py (set by useLandingAnimations.js); negative speeds
+   drift upward as the section enters, positive speeds drift downward. */
+.landing-page .hero-shape {
   position: absolute;
   z-index: 1;
   pointer-events: none;
-  border-radius: 4px;
   will-change: transform;
   transform: translate3d(0, calc(var(--py, 0) * 1px), 0);
 }
 
-.landing-page .hero-side--l1 {
+/* Tall rectangle on the left, mid-depth */
+.landing-page .hero-shape--l1 {
   top: 14%;
   left: 6%;
   width: clamp(60px, 7vw, 110px);
   height: clamp(180px, 22vh, 280px);
   background: var(--organic-amber);
   opacity: 0.45;
+  border-radius: 4px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
 }
 
-.landing-page .hero-side--l2 {
-  top: 56%;
-  left: 14%;
-  width: clamp(46px, 5vw, 80px);
-  height: clamp(120px, 16vh, 200px);
-  background: var(--organic-sand);
-  opacity: 0.30;
-}
-
-.landing-page .hero-side--r1 {
+/* Tall rectangle on the right, far depth */
+.landing-page .hero-shape--r1 {
   top: 22%;
   right: 8%;
   width: clamp(50px, 6vw, 90px);
   height: clamp(140px, 18vh, 220px);
   background: var(--organic-sand);
   opacity: 0.40;
+  border-radius: 4px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+  filter: blur(0.5px);
 }
 
-.landing-page .hero-side--r2 {
-  top: 62%;
-  right: 16%;
-  width: clamp(42px, 5vw, 72px);
-  height: clamp(110px, 14vh, 180px);
+/* Soft circular orb, low-left, farthest depth */
+.landing-page .hero-shape--orb {
+  bottom: 18%;
+  left: 12%;
+  width: clamp(90px, 11vw, 160px);
+  height: clamp(90px, 11vw, 160px);
+  background: var(--organic-canopy);
+  opacity: 0.32;
+  border-radius: 50%;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.5);
+  filter: blur(1px);
+}
+
+/* Diamond (rotated square), low-right, mid-depth */
+.landing-page .hero-shape--diamond {
+  bottom: 22%;
+  right: 14%;
+  width: clamp(70px, 8vw, 120px);
+  height: clamp(70px, 8vw, 120px);
   background: var(--organic-amber);
-  opacity: 0.35;
+  opacity: 0.38;
+  transform: translate3d(0, calc(var(--py, 0) * 1px), 0) rotate(45deg);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.4);
+}
+
+/* Soft blob with irregular border-radius, near depth */
+.landing-page .hero-shape--blob {
+  top: 38%;
+  left: 20%;
+  width: clamp(90px, 10vw, 150px);
+  height: clamp(110px, 12vw, 180px);
+  background: var(--organic-sand);
+  opacity: 0.30;
+  border-radius: 62% 38% 53% 47% / 47% 53% 62% 38%;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Small triangle (clip-path), upper-right, near depth */
+.landing-page .hero-shape--triangle {
+  top: 8%;
+  right: 22%;
+  width: clamp(60px, 7vw, 100px);
+  height: clamp(55px, 6vw, 90px);
+  background: var(--organic-canopy);
+  opacity: 0.42;
+  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.45));
 }
 
 /* Bottom decorative block — wider canopy panel beneath the centrepiece */
@@ -435,7 +509,7 @@
   .landing-page .hero-centrepiece {
     width: clamp(220px, 70vw, 340px);
   }
-  .landing-page .hero-side {
+  .landing-page .hero-shape {
     display: none;
   }
   .landing-page .hero-bottom-block {
@@ -616,35 +690,8 @@
     pointer-events: none;
     will-change: transform;
     border-radius: 18px;
-    background:
-      /* Top-left soft white highlight (the dominant gloss) */
-      radial-gradient(
-        circle at 22% 14%,
-        rgba(255, 255, 255, 0.22) 0%,
-        rgba(255, 255, 255, 0.08) 25%,
-        transparent 50%
-      ),
-      /* Top-right secondary highlight */
-      radial-gradient(
-        circle at 78% 22%,
-        rgba(255, 255, 255, 0.10) 0%,
-        transparent 38%
-      ),
-      /* Bottom-right vignette */
-      radial-gradient(
-        circle at 82% 92%,
-        rgba(0, 0, 0, 0.30) 0%,
-        transparent 55%
-      ),
-      /* Base linear forest → canopy diagonal */
-      linear-gradient(
-        135deg,
-        var(--organic-forest) 0%,
-        var(--organic-canopy) 100%
-      );
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.18),
-      inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+    background: var(--organic-forest);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
     /* Soft top + bottom fade so the panel doesn't end abruptly */
     -webkit-mask-image: linear-gradient(
       to bottom,
@@ -675,7 +722,9 @@
   background: #FFFFFF;
   padding: 14px 14px 56px;
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.40);
-  transform: rotate(2deg);
+  /* Compose baseline rotation with parallax-driven --ty so the scroll
+     parallax doesn't clobber the tilt. */
+  transform: rotate(2deg) translate3d(0, calc(var(--ty, 0) * 1px), 0);
   max-width: 380px;
   border-radius: 2px;
   will-change: transform;
@@ -712,7 +761,7 @@
 
 @media (max-width: 767px) {
   .landing-page .section-c__polaroid {
-    transform: rotate(1deg);
+    transform: rotate(1deg) translate3d(0, calc(var(--ty, 0) * 1px), 0);
     max-width: 320px;
     margin: 0 auto;
   }
@@ -780,7 +829,7 @@
 
 .landing-page .footer-grid {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
+  grid-template-columns: 2fr 1fr 1fr;
   gap: 40px;
   max-width: 1200px;
   margin: 0 auto;

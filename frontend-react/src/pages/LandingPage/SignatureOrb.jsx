@@ -9,6 +9,7 @@ const MotionDiv = motion.div
 const GREETING_LINE = 'Hello. Welcome to your ST3 interview. Are you ready to begin?'
 const GREETING_WORDS = GREETING_LINE.split(' ')
 const AUDIO_SRC = '/audio/landing-examiner-greeting.mp3'
+const POST_PLAYBACK_LINGER_MS = 5000
 
 /**
  * SignatureOrb — §D's centrepiece.
@@ -34,6 +35,7 @@ export function SignatureOrb() {
   const fakeRafRef = useRef(0)
   const fakeBandsRef = useRef([0, 0, 0, 0, 0])
   const wordTimersRef = useRef([])
+  const lingerTimerRef = useRef(0)
   const prefersReducedMotion = useReducedMotion()
 
   const [audioAvailable, setAudioAvailable] = useState(null) // null=probing, true|false
@@ -63,6 +65,7 @@ export function SignatureOrb() {
     return () => {
       wordTimersRef.current.forEach((t) => clearTimeout(t))
       wordTimersRef.current = []
+      if (lingerTimerRef.current) clearTimeout(lingerTimerRef.current)
       if (fakeRafRef.current) cancelAnimationFrame(fakeRafRef.current)
       if (audioEl) audioEl.pause()
     }
@@ -152,16 +155,34 @@ export function SignatureOrb() {
     }
   }
 
-  function reset() {
+  // Two-phase end of playback:
+  //   Phase 1 (now)  — flip playback state, force the full transcript visible,
+  //                    button + status change to the "finished" copy. Transcript
+  //                    stays on screen.
+  //   Phase 2 (5s)   — drop revealedCount to 0, the per-word Framer transitions
+  //                    reverse and the words fade out individually.
+  function endPlayback() {
     setIsPlaying(false)
     setHasPlayed(true)
-    setRevealedCount(0)
     stopFakeAmplitude()
     wordTimersRef.current.forEach((t) => clearTimeout(t))
     wordTimersRef.current = []
+    // Force the full transcript visible during the linger, in case audio
+    // ended a beat before the last word's reveal timer fired.
+    setRevealedCount(GREETING_WORDS.length)
+    if (lingerTimerRef.current) clearTimeout(lingerTimerRef.current)
+    lingerTimerRef.current = setTimeout(() => {
+      setRevealedCount(0)
+      lingerTimerRef.current = 0
+    }, POST_PLAYBACK_LINGER_MS)
   }
 
   async function handlePlay() {
+    // Cancel any pending linger fade-out so a re-click starts fresh.
+    if (lingerTimerRef.current) {
+      clearTimeout(lingerTimerRef.current)
+      lingerTimerRef.current = 0
+    }
     if (isPlaying) return
     setIsPlaying(true)
 
@@ -183,7 +204,7 @@ export function SignatureOrb() {
         // Autoplay blocked despite click — fall back to visual-only.
         startFakeAmplitude()
         revealWordsOverDuration(3000)
-        setTimeout(() => reset(), 3200)
+        setTimeout(() => endPlayback(), 3200)
       }
       return
     }
@@ -191,11 +212,11 @@ export function SignatureOrb() {
     // No audio file — pure visual demonstration.
     startFakeAmplitude()
     revealWordsOverDuration(3000)
-    setTimeout(() => reset(), 3200)
+    setTimeout(() => endPlayback(), 3200)
   }
 
   function handleAudioEnded() {
-    reset()
+    endPlayback()
   }
 
   const orbState = isPlaying ? 'speaking' : 'idle'

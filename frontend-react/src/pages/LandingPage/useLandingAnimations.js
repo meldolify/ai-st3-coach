@@ -45,6 +45,8 @@ export function useLandingAnimations() {
         smoothTouch: false,
       })
 
+      window.__lenisInstance = lenis
+
       lenis.on('scroll', ScrollTrigger.update)
 
       lenisTickerFn = (time) => {
@@ -73,7 +75,8 @@ export function useLandingAnimations() {
       // Nav fade in
       tl.from('#landingNav', { opacity: 0, y: -20, duration: 0.6, ease: 'power2.out' }, 0)
 
-      // REVIVA brand — scramble-style character reveal
+      // REVIVA brand — scramble-style character reveal. Deliberate ~2.5s total
+      // (stagger 0.15, per-letter 0.7s, scramble runs 6 iterations at 60ms each).
       const brandChars = heroContent.querySelectorAll('.hero-brand-char')
       const scrambleChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
       if (brandChars.length) {
@@ -81,32 +84,32 @@ export function useLandingAnimations() {
           const targetChar = charEl.textContent
           charEl.textContent = scrambleChars[Math.floor(Math.random() * scrambleChars.length)]
           tl.fromTo(charEl, { opacity: 0, y: 40 }, {
-            opacity: 1, y: 0, duration: 0.5, ease: 'back.out(1.7)',
+            opacity: 1, y: 0, duration: 0.7, ease: 'back.out(1.7)',
             onStart: () => {
               let scrambleCount = 0
               const interval = setInterval(() => {
                 charEl.textContent = scrambleChars[Math.floor(Math.random() * scrambleChars.length)]
                 scrambleCount++
-                if (scrambleCount > 5) {
+                if (scrambleCount > 6) {
                   clearInterval(interval)
                   charEl.textContent = targetChar
                 }
-              }, 50)
+              }, 60)
             },
-          }, 0.4 + i * 0.08)
+          }, 0.4 + i * 0.15)
         })
       }
 
-      // Subtitle fade up
+      // Subtitle fade up (delayed to land after the wordmark finishes assembling)
       const subtitle = heroContent.querySelector('.hero-subtitle')
       if (subtitle) {
-        tl.from(subtitle, { opacity: 0, y: 20, duration: 0.8, ease: 'power2.out' }, 1.0)
+        tl.from(subtitle, { opacity: 0, y: 20, duration: 0.8, ease: 'power2.out' }, 1.9)
       }
 
       // CTA button slide up
       const ctas = heroContent.querySelectorAll('.hero-ctas > *')
       if (ctas.length) {
-        tl.from(ctas, { opacity: 0, y: 40, duration: 0.6, stagger: 0.1, ease: 'power2.out' }, 1.3)
+        tl.from(ctas, { opacity: 0, y: 40, duration: 0.6, stagger: 0.1, ease: 'power2.out' }, 2.3)
       }
     }
 
@@ -225,18 +228,23 @@ export function useLandingAnimations() {
         })
       }
 
-      // Hero side blocks drive --py so their fixed positioning stays intact
-      add('.hero-side--l1', -0.32, { cssVar: 'py' })
-      add('.hero-side--l2', 0.20, { cssVar: 'py' })
-      add('.hero-side--r1', -0.45, { cssVar: 'py' })
-      add('.hero-side--r2', 0.15, { cssVar: 'py' })
+      // Hero floating shapes drive --py so their fixed positioning stays intact.
+      // Mixed speeds + directions read as layered depth.
+      add('.hero-shape--l1', -0.32, { cssVar: 'py' })       // tall rect L, mid
+      add('.hero-shape--r1', -0.45, { cssVar: 'py' })       // tall rect R, far/slow
+      add('.hero-shape--orb', -0.55, { cssVar: 'py' })      // circle, farthest
+      add('.hero-shape--diamond', 0.30, { cssVar: 'py' })   // diamond, near, opposite
+      add('.hero-shape--blob', 0.15, { cssVar: 'py' })      // blob, near-mid
+      add('.hero-shape--triangle', 0.40, { cssVar: 'py' })  // triangle, near
       add('.hero-bottom-block', 0.12, { cssVar: 'py' })
       // Hero doctor (left over for backwards compat — currently unused) +
       // section photos translate directly
       add('#sectionHero .hero-photo', 0.10)
       add('.section-a__photo', 0.10)
       add('.section-b__backdrop', 0.08)
-      add('.section-c__polaroid', -0.12)
+      // Polaroid uses cssVar mode so the parallax composes with the
+      // baseline rotate(2deg) instead of clobbering it.
+      add('.section-c__polaroid', -0.35, { cssVar: 'ty' })
       // Mode tiles get a tiny parallax + sustained scale to feel alive
       document.querySelectorAll('.section-e .mode-photo img').forEach((img, i) => {
         targets.push({ el: img, speed: 0.06 + i * 0.015, scaleHold: 1.06 })
@@ -296,6 +304,9 @@ export function useLandingAnimations() {
       }
       if (lenis) {
         lenis.destroy()
+      }
+      if (window.__lenisInstance === lenis) {
+        delete window.__lenisInstance
       }
       ScrollTrigger.getAll().forEach((st) => st.kill())
     }

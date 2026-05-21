@@ -1,8 +1,6 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 export default function FooterSection() {
-  const navigate = useNavigate()
-
   return (
     <footer className="section-footer" id="sectionFooter">
       {/* SVG wave divider */}
@@ -13,48 +11,23 @@ export default function FooterSection() {
       <div className="footer-grid">
         <div className="footer-brand">
           <Link to="/">
-            <img src="/images/logo/logo-md.png" alt="ReViva" className="logo-img logo-img--footer" style={{ height: '32px', marginBottom: '12px' }} />
+            <img
+              src="/images/logo/logo-md.png"
+              alt="ReViva"
+              className="logo-img logo-img--footer"
+              style={{ height: '56px', marginBottom: '14px', filter: 'invert(1)', opacity: 0.9 }}
+            />
           </Link>
           <p className="footer-tag">
             <em>Hand-crafted, AI-powered prep for the trainees who&rsquo;d rather rehearse than panic.</em>
           </p>
         </div>
         <div className="footer-column">
-          <h4>Product</h4>
-          <a
-            href="#"
-            onClick={(e) => {
-              e.preventDefault()
-              navigate('/scenarios', { state: { fresh: true } })
-            }}
-          >
-            Practice
-          </a>
-          <a
-            href="#"
-            onClick={(e) => {
-              e.preventDefault()
-              navigate('/scenarios', { state: { fresh: true } })
-            }}
-          >
-            Mock by Station
-          </a>
-          <a
-            href="#"
-            onClick={(e) => {
-              e.preventDefault()
-              navigate('/scenarios', { state: { fresh: true } })
-            }}
-          >
-            Full Mock Exam
-          </a>
-          <span className="footer-pending">Mentor mode &middot; coming soon</span>
-        </div>
-        <div className="footer-column">
           <h4>Resources</h4>
           <Link to="/about">About</Link>
           <Link to="/help">Help &amp; FAQ</Link>
           <span className="footer-pending">Blog &middot; coming soon</span>
+          <span className="footer-pending">Testimonials &middot; coming soon</span>
           <Link to="/contact">Contact</Link>
         </div>
         <div className="footer-column">
@@ -65,8 +38,7 @@ export default function FooterSection() {
         </div>
       </div>
       <div className="footer-bottom">
-        <span>&copy; 2026 ReViva Ltd. Made with care in the UK.</span>
-        <em className="footer-bottom__est">( est. 2026 )</em>
+        <span>&copy; 2026 ReViva Limited. Made with care in the UK.</span>
       </div>
     </footer>
   )

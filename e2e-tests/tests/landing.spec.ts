@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test'
 import { SELECTORS } from '../helpers/selectors'
+import { setTestTier } from '../helpers/tier-control'
 
 test.describe('Landing Page', () => {
   test.beforeEach(async ({ page }) => {
@@ -37,26 +38,32 @@ test.describe('Landing Page', () => {
     await expect(page.locator(SELECTORS.landing.navSignup)).toBeVisible()
   })
 
-  test('Pricing link scrolls to pricing section', async ({ page }) => {
-    const pricingLink = page.locator(SELECTORS.landing.nav).getByText('Pricing')
-    await pricingLink.click()
+  test('Explore scrolls to pricing section for logged-out users', async ({ page }) => {
+    await page.locator(SELECTORS.landing.navExplore).click()
 
     const pricingSection = page.locator(SELECTORS.landing.pricingSection)
     await expect(pricingSection).toBeInViewport({ timeout: 5000 })
   })
 
-  test('Explore button navigates to /scenarios', async ({ page }) => {
+  test('Explore button navigates to /scenarios for logged-in users', async ({ browser }) => {
+    const context = await browser.newContext()
+    const page = await context.newPage()
+    await setTestTier(page, 'premium')
+    await page.goto('/')
+    await page.waitForLoadState('domcontentloaded')
     await page.locator(SELECTORS.landing.navExplore).click()
     await expect(page).toHaveURL(/\/scenarios/)
+    await context.close()
   })
 
-  test('§B AI Interviewer section renders with Practice/Mock toggle', async ({ page }) => {
+  test('§B AI Interviewer section renders with persona toggle', async ({ page }) => {
     const sectionB = page.locator(SELECTORS.landing.sectionB)
     await sectionB.scrollIntoViewIfNeeded()
     await expect(sectionB).toBeVisible()
-    // The toggle pill renders both labels
-    await expect(sectionB.getByRole('button', { name: 'Practice Mode' })).toBeVisible()
-    await expect(sectionB.getByRole('button', { name: 'Mock Exam' })).toBeVisible()
+    // Persona pill renders all three personas
+    await expect(sectionB.locator('[data-testid="persona-toggle-easy"]')).toBeVisible()
+    await expect(sectionB.locator('[data-testid="persona-toggle-medium"]')).toBeVisible()
+    await expect(sectionB.locator('[data-testid="persona-toggle-strict"]')).toBeVisible()
   })
 
   test('§D Signature section renders with the orb CTA', async ({ page }) => {

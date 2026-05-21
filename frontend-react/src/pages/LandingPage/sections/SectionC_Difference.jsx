@@ -26,11 +26,8 @@ export default function SectionC_Difference() {
     >
       <div className="max-w-7xl mx-auto px-6 sm:px-10 py-24 md:py-32">
         <div className="grid grid-cols-1 md:grid-cols-[1.2fr_1fr] gap-10 md:gap-16 lg:gap-20 items-center">
-          {/* Left column — eyebrow + headline + prose */}
+          {/* Left column — headline + prose */}
           <div>
-            <p className="font-display italic text-organic-forest text-[clamp(1rem,1.1vw,1.2rem)] mb-3">
-              ( and )
-            </p>
             <h2 className="font-organic-display uppercase font-bold text-[clamp(2.5rem,5vw,4.5rem)] leading-[0.95] tracking-[-0.025em] mb-6">
               ReViva is{' '}
               <em className="font-display italic font-normal text-organic-amber lowercase tracking-[-0.01em]">
@@ -62,7 +59,7 @@ export default function SectionC_Difference() {
                 />
               </div>
               <figcaption className="section-c__polaroid-caption">
-                a quiet morning, 06:42
+                handcrafted, one case at a time.
               </figcaption>
             </figure>
           </div>

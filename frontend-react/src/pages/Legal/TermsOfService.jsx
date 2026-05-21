@@ -1,4 +1,5 @@
 import PageLayout from '../../components/PageLayout'
+import { PRICING } from '../../config'
 
 /**
  * Terms of Service — UK consumer-law compliant placeholder.
@@ -49,8 +50,8 @@ export default function TermsOfService() {
         Premium access is available via subscription. Current pricing:
       </p>
       <ul>
-        <li>Monthly: &pound;14.99/month, cancel any time.</li>
-        <li>Annual: &pound;99.99/year, cancel any time (no refund for unused portion).</li>
+        <li>Monthly: {PRICING.monthly.amount}/month, cancel any time.</li>
+        <li>Annual: {PRICING.annual.amount}/year, cancel any time (no refund for unused portion).</li>
       </ul>
       <p>
         Payments are processed by Stripe. We may change pricing for future

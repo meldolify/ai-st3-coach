@@ -42,11 +42,32 @@ export const CONFIG = {
   },
 }
 
+// Single source of truth for displayed pricing strings.
+// Stripe price IDs are configured server-side via env vars; this object is
+// only the user-facing copy. To change displayed prices, edit here only.
+// To change the actual Stripe charge amounts, update the Stripe Price
+// objects + STRIPE_PRICE_ID_MONTHLY / STRIPE_PRICE_ID_ANNUAL env vars.
+export const PRICING = {
+  monthly: {
+    amount: '£19.99',
+    period: '/month',
+  },
+  annual: {
+    amount: '£119.99',
+    period: '/year',
+    monthlyEquivalent: '£9.99/mo',
+    savings: '£120',
+  },
+}
+
 // Persona configuration for each difficulty level
 export const PERSONA_CONFIG = {
   easy: {
     name: 'Mr John',
     title: 'Consultant Plastic Surgeon',
+    roleLabel: 'Easy Examiner',
+    description:
+      'Your friendly neighborhood consultant who remembers being a trainee. Warm encouragement, generous hints, and celebrates your wins.',
     image: '/images/interviewer_persona_john.png',
     imageWide: '/images/interviewer_persona_john_wide.png',
     voice: 'Fenrir',
@@ -55,6 +76,9 @@ export const PERSONA_CONFIG = {
   medium: {
     name: 'Miss Elliot',
     title: 'Senior Examiner',
+    roleLabel: 'Balanced Examiner',
+    description:
+      'Fair and balanced. The real ST3 interview experience. Straight-shooting feedback with occasional nudges.',
     image: '/images/interviewer_persona_elliot.png',
     imageWide: '/images/interviewer_persona_elliot_wide.png',
     voice: 'Kore',
@@ -63,6 +87,9 @@ export const PERSONA_CONFIG = {
   strict: {
     name: 'Mr Perry',
     title: 'Chief Examiner',
+    roleLabel: 'Strict Examiner',
+    description:
+      "No nonsense. High standards. Expects excellence or you'll hear about it. Brutally honest with sky-high expectations.",
     image: '/images/interviewer_persona_perry.png',
     imageWide: '/images/interviewer_persona_perry_wide.png',
     voice: 'Charon',

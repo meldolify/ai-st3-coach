@@ -1,17 +1,15 @@
 import { useNavigate } from 'react-router-dom'
+import { PRICING } from '../../../config'
 import { cn } from '../../../lib/utils'
 
 /**
- * §F — Sign Up + Pricing. How do I get it?
+ * §F — Ready to start? Free + Premium pricing cards.
  *
- * Light restage of the original ActionSection — same offer, same routing
- * logic, lighter chrome. Removes the shimmer ::before that read as
- * AI-template.
+ * Both cards render regardless of auth/subscription state — the hero CTA
+ * already swaps to "Go to Dashboard" for logged-in users, so the pricing
+ * stays informational.
  *
- * The pricing cards always render regardless of auth/subscription state —
- * earlier versions hid them for premium users, but that made the bottom
- * of the page feel empty for them. The hero CTA already toggles to
- * "Go to Dashboard" for logged-in users; pricing cards stay informational.
+ * Displayed prices come from PRICING in config.js (single source of truth).
  */
 export default function SectionF_Pricing() {
   const navigate = useNavigate()
@@ -38,22 +36,29 @@ export default function SectionF_Pricing() {
           <PriceCard
             tone="sand"
             overline="Free"
-            title="4 Sample Scenarios"
-            features={['Basic feedback', 'Free sign-up, no card']}
+            title="Not convinced yet? Try sample stations for free."
+            features={[
+              '4 fully working sample stations on Practice mode.',
+              'Test and get a feel if it’s right for you.',
+              'Free sign-up, no card details, no commitment.',
+            ]}
             price="£0"
             ctaLabel="Explore Free"
             onClick={() => navigate('/scenarios', { state: { fresh: true } })}
           />
 
-          {/* Premium tier — title intentionally non-numeric so the
-              copy doesn't go stale as the scenario library grows. */}
+          {/* Premium tier */}
           <PriceCard
             tone="canopy"
             overline="Premium ★"
-            title="All Scenarios"
-            features={['Full feedback + scoring', 'Mock exams', 'Progress tracking']}
-            price="From £8.33/mo"
-            priceCaption="£99.99/year (save £80)"
+            title="Full access"
+            features={[
+              'Access to 100+ scenarios and every mode',
+              'Unrestricted use. 24/7 practice.',
+              'Progress tracking',
+            ]}
+            price={`From ${PRICING.annual.monthlyEquivalent}`}
+            priceCaption={`${PRICING.annual.amount}/year (save ${PRICING.annual.savings})`}
             ctaLabel="Subscribe"
             ctaPrimary
             onClick={() => navigate('/login')}

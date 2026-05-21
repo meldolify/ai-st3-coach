@@ -46,11 +46,14 @@ export default function HeroSection() {
         </svg>
       </div>
 
-      {/* Side decorative blocks — parallax at different speeds via --py */}
-      <div className="hero-side hero-side--l1" aria-hidden="true" />
-      <div className="hero-side hero-side--l2" aria-hidden="true" />
-      <div className="hero-side hero-side--r1" aria-hidden="true" />
-      <div className="hero-side hero-side--r2" aria-hidden="true" />
+      {/* Floating decorative shapes — mixed forms (rectangle, circle, diamond,
+          blob, triangle), depth-graded shadows, varying parallax speeds via --py */}
+      <div className="hero-shape hero-shape--l1" aria-hidden="true" />
+      <div className="hero-shape hero-shape--r1" aria-hidden="true" />
+      <div className="hero-shape hero-shape--orb" aria-hidden="true" />
+      <div className="hero-shape hero-shape--diamond" aria-hidden="true" />
+      <div className="hero-shape hero-shape--blob" aria-hidden="true" />
+      <div className="hero-shape hero-shape--triangle" aria-hidden="true" />
 
       {/* Bottom block — canopy panel beneath the centrepiece */}
       <div className="hero-bottom-block" aria-hidden="true" />

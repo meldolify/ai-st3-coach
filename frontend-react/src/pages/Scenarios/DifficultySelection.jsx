@@ -2,25 +2,12 @@ import { useState } from 'react'
 import { PERSONA_CONFIG } from '../../config'
 import BackButton from '../../components/BackButton'
 
-const CARD_DATA = {
-  easy: {
-    colorClass: 'green',
-    roleLabel: 'Easy Examiner',
-    description:
-      'Your friendly neighborhood consultant who remembers being a trainee. Warm encouragement, generous hints, and celebrates your wins.',
-  },
-  medium: {
-    colorClass: 'orange',
-    roleLabel: 'Medium Examiner',
-    description:
-      'Fair and balanced \u2014 the real ST3 interview experience. Straight-shooting feedback with occasional nudges.',
-  },
-  strict: {
-    colorClass: 'purple',
-    roleLabel: 'Strict Examiner',
-    description:
-      'No nonsense. High standards. Expects excellence or you\u2019ll hear about it. Brutally honest with sky-high expectations.',
-  },
+// Per-difficulty visual styling. Role label + description live on
+// PERSONA_CONFIG itself so the landing page (\u00a7B) and this page stay in sync.
+const CARD_VISUALS = {
+  easy: { colorClass: 'green' },
+  medium: { colorClass: 'orange' },
+  strict: { colorClass: 'purple' },
 }
 
 export default function DifficultySelection({ onSelect, onBack }) {
@@ -53,7 +40,7 @@ export default function DifficultySelection({ onSelect, onBack }) {
       </div>
 
       <div className="gradient-cards-container">
-        {Object.entries(CARD_DATA).map(([difficulty, data]) => {
+        {Object.entries(CARD_VISUALS).map(([difficulty, visuals]) => {
           const persona = PERSONA_CONFIG[difficulty]
           const isExpanded = expandedCard === difficulty
 
@@ -65,10 +52,10 @@ export default function DifficultySelection({ onSelect, onBack }) {
               onClick={() => handleCardClick(difficulty)}
             >
               <span
-                className={`gradient-panel gradient-panel--${data.colorClass}`}
+                className={`gradient-panel gradient-panel--${visuals.colorClass}`}
               />
               <span
-                className={`gradient-panel gradient-panel--blur gradient-panel--${data.colorClass}`}
+                className={`gradient-panel gradient-panel--blur gradient-panel--${visuals.colorClass}`}
               />
               <span className="animated-blobs">
                 <span className="blob blob--top" />
@@ -82,9 +69,9 @@ export default function DifficultySelection({ onSelect, onBack }) {
                 />
                 <h2 className="persona-name">{persona.name}</h2>
                 <p className={`persona-role persona-role--${difficulty}`}>
-                  {data.roleLabel}
+                  {persona.roleLabel}
                 </p>
-                <p className="persona-description">{data.description}</p>
+                <p className="persona-description">{persona.description}</p>
                 <button
                   className="btn-select-persona"
                   onClick={(e) => handleButtonClick(e, difficulty)}
