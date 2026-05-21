@@ -1,0 +1,37 @@
+# gitleaks configuration for ReViva.
+#
+# Extends the default ruleset and allowlists known false positives so the
+# CI Secret Scan stays green on legitimate commits.
+#
+# History: every commit that touches the React SPA changes the build hash
+# under frontend/assets/index-*.js, and that bundle embeds the Supabase
+# anon key (a publishable JWT by design — see frontend-react/src/config.js).
+# The default "jwt" rule fired on every such commit. The bundle is a
+# generated artifact and its contents are public anyway, so we allowlist
+# the whole directory rather than re-evaluating on every build.
+
+title = "ReViva gitleaks config"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Allowlisted paths and known-publishable values"
+
+# Vite build output. Contains:
+#   - Supabase anon JWT (publishable key, embedded in every browser session)
+#   - Vendor bundle hashes that occasionally look like API keys to a regex
+# Source lives under frontend-react/. If a real secret appears here, the
+# source-side ruleset will catch it before it reaches the bundle.
+paths = [
+  '''frontend/assets/.*''',
+  '''frontend/index\.html''',
+]
+
+# Belt-and-braces: even if gitleaks scans the source files, allow the
+# specific publishable Supabase anon JWT used by this project. (Different
+# keys for different envs would each need their own line — at the time of
+# writing there's just one.)
+regexes = [
+  '''eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZzZGlvdmdqbmJ6aXd3dWtwdnFvIiwicm9sZSI6ImFub24i[A-Za-z0-9._-]+''',
+]
