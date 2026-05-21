@@ -103,6 +103,19 @@ const config = {
   // When unset, Sentry calls no-op and nothing is reported.
   SENTRY_DSN: process.env.SENTRY_DSN,
 
+  // Daily per-user audio caps (minutes). Defense-in-depth against runaway
+  // Deepgram/Gemini cost from a single user holding a session open. Free
+  // and premium tiers have separate caps; premium is intentionally generous
+  // so honest users never hit it. Set 0 to disable.
+  DAILY_AUDIO_MINUTES_FREE: parseInt(process.env.DAILY_AUDIO_MINUTES_FREE, 10) || 30,
+  DAILY_AUDIO_MINUTES_PREMIUM: parseInt(process.env.DAILY_AUDIO_MINUTES_PREMIUM, 10) || 240,
+
+  // Global daily LLM-call kill-switch. If aggregate LLM calls across ALL
+  // users exceeds this in a single UTC day, every further request returns
+  // a soft "service unavailable" error. Insurance against runaway abuse
+  // or a bug pinning the LLM. Set 0 to disable.
+  MAX_DAILY_LLM_CALLS: parseInt(process.env.MAX_DAILY_LLM_CALLS, 10) || 0,
+
   // Free tier scenarios - topicFolder paths accessible without subscription
   // Keep in sync with frontend-react/src/config.js FREE_TIER_SCENARIOS
   // All 3 difficulties are implicitly included per topic

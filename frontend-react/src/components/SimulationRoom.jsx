@@ -45,6 +45,7 @@ export default function SimulationRoom() {
   const [confirmModal, setConfirmModal] = useState(null)
   const [prepPhase, setPrepPhase] = useState(null) // { prepTime } | null
   const [mobileTranscriptOpen, setMobileTranscriptOpen] = useState(false)
+  const hasConnectedRef = useRef(false)
 
   const rawScenario = params?.scenario || {
     title: 'No scenario selected',
@@ -77,6 +78,20 @@ export default function SimulationRoom() {
     requestFeedback,
     disconnect,
   } = useSession({})
+
+  // Track whether we've ever connected so the reconnect banner only fires
+  // after an actual drop (not on the initial pre-connect render).
+  useEffect(() => {
+    if (isConnected) hasConnectedRef.current = true
+  }, [isConnected])
+
+  const showReconnectBanner =
+    hasConnectedRef.current && !isConnected && !interviewEnded && !isExiting
+
+  const handleRestartSession = useCallback(() => {
+    disconnect()
+    navigate('/scenarios')
+  }, [disconnect, navigate])
 
   const domain = scenarioMeta?.domain || 'clinical'
   const isAISpeaking = orbState === 'speaking'
@@ -326,6 +341,38 @@ export default function SimulationRoom() {
             onToggleSidebar={() => setSidebarOpen((prev) => !prev)}
           />
         </motion.div>
+
+        {/* Connection-lost banner — fires when the WebSocket drops mid-interview.
+            Server-side session state isn't recoverable on reconnect, so the
+            user has to start a fresh session. Banner is non-modal so the user
+            can still read the transcript while deciding. */}
+        <AnimatePresence>
+          {showReconnectBanner && (
+            <motion.div
+              data-testid="reconnect-banner"
+              role="alert"
+              initial={{ y: -16, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: -16, opacity: 0 }}
+              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              className="organic-card flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 px-4 py-3 border border-amber-300 bg-amber-50/95"
+            >
+              <div className="flex-1">
+                <p className="font-medium text-amber-900">Connection lost</p>
+                <p className="text-sm text-amber-800/85">
+                  Your session was interrupted and can&rsquo;t be resumed.
+                  Restart to begin a fresh session.
+                </p>
+              </div>
+              <button
+                onClick={handleRestartSession}
+                className="self-start sm:self-center px-4 py-2 rounded-md bg-amber-700 text-white text-sm font-medium hover:bg-amber-800 transition-colors"
+              >
+                Restart session
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* ════════ MOBILE LAYOUT (<lg) ════════
             Image-hero + compact strip + sticky pinwheel dock. Transcript

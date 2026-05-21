@@ -44,6 +44,7 @@ const {
   validateMessage,
   sanitizeForLog
 } = require('./src/middleware/websocketSecurity');
+const usageTracker = require('./src/middleware/usageTracker');
 
 // Initialize WebSocket rate limiter
 // Audio streaming: ScriptProcessorNode(4096) at 48kHz = 85ms/callback = ~12 chunks/sec = ~720/min
@@ -243,6 +244,19 @@ async function streamResponseToClient(session, ws, history, options = {}) {
   let fullText = '';
   const timeline = options.timeline; // optional createTurnTimeline instance
   const mark = name => timeline && timeline.mark(name);
+
+  // Global LLM kill-switch. Checked at the moment we'd open the LLM call,
+  // so a long-running session whose first turn is fine doesn't get
+  // capacity-blocked mid-conversation arbitrarily.
+  const globalCheck = usageTracker.checkGlobalLLMCap();
+  if (!globalCheck.allowed) {
+    console.warn(`[USAGE] Global LLM cap hit: ${globalCheck.reason}`);
+    ws.send(JSON.stringify({ type: 'error', message: globalCheck.reason }));
+    return;
+  }
+  if (session.userId) {
+    usageTracker.recordLLMCall(session.userId);
+  }
 
   session.isAISpeaking = true;
   mark('stream_invoked');
@@ -494,6 +508,11 @@ wss.on('connection', (ws, req) => {
 
   // Async IIFE for access validation
   (async () => {
+    // Tracks whether the connecting user has an active premium sub. Set by
+    // the subscription lookup below; consumed by usageTracker to pick the
+    // right daily audio-minute cap when handling audio_chunk messages.
+    let isPremiumUser = false;
+
     // Server-side tier validation if Supabase is enabled
     if (config.DEV_BYPASS_AUTH) {
       console.log('[ACCESS] DEV_BYPASS_AUTH enabled - skipping all access checks');
@@ -529,6 +548,16 @@ wss.on('connection', (ws, req) => {
           return;
         }
 
+        // Subscription lookup for BOTH access control AND per-user cost-cap
+        // tier (free users get a tighter daily audio budget than premium).
+        const { data: subscription } = await supabaseAdmin
+          .from('subscriptions')
+          .select('status, specialty')
+          .eq('user_id', userId)
+          .maybeSingle();
+
+        isPremiumUser = subscription?.status === 'active';
+
         // Check if this is a free tier scenario (skip subscription check)
         const isFreeScenario = config.FREE_TIER_SCENARIOS.includes(scenarioFile);
 
@@ -536,15 +565,7 @@ wss.on('connection', (ws, req) => {
           console.log('[ACCESS] Allowed: Authenticated user accessing free tier scenario');
         } else {
           // Premium scenario - require active subscription with matching specialty
-          const { data: subscription } = await supabaseAdmin
-            .from('subscriptions')
-            .select('status, specialty')
-            .eq('user_id', userId)
-            .single();
-
-          const isPremium = subscription?.status === 'active';
-
-          if (!isPremium) {
+          if (!isPremiumUser) {
             console.warn('[ACCESS] Rejected: No active subscription for premium scenario');
             ws.send(JSON.stringify({ type: 'error', message: 'Subscription required' }));
             ws.close(4003, 'Subscription required');
@@ -604,6 +625,7 @@ wss.on('connection', (ws, req) => {
       voice: voice,
       difficulty: difficulty,
       userId: userId,
+      isPremium: isPremiumUser,
       isAISpeaking: false,
       inFeedbackMode: false,
       interviewEnded: false,
@@ -739,6 +761,27 @@ wss.on('connection', (ws, req) => {
           if (session.inFeedbackMode || session.interviewEnded) {
             return;
           }
+
+          // Per-user daily audio-minute cap. Defense-in-depth against cost
+          // runaway. We send the error once per cap-hit then mark the
+          // session capped so we don't spam the client with errors for
+          // every subsequent chunk.
+          if (session.userId && !session.audioCapHit) {
+            const capCheck = usageTracker.checkAudioCap(session.userId, session.isPremium);
+            if (!capCheck.allowed) {
+              session.audioCapHit = true;
+              console.warn(
+                `[USAGE] Audio cap hit for user ${session.userId} (${capCheck.minutesUsed.toFixed(1)}/${capCheck.capMinutes} min)`
+              );
+              ws.send(JSON.stringify({ type: 'error', message: capCheck.reason }));
+              return;
+            }
+            usageTracker.recordAudioChunk(session.userId);
+          } else if (session.audioCapHit) {
+            // Silently drop further chunks for capped session.
+            return;
+          }
+
           const pcmData = Buffer.from(msg.audio, 'base64');
           session.flux.processChunk(pcmData);
         } catch (error) {
@@ -1104,6 +1147,17 @@ const promptLabLimiter = rateLimit({
 app.use('/create-checkout-session', paymentLimiter);
 app.use('/create-portal-session', paymentLimiter);
 app.use('/stripe-webhook', apiLimiter);
+
+// Account endpoints — tight limiter. Delete is one-shot per user; export
+// shouldn't be hammered. 5/15min stops a stolen-token-driven export farm.
+const accountLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  message: { error: 'Too many account requests. Try again later.' },
+  standardHeaders: true,
+  legacyHeaders: false
+});
+app.use('/api/account', accountLimiter, express.json(), require('./src/routes/account'));
 
 // Health check endpoint
 app.get('/health', (req, res) => {

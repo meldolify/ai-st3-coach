@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { supabaseClient } from '../../lib/supabase'
 import { useAuthStore } from '../../stores/authStore'
 import { isPremiumUser, openCustomerPortal } from '../../lib/subscription'
+import { exportMyData, deleteMyAccount } from '../../lib/account'
 import UpgradeModal from '../../components/UpgradeModal'
 import AppNav from '../../components/AppNav'
 import './profile.css'
@@ -24,6 +25,12 @@ export default function ProfilePage() {
   const [saving, setSaving] = useState(false)
   const [toast, setToast] = useState(null)
   const [showUpgrade, setShowUpgrade] = useState(false)
+
+  // GDPR actions — export + delete confirmation state.
+  const [exporting, setExporting] = useState(false)
+  const [deleteConfirmText, setDeleteConfirmText] = useState('')
+  const [deleting, setDeleting] = useState(false)
+  const [showDeleteFlow, setShowDeleteFlow] = useState(false)
 
   // Progress stats
   const [stats, setStats] = useState({ totalSessions: 0, lastSessionDate: null })
@@ -150,6 +157,39 @@ export default function ProfilePage() {
     }
   }, [])
 
+  const handleExport = useCallback(async () => {
+    setExporting(true)
+    try {
+      await exportMyData()
+      showToast('Your data export has downloaded', 'success')
+    } catch (err) {
+      console.error('[ProfilePage] Export failed:', err)
+      showToast(err.message || 'Export failed', 'error')
+    } finally {
+      setExporting(false)
+    }
+  }, [])
+
+  const handleDelete = useCallback(async () => {
+    if (deleteConfirmText !== 'DELETE') {
+      showToast('Type DELETE to confirm', 'error')
+      return
+    }
+    setDeleting(true)
+    try {
+      const partialErrors = await deleteMyAccount()
+      if (partialErrors.length > 0) {
+        console.warn('[ProfilePage] Account deleted with partial errors:', partialErrors)
+      }
+      // Account is gone — redirect to landing.
+      navigate('/', { replace: true })
+    } catch (err) {
+      console.error('[ProfilePage] Delete failed:', err)
+      showToast(err.message || 'Account deletion failed', 'error')
+      setDeleting(false)
+    }
+  }, [deleteConfirmText, navigate])
+
   function showToast(message, type = 'info') {
     setToast({ message, type })
     setTimeout(() => setToast(null), 4000)
@@ -273,6 +313,73 @@ export default function ProfilePage() {
             <button className="btn-profile-save" onClick={handleSave} disabled={saving}>
               {saving ? 'Saving...' : 'Save Changes'}
             </button>
+          </div>
+
+          {/* Data & privacy — GDPR rights */}
+          <div className="profile-section profile-section--danger">
+            <h3>Data &amp; privacy</h3>
+            <p className="profile-section__description">
+              Download a copy of everything we hold against your account, or
+              permanently delete your account and all associated data.
+            </p>
+
+            <div className="profile-data-actions">
+              <button
+                className="btn-data-export"
+                onClick={handleExport}
+                disabled={exporting}
+                type="button"
+              >
+                {exporting ? 'Preparing export…' : 'Export my data'}
+              </button>
+
+              {!showDeleteFlow ? (
+                <button
+                  className="btn-data-delete"
+                  onClick={() => setShowDeleteFlow(true)}
+                  type="button"
+                >
+                  Delete account
+                </button>
+              ) : (
+                <div className="delete-confirm">
+                  <p className="delete-confirm__warning">
+                    <strong>This cannot be undone.</strong> Your profile,
+                    session history, and any active subscription will be
+                    deleted. To confirm, type <code>DELETE</code> below.
+                  </p>
+                  <input
+                    type="text"
+                    className="delete-confirm__input"
+                    value={deleteConfirmText}
+                    onChange={(e) => setDeleteConfirmText(e.target.value)}
+                    placeholder="Type DELETE to confirm"
+                    autoComplete="off"
+                  />
+                  <div className="delete-confirm__buttons">
+                    <button
+                      className="btn-data-delete--confirm"
+                      onClick={handleDelete}
+                      disabled={deleting || deleteConfirmText !== 'DELETE'}
+                      type="button"
+                    >
+                      {deleting ? 'Deleting…' : 'Permanently delete account'}
+                    </button>
+                    <button
+                      className="btn-data-cancel"
+                      onClick={() => {
+                        setShowDeleteFlow(false)
+                        setDeleteConfirmText('')
+                      }}
+                      disabled={deleting}
+                      type="button"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 

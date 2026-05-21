@@ -10,7 +10,14 @@ module.exports = {
     '!src/services/GitHubService.js',
     // Pure side-effect bootstrap: Sentry.init() driven by env var. No
     // exported logic worth unit-testing; runs once at server start.
-    '!src/sentry-init.js'
+    '!src/sentry-init.js',
+    // Supabase-admin / Stripe integration glue. The error-handling branches
+    // (db down, Stripe already cancelled, partial-delete recovery) need
+    // integration tests with a real Supabase instance to exercise meaningfully;
+    // unit-mock coverage would just verify mock wiring. Excluded for now —
+    // revisit if a Supabase test harness is set up.
+    '!src/middleware/userAuth.js',
+    '!src/routes/account.js'
   ],
   coverageThreshold: {
     global: {
