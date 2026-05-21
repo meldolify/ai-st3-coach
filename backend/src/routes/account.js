@@ -12,8 +12,22 @@
 const express = require('express');
 const config = require('../config');
 const { userAuth } = require('../middleware/userAuth');
+const { terminateUserSessions } = require('../services/sessions');
 
 const router = express.Router();
+
+/**
+ * Truncated support reference derived from the user's id — non-PII (8 hex
+ * chars of the UUID), unique enough for the operator to find the matching
+ * server-side log entry, opaque enough to not leak the full user id back
+ * to the client. Audit 2026-05-21 §MED-03.
+ */
+function supportReference(userId) {
+  if (!userId || typeof userId !== 'string') {
+    return 'unknown';
+  }
+  return userId.replace(/-/g, '').slice(0, 8);
+}
 
 let supabaseAdmin = null;
 function getSupabase() {
@@ -162,25 +176,50 @@ router.delete('/', userAuth, async (req, res) => {
     if (error) {
       // If we can't delete the auth row the user is in a half-deleted
       // state: domain data gone, but they can still log in to a now-empty
-      // account. Surface this as a server error so the client knows to
-      // retry or escalate.
-      console.error(`[account/delete] Failed to delete auth.users row: ${error.message}`);
+      // account. Surface a generic 500 so the client knows to escalate;
+      // full error chain is logged server-side only — see audit
+      // 2026-05-21 §MED-03.
+      const ref = supportReference(userId);
+      const fullErrors = errors.concat([{ step: 'auth_delete', message: error.message }]);
+      console.error(`[account/delete] ref=${ref} step-errors:`, fullErrors);
       return res.status(500).json({
-        error:
-          'Auth row deletion failed — your data has been removed but the account still exists. Please contact support.',
-        partial_errors: errors.concat([{ step: 'auth_delete', message: error.message }])
+        error: `Account deletion failed at the auth step. Please contact support and reference id ${ref}.`
       });
     }
   } catch (err) {
-    console.error(`[account/delete] Exception deleting auth user: ${err.message}`);
+    const ref = supportReference(userId);
+    const fullErrors = errors.concat([{ step: 'auth_delete', message: err.message }]);
+    console.error(`[account/delete] ref=${ref} step-exception:`, fullErrors);
     return res.status(500).json({
-      error: 'Account deletion failed. Please contact support.',
-      partial_errors: errors.concat([{ step: 'auth_delete', message: err.message }])
+      error: `Account deletion failed. Please contact support and reference id ${ref}.`
     });
   }
 
-  console.log(`[account/delete] Completed for user ${userId}`);
-  return res.status(200).json({ deleted: true, partial_errors: errors });
+  // 4. Terminate any live WS sessions for this user — otherwise they keep
+  //    streaming audio to Deepgram and consuming Gemini tokens against an
+  //    account that no longer exists. Audit 2026-05-21 §LOW-06.
+  try {
+    const terminated = terminateUserSessions(userId);
+    if (terminated.length > 0) {
+      console.log(
+        `[account/delete] Terminated ${terminated.length} live session(s) for ${supportReference(userId)}`
+      );
+    }
+  } catch (err) {
+    // Non-fatal: the account is already deleted; if a teardown error here
+    // leaves a zombie session, the idle-cleanup sweep will catch it within
+    // 30 minutes.
+    console.warn(`[account/delete] Session teardown failed: ${err.message}`);
+  }
+
+  if (errors.length > 0) {
+    console.warn(
+      `[account/delete] ref=${supportReference(userId)} completed with non-fatal step-errors:`,
+      errors
+    );
+  }
+  console.log(`[account/delete] Completed for user ${supportReference(userId)}`);
+  return res.status(200).json({ deleted: true });
 });
 
 module.exports = router;

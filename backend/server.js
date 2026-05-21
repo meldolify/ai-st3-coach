@@ -81,7 +81,10 @@ process.on('uncaughtException', error => {
 
 console.log('API clients initialized');
 
-const sessions = new Map();
+// Live WS session registry lives in its own module so non-WS callers (e.g.
+// account-delete) can iterate and terminate sessions without an import
+// cycle through server.js. Audit 2026-05-21 §LOW-06.
+const { sessions } = require('./src/services/sessions');
 
 // Use secure session ID generation from middleware
 // (keeping function name for backwards compatibility)
