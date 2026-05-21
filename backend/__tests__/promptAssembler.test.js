@@ -41,8 +41,12 @@ describe('safeResolveIn / safeResolveInPromptsDir', () => {
   });
 
   test('throws on absolute path that escapes the root', () => {
-    expect(() => safeResolveIn(tmp, 'C:\\Windows\\System32')).toThrow(/escapes/);
-    expect(() => safeResolveIn(tmp, '/etc/passwd')).toThrow(/escapes/);
+    // Compute an "outside" path that's actually outside tmp on whichever
+    // platform we're on. Using a hard-coded Windows-only string like
+    // 'C:\\Windows\\System32' would be treated as a *relative* segment on
+    // Linux and resolve inside tmp, silently passing the negative test.
+    const outside = path.resolve(tmp, '..', '..', '..', 'definitely-outside');
+    expect(() => safeResolveIn(tmp, outside)).toThrow(/escapes/);
   });
 
   test('throws when chained traversal escapes after a valid segment', () => {
