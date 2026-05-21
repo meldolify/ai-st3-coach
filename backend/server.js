@@ -34,6 +34,7 @@ const {
 } = require('./src/utils/promptAssembler');
 const { parseFeedbackResponse } = require('./src/utils/feedbackParser');
 const { FeedbackSectionBuffer } = require('./src/utils/feedbackSectionBuffer');
+const { createStripeWebhookHandler } = require('./src/routes/stripeWebhook');
 const { RateLimitError } = require('openai');
 
 // Import security middleware
@@ -493,10 +494,10 @@ wss.on('connection', (ws, req) => {
   const userId = queryParams.userId || null;
   // Supabase JWT lives in the Sec-WebSocket-Protocol header, not the URL.
   // See AUTH_SUBPROTOCOL definition above for rationale (URL-token leak via
-  // Render request logs). Fall back to the legacy query-param transport ONLY
-  // for the duration of one deploy where old frontend bundles may still be
-  // cached in browsers; remove the fallback in the follow-up commit.
-  const authToken = extractAuthToken(req) || queryParams.token || null;
+  // Render request logs — CWE-598, audit 2026-05-21 §MED-01). The legacy
+  // ?token= query-param fallback was removed in this commit; all current
+  // frontend bundles send the JWT via subprotocol since commit 37c889c.
+  const authToken = extractAuthToken(req);
 
   console.log(
     '[CLIENT] Requested scenario: ' +
@@ -1196,93 +1197,17 @@ if (process.env.PROMPT_LAB_ENABLED === 'true' || !config.isProduction) {
   console.log('[PROMPT LAB] Routes enabled at /prompt-lab/api (auth required)');
 }
 
-// Stripe webhook endpoint (must use raw body)
+// Stripe webhook endpoint. Handler factored into ./src/routes/stripeWebhook.js
+// for testability; the raw-body parser stays here (Stripe signs the raw bytes
+// — JSON-parsing first would invalidate the signature).
 app.post(
   '/stripe-webhook',
   express.raw({ type: 'application/json', limit: '64kb' }),
-  async (req, res) => {
-    if (!stripe || !supabaseAdmin) {
-      return res.status(503).json({ error: 'Payment processing not configured' });
-    }
-
-    const sig = req.headers['stripe-signature'];
-    let event;
-
-    try {
-      event = stripe.webhooks.constructEvent(req.body, sig, config.STRIPE_WEBHOOK_SECRET);
-    } catch (err) {
-      console.error('[STRIPE WEBHOOK] Signature verification failed:', err.message);
-      return res.status(400).send('Webhook processing failed');
-    }
-
-    console.log('[STRIPE WEBHOOK] Event received:', event.type);
-
-    try {
-      switch (event.type) {
-        case 'checkout.session.completed': {
-          const session = event.data.object;
-          const userId = session.metadata?.userId;
-          const customerId = session.customer;
-          const subscriptionId = session.subscription;
-          const priceType = session.metadata?.priceType || 'monthly';
-          const specialty = session.metadata?.specialty || 'plastic-surgery';
-
-          if (userId) {
-            // Use upsert to create or update the subscription record
-            await supabaseAdmin.from('subscriptions').upsert(
-              {
-                user_id: userId,
-                stripe_customer_id: customerId,
-                stripe_subscription_id: subscriptionId,
-                status: 'active',
-                price_type: priceType,
-                specialty: specialty,
-                created_at: new Date().toISOString()
-              },
-              {
-                onConflict: 'user_id'
-              }
-            );
-
-            console.log('[STRIPE] Subscription activated for user:', userId);
-          }
-          break;
-        }
-
-        case 'customer.subscription.updated': {
-          const subscription = event.data.object;
-          const status = subscription.status === 'active' ? 'active' : 'past_due';
-
-          await supabaseAdmin
-            .from('subscriptions')
-            .update({
-              status,
-              current_period_end: new Date(subscription.current_period_end * 1000).toISOString()
-            })
-            .eq('stripe_subscription_id', subscription.id);
-
-          console.log('[STRIPE] Subscription updated:', subscription.id, status);
-          break;
-        }
-
-        case 'customer.subscription.deleted': {
-          const subscription = event.data.object;
-
-          await supabaseAdmin
-            .from('subscriptions')
-            .update({ status: 'cancelled' })
-            .eq('stripe_subscription_id', subscription.id);
-
-          console.log('[STRIPE] Subscription cancelled:', subscription.id);
-          break;
-        }
-      }
-    } catch (error) {
-      console.error('[STRIPE WEBHOOK] Error processing event:', error);
-    }
-
-    res.json({ received: true });
-  }
+  createStripeWebhookHandler({
+    stripe,
+    supabaseAdmin,
+    webhookSecret: config.STRIPE_WEBHOOK_SECRET
+  })
 );
 
 // Stripe Checkout + Customer Portal handlers moved to ./src/routes/payments.js.
