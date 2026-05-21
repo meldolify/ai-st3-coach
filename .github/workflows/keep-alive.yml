@@ -5,6 +5,11 @@ on:
     - cron: '0 0 * * *'  # Every day at midnight UTC
   workflow_dispatch:        # Manual trigger for testing
 
+# This workflow only calls Supabase via HTTPS — no repo access needed at all,
+# but `contents: read` is the minimum-viable default for actions/checkout.
+permissions:
+  contents: read
+
 jobs:
   ping:
     name: Ping Supabase

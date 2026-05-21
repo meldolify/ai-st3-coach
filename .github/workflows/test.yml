@@ -8,6 +8,11 @@ on:
   pull_request:
     branches: [main]
 
+# Default least-privilege: jobs only read the repo. Any job that needs more
+# (e.g. posting PR comments) should override its own permissions block.
+permissions:
+  contents: read
+
 jobs:
   backend-tests:
     name: Backend Unit Tests

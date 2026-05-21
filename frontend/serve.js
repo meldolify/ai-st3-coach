@@ -5,6 +5,9 @@ const path = require('path');
 
 const PORT = 3001;
 
+// Serve only files under this directory — never escape it.
+const ROOT = path.resolve(__dirname);
+
 const MIME_TYPES = {
   '.html': 'text/html',
   '.js': 'application/javascript',
@@ -17,6 +20,25 @@ const MIME_TYPES = {
   '.ico': 'image/x-icon'
 };
 
+/**
+ * Resolve a URL path against ROOT and refuse anything that escapes it.
+ * Decodes percent-escapes so attempts like `/%2e%2e/etc/passwd` are caught
+ * before the fs.readFile call.
+ */
+function safeResolve(urlPath) {
+  let decoded;
+  try {
+    decoded = decodeURIComponent(urlPath);
+  } catch {
+    return null; // malformed percent-encoding
+  }
+  const resolved = path.resolve(ROOT, '.' + decoded);
+  if (resolved !== ROOT && !resolved.startsWith(ROOT + path.sep)) {
+    return null;
+  }
+  return resolved;
+}
+
 const server = http.createServer((req, res) => {
   console.log(`${req.method} ${req.url}`);
 
@@ -24,9 +46,11 @@ const server = http.createServer((req, res) => {
   const urlPath = req.url.split('?')[0].split('#')[0];
 
   // Default to index.html
-  let filePath = '.' + urlPath;
-  if (filePath === './') {
-    filePath = './index.html';
+  let filePath = safeResolve(urlPath === '/' ? '/index.html' : urlPath);
+  if (filePath === null) {
+    res.writeHead(403, { 'Content-Type': 'text/html' });
+    res.end('<h1>403 - Forbidden</h1>', 'utf-8');
+    return;
   }
 
   const ext = String(path.extname(filePath)).toLowerCase();
@@ -58,20 +82,22 @@ const server = http.createServer((req, res) => {
     const mimeType = MIME_TYPES[ext] || 'application/octet-stream';
     serveFile(filePath, mimeType);
   } else {
-    // No file extension — try the exact path, then .html fallback, then SPA fallback
+    // No file extension — try the exact path, then .html fallback, then SPA fallback.
+    // filePath is already root-confined by safeResolve above.
     fs.access(filePath, fs.constants.F_OK, (err) => {
       if (!err) {
         // Exact path exists (e.g. directory or extensionless file)
         serveFile(filePath, 'application/octet-stream');
       } else {
-        // Try .html fallback (e.g. /simulation → /simulation.html)
+        // Try .html fallback (e.g. /simulation → /simulation.html).
+        // Appending a constant suffix to a root-confined path stays root-confined.
         const htmlPath = filePath + '.html';
         fs.access(htmlPath, fs.constants.F_OK, (err2) => {
           if (!err2) {
             serveFile(htmlPath, 'text/html');
           } else {
             // SPA fallback: serve index.html for React Router paths
-            serveFile('./index.html', 'text/html');
+            serveFile(path.join(ROOT, 'index.html'), 'text/html');
           }
         });
       }

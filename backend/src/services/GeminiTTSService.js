@@ -100,9 +100,15 @@ class GeminiTTSService {
    */
   async *synthesizeStream(text, voiceName, options = {}) {
     const client = this._ensureClient();
+    // Constant format string with %s placeholders for the tainted values —
+    // template literals get the tainted values into the format string itself,
+    // which CodeQL flags as js/tainted-format-string regardless of the wrap.
     console.log(
-      `[Gemini TTS] (stream) ${config.TTS_MODEL_NAME} voice=${sanitizeForLog(voiceName)} lang=${config.TTS_LANGUAGE_CODE}`,
-      options.stylePrompt ? `tags=${sanitizeForLog(options.stylePrompt)}` : ''
+      '[Gemini TTS] (stream) %s voice=%s lang=%s tags=%s',
+      config.TTS_MODEL_NAME,
+      sanitizeForLog(voiceName),
+      config.TTS_LANGUAGE_CODE,
+      options.stylePrompt ? sanitizeForLog(options.stylePrompt) : ''
     );
 
     const mark = options.onTimingMark || (() => {});

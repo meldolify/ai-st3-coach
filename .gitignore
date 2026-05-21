@@ -101,6 +101,19 @@ tmpclaude-*-cwd
 !frontend/**/*.png
 !frontend-react/**/*.png
 
+# Vite build output (the SPA builds into frontend/ for Vercel).
+# Vercel rebuilds on every deploy via vercel.json buildCommand, and
+# Playwright builds before running E2E (playwright.config.ts), so
+# nothing in here needs to be tracked. Tracking it caused:
+#   * huge per-PR diffs from hashed Vite chunk filenames
+#   * CodeQL flagging bundled React internals (Math.random in lib code)
+# Top-level static assets (favicons, PWA icons) are kept tracked via
+# the negative !pattern entries below.
+frontend/assets/
+frontend/index.html
+frontend/index.html.backup
+frontend/index.js.backup
+
 # Vite build-output mirrors of frontend-react/public/.
 # Sources live in frontend-react/public/{audio,images}/ and are committed there.
 # Anything copied to frontend/{audio,images/landing}/ at build time should not
