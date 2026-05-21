@@ -17,7 +17,11 @@ module.exports = {
     // unit-mock coverage would just verify mock wiring. Excluded for now —
     // revisit if a Supabase test harness is set up.
     '!src/middleware/userAuth.js',
-    '!src/routes/account.js'
+    '!src/routes/account.js',
+    // Time-keyed singleton (per-user daily counter + UTC-midnight rollover).
+    // Behaviour is state-machine across day boundaries; meaningful tests need
+    // time mocking + real-clock interactions. Excluded for now.
+    '!src/middleware/usageTracker.js'
   ],
   coverageThreshold: {
     global: {
