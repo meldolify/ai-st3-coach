@@ -2,6 +2,16 @@
 @import url('https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600&display=swap');
 @import "tailwindcss";
 
+/* Global spin keyframe. VoiceOrbSimple uses inline `animation: spin Xs linear
+   infinite` styles which need this keyframe available globally. Tailwind v4
+   doesn't emit it because no component uses the `animate-spin` utility class
+   (custom durations are set inline instead). Previously this keyframe was only
+   defined inside LoadingFallback's local <style> tag, so it disappeared once
+   the lazy route loaded — orb rings would stop rotating. */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
 /* ============================================================================
    DESIGN TOKENS — Cinematic Command Center (dark theme)
    Tailwind v4 CSS-first configuration
