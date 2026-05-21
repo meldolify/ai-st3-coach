@@ -119,10 +119,12 @@ Heartbeat every 30s. Idle session cleanup every 30 min.
 
 ### Access Control (Server-Side)
 
-WebSocket URL includes `userId` and `token` query params. On connection:
-1. **All scenarios** require valid Supabase auth token (userId + token validated server-side)
+WebSocket upgrade carries auth in two channels: `userId` in the URL query string and the Supabase access JWT in the `Sec-WebSocket-Protocol` header (sub-protocol `st3.auth.bearer`, followed by the JWT itself). The JWT is NOT in the URL — putting it there leaked it into Render's request logs (CVE-class CWE-598; fixed in `fix/ws-auth-hardening`). On connection:
+1. **All scenarios** require valid Supabase auth token (userId + token validated server-side; token extracted by `extractAuthToken(req)` in server.js)
 2. **Free scenarios** (`FREE_TIER_SCENARIOS`): skip subscription check after auth
 3. **Premium scenarios**: require `subscription.status === 'active'` AND `subscription.specialty` matches scenario specialty via `config.getScenarioSpecialty()`
+
+Per-message handler also enforces session ownership: `sessions.get(msg.sessionId)` must return a session whose `ws === ws` (the connecting socket), otherwise the message is rejected with `Session not found` — same generic error as a genuinely unknown id, so the response doesn't leak whether the id was valid-but-not-owned (CWE-639; fixed in same branch).
 
 Error codes: 4001 (Unauthorized), 4002 (Validation), 4003 (Subscription required)
 

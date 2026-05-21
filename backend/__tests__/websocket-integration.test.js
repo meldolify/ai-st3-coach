@@ -61,9 +61,12 @@ let geminiTTSService;
  * This prevents the race condition where scenario_loaded arrives
  * before the test attaches a message listener.
  */
-function connectWS(queryString = '') {
+function connectWS(queryString = '', protocols = undefined) {
   return new Promise((resolve, reject) => {
-    const ws = new WebSocket(`ws://127.0.0.1:${port}${queryString ? '?' + queryString : ''}`);
+    const ws = new WebSocket(
+      `ws://127.0.0.1:${port}${queryString ? '?' + queryString : ''}`,
+      protocols
+    );
     const timeout = setTimeout(() => reject(new Error('Connection timed out')), 5000);
 
     // Buffer messages from the very first moment
@@ -305,6 +308,58 @@ describe('WebSocket connection lifecycle', () => {
     await new Promise(resolve => {
       ws.on('close', resolve);
       ws.close();
+    });
+  });
+
+  // The Supabase JWT is carried on Sec-WebSocket-Protocol rather than the URL
+  // (see AUTH_SUBPROTOCOL in server.js). These tests exercise the parsing
+  // branches in extractAuthToken — DEV_BYPASS_AUTH is on, so the token isn't
+  // verified, but the connection-handler code path is.
+  describe('auth subprotocol parsing', () => {
+    // Three URL-safe-base64 segments separated by dots — enough to satisfy
+    // extractAuthToken's shape regex. Auth is bypassed in test mode so the
+    // value is never validated by Supabase.
+    const FAKE_JWT = 'header-segment.payload-segment.signature-segment';
+
+    test('connection succeeds when token is offered via sub-protocol', async () => {
+      const ws = await connectWS(`scenario=${FREE_SCENARIO}`, ['st3.auth.bearer', FAKE_JWT]);
+      try {
+        const msg = await waitForMessage(ws);
+        expect(msg.type).toBe('scenario_loaded');
+        // Server must echo the sentinel sub-protocol back to satisfy the
+        // WS handshake; the JWT itself must NOT be echoed.
+        expect(ws.protocol).toBe('st3.auth.bearer');
+      } finally {
+        ws.close();
+      }
+    });
+
+    test('malformed JWT in sub-protocol is rejected by the extractor (no token)', async () => {
+      // Token doesn't match the three-segment base64url pattern → extractor
+      // returns null. With DEV_BYPASS_AUTH on, the connection still
+      // succeeds; in production this would short-circuit at the auth check.
+      const ws = await connectWS(`scenario=${FREE_SCENARIO}`, [
+        'st3.auth.bearer',
+        'not-a-real-jwt'
+      ]);
+      try {
+        const msg = await waitForMessage(ws);
+        expect(msg.type).toBe('scenario_loaded');
+      } finally {
+        ws.close();
+      }
+    });
+
+    test('connection still works with no sub-protocol at all', async () => {
+      // Tests the early-return branch in extractAuthToken (header missing).
+      const ws = await connectWS(`scenario=${FREE_SCENARIO}`);
+      try {
+        const msg = await waitForMessage(ws);
+        expect(msg.type).toBe('scenario_loaded');
+        expect(ws.protocol).toBe('');
+      } finally {
+        ws.close();
+      }
     });
   });
 });
@@ -741,6 +796,44 @@ describe('Error handling', () => {
       expect(errorMsg.message).toContain('Session not found');
     } finally {
       ws.close();
+    }
+  });
+
+  test('cross-connection session hijack is rejected (CWE-639)', async () => {
+    // Two authenticated WS connections. Connection B sends a message claiming
+    // A's sessionId — must be refused with the same generic "Session not
+    // found" error used for unknown ids (so the error message doesn't leak
+    // whether the id was valid-but-not-owned).
+    const wsA = await connectWS(`scenario=${FREE_SCENARIO}`);
+    const wsB = await connectWS(`scenario=${FREE_SCENARIO}`);
+    try {
+      const initA = await waitForMessage(wsA);
+      await waitForMessage(wsB); // consume B's scenario_loaded
+
+      // Sanity: A got a valid session id we can target from B
+      expect(initA.sessionId).toMatch(/^session_/);
+
+      wsB.send(
+        JSON.stringify({
+          type: 'user_transcript',
+          sessionId: initA.sessionId, // A's id, not B's
+          text: 'hijack attempt'
+        })
+      );
+
+      const errorMsg = await waitForMessage(wsB);
+      expect(errorMsg.type).toBe('error');
+      expect(errorMsg.message).toContain('Session not found');
+
+      // A must NOT receive any ai_response_* triggered by B's injected turn.
+      // Give the server a beat to (mis)process, then confirm A's buffer is
+      // empty.
+      await new Promise(r => setTimeout(r, 200));
+      const leaked = wsA._messageBuffer || [];
+      expect(leaked).toHaveLength(0);
+    } finally {
+      wsA.close();
+      wsB.close();
     }
   });
 

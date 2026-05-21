@@ -368,8 +368,18 @@ setInterval(
   5 * 60 * 1000
 );
 
+// Sub-protocol used to carry the Supabase access JWT on the upgrade. Putting
+// the token in the URL query string (the old approach) leaks it into Render's
+// request logs; the Sec-WebSocket-Protocol header is not part of the URL and
+// is not recorded by the logging pipeline.
+const AUTH_SUBPROTOCOL = 'st3.auth.bearer';
+
 const wss = new WebSocket.Server({
   server, // Attach to shared HTTP server (same port for REST + WebSocket)
+  // The client offers two protocols: [AUTH_SUBPROTOCOL, <jwt>]. We must echo
+  // exactly one back, otherwise some browsers fail the upgrade. Selecting our
+  // sentinel name (never the raw JWT) keeps the response header benign.
+  handleProtocols: protocols => (protocols.has(AUTH_SUBPROTOCOL) ? AUTH_SUBPROTOCOL : false),
   verifyClient: info => {
     if (isWsConnectRateLimited(info.req)) {
       console.warn(`[WS] Rejected: connection rate limit for ${getClientIp(info.req)}`);
@@ -382,6 +392,31 @@ const wss = new WebSocket.Server({
     return true; // Allow all origins in development
   }
 });
+
+/**
+ * Extract the Supabase access JWT from the Sec-WebSocket-Protocol header.
+ * Clients send `[AUTH_SUBPROTOCOL, <jwt>]`; the header arrives as a comma-
+ * separated list. Returns null if the protocol isn't ours or the token is
+ * missing. Defence-in-depth: ensure the returned value looks like a JWT
+ * (three base64url segments) so a stray protocol entry can't be mistaken
+ * for a token.
+ */
+function extractAuthToken(req) {
+  const raw = req.headers['sec-websocket-protocol'];
+  if (!raw) {
+    return null;
+  }
+  const parts = raw.split(',').map(s => s.trim());
+  if (parts[0] !== AUTH_SUBPROTOCOL || !parts[1]) {
+    return null;
+  }
+  const candidate = parts[1];
+  // A JWT is three URL-safe-base64 segments separated by dots.
+  if (!/^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/.test(candidate)) {
+    return null;
+  }
+  return candidate;
+}
 
 console.log('WebSocket server attached to HTTP server');
 
@@ -435,7 +470,12 @@ wss.on('connection', (ws, req) => {
   const difficulty = queryParams.difficulty || 'easy';
   const voice = queryParams.voice || config.TTS_VOICE;
   const userId = queryParams.userId || null;
-  const authToken = queryParams.token || null;
+  // Supabase JWT lives in the Sec-WebSocket-Protocol header, not the URL.
+  // See AUTH_SUBPROTOCOL definition above for rationale (URL-token leak via
+  // Render request logs). Fall back to the legacy query-param transport ONLY
+  // for the duration of one deploy where old frontend bundles may still be
+  // cached in browsers; remove the fallback in the follow-up commit.
+  const authToken = extractAuthToken(req) || queryParams.token || null;
 
   console.log(
     '[CLIENT] Requested scenario: ' +
@@ -669,8 +709,14 @@ wss.on('connection', (ws, req) => {
         return;
       }
 
+      // Cross-connection hijack guard: even though sessionId is a 122-bit UUID,
+      // it gets logged in plaintext on several lines, so a log-reader could in
+      // principle send messages targeting another user's session over their own
+      // authenticated WS. Verify the session belongs to THIS socket.
+      // Same error message in both branches so we don't leak whether the id was
+      // valid-but-not-owned vs. genuinely unknown.
       const session = sessions.get(msg.sessionId);
-      if (!session) {
+      if (!session || session.ws !== ws) {
         ws.send(JSON.stringify({ type: 'error', message: 'Session not found' }));
         return;
       }

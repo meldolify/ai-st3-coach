@@ -253,23 +253,30 @@ export function useSession({ orbVisualizerRef }) {
       if (difficulty) wsUrl += '&difficulty=' + difficulty
       if (voice) wsUrl += '&voice=' + voice
 
-      // Add userId and auth token for server-side tier validation
+      // userId is a UUID and not sensitive, so it stays on the query string for
+      // server-side tier validation. The Supabase access JWT is sensitive and
+      // is sent via Sec-WebSocket-Protocol so it does NOT land in request logs.
       const currentUser = useAuthStore.getState().currentUser
       if (currentUser?.id) {
         wsUrl += '&userId=' + encodeURIComponent(currentUser.id)
       }
+
+      let protocols
       try {
         const { data } = await supabaseClient.auth.getSession()
         const token = data?.session?.access_token
         if (token) {
-          wsUrl += '&token=' + encodeURIComponent(token)
+          // First entry is the sentinel name the server selects and echoes
+          // back to complete the WebSocket handshake. Second entry is the JWT
+          // itself (base64url + dots — RFC-6455-safe sub-protocol chars).
+          protocols = ['st3.auth.bearer', token]
         }
       } catch (err) {
         console.warn('[useSession] Could not get auth token:', err)
       }
 
       return new Promise((resolve, reject) => {
-        const ws = new WebSocket(wsUrl)
+        const ws = new WebSocket(wsUrl, protocols)
         wsRef.current = ws
 
         // Resolve when scenario_loaded arrives (not on ws.onopen)
