@@ -77,7 +77,8 @@ export default function HeroSection() {
         {/* Subtitle + CTA stack — sits below the wordmark, overlaid */}
         <div className="hero-stack">
           <p className="landing-body hero-subtitle">
-            AI interview practice for surgical trainees.
+            Your viva, on repeat.<br />
+            Built for the UK medical and surgical specialty training interviews.
           </p>
           <div className="hero-ctas">
             <button

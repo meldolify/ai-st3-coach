@@ -471,8 +471,9 @@
   color: var(--organic-cream);
   opacity: 0.85;
   font-size: clamp(1rem, 1.25vw, 1.25rem);
-  max-width: 400px;
+  max-width: 640px;
   line-height: 1.5;
+  text-align: center;
 }
 
 .landing-page .hero-ctas {
