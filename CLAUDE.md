@@ -119,7 +119,7 @@ Heartbeat every 30s. Idle session cleanup every 30 min.
 
 ### Access Control (Server-Side)
 
-WebSocket upgrade carries auth in two channels: `userId` in the URL query string and the Supabase access JWT in the `Sec-WebSocket-Protocol` header (sub-protocol `st3.auth.bearer`, followed by the JWT itself). The JWT is NOT in the URL — putting it there leaked it into Render's request logs (CVE-class CWE-598; fixed in `fix/ws-auth-hardening`). On connection:
+WebSocket upgrade carries auth in two channels: `userId` in the URL query string and the Supabase access JWT in the `Sec-WebSocket-Protocol` header (sub-protocol `st3.auth.bearer`, followed by the JWT itself). The JWT is NOT in the URL — putting it there leaked it into request logs (originally Render's; the same risk applies to any provider, hence the policy; fixed in `fix/ws-auth-hardening`). On connection:
 1. **All scenarios** require valid Supabase auth token (userId + token validated server-side; token extracted by `extractAuthToken(req)` in server.js)
 2. **Free scenarios** (`FREE_TIER_SCENARIOS`): skip subscription check after auth
 3. **Premium scenarios**: require `subscription.status === 'active'` AND `subscription.specialty` matches scenario specialty via `config.getScenarioSpecialty()`
@@ -202,7 +202,7 @@ Text-in/text-out environment for rapid prompt iteration without STT/TTS overhead
 - Dirty tracking: only modified tabs are saved/committed
 - Auto-commit to GitHub on save (production). GitHub env vars: `GITHUB_TOKEN`, `GITHUB_OWNER`, `GITHUB_REPO`
 
-**Gating:** `PROMPT_LAB_ENABLED=true` env var in production (Render). Auto-enabled in dev (`!config.isProduction`). No auth — hidden URL only.
+**Gating:** `PROMPT_LAB_ENABLED=true` env var in production (Fly). Auto-enabled in dev (`!config.isProduction`). Per-request auth: Supabase Bearer + `PROMPT_LAB_ADMIN_EMAILS` allowlist (`backend/src/middleware/promptLabAuth.js`).
 
 **Key files:** `src/routes/promptLab.js` (12 REST endpoints), `src/services/PromptLabService.js`, `src/utils/promptParser.js`
 
@@ -317,13 +317,29 @@ npm run format        # Prettier
 ## Deployment
 
 - **Frontend:** https://www.reviva.live/ (Vercel, serves `frontend/` directory)
-- **Backend API:** https://api.reviva.live/ (Render)
+- **Backend API:** https://api.reviva.live/ (Fly.io, app `reviva-backend`, region `ams` Amsterdam)
 - **WebSocket:** wss://api.reviva.live/
 - **Stripe webhook:** https://api.reviva.live/stripe-webhook
 
-### Render Environment Variables
+Backend hosted on Fly.io as of 2026-05-30 (migrated from Render). Single `shared-cpu-1x` machine with 1024 MB RAM, `auto_stop_machines = off`, `min_machines_running = 1` — long-lived voice WebSockets require always-on. See [`docs/render-to-fly-migration.md`](docs/render-to-fly-migration.md) for the full migration record. The Render service is suspended (not yet deleted; safe-keeping for 7 days).
 
-`GEMINI_API_KEY` (required), `DEEPGRAM_API_KEY` (required), `GOOGLE_APPLICATION_CREDENTIALS_JSON` (JSON string, not file path), `SUPABASE_URL`, `SUPABASE_SERVICE_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_ID_MONTHLY`, `STRIPE_PRICE_ID_ANNUAL`, `FRONTEND_URL=https://www.reviva.live`, `PROMPT_LAB_ENABLED=true`
+**Deploy:** Pushes to `main` do NOT auto-deploy to Fly. Run manually from `backend/`:
+```powershell
+cd backend
+fly deploy -a reviva-backend
+```
+
+**Logs:** `fly logs -a reviva-backend`. **Status:** `fly status -a reviva-backend`. **SSH:** `fly ssh console -a reviva-backend`.
+
+### Fly.io Environment Variables (Secrets)
+
+Set via `fly secrets set KEY=value -a reviva-backend`. Listed by name in `docs/render-to-fly-migration.md` §5. Canonical inventory:
+
+`GEMINI_API_KEY` (required), `DEEPGRAM_API_KEY` (required), `GOOGLE_APPLICATION_CREDENTIALS_JSON` (JSON string, not file path — single-line minified), `SUPABASE_URL`, `SUPABASE_SERVICE_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_ID_MONTHLY`, `STRIPE_PRICE_ID_ANNUAL`, `FRONTEND_URL=https://www.reviva.live`, `PROMPT_LAB_ENABLED=true`, `PROMPT_LAB_ADMIN_EMAILS` (Supabase auth email for Prompt Lab access).
+
+`SENTRY_DSN`, `GITHUB_TOKEN`/`GITHUB_OWNER`/`GITHUB_REPO`, `MAX_DAILY_LLM_CALLS` not currently set — add when configured. `DEV_BYPASS_AUTH` must never be set in production.
+
+As of 2026-05-30, Stripe secrets are in **test mode** (`sk_test_*`) — backend logs a startup WARNING. Switch to `sk_live_*` keys before public launch.
 
 ### Local Environment (`backend/.env`)
 
