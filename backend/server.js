@@ -1080,10 +1080,28 @@ const DEV_CORS_ORIGINS = [
   'http://localhost:8080',
   'http://127.0.0.1:3001'
 ];
+
+// Production allowlist. Includes the canonical custom domain AND the Vercel
+// auto-generated URL — Vercel keeps the .vercel.app URL accessible alongside
+// the custom domain, and users hit it via bookmarks/autocomplete more often
+// than expected (a real customer was blocked here during 2026-05-30 live-mode
+// smoke test). Both URLs are safe to allow because the actual auth gate is the
+// Supabase Bearer token, not the origin.
+const PROD_CORS_ORIGINS = [config.FRONTEND_URL, 'https://ai-st3-coach.vercel.app'].filter(Boolean);
+
 app.use(
   cors({
     origin: config.isProduction
-      ? config.FRONTEND_URL || false
+      ? (origin, callback) => {
+        // No Origin header (mobile apps, curl, same-origin) — allow.
+        if (!origin) {
+          return callback(null, true);
+        }
+        if (PROD_CORS_ORIGINS.includes(origin)) {
+          return callback(null, true);
+        }
+        return callback(new Error(`CORS blocked: origin ${origin} not allowed`));
+      }
       : config.FRONTEND_URL || DEV_CORS_ORIGINS,
     methods: ['POST', 'GET', 'DELETE', 'PUT', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'stripe-signature']
