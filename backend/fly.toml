@@ -1,0 +1,69 @@
+# fly.toml — Reviva backend (Node.js + WebSocket on Fly.io)
+#
+# App contract:
+#   - Single Node process owns BOTH the WebSocket server (interview voice
+#     loop) AND the Express HTTP server (/health, /stripe-webhook,
+#     /prompt-lab/api/*). They share port 8080 via ws upgrade-on-http-server.
+#   - Long-lived WebSockets: interviews run ~30 min. We CANNOT let Fly stop
+#     the machine while a WS is connected, hence auto_stop_machines = false
+#     and min_machines_running = 1 below.
+#   - Region "ams" (Amsterdam) chosen over "fra" (Frankfurt) because: most
+#     UK end users have <15 ms latency to AMS via LINX/AMS-IX peering, AMS
+#     is Fly's largest EU PoP (better capacity for bursts), and Supabase
+#     project lives in eu-west-1 (Ireland) — AMS<->Dublin is ~15 ms vs
+#     FRA<->Dublin ~25 ms. If UK end-user latency ever becomes the bottleneck,
+#     "lhr" (London) is a one-line swap.
+
+app = "reviva-backend"
+primary_region = "ams"
+
+[build]
+  # Use the local Dockerfile rather than a buildpack — we need control over
+  # native build deps for onnxruntime-node and we want multi-stage caching.
+  dockerfile = "Dockerfile"
+
+[env]
+  # Non-secret env. All sensitive values are set via `fly secrets set`
+  # (see docs/render-to-fly-migration.md §5) and override anything here.
+  NODE_ENV = "production"
+  PORT = "8080"
+
+[http_service]
+  internal_port = 8080
+  # Redirect HTTP->HTTPS at the Fly edge. Frontend always uses wss:// + https://.
+  force_https = true
+
+  # CRITICAL: do NOT auto-stop. Stopping the machine kills every connected
+  # WebSocket. With voice interviews running 30+ min, that's user-visible.
+  auto_stop_machines = false
+  # Allow Fly to start the machine on inbound traffic if it ever ends up
+  # stopped (e.g. manual stop). Belt-and-braces alongside min_machines_running.
+  auto_start_machines = true
+  # Always keep at least one machine warm. Combined with auto_stop_machines
+  # = false this guarantees always-on.
+  min_machines_running = 1
+
+  # Process group — single default group is fine for a single-process app.
+  processes = ["app"]
+
+  [[http_service.checks]]
+    # Fly's edge will mark the machine unhealthy and stop routing traffic to
+    # it if /health doesn't return 2xx within timeout. The existing /health
+    # route in server.js returns {"status":"ok"} synchronously, so 2s is
+    # plenty of headroom.
+    grace_period = "10s"
+    interval     = "15s"
+    method       = "GET"
+    path         = "/health"
+    protocol     = "http"
+    timeout      = "2s"
+
+[[vm]]
+  # shared-cpu-1x / 1 GB is enough for: Silero ONNX (~50 MB peak inference
+  # RAM), one Node process holding ~20 concurrent WS sessions, plus headroom
+  # for spikes during TTS streaming. Bump to shared-cpu-2x / 2048 if we ever
+  # see OOM events in `fly logs`.
+  size = "shared-cpu-1x"
+  memory_mb = 1024
+  cpu_kind = "shared"
+  cpus = 1

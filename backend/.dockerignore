@@ -1,0 +1,67 @@
+# .dockerignore — keep the build context tiny and NEVER ship secrets.
+#
+# Anything matched here is excluded from the `COPY . .` in the Dockerfile.
+# node_modules in particular must be excluded so we get a clean `npm ci`
+# install inside the container (host node_modules may include OS-specific
+# native bindings that won't work on linux-x64).
+
+# Dependencies (rebuilt inside the container via npm ci)
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Secrets — NEVER ship .env files
+.env
+.env.*
+*.env
+google-tts-key.json
+google-tts-key.*.json
+
+# Tests & coverage (not needed in production image)
+__tests__
+coverage
+.nyc_output
+jest.config.js
+jest.setup.js
+
+# Test fixtures and generated outputs
+test-results
+test-scripts/_generated
+
+# Editor / OS junk
+.vscode
+.idea
+.DS_Store
+Thumbs.db
+*.swp
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Docs that don't need to be in the image
+README.md
+CHANGELOG.md
+docs
+
+# Build/CI configs
+.github
+.husky
+.eslintcache
+.prettierignore
+.prettierrc*
+.eslintrc*
+
+# Fly artefacts (avoid recursive copies)
+fly.toml
+.fly
+
+# Logs
+logs
+*.log
+
+# OS / runtime temp
+tmp
+temp
