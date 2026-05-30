@@ -1122,10 +1122,19 @@ app.use(
   })
 );
 
-// HTTPS enforcement in production
+// HTTPS enforcement in production. Bypassed for /health so Fly's internal
+// health-check probe (which hits the container over plain HTTP on the
+// internal port) gets a real 200 instead of a 301 that the probe can't
+// follow. Real user traffic still hits the redirect because they always
+// arrive via the edge proxy with x-forwarded-proto already set.
 app.set('trust proxy', 1);
 app.use((req, res, next) => {
-  if (config.isProduction && !req.secure && req.get('x-forwarded-proto') !== 'https') {
+  if (
+    config.isProduction &&
+    req.path !== '/health' &&
+    !req.secure &&
+    req.get('x-forwarded-proto') !== 'https'
+  ) {
     return res.redirect(301, `https://${req.get('host')}${req.url}`);
   }
   next();
