@@ -1086,7 +1086,7 @@ app.use(
       ? config.FRONTEND_URL || false
       : config.FRONTEND_URL || DEV_CORS_ORIGINS,
     methods: ['POST', 'GET', 'DELETE', 'PUT', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'stripe-signature']
+    allowedHeaders: ['Content-Type', 'Authorization', 'stripe-signature']
   })
 );
 
