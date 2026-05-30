@@ -112,19 +112,35 @@ export default function AuthPage() {
           email: email.trim(),
           password
         })
-        if (loginError) throw loginError
+        if (loginError) {
+          // Friendlier error when Supabase blocks because email isn't confirmed.
+          if (loginError.code === 'email_not_confirmed') {
+            setError('Please confirm your email before signing in — check your inbox for the link.')
+            return
+          }
+          throw loginError
+        }
         setCurrentUser(data.user)
         navigate('/scenarios')
       } else {
-        const { error: signupError } = await supabaseClient.auth.signUp({
+        const { data, error: signupError } = await supabaseClient.auth.signUp({
           email: email.trim(),
           password
         })
         if (signupError) throw signupError
-        setSuccess('Check your email for a confirmation link')
-        setEmail('')
-        setPassword('')
-        setConfirmPassword('')
+        // When Supabase requires email confirmation, signUp returns user but
+        // session = null — the user can't act on the account until they click
+        // the confirmation link. When confirmation is disabled, session is
+        // populated and we can sign them straight in.
+        if (data.session) {
+          setCurrentUser(data.user)
+          navigate('/scenarios')
+        } else {
+          setSuccess('Check your email for a confirmation link to finish signing in.')
+          setEmail('')
+          setPassword('')
+          setConfirmPassword('')
+        }
       }
     } catch (err) {
       setError(err.message || 'Authentication failed')
