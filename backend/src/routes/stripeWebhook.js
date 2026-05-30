@@ -89,7 +89,12 @@ function createStripeWebhookHandler({ stripe, supabaseAdmin, webhookSecret }) {
               }
             }
 
-            await supabaseAdmin.from('subscriptions').upsert(
+            // Supabase JS returns { data, error } — DON'T discard the error.
+            // The original code logged "activated" regardless of outcome; if
+            // user_id lacks a UNIQUE constraint the upsert errors silently and
+            // the row never lands. Diagnosed 2026-05-30 when a real live-mode
+            // payment succeeded in Stripe but the DB never updated.
+            const { error: upsertErr } = await supabaseAdmin.from('subscriptions').upsert(
               {
                 user_id: userId,
                 stripe_customer_id: customerId,
@@ -103,6 +108,21 @@ function createStripeWebhookHandler({ stripe, supabaseAdmin, webhookSecret }) {
               { onConflict: 'user_id' }
             );
 
+            if (upsertErr) {
+              console.error(
+                '[STRIPE] Failed to upsert subscription for user:',
+                userId,
+                upsertErr.code,
+                upsertErr.message
+              );
+              // Return 500 so Stripe retries — Stripe's default retry policy
+              // re-delivers webhooks for up to 3 days with exponential backoff.
+              // Better to surface the failure than silently lose the row.
+              return res
+                .status(500)
+                .json({ error: 'Subscription persistence failed', code: upsertErr.code });
+            }
+
             console.log('[STRIPE] Subscription activated for user:', userId);
           }
           break;
@@ -112,7 +132,7 @@ function createStripeWebhookHandler({ stripe, supabaseAdmin, webhookSecret }) {
           const subscription = event.data.object;
           const status = mapStripeStatus(subscription.status);
 
-          await supabaseAdmin
+          const { error: updateErr } = await supabaseAdmin
             .from('subscriptions')
             .update({
               status,
@@ -122,6 +142,18 @@ function createStripeWebhookHandler({ stripe, supabaseAdmin, webhookSecret }) {
             })
             .eq('stripe_subscription_id', subscription.id);
 
+          if (updateErr) {
+            console.error(
+              '[STRIPE] Failed to update subscription:',
+              subscription.id,
+              updateErr.code,
+              updateErr.message
+            );
+            return res
+              .status(500)
+              .json({ error: 'Subscription update failed', code: updateErr.code });
+          }
+
           console.log('[STRIPE] Subscription updated:', subscription.id, status);
           break;
         }
@@ -129,10 +161,22 @@ function createStripeWebhookHandler({ stripe, supabaseAdmin, webhookSecret }) {
         case 'customer.subscription.deleted': {
           const subscription = event.data.object;
 
-          await supabaseAdmin
+          const { error: cancelErr } = await supabaseAdmin
             .from('subscriptions')
             .update({ status: 'cancelled' })
             .eq('stripe_subscription_id', subscription.id);
+
+          if (cancelErr) {
+            console.error(
+              '[STRIPE] Failed to mark subscription cancelled:',
+              subscription.id,
+              cancelErr.code,
+              cancelErr.message
+            );
+            return res
+              .status(500)
+              .json({ error: 'Subscription cancel failed', code: cancelErr.code });
+          }
 
           console.log('[STRIPE] Subscription cancelled:', subscription.id);
           break;
